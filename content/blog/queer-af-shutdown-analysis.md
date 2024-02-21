@@ -1,5 +1,5 @@
 ---
-title: "When Your Platform Disappears: the Queer.AF Shutdown"
+title: "When Your Platform Disappears: The Queer.AF Shutdown"
 summary: "My thoughts on the seizure of the 'queer.af' domain by the Taliban, and domain seizures in general."
 date: 2024-02-13T01:05:05Z
 draft: false
