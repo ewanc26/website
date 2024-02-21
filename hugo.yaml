@@ -1,0 +1,110 @@
+baseURL: 'https://ewancroft.uk/'
+languageCode: en-gb
+title: Ewan's Corner
+theme: PaperMod
+
+enableEmoji: true
+enableRobotsTXT: true
+
+menu:
+  main:
+    - identifier: archive
+      name: Archive
+      url: /archive
+      weight: 20
+    - identifier: tags
+      name: Tags
+      url: /tags
+      weight: 30
+    - identifier: search
+      name: Search
+      url: /search
+      weight: 40
+
+taxonomies:
+  tag: "tags"
+
+outputFormats:
+  RSS:
+    mediatype: application/rss
+    baseName: rss
+
+markup:
+  tableOfContents:
+    endLevel: 3
+    ordered: false
+    startLevel: 2
+
+params:
+  DateFormat: "02 Jan, 2006 at 15:04"
+  defaultTheme: auto
+
+  mainSections:
+    - blog
+    - poetry
+    - reviews
+
+  ShowBreadCrumbs: true
+  ShowShareButtons: true
+  ShareButtons: ["reddit", "facebook", "x"]
+  ShowPostNavLinks: true
+
+  ShowReadingTime: true
+  ShowWordCount: true
+
+  assets:
+    favicon: "images/favicon/favicon.ico"
+    favicon16x16: "images/favicon/favicon-16x16.png"
+    favicon32x32: "images/favicon/favicon-32x32.png"
+    apple_touch_icon: "images/favicon/apple-touch-icon.png"
+
+    disableHLJS: true
+
+  profileMode:
+    enabled: true
+    imageUrl: "/images/Ewan.jpeg"
+    title: "Hey! &#128075;&#127995;"
+    subtitle: "I'm Ewan, a British Gen-Z poet and programmer."
+    imageTitle: "An image of me."
+    imageWidth: 200
+    imageHeight: 200
+    buttons:
+      - identifier: about me
+        name: About Me
+        url: /about
+        weight: 10
+      - identifier: blog
+        name: Blog
+        url: /blog/
+        weight: 20
+      - identifier: poetry
+        name: Poetry
+        url: /poetry/
+        weight: 20
+      - identifier: reviews
+        name: Reviews
+        url: /reviews/
+        weight: 20
+
+  socialIcons:
+    - name: GitHub
+      url: "https://github.com/"
+    - name: RSS
+      url: "/blog/rss"
+  
+  author: ["Ewan"]
+
+markup:
+  highlight:
+    # anchorLineNos: true
+    codeFences: true
+    guessSyntax: true
+    lineNos: true
+    # noClasses: false
+    style: monokai
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON

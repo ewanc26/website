@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /
+Allow: /robots.txt
+
+User-agent: Bingbot
+User-agent: DuckDuckBot
+User-agent: Googlebot
+Allow: /$
+Allow: /blog/$
+Allow: /poetry/$
+Allow: /reviews/$
+Disallow: /
