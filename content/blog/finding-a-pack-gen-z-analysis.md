@@ -175,7 +175,7 @@ In essence, the conclusion to the exploration of loneliness in the context of Ge
 
 [^1]: <https://www.deseret.com/2023/11/15/23958265/report-gen-z-teenagers-lonelier-more-apt-therapy-less-likely-use-drugs>, <https://www.youtube.com/watch?v=dA_m4JVxX1Q>
 [^2]: <https://thred.com/culture/offbeat/understanding-gen-zs-expected-uptake-in-nihilism/>, <https://gnet-research.org/2022/12/16/generation-doomer-how-nihilism-on-social-media-is-creating-a-new-generation-of-extremists/>, <https://www.yourtango.com/entertainment/spiritual-director-explains-why-worried-about-gen-zs-nihilism>
-[^3]: A stanza from my poem 'nothing' (© Ewan Croft under [CC BY-ND-NC 4.0.](/legalities/licence/#cc-by-nc-nd-40)
+[^3]: A stanza from my poem 'nothing' (© Ewan Croft under [CC BY-ND-NC 4.0.](/legalities/licence/#cc-by-nc-nd-40))
 [^4]: <https://www.independent.co.uk/tech/tiktok-addiction-symptoms-study-users-b2072116.html>, <https://www.deseret.com/2022/5/6/23055481/tik-tok-addiction-social-media-mental-health-psychology>
 [^5]: <https://www.psychologytoday.com/gb/blog/the-squeaky-wheel/202002/the-importance-belonging-tribe>, <https://www.nytimes.com/interactive/2020/04/13/t-magazine/tribe-meaning.html>
 [^6]: <https://www.history.com/news/prehistoric-ancestors-population-decline>
