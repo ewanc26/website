@@ -1,6 +1,6 @@
 ---
 title: "Logistics of Lycanthropy and its Romanticisation"
-summary: "An analysis on the logistical nature of the lycanthropic curse, and how it's changed over time."
+summary: "An analysis of the logistical nature of the lycanthropic curse, and how it's changed over time."
 date: 2024-01-24T04:26:42Z
 draft: false
 tags: ['Werewolves', 'History']
@@ -53,13 +53,13 @@ All this considered, the Greek legend is *not*, by any means, the sole influence
 
 ### The Ossory Werewolves
 
-Much of the mysticism to these wolfmen is down to various stories, such as the Werewolves of Ossory, originating as early as 1200 C.E.
+Much of the mysticism of these wolfmen is down to various stories, such as the Werewolves of Ossory, originating as early as 1200 C.E.
 
 ![Depiction of the Werewolves of Ossory, from Topographia Hibernica by Gerald of Wales, c. 1200](/images/werewolf-depictions/Werewolves_of_Ossory.png 'Depiction of the Werewolves of Ossory, from Topographia Hibernica by Gerald of Wales, c. 1200')
 
 (image from [here](https://en.wikipedia.org/wiki/File:Werewolves_of_Ossory.png))
 
-The Ossory Werewolves are legendary shapeshifters from Irish folklore, specifically associated with the ancient kingdom of Ossory in the south-east of the country. Their origins have two main strands:
+The Ossory Werewolves are legendary shapeshifters from Irish folklore, specifically associated with the ancient kingdom of Ossory in the southeast of the country. Their origins have two main strands:
 
 1. According to this first legend, the werewolves descended from a mythical warrior named Laignech Fáelad[^4], whose line later gave rise to the kings of Ossory. This suggests a hereditary curse or inherent magical ability within the bloodline.
 
@@ -87,7 +87,7 @@ The Wolf Man stands as a pivotal work in the realm of horror cinema, casting an 
 
 Key facets of The Wolf Man's impact on modern lycanthropic depictions include:
 
-1. The film's depiction of the werewolf, characterized by an elongated snout, pointed ears, and shaggy fur, has evolved into the archetype for the modern werewolf. Lon Chaney Jr.'s transformative performance, marked by agonizing contortions, remains a benchmark in cinematic history. It also could be coincidental that it looks similar to [hypertrichosis](https://en.wikipedia.org/wiki/Hypertrichosis).
+1. The film's depiction of the werewolf, characterized by an elongated snout, pointed ears, and shaggy fur, has evolved into the archetype of the modern werewolf. Lon Chaney Jr.'s transformative performance, marked by agonizing contortions, remains a benchmark in cinematic history. It also could be coincidental that it looks similar to [hypertrichosis](https://en.wikipedia.org/wiki/Hypertrichosis).
 
 2. The Wolf Man presents a departure from the mindless monster trope, portraying the titular character as a tragic hero ensnared by his own curse. This nuanced archetype, torn between human and animal instincts, has reverberated in werewolf narratives from An American Werewolf in London (1981) to Twilight (2005; book, 2008; film).
 
@@ -123,7 +123,7 @@ Unlike traditional monster-hunting narratives, An American Werewolf in London do
 
 The film's impact reverberates in numerous werewolf movies that followed, with Teen Wolf (1985) incorporating humour and coming-of-age themes and Dog Soldiers (2002) embracing the action-horror blend. Its influence extends beyond the horror genre, with films like Ginger Snaps (2000) exploring themes of female identity and sexuality through the werewolf lens.
 
-An American Werewolf in London's enduring legacy lies in its innovative special effects, genre-defying blend, and exploration of the human condition within the werewolf myth. Challenging traditional tropes, it paved the way for future interpretations, securing its status as a horror comedy classic that continues to inspire filmmakers and captivate audiences.
+An American Werewolf in London's enduring legacy lies in its innovative special effects, genre-defying blend, and exploration of the human condition within the werewolf myth. Challenging traditional tropes, paved the way for future interpretations, securing its status as a horror comedy classic that continues to inspire filmmakers and captivate audiences.
 
 ### Post-Millennium
 
@@ -150,7 +150,7 @@ Wolf Pack, a 2004 book by Edo van Belkom adapted by Jeff Davis (of [MTV Teen Wol
 Jeff Davis' adaptation takes a refreshing departure from conventional lycanthropic tropes, offering a nuanced and distinctive perspective on the transformative nature of lycanthropy. Here's an exploration of its portrayal:
 
 Found Family Dynamic:
-"Wolf Pack" places significant emphasis on the concept of the pack, presenting it not merely as a biological unit but as a chosen family. Bitten teenagers, Everett and Blake, along with Luna, a born werewolf, form a powerful bond that transcends their individual transformations, highlighting the importance of found family in their lives.
+"Wolf Pack" places significant emphasis on the concept of the pack, presenting it not merely as a biological unit but as a chosen family. Bitten teenagers, Everett and Blake, along with Luna, a born werewolf, form a powerful bond that transcends their individual transformations, highlighting the importance of finding family in their lives.
 
 Shared Challenges, Individual Struggles:
 While the characters collectively grapple with the challenges posed by lycanthropy, the show intricately portrays their experiences as deeply personal. Everett's battle with anxiety and self-doubt and Blake's confrontation with anger and rebellion showcase the individual struggles within the broader context of their shared condition. Luna, embodying her inherent wolf nature, acts as a bridge between these two worlds.
@@ -173,7 +173,7 @@ Raw and Swift Transformations:
 In contrast to the gradual shifts in the TV adaptation, the book's transformations are swift and agonizing. The characters are overtaken by animalistic urges, losing control over their senses and actions. This raw portrayal underscores the primal force unleashed by the curse.
 
 Predatory Nature and Instinct:
-The novel places a greater emphasis on the predatory instincts of the wolves. Hunting becomes an irresistible urge, blurring the lines between human and animal and adding a layer of danger and unpredictability to the characters' struggles.
+The novel places a greater emphasis on the predatory instincts of the wolves. Hunting becomes an irresistible urge, blurring the lines between humans and animals and adding a layer of danger and unpredictability to the characters' struggles.
 
 Living in Shadows - Paranoia and Isolation:
 Characters in the book exist in a perpetual state of paranoia and isolation, fearing exposure and persecution. This constant need for secrecy forces them to live double lives, adding psychological torment to their transformative experiences.
@@ -195,7 +195,7 @@ As we navigate through the landscapes of ancient myths, cinematic masterpieces, 
 Ultimately, the logistics of lycanthropy may remain a speculative mystery, but the enduring allure of werewolf tales lies in their power to mirror and navigate the complexities of the human condition. Whether it's the ancient howls echoing through mythic forests or the modern-day struggles depicted on screen and in literature, the werewolf continues to captivate our imaginations, reminding us that within the realms of transformation, there exists a profound exploration of what it means to be human.
 
 [^1]: [Twilight (series)](https://en.wikipedia.org/wiki/Twilight_(novel_series))
-[^2]: A stanza from my poem 'Lunar Descent' (© Ewan Croft under [CC BY-ND-NC 4.0.](/legalities/licence/#cc-by-nc-nd-40)
+[^2]: A stanza from my poem 'Lunar Descent' (© Ewan Croft under [CC BY-ND-NC 4.0.](/legalities/licence/#cc-by-nc-nd-40))
 [^3]: ['According to Ovid’s Metamorphoses, Book I. Lycaon himself was turned into a wolf.'](https://www.britannica.com/topic/Lycaon-Greek-mythology)
 [^4]: <https://kilkennycastle.ie/the-ossory-werewolves>
 [^5]: <https://www.britannica.com/biography/Saint-Patrick>, <https://en.wikipedia.org/wiki/History_of_Christianity_in_Ireland>
