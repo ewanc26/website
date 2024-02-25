@@ -7,10 +7,6 @@ ShowReadingTime: false
 ShowWordCount: false
 ---
 
-![Written by Human, Not by AI](/images/not-by-ai/english/Written-By-Human-Not-By-AI-Badge-black.svg "Written by Human, Not by AI")
-
----
-
 The [code files in the GitHub repository for this site](https://github.com/ewanc26/website) are under the MIT Licence, whereas the text and original imagery (such that are *not* attributed elsewhere) featured on this website are under the CC BY 4.0 Licence, while my original poetry is under CC BY-NC-ND 4.0.
 
 ## MIT Licence
