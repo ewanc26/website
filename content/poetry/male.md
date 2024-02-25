@@ -13,12 +13,12 @@ That today’s world
 Would be more equal.
 
 You would think
-That a human, on either side of the binary
+That a human, irrespective of who they are 
 Would be the same in worth.
 
 You would think wrong,
-Apparently, we are bad.
-We are rapists, sexists, murderers…
+Apparently, we men are bad.
+We are rapists, sexists, murderers...
 
 We are meant
 To be strong and powerful,
