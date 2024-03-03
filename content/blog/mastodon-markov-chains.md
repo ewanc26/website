@@ -14,6 +14,16 @@ It's a way to create a relatively simple algorithm with *maths*, and I did that!
 
 As you would see from [@ewan_mrkv@infosec.exchange](https://infosec.exchange/@ewan_mrkv), it takes my posts and spits out new randomised posts, which usually is gibberish.
 
+## Why did I create one?
+
+I created [@ewan_mrkv@infosec.exchange](https://infosec.exchange/@ewan_mrkv) as I had seen other Markov chain generative bots such as [@chain@brain.d.on-t.work](https://brain.d.on-t.work/@chain) (which is built from [@kopper@brain.d.on-t.work](https://brain.d.on-t.work/@kopper)'s posts). It sparked interest in the gibberish that it could generate, but I wanted to keep it updated, so *I did it myself!*
+
+### Open source?
+
+I also made it open-source with the [MIT Licence](https://opensource.org/license/mit) so that other people could use my shoddy code *(If it works, don't touch it!)* and build on it.
+
+I'm honestly just glad I was able to use Python again. It was fun to code!
+
 ## How Does the Script work?
 
 Here is a brief explanation of how [the Mastodon Markov chain bot](https://github.com/ewanc26/mastodon-markov) works. If you'd like to learn how Markov chains work, I recommend watching [this video by Harvard](https://www.youtube.com/watch?v=JHwyHIz6a8A).
@@ -50,12 +60,6 @@ The main loop orchestrates the entire process. It calculates a random refresh in
 
 The script interacts with the user when necessary, prompting for Mastodon and environment variable details if they're not already configured. It also monitors for the `ctrl+C` hotkey as a way for the script to be stopped immediately.
 
-## Why did I create one?
+## Conclusion
 
-I created [@ewan_mrkv@infosec.exchange](https://infosec.exchange/@ewan_mrkv) as I had seen other Markov chain generative bots such as [@chain@brain.d.on-t.work](https://brain.d.on-t.work/@chain) (which is built from [@kopper@brain.d.on-t.work](https://brain.d.on-t.work/@kopper)'s posts). It sparked interest in the gibberish that it could generate, but I wanted to keep it updated, so *I did it myself!*
-
-### Open source?
-
-I also made it open-source with the [MIT Licence](https://opensource.org/license/mit) so that other people could use my shoddy code *(If it works, don't touch it!)* and build on it.
-
-I'm honestly just glad I was able to use Python again. It was fun to code!
+Working on this project reignited my love for coding in Python. The process involved in setting up the Mastodon Markov chain bot, from importing necessary libraries to cleaning content and orchestrating dataset refreshes, has been both educational and rewarding. Moreover, the interaction with users, prompt handling, and error management added a layer of complexity that enhanced the overall coding experience.
