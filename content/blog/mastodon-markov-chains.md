@@ -38,7 +38,7 @@ It loads environment variables from a `.env` file using `dotenv.load_dotenv()`. 
 
 ### Cleaning Content
 
-A function called `clean_content()` is defined to sanitize HTML content fetched from Mastodon posts. It removes HTML tags, decodes HTML entities, eliminates usernames, and filters out special characters, ensuring clean input for the Markov chain.
+A function called `clean_content()` is defined to sanitise HTML content fetched from Mastodon posts. It removes HTML tags, decodes HTML entities, eliminates usernames, and filters out special characters, ensuring clean input for the Markov chain.
 
 ### Fetching Mastodon Posts
 
