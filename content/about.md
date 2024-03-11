@@ -14,7 +14,7 @@ ShowWordCount: false
 ![an image of me](/images/Ewan.jpeg)
 
 I am a British programmer and hobbyist poet.
-I was born in Spain, and raised in the UK (I am English-Scottish heritage.)
+I was born in Spain, and raised in the UK (I am Anglo-Scottish heritage.)
 
 I enjoy many things, but these are my favourites:
 
