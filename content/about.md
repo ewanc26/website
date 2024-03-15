@@ -33,4 +33,4 @@ I also like [music](https://open.spotify.com/playlist/4Zc7Jo2VgPDQaDWbS9FIGi?si=
 
 I was on major social media, but I've largely stepped away from most in favour of the [Fediverse (OSW)](https://fediverse.info).  
   
-You can find me [here](https://infosec.exchange/@ewan) for my main social media presence. [It can be accessed via RSS too](https://infosec.exchange/@ewan.rss)!
+You can find me [here](https://infosec.exchange/@ewan) for my main social media presence.
