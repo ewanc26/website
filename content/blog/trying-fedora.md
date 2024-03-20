@@ -1,6 +1,6 @@
 ---
 title: "Fedora: My First Distro Hop"
-summary: "I have moved to Fedora Linux."
+summary: "I have moved to Fedora Linux on my laptop."
 description: "Not even a week later. Sorry Pop!_OS, I was too curious."
 date: 2024-02-20T13:48:56Z
 draft: false
