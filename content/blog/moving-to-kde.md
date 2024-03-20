@@ -2,10 +2,9 @@
 title: "Fedora: The KDE Plasma Spin"
 summary: "I have moved to KDE Plasma on Fedora on my laptop."
 description: "Plasma is pretty hot, so why not give it a shot?"
-date: 2024-03-20T20:08:56Z
+date: 2024-03-20T19:08:56Z
 draft: false
 tags: ['Linux']
-showToc: true
 ---
 
 Ah, the joys of Linux.
@@ -29,3 +28,5 @@ My first attempt was *okay,* but it was a Windows-like style. I didn't like that
 I then found a good macOS-like style that I preferred. It's kind of a mix between the two, really.
 
 ![My KDE Plasma Desktop, showing a more macOS-like layout than before.](/images/linux/Fedora-desktop-KDE-2.png 'My KDE Plasma Desktop, showing a more macOS-like layout than before.')
+
+Guess that I have to get used to KDE Plasma after pretty much exclusively using GNOME now...
