@@ -104,6 +104,6 @@ It's such a special thing for us, because a lot of the time, special interests c
 
 ## Conclusion
 
-Despite the struggles, there's beauty in neurodiversity. It's about embracing differences and celebrating the unique perspectives that each individual brings to the table. Whether it's finding comfort in infodumping on a loved one or navigating the world with a colorful palette of language associations, being neurodivergent is an integral part of who I am.
+Despite the struggles, there's beauty in neurodiversity. It's about embracing differences and celebrating the unique perspectives that each individual brings to the table. Whether it's finding comfort in infodumping on a loved one or navigating the world with a colourful palette of language associations, being neurodivergent is an integral part of who I am.
 
 Through awareness and understanding, we can create a more inclusive society where neurodivergent individuals are valued for their contributions and respected for their unique perspectives. So, here's to embracing neurodiversity and celebrating the diverse ways in which we all experience the world.
