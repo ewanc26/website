@@ -26,7 +26,7 @@ On that note, let's get started.
 
 As seen with [my poetry](/poetry), one might assume that I don't have that much creativity. That is *not* the case.
 
-I state that the poetry shown is the selection that I am *comfortable* with showing. As of writing this post, I have 131 poems overall.
+I state that the poetry shown is the selection that I am *comfortable* with showing. As of writing this post, I have 131 poems overall as of writing.
 
 ### Depths of Poetry
 
