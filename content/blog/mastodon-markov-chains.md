@@ -12,11 +12,11 @@ tags: ['Fediverse', 'Programming', 'Python']
 
 It's a way to create a relatively simple algorithm with *maths*, and I did that!
 
-As you would see from [@ewan_mrkv@infosec.exchange](https://infosec.exchange/@ewan_mrkv), it takes my posts and spits out new randomised posts, which usually is gibberish.
+As you would see from the bot, it takes my posts and spits out new randomised posts, which usually is gibberish.
 
 ## Why did I create one?
 
-I created [@ewan_mrkv@infosec.exchange](https://infosec.exchange/@ewan_mrkv) as I had seen other Markov chain generative bots such as [@chain@brain.d.on-t.work](https://brain.d.on-t.work/@chain) (which is built from [@kopper@brain.d.on-t.work](https://brain.d.on-t.work/@kopper)'s posts). It sparked interest in the gibberish that it could generate, but I wanted to keep it updated, so *I did it myself!*
+I created my bot as I had seen other Markov chain generative bots such as [@chain@brain.d.on-t.work](https://brain.d.on-t.work/@chain) (which is built from [@kopper@brain.d.on-t.work](https://brain.d.on-t.work/@kopper)'s posts). It sparked interest in the gibberish that it could generate, but I wanted to keep it updated, so *I did it myself!*
 
 ### Open source?
 
