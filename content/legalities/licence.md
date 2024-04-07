@@ -7,7 +7,7 @@ ShowReadingTime: false
 ShowWordCount: false
 ---
 
-The [code files in the GitHub repository for this site](https://github.com/ewanc26/website) are under the MIT Licence, whereas the text and original imagery (such that are *not* attributed elsewhere) featured on this website are under the CC BY 4.0 Licence, while my original poetry is under CC BY-NC-ND 4.0.
+The [code files in the GitHub repository for this site](https://github.com/ewanc26/website) are under the MIT Licence, whereas the text and original imagery (such that are *not* attributed elsewhere or are explicitly overridden by other licences seen below) featured on this website are under the CC BY 4.0 Licence, while my original creative works are under CC BY-NC-ND 4.0.
 
 ## MIT Licence
 
@@ -15,7 +15,7 @@ The [code files in the GitHub repository for this site](https://github.com/ewanc
 
 Copyright © 2024 Ewan Croft
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicence, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
@@ -44,13 +44,13 @@ Full Licence details: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 Copyright © 2024 Ewan Croft
 
-The Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International License (CC BY-NC-ND 4.0) governs the use of original poetry featured on this website. Under this license:
+The Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International License (CC BY-NC-ND 4.0) governs the use of original creative works (poetry, art, song lyrics, music et cetera) featured on this website. Under this license:
 
-- Attribution (CC BY): Others are allowed to share the original poetry as long as appropriate credit is given to the author, Ewan Croft. The attribution should include a link to the license, and any changes made must be indicated, though no suggestion of endorsement is required.
-- NonCommercial (NC): Commercial use of the original poetry is not permitted without explicit permission from the author. This restriction ensures that the work is not used for commercial purposes without the author's consent.
-- NoDerivs (ND): Modifications, adaptations, or transformations of the original poetry are not allowed under this license. The work must be shared in its original form without alterations.
+- Attribution (CC BY): Others are allowed to share the original creative works as long as appropriate credit is given to the author, Ewan Croft. The attribution should include a link to the license, and any changes made must be indicated, though no suggestion of endorsement is required.
+- NonCommercial (NC): Commercial use of the original creative works is not permitted without explicit permission from the author. This restriction ensures that the work is not used for commercial purposes without the author's consent.
+- NoDerivs (ND): Modifications, adaptations, or transformations of the original creative works are not allowed under this license. The work must be shared in its original form without alterations.
 The full details of the CC BY-NC-ND 4.0 License can be found [here](https://creativecommons.org/licenses/by-nc-nd/4.0/).
 
 ## PaperMod and Hugo
 
-These are not my property, and I use them both in alignment with the MIT licence (PaperMod) and Apache License 2.0 (Hugo) accordingly. You may see their attributions in the footer.
+These are not my property, and I use them both in alignment with the MIT licence (PaperMod) and Apache License 2.0 (Hugo) accordingly.
