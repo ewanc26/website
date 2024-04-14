@@ -7,10 +7,6 @@ ShowReadingTime: false
 ShowWordCount: false
 ---
 
-![Written by Human, Not by AI](/images/not-by-ai/english/Written-By-Human-Not-By-AI-Badge-black.svg "Written by Human, Not by AI")
-
----
-
 ![an image of me](/images/Ewan.jpeg)
 
 I am a British programmer and hobbyist poet.
