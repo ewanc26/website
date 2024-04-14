@@ -6,4 +6,4 @@ summary: 'The archive of my site. This correlates all of the posts from my blog 
 description: The archive of my site, showing every post on here.
 ---
 
-![Written by Human, Not by AI](/images/not-by-ai/english/Written-By-Human-Not-By-AI-Badge-black.svg "Written by Human, Not by AI")
+
