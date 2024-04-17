@@ -5,6 +5,11 @@ description: "I do really like the platform, but it's got its pitfalls."
 date: 2024-04-17T02:14:10+01:00
 draft: false
 tags: ['Bluesky']
+cover:
+    image: "/images/bluesky/bluesky-profile.jpeg"
+    alt: "My Bluesky account (@ewancroft.uk) as seen through bsky.app"
+    caption: "My Bluesky account (@ewancroft.uk) as seen through bsky.app"
+    relative: false
 ---
 
 Bluesky, `bsky`, whatever.
