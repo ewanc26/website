@@ -20,7 +20,7 @@ I decided to test it out a few days ago, with my account being [@ewancroft.uk](h
 
 ## My Thoughts
 
-Bluesky has a pretty similar feel to Twitter (in particular - *early* Twitter c. 2008-2013) and a similar UI. It's not much of a surprise when co-founder of Twitter, Jack Dorsey, is on Bluesky's board of directors. He initially announced Bluesky as an initiative while CEO of Twitter in 2019[^1] and continued on with it as a board member when it was incorporated as a separate [benefit corporation](https://en.wikipedia.org/wiki/Benefit_corporation) from Twitter in late 2021[^1]
+Bluesky has a pretty similar feel to Twitter (in particular - *early* Twitter c. 2008-2013) and a similar UI. It's not much of a surprise when co-founder of Twitter, Jack Dorsey, was on Bluesky's board of directors. He initially announced Bluesky as an initiative while CEO of Twitter in 2019[^1] and continued on with it as a board member when it was incorporated as a separate [benefit corporation](https://en.wikipedia.org/wiki/Benefit_corporation) from Twitter in late 2021[^1]
 
 Anyway, enough of reading off of Wikipedia. Let me talk about what I think.
 
