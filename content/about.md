@@ -18,7 +18,7 @@ I enjoy many things, but these are my favourites:
 - [Lycanthropy](https://en.wikipedia.org/wiki/Werewolf) (you can thank CBBC's ["Wolfblood"](https://en.wikipedia.org/wiki/Wolfblood) for that)
 - Linguistics and language
 - Doctor Who
-- PlayStation and Nintendo, although I'm slowly moving my PlayStation library over to Steam.
+- Gaming
 - Steven Universe
 - [BEASTARS](https://en.wikipedia.org/wiki/Beastars)  
 - [The SCP Foundation](https://en.wikipedia.org/wiki/SCP_Foundation), with my favorites being [SCP-999](https://scp-wiki.wikidot.com/scp-999),  
