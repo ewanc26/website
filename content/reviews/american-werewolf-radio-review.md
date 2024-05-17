@@ -11,7 +11,7 @@ tags: ['Werewolves']
 
 ---
 
-So, as most horror fans would know, the 1981 horror-comedy 'An American Werewolf in London' was a renowned success and is referenced a lot in subsequent lycanthropic fiction; I would say, 'An American Werewolf in London' is a brilliant watch, and, despite its dated references to erotic cinemas and the wedding of at-the-time Prince Charles and Lady Diana, is timeless.
+So, as most horror fans would know, the 1981 comedy-horror 'An American Werewolf in London' was a renowned success and is referenced a lot in subsequent lycanthropic fiction; I would say, 'An American Werewolf in London' is a brilliant watch, and, despite its dated references to erotic cinemas and the wedding of at-the-time Prince Charles and Lady Diana, is timeless.
 
 However, most would forget about the BBC's 1997 made-for-radio audio adaptation of the film. Not much fanfare for it, sadly, but here are my ramblings as I listen through it for the first time. The following thoughts are typed out as the story progresses, so forgive any missed cues and such.
 
