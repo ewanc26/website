@@ -56,9 +56,11 @@ Short and sweet... not.
 
 I'm definitely spoiled because Mastodon by default supplies 500 characters to play with per post, and [infosec.exchange](https://infosec.exchange), my Mastodon server, supplies me with an overly generous 11000 characters.
 
-#### No Direct Messaging Support
+#### ~~No Direct Messaging Support~~
 
-One glaring omission in Bluesky's feature set is the lack of direct messaging (DM) support. DMs are a crucial aspect of social media platforms, so why leave them out?
+~~One glaring omission in Bluesky's feature set is the lack of direct messaging (DM) support. DMs are a crucial aspect of social media platforms, so why leave them out?~~
+
+***Update!*** as of [this post](https://bsky.app/profile/bsky.app/post/3ksi2kwx5xe2x), DMs are coming!
 
 #### Lack of Post Editing Functionality
 
