@@ -90,7 +90,7 @@ params:
     - name: GitHub
       url: "https://github.com/"
     - name: Bluesky
-      url: "https://bsky.app/profile/ewancroft.uk"
+      url: "https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol"
     - name: Mastodon
       url: "https://infosec.exchange/@ewan"
     - name: RSS
