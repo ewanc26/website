@@ -33,3 +33,5 @@ I also like [music](https://open.spotify.com/playlist/4Zc7Jo2VgPDQaDWbS9FIGi?si=
 1. Mastodon: [@ewan@infosec.exchange](https://infosec.exchange/@ewan)
 
 2. Bluesky: [@ewancroft.uk](https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol)
+
+3. Bluesky bridged to Mastodon and the Fediverse: [@ewancroft.uk@bsky.brid.gy](https://fed.brid.gy/bsky/ewancroft.uk)
