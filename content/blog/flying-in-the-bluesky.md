@@ -14,7 +14,7 @@ cover:
 
 Well!
 
-I didn't think I'd be doing a follow up to a post, but here we are. This is a two-month follow-up to ["Gazing Into the Bluesky."](../gazing-into-the-bluesky)
+I didn't think I'd be doing a follow-up to a post, but here we are. This is a two-month follow-up to ["Gazing Into the Bluesky."](../gazing-into-the-bluesky)
 
 I have some new thoughts and things I wanted to update the blog on!
 
@@ -26,9 +26,9 @@ Why is this? There are a few reasons.
 
 ### Mastodon and its Toxicity
 
-Mastodon, for what it's worth, is a great platform! I admire and love what an European company can do in the tech world! It has brilliant filtering and self-moderation tools.
+Mastodon, for what it's worth, is a great platform! I admire and love what a European company can do in the tech world! It has brilliant filtering and self-moderation tools.
 
-The userbase has, sadly, slowly, gnawed me down to the point that I just... can't deal with it anymore. A lot of the time, it's pleasent, but more and more I've seen toxicity drip its way into my feed.
+The userbase has, sadly, slowly, gnawed me down to the point that I just... can't deal with it anymore. A lot of the time, it's pleasant, but more and more I've seen toxicity drip its way into my feed.
 
 Those on other Fediverse platforms have actually called this part of the Mastodon community the "Mastocels" (a portmanteau of "Mastodon" and ["Incel"](https://en.wikipedia.org/wiki/Incel)) and honestly, I can see why.
 
@@ -42,7 +42,7 @@ Mastodon is *rife* with them. I personally feel like [the perception](https://lo
 
 ### Curiosity
 
-General curiousity about the community is strong. I'm still finding new interesting people every day, and haven't had a significant bad experience ~~yet~~.
+General curiosity about the community is strong. I'm still finding new interesting people every day, and haven't had a significant bad experience ~~yet~~.
 
 ### Furries
 
