@@ -6,7 +6,7 @@ date: 2024-04-17T02:14:10+01:00
 draft: false
 tags: ['Bluesky']
 cover:
-    image: "/images/bluesky/bluesky-profile.jpeg"
+    image: "/images/bluesky/bluesky-profile-march.jpeg"
     alt: "My Bluesky account (@ewancroft.uk) as seen through bsky.app"
     caption: "My Bluesky account (@ewancroft.uk) as seen through bsky.app"
     relative: false
@@ -26,7 +26,7 @@ Anyway, enough of reading off of Wikipedia. Let me talk about what I think.
 
 ### User Interface
 
-![The 'Following' feed of the default web interface, on bsky.app](/images/bluesky/bluesky-ui.jpeg)
+![The 'Following' feed of the default web interface, on bsky.app](/images/bluesky/bluesky-ui-march.jpeg)
 
 I quite like the UI, it's familiar for those coming from Twitter and has the familiar layout as such. No real complaints.
 
@@ -60,7 +60,7 @@ I'm definitely spoiled because Mastodon by default supplies 500 characters to pl
 
 ~~One glaring omission in Bluesky's feature set is the lack of direct messaging (DM) support. DMs are a crucial aspect of social media platforms, so why leave them out?~~
 
-***Update!*** as of [this post](https://bsky.app/profile/bsky.app/post/3ksi2kwx5xe2x), DMs are coming!
+***Update!*** as of [this post](https://bsky.app/profile/bsky.app/post/3kt3y33tk4w2m), DMs are here!
 
 #### Lack of Post Editing Functionality
 
