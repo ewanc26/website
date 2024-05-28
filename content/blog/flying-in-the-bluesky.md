@@ -57,5 +57,3 @@ The Bluesky core developer team have been very active in the community. It's ref
 Yeah. I'm no longer really in the Fediverse. If you count [BridgyFed](https://fed.brid.gy/), though, I still am!
 
 My Bluesky account ([@ewancroft.uk](https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol)) has been bridged over to the Fediverse through BridgyFed at [@ewancroft.uk@bsky.brid.gy](https://fed.brid.gy/bsky/ewancroft.uk).
-
-I have [left a statement](https://infosec.exchange/@ewan/112496305999439269) on my old Mastodon account stating that people can follow me there instead.
