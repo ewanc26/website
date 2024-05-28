@@ -1,1 +1,56 @@
-{"subject":"acct:ewan@infosec.exchange","aliases":["https://infosec.exchange/@ewan","https://infosec.exchange/users/ewan"],"links":[{"rel":"http://webfinger.net/rel/profile-page","type":"text/html","href":"https://infosec.exchange/@ewan"},{"rel":"self","type":"application/activity+json","href":"https://infosec.exchange/users/ewan"},{"rel":"http://ostatus.org/schema/1.0/subscribe","template":"https://infosec.exchange/authorize_interaction?uri={uri}"},{"rel":"http://webfinger.net/rel/avatar","type":"image/jpeg","href":"https://media.infosec.exchange/infosec.exchange/accounts/avatars/112/023/564/670/540/448/original/1e8e60b842030aee.jpeg"}]}
+{
+  "aliases": [
+    "https://bsky.app/profile/ewancroft.uk",
+    "https://ewancroft.uk/"
+  ],
+  "links": [
+    {
+      "href": "https://bsky.app/profile/ewancroft.uk",
+      "rel": "http://webfinger.net/rel/profile-page",
+      "type": "text/html"
+    },
+    {
+      "href": "https://ewancroft.uk/",
+      "rel": "http://webfinger.net/rel/profile-page",
+      "type": "text/html"
+    },
+    {
+      "href": "https://boletus.us-west.host.bsky.network/xrpc/com.atproto.sync.getBlob?did=did:plc:ofrbh253gwicbkc5nktqepol&cid=bafkreidhmj4bpx4fjeoewgh3o6mlstef6pkkb3nsbvqzcemh5astbiws2y",
+      "rel": "http://webfinger.net/rel/avatar"
+    },
+    {
+      "href": "https://boletus.us-west.host.bsky.network/xrpc/com.atproto.sync.getBlob?did=did:plc:ofrbh253gwicbkc5nktqepol&cid=bafkreie2zexyzmusyzqecal7l7ojf75gl67xxarfu7sbhzalmtuidxthya",
+      "rel": "http://webfinger.net/rel/avatar"
+    },
+    {
+      "href": "https://bsky.app/profile/ewancroft.uk",
+      "rel": "canonical_uri",
+      "type": "text/html"
+    },
+    {
+      "href": "https://bsky.brid.gy/ap/did:plc:ofrbh253gwicbkc5nktqepol",
+      "rel": "self",
+      "type": "application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\""
+    },
+    {
+      "href": "https://bsky.brid.gy/ap/did:plc:ofrbh253gwicbkc5nktqepol",
+      "rel": "self",
+      "type": "application/activity+json"
+    },
+    {
+      "href": "https://bsky.brid.gy/ap/did:plc:ofrbh253gwicbkc5nktqepol/inbox",
+      "rel": "inbox",
+      "type": "application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\""
+    },
+    {
+      "href": "https://bsky.brid.gy/ap/sharedInbox",
+      "rel": "sharedInbox",
+      "type": "application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\""
+    },
+    {
+      "rel": "http://ostatus.org/schema/1.0/subscribe",
+      "template": "https://fed.brid.gy/bsky/ewancroft.uk?url={uri}"
+    }
+  ],
+  "subject": "acct:ewancroft.uk@bsky.brid.gy"
+}
