@@ -1,7 +1,7 @@
 ---
 title: 'About Me'
 url: '/about'
-summary: 'About Me'
+summary: 'About Me.'
 searchHidden: true
 ShowReadingTime: false
 ShowWordCount: false
