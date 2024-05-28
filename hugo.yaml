@@ -73,6 +73,10 @@ params:
         name: About Me
         url: /about
         weight: 10
+      - identifier: verification
+        name: Verification
+        url: /verification
+        weight: 20
       - identifier: blog
         name: Blog
         url: /blog/
