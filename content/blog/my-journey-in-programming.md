@@ -51,7 +51,7 @@ Anyway, with the shift from Windows to macOS, it took me a while to get back in 
 
 ### January 2024 and Thereafter
 
-It all leads up to now, with me now using [Hugo](https://gohugo.io) to manage my website which I bought [a domain](https://en.wikipedia.org/wiki/Domain_name) (do you see it in your address bar?) for, and I'm doing a Software Developer course. It's what you'd expect, detailing working as a Software Developer in the tech industry and explaining those concepts through units, I've just done units on Microsoft Access databases and spreadsheets using Microsoft Excel, along with units on documentation and blogging. *(hah, nice, what I'm doing right now!)*
+It all leads up to now, with me now using [Hugo](https://gohugo.io) to manage my website which I bought [a domain](https://en.wikipedia.org/wiki/Domain_name) (do you see it in your address bar?) for.
 
 I'm not sure where I'll go from here between programming and my other endeavours such as my poetry, but I think I will continue with how I am for now, before I do anything too serious in the future.
 

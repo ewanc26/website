@@ -101,7 +101,7 @@ For my personal website, using the .UK geoTLD made sense due to my target audien
 
 1. Regular backups: I utilise Git for version control and maintain regular backups of my website data on cloud storage services, ensuring redundancy and quick restoration in case of issues.
 
-2. Diversified presence: While my website serves as a great online presence for myself, I also maintain [a profile](https://infosec.town/ewan) and engage with communities on the Fediverse, mitigating the risk of relying solely on one platform.
+2. Diversified presence: While my website serves as a great online presence for myself, I also maintain a profile and engage with communities on the Fediverse, mitigating the risk of relying solely on one platform. (*UPDATE: I'm now [on Bluesky.](../flying-in-the-bluesky)*)
 
 ## Impact on the Queer.AF community diaspora
 
