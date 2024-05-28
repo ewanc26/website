@@ -88,7 +88,7 @@ params:
 
   socialIcons:
     - name: GitHub
-      url: "https://github.com/"
+      url: "https://github.com/ewanc26"
     - name: Bluesky
       url: "https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol"
     - name: RSS
