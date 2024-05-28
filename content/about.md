@@ -26,12 +26,4 @@ I enjoy many things, but these are my favourites:
 - [Analogue Horror](https://aesthetics.fandom.com/wiki/Analog_Horror), specifically [Kane Pixel's "Backrooms"](https://kane-pixels-backrooms.fandom.com/wiki/Kane_Pixels_Backrooms_Wiki) and [Nexpo's "Liminal Land"](https://www.visitliminalland.net/).
 - [Hazbin Hotel](https://en.wikipedia.org/wiki/Hazbin_Hotel) and [Helluva Boss](https://en.wikipedia.org/wiki/Helluva_Boss).
 
-I also like [music](https://open.spotify.com/playlist/4Zc7Jo2VgPDQaDWbS9FIGi?si=69ed6ddd095a4e91)!  
-  
-#### Social Media
-
-1. Mastodon: [@ewan@infosec.exchange](https://infosec.exchange/@ewan)
-
-2. Bluesky: [@ewancroft.uk](https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol)
-
-3. Bluesky bridged to Mastodon and the Fediverse: [@ewancroft.uk@bsky.brid.gy](https://fed.brid.gy/bsky/ewancroft.uk)
+I also like [music](https://open.spotify.com/playlist/4Zc7Jo2VgPDQaDWbS9FIGi)!
