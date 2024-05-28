@@ -12,14 +12,18 @@ menu:
       name: Archive
       url: /archive
       weight: 20
+    - identifier: verification
+      name: Verification
+      url: /verification
+      weight: 30
     - identifier: tags
       name: Tags
       url: /tags
-      weight: 30
+      weight: 40
     - identifier: search
       name: Search
       url: /search
-      weight: 40
+      weight: 50
 
 taxonomies:
   tag: "tags"
@@ -73,10 +77,6 @@ params:
         name: About Me
         url: /about
         weight: 10
-      - identifier: verification
-        name: Verification
-        url: /verification
-        weight: 20
       - identifier: blog
         name: Blog
         url: /blog/
