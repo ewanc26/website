@@ -53,4 +53,4 @@ I will *never* try to give you crypto trading tips. If an account claims to be m
 
 ### Inactive Accounts
 
-The accounts, such as my Mastodon account listed above, that are inactive (particularly on the Fediverse) and look to be mine should be regarded with suspicion regardless.
+The accounts, such as my Mastodon account listed above, that are inactive (particularly on the Fediverse) and look to be mine should be regarded with suspicion regardless. This should go without saying, really.
