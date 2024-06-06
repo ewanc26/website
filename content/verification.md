@@ -15,7 +15,7 @@ This page serves as the system of record for my online identity. I control the f
 
 - Bluesky: [@ewancroft.uk](https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol)
 
-- Bluesky bridged to Mastodon and the Fediverse: [@ewancroft.uk@bsky.brid.gy](https://fed.brid.gy/bsky/ewancroft.uk)
+- Bluesky bridged to Mastodon and the rest of the Fediverse: [@ewancroft.uk@bsky.brid.gy](https://fed.brid.gy/bsky/ewancroft.uk) (make sure to follow `@bsky.brid.gy@bsky.brid.gy` to bridge your Fediverse account to Bluesky!)
 
 - Mastodon: [@ewan@infosec.exchange](https://infosec.exchange/@ewan) (No longer used.)
 
