@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Artificial Intelligence on Ewan&#39;s Corner</title>
+    <link>https://ewancroft.uk/tags/artificial-intelligence/</link>
+    <description>Recent content in Artificial Intelligence on Ewan&#39;s Corner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Sun, 07 Apr 2024 04:18:43 +0100</lastBuildDate>
+    <atom:link href="https://ewancroft.uk/tags/artificial-intelligence/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Suno AI and Song Generation</title>
+      <link>https://ewancroft.uk/blog/suno-ai-and-song-generation/</link>
+      <pubDate>Sun, 07 Apr 2024 04:18:43 +0100</pubDate>
+      <guid>https://ewancroft.uk/blog/suno-ai-and-song-generation/</guid>
+      <description>I tested Suno AI. I have some thoughts.</description>
+    </item>
+  </channel>
+</rss>
