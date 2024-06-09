@@ -29,7 +29,9 @@ As stated above, [@ewancroft.uk](https://bsky.app/profile/did:plc:ofrbh253gwicbk
 
 I will *always* put my Bluesky bot accounts on a `*.ewancroft.uk` subdomain with the source code on GitHub. These are:
 
-1. [@awoo.ewancroft.uk](https://bsky.app/profile/awoo.ewancroft.uk)
+1. [@awoo.ewancroft.uk](https://bsky.app/profile/awoo.ewancroft.uk) ([source code](https://github.com/ewanc26/bluesky-awoo-bot))
+
+2. [@markov.ewancroft.uk](https://bsky.app/profile/markov.ewancroft.uk) ([source code](https://github.com/ewanc26/bluesky-markov))
 
 ### Development
 
