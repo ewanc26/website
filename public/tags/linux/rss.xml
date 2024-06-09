@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Ewan&#39;s Corner</title>
+    <link>https://ewancroft.uk/tags/linux/</link>
+    <description>Recent content in Linux on Ewan&#39;s Corner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Wed, 20 Mar 2024 19:08:56 +0000</lastBuildDate>
+    <atom:link href="https://ewancroft.uk/tags/linux/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Fedora: The KDE Plasma Spin</title>
+      <link>https://ewancroft.uk/blog/moving-to-kde/</link>
+      <pubDate>Wed, 20 Mar 2024 19:08:56 +0000</pubDate>
+      <guid>https://ewancroft.uk/blog/moving-to-kde/</guid>
+      <description>Plasma is pretty hot, so why not give it a shot?</description>
+    </item>
+    <item>
+      <title>Fedora: My First Distro Hop</title>
+      <link>https://ewancroft.uk/blog/trying-fedora/</link>
+      <pubDate>Tue, 20 Feb 2024 13:48:56 +0000</pubDate>
+      <guid>https://ewancroft.uk/blog/trying-fedora/</guid>
+      <description>Not even a week later. Sorry Pop!_OS, I was too curious.</description>
+    </item>
+    <item>
+      <title>Ditching Windows: My Time Using macOS and Pop!_OS</title>
+      <link>https://ewancroft.uk/blog/ditching-windows/</link>
+      <pubDate>Sun, 18 Feb 2024 01:45:25 +0000</pubDate>
+      <guid>https://ewancroft.uk/blog/ditching-windows/</guid>
+      <description>Sadly, I still have to use Windows at college.</description>
+    </item>
+  </channel>
+</rss>

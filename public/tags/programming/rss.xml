@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Programming on Ewan&#39;s Corner</title>
+    <link>https://ewancroft.uk/tags/programming/</link>
+    <description>Recent content in Programming on Ewan&#39;s Corner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Sun, 03 Mar 2024 14:24:14 +0000</lastBuildDate>
+    <atom:link href="https://ewancroft.uk/tags/programming/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mastodon Markov Chains, and Why I Created My Own</title>
+      <link>https://ewancroft.uk/blog/mastodon-markov-chains/</link>
+      <pubDate>Sun, 03 Mar 2024 14:24:14 +0000</pubDate>
+      <guid>https://ewancroft.uk/blog/mastodon-markov-chains/</guid>
+      <description>Gibberish is my hobby.</description>
+    </item>
+    <item>
+      <title>My Journey in Programming</title>
+      <link>https://ewancroft.uk/blog/my-journey-in-programming/</link>
+      <pubDate>Mon, 22 Jan 2024 22:59:33 +0000</pubDate>
+      <guid>https://ewancroft.uk/blog/my-journey-in-programming/</guid>
+      <description>I thought about doing this for a while, so here, my programming journey as I remember it.</description>
+    </item>
+  </channel>
+</rss>
