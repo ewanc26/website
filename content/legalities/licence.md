@@ -1,7 +1,7 @@
 ---
 title: 'Licence'
 url: '/legalities/licence'
-summary: 'Website licence'
+summary: 'Website licence.'
 searchHidden: true
 ShowReadingTime: false
 ShowWordCount: false
