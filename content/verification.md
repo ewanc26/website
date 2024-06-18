@@ -21,7 +21,7 @@ This page serves as the system of record for my online identity. I control the f
 
 ### Bluesky Accounts
 
-As Bluesky (and by extension, [ATProto](https://atproto.com)) use apex and subdomains as the username (or "handle") and require access to the domain to register as such, please disregard any account that does not have `*.ewancroft.uk` in the username.
+As Bluesky (and by extension, [ATProto](https://atproto.com)) use apex (main) domains and subdomains as the username (or "handle") and require access to the domain to register. As such, please disregard any account that does not have `*.ewancroft.uk` in the username.
 
 As stated above, [@ewancroft.uk](https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol) is my Bluesky account with [@ewancroft.uk@bsky.brid.gy](https://fed.brid.gy/bsky/ewancroft.uk) being the same account bridged over to the Fediverse with [BridgyFed.](https://fed.brid.gy)
 
