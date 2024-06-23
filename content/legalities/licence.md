@@ -13,7 +13,7 @@ The [code files in the GitHub repository for this site](https://github.com/ewanc
 
 ### ROOT ('/')
 
-Copyright © 2024 Ewan Croft
+Copyright &copy; 2024 Ewan Croft
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -25,7 +25,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ### CC BY 4.0
 
-Copyright © 2024 Ewan Croft
+Copyright &copy; 2024 Ewan Croft
 
 This work (including text and imagery (such that are *not* attributed elsewhere)) is licenced under a Creative Commons Attribution 4.0 International Licence.
 
@@ -42,7 +42,7 @@ Full Licence details: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 ### CC BY NC-ND 4.0
 
-Copyright © 2024 Ewan Croft
+Copyright &copy; 2024 Ewan Croft
 
 The Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International License (CC BY-NC-ND 4.0) governs the use of original creative works (poetry, art, song lyrics, music et cetera) featured on this website. Under this license:
 

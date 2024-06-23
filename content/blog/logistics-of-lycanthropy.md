@@ -195,7 +195,7 @@ As we navigate through the landscapes of ancient myths, cinematic masterpieces, 
 Ultimately, the logistics of lycanthropy may remain a speculative mystery, but the enduring allure of werewolf tales lies in their power to mirror and navigate the complexities of the human condition. Whether it's the ancient howls echoing through mythic forests or the modern-day struggles depicted on screen and in literature, the werewolf continues to captivate our imaginations, reminding us that within the realms of transformation, there exists a profound exploration of what it means to be human.
 
 [^1]: [Twilight (series)](https://en.wikipedia.org/wiki/Twilight_(novel_series))
-[^2]: A stanza from my poem 'Lunar Descent' (© Ewan Croft under [CC BY-ND-NC 4.0.](/legalities/licence/#cc-by-nc-nd-40))
+[^2]: A stanza from my poem 'Lunar Descent' (&copy; Ewan Croft under [CC BY-ND-NC 4.0.](/legalities/licence/#cc-by-nc-nd-40))
 [^3]: ['According to Ovid’s Metamorphoses, Book I. Lycaon himself was turned into a wolf.'](https://www.britannica.com/topic/Lycaon-Greek-mythology)
 [^4]: <https://kilkennycastle.ie/the-ossory-werewolves>
 [^5]: <https://www.britannica.com/biography/Saint-Patrick>, <https://en.wikipedia.org/wiki/History_of_Christianity_in_Ireland>
