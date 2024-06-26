@@ -27,3 +27,5 @@ I enjoy many things, but these are my favourites:
 - [Hazbin Hotel](https://en.wikipedia.org/wiki/Hazbin_Hotel) and [Helluva Boss](https://en.wikipedia.org/wiki/Helluva_Boss).
 
 I also like [music](https://open.spotify.com/playlist/4Zc7Jo2VgPDQaDWbS9FIGi)!
+
+You can join me on [Bluesky](https://bsky.social) via [my starter pack!](https://go.bsky.app/EhqKzmU)
