@@ -7,7 +7,7 @@ ShowReadingTime: false
 ShowWordCount: false
 ---
 
-![an image of me](/images/Ewan.jpeg)
+![A young man with short hair and a trimmed beard, smiling warmly. He is wearing a light-colored jacket and has a cheerful expression on his face.](/images/Ewan.jpeg)
 
 I am a British programmer and hobbyist poet.
 I was born in Spain, and raised in the UK (I am Anglo-Scottish heritage.)
