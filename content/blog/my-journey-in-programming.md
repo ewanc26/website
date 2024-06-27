@@ -43,7 +43,7 @@ I can revert to the previous version, but it would kill off my blog. &#128531;
 
 ### August 2023
 
-![A Mac mini, image directly from Apple.](/images/mac-mini.jpeg "A Mac mini, image directly from Apple. All rights and credits for this image belong to Apple Inc.")
+![A Mac mini, image directly from Apple.](/images/mac/mac-mini.jpeg "A Mac mini, image directly from Apple. All rights and credits for this image belong to Apple Inc.")
 
 Switching from Windows to macOS in August was a bigger deal than it might seem. Windows machines and Macs run on different systems, like Windows with its own [NT kernel](https://en.wikipedia.org/wiki/Architecture_of_Windows_NT) and Macs with the [Darwin kernel](https://en.wikipedia.org/wiki/Darwin_(operating_system)) (which powers other Apple devices too). So, I had to learn a whole new set of commands and ways of working. It was like switching spoken languages, such as English to Spanish.
 
