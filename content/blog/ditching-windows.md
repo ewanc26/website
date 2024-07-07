@@ -4,7 +4,7 @@ summary: "I discuss myself venturing into Pop!_OS Linux on my laptop, replacing 
 description: "Sadly, I still have to use Windows at college."
 date: 2024-02-18T01:45:25Z
 draft: false
-tags: ['Linux']
+tags: ['Linux', 'Windows']
 showToc: true
 ---
 
