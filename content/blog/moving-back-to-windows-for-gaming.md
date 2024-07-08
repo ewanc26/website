@@ -1,6 +1,7 @@
 ---
 title: "Moving Back to Windows (for Gaming)"
 date: 2024-07-07T20:26:38+01:00
+draft: false
 tags: ['Windows']
 summary: "I moved back to Windows for gaming. Proton wasn't too great on my laptop."
 ---
