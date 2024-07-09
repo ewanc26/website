@@ -27,7 +27,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 Copyright &copy; 2024 Ewan Croft
 
-This website's content (including text and imagery (such that are *not* attributed elsewhere)) is licenced under a Creative Commons Attribution 4.0 International Licence.
+This website's content (including text and imagery (except for content with specific attribution already provided)) is licenced under a Creative Commons Attribution 4.0 International Licence.
 
 You are free to:
 
