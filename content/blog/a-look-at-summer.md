@@ -17,7 +17,7 @@ As of last week, our first dog was put to sleep. I won't say much, but it was fo
 
 ## I got my results! I passed!
 
-I have, as of today, passed my Level 2 IT course and recieved my diploma! Time to go for Level 3 (before I get a job... oh god. I have to update my CV now. &#128517; &#x1F605;)
+I have, as of today, passed my Level 2 IT course and recieved my diploma! Time to go for Level 3 (before I get a job... oh god. I have to update my CV now. &#128517;)
 
 ## Successful Arch Linux installation!
 
