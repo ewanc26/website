@@ -1,7 +1,7 @@
 ---
 title: "Finding A Pack: Why Is It So Hard for Us as Gen Z?"
 description: "Yes, that was a pun."
-Summary: "A look into why Generation Z are the most isolated and lonely."
+summary: "A look into why Generation Z are the most isolated and lonely."
 date: 2024-01-31T04:50:25Z
 draft: false
 tags: ['Et Cetera', 'Mental Health']
