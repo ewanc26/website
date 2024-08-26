@@ -7,7 +7,7 @@ ShowReadingTime: false
 ShowWordCount: false
 ---
 
-![A young man with short hair and a trimmed beard, smiling warmly. He is wearing a light-colored jacket and has a cheerful expression on his face.](/images/Ewan.jpeg)
+![A young man with fair skin and a reddish-brown beard. He has short, slightly messy dark brown hair that is swept to the side. His eyes are light-coloured, possibly hazel or green, and he has a neutral expression on his face. The background is a plain, light-coloured wall, and he is wearing a teal and white collared shirt.](/images/Ewan.jpeg)
 
 I am a British programmer and hobbyist poet.
 I was born in Spain, and raised in the UK (I am Anglo-Scottish heritage.)
