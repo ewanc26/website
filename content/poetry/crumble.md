@@ -4,7 +4,6 @@ description:  "'Crumble' was my response to those who have seen their lives, car
 summary: "'Crumble' was my response to those who have seen their lives, careers, empires fall due to their actions. I've seen many that I respected fall from grace in recent weeks and it was mulling on my mind to do a poem in response."
 date: 2024-09-08T00:14:13Z
 draft: false
-tags: []
 ---
 
 ```plaintext
