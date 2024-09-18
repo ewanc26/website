@@ -5,7 +5,6 @@ summary: 'About me'
 searchHidden: true
 ShowReadingTime: false
 ShowWordCount: false
-layout: 'microformat/single'
 ---
 
 ![A young man with fair skin and a reddish-brown beard. He has short, slightly messy dark brown hair that is swept to the side. His eyes are light-coloured, possibly hazel or green, and he has a neutral expression on his face. The background is a plain, light-coloured wall, and he is wearing a teal and white collared shirt.](/images/Ewan.jpeg)
@@ -29,4 +28,4 @@ I enjoy many things, but these are my favourites:
 
 I also like [music](https://open.spotify.com/playlist/4Zc7Jo2VgPDQaDWbS9FIGi)!
 
-You can join me on [Bluesky](https://bsky.social) via [my starter pack](https://go.bsky.app/EiZxzTpß) or join me on [Mastodon](https://joinmastodon.org) using [my invite link.](https://mastodon.social/invite/ekqbHMEc)
+You can join me on [Bluesky](https://bsky.social) via [my starter pack!](https://go.bsky.app/EiZxzTpß)
