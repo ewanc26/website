@@ -1,0 +1,61 @@
+{{- $url := (print "https://webmention.io/api/mentions.jf2?target=" .Permalink) }}
+
+{{/*
+{{ $url := "https://webmention.io/api/mentions.jf2?target=https://indieweb.org" }}
+{{ $url := "https://webmention.io/api/mentions.jf2?target=https://aaronparecki.com/2018/06/30/11/your-first-webmention" }}
+{{ $url := "https://webmention.io/api/mentions.jf2?target=https://david.wolf.gdn/how-to-add-custom-javascript-to-adobe-captivate-projects/" }}
+*/}}
+
+{{ if not (in .Permalink "%C3%") }}
+{{ $webmentionsResource := resources.GetRemote $url }}
+{{ $webmentionsData := $webmentionsResource.Content | transform.Unmarshal }}
+
+{{ if and $webmentionsData (isset $webmentionsData "children") }}
+{{ $webmentions := $webmentionsData.children }}
+
+{{ $inReplyTo := where $webmentions "wm-property" "=" "in-reply-to" }}
+{{ $likeOf := where $webmentions "wm-property" "=" "like-of" }}
+{{ $repostOf := where $webmentions "wm-property" "=" "repost-of" }}
+{{ $bookmarkOf := where $webmentions "wm-property" "=" "bookmark-of" }}
+{{ $mentionOf := where $webmentions "wm-property" "=" "mention-of" }}
+{{ $rsvp := where $webmentions "wm-property" "=" "rsvp" }}
+
+{{ $count := len $mentionOf }}
+
+{{ if gt $count 0 }}
+<section class="webmentions">
+    <header>
+        <h1>
+            {{ if eq $count 1 }}
+            Webmention
+            {{ else }}
+            {{ $count }}
+            Webmentions
+            {{ end }}
+        </h1>
+    </header>
+    <div class="entries">
+        {{ range $mentionOf }}
+
+        {{ $property := index . "wm-property" }}
+        {{ $received := index . "wm-received" }}
+        {{ $source := index . "wm-source" }}
+
+        <article class="entry">
+            <a href="{{ $source }}" rel="noopener noreferrer nofollow external" target="_blank">
+                {{ $source }}
+            </a>
+            <footer>
+                <address>
+                    <time datetime="{{ $received }}">
+                        {{ time.Format "Monday, January 2, 2006" $received }}
+                    </time>
+                </address>
+            </footer>
+        </article>
+        {{ end }}
+    </div>
+</section>
+{{ end }}
+{{ end }}
+{{ end }}
