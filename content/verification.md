@@ -17,7 +17,7 @@ This page serves as the system of record for my online identity. I control the f
 
 - Bluesky bridged to the Fediverse: [@ewancroft.uk@bsky.brid.gy](https://fed.brid.gy/bsky/ewancroft.uk)
 
-- Mastodon: [@ewanc26@mastodon.social](https://mastodon.social/@ewanc26) (Backup, not currently used.)
+- Mastodon: [@ewanc26@mastodon.social](https://mastodon.social/@ewanc26)
 
 ### Bluesky Accounts
 
@@ -55,4 +55,4 @@ I will *never* try to give you crypto trading tips. If an account claims to be m
 
 ### Inactive Accounts
 
-The accounts, such as my Mastodon account listed above, that are inactive (particularly on the Fediverse) and look to be mine should be regarded with suspicion regardless. This should go without saying, really.
+The accounts that are inactive (particularly on the Fediverse) and look to be mine should be regarded with suspicion regardless. This should go without saying, really.
