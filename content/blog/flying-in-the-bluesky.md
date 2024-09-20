@@ -20,7 +20,7 @@ I have some new thoughts and things I wanted to update the blog on!
 
 ## The Fediverse
 
-As you may or may not know, [the Fediverse](https://fediverse.info/) has been my social home since November 2022 after the [Twitter Meltdown](https://en.wikipedia.org/wiki/Acquisition_of_Twitter_by_Elon_Musk). ***No more!***
+As you may or may not know, [the Fediverse](https://fediverse.info/) has been my social home since November 2022 after the [Twitter Meltdown](https://en.wikipedia.org/wiki/Acquisition_of_Twitter_by_Elon_Musk).
 
 Why is this? There are a few reasons.
 
