@@ -7,3 +7,6 @@
 /hugo.exe
 /hugo.darwin
 /hugo.linux
+
+# Why the hell does this exist? It's just a bloodstain on a perfectly white shirt!
+.DS_Store
