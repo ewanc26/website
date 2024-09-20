@@ -14,7 +14,7 @@ cover:
 
 Bluesky, `bsky`, whatever.
 
-It's an alternative to Twitter (yes, I am still calling it Twitter, not ***X***) and the Fediverse (such as [Mastodon](https://joinmastodon.org)), running atop [the AT Protocal](https://atproto.com/) (also known as 'ATProto').
+It's an alternative to Twitter (yes, I am still calling it Twitter, not ***X***) and the Fediverse (such as [Mastodon](https://joinmastodon.org)), running atop [the AT Protocol](https://atproto.com/) (also known as 'ATProto').
 
 I decided to test it out a few days ago, with my account being [@ewancroft.uk](https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol). ***Yes!*** Even domains can be used as the handles, with the default being a subdomain under `bsky.social` (i.e., `ewancroft.bsky.social`) however ATProto has a nice trick where if you add a [/.well-known/ file](https://en.wikipedia.org/wiki/Well-known_URI) called `atproto-did` and add the identifier (which you can find under `Settings > Change Handle`) on your website, you can have the domain as the handle!
 
