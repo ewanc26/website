@@ -46,14 +46,8 @@ General curiosity about the community is strong. I'm still finding new interesti
 
 ### Furries
 
-A lot of people don't actually realise that [the furry community](https://en.wikipedia.org/wiki/Furry_fandom) is very active *in the skies*, as they are in the Fediverse as well. I like to mingle with them as, well, [I am part of it too.](https://bsky.app/profile/ewancroft.uk/post/3kt7skcyn322z)
+A lot of people don't actually realise that [the furry community](https://en.wikipedia.org/wiki/Furry_fandom) is very active *in the skies*, as they are in the Fediverse as well. I like to mingle with them as, well, I am part of it too.
 
 ### Amazing Developer Modesty
 
 The Bluesky core developer team have been very active in the community. It's refreshing from other tech companies, plus, [Jack Dorsey has left the board](https://www.engadget.com/jack-dorsey-says-on-x-that-hes-not-on-the-bluesky-board-anymore-183902317.html) so it's not got some tech billionaire flaunting it like some shiny toy. (***looking at you, Elon.***)
-
-## Wrapping Up
-
-Yeah. I'm no longer really in the Fediverse. If you count [BridgyFed](https://fed.brid.gy/), though, I still am!
-
-My Bluesky account ([@ewancroft.uk](https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol)) has been bridged over to the Fediverse through BridgyFed at [@ewancroft.uk@bsky.brid.gy](https://fed.brid.gy/bsky/ewancroft.uk).
