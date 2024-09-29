@@ -1,11 +1,14 @@
 ---
-title: "Fedora: My First Distro Hop"
-summary: "I have moved to Fedora Linux on my laptop."
-description: "Not even a week later. Sorry Pop!_OS, I was too curious."
-date: 2024-02-20T13:48:56Z
+aliases:
+- /blog/trying-fedora/
+date: 2024-02-20 13:48:56+00:00
+description: Not even a week later. Sorry Pop!_OS, I was too curious.
 draft: false
-tags: ['Linux']
 showToc: true
+summary: I have moved to Fedora Linux on my laptop.
+tags:
+- Linux
+title: 'Fedora: My First Distro Hop'
 ---
 
 Yep.

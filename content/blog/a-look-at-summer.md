@@ -1,10 +1,13 @@
 ---
-title: "A Look at Summer"
-date: 2024-08-07T18:00:01+01:00
+aliases:
+- /blog/a-look-at-summer/
+date: 2024-08-07 18:00:01+01:00
 draft: false
-summary: "A lot has happened with me this summer, I'd like to talk about it."
-tags: ['Et Cetera']
 showToc: true
+summary: A lot has happened with me this summer, I'd like to talk about it.
+tags:
+- Et Cetera
+title: A Look at Summer
 ---
 
 Summer is fun for a lot of people. This year, though, mine has been... a rollercoaster of emotions.

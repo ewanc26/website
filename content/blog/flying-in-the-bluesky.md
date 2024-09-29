@@ -1,15 +1,19 @@
 ---
-title: "Flying In the Bluesky"
-summary: "My thoughts on Bluesky after a few months on the platform, and why I am staying."
-description: "A breath of fresh air."
-date: 2024-05-27T02:54:34+01:00
-draft: false
-tags: ['Bluesky', 'Fediverse']
+aliases:
+- /blog/flying-in-the-bluesky/
 cover:
-    image: "/images/bluesky/bluesky-profile-may.jpeg"
-    alt: "My Bluesky account (@ewancroft.uk) as seen through bsky.app"
-    caption: "My Bluesky account (@ewancroft.uk) as seen through bsky.app"
-    relative: false
+  alt: My Bluesky account (@ewancroft.uk) as seen through bsky.app
+  caption: My Bluesky account (@ewancroft.uk) as seen through bsky.app
+  image: /images/bluesky/bluesky-profile-may.jpeg
+  relative: false
+date: 2024-05-27 02:54:34+01:00
+description: A breath of fresh air.
+draft: false
+summary: My thoughts on Bluesky after a few months on the platform, and why I am staying.
+tags:
+- Bluesky
+- Fediverse
+title: Flying In the Bluesky
 ---
 
 Well!

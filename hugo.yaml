@@ -116,3 +116,7 @@ outputs:
     - HTML
     - RSS
     - JSON
+
+permalinks:
+  blog: "/blog/:year/:month/:slug/"
+  reviews: "/reviews/:year/:slug/"

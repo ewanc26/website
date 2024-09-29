@@ -1,15 +1,18 @@
 ---
-title: "Gazing Into the Bluesky"
-summary: "My thoughts on Bluesky after a few days on the platform."
-description: "I do really like the platform, but it's got its pitfalls."
-date: 2024-04-17T02:14:10+01:00
-draft: false
-tags: ['Bluesky']
+aliases:
+- /blog/gazing-into-the-bluesky/
 cover:
-    image: "/images/bluesky/bluesky-profile-march.jpeg"
-    alt: "My Bluesky account (@ewancroft.uk) as seen through bsky.app"
-    caption: "My Bluesky account (@ewancroft.uk) as seen through bsky.app"
-    relative: false
+  alt: My Bluesky account (@ewancroft.uk) as seen through bsky.app
+  caption: My Bluesky account (@ewancroft.uk) as seen through bsky.app
+  image: /images/bluesky/bluesky-profile-march.jpeg
+  relative: false
+date: 2024-04-17 02:14:10+01:00
+description: I do really like the platform, but it's got its pitfalls.
+draft: false
+summary: My thoughts on Bluesky after a few days on the platform.
+tags:
+- Bluesky
+title: Gazing Into the Bluesky
 ---
 
 Bluesky, `bsky`, whatever.

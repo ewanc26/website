@@ -1,14 +1,18 @@
 ---
-title: "Getting Back on the Back of the Mastodon"
-date: 2024-09-20T02:20:19+01:00
-draft: false
-tags: ['Bluesky', 'Fediverse']
-summary: 'Well, this is awkward.'
+aliases:
+- /blog/getting-back-on-the-back-of-the-mastodon/
 cover:
-    image: "/images/fediverse/mastodon-profile-september-2024.jpeg"
-    alt: "My Mastodon account (@ewanc26@mastodon.social) as seen through mastodon.social"
-    caption: "My Mastodon account(@ewanc26@mastodon.social) as seen through mastodon.social"
-    relative: false
+  alt: My Mastodon account (@ewanc26@mastodon.social) as seen through mastodon.social
+  caption: My Mastodon account(@ewanc26@mastodon.social) as seen through mastodon.social
+  image: /images/fediverse/mastodon-profile-september-2024.jpeg
+  relative: false
+date: 2024-09-20 02:20:19+01:00
+draft: false
+summary: Well, this is awkward.
+tags:
+- Bluesky
+- Fediverse
+title: Getting Back on the Back of the Mastodon
 ---
 
 Things don't always go to plan, huh?

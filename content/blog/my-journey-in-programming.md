@@ -1,10 +1,15 @@
 ---
-title: "My Journey in Programming"
-summary: "I thought about doing this for a while, so here, my programming journey as I remember it."
-description: "I thought about doing this for a while, so here, my programming journey as I remember it."
-date: 2024-01-22T22:59:33Z
+aliases:
+- /blog/my-journey-in-programming/
+date: 2024-01-22 22:59:33+00:00
+description: I thought about doing this for a while, so here, my programming journey
+  as I remember it.
 draft: false
-tags: ['Programming']
+summary: I thought about doing this for a while, so here, my programming journey as
+  I remember it.
+tags:
+- Programming
+title: My Journey in Programming
 ---
 
 ## My first exposure

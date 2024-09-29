@@ -1,11 +1,15 @@
 ---
-title: "Finding A Pack: Why Is It So Hard for Us as Gen Z?"
-description: "Yes, that was a pun."
-summary: "A look into why Generation Z are the most isolated and lonely."
-date: 2024-01-31T04:50:25Z
+aliases:
+- /blog/finding-a-pack-gen-z-analysis/
+date: 2024-01-31 04:50:25+00:00
+description: Yes, that was a pun.
 draft: false
-tags: ['Et Cetera', 'Mental Health']
 showToc: true
+summary: A look into why Generation Z are the most isolated and lonely.
+tags:
+- Et Cetera
+- Mental Health
+title: 'Finding A Pack: Why Is It So Hard for Us as Gen Z?'
 ---
 
 Heads up, though, naturally with a post like this, things are going to be ***heavy***, and some people may not be able to handle it.
