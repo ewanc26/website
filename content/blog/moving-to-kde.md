@@ -1,10 +1,13 @@
 ---
-title: "Fedora: The KDE Plasma Spin"
-summary: "I have moved to KDE Plasma on Fedora on my laptop."
-description: "Plasma is pretty hot, so why not give it a shot?"
-date: 2024-03-20T19:08:56Z
+aliases:
+- /blog/moving-to-kde/
+date: 2024-03-20 19:08:56+00:00
+description: Plasma is pretty hot, so why not give it a shot?
 draft: false
-tags: ['Linux']
+summary: I have moved to KDE Plasma on Fedora on my laptop.
+tags:
+- Linux
+title: 'Fedora: The KDE Plasma Spin'
 ---
 
 Ah, the joys of Linux.

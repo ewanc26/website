@@ -1,11 +1,14 @@
 ---
-title: "Suno AI and Song Generation"
-date: 2024-04-07T04:18:43+01:00
-summary: "I tested Suno AI. I have some thoughts."
-description: "I tested Suno AI. I have some thoughts."
+aliases:
+- /blog/suno-ai-and-song-generation/
+date: 2024-04-07 04:18:43+01:00
+description: I tested Suno AI. I have some thoughts.
 draft: false
-tags: ['Artificial Intelligence']
 showToc: false
+summary: I tested Suno AI. I have some thoughts.
+tags:
+- Artificial Intelligence
+title: Suno AI and Song Generation
 ---
 
 So, music generation is now a thing, I guess?

@@ -1,11 +1,15 @@
 ---
-title: "Ditching Windows: My Time Using macOS and Pop!_OS"
-summary: "I discuss myself venturing into Pop!_OS Linux on my laptop, replacing Windows."
-description: "Sadly, I still have to use Windows at college."
-date: 2024-02-18T01:45:25Z
+aliases:
+- /blog/ditching-windows/
+date: 2024-02-18 01:45:25+00:00
+description: Sadly, I still have to use Windows at college.
 draft: false
-tags: ['Linux', 'Windows']
 showToc: true
+summary: I discuss myself venturing into Pop!_OS Linux on my laptop, replacing Windows.
+tags:
+- Linux
+- Windows
+title: 'Ditching Windows: My Time Using macOS and Pop!_OS'
 ---
 
 I *finally* did it. I ditched Windows completely in my personal life, and as a bonus, gave life back to my laptop.

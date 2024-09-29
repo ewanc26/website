@@ -1,9 +1,13 @@
 ---
-title: "New Site Design"
-summary: "I talk about the new site design."
-date: 2024-01-19T23:00:30Z
+aliases:
+- /blog/new-site-design/
+date: 2024-01-19 23:00:30+00:00
 draft: false
-tags: ['Et Cetera', 'Site Meta']
+summary: I talk about the new site design.
+tags:
+- Et Cetera
+- Site Meta
+title: New Site Design
 ---
 
 ***HEY!***

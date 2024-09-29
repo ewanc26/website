@@ -1,10 +1,15 @@
 ---
-title: "When Your Platform Disappears: The Queer.AF Shutdown"
-summary: "My thoughts on the seizure of the 'queer.af' domain by the Taliban, and domain seizures in general."
-date: 2024-02-13T01:05:05Z
+aliases:
+- /blog/queer-af-shutdown-analysis/
+date: 2024-02-13 01:05:05+00:00
 draft: false
-tags: ['LGBTQ', 'Fediverse']
 showToc: true
+summary: My thoughts on the seizure of the 'queer.af' domain by the Taliban, and domain
+  seizures in general.
+tags:
+- LGBTQ
+- Fediverse
+title: 'When Your Platform Disappears: The Queer.AF Shutdown'
 ---
 
 This is a hot topic right now, huh?

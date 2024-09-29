@@ -1,11 +1,16 @@
 ---
-title: "Mastodon Markov Chains, and Why I Created My Own"
-summary: "A little blog post talking about Markov chains."
-description: "Gibberish is my hobby."
-date: 2024-03-03T14:24:14Z
+aliases:
+- /blog/mastodon-markov-chains/
+date: 2024-03-03 14:24:14+00:00
+description: Gibberish is my hobby.
 draft: false
 showToC: true
-tags: ['Fediverse', 'Programming', 'Python']
+summary: A little blog post talking about Markov chains.
+tags:
+- Fediverse
+- Programming
+- Python
+title: Mastodon Markov Chains, and Why I Created My Own
 ---
 
 [Markov chains](https://en.wikipedia.org/wiki/Markov_chain) are interesting, aren't they?

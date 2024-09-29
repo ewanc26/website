@@ -1,4 +1,6 @@
 ---
+aliases:
+  - /reviews/an-american-werewolf-in-london-made-for-radio-bbc-audio-adaptation/
 title: "An American Werewolf in London made-for-radio BBC audio adaptation"
 summary: "My thoughts and review on the 1997 BBC Radio 1 adaptation of An American Werewolf in London."
 description: "If given a star rating, I would give it a 4.5/5."
@@ -7,7 +9,7 @@ draft: false
 tags: ['Werewolves']
 ---
 
-***Spoilers ahead in case you haven't watched the film! This is a real-time review, so I discuss a lot of the details!***
+***Spoilers ahead in case you haven't watched the original film! This is a real-time review, so I discuss a lot of the details!***
 
 ---
 

@@ -1,10 +1,15 @@
 ---
-title: "Logistics of Lycanthropy and its Romanticisation"
-summary: "An analysis of the logistical nature of the lycanthropic curse, and how it's changed over time."
-date: 2024-01-24T04:26:42Z
-draft: false
-tags: ['Werewolves', 'History']
 ShowToc: true
+aliases:
+- /blog/logistics-of-lycanthropy/
+date: 2024-01-24 04:26:42+00:00
+draft: false
+summary: An analysis of the logistical nature of the lycanthropic curse, and how it's
+  changed over time.
+tags:
+- Werewolves
+- History
+title: Logistics of Lycanthropy and its Romanticisation
 ---
 
 Most people ***really*** don't realise the actual logistics of a lycanthropic curse, in the modern age, do they?
