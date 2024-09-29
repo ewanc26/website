@@ -100,7 +100,7 @@ params:
     - name: RSS
       url: "/blog/rss"
   
-  author: "Ewan Croft"
+  author: "Ewan"
 
 markup:
   highlight:
