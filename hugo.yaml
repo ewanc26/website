@@ -28,11 +28,6 @@ menu:
 taxonomies:
   tag: "tags"
 
-outputFormats:
-  RSS:
-    mediatype: application/rss
-    baseName: rss
-
 markup:
   tableOfContents:
     endLevel: 3
@@ -96,8 +91,6 @@ params:
       url: "https://mastodon.social/@ewanc26"
     - name: Bluesky
       url: "https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol"
-    - name: RSS
-      url: "/blog/rss"
   
   author: "Ewan"
 
