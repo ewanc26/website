@@ -44,7 +44,6 @@ params:
   defaultTheme: auto
 
   mainSections:
-    - blog
     - poetry
     - reviews
 
@@ -79,7 +78,7 @@ params:
         weight: 10
       - identifier: blog
         name: Blog
-        url: /blog/
+        url: https://whtwnd.com/ewancroft.uk
         weight: 20
       - identifier: poetry
         name: Poetry
@@ -118,5 +117,4 @@ outputs:
     - JSON
 
 permalinks:
-  blog: "/blog/:year/:month/:slug/"
   reviews: "/reviews/:year/:slug/"
