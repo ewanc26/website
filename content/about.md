@@ -29,4 +29,4 @@ I enjoy many things, but these are my favourites:
 
 I also like [music](https://open.spotify.com/playlist/4Zc7Jo2VgPDQaDWbS9FIGi)!
 
-You can join me on [Bluesky](https://bsky.social) via [my starter pack](https://go.bsky.app/EiZxzTpß) or join me on [Mastodon](https://joinmastodon.org) using [my invite link.](https://mastodon.social/invite/ekqbHMEc)
+You can join me on [Bluesky](https://bsky.social) via [my starter pack](https://go.bsky.app/2yApAmz) or join me on [Mastodon](https://joinmastodon.org) using [my invite link.](https://mastodon.social/invite/ekqbHMEc)
