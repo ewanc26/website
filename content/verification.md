@@ -31,11 +31,11 @@ As stated above, [@ewancroft.uk](https://bsky.app/profile/did:plc:ofrbh253gwicbk
 
 I will *always* put my Bluesky bot accounts on a `*.bot.ewancroft.uk` subdomain with the source code on GitHub.
 
-This is however not the case with [@dev.ewancroft.uk](https://bsky.app/profile/dev.ewancroft.uk) which is my generalised developmental account for bots and stuff.
-
 ### Development
 
 - GitHub: [ewanc26](https://github.com/ewanc26)
+
+- Bluesky developmental account: [@dev.ewancroft.uk](https://bsky.app/profile/dev.ewancroft.uk)
 
 ## Domains
 
