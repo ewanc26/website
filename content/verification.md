@@ -15,6 +15,8 @@ This page serves as the system of record for my online identity. I control the f
 
 - Bluesky: [@ewancroft.uk](https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol)
 
+- Bluesky alt: [@alt.ewancroft.uk](https://bsky.app/profile/alt.ewancroft.uk)
+
 - Mastodon: [@ewanc26@mastodon.social](https://mastodon.social/@ewanc26)
 
 ### Bluesky Accounts
@@ -26,6 +28,8 @@ As stated above, [@ewancroft.uk](https://bsky.app/profile/did:plc:ofrbh253gwicbk
 #### Bot Accounts
 
 I will *always* put my Bluesky bot accounts on a `*.bot.ewancroft.uk` subdomain with the source code on GitHub.
+
+This is however not the case with [@dev.ewancroft.uk](https://bsky.app/profile/dev.ewancroft.uk) which is my generalised developmental account for bots and stuff.
 
 ### Development
 
