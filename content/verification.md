@@ -19,6 +19,8 @@ This page serves as the system of record for my online identity. I control the f
 
 - Mastodon: [@ewanc26@mastodon.social](https://mastodon.social/@ewanc26)
 
+- Tumblr: [@greenwerewolf745](https://tumblr.com/greenwerewolf745)
+
 ### Bluesky Accounts
 
 As Bluesky (and by extension, [ATProto](https://atproto.com)) use apex (main) domains and subdomains as the username (or "handle") and require access to the domain to register. As such, please disregard any account that does not have `*.ewancroft.uk` in the username.
