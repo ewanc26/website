@@ -33,8 +33,6 @@ I will *always* put my Bluesky bot accounts on a `*.bot.ewancroft.uk` subdomain 
 
 - GitHub: [ewanc26](https://github.com/ewanc26)
 
-- Bluesky developmental account: [@dev.ewancroft.uk](https://bsky.app/profile/dev.ewancroft.uk)
-
 ## Domains
 
 I *only* own and control [this website](/), and as such, any subdomains under the apex (main) domain should be regarded as controlled by me.
