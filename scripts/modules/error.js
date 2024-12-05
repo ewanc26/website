@@ -2,13 +2,13 @@ document.addEventListener("DOMContentLoaded", function () {
   // This function sets the error code, message, and title dynamically
   function setErrorPage(errorCode, errorMessage) {
     // Inject the error code (e.g., "404 Error")
-    document.getElementById("error_code").innerText = `${errorCode} Error`;
+    document.getElementById("error_code").innerText = `Error ${errorCode}`;
 
     // Inject the error message (e.g., a description of the error)
     document.getElementById("error_message").innerText = errorMessage;
 
     // Set the page title dynamically based on the error code
-    document.title = `${errorCode} Error - Something went wrong`;
+    document.title = `Error ${errorCode} - Something went wrong | Ewan's Corner`;
 
     // Customize the "Go back to Home" link based on the error
     const backHomeLink = document.getElementById("back_home_link");
