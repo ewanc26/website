@@ -206,7 +206,7 @@ p {
     padding: 15px 0;
   }
 
-  #date {
+  #datetime_marker {
     display: none;
   }
 
@@ -262,10 +262,6 @@ p {
 
   h2 {
     font-size: 20px;
-  }
-
-  #clock {
-    display: none;
   }
 
   #emoji {
