@@ -13,17 +13,10 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png" />
   <link rel="manifest" href="/images/favicon/site.webmanifest" />
 
-
-  <!-- Favicon links for different sizes -->
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png" />
-  <link rel="manifest" href="/images/favicon/site.webmanifest" />
-
-  <title>Error Page</title>
+  <title>Error Page</title> <!-- This will be dynamically updated -->
 
   <!-- Stylesheets for styling the error page -->
-  <link rel="stylesheet" href="/css/error.css" />
+  <link rel="stylesheet" href="/css/main/styles.css" />
   <link rel="stylesheet" href="/css/main/animations.css" />
 
   <!-- JavaScript files for functionality -->
@@ -41,11 +34,11 @@
 
   <main>
     <!-- Dynamic error code and message -->
-    <h1 id="error_code"></h1>
-    <span id="emoji">&#128517;</span>
-    <p id="error_message"></p>
+    <h1 id="error_code" class="error-page__title"></h1>
+    <span id="emoji" class="error-page__emoji">&#128517;</span>
+    <p id="error_message" class="error-page__message"></p>
     <br />
-    <a href="/" id="back_home_link">Go back to Home</a>
+    <a href="/" id="back_home_link" class="error-page__button">Go back to Home</a>
   </main>
 
   <!-- Footer will be dynamically injected -->
