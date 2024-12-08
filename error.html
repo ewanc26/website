@@ -1,48 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, noai, noimageai" />
+    <meta name="theme-color" content="#0a1607" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, noai, noimageai" />
-  <meta name="theme-color" content="#0a1607" />
+    <!-- Favicon links for different sizes -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/images/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/images/favicon/site.webmanifest" />
 
-  <!-- Favicon links for different sizes -->
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png" />
-  <link rel="manifest" href="/images/favicon/site.webmanifest" />
+    <title>Error!</title>
+    <!-- This will be dynamically updated -->
 
-  <title>Error!</title> <!-- This will be dynamically updated -->
+    <!-- Stylesheets for styling the error page -->
+    <link rel="stylesheet" href="/css/main/styles.css" />
+    <link rel="stylesheet" href="/css/main/animations.css" />
 
-  <!-- Stylesheets for styling the error page -->
-  <link rel="stylesheet" href="/css/main/styles.css" />
-  <link rel="stylesheet" href="/css/main/animations.css" />
+    <!-- JavaScript files for functionality -->
+    <script src="/scripts/clock.js" defer></script>
 
-  <!-- JavaScript files for functionality -->
-  <script src="/scripts/clock.js" defer></script>
-  
-  <!-- External JavaScript for dynamic content -->
-  <script src="/scripts/modules/header.js" defer></script>
-  <script src="/scripts/modules/footer.js" defer></script>
-  <script src="/scripts/modules/error.js" defer></script>
-</head>
+    <!-- External JavaScript for dynamic content -->
+    <script src="/scripts/modules/header.js" defer></script>
+    <script src="/scripts/modules/footer.js" defer></script>
+    <script src="/scripts/modules/error.js" defer></script>
+  </head>
 
-<body>
-  <!-- Header will be dynamically injected -->
-  <div id="header"></div>
+  <body>
+    <!-- Header will be dynamically injected -->
+    <div id="header"></div>
 
-  <main>
-    <!-- Dynamic error code and message -->
-    <h1 id="error_code" class="error-page__title"></h1>
-    <span id="emoji" class="error-page__emoji">&#128517;</span>
-    <p id="error_message" class="error-page__message"></p>
-    <br />
-    <a href="/" id="back_home_link" class="error-page__button">Go back to Home</a>
-  </main>
+    <main>
+      <!-- Dynamic error code and message -->
+      <h1 id="error_code" class="error-page__title"></h1>
+      <span id="emoji" class="error-page__emoji">&#128517;</span>
+      <p id="error_message" class="error-page__message"></p>
+      <br />
+      <a href="/" id="back_home_link" class="error-page__button"
+        >Go back to Home</a
+      >
+    </main>
 
-  <!-- Footer will be dynamically injected -->
-  <div id="footer"></div>
-</body>
-
+    <!-- Footer will be dynamically injected -->
+    <div id="footer"></div>
+  </body>
 </html>
