@@ -1,4 +1,4 @@
-// /scripts/modules/header.js
+// /assets/scripts/modules/header.js
 
 document.addEventListener('DOMContentLoaded', function () {
     // Function to load and inject the header HTML
