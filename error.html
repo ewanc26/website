@@ -54,11 +54,23 @@
 
     <main>
       <!-- Dynamic error code and message -->
-      <h1 id="error_code" class="error-page__title"></h1>
-      <span id="emoji" class="error-page__emoji">&#128517;</span>
-      <p id="error_message" class="error-page__message"></p>
+      <h1 id="error_code" class="error-page__title" aria-label="Error code"></h1>
+      <span
+        id="emoji"
+        class="error-page__emoji"
+        aria-label="Emoji representation of the error"
+        >&#128517;</span>
+      <p
+        id="error_message"
+        class="error-page__message"
+        aria-label="Detailed error message"
+      ></p>
       <br />
-      <a href="/" id="back_home_link" class="error-page__button"
+      <a
+        href="/"
+        id="back_home_link"
+        class="error-page__button"
+        aria-label="Go back to the home page"
         >Go back to Home</a
       >
     </main>
