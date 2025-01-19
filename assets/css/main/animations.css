@@ -39,21 +39,3 @@
     transform: rotate(0deg);
   }
 }
-
-.heartbeat {
-  animation-name: heartbeat;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-  display: inline-block;
-}
-
-@keyframes heartbeat {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.33);
-  }
-}
