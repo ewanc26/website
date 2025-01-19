@@ -1,0 +1,151 @@
+/* Header and footer styles */
+header,
+footer {
+  background-color: var(--header-footer-bg);
+  padding: var(--padding-header-footer);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer_section {
+  align-items: center;
+  flex-basis: 50%;
+  text-align: left;
+  margin: 0 5vh;
+}
+
+footer p {
+  color: var(--footer-text-color);
+  margin: 0;
+}
+
+footer p.credit {
+  font-style: italic;
+}
+
+/* Header content styles */
+.header-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+#website_title,
+.dropbtn,
+#clock {
+  position: relative;
+  margin-left: var(--margin-left-header);
+}
+
+/* Dropdown Button */
+.dropbtn {
+  background-color: var(--button-bg);
+  color: var(--button-text-color);
+  padding: 16px;
+  font-size: var(--font-size-large);
+  border: none;
+  order: 2;
+  transition: background-color 0.2s ease;
+  border-radius: var(--border-radius-button);
+}
+
+/* Dropdown Container and Content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--dropdown-bg);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: var(--border-radius-dropdown);
+  text-align: center;
+}
+
+/* Dropdown Links */
+.dropdown-content a {
+  color: var(--dropdown-link-color);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Dropdown hover effects */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: var(--dropdown-hover-bg);
+}
+
+.dropdown-content a:hover {
+  background-color: var(--dropdown-link-hover-bg);
+  border-radius: var(--border-radius-dropdown);
+  transition: background-color 0.2s ease;
+}
+
+/* Updated main section */
+main {
+  flex: 1;
+  text-align: center;
+  padding: var(--padding-main);
+  margin: var(--margin-main);
+}
+
+/* Centre-align list items and remove list bullets */
+ul {
+  text-align: center;
+  list-style: none;
+}
+
+/* Style hyperlinks with button colour and remove underline */
+a {
+  color: var(--button-bg);
+  text-decoration: none;
+}
+
+/* Create a column layout for buttons with spacing */
+.button_container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Style custom buttons */
+.custom_button {
+  align-items: center;
+  background-color: var(--button-bg);
+  color: white;
+  padding: var(--padding-button);
+  border: none;
+  border-radius: var(--border-radius-default);
+  transition: background-color 0.5s ease;
+  font-size: var(--font-size-default);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  max-width: fit-content;
+}
+
+/* Style custom button hyperlinks */
+.custom_button a {
+  text-decoration: none;
+  background-color: transparent;
+  color: white;
+}
+
+/* Change button background colour on hover */
+.custom_button:hover {
+  background-color: var(--button-hover-bg);
+}

@@ -1,94 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, noai, noimageai" />
-    <meta name="theme-color" content="#0a1607" />
 
-    <!-- Favicon links for different sizes -->
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/assets/images/favicon/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/assets/images/favicon/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/assets/images/favicon/favicon-16x16.png"
-    />
-    <link rel="manifest" href="/assets/images/favicon/site.webmanifest" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, noai, noimageai" />
+  <meta name="theme-color" content="#0a1607" />
 
-    <title>Privacy Disclaimer | Ewan's Corner</title>
+  <!-- Favicon links for different sizes -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png" />
+  <link rel="manifest" href="/assets/images/favicon/site.webmanifest" />
 
-    <!-- Stylesheets for different screen sizes -->
-    <link rel="stylesheet" href="/assets/css/main/styles.css" />
-    <link rel="stylesheet" href="/assets/css/main/animations.css" />
+  <title>Privacy Disclaimer | Ewan's Corner</title>
 
-    <!-- JavaScript files for functionality -->
-    <script src="/assets/scripts/clock.js" defer></script>
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/main/variables.css">
+  <link rel="stylesheet" href="/assets/css/main/reset.css">
 
-    <!-- Dynamically load header and footer modules -->
-    <script src="/assets/scripts/modules/header.js" defer></script>
-    <script src="/assets/scripts/modules/footer.js" defer></script>
-  </head>
+  <link rel="stylesheet" href="/assets/css/main/components.css">
+  <link rel="stylesheet" href="/assets/css/main/typography.css">
+  <link rel="stylesheet" href="/assets/css/main/responsive.css">
+  <link rel="stylesheet" href="/assets/css/main/warning.css">  
 
-  <body>
-    <noscript>
-      <div
-        id="js-warning"
-        aria-label="Warning: JavaScript is disabled in your browser. Enable JavaScript for optimal functionality."
-      >
-        <strong>Warning:</strong> JavaScript is disabled in your browser. This website relies on JavaScript for optimal functionality. Please enable JavaScript for the best experience.
-      </div>
-    </noscript>
+  <!-- JavaScript files for functionality -->
+  <script src="/assets/scripts/clock.js" defer></script>
 
-    <!-- The header is dynamically injected here -->
-    <div id="header" aria-label="Website header section"></div>
+  <!-- Dynamically load header and footer modules -->
+  <script src="/assets/scripts/modules/header.js" defer></script>
+  <script src="/assets/scripts/modules/footer.js" defer></script>
+</head>
 
-    <main aria-label="Main content: Privacy Disclaimer">
-      <h1 aria-label="Privacy Disclaimer title">Privacy Disclaimer</h1>
-      <p aria-label="Introduction to privacy statement">
-        Welcome to my personal website. I value your privacy and aim to be
-        completely transparent about how your data is (or isn't) handled:
-      </p>
-      <ul aria-label="Privacy policy list">
-        <li aria-label="No activity tracking">This website does not track your activity in any way.</li>
-        <li aria-label="No data collection">No personal data is collected or stored.</li>
-        <li aria-label="No cookies used">
-          No cookies are used since the site is static and does not rely on server-side processing or databases.
-        </li>
-      </ul>
-      <p aria-label="GitHub repository link">
-        This site is open source, and you can verify its code and structure on GitHub at
-        <a
-          href="https://github.com/ewanc26/website"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="View the website's repository on GitHub"
-          >the website repository</a
-        >. There is no hidden tracking or data collection.
-      </p>
-      <p aria-label="Contact section">
-        If you have questions, feel free to <a href="/verification" aria-label="Contact me via verification page">reach out</a> via
-        my socials.
-      </p>
-      <p aria-label="Summary of privacy policy">
-        <em><strong>TLDR:</strong></em> This is a personal website designed for
-        sharing content and connecting with others. I <em>do not</em> collect or
-        mine any data from you.
-      </p>
-      <p aria-label="Closing thank you message">Thank you for visiting!</p>
-    </main>
+<body>
+  <noscript>
+    <div id="js-warning"
+      aria-label="Warning: JavaScript is disabled in your browser. Enable JavaScript for optimal functionality.">
+      <strong>Warning:</strong> JavaScript is disabled in your browser. This
+      website relies on JavaScript for optimal functionality. Please enable
+      JavaScript for the best experience.
+    </div>
+  </noscript>
 
-    <!-- The footer is dynamically injected here -->
-    <div id="footer" aria-label="Website footer section"></div>
-  </body>
+  <!-- The header is dynamically injected here -->
+  <div id="header" aria-label="Website header section"></div>
+
+  <main aria-label="Main content: Privacy Disclaimer">
+    <h1 aria-label="Privacy Disclaimer title">Privacy Disclaimer</h1>
+    <p aria-label="Introduction to privacy statement">
+      Welcome to my personal website. I value your privacy and aim to be
+      completely transparent about how your data is (or isn't) handled:
+    </p>
+    <ul aria-label="Privacy policy list">
+      <li aria-label="No activity tracking">
+        This website does not track your activity in any way.
+      </li>
+      <li aria-label="No data collection">
+        No personal data is collected or stored.
+      </li>
+      <li aria-label="No cookies used">
+        No cookies are used since the site is static and does not rely on
+        server-side processing or databases.
+      </li>
+    </ul>
+    <p aria-label="GitHub repository link">
+      This site is open source, and you can verify its code and structure on
+      GitHub at
+      <a href="https://github.com/ewanc26/website" target="_blank" rel="noopener noreferrer"
+        aria-label="View the website's repository on GitHub">the website repository</a>. There is no hidden tracking or
+      data collection.
+    </p>
+    <p aria-label="Contact section">
+      If you have questions, feel free to
+      <a href="/verification" aria-label="Contact me via verification page">reach out</a>
+      via my socials.
+    </p>
+    <p aria-label="Summary of privacy policy">
+      <em><strong>TLDR:</strong></em> This is a personal website designed for
+      sharing content and connecting with others. I <em>do not</em> collect or
+      mine any data from you.
+    </p>
+    <p aria-label="Closing thank you message">Thank you for visiting!</p>
+  </main>
+
+  <!-- The footer is dynamically injected here -->
+  <div id="footer" aria-label="Website footer section"></div>
+</body>
+
 </html>
