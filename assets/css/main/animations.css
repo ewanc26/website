@@ -57,8 +57,3 @@
     transform: scale(1.33);
   }
 }
-
-html.is-animating .swup-transition-main {
-  opacity: 0;
-  transition: opacity 0.4s;
-}
