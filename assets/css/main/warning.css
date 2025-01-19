@@ -1,0 +1,15 @@
+/* Style for the JavaScript warning message */
+#js-warning {
+    background-color: var(--warning-bg);
+    color: var(--warning-text-color);
+    text-align: center;
+    padding: 20px;
+    font-family: var(--font-family);
+    line-height: var(--text-line-height);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+  
