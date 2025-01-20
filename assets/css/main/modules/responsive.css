@@ -101,4 +101,8 @@ video {
     width: 100%;
     z-index: 1000;
   }
+
+  #rkey {
+    display: hidden;
+  }
 }
