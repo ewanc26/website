@@ -1,23 +1,16 @@
+// /assets/scripts/modules/header.js
+
 document.addEventListener('DOMContentLoaded', function () {
-    console.debug("Starting header injection...");
-  
+    // Function to load and inject the header HTML
     function injectHeader() {
-      console.debug("Fetching header HTML...");
-      
-      fetch('/modules/header.html')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`Failed to load header: ${response.statusText}`);
-          }
-          console.debug("Header HTML fetched successfully.");
-          return response.text();
-        })
-        .then(data => {
-          document.body.insertAdjacentHTML('afterbegin', data);
-          console.debug("Header injected successfully.");
-        })
-        .catch(error => console.error('Header injection failed:', error));
+        fetch('/modules/header.html')
+            .then(response => response.text())  // Get the content of header.html
+            .then(data => {
+                document.body.insertAdjacentHTML('afterbegin', data);  // Insert the header content at the start of the body
+            })
+            .catch(error => console.error('Error loading header:', error));
     }
-  
+
+    // Call injectHeader to add the header when the page loads
     injectHeader();
-  });  
+});
