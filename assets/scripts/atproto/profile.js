@@ -73,10 +73,3 @@ window.onload = () => {
     // Set an interval to refresh the profile data every 5 minutes (300,000 ms)
     setInterval(injectProfileData, 300000);
 };
-
-// Call the function to inject data when the page loads
-window.onload = () => {
-    injectProfileData();  // Initial injection on page load
-    // Set an interval to refresh the profile data every 5 minutes (300,000 ms)
-    setInterval(injectProfileData, 300000);
-};
