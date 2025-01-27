@@ -1,43 +1,42 @@
 document.addEventListener("DOMContentLoaded", function () {
-  console.debug("Initialising clock and date script...");
-
+  // Function to detect if the user is on a mobile device
   function isMobileDevice() {
-    const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent) || window.innerWidth <= 768;
-    console.debug(`Is mobile device: ${isMobile}`);
-    return isMobile;
+    return (
+      /Mobi|Android|iPhone/i.test(navigator.userAgent) ||
+      window.innerWidth <= 768
+    );
   }
 
   if (!isMobileDevice()) {
-    console.debug("Device is not mobile. Enabling clock and date display...");
-
+    // Function to display the current date and time
     function displayDate_Time() {
-      const date = new Date();
+      // Create a new Date object to get the current date and time
+      var date = new Date();
 
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
-      const time = `${hours}:${minutes}:${seconds}`;
-      const currentDate = date.toLocaleDateString();
+      // Extract hours, minutes, and seconds from the Date object
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var seconds = date.getSeconds();
 
-      const clockElement = document.getElementById("clock");
-      const dateElement = document.getElementById("date");
+      // Add leading zeros to single-digit hours, minutes, and seconds
+      hours = (hours < 10 ? "0" : "") + hours;
+      minutes = (minutes < 10 ? "0" : "") + minutes;
+      seconds = (seconds < 10 ? "0" : "") + seconds;
 
-      if (clockElement) {
-        clockElement.innerHTML = time;
-      } else {
-        console.warn("Clock element not found.");
-      }
+      // Create a time string in the format "HH:MM:SS"
+      var time = hours + ":" + minutes + ":" + seconds;
 
-      if (dateElement) {
-        dateElement.innerHTML = currentDate;
-      } else {
-        console.warn("Date element not found.");
-      }
+      // Get the current date in a formatted string
+      var current_date = date.toLocaleDateString();
+
+      // Display the formatted time in the "clock" element
+      document.getElementById("clock").innerHTML = time;
+
+      // Display the formatted date in the "date" element
+      document.getElementById("date").innerHTML = current_date;
     }
 
+    // Call the displayDate_Time function every second (1000 milliseconds)
     setInterval(displayDate_Time, 1000);
-    console.debug("Clock and date update interval set.");
-  } else {
-    console.info("Clock and date display disabled on mobile devices.");
   }
 });

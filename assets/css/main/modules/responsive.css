@@ -28,7 +28,7 @@ video {
     padding: 15px 0;
   }
 
-  #extra_header {
+  #datetime_marker {
     display: none;
   }
 
@@ -84,6 +84,10 @@ video {
     font-size: 10vh;
   }
 
+  .paw_print {
+    right: 2.5vh;
+  }
+
   .dropdown-content a {
     padding: 8px 12px;
     font-size: var(--font-size-default);
@@ -96,6 +100,5 @@ video {
     position: static;
     width: 100%;
     z-index: 1000;
-    overflow-wrap: break-word;
   }
 }
