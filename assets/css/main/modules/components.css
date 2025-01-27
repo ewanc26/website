@@ -39,6 +39,19 @@ footer p.credit {
   margin-left: var(--margin-left-header);
 }
 
+#extra_header {
+  display: flex; /* Set to flexbox layout */
+  align-items: center; /* Align items vertically in the center */
+  justify-content: flex-start; /* Align items horizontally at the start */
+  gap: 10px; /* Add space between child elements */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+#extra_header #datetime_marker {
+  display: inline-flex; /* Ensure content inside these spans stays on one line */
+  align-items: center;
+}
+
 /* Dropdown Button */
 .dropbtn {
   background-color: var(--button-bg);

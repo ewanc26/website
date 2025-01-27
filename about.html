@@ -24,6 +24,7 @@
 
   <!-- JavaScript files for functionality -->
   <script src="/assets/scripts/clock.js" defer></script>
+  <script src="/assets/scripts/atproto/profile.js" defer></script>
 </head>
 
 <body>
@@ -41,11 +42,11 @@
 
   <!-- Main content of the page -->
   <main>
-    <img src="/assets/images/Ewan.jpeg"
-      alt="A young man with fair skin and a reddish-brown beard. He has short, slightly messy dark brown hair that is swept to the side. His eyes are light-coloured, possibly hazel or green, and he has a neutral expression on his face. The background is a plain, light-coloured wall, and he is wearing a teal and white collared shirt."
-      aria-label="Photograph of Ewan" />
+    <!-- Avatar image that will be dynamically updated -->
+    <img id="profile-avatar" aria-label="Photograph of Ewan" />
+    
     <p aria-label="Ewan's personal introduction">
-      I am a British programmer and hobbyist poet.
+      I am a British programmer and poet.
     </p>
     <p aria-label="Ewan's favorite hobbies and interests">
       I enjoy many things, but these are my favourites: writing poetry (who
@@ -86,13 +87,13 @@
       <a href="https://open.spotify.com/playlist/4Zc7Jo2VgPDQaDWbS9FIGi"
         aria-label="Check out Ewan's music playlist on Spotify">music</a>!
     </p>
-
+  
     <p aria-label="Join Ewan on Bluesky">
       You can join me on
       <a href="https://bsky.social" aria-label="Visit Bluesky">Bluesky</a> via
       <a href="https://go.bsky.app/2yApAmz" aria-label="Join Bluesky using Ewan's starter pack">my starter pack</a>.
     </p>
-  </main>
+  </main>  
   <!-- The footer will be dynamically injected here -->
   <script src="/assets/scripts/modules/footer.js"></script>
 </body>
