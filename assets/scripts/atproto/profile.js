@@ -73,10 +73,10 @@ async function injectProfileData(did) {
             console.debug('Updated description:', description);
         }
 
-        // Inject avatar with alt text for accessibility
+        // Inject avatar with alt text for accessibility, no fallback for avatar
         const avatarElement = document.getElementById('profile-avatar');
         if (avatarElement) {
-            avatarElement.src = avatar || '/assets/images/default-avatar.jpg';
+            avatarElement.src = avatar || ''; // No fallback image
             avatarElement.alt = displayName || 'User Avatar';  // Provide descriptive alt text
             console.debug('Updated avatar:', avatar);
         }
