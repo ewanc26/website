@@ -1,4 +1,4 @@
-export async function fetchProfileData(did) {
+export async function fetchProfileData(did, pds) {
     const cacheKey = `profileData_${did}`;
     const expiryKey = `${cacheKey}_expiry`;
     const cachedData = sessionStorage.getItem(cacheKey);
@@ -9,7 +9,7 @@ export async function fetchProfileData(did) {
         return JSON.parse(cachedData); // Return cached data if it has not expired
     }
 
-    const profileUrl = `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`;
+    const profileUrl = `https://${pds}/xrpc/com.atproto.repo.getRecord?repo=${did}&collection=app.bsky.actor.profile&rkey=self`;
     try {
         console.debug(`Fetching profile data for DID: ${did} from ${profileUrl}...`);
         const response = await fetch(profileUrl);
