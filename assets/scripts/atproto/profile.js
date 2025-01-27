@@ -45,30 +45,55 @@ async function injectProfileData(did) {
         }
 
         // Extract necessary fields
-        const { displayName, description, avatar } = profileData;
+        const { displayName, description, avatar, handle } = profileData;
 
-        // Inject into the page
+        // Inject display name
         const displayNameElement = document.getElementById('profile-display-name');
         if (displayNameElement) {
             displayNameElement.textContent = displayName || 'ewan';
             console.debug('Updated display name:', displayName);
         }
 
+        // Inject description
         const descriptionElement = document.getElementById('profile-description');
         if (descriptionElement) {
             descriptionElement.textContent = description || 'a British poet and programmer.';
             console.debug('Updated description:', description);
         }
 
+        // Inject avatar
         const avatarElement = document.getElementById('profile-avatar');
         if (avatarElement) {
-            avatarElement.src = avatar || '/assets/images/Ewan.jpeg'; // Fallback if no avatar
+            avatarElement.src = avatar || '/assets/images/default-avatar.jpg'; // Fallback if no avatar
             console.debug('Updated avatar:', avatar);
+        }
+
+        // Inject handle
+        const handleElements = document.querySelectorAll('#profile-handle'); // Select all occurrences
+        handleElements.forEach((element) => {
+            element.textContent = handle || 'account';
+            console.debug('Updated handle:', handle);
+        });
+
+        // Update website title and heading dynamically
+        if (displayName) {
+            // Update the <title>
+            const pageTitle = document.title.split('|')[0].trim(); // Extract current page prefix
+            document.title = `${pageTitle} | ${displayName}'s Corner`;
+            console.debug('Updated <title>:', document.title);
+
+            // Update the website title element
+            const websiteTitleElement = document.getElementById('website_title');
+            if (websiteTitleElement) {
+                websiteTitleElement.innerHTML = `<b>${displayName}'s Corner</b>`;
+                console.debug('Updated #website_title:', websiteTitleElement.innerHTML);
+            }
         }
     } catch (error) {
         console.error('Error injecting main profile data:', error);
     }
 }
+
 
 // Function to fetch and inject the statistical data
 async function injectStatisticalData(did) {
