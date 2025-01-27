@@ -24,13 +24,15 @@
   <link rel="stylesheet" href="/assets/css/main/modules/responsive.css">
   <link rel="stylesheet" href="/assets/css/main/modules/warning.css">
   
-
   <!-- JavaScript files for functionality -->
   <script src="/assets/scripts/clock.js" defer></script>
 
   <!-- Dynamically load header and footer modules -->
   <script src="/assets/scripts/modules/header.js" defer></script>
   <script src="/assets/scripts/modules/footer.js" defer></script>
+  
+  <!-- Profile injection script -->
+  <script src="/assets/scripts/atproto/profile.js" defer></script>
 </head>
 
 <body aria-label="Ewan's Corner homepage">
@@ -50,7 +52,7 @@
     <section aria-label="Introduction">
       <h1>Hey there!</h1>
       <p>
-        I'm Ewan, a British poet and programmer.
+        I'm <span id="profile-display-name">Ewan</span>, <span id="profile-description">British poet and programmer.</span>
       </p>
       <p>
         This is my website. It's not much, but feel free to explore!
