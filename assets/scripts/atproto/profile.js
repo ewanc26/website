@@ -62,7 +62,7 @@ async function injectProfileData(did) {
 
         const avatarElement = document.getElementById('profile-avatar');
         if (avatarElement) {
-            avatarElement.src = avatar || '/assets/images/default-avatar.jpg'; // Fallback if no avatar
+            avatarElement.src = avatar || '/assets/images/Ewan.jpeg'; // Fallback if no avatar
             console.debug('Updated avatar:', avatar);
         }
     } catch (error) {
