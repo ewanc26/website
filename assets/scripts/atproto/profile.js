@@ -15,8 +15,16 @@ async function fetchConfig() {
     }
 }
 
-// Function to fetch the main profile data (e.g., display name, description, avatar)
+// Function to fetch profile data with caching
 async function fetchProfileData(did) {
+    const cacheKey = `profileData_${did}`;
+    const cachedData = localStorage.getItem(cacheKey);
+    
+    if (cachedData) {
+        console.debug('Using cached profile data');
+        return JSON.parse(cachedData); // Return cached data
+    }
+    
     const profileUrl = `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`;
     try {
         console.debug(`Fetching profile data for DID: ${did} from ${profileUrl}...`);
@@ -27,6 +35,9 @@ async function fetchProfileData(did) {
         }
         const profileData = await response.json();
         console.debug('Profile data fetched successfully:', profileData);
+        
+        // Cache profile data for future use
+        localStorage.setItem(cacheKey, JSON.stringify(profileData));
         return profileData;
     } catch (error) {
         console.error('Error fetching profile data:', error);
@@ -34,7 +45,7 @@ async function fetchProfileData(did) {
     }
 }
 
-// Function to inject the main profile data into the page
+// Function to inject profile data into the page with ARIA accessibility
 async function injectProfileData(did) {
     try {
         console.debug('Injecting main profile data...');
@@ -44,41 +55,44 @@ async function injectProfileData(did) {
             return;
         }
 
-        // Extract necessary fields
         const { displayName, description, avatar, handle } = profileData;
 
-        // Inject display name
+        // Inject display name with ARIA
         const displayNameElement = document.getElementById('profile-display-name');
         if (displayNameElement) {
             displayNameElement.textContent = displayName || 'ewan';
+            displayNameElement.setAttribute('aria-live', 'polite');  // Live region for screen readers
             console.debug('Updated display name:', displayName);
         }
 
-        // Inject description
+        // Inject description with ARIA
         const descriptionElement = document.getElementById('profile-description');
         if (descriptionElement) {
             descriptionElement.textContent = description || 'a British poet and programmer.';
+            descriptionElement.setAttribute('aria-live', 'polite');  // Live region for screen readers
             console.debug('Updated description:', description);
         }
 
-        // Inject avatar
+        // Inject avatar with alt text for accessibility
         const avatarElement = document.getElementById('profile-avatar');
         if (avatarElement) {
-            avatarElement.src = avatar || '/assets/images/default-avatar.jpg'; // Fallback if no avatar
+            avatarElement.src = avatar || '/assets/images/default-avatar.jpg';
+            avatarElement.alt = displayName || 'User Avatar';  // Provide descriptive alt text
             console.debug('Updated avatar:', avatar);
         }
 
-        // Inject handle
-        const handleElements = document.querySelectorAll('#profile-handle'); // Select all occurrences
+        // Inject handle with ARIA
+        const handleElements = document.querySelectorAll('#profile-handle');
         handleElements.forEach((element) => {
             element.textContent = handle || 'account';
+            element.setAttribute('aria-live', 'polite');
             console.debug('Updated handle:', handle);
         });
 
         // Update website title and heading dynamically
         if (displayName) {
             // Update the <title>
-            const pageTitle = document.title.split('|')[0].trim(); // Extract current page prefix
+            const pageTitle = document.title.split('|')[0].trim();
             document.title = `${pageTitle} | ${displayName}'s Corner`;
             console.debug('Updated <title>:', document.title);
 
@@ -94,9 +108,18 @@ async function injectProfileData(did) {
     }
 }
 
-
-// Function to fetch and inject the statistical data
+// Function to fetch and inject statistical data with caching
 async function injectStatisticalData(did) {
+    const cacheKey = `statisticalData_${did}`;
+    const cachedData = localStorage.getItem(cacheKey);
+    
+    if (cachedData) {
+        console.debug('Using cached statistical data');
+        const { followersCount, followsCount, postsCount } = JSON.parse(cachedData);
+        updateStatisticalElements(followersCount, followsCount, postsCount);
+        return;
+    }
+
     try {
         console.debug('Injecting statistical data...');
         const profileData = await fetchProfileData(did);
@@ -105,50 +128,45 @@ async function injectStatisticalData(did) {
             return;
         }
 
-        // Extract statistical fields
         const { followersCount, followsCount, postsCount } = profileData;
 
-        console.debug('Extracted profile stats:', {
-            followersCount,
-            followsCount,
-            postsCount
-        });
-
-        // Inject into the page
-        const followerCountElement = document.getElementById('follower-count-number');
-        if (followerCountElement) {
-            followerCountElement.textContent = followersCount || '0'; // Fallback to 0
-            console.debug('Updated follower count element:', followerCountElement.textContent);
-        } else {
-            console.info('Note: Follower count element is missing on the page.');
-        }
-
-        const followingCountElement = document.getElementById('following-count-number');
-        if (followingCountElement) {
-            followingCountElement.textContent = followsCount || '0'; // Fallback to 0
-            console.debug('Updated following count element:', followingCountElement.textContent);
-        } else {
-            console.info('Note: Following count element is missing on the page.');
-        }
-
-        const postCountElement = document.getElementById('post-count-number');
-        if (postCountElement) {
-            postCountElement.textContent = postsCount || '0'; // Fallback to 0
-            console.debug('Updated post count element:', postCountElement.textContent);
-        } else {
-            console.info('Note: Post count element is missing on the page.');
-        }
+        // Cache statistical data
+        localStorage.setItem(cacheKey, JSON.stringify({ followersCount, followsCount, postsCount }));
+        
+        updateStatisticalElements(followersCount, followsCount, postsCount);
     } catch (error) {
         console.error('Error injecting statistical data:', error);
     }
 }
 
-// Main function to initialise the data injection
+// Helper function to update statistical elements
+function updateStatisticalElements(followersCount, followsCount, postsCount) {
+    const followerCountElement = document.getElementById('follower-count-number');
+    if (followerCountElement) {
+        followerCountElement.textContent = followersCount || '0';
+        followerCountElement.setAttribute('aria-live', 'polite');
+        console.debug('Updated follower count element:', followerCountElement.textContent);
+    }
+
+    const followingCountElement = document.getElementById('following-count-number');
+    if (followingCountElement) {
+        followingCountElement.textContent = followsCount || '0';
+        followingCountElement.setAttribute('aria-live', 'polite');
+        console.debug('Updated following count element:', followingCountElement.textContent);
+    }
+
+    const postCountElement = document.getElementById('post-count-number');
+    if (postCountElement) {
+        postCountElement.textContent = postsCount || '0';
+        postCountElement.setAttribute('aria-live', 'polite');
+        console.debug('Updated post count element:', postCountElement.textContent);
+    }
+}
+
+// Main function to initialise the data injection with caching and accessibility
 async function initialiseDataInjection() {
     try {
         console.debug('Initialising data injection...');
-        
-        // Fetch configuration to get DID
         const { did } = await fetchConfig();
         console.debug('DID fetched from config:', did);
 
