@@ -1,25 +1,35 @@
-// footer.js
-
 // Function to load and inject the footer HTML
 function injectFooter() {
-    fetch('/modules/footer.html')
-      .then(response => response.text()) // Read the HTML content of footer.html
-      .then(data => {
-        document.body.insertAdjacentHTML('beforeend', data); // Inject the footer HTML into the body
-        updateCopyrightYear(); // Update the copyright year dynamically
-      })
-      .catch(error => console.error('Error loading footer:', error));
+  console.debug("Injecting footer...");
+  
+  fetch('/modules/footer.html')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to load footer: ${response.statusText}`);
+      }
+      console.debug("Footer HTML fetched successfully.");
+      return response.text();
+    })
+    .then(data => {
+      document.body.insertAdjacentHTML('beforeend', data);
+      console.debug("Footer injected successfully.");
+      updateCopyrightYear();
+    })
+    .catch(error => console.error('Footer injection failed:', error));
+}
+
+// Function to update the copyright year
+function updateCopyrightYear() {
+  console.debug("Updating copyright year...");
+  
+  const currentYear = new Date().getFullYear();
+  const copyrightYearElement = document.getElementById('copyright-year');
+  if (copyrightYearElement) {
+    copyrightYearElement.textContent = currentYear;
+    console.debug(`Copyright year updated to ${currentYear}.`);
+  } else {
+    console.warn("Copyright year element not found.");
   }
-  
-  // Function to update the copyright year
-  function updateCopyrightYear() {
-    const currentYear = new Date().getFullYear(); // Get the current year
-    const copyrightYearElement = document.getElementById('copyright-year'); // Get the span with ID "copyright-year"
-    if (copyrightYearElement) {
-      copyrightYearElement.textContent = currentYear; // Update the year in the footer
-    }
-  }
-  
-  // Call the function to inject the footer when the page loads
-  document.addEventListener('DOMContentLoaded', injectFooter);
-  
+}
+
+document.addEventListener('DOMContentLoaded', injectFooter);
