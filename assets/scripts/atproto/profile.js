@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-export async function fetchProfileData(did, pds) {
-=======
 // Function to load configuration (DID) from an external JSON file
 async function fetchConfig() {
     try {
@@ -20,7 +17,6 @@ async function fetchConfig() {
 
 // Function to fetch profile data with caching and expiry
 async function fetchProfileData(did) {
->>>>>>> parent of 779fe48 (replace local storage with session storage)
     const cacheKey = `profileData_${did}`;
     const expiryKey = `${cacheKey}_expiry`;
     const cachedData = localStorage.getItem(cacheKey);
@@ -52,9 +48,6 @@ async function fetchProfileData(did) {
         console.error('Error fetching profile data:', error);
         return null;
     }
-<<<<<<< HEAD
-}
-=======
 }
 
 // Function to fetch profile data with caching and expiry
@@ -177,4 +170,3 @@ window.onload = () => {
     console.debug('Page loaded. Starting data injection...');
     initialiseDataInjection();
 };
->>>>>>> parent of 779fe48 (replace local storage with session storage)
