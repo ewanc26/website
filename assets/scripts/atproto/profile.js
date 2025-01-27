@@ -44,28 +44,35 @@ async function injectProfileData() {
         }
 
         // Extract necessary fields from the profile
-        const { displayName, description, avatar } = profileData;
+        const { followersCount, followsCount, postsCount } = profileData;
 
         // Inject the data into your page
-        const displayNameElement = document.getElementById('profile-display-name');
-        if (displayNameElement) {
-            displayNameElement.textContent = displayName || 'ewan';
+        const followerCountElement = document.getElementById('follower-count-number');
+        if (followerCountElement) {
+            followerCountElement.textContent = followersCount || '0'; // Fallback to 0
         }
 
-        const descriptionElement = document.getElementById('profile-description');
-        if (descriptionElement) {
-            descriptionElement.textContent = description || 'a British poet and programmer.';
+        const followingCountElement = document.getElementById('following-count-number');
+        if (followingCountElement) {
+            followingCountElement.textContent = followsCount || '0'; // Fallback to 0
         }
 
-        const avatarElement = document.getElementById('profile-avatar');
-        if (avatarElement) {
-            avatarElement.src = avatar || '/assets/images/default-avatar.jpg';  // Fallback if no avatar
+        const postCountElement = document.getElementById('post-count-number');
+        if (postCountElement) {
+            postCountElement.textContent = postsCount || '0'; // Fallback to 0
         }
 
     } catch (error) {
         console.error('Error fetching or injecting profile data:', error);
     }
 }
+
+// Call the function to inject data when the page loads
+window.onload = () => {
+    injectProfileData();  // Initial injection on page load
+    // Set an interval to refresh the profile data every 5 minutes (300,000 ms)
+    setInterval(injectProfileData, 300000);
+};
 
 // Call the function to inject data when the page loads
 window.onload = () => {
