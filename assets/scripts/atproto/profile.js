@@ -15,16 +15,18 @@ async function fetchConfig() {
     }
 }
 
-// Function to fetch profile data with caching
+// Function to fetch profile data with caching and expiry
 async function fetchProfileData(did) {
     const cacheKey = `profileData_${did}`;
+    const expiryKey = `${cacheKey}_expiry`;
     const cachedData = localStorage.getItem(cacheKey);
-    
-    if (cachedData) {
+    const expiryTime = localStorage.getItem(expiryKey);
+
+    if (cachedData && expiryTime && Date.now() < expiryTime) {
         console.debug('Using cached profile data');
-        return JSON.parse(cachedData); // Return cached data
+        return JSON.parse(cachedData); // Return cached data if it has not expired
     }
-    
+
     const profileUrl = `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`;
     try {
         console.debug(`Fetching profile data for DID: ${did} from ${profileUrl}...`);
@@ -36,8 +38,11 @@ async function fetchProfileData(did) {
         const profileData = await response.json();
         console.debug('Profile data fetched successfully:', profileData);
         
-        // Cache profile data for future use
+        // Cache profile data for future use and set an expiry (e.g., 1 hour)
+        const expiryInMs = 3600000; // 1 hour expiry
         localStorage.setItem(cacheKey, JSON.stringify(profileData));
+        localStorage.setItem(expiryKey, Date.now() + expiryInMs); // Set expiry time
+        
         return profileData;
     } catch (error) {
         console.error('Error fetching profile data:', error);
@@ -108,12 +113,14 @@ async function injectProfileData(did) {
     }
 }
 
-// Function to fetch and inject statistical data with caching
+// Function to fetch and inject statistical data with caching and expiry
 async function injectStatisticalData(did) {
     const cacheKey = `statisticalData_${did}`;
+    const expiryKey = `${cacheKey}_expiry`;
     const cachedData = localStorage.getItem(cacheKey);
-    
-    if (cachedData) {
+    const expiryTime = localStorage.getItem(expiryKey);
+
+    if (cachedData && expiryTime && Date.now() < expiryTime) {
         console.debug('Using cached statistical data');
         const { followersCount, followsCount, postsCount } = JSON.parse(cachedData);
         updateStatisticalElements(followersCount, followsCount, postsCount);
@@ -130,8 +137,10 @@ async function injectStatisticalData(did) {
 
         const { followersCount, followsCount, postsCount } = profileData;
 
-        // Cache statistical data
+        // Cache statistical data and set an expiry (e.g., 5 minutes)
+        const expiryInMs = 300000; // 5 minutes expiry
         localStorage.setItem(cacheKey, JSON.stringify({ followersCount, followsCount, postsCount }));
+        localStorage.setItem(expiryKey, Date.now() + expiryInMs); // Set expiry time
         
         updateStatisticalElements(followersCount, followsCount, postsCount);
     } catch (error) {
