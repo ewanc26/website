@@ -21,7 +21,7 @@ export async function injectStatisticalData(did) {
             return;
         }
 
-        const { followersCount, followsCount, postsCount } = profileData;
+        const { followersCount, followsCount, postsCount } = profileData.value;
 
         // Cache statistical data and set an expiry (e.g., 5 minutes)
         const expiryInMs = 300000; // 5 minutes expiry

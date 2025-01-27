@@ -5,11 +5,11 @@ import { injectStatisticalData } from './statistics.js';
 async function initialiseDataInjection() {
     try {
         console.debug('Initialising data injection...');
-        const { did } = await fetchConfig();
-        console.debug('DID fetched from config:', did);
+        const { did, pds } = await fetchConfig(); // Ensure pds is fetched from the config
+        console.debug('DID and PDS fetched from config:', { did, pds });
 
-        // Inject main profile data
-        injectProfileData(did);
+        // Inject main profile data with both DID and PDS
+        injectProfileData(did, pds);
 
         // Inject statistical data separately
         injectStatisticalData(did);
