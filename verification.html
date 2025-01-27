@@ -17,15 +17,15 @@
 
   <!-- JavaScript files for functionality -->
   <script src="/assets/scripts/clock.js" defer></script>
+  <script src="/assets/scripts/atproto/profile.js" defer></script>
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/main/modules/variables.css">
   <link rel="stylesheet" href="/assets/css/main/modules/reset.css">
-
   <link rel="stylesheet" href="/assets/css/main/modules/components.css">
   <link rel="stylesheet" href="/assets/css/main/modules/typography.css">
   <link rel="stylesheet" href="/assets/css/main/modules/responsive.css">
-  <link rel="stylesheet" href="/assets/css/main/modules/warning.css">  
+  <link rel="stylesheet" href="/assets/css/main/modules/warning.css">
 </head>
 
 <body>
@@ -53,13 +53,14 @@
       <ul>
         <li>
           Bluesky:
-          <a href="https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol" target="_blank" rel="noopener noreferrer"
-            aria-label="Bluesky profile - opens in a new tab">@ewancroft.uk</a>
+          <!-- Dynamically populated handle will appear here -->
+          <a href="https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol" target="_blank" rel="noopener noreferrer" aria-label="Bluesky profile - opens in a new tab">
+            <span id="profile-handle">account</span> <!-- Dynamic handle will replace this -->
+          </a>
         </li>
         <li>
           Tumblr:
-          <a href="https://tumblr.com/greenwerewolf745" target="_blank" rel="noopener noreferrer"
-            aria-label="Tumblr profile - opens in a new tab">@greenwerewolf745</a>
+          <a href="https://tumblr.com/greenwerewolf745" target="_blank" rel="noopener noreferrer" aria-label="Tumblr profile - opens in a new tab">@greenwerewolf745</a>
         </li>
       </ul>
 
@@ -72,8 +73,9 @@
       </p>
       <p>
         My Bluesky account is
-        <a href="https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol" target="_blank" rel="noopener noreferrer"
-          aria-label="Bluesky profile - opens in a new tab">@ewancroft.uk</a>
+        <a href="https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol" target="_blank" rel="noopener noreferrer" aria-label="Bluesky profile - opens in a new tab">
+          <span id="profile-handle">account</span> <!-- Dynamic handle will replace this -->
+        </a>
       </p>
 
       <h4>Bot Accounts</h4>
