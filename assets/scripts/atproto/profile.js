@@ -50,70 +50,42 @@ async function fetchProfileData(did) {
     }
 }
 
-// Function to inject profile data into the page with ARIA accessibility
-async function injectProfileData(did) {
+// Function to fetch profile data with caching and expiry
+async function fetchProfileData(did) {
+    const cacheKey = `profileData_${did}`;
+    const expiryKey = `${cacheKey}_expiry`;
+    const cachedData = localStorage.getItem(cacheKey);
+    const expiryTime = localStorage.getItem(expiryKey);
+
+    if (cachedData && expiryTime && Date.now() < expiryTime) {
+        console.debug('Using cached profile data');
+        return JSON.parse(cachedData); // Return cached profile data if it has not expired
+    }
+
+    const profileUrl = `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`;
     try {
-        console.debug('Injecting main profile data...');
-        const profileData = await fetchProfileData(did);
-        if (!profileData) {
-            console.error('Profile data is empty or could not be fetched');
-            return;
+        console.debug(`Fetching profile data for DID: ${did} from ${profileUrl}...`);
+        const response = await fetch(profileUrl);
+        if (!response.ok) {
+            console.error(`Failed to fetch profile data: ${response.statusText} (${response.status})`);
+            return null;
         }
-
-        const { displayName, description, avatar, handle } = profileData;
-
-        // Inject display name with ARIA
-        const displayNameElement = document.getElementById('profile-display-name');
-        if (displayNameElement) {
-            displayNameElement.textContent = displayName || 'ewan';
-            displayNameElement.setAttribute('aria-live', 'polite');  // Live region for screen readers
-            console.debug('Updated display name:', displayName);
-        }
-
-        // Inject description with ARIA
-        const descriptionElement = document.getElementById('profile-description');
-        if (descriptionElement) {
-            descriptionElement.textContent = description || 'a British poet and programmer.';
-            descriptionElement.setAttribute('aria-live', 'polite');  // Live region for screen readers
-            console.debug('Updated description:', description);
-        }
-
-        // Inject avatar with alt text for accessibility, no fallback for avatar
-        const avatarElement = document.getElementById('profile-avatar');
-        if (avatarElement) {
-            avatarElement.src = avatar || ''; // No fallback image
-            avatarElement.alt = displayName || 'User Avatar';  // Provide descriptive alt text
-            console.debug('Updated avatar:', avatar);
-        }
-
-        // Inject handle with ARIA
-        const handleElements = document.querySelectorAll('#profile-handle');
-        handleElements.forEach((element) => {
-            element.textContent = handle || 'account';
-            element.setAttribute('aria-live', 'polite');
-            console.debug('Updated handle:', handle);
-        });
-
-        // Update website title and heading dynamically
-        if (displayName) {
-            // Update the <title>
-            const pageTitle = document.title.split('|')[0].trim();
-            document.title = `${pageTitle} | ${displayName}'s Corner`;
-            console.debug('Updated <title>:', document.title);
-
-            // Update the website title element
-            const websiteTitleElement = document.getElementById('website_title');
-            if (websiteTitleElement) {
-                websiteTitleElement.innerHTML = `<b>${displayName}'s Corner</b>`;
-                console.debug('Updated #website_title:', websiteTitleElement.innerHTML);
-            }
-        }
+        const profileData = await response.json();
+        console.debug('Profile data fetched successfully:', profileData);
+        
+        // Cache profile data for future use and set an expiry (e.g., 1 hour)
+        const expiryInMs = 3600000; // 1 hour expiry
+        localStorage.setItem(cacheKey, JSON.stringify(profileData));
+        localStorage.setItem(expiryKey, Date.now() + expiryInMs); // Set expiry time
+        
+        return profileData;
     } catch (error) {
-        console.error('Error injecting main profile data:', error);
+        console.error('Error fetching profile data:', error);
+        return null;
     }
 }
 
-// Function to fetch and inject statistical data with caching and expiry
+// Function to inject statistical data with caching and expiry (now using profileData)
 async function injectStatisticalData(did) {
     const cacheKey = `statisticalData_${did}`;
     const expiryKey = `${cacheKey}_expiry`;
@@ -129,7 +101,7 @@ async function injectStatisticalData(did) {
 
     try {
         console.debug('Injecting statistical data...');
-        const profileData = await fetchProfileData(did);
+        const profileData = await fetchProfileData(did); // Get profile data
         if (!profileData) {
             console.error('Statistical data is empty or could not be fetched');
             return;
