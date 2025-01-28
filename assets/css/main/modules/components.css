@@ -104,6 +104,12 @@ footer p.credit {
   transition: background-color 0.2s ease;
 }
 
+/* Show the dropdown content when the button is focused or any of its links are focused */
+.dropbtn:focus + .dropdown-content,
+.dropdown-content:focus-within {
+  display: block;
+}
+
 /* Updated main section */
 main {
   flex: 1;
