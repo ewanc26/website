@@ -23,6 +23,10 @@
   --embed-bg: #304028; /* Adjusted embed background */
   --embed-border: #3da01f; /* Slightly lighter border for embeds */
   --embed-border-radius: 12px; /* Rounded borders for embeds */
+
+  /* Darker hyperlink colour */
+  --link-color: #4caf50; /* Default green link colour */
+  --link-hover-color: #388e3c; /* Darker green for hover state */
 }
 
 /* Apply Poppins font throughout */
@@ -105,7 +109,7 @@ nav {
 
 .links a:hover {
   text-decoration: none; /* Ensure no underline */
-  color: var(--text-color); /* Prevent color change */
+  color: var(--text-color); /* Prevent colour change */
 }
 
 /* Pagination Styling */
@@ -148,7 +152,7 @@ main {
 }
 
 a {
-  color: var(--button-bg);
+  color: var(--link-color);
   text-decoration: none;
 }
 
@@ -366,16 +370,15 @@ imageset-post image-content img {
   }
 
   /* Navigation links */
-nav a {
-  margin-top: 30px;
-  padding: 5px;
-
-}
+  nav a {
+    margin-top: 30px;
+    padding: 5px;
+  }
 }
 
 /* Light theme (alternative) */
 @media (prefers-color-scheme: light) {
-:root {
+  :root {
     --background-color: #91c991; /* Soft, light green background */
     --header-footer-bg: #e2f4e2; /* Light green for header/footer */
     --text-color: #333333; /* Darker grey for text for better readability */
@@ -383,5 +386,7 @@ nav a {
     --button-hover-bg: #2c6c29; /* Darker green on hover */
     --embed-bg: #ffffff; /* White background for embedded content */
     --embed-border: #a7d8a3; /* Subtle green border for embedded content */
-}
+    --link-color: #2d6a2f; /* Darker green for hyperlinks */
+    --link-hover-color: #1b4d24; /* Even darker green for hover state */
+  }
 }
