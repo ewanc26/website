@@ -705,8 +705,19 @@ function addTags(post, tags) {
 function addCreatedAt(post, createdAt) {
 	const dateElement = post.querySelector('created-at');
 	if (dateElement) {
-		const datetime = Date.parse(createdAt);
-		dateElement.textContent = options.dateFormat.format(datetime);
+		const datetime = new Date(createdAt);
+		const options = { 
+			year: 'numeric', 
+			month: '2-digit', 
+			day: '2-digit',
+			hour: '2-digit', 
+			minute: '2-digit',
+			hour12: false
+		};
+		
+		// Format the datetime based on system locale
+		const formattedDate = new Intl.DateTimeFormat(navigator.language, options).format(datetime);
+		dateElement.textContent = formattedDate;
 	}
 }
 
