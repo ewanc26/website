@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, noai, noimageai" />
   <meta name="theme-color" content="#0a1607" />
-
   <!-- Favicon links for different sizes -->
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png" />
   <link rel="manifest" href="/assets/images/favicon/site.webmanifest" />
-
   <title>Home | Ewan's Corner</title>
-
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/main/modules/variables.css">
   <link rel="stylesheet" href="/assets/css/main/modules/reset.css">
@@ -23,44 +19,31 @@
   <link rel="stylesheet" href="/assets/css/main/modules/typography.css">
   <link rel="stylesheet" href="/assets/css/main/modules/responsive.css">
   <link rel="stylesheet" href="/assets/css/main/modules/warning.css">
-
   <!-- JavaScript files for functionality -->
   <script src="/assets/scripts/clock.js" defer></script>
-
   <!-- Dynamically load header and footer modules -->
   <script src="/assets/scripts/modules/header.js" defer></script>
   <script src="/assets/scripts/modules/footer.js" defer></script>
-
   <!-- Profile injection script -->
   <script src="/assets/scripts/atproto/profile.js" defer></script>
+  <script src="/assets/scripts/keyboard-navigation.js" defer></script>
 </head>
-
 <body aria-label="homepage">
   <noscript>
     <div id="js-warning" aria-label="JavaScript warning">
-      <strong>Warning:</strong> JavaScript is disabled in your browser. This website relies on JavaScript for optimal
-      functionality. Please enable JavaScript for the best experience.
+      <strong>Warning:</strong> JavaScript is disabled in your browser. This website relies on JavaScript for optimal functionality. Please enable JavaScript for the best experience.
     </div>
   </noscript>
-
   <!-- The header is dynamically injected here -->
   <div id="header" aria-label="Website header"></div>
-
   <main aria-label="Main content area">
     <!-- Introduction text -->
     <span id="emoji" class="waving_hand" aria-hidden="true">&#128075;&#127995;</span>
     <section aria-label="Introduction">
       <h1>Hey there!</h1>
-      <p>
-        I'm <span id="profile-display-name">Ewan</span>, <span id="profile-description">British poet and
-          programmer.</span>
-      </p>
-      <p>
-        This is my website. It's not much, but feel free to explore!
-        <span aria-hidden="true">&#128513;</span>
-      </p>
+      <p>I'm <span id="profile-display-name">Ewan</span>, <span id="profile-description">British poet and programmer.</span></p>
+      <p>This is my website. It's not much, but feel free to explore! <span aria-hidden="true">&#128513;</span></p>
     </section>
-
     <section aria-label="Additional information">
       <h2>More About Me</h2>
       <p>
@@ -68,15 +51,12 @@
         You'll also find me diving into gaming, linguistics, and media like Doctor Who and Steven Universe.
       </p>
       <p>
-        Feel free to check out the <a href="/about" aria-label="Go to About Me page">About Me</a> page for more details,
-        or visit
-        <a href="https://whtwnd.com/ewancroft.uk" aria-label="Go to Ewan's Blog">my blog</a> for recent musings.
+        Feel free to check out the <a href="/about" aria-label="Go to About Me page" tabindex="0">About Me</a> page for more details, or visit
+        <a href="https://whtwnd.com/ewancroft.uk" aria-label="Go to Ewan's Blog" tabindex="0">my blog</a> for recent musings.
       </p>
     </section>
   </main>
-
   <!-- The footer is dynamically injected here -->
   <div id="footer" aria-label="Website footer"></div>
 </body>
-
 </html>
