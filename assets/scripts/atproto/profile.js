@@ -1,3 +1,17 @@
+// Function to escape HTML special characters to prevent XSS
+function escapeHTML(str) {
+    return str.replace(/[&<>"']/g, (char) => {
+        const escapeMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+        };
+        return escapeMap[char];
+    });
+}
+
 // Function to load configuration (DID) from an external JSON file
 async function fetchConfig() {
     try {
@@ -15,7 +29,7 @@ async function fetchConfig() {
     }
 }
 
-// Function to fetch profile data with sessionStorage caching and data sanitization
+// Function to fetch profile data with sessionStorage caching and data sanitisation
 async function fetchProfileData(did) {
     const cacheKey = `profileData_${did}`;
     const expiryKey = `${cacheKey}_expiry`;
@@ -55,7 +69,7 @@ async function fetchProfileData(did) {
 // Function to sanitize profile data
 function sanitizeProfileData(data) {
     const sanitizedData = {};
-    
+
     // List of expected fields and their types
     const expectedFields = {
         displayName: 'string',
@@ -96,7 +110,7 @@ async function injectProfileData(did) {
         // Inject display name with ARIA
         const displayNameElement = document.getElementById('profile-display-name');
         if (displayNameElement) {
-            displayNameElement.textContent = displayName || 'ewan';
+            displayNameElement.textContent = escapeHTML(displayName || 'ewan');
             displayNameElement.setAttribute('aria-live', 'polite');  // Live region for screen readers
             console.debug('Updated display name:', displayName);
         }
@@ -104,7 +118,7 @@ async function injectProfileData(did) {
         // Inject description with ARIA
         const descriptionElement = document.getElementById('profile-description');
         if (descriptionElement) {
-            descriptionElement.textContent = description || 'a British poet and programmer.';
+            descriptionElement.textContent = escapeHTML(description || 'a British poet and programmer.');
             descriptionElement.setAttribute('aria-live', 'polite');  // Live region for screen readers
             console.debug('Updated description:', description);
         }
@@ -113,14 +127,14 @@ async function injectProfileData(did) {
         const avatarElement = document.getElementById('profile-avatar');
         if (avatarElement) {
             avatarElement.src = avatar || ''; // No fallback image
-            avatarElement.alt = displayName || 'User Avatar';  // Provide descriptive alt text
+            avatarElement.alt = escapeHTML(displayName || 'User Avatar');  // Provide descriptive alt text
             console.debug('Updated avatar:', avatar);
         }
 
         // Inject handle with ARIA
         const handleElements = document.querySelectorAll('#profile-handle');
         handleElements.forEach((element) => {
-            element.textContent = handle || 'account';
+            element.textContent = escapeHTML(handle || 'account');
             element.setAttribute('aria-live', 'polite');
             console.debug('Updated handle:', handle);
         });
@@ -129,14 +143,14 @@ async function injectProfileData(did) {
         if (displayName) {
             // Update the <title>
             const pageTitle = document.title.split('|')[0].trim();
-            document.title = `${pageTitle} | ${displayName}'s Corner`;
+            document.title = `${pageTitle} | ${escapeHTML(displayName)}'s Corner`;
             console.debug('Updated <title>:', document.title);
 
             // Update the website title element
             const websiteTitleElement = document.getElementById('website_title');
             if (websiteTitleElement) {
-                websiteTitleElement.innerHTML = `<b>${displayName}'s Corner</b>`;
-                console.debug('Updated #website_title:', websiteTitleElement.innerHTML);
+                websiteTitleElement.textContent = `${escapeHTML(displayName)}'s Corner`;
+                console.debug('Updated #website_title:', websiteTitleElement.textContent);
             }
         }
     } catch (error) {
