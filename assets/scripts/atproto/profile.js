@@ -15,7 +15,7 @@ async function fetchConfig() {
     }
 }
 
-// Function to fetch profile data with sessionStorage caching
+// Function to fetch profile data with sessionStorage caching and data sanitization
 async function fetchProfileData(did) {
     const cacheKey = `profileData_${did}`;
     const expiryKey = `${cacheKey}_expiry`;
@@ -32,22 +32,53 @@ async function fetchProfileData(did) {
         console.debug(`Fetching profile data for DID: ${did} from ${profileUrl}...`);
         const response = await fetch(profileUrl);
         if (!response.ok) {
-            console.error(`Failed to fetch profile data: ${response.statusText} (${response.status})`);
-            return null;
+            throw new Error(`Failed to fetch profile data: ${response.statusText} (${response.status})`);
         }
         const profileData = await response.json();
         console.debug('Profile data fetched successfully:', profileData);
 
+        // Sanitize the fetched data
+        const sanitizedData = sanitizeProfileData(profileData);
+
         // Cache profile data for future use and set an expiry (e.g., 1 hour)
         const expiryInMs = 3600000; // 1 hour expiry
-        sessionStorage.setItem(cacheKey, JSON.stringify(profileData));
+        sessionStorage.setItem(cacheKey, JSON.stringify(sanitizedData));
         sessionStorage.setItem(expiryKey, Date.now() + expiryInMs); // Set expiry time
 
-        return profileData;
+        return sanitizedData;
     } catch (error) {
         console.error('Error fetching profile data:', error);
-        return null;
+        throw error;
     }
+}
+
+// Function to sanitize profile data
+function sanitizeProfileData(data) {
+    const sanitizedData = {};
+    
+    // List of expected fields and their types
+    const expectedFields = {
+        displayName: 'string',
+        description: 'string',
+        avatar: 'string',
+        handle: 'string',
+        followersCount: 'number',
+        followsCount: 'number',
+        postsCount: 'number'
+    };
+
+    // Check and sanitize each expected field
+    for (const [key, type] of Object.entries(expectedFields)) {
+        if (typeof data[key] === type) {
+            sanitizedData[key] = data[key];
+        } else if (type === 'string') {
+            sanitizedData[key] = '';
+        } else if (type === 'number') {
+            sanitizedData[key] = 0;
+        }
+    }
+
+    return sanitizedData;
 }
 
 // Function to inject profile data into the page with ARIA accessibility
