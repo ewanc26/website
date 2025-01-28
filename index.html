@@ -1,62 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, noai, noimageai" />
-  <meta name="theme-color" content="#0a1607" />
-  <!-- Favicon links for different sizes -->
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png" />
-  <link rel="manifest" href="/assets/images/favicon/site.webmanifest" />
-  <title>Home | Ewan's Corner</title>
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="/assets/css/main/modules/variables.css">
-  <link rel="stylesheet" href="/assets/css/main/modules/reset.css">
-  <link rel="stylesheet" href="/assets/css/main/animations.css">
-  <link rel="stylesheet" href="/assets/css/main/modules/components.css">
-  <link rel="stylesheet" href="/assets/css/main/modules/typography.css">
-  <link rel="stylesheet" href="/assets/css/main/modules/responsive.css">
-  <link rel="stylesheet" href="/assets/css/main/modules/warning.css">
-  <!-- JavaScript files for functionality -->
-  <script src="/assets/scripts/clock.js" defer></script>
-  <!-- Dynamically load header and footer modules -->
-  <script src="/assets/scripts/modules/header.js" defer></script>
-  <script src="/assets/scripts/modules/footer.js" defer></script>
-  <!-- Profile injection script -->
-  <script src="/assets/scripts/atproto/profile.js" defer></script>
-  <script src="/assets/scripts/keyboard-navigation.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Meta Tags for SEO and Personal Branding -->
+  <meta name="description"
+    content="Welcome to Ewan's Web Corner - A personal blog where I share my thoughts on coding, technology, and life.">
+  <meta name="keywords" content="Ewan, personal blog, coding, technology, programming, tech blog, Ewan's Web Corner">
+  <meta name="author" content="Ewan Croft">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph Meta Tags for Social Media -->
+  <meta property="og:title" content="Ewan's Web Corner">
+  <meta property="og:description"
+    content="Explore my personal blog where I share my journey with coding, technology, and insights into my life.">
+  <meta property="og:image" content="/assets/images/favicon/apple-touch-icon.png">
+  <meta property="og:url" content="https://ewancroft.uk">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ewan's Web Corner">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/main.css">
+
+  <!-- Favicon and Icons -->
+  <link rel="icon" href="/assets/images/favicon/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/images/favicon/site.webmanifest">
+
+  <!-- Theme Color for Mobile Devices -->
+  <meta name="theme-color" content="#0a1607">
+
+  <!-- Mobile Optimisation -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- Title -->
+  <title>Ewan's Web Corner</title>
+
+  <!-- Other Meta Tags for Compatibility -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-TileColor" content="#0a1607">
+  <meta name="msapplication-TileImage" content="/assets/images/favicon/ms-icon-144x144.png">
+
+  <title>Loading...</title>
 </head>
-<body aria-label="homepage">
-  <noscript>
-    <div id="js-warning" aria-label="JavaScript warning">
-      <strong>Warning:</strong> JavaScript is disabled in your browser. This website relies on JavaScript for optimal functionality. Please enable JavaScript for the best experience.
+
+<body class="atproto-site-scroll">
+
+  <div id="page">
+    <div id="column-left">
+      <div id="sidebar">
+        <div id="profile-area">
+          <!-- Profile Information -->
+          <profile-picture></profile-picture>
+          <profile-username></profile-username>
+          <profile-description></profile-description>
+
+          <!-- Navigation Links -->
+          <nav>
+            <div class="links">
+              <a href="">Home</a>
+              <a href="#about">About</a>
+              <a href="#verification">Verification</a>
+            </div>
+
+            <!-- Pagination -->
+            <if-pagination>
+              <if-previous-page style="display: none;">
+                <a><previous-page-link>&lt;</previous-page-link></a>
+              </if-previous-page>
+              <current-page-number>1</current-page-number>
+              <if-next-page>
+                <a href="#page/2"><next-page-link>&gt;</next-page-link></a>
+              </if-next-page>
+            </if-pagination>
+          </nav>
+        </div>
+        <p class="credit">
+          powered by <a href="https://atproto.com">atproto</a>
+        </p>
+      </div>
+
     </div>
-  </noscript>
-  <!-- The header is dynamically injected here -->
-  <div id="header" aria-label="Website header"></div>
-  <main aria-label="Main content area">
-    <!-- Introduction text -->
-    <span id="emoji" class="waving_hand" aria-hidden="true">&#128075;&#127995;</span>
-    <section aria-label="Introduction">
-      <h1>Hey there!</h1>
-      <p>I'm <span id="profile-display-name">Ewan</span>, <span id="profile-description">British poet and programmer.</span></p>
-      <p>This is my website. It's not much, but feel free to explore! <span aria-hidden="true">&#128513;</span></p>
-    </section>
-    <section aria-label="Additional information">
-      <h2>More About Me</h2>
-      <p>
-        I enjoy writing poetry, creating digital projects, and exploring creative avenues.
-        You'll also find me diving into gaming, linguistics, and media like Doctor Who and Steven Universe.
-      </p>
-      <p>
-        Feel free to check out the <a href="/about" aria-label="Go to About Me page" tabindex="0">About Me</a> page for more details, or visit
-        <a href="https://whtwnd.com/ewancroft.uk" aria-label="Go to Ewan's Blog" tabindex="0">my blog</a> for recent musings.
-      </p>
-    </section>
-  </main>
-  <!-- The footer is dynamically injected here -->
-  <div id="footer" aria-label="Website footer"></div>
+    <div id="column-right">
+      <main class="atproto-site-scroll">
+        <!--you can add a "pinned" post here:-->
+        <!--<site-post data-uri="at:..." data-show-author></site-post>-->
+        <post-container></post-container>
+      </main>
+    </div>
+  </div>
+
+  <!--generic/fallback post template-->
+  <template id="template-generic-post">
+    <article class="post">
+      <if-reply>
+        <div class="reply-indicator">&#8617; Reply
+          <reply-link-wrapper>(open reply)</reply-link-wrapper>
+        </div>
+      </if-reply>
+      <if-author>
+        <div class="author">
+          <author-pfp></author-pfp>
+          <author-username></author-username> <author-handle></author-handle>
+        </div>
+      </if-author>
+      <image-content></image-content>
+      <if-title>
+        <h2><title-content></title-content></h2>
+      </if-title>
+      <text-content></text-content>
+      <embed-container></embed-container>
+      <tag-container></tag-container>
+      <div class="footer">
+        <created-at></created-at>
+        <remote-link></remote-link>
+      </div>
+    </article>
+  </template>
+
+  <!--example of a template for a specific post type-->
+  <template id="template-link-post">
+    <article class="post">
+      <if-reply>
+        <div class="reply-indicator">&#8617; Reply
+          <reply-link-wrapper>(open reply)</reply-link-wrapper>
+        </div>
+      </if-reply>
+      <link-wrapper>
+        <link-content></link-content>
+      </link-wrapper>
+      <if-title>
+        <h3><title-content></title-content></h3>
+      </if-title>
+      <div class="footer">
+        <if-author>
+          <author-pfp></author-pfp>
+          <author-username></author-username> <author-handle></author-handle>
+        </if-author>
+        <created-at></created-at>
+        <remote-link></remote-link>
+      </div>
+      <embed-container></embed-container>
+      <tag-container></tag-container>
+    </article>
+  </template>
+
+  <template id="template-embed-card">
+    <image-content></image-content>
+    <div class="embed-content">
+      <if-title>
+        <div>
+          <title-content></title-content>
+        </div>
+      </if-title>
+      <text-content></text-content>
+    </div>
+  </template>
+
+  <template id="template-tag-chip">
+    <link-wrapper>
+      #<link-content></link-content>
+    </link-wrapper>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+  <script src="main.js"></script>
+  <script>
+    // docs: https://whtwnd.com/did:plc:xz3euvkhf44iadavovbsmqoo/3laxrz4dl4s2f
+    atprotoSite({
+      PDS: 'altq.net',
+      title: "Ewan's Web Corner",
+      postsPerPage: 10,
+      pageLimit: 5,
+      linkToUserHandles: true,
+      showDrafts: false,
+      showReplies: true,
+      readMore: 5,
+      tagsAsClasses: true,
+      blobURL: undefined,
+      dateFormat: new Intl.DateTimeFormat(),
+      pages: {
+        'about': {
+          title: 'About Me',
+          post: 'at://did:plc:ofrbh253gwicbkc5nktqepol/com.whtwnd.blog.entry/3lgstfrk3ai2e'
+        },
+        'verification': {
+          title: 'Verification',
+          post: 'at://did:plc:ofrbh253gwicbkc5nktqepol/com.whtwnd.blog.entry/3lgt5skttvy2e'
+        }
+      },
+      users: [
+        {
+          DID: 'did:plc:ofrbh253gwicbkc5nktqepol',
+          handle: 'ewancroft.uk',
+          sources: {
+            Bluesky: true,
+            WhiteWind: true,
+            Frontpage: true,
+            PinkSea: false,
+            pastesphere: false,
+            Linkat: false
+          },
+        }
+      ],
+    });
+  </script>
 </body>
+
 </html>
