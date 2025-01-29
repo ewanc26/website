@@ -127,7 +127,37 @@
     </article>
   </template>
 
-  <!--example of a template for a specific post type-->
+  <template id="template-generic-post">
+    <article class="post">
+      <if-reply>
+        <div class="reply-indicator">&#8617; Reply
+          <reply-link-wrapper>(see context)</reply-link-wrapper>
+        </div>
+      </if-reply>
+      <if-author>
+        <div class="author">
+          <author-pfp></author-pfp>
+          <author-username></author-username> <author-handle></author-handle>
+        </div>
+      </if-author>
+      <image-content></image-content>
+      <if-title>
+        <h2><title-content></title-content></h2>
+      </if-title>
+      <text-content></text-content>
+
+      <div class="embed-container">
+        <embed-container></embed-container>
+      </div>
+
+      <tag-container></tag-container>
+      <div class="footer">
+        <created-at></created-at>
+        <remote-link></remote-link>
+      </div>
+    </article>
+  </template>
+
   <template id="template-link-post">
     <article class="post">
       <if-reply>
@@ -141,6 +171,12 @@
       <if-title>
         <h3><title-content></title-content></h3>
       </if-title>
+
+      <div class="embed-container">
+        <embed-container></embed-container>
+      </div>
+
+      <tag-container></tag-container>
       <div class="footer">
         <if-author>
           <author-pfp></author-pfp>
@@ -149,20 +185,20 @@
         <created-at></created-at>
         <remote-link></remote-link>
       </div>
-      <embed-container></embed-container>
-      <tag-container></tag-container>
     </article>
   </template>
 
   <template id="template-embed-card">
-    <image-content></image-content>
-    <div class="embed-content">
-      <if-title>
-        <div>
-          <title-content></title-content>
-        </div>
-      </if-title>
-      <text-content></text-content>
+    <div class="embed-card">
+      <image-content></image-content>
+      <div class="embed-content">
+        <if-title>
+          <div>
+            <title-content></title-content>
+          </div>
+        </if-title>
+        <text-content></text-content>
+      </div>
     </div>
   </template>
 
