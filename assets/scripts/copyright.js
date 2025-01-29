@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
     function updateCopyrightYear() {
       const currentYear = new Date().getFullYear();
+      const displayYear = currentYear < 2023 ? 2023 : currentYear;
       const copyrightElement = document.getElementById("copyright-year");
   
       if (copyrightElement) {
