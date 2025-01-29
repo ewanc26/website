@@ -14,7 +14,7 @@ atprotoSite({
     pages: {
         'about': {
             title: 'About Me',
-            post: 'at://did:plc:ofrbh253gwicbkc5nktqepol/com.whtwnd.blog.entry/3lgstfrk3ai2e'
+            post: 'at://did:plc:ofrbh253gwicbkc5nktqepol/com.whtwnd.blog.entry/3lgvyq43doi2e'
         },
         'verification': {
             title: 'Verification',
