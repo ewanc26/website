@@ -28,7 +28,6 @@
   --link-hover-color: #388e3c; /* Darker green for hover state */
 }
 
-/* Apply Poppins font throughout */
 body {
   margin: 0;
   background: var(--background-color);
