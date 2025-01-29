@@ -12,7 +12,7 @@ The site is built using **atproto** technology, and the structure is optimised t
 - **Profile Information:** The left sidebar includes a space for a profile picture, username, description, and external links.
 - **Mobile Optimisation:** The site is optimised for mobile browsing, with a responsive design that adjusts to different screen sises.
 
-For more details on customisation, refer to the documentation on WhiteWind: [Documentation Link](https://whtwnd.com/did:plc:xs3euvkhf44iadavovbsmqoo/3laxrs4dl4s2f)
+For more details on customisation, refer to the documentation on WhiteWind: [Documentation Link](https://whtwnd.com/did:plc:xz3euvkhf44iadavovbsmqoo/3laxrz4dl4s2f)
 
 ### Powered by atproto
 
