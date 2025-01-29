@@ -31,7 +31,7 @@ atprotoSite({
                 Frontpage: true,
                 PinkSea: false,
                 pastesphere: false,
-                Linkat: true
+                Linkat: false
             },
         }
     ],
