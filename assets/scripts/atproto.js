@@ -455,6 +455,9 @@ const customTypes = [
 	'if-next-page',
 	'next-page-link',
 	'current-page',
+	'if-index-page',
+	'if-tag-page',
+	'tag-name',
 	'if-author',
 	'author-pfp',
 	'author-username',
@@ -496,6 +499,20 @@ function createCustomElement(type, fallback=true) {
 	}
 
 	return element;
+}
+
+function showCustomElements(container, type) {
+	const elements = container.querySelectorAll(type);
+	for (let element of elements) {
+		element.style.display = '';
+	}
+}
+
+function hideCustomElements(container, type) {
+	const elements = container.querySelectorAll(type);
+	for (let element of elements) {
+		element.style.display = 'none';
+	}
 }
 
 function removeCustomElements(container, type) {
@@ -692,11 +709,13 @@ function addEmbed(post, {title, text, url, user, blob}) {
 // tags: array of strings
 function addTags(post, tags) {
 	const tagContainer = post.querySelector('tag-container');
-	for (let tag of tags) {
-		const tagChip = createCustomElement('tag-chip', false);
-		wrapLink(tagChip, `#tagged/${tag.toLowerCase()}`);
-		addText(tagChip, tag, 'link-content');
-		tagContainer.appendChild(tagChip);
+	if (tagContainer) {
+		for (let tag of tags) {
+			const tagChip = createCustomElement('tag-chip', false);
+			wrapLink(tagChip, `#tagged/${tag.toLowerCase()}`);
+			addText(tagChip, tag, 'link-content');
+			tagContainer.appendChild(tagChip);
+		}
 	}
 }
 
@@ -705,19 +724,8 @@ function addTags(post, tags) {
 function addCreatedAt(post, createdAt) {
 	const dateElement = post.querySelector('created-at');
 	if (dateElement) {
-		const datetime = new Date(createdAt);
-		const options = { 
-			year: 'numeric', 
-			month: '2-digit', 
-			day: '2-digit',
-			hour: '2-digit', 
-			minute: '2-digit',
-			hour12: false
-		};
-		
-		// Format the datetime based on system locale
-		const formattedDate = new Intl.DateTimeFormat(navigator.language, options).format(datetime);
-		dateElement.textContent = formattedDate;
+		const datetime = Date.parse(createdAt);
+		dateElement.textContent = options.dateFormat.format(datetime);
 	}
 }
 
@@ -807,6 +815,8 @@ function hidePagination() {
 // numbered page: one page of the timeline
 async function goToPage(page) {
 	cache.page = page;
+	hideCustomElements(document.body, 'if-tag-page');
+	showCustomElements(document.body, 'if-index-page');
 	clearContainer(refs.postContainer);
 	const records = await getPostsByPage(page);
 	addPosts(refs.postContainer, records);
@@ -816,6 +826,13 @@ async function goToPage(page) {
 // tag page: all posts up to limit, filtered by tag
 async function goToTagPage(tag) {
 	document.title += ` | #${tag}`;
+	hideCustomElements(document.body, 'if-index-page');
+	// add tag text to all if-tag-page tag-name elements
+	const tagPageElements = document.body.querySelectorAll('if-tag-page');
+	for (let element of tagPageElements) {
+		element.style = '';
+		addText(element, tag, 'tag-name');
+	}
 	hidePagination();
 	clearContainer(refs.postContainer);
 	const records = await getPostsByTag(tag);
@@ -824,6 +841,8 @@ async function goToTagPage(tag) {
 
 // custom page: the specified post
 async function goToCustomPage(url) {
+	hideCustomElements(document.body, 'if-tag-page');
+	hideCustomElements(document.body, 'if-index-page');
 	const page = options.pages[url];
 	document.title += ` | ${page.title}`;
 	hidePagination();
