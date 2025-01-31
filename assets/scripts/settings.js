@@ -4,7 +4,7 @@ atprotoSite({
     title: "Ewan's Web Corner",
     postsPerPage: 10,
     pageLimit: 5,
-    linkToUserHandles: true,
+    linkToUserHandles: false,
     showDrafts: false,
     showReplies: true,
     readMore: 5,
