@@ -10,7 +10,7 @@ atprotoSite({
     readMore: 5,
     tagsAsClasses: true,
     blobURL: undefined,
-    dateFormat: new Intl.DateTimeFormat(),
+    dateFormat: new Intl.DateTimeFormat(undefined, { dateStyle: 'long', timeStyle: 'short' }),
     pages: {
         'about': {
             title: 'About Me',
