@@ -331,8 +331,8 @@ imageset-post image-content img {
   }
 
   .footer {
-      flex-direction: column;
-      align-items: flex-start;
+      flex-direction: row;
+      align-items: center;
       gap: 16px;
   }
 
