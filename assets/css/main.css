@@ -282,7 +282,6 @@ imageset-post image-content img {
   background: var(--embed-bg);
   border-radius: var(--embed-border-radius);
   padding: 16px;
-  border: 1px solid var(--embed-border);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
