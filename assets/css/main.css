@@ -285,6 +285,10 @@ imageset-post image-content img {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
+.frontpage-post .embed-container {
+  display: none;
+}
+
 /* Embed card styling */
 .post .embed-card {
   display: block;
