@@ -113,6 +113,13 @@
   <!--generic/fallback post template-->
   <template id="template-generic-post">
     <article class="post">
+      <div class="author">
+        <author-pfp></author-pfp>
+        <div>
+          <author-username></author-username>
+          <author-handle></author-handle>
+        </div>
+      </div>
       <if-reply>
         <div class="reply-indicator">&#8617; Reply
           <reply-link-wrapper>(see context)</reply-link-wrapper>
@@ -132,33 +139,15 @@
     </article>
   </template>
 
-  <template id="template-generic-post">
-    <article class="post">
-      <if-reply>
-        <div class="reply-indicator">&#8617; Reply
-          <reply-link-wrapper>(see context)</reply-link-wrapper>
-        </div>
-      </if-reply>
-      <image-content></image-content>
-      <if-title>
-        <h2><title-content></title-content></h2>
-      </if-title>
-      <text-content></text-content>
-
-      <div class="embed-container">
-        <embed-container></embed-container>
-      </div>
-
-      <tag-container></tag-container>
-      <div class="footer">
-        <created-at></created-at>
-        <remote-link></remote-link>
-      </div>
-    </article>
-  </template>
-
   <template id="template-link-post">
     <article class="post">
+      <div class="author">
+        <author-pfp></author-pfp>
+        <div>
+          <author-username></author-username>
+          <author-handle></author-handle>
+        </div>
+      </div>
       <if-reply>
         <div class="reply-indicator">&#8617; Reply
           <reply-link-wrapper>(see context)</reply-link-wrapper>
@@ -170,11 +159,7 @@
       <if-title>
         <h3><title-content></title-content></h3>
       </if-title>
-
-      <div class="embed-container">
-        <embed-container></embed-container>
-      </div>
-
+      <embed-container></embed-container>
       <tag-container></tag-container>
       <div class="footer">
         <created-at></created-at>
