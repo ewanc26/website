@@ -217,7 +217,6 @@ const sources = [
 		createPost(record, info) {
 			if (info.collection === 'fyi.unravel.frontpage.post') {
 				const post = createCustomElement('link-post');
-				post.classList.add('frontpage-post');
 				removeCustomElements(post, 'if-reply');
 				addText(post, record.value.title, 'title-content');
 				addText(post, record.value.url, 'link-content');
