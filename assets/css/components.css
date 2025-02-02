@@ -95,6 +95,12 @@ if-pagination {
   margin-bottom: 12px;
 }
 
+.author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 author-pfp {
   display: inline-block;
   vertical-align: middle;
@@ -112,6 +118,14 @@ author-pfp img {
 author-username,
 title-content {
   font-weight: bold;
+}
+
+author-username {
+  font-weight: bold;
+}
+
+author-handle {
+  opacity: 0.5;
 }
 
 image-post image-content {
@@ -138,12 +152,6 @@ imageset-post image-content img {
   align-items: center;
   font-size: 14px;
   color: var(--text-color);
-}
-
-.author {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .created-at {
