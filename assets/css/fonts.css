@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'madecarvingsoft';
+  src: url('/assets/fonts/madecarvingsoft.woff2') format('woff2'),
+       url('/assets/fonts/madecarvingsoft.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'madecarvingsoft';
+  src: url('/assets/fonts/madecarvingsoftsemibold.woff2') format('woff2'),
+       url('/assets/fonts/madecarvingsoftsemibold.woff') format('woff');
+  font-weight: bold;
+}
