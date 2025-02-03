@@ -1,6 +1,6 @@
 # Ewan's Web Corner
 
-Welcome to the repository for **Ewan's Web Corner**, my personal website and blog. This site is where I share my thoughts on coding, technology, and various aspects of my life.
+Welcome to the repository for **Ewan's Web Corner**, my personal website. This site is where I share my thoughts on coding, technology, and various aspects of my life.
 
 ### Site Overview
 
@@ -14,7 +14,7 @@ It is based on the fantastic work by [fei.chicory.blue](https://codeberg.org/fei
 - **Profile Information:** The left sidebar includes a space for a profile picture, username, description, and external links.
 - **Mobile Optimisation:** The site is optimised for mobile browsing, with a responsive design that adjusts to different screen sises.
 
-For more details on customisation, refer to the documentation on WhiteWind: [Documentation Link](https://whtwnd.com/did:plc:xz3euvkhf44iadavovbsmqoo/3laxrz4dl4s2f)
+For more details on customisation, refer to the documentation on WhiteWind [here](https://whtwnd.com/did:plc:xz3euvkhf44iadavovbsmqoo/3laxrz4dl4s2f).
 
 ### Powered by atproto
 
