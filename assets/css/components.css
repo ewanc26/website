@@ -69,7 +69,7 @@ nav .links a:hover {
 
 #theme-toggle:hover {
   background: var(--button-hover-bg);
-  color: var(--link-hover-color);
+  color: var(--text-color);
 }
 
 if-pagination {
