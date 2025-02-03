@@ -33,7 +33,7 @@ nav {
   display: flex;
   height: 48px;
   background: var(--button-bg);
-  color: var(--text-color);
+  color: var(--link-color);
   border-radius: 16px;
   justify-content: center;
   align-items: center;
@@ -43,7 +43,16 @@ nav {
 
 .links a:hover {
   text-decoration: none;
+  color: var(--link-hover-color);
+}
+
+nav .links a {
   color: var(--text-color);
+}
+
+nav .links a:hover {
+  color: var(--text-color);
+  background: var(--button-hover-bg);
 }
 
 if-pagination {
@@ -65,12 +74,12 @@ if-pagination {
 }
 
 .credit a {
-  color: var(--button-bg);
+  color: var(--link-color);
   text-decoration: none;
 }
 
 .credit a:hover {
-  text-decoration: underline;
+  color: var(--link-hover-color);
 }
 
 .post {
