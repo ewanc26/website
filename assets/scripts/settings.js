@@ -18,7 +18,7 @@ atprotoSite({
         },
         'verification': {
             title: 'Verification',
-            post: 'at://did:plc:ofrbh253gwicbkc5nktqepol/com.whtwnd.blog.entry/3lgt5skttvy2e'
+            post: 'at://did:plc:ofrbh253gwicbkc5nktqepol/com.whtwnd.blog.entry/3lhcavd3wyc2g'
         }
     },
     users: [
