@@ -61,54 +61,54 @@
     --background-color: #91c991;
     --header-footer-bg: #e2f4e2;
     --text-color: #333;
-    --button-bg: #91c991;
-    --button-hover-bg: #6fbf6f;
+    --button-bg: #6fbf6f;
+    --button-hover-bg: #91c991;
     --embed-bg: #b1ddb1;
     --link-color: #2d6a2f;
-    --link-hover-color: #1bb137;
+    --link-hover-color: #222222; /* Barely tinted black */
   }
 
   :root.red {
     --background-color: #f8c2c2;
     --header-footer-bg: #ffe5e5;
     --text-color: #300707;
-    --button-bg: #f8c2c2;
-    --button-hover-bg: #e89a9a;
+    --button-bg: #e89a9a;
+    --button-hover-bg: #f8c2c2;
     --embed-bg: #ffcccc;
     --link-color: #a11414;
-    --link-hover-color: #ff5757;
+    --link-hover-color: #222222; /* Barely tinted black */
   }
 
   :root.blue {
     --background-color: #c2d9f8;
     --header-footer-bg: #e5f0ff;
     --text-color: #0d1530;
-    --button-bg: #c2d9f8;
-    --button-hover-bg: #9bbce8;
+    --button-bg: #9bbce8;
+    --button-hover-bg: #c2d9f8;
     --embed-bg: #d4e5ff;
     --link-color: #104b8a;
-    --link-hover-color: #57aaff;
+    --link-hover-color: #222222; /* Barely tinted black */
   }
 
   :root.yellow {
     --background-color: #fff6c2;
     --header-footer-bg: #fffbe5;
     --text-color: #4c470a;
-    --button-bg: #fff6c2;
-    --button-hover-bg: #ebdf9f;
+    --button-bg: #ebdf9f;
+    --button-hover-bg: #fff6c2;
     --embed-bg: #fff2ad;
     --link-color: #8a7a10;
-    --link-hover-color: #ffc800;
+    --link-hover-color: #222222; /* Barely tinted black */
   }
 
   :root.monochrome {
     --background-color: #f0f0f0;
     --header-footer-bg: #ffffff;
     --text-color: #222;
-    --button-bg: #d9d9d9;
-    --button-hover-bg: #bfbfbf;
+    --button-bg: #bfbfbf;
+    --button-hover-bg: #d9d9d9;
     --embed-bg: #e6e6e6;
     --link-color: #666;
-    --link-hover-color: #222;
+    --link-hover-color: #222222; /* Barely tinted black */
   }
 }
