@@ -1,28 +1,130 @@
 :root {
-  /* Colours (dark theme by default) */
+  /* Default (Green) - Dark */
   --background-color: #2b3728;
   --text-color: #fff;
   --header-footer-bg: #0a1607;
-  --button-bg: #4caf50;
+  --button-bg: #2b3728;
   --button-hover-bg: #204d22;
   --embed-bg: #304028;
   --embed-border-radius: 8px;
-
-  /* Darker hyperlink colour */
-  --link-color: #4caf50;
-  --link-hover-color: #388e3c;
+  --link-color: #29a12d;
+  --link-hover-color: #8ced91;
 }
 
-/* Light theme (alternative) */
+/* Default (Green) - Light */
 @media (prefers-color-scheme: light) {
   :root {
-    --background-color: #91c991; /* Soft, light green background */
-    --header-footer-bg: #e2f4e2; /* Light green for header/footer */
-    --text-color: #333333; /* Darker grey for text for better readability */
-    --button-bg: #54cb5a; /* Rich green button background */
-    --button-hover-bg: #2c6c29; /* Darker green on hover */
+    --background-color: #91c991;
+    --header-footer-bg: #e2f4e2;
+    --text-color: #333;
+    --button-bg: #91c991;
+    --button-hover-bg: #6fbf6f;
     --embed-bg: #b1ddb1;
-    --link-color: #2d6a2f; /* Darker green for hyperlinks */
-    --link-hover-color: #1b4d24; /* Even darker green for hover state */
+    --link-color: #2d6a2f;
+    --link-hover-color: #1bb137;
+  }
+}
+
+/* Red Theme - Dark */
+:root.red {
+  --background-color: #4a0e0e;
+  --text-color: #fff;
+  --header-footer-bg: #300707;
+  --button-bg: #4a0e0e;
+  --button-hover-bg: #650a0a;
+  --embed-bg: #530e0e;
+  --link-color: #ff4d4d;
+  --link-hover-color: #ff9999;
+}
+
+/* Red Theme - Light */
+@media (prefers-color-scheme: light) {
+  :root.red {
+    --background-color: #f8c2c2;
+    --header-footer-bg: #ffe5e5;
+    --text-color: #300707;
+    --button-bg: #f8c2c2;
+    --button-hover-bg: #e89a9a;
+    --embed-bg: #ffcccc;
+    --link-color: #a11414;
+    --link-hover-color: #ff5757;
+  }
+}
+
+/* Blue Theme - Dark */
+:root.blue {
+  --background-color: #1a2a4a;
+  --text-color: #fff;
+  --header-footer-bg: #0d1530;
+  --button-bg: #1a2a4a;
+  --button-hover-bg: #20346d;
+  --embed-bg: #253a67;
+  --link-color: #4da6ff;
+  --link-hover-color: #99ccff;
+}
+
+/* Blue Theme - Light */
+@media (prefers-color-scheme: light) {
+  :root.blue {
+    --background-color: #c2d9f8;
+    --header-footer-bg: #e5f0ff;
+    --text-color: #0d1530;
+    --button-bg: #c2d9f8;
+    --button-hover-bg: #9bbce8;
+    --embed-bg: #d4e5ff;
+    --link-color: #104b8a;
+    --link-hover-color: #57aaff;
+  }
+}
+
+/* Yellow Theme - Dark */
+:root.yellow {
+  --background-color: #665a0e;
+  --text-color: #fff;
+  --header-footer-bg: #4c470a;
+  --button-bg: #665a0e;
+  --button-hover-bg: #7a6f0c;
+  --embed-bg: #806710;
+  --link-color: #ffd633;
+  --link-hover-color: #ffea80;
+}
+
+/* Yellow Theme - Light */
+@media (prefers-color-scheme: light) {
+  :root.yellow {
+    --background-color: #fff6c2;
+    --header-footer-bg: #fffbe5;
+    --text-color: #4c470a;
+    --button-bg: #fff6c2;
+    --button-hover-bg: #ebdf9f;
+    --embed-bg: #fff2ad;
+    --link-color: #8a7a10;
+    --link-hover-color: #ffc800;
+  }
+}
+
+/* Monochrome Theme - Dark */
+:root.monochrome {
+  --background-color: #333;
+  --text-color: #fff;
+  --header-footer-bg: #1a1a1a;
+  --button-bg: #333;
+  --button-hover-bg: #4d4d4d;
+  --embed-bg: #404040;
+  --link-color: #ccc;
+  --link-hover-color: #eee;
+}
+
+/* Monochrome Theme - Light */
+@media (prefers-color-scheme: light) {
+  :root.monochrome {
+    --background-color: #f0f0f0;
+    --header-footer-bg: #ffffff;
+    --text-color: #222;
+    --button-bg: #d9d9d9;
+    --button-hover-bg: #bfbfbf;
+    --embed-bg: #e6e6e6;
+    --link-color: #666;
+    --link-hover-color: #222;
   }
 }

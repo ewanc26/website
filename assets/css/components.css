@@ -51,8 +51,25 @@ nav .links a {
 }
 
 nav .links a:hover {
-  color: var(--text-color);
+  color: var(--link-hover-color);;
   background: var(--button-hover-bg);
+}
+
+#theme-toggle {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background: var(--button-bg);
+  color: var(--text-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+}
+
+#theme-toggle:hover {
+  background: var(--button-hover-bg);
+  color: var(--link-hover-color);
 }
 
 if-pagination {
