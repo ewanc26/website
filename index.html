@@ -65,23 +65,23 @@
           <profile-description></profile-description>
 
           <!-- Navigation Links -->
-          <nav>
+          <nav aria-label="Main Navigation">
             <div class="links">
               <a href="">Home</a>
               <a href="#about">About</a>
               <a href="#verification">Verification</a>
             </div>
 
-            <button id="theme-toggle">Toggle Theme</button>
+            <button id="theme-toggle" aria-label="Toggle Theme">Toggle Theme</button>
 
             <!-- Pagination -->
-            <if-pagination>
+            <if-pagination role="navigation" aria-label="Pagination Navigation">
               <if-previous-page style="display: none;">
-                <a><previous-page-link>&lt;</previous-page-link></a>
+                <a aria-label="Previous Page"><previous-page-link>&lt;</previous-page-link></a>
               </if-previous-page>
               <current-page-number>1</current-page-number>
               <if-next-page>
-                <a href="#page/2"><next-page-link>&gt;</next-page-link></a>
+                <a href="#page/2" aria-label="Next Page"><next-page-link>&gt;</next-page-link></a>
               </if-next-page>
             </if-pagination>
           </nav>
@@ -116,7 +116,7 @@
 
   <!--generic/fallback post template-->
   <template id="template-generic-post">
-    <article class="post">
+    <article class="post" role="article">
       <div class="author">
         <author-pfp></author-pfp>
         <div>
@@ -125,7 +125,7 @@
         </div>
       </div>
       <if-reply>
-        <div class="reply-indicator">&#8617; Reply
+        <div class="reply-indicator" aria-label="Reply Indicator">&#8617; Reply
           <reply-link-wrapper>(see context)</reply-link-wrapper>
         </div>
       </if-reply>
@@ -144,7 +144,7 @@
   </template>
 
   <template id="template-link-post">
-    <article class="post">
+    <article class="post" role="article">
       <div class="author">
         <author-pfp></author-pfp>
         <div>
@@ -153,7 +153,7 @@
         </div>
       </div>
       <if-reply>
-        <div class="reply-indicator">&#8617; Reply
+        <div class="reply-indicator" aria-label="Reply Indicator">&#8617; Reply
           <reply-link-wrapper>(see context)</reply-link-wrapper>
         </div>
       </if-reply>
@@ -187,7 +187,7 @@
   </template>
 
   <template id="template-tag-chip">
-    <link-wrapper>
+    <link-wrapper >
       #<link-content></link-content>
     </link-wrapper>
   </template>
