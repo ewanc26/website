@@ -1,29 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const themeToggleButton = document.getElementById("theme-toggle");
-    const currentTheme = localStorage.getItem("theme") || "default";
+  const themeToggleButton = document.getElementById("theme-toggle");
+  const themes = ["default", "red", "blue", "yellow", "monochrome"];
+  let currentTheme = localStorage.getItem("theme") || "default";
 
-    // Apply the saved theme on page load
-    document.documentElement.className = currentTheme;
+  // Apply saved theme and update button text
+  document.documentElement.className = currentTheme;
+  themeToggleButton.textContent = `Theme: ${currentTheme}`;
+  themeToggleButton.setAttribute("aria-label", `Switch theme (Current: ${currentTheme})`);
 
-    themeToggleButton.addEventListener("click", function () {
-      let newTheme;
-      switch (document.documentElement.className) {
-        case "default":
-          newTheme = "red";
-          break;
-        case "red":
-          newTheme = "blue";
-          break;
-        case "blue":
-          newTheme = "yellow";
-          break;
-        case "yellow":
-          newTheme = "monochrome";
-          break;
-        default:
-          newTheme = "default";
-      }
-      document.documentElement.className = newTheme;
-      localStorage.setItem("theme", newTheme);
-    });
+  themeToggleButton.addEventListener("click", function () {
+    const nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
+
+    // Apply the new theme
+    document.documentElement.className = nextTheme;
+    localStorage.setItem("theme", nextTheme);
+    currentTheme = nextTheme;
+
+    // Update button text and accessibility label
+    themeToggleButton.textContent = `Theme: ${nextTheme}`;
+    themeToggleButton.setAttribute("aria-label", `Switch theme (Current: ${nextTheme})`);
   });
+});
