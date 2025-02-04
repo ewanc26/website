@@ -4,6 +4,7 @@ profile-picture img {
   margin: 0 auto;
   border-radius: 50%;
   object-fit: cover;
+  box-shadow: 0 0 10px 3px var(--link-color);
 }
 
 profile-username {
