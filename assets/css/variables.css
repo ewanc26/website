@@ -65,7 +65,7 @@
     --button-hover-bg: #91c991;
     --embed-bg: #b1ddb1;
     --link-color: #2d6a2f;
-    --link-hover-color: #222222; /* Barely tinted black */
+    --link-hover-color: #222222;
   }
 
   :root.red {
@@ -76,7 +76,7 @@
     --button-hover-bg: #f8c2c2;
     --embed-bg: #ffcccc;
     --link-color: #a11414;
-    --link-hover-color: #222222; /* Barely tinted black */
+    --link-hover-color: #222222;
   }
 
   :root.blue {
@@ -87,7 +87,7 @@
     --button-hover-bg: #c2d9f8;
     --embed-bg: #d4e5ff;
     --link-color: #104b8a;
-    --link-hover-color: #222222; /* Barely tinted black */
+    --link-hover-color: #222222;
   }
 
   :root.yellow {
@@ -98,7 +98,7 @@
     --button-hover-bg: #fff6c2;
     --embed-bg: #fff2ad;
     --link-color: #8a7a10;
-    --link-hover-color: #222222; /* Barely tinted black */
+    --link-hover-color: #222222;
   }
 
   :root.monochrome {
@@ -109,6 +109,6 @@
     --button-hover-bg: #d9d9d9;
     --embed-bg: #e6e6e6;
     --link-color: #666;
-    --link-hover-color: #222222; /* Barely tinted black */
+    --link-hover-color: #222222;
   }
 }
