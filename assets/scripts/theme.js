@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const themeToggleButton = document.getElementById("theme-toggle");
-  // Expanded themes list – note that "default" corresponds to your green theme.
-  const themes = ["default", "red", "blue", "yellow", "monochrome", "orange", "indigo", "violet"];
+  // Reordered themes list by colour spectrum – "default" is green.
+  const themes = ["red", "orange", "yellow", "default", "blue", "indigo", "violet", "monochrome"];
   let currentTheme = localStorage.getItem("theme") || "default";
 
   // Apply saved theme and update button text
@@ -32,16 +32,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function updateFavicon(theme) {
     const faviconSrc = "/assets/images/favicon/favicon-32x32.png"; // Use a PNG version for canvas manipulation
-    // Updated hue mapping with new themes:
+    // Updated hue mapping with reordered themes:
     const hueValues = {
-      default: 0,
+      default: 0, // Green
       red: 120,
-      blue: 240,
-      yellow: 60,
-      monochrome: null, // Special case for grayscale
       orange: 30,
+      yellow: 60,
+      blue: 240,
       indigo: 270,
-      violet: 330
+      violet: 330,
+      monochrome: null // Special case for grayscale
     };
 
     const hueRotate = hueValues[theme];
@@ -78,14 +78,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const ogImageSrc = "/assets/images/embed-preview.png"; // Use a single source for the Open Graph image
 
     const hueValues = {
-      default: 0,
+      default: 0, // Green
       red: 120,
-      blue: 240,
-      yellow: 60,
-      monochrome: null, // Special case for grayscale
       orange: 30,
+      yellow: 60,
+      blue: 240,
       indigo: 270,
-      violet: 330
+      violet: 330,
+      monochrome: null // Special case for grayscale
     };
 
     const hueRotate = hueValues[theme];
@@ -116,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   }
 
+  // Functions remain unchanged
   function applyHueRotation(imageData, degrees) {
     const data = imageData.data;
     const angle = (degrees * Math.PI) / 180;
