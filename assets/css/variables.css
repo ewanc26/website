@@ -1,5 +1,6 @@
 @media (prefers-color-scheme: dark) {
   :root {
+    /* Default (green) */
     --background-color: #2b3728;
     --text-color: #fff;
     --header-footer-bg: #0a1607;
@@ -54,10 +55,44 @@
     --link-color: #ccc;
     --link-hover-color: #eee;
   }
+
+  :root.orange {
+    --background-color: #5a3f0a;
+    --text-color: #fff;
+    --header-footer-bg: #3b2a07;
+    --button-bg: #5a3f0a;
+    --button-hover-bg: #6f4b0a;
+    --embed-bg: #64410a;
+    --link-color: #ff8c00;
+    --link-hover-color: #ffb347;
+  }
+
+  :root.indigo {
+    --background-color: #2e1a4a;
+    --text-color: #fff;
+    --header-footer-bg: #1f1130;
+    --button-bg: #2e1a4a;
+    --button-hover-bg: #36265d;
+    --embed-bg: #392a66;
+    --link-color: #7a5cff;
+    --link-hover-color: #b3a0ff;
+  }
+
+  :root.violet {
+    --background-color: #4a0e4a;
+    --text-color: #fff;
+    --header-footer-bg: #300730;
+    --button-bg: #4a0e4a;
+    --button-hover-bg: #650a65;
+    --embed-bg: #530e53;
+    --link-color: #d966ff;
+    --link-hover-color: #e699ff;
+  }
 }
 
 @media (prefers-color-scheme: light) {
   :root {
+    /* Default (green) */
     --background-color: #91c991;
     --header-footer-bg: #e2f4e2;
     --text-color: #333;
@@ -109,6 +144,39 @@
     --button-hover-bg: #d9d9d9;
     --embed-bg: #e6e6e6;
     --link-color: #666;
+    --link-hover-color: #222222;
+  }
+
+  :root.orange {
+    --background-color: #f8e4d1;
+    --header-footer-bg: #fff0e0;
+    --text-color: #5a3f0a;
+    --button-bg: #f5d4b0;
+    --button-hover-bg: #f8e4d1;
+    --embed-bg: #fae7cf;
+    --link-color: #d2691e;
+    --link-hover-color: #222222;
+  }
+
+  :root.indigo {
+    --background-color: #d1d0f8;
+    --header-footer-bg: #e0e0ff;
+    --text-color: #1a0e4a;
+    --button-bg: #b0b3f5;
+    --button-hover-bg: #d1d0f8;
+    --embed-bg: #c2c5fa;
+    --link-color: #4a3aff;
+    --link-hover-color: #222222;
+  }
+
+  :root.violet {
+    --background-color: #f0d1f8;
+    --header-footer-bg: #ffe0ff;
+    --text-color: #4a0e4a;
+    --button-bg: #e0b3f5;
+    --button-hover-bg: #f0d1f8;
+    --embed-bg: #e0c2fa;
+    --link-color: #a64ca6;
     --link-hover-color: #222222;
   }
 }

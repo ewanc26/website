@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const themeToggleButton = document.getElementById("theme-toggle");
-  const themes = ["default", "red", "blue", "yellow", "monochrome"];
+  // Expanded themes list – note that "default" corresponds to your green theme.
+  const themes = ["default", "red", "blue", "yellow", "monochrome", "orange", "indigo", "violet"];
   let currentTheme = localStorage.getItem("theme") || "default";
 
   // Apply saved theme and update button text
@@ -31,12 +32,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function updateFavicon(theme) {
     const faviconSrc = "/assets/images/favicon/favicon-32x32.png"; // Use a PNG version for canvas manipulation
+    // Updated hue mapping with new themes:
     const hueValues = {
       default: 0,
       red: 120,
       blue: 240,
       yellow: 60,
       monochrome: null, // Special case for grayscale
+      orange: 30,
+      indigo: 270,
+      violet: 330
     };
 
     const hueRotate = hueValues[theme];
@@ -51,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
       canvas.width = img.width;
       canvas.height = img.height;
 
+      // Draw the original favicon first
       ctx.drawImage(img, 0, 0);
 
       if (hueRotate !== null) {
@@ -58,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
         applyHueRotation(imageData, hueRotate);
         ctx.putImageData(imageData, 0, 0);
       } else {
+        // For monochrome, apply a grayscale filter
         ctx.filter = "grayscale(100%)";
         ctx.drawImage(img, 0, 0);
       }
@@ -68,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function updateOgImage(theme) {
-    const ogImageSrc = "/assets/images/embed-preview.png"; // Use a single source for Open Graph image
+    const ogImageSrc = "/assets/images/embed-preview.png"; // Use a single source for the Open Graph image
 
     const hueValues = {
       default: 0,
@@ -76,6 +83,9 @@ document.addEventListener("DOMContentLoaded", function () {
       blue: 240,
       yellow: 60,
       monochrome: null, // Special case for grayscale
+      orange: 30,
+      indigo: 270,
+      violet: 330
     };
 
     const hueRotate = hueValues[theme];
@@ -117,9 +127,16 @@ document.addEventListener("DOMContentLoaded", function () {
       let g = data[i + 1];
       let b = data[i + 2];
 
-      data[i] = r * (cosA + (1.0 - cosA) / 3) + g * (1.0 / 3 - cosA / 3 - sinA / Math.sqrt(3)) + b * (1.0 / 3 - cosA / 3 + sinA / Math.sqrt(3));
-      data[i + 1] = r * (1.0 / 3 - cosA / 3 + sinA / Math.sqrt(3)) + g * (cosA + (1.0 - cosA) / 3) + b * (1.0 / 3 - cosA / 3 - sinA / Math.sqrt(3));
-      data[i + 2] = r * (1.0 / 3 - cosA / 3 - sinA / Math.sqrt(3)) + g * (1.0 / 3 - cosA / 3 + sinA / Math.sqrt(3)) + b * (cosA + (1.0 - cosA) / 3);
+      // Apply the hue rotation matrix to each pixel.
+      data[i] = r * (cosA + (1.0 - cosA) / 3) +
+                g * (1.0 / 3 - cosA / 3 - sinA / Math.sqrt(3)) +
+                b * (1.0 / 3 - cosA / 3 + sinA / Math.sqrt(3));
+      data[i + 1] = r * (1.0 / 3 - cosA / 3 + sinA / Math.sqrt(3)) +
+                    g * (cosA + (1.0 - cosA) / 3) +
+                    b * (1.0 / 3 - cosA / 3 - sinA / Math.sqrt(3));
+      data[i + 2] = r * (1.0 / 3 - cosA / 3 - sinA / Math.sqrt(3)) +
+                    g * (1.0 / 3 - cosA / 3 + sinA / Math.sqrt(3)) +
+                    b * (cosA + (1.0 - cosA) / 3);
     }
   }
 
