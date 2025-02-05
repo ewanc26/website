@@ -35,7 +35,7 @@ nav {
   height: 48px;
   background: var(--button-bg);
   color: var(--link-color);
-  border-radius: 16px;
+  border-radius: 8px;
   justify-content: center;
   align-items: center;
   transition: background 0.25s;
