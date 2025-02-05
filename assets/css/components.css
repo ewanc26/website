@@ -221,3 +221,7 @@ imageset-post image-content img {
 .post .embed-card .embed-content {
   padding: 16px;
 }
+
+.post .embed-card .embed-title {
+  font-weight: bold;
+}
