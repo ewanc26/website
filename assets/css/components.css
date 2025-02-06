@@ -49,11 +49,13 @@ nav {
 
 nav .links a {
   color: var(--text-color);
+  transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease;
 }
 
 nav .links a:hover {
   color: var(--link-hover-color);;
   background: var(--button-hover-bg);
+  transform: scale(1.1)
 }
 
 #theme-toggle {
