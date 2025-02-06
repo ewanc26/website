@@ -1,20 +1,19 @@
-/* Mobile Styling */
 @media screen and (max-width: 800px) {
   body {
       overflow: auto;
   }
 
   #page {
-      display: block; /* Stacks the columns vertically */
+      display: block;
   }
 
   #column-left {
       justify-content: center;
-      padding: 24px 16px; /* Padding for mobile */
+      padding: 24px 16px;
   }
 
   #column-right {
-      padding: 24px 16px; /* Padding for mobile */
+      padding: 24px 16px;
   }
 
   .footer {
@@ -60,7 +59,6 @@
       padding: 12px;
   }
 
-  /* Navigation links */
   nav a {
     margin-top: 30px;
     padding: 5px;
