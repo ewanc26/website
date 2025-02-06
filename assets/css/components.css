@@ -68,6 +68,7 @@ nav .links a:hover {
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.25s, color 0.25s;
+  text-align: center;
 }
 
 #theme-toggle:hover {
@@ -226,4 +227,8 @@ imageset-post image-content img {
 
 .post .embed-card .embed-title {
   font-weight: bold;
+}
+
+.post image-content img {
+  border-radius: 8px;
 }
