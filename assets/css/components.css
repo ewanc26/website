@@ -246,3 +246,20 @@ noscript {
   max-width: 600px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
+.music-embed {
+  display: block;
+  max-width: 800px;
+  padding: 20px;
+  margin: 10px auto;
+  background: var(--header-footer-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.music-embed iframe {
+  width: 100%;
+  height: 90vh;
+  border: none;
+  border-radius: 8px;
+}
