@@ -68,22 +68,11 @@
           <!-- Navigation Links -->
           <nav aria-label="Main Navigation">
             <div class="links">
-              <a href="/">Home</a>
-              <a href="/#about">About</a>
-              <a href="/#verification">Verification</a>
-              <a href="/music">Music</a>
+                <a href="/">Home</a>
+                <a href="/#about">About</a>
+                <a href="/#verification">Verification</a>
+                <a href="/music">Music</a>
             </div>
-
-            <!-- Pagination -->
-            <if-pagination role="navigation" aria-label="Pagination Navigation">
-              <if-previous-page style="display: none;">
-                <a aria-label="Previous Page"><previous-page-link>&lt;</previous-page-link></a>
-              </if-previous-page>
-              <current-page-number>1</current-page-number>
-              <if-next-page>
-                <a href="#page/2" aria-label="Next Page"><next-page-link>&gt;</next-page-link></a>
-              </if-next-page>
-            </if-pagination>
           </nav>
         </div>
         
@@ -97,8 +86,6 @@
           <a href="https://creativecommons.org/licenses/by/4.0/">text and imagery licenced under cc by 4.0</a>
           <br />
           here is the <a href="https://github.com/ewanc26/website">codebase</a>
-          
-          <script src="https://recentfm.rknight.me/now.js?u=greenwolf745"></script>
         </p>
         
         <button id="theme-toggle" aria-label="Toggle Theme">Toggle Theme</button>
@@ -109,97 +96,14 @@
       <noscript>
           <p>It seems you have JavaScript disabled. Please enable it to view this site properly.</p>
       </noscript>
-      <if-tag-page style="display: none;">
-        <div class="post">
-          Posts tagged #<tag-name></tag-name>
+      <main>
+        <div class="music-embed">
+          <iframe src="https://lastfmstats.com/user/greenwolf745/general" title="LastFM Stats"></iframe>
         </div>
-      </if-tag-page>
-      <main class="atproto-site-scroll">
-        <!--you can add a "pinned" post here:-->
-        <!--<site-post data-uri="at:..." data-show-author></site-post>-->
-        <post-container></post-container>
-      </main>
+      </main>      
     </div>
   </div>
 
-  <!--generic/fallback post template-->
-  <template id="template-generic-post">
-    <article class="post" role="article">
-      <div class="author">
-        <author-pfp></author-pfp>
-        <div>
-          <author-username></author-username>
-          <author-handle></author-handle>
-        </div>
-      </div>
-      <if-reply>
-        <div class="reply-indicator" aria-label="Reply Indicator">&#8617; Reply
-          <reply-link-wrapper>(see context)</reply-link-wrapper>
-        </div>
-      </if-reply>
-      <image-content></image-content>
-      <if-title>
-        <h2><title-content></title-content></h2>
-      </if-title>
-      <text-content></text-content>
-      <embed-container></embed-container>
-      <tag-container></tag-container>
-      <div class="footer">
-        <created-at></created-at>
-        <remote-link></remote-link>
-      </div>
-    </article>
-  </template>
-
-  <template id="template-link-post">
-    <article class="post" role="article">
-      <div class="author">
-        <author-pfp></author-pfp>
-        <div>
-          <author-username></author-username>
-          <author-handle></author-handle>
-        </div>
-      </div>
-      <if-reply>
-        <div class="reply-indicator" aria-label="Reply Indicator">&#8617; Reply
-          <reply-link-wrapper>(see context)</reply-link-wrapper>
-        </div>
-      </if-reply>
-      <link-wrapper>
-        <link-content></link-content>
-      </link-wrapper>
-      <if-title>
-        <h3><title-content></title-content></h3>
-      </if-title>
-      <embed-container></embed-container>
-      <tag-container></tag-container>
-      <div class="footer">
-        <created-at></created-at>
-        <remote-link></remote-link>
-      </div>
-    </article>
-  </template>
-
-  <template id="template-embed-card">
-    <div class="embed-card">
-      <image-content></image-content>
-      <div class="embed-content">
-        <if-title>
-          <div>
-            <title-content></title-content>
-          </div>
-        </if-title>
-        <text-content></text-content>
-      </div>
-    </div>
-  </template>
-
-  <template id="template-tag-chip">
-    <link-wrapper >
-      #<link-content></link-content>
-    </link-wrapper>
-  </template>
-    
   <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
   <script src="/assets/scripts/atproto.js"></script>
   <script src="/assets/scripts/settings.js"></script>
