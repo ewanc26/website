@@ -12,6 +12,7 @@
 .DS_Store
 
 Caddyfile
+/caddy/*
 
 # Node.js dependencies
 /node_modules/
