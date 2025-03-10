@@ -36,7 +36,7 @@ yarn-error.log*
 /build/
 
 # IDE specific files
-.vscode/
+/.vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
