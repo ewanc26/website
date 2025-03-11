@@ -1,0 +1,17 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3000"
+    volumes:
+      - .:/srv/www/ewancroft.uk
+    environment:
+      NODE_ENV: production
+    networks:
+      - www
+
+networks:
+  www:
+    external: true
