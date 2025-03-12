@@ -11,9 +11,6 @@
 # Why the hell does this exist? It's just a bloodstain on a perfectly white shirt!
 .DS_Store
 
-Caddyfile
-/caddy/*
-
 # Node.js dependencies
 /node_modules/
 /package-lock.json
