@@ -25,13 +25,13 @@ The site is powered by the [atproto platform](https://atproto.com), which enable
 
 To run the site using Docker Compose, follow these steps:
 
-1. Build and start the Docker containers:
+1. Build and start the Docker container:
 
    ```sh
    docker compose up --build -d
    ```
 
-This will build your Docker image and start the application inside a Docker container, making it accessible on port `3002`.
+This will build your Docker image and start the website inside a Docker container, making it accessible on port `3002`.
 
 ## Deploying with Cloudflare Tunnel
 
