@@ -1,0 +1,4 @@
+:80 {
+    root * /srv/www/ewancroft.uk
+    file_server
+}
