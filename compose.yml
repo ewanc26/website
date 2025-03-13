@@ -1,7 +1,8 @@
 services:
   web:
     image: caddy:alpine
-    container_name: caddy
+    container_name: caddy-apex
+    
     ports:
       - "3002:80"
     volumes:
