@@ -1,6 +1,31 @@
 {
 	"links": [
 		{
+			"name": "Bluesky",
+			"url": "https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol",
+			"icon": "🌐"
+		},
+		{
+			"name": "Tumblr",
+			"url": "https://tumblr.com/greenwerewolf745",
+			"icon": "📝"
+		},
+		{
+			"name": "Last.fm",
+			"url": "https://www.last.fm/user/greenwolf745",
+			"icon": "🎵"
+		},
+		{
+			"name": "GitHub",
+			"url": "https://github.com/ewanc26",
+			"icon": "👨🏻‍💻"
+		},
+		{
+			"name": "Forgejo",
+			"url": "https://git.ewancroft.uk/ewan",
+			"icon": "⚙️"
+		},
+		{
 			"name": "My Blog",
 			"url": "https://whtwnd.com/did:plc:ofrbh253gwicbkc5nktqepol",
 			"icon": "📝"
@@ -10,10 +35,10 @@
 			"url": "https://lastfmstats.com/user/greenwolf745/charts",
 			"icon": "🎵"
 		},
-        {
-            "name": "GitHub",
-            "url": "https://github.com/ewanc26",
-            "icon": "👨🏻‍💻"
-        }
+		{
+			"name": "Frontpage",
+			"url": "https://frontpage.fyi/profile/did:plc:ofrbh253gwicbkc5nktqepol",
+			"icon": "🌐"
+		}
 	]
 }
