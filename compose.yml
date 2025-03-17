@@ -1,25 +1,17 @@
 services:
   web:
-    image: caddy:alpine
-    container_name: caddy-apex
-    
+    image: node:18-alpine
+    container_name: ewancroft-web
+    working_dir: /srv/www/ewancroft.uk
+    volumes:
+      - /srv/www/ewancroft.uk:/srv/www/ewancroft.uk
     ports:
-      - "3002:80"
-    volumes:
-      - .:/srv/www/ewancroft.uk
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - "3002:3000"
+    command: sh -c "cd /srv/www/ewancroft.uk && npm install && npm run build && npm run preview -- --host 0.0.0.0"
     networks:
       - www
-    depends_on:
-      - php-fpm
-
-  php-fpm:
-    image: php:7.4-fpm-alpine
-    container_name: php-fpm
-    volumes:
-      - .:/srv/www/ewancroft.uk
-    networks:
-      - www
+    environment:
+      - NODE_ENV=production
 
 networks:
   www:
