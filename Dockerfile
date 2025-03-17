@@ -22,10 +22,12 @@ FROM node:18-alpine
 # Set the working directory
 WORKDIR /app
 
-# Copy the build output and node_modules from the builder stage
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/node_modules ./node_modules
+# Copy the build output from the builder stage
+COPY --from=builder /app/build ./
 COPY --from=builder /app/package.json ./package.json
+
+# Install only production dependencies
+RUN npm ci --omit=dev
 
 # Expose the application port
 EXPOSE 3000
@@ -34,4 +36,4 @@ EXPOSE 3000
 ENV NODE_ENV=production
 
 # Run the application
-CMD ["node", "build"]
+CMD ["node", "index.js"]
