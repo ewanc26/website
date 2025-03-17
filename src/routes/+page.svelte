@@ -6,6 +6,9 @@
   
   // Now you have access to profileSettings and websiteInfo.links
   const links = externalData.links;
+  
+  // Dynamically determine the number of links
+  let linkCount = links.length;
 </script>
 
 <svelte:head>
@@ -25,7 +28,7 @@
     
     <section class="links-section">
       <h2>Find me elsewhere</h2>
-      <div class="links-grid">
+      <div class="links-grid" style="grid-template-columns: repeat(auto-fill, minmax({linkCount > 3 ? 200 : 150}px, 1fr));">
         {#each links as link}
           <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-card">
             <span class="link-icon">{link.icon}</span>
