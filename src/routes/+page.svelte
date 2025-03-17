@@ -15,10 +15,6 @@
 
 <main>
   <div class="container">
-    <header>
-      <h1>{websiteInfo.title}</h1>
-    </header>
-    
     <section class="profile-section">
       <ATProfileComponent 
         pds={profileSettings.pds}
@@ -42,45 +38,26 @@
 </main>
 
 <style>
-  :global(body) {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
-    line-height: 1.6;
-  }
-  
   .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 2rem;
   }
   
-  header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  header h1 {
-    font-size: 2.5rem;
-    color: #333;
-    margin: 0;
-  }
-  
   section {
     margin-bottom: 3rem;
-    background-color: white;
+    background-color: var(--color-header-footer);
     border-radius: 8px;
     padding: 2rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
   }
   
   h2 {
     font-size: 1.5rem;
     margin-top: 0;
     margin-bottom: 1rem;
-    color: #444;
+    color: var(--color-text);
   }
   
   .links-grid {
@@ -93,16 +70,16 @@
     display: flex;
     align-items: center;
     padding: 1rem;
-    background-color: #f0f0f0;
+    background-color: var(--color-button);
     border-radius: 6px;
     text-decoration: none;
-    color: #333;
+    color: var(--color-text);
     transition: transform 0.2s, background-color 0.2s;
   }
   
   .link-card:hover {
     transform: translateY(-3px);
-    background-color: #e0e0e0;
+    background-color: var(--color-button-hover);
   }
   
   .link-icon {
@@ -121,10 +98,6 @@
     
     section {
       padding: 1.5rem;
-    }
-    
-    header h1 {
-      font-size: 2rem;
     }
   }
 </style>

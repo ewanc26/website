@@ -164,6 +164,7 @@
 				align-items: center;
 				gap: 1.5rem;
 				text-align: center;
+				color: var(--color-text)
 			}
 
 			@media (min-width: 640px) {
@@ -181,8 +182,6 @@
 				width: 130px;
 				height: 130px;
 				flex-shrink: 0;
-				background: white;
-				border: 3px solid #ddd;
 				transition: transform 0.2s ease-in-out;
 			}
 
@@ -204,19 +203,16 @@
 			.profile-username {
 				font-size: 1.8rem;
 				font-weight: bold;
-				color: #333;
 				margin-bottom: 0.3rem;
 			}
 
 			.profile-handle {
 				font-size: 1.2rem;
-				color: #777;
 			}
 
 			.profile-description {
 				font-size: 1rem;
 				line-height: 1.6;
-				color: #444;
 				margin-top: 0.5rem;
 				white-space: pre-wrap;
 			}
