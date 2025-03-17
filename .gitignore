@@ -1,51 +1,23 @@
-/public/
-/resources/_gen/
-/assets/jsconfig.json
-/hugo.log
-/hugo_stats.json
-/.hugo_build.lock
-/hugo.exe
-/hugo.darwin
-/hugo.linux
+node_modules
 
-# Why the hell does this exist? It's just a bloodstain on a perfectly white shirt!
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
 .DS_Store
+Thumbs.db
 
-# Node.js dependencies
-/node_modules/
-/package-lock.json
-/yarn.lock
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Environment variables
+# Env
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+!.env.test
 
-# Build output
-/dist/
-/build/
-
-# IDE specific files
-/.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
-
-# Temporary files
-*.tmp
-*.temp
-
-# Server-specific files
-/nginx.conf
-/nginx/
-/apache2.conf
-/httpd.conf
-/uwsgi.ini
-/gunicorn.conf.py
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
