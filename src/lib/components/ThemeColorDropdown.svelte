@@ -88,8 +88,10 @@
             on:click={() => setThemeColor(theme.name)}
             aria-current={currentTheme === theme.name}
           >
-            <span class="color-dot {theme.name}"></span>
-            <span>{theme.label}</span>
+            <span class="color-dot-container">
+              <span class="color-dot {theme.name}"></span>
+            </span>
+            <span class="theme-label">{theme.label}</span>
           </button>
         {/each}
       </div>
@@ -162,8 +164,21 @@
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      margin-right: 0.75rem;
       border: 2px solid var(--color-text);
+    }
+    
+    .dropdown-toggle .color-dot {
+      margin-right: 0.75rem;
+    }
+    
+    .color-dot-container {
+      display: inline-flex;
+      width: 28px;
+      flex-shrink: 0;
+    }
+    
+    .theme-label {
+      flex-grow: 1;
     }
   
     .color-dot.default {
@@ -208,7 +223,7 @@
         display: none;
       }
       
-      .color-dot {
+      .dropdown-toggle .color-dot {
         margin-right: 0;
       }
     }
