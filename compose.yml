@@ -1,13 +1,9 @@
 services:
   web:
-    image: node:18-alpine
+    build: .
     container_name: ewancroft-web
-    working_dir: /srv/www/ewancroft.uk
-    volumes:
-      - /srv/www/ewancroft.uk:/srv/www/ewancroft.uk
     ports:
       - "3002:3000"
-    command: sh -c "cd /srv/www/ewancroft.uk && npm install && npm run build && npm run preview -- --host 0.0.0.0"
     networks:
       - www
     environment:
