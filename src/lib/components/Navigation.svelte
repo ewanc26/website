@@ -1,6 +1,6 @@
 <script lang="ts">
     import ThemeColorDropdown from './ThemeColorDropdown.svelte';
-    import ThemeToggle from './ThemeToggle.svelte';
+    import ThemeSwitch from './ThemeSwitch.svelte'; 
     import websiteInfo from '$lib/data/website.json';
   </script>
   
@@ -11,7 +11,7 @@
         
         <div class="nav-controls">
           <ThemeColorDropdown />
-          <ThemeToggle />
+          <ThemeSwitch />
         </div>
       </div>
     </div>
