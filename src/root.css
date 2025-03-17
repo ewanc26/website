@@ -56,17 +56,6 @@
 	--color-link-hover: #222222;
 }
 
-:root.monochrome {
-	--color-background: #f0f0f0;
-	--color-header-footer: #ffffff;
-	--color-text: #222;
-	--color-button: #bfbfbf;
-	--color-button-hover: #d9d9d9;
-	--color-embed: #e6e6e6;
-	--color-link: #666;
-	--color-link-hover: #222222;
-}
-
 :root.orange {
 	--color-background: #f8e4d1;
 	--color-header-footer: #fff0e0;
@@ -132,17 +121,6 @@
 	--color-embed: #806710;
 	--color-link: #ffd633;
 	--color-link-hover: #ffea80;
-}
-
-.dark:root.monochrome {
-	--color-background: #333;
-	--color-header-footer: #1a1a1a;
-	--color-text: #fff;
-	--color-button: #333;
-	--color-button-hover: #4d4d4d;
-	--color-embed: #404040;
-	--color-link: #ccc;
-	--color-link-hover: #eee;
 }
 
 .dark:root.orange {

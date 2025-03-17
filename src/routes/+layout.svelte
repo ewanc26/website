@@ -4,7 +4,7 @@
 	// Destructure the children render function from $props
 	let { children } = $props();
 	import Footer from '$lib/components/Footer.svelte';
-	import ThemeSwitch from '$lib/components/ThemeSwitch.svelte';
+	import Navigation from '$lib/components/Navigation.svelte';
 	import websiteInfo from '$lib/data/website.json';
 </script>
 
@@ -85,14 +85,7 @@
 </svelte:head>
 
 <div class="layout">
-	<header class="site-header">
-		<div class="container">
-			<div class="header-content">
-				<h1 class="site-title">{websiteInfo.title}</h1>
-				<ThemeSwitch />
-			</div>
-		</div>
-	</header>
+	<Navigation />
 
 	<div class="main-content">
 		{@render children()}
@@ -111,42 +104,8 @@
 		transition: background-color 0.3s, color 0.3s;
 	}
 
-	.site-header {
-		background-color: var(--color-header-footer);
-		padding: 1rem 0;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		position: sticky;
-		top: 0;
-		z-index: 100;
-	}
-
-	.container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 1rem;
-	}
-
-	.header-content {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-
-	.site-title {
-		margin: 0;
-		font-size: 1.5rem;
-		font-weight: 700;
-		color: var(--color-text);
-	}
-
 	.main-content {
 		flex: 1;
 		width: 100%;
-	}
-
-	@media (max-width: 600px) {
-		.site-title {
-			font-size: 1.2rem;
-		}
 	}
 </style>
