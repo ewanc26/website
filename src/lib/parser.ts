@@ -9,6 +9,7 @@ import { unified } from 'unified'
 import type { Node } from 'unist'
 import type { Root, Element } from 'hast'
 import type { Plugin } from "unified";
+import { pds, did } from './data/profile.json';
 
 export interface Post {
     title: string,
@@ -50,11 +51,9 @@ const customSchema = {
       section: ['dataFootnotes', 'className']
     },
     tagNames: [...(defaultSchema.tagNames ?? []), 'font', 'mark', 'iframe', 'section']
-  }
+}
 
-// Automatically enforce https on PDS images. Heavily inspired by WhiteWind's blob replacer:
-// https://github.com/whtwnd/whitewind-blog/blob/7eb8d4623eea617fd562b93d66a0e235323a2f9a/frontend/src/services/DocProvider.tsx#L90
-// In theory we could also use their cache, but I'd like to rely on their API as little as possible, opting to pull from the PDS instead.
+// Process image URLs to ensure they use the correct protocol and path
 const upgradeImage = (child: Node): void => {
     if (child.type !== 'element') {
         return
@@ -64,7 +63,16 @@ const upgradeImage = (child: Node): void => {
         // Ensure https
         const src = elem.properties.src
         if (src !== undefined && typeof src === 'string') {
-            elem.properties.src = src.replace(/http\:\/\//, "https://")
+            // Ensure HTTPS
+            let newSrc = src.replace(/http\:\/\//, "https://");
+            
+            // Handle AT Protocol blob references if they exist
+            if (newSrc.includes('at://blob/')) {
+                const cid = newSrc.split('at://blob/')[1];
+                newSrc = `https://${pds}/xrpc/com.atproto.sync.getBlob?did=${did}&cid=${cid}`;
+            }
+            
+            elem.properties.src = newSrc;
         }
     }
     elem.children.forEach(child => upgradeImage(child))
