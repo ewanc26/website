@@ -23,18 +23,18 @@
 </script>
 
 <svelte:head>
-    <title>Ewan's Blog</title>
+    <title>Blog | Ewan's Web Corner</title>
     <meta name="description" content="Ewan's Self-Hosted WhiteWind Blog" />
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="/blog" />
-    <meta property="og:title" content="Ewan's Blog" />
+    <meta property="og:title" content="Blog | Ewan's Web Corner" />
     <meta property="og:description" content="Ewan's Self-Hosted WhiteWind Blog" />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="/blog" />
-    <meta property="twitter:title" content="Ewan's Blog" />
+    <meta property="twitter:title" content="Blog | Ewan's Web Corner" />
     <meta property="twitter:description" content="Ewan's Self-Hosted WhiteWind Blog" />
 </svelte:head>
 
