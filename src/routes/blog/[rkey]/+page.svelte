@@ -72,11 +72,10 @@
     <h1 class="text-center my-8">{post.title}</h1>
 
     <!-- Subheading with update date and author -->
-    <div class="text-center text-[#a9c8b3] mb-6">
+    <div class="text-center mb-6">
       <p>
         last updated by <a
           href={`https://bsky.app/profile/${data.profile?.handle || handle}`}
-          class="text-[#8bd5a0] hover:text-[#b7e6c4]"
           >{data.profile?.displayName || handle}</a
         >
         on {#if localeLoaded}{formatDate(post.createdAt)}{:else}<span
@@ -85,11 +84,11 @@
       </p>
     </div>
 
-    <hr class="my-6 border-[#3b574a]" />
+    <hr class="my-6" />
     <article class="prose dark:prose-invert mx-auto text-center">
       {@html post.content}
     </article>
-    <hr class="my-6 border-[#3b574a]" />
+    <hr class="my-6" />
     <div class="comments-section">
       <CommentSection author={handle} />
     </div>
@@ -106,5 +105,42 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+h1 {
+  color: var(--color-text);
+}
+
+hr {
+  border-color: var(--color-header-footer);
+  opacity: 0.5;
+}
+
+article {
+  color: var(--color-text);
+}
+
+.comments-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: var(--color-button);
+  transition: background-color 0.3s;
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
 }
 </style>

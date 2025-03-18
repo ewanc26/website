@@ -42,17 +42,19 @@
 	<div class="mx-2 my-6 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr)_)] gap-x-4 gap-y-6">
 		{#each posts as post}
 			<div class="post-card">
-				<a href="/blog/{post.rkey}">
-					<div class="flex h-[110px] flex-col justify-between">
-						<p
-							class="title-truncate pb-2 leading-[1.5] font-medium text-[#8bd5a0]"
-							title={post.title}
-						>
-							{post.title}
-						</p>
-						<div>
-							<p class="text-sm text-[#a9c8b3]">Last Updated:</p>
-							<p class="object-bottom text-[#c9e8d3]">
+				<a href="/blog/{post.rkey}" class="h-full w-full flex flex-col">
+					<div class="flex flex-col h-full justify-between">
+						<div class="title-container">
+							<p
+								class="title-truncate pb-2 leading-[1.5] font-medium"
+								title={post.title}
+							>
+								{post.title}
+							</p>
+						</div>
+						<div class="date-container">
+							<p class="text-sm">Last Updated:</p>
+							<p>
 								{#if localeLoaded}
 									{formatDate(post.createdAt)}
 								{:else}
@@ -72,5 +74,49 @@
 		max-width: 800px;
 		margin: 0 auto;
 		padding: 2rem;
+	}
+
+	/* Local styles to override the blog.css for post cards */
+	.post-card {
+		background-color: var(--color-header-footer);
+		transition: all 0.3s ease;
+		height: 150px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.post-card:hover {
+		background-color: var(--color-button-hover);
+		transform: scale(1.005);
+	}
+
+	.post-card .title-truncate {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		-webkit-box-orient: vertical;
+		max-height: 3em;
+	}
+
+	.post-card p {
+		color: var(--color-text);
+		margin: 0;
+	}
+
+	.post-card a {
+		padding: 0.5rem;
+		height: 100%;
+		text-decoration: none;
+	}
+
+	.title-container {
+		margin-bottom: 0.5rem;
+		flex-grow: 1;
+	}
+
+	.date-container {
+		margin-top: auto;
 	}
 </style>
