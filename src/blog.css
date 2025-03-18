@@ -1,0 +1,133 @@
+h1 {
+    @apply text-4xl font-bold;
+}
+h2 {
+    @apply text-3xl font-bold;
+}
+h3 {
+    @apply text-2xl font-bold;
+}
+h4 {
+    @apply text-xl font-semibold;
+}
+h5 {
+    @apply text-lg font-semibold;
+}
+h6 {
+    @apply text-sm font-semibold;
+}
+
+a {
+    @apply text-[#7ec491] hover:text-[#a9e6b9] transition-colors duration-300 no-underline;
+}
+
+/* Header links - explicitly removing underline and adding growth effect */
+header a, 
+a.font-medium {
+    @apply no-underline hover:no-underline transition-transform duration-300 hover:scale-110 inline-block;
+}
+
+/* Typography styles for blog content */
+.prose {
+    @apply max-w-none;
+}
+
+/* Center text in blog posts */
+.prose p, .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6, .prose ul, .prose ol {
+    @apply text-center mx-auto;
+}
+
+.prose img {
+    @apply border-0 rounded-lg mx-auto;
+}
+
+.prose a {
+    @apply text-[#7ec491] hover:text-[#a9e6b9] no-underline transition-colors duration-300;
+}
+
+.prose blockquote {
+    @apply border-l-2 border-[#304a3d] pl-4 bg-[#1a2a20] rounded-none mx-auto;
+}
+
+.prose code {
+    @apply bg-[#1a2a20] rounded px-1;
+}
+
+.prose pre {
+    @apply bg-[#1a2a20] rounded-md mx-auto text-left;
+}
+
+/* Post grid and cards */
+.post-card {
+    @apply border-0 rounded-md p-4 transition-all duration-300
+           hover:bg-[#202e25] bg-[#1d2922] hover:scale-105;
+}
+
+.title-truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 3em;
+}
+
+/* Profile banner - explicitly removing border */
+.profile-banner {
+    @apply bg-cover bg-center rounded-md border-0 transition-all duration-300;
+}
+
+/* Profile section elements */
+.flex-wrap {
+    @apply gap-4 items-center;
+}
+
+div.items-center {
+    @apply p-3 transition-all duration-300;
+}
+
+.rounded-full {
+    @apply shadow-none transition-transform duration-300 hover:scale-105;
+}
+
+/* Account handle and related info - explicitly left-aligned */
+h4.content-around, h6.content-around {
+    @apply my-2 text-left transition-all duration-300;
+}
+
+/* Links styling within the profile section */
+.profile-banner a,
+.flex-wrap a,
+div.items-center a,
+h4.content-around a,
+h6.content-around a {
+    @apply text-[#7ec491] hover:text-[#a9e6b9] no-underline hover:no-underline 
+           transition-all duration-300 hover:scale-110 inline-block;
+}
+
+/* Add subtle hover effects to containers */
+.profile-banner:hover,
+div.items-center:hover {
+    @apply bg-opacity-95;
+}
+
+/* Remove any borders throughout profile section */
+.profile-banner,
+.profile-banner *,
+.flex-wrap *,
+div.items-center *,
+.rounded-full,
+h4.content-around *,
+h6.content-around * {
+    @apply border-0;
+}
+
+/* Comments section styling */
+.comments-section {
+    @apply mt-8 p-4 border-0 rounded-md bg-[#1d2922];
+}
+
+.comments-section input, .comments-section button {
+    @apply bg-[#1a2a20] border-0 rounded-sm;
+}
