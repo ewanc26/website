@@ -36,7 +36,7 @@
 
 <svelte:head>
 {#if post !== undefined}
-  <title>{post.title} - Ewan's Blog</title>
+  <title>{post.title} - Blog | Ewan's Web Corner</title>
   <meta name="description" content={post.excerpt} />
 
   <!-- Open Graph / Facebook -->
@@ -57,7 +57,7 @@
   <meta property="twitter:title" content={post.title} />
   <meta property="twitter:description" content={post.excerpt} />
 {:else}
-  <title>Post Not Found - Ewan's Blog</title>
+  <title>Post Not Found - Blog | Ewan's Web Corner</title>
   <meta
     name="description"
     content="The requested blog post could not be found."
