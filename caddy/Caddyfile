@@ -1,6 +1,5 @@
 :80 {
     root * /srv/www/ewancroft.uk
-    encode gzip
+    php_fastcgi php-fpm:9000
     file_server
-    try_files {path} /index.html
 }

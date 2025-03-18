@@ -1,121 +1,105 @@
 # Ewan's Web Corner
 
-A personal website built with Svelte and SvelteKit featuring AT Protocol integration, theme customization, and responsive design.
+Welcome to the repository for **Ewan's Web Corner**, my personal website. This site is where I share my thoughts on coding, technology, and various aspects of my life.
 
-## Features
+## Site Overview
 
-- 🌐 **AT Protocol Integration** - Displays profile information from Bluesky/AT Protocol
-- 🎨 **Theme Customization** - Multiple color themes and dark/light mode support
-- 📱 **Responsive Design** - Mobile-friendly layout
-- 🐳 **Docker Support** - Easy deployment with Docker
-- 🔧 **SvelteKit** - Built with the latest SvelteKit features
-- 💅 **TailwindCSS** - Styled with TailwindCSS for easy customization
+The site is built using **atproto** technology, and the structure is optimised to display posts, profile information, and various content in a user-friendly way. It's also designed to be easy to navigate, with pages like **About** and **Verification** accessible directly from the sidebar.
 
-## Tech Stack
+It is based on the fantastic work by [fei.chicory.blue](https://codeberg.org/fei-chicory-blue/atproto-site), just with my own tweaks.
 
-- **Frontend Framework**: SvelteKit
-- **Styling**: TailwindCSS
-- **Node Version**: Node 18
-- **Build Tool**: Vite
-- **Deployment**: Docker with Node adapter
+### Features
 
-## Getting Started
+- **Customisable Layout:** The page layout features a left sidebar with profile info, navigation links, and pagination. The right column is dedicated to displaying posts.
+- **Posts:** The site supports multiple post types, including text posts, image posts, and embedded content. Posts can be customised with rich media, such as images and embedded cards.
+- **Profile Information:** The left sidebar includes a space for a profile picture, username, description, and external links.
+- **Mobile Optimisation:** The site is optimised for mobile browsing, with a responsive design that adjusts to different screen sizes.
 
-### Prerequisites
+For more details on customisation, refer to the documentation on WhiteWind [here](https://whtwnd.com/did:plc:xz3euvkhf44iadavovbsmqoo/3laxrz4dl4s2f).
 
-- Node.js 18 or higher
-- npm, pnpm, or yarn
-- Docker and Docker Compose (for containerized deployment)
+### Powered by atproto
 
-### Installation
+The site is powered by the [atproto platform](https://atproto.com), which enables decentralised content hosting. This allows you to integrate various platforms and manage your content seamlessly.
 
-Clone the project and install dependencies:
+## Running the Site with Docker
 
-```bash
-# Clone the repository
-git clone https://github.com/ewanc26/website website
+To run the site using Docker Compose, follow these steps:
 
-# Navigate to project directory
-cd website
+1. Build and start the Docker container:
 
-# Install dependencies
-npm install
-# or
-pnpm install
-# or
-yarn
-```
+   ```sh
+   docker compose up --build -d
+   ```
 
-## Development
+This will build your Docker image and start the website inside a Docker container, making it accessible on port `3002`.
 
-Start a development server:
+## Deploying with Cloudflare Tunnel
 
-```bash
-# Start the development server
-npm run dev
+To deploy the site through a Cloudflare Tunnel, follow these steps:
 
-# Start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+### On macOS
 
-## Building
+1. Install the Cloudflare Tunnel client (`cloudflared`):
 
-To create a production version of your app:
+   ```sh
+   brew install cloudflare/cloudflare/cloudflared
+   ```
 
-```bash
-# Build the application
-npm run build
+2. Authenticate `cloudflared` with your Cloudflare account:
 
-# Preview the production build
-npm run preview
-```
+   ```sh
+   cloudflared login
+   ```
 
-## Docker Deployment
+3. Create a tunnel and give it a name:
 
-This project includes Docker configuration for easy deployment:
+   ```sh
+   cloudflared tunnel create my-tunnel
+   ```
 
-### Using Docker Compose
+4. Configure the tunnel to route traffic to your Docker container:
 
-```bash
-# Start the containers
-docker compose up -d
+   ```sh
+   cloudflared tunnel route dns my-tunnel mywebsite.example.com
+   ```
 
-# Stop the containers
-docker compose down
-```
+5. Start the tunnel and route traffic to your local Docker container running on port `3002`:
 
-The site will be available at <http://localhost:3002>
+   ```sh
+   cloudflared tunnel --url http://localhost:3002 run my-tunnel
+   ```
 
-### Manual Docker Build
+### On Ubuntu Server
 
-```bash
-# Build the Docker image
-docker build -t ewans-web-corner .
+1. Install the Cloudflare Tunnel client (`cloudflared`):
 
-# Run the container
-docker run -p 3002:3000 -e NODE_ENV=production ewans-web-corner
-```
+   ```sh
+   sudo apt-get update
+   sudo apt-get install -y wget
+   wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+   sudo dpkg -i cloudflared-linux-amd64.deb
+   ```
 
-## Configuration
+2. Authenticate `cloudflared` with your Cloudflare account:
 
-- Modify AT Protocol settings in `src/lib/data/profile.json`
-- Update external links in `src/lib/data/external.json`
-- Change website title in `src/lib/data/website.json`
+   ```sh
+   cloudflared login
+   ```
 
-## Project Structure
+3. Create a tunnel and give it a name:
 
-The project uses the standard SvelteKit structure:
+   ```sh
+   cloudflared tunnel create my-tunnel
+   ```
 
-- `src/` - Contains the source code
-- `src/routes/` - Page components
-- `src/lib/` - Shared components and utilities
-- `static/` - Static assets
+4. Configure the tunnel to route traffic to your Docker container:
 
-## Environment Variables
+   ```sh
+   cloudflared tunnel route dns my-tunnel mywebsite.example.com
+   ```
 
-- `NODE_ENV` - Set to `production` for production deployments
+5. Start the tunnel and route traffic to your local Docker container running on port `3002`:
 
-## License
-
-- Code is licensed under the MIT License
-- Text and imagery are licensed under CC BY 4.0
+   ```sh
+   cloudflared tunnel --url http://localhost:3002 run my-tunnel
+   ```

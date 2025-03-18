@@ -1,13 +1,25 @@
 services:
   web:
-    build: .
-    container_name: ewancroft-web
+    image: caddy:alpine
+    container_name: caddy-apex
+    
     ports:
-      - "3002:3000"
+      - "3002:80"
+    volumes:
+      - .:/srv/www/ewancroft.uk
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
     networks:
       - www
-    environment:
-      - NODE_ENV=production
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    image: php:7.4-fpm-alpine
+    container_name: php-fpm
+    volumes:
+      - .:/srv/www/ewancroft.uk
+    networks:
+      - www
 
 networks:
   www:
