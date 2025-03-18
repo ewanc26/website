@@ -106,12 +106,6 @@ h6.content-around a {
            transition-all duration-300 hover:scale-110 inline-block;
 }
 
-/* Add subtle hover effects to containers */
-.profile-banner:hover,
-div.items-center:hover {
-    @apply bg-opacity-95;
-}
-
 /* Remove any borders throughout profile section */
 .profile-banner,
 .profile-banner *,
