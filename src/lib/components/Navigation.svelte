@@ -9,9 +9,7 @@
 		<div class="nav-content">
 			<a href="/" class="nav-logo">{websiteInfo.title}</a>
 			<div class="nav-controls">
-        <div class="nav-links">
-          <a class="nav-link" href="/blog">Blog</a>
-        </div>
+        <a href="/blog">Blog</a>
 				<ThemeColorDropdown />
 				<ThemeSwitch />
 			</div>
