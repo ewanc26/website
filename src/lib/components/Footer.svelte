@@ -43,12 +43,11 @@
 <style>
 	footer {
 		text-align: center;
-		margin-top: 2rem;
-		padding: 2rem 0;
-		border-top: 1px solid rgba(0, 0, 0, 0.1);
+		margin-top: 1rem;
+		padding: 1rem 0;
 		background-color: var(--color-header-footer);
 		color: var(--color-text);
-		font-size: 0.9rem;
+		font-size: 0.8rem;
 		transition:
 			background-color 0.3s,
 			color 0.3s;
