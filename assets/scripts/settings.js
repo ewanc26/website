@@ -1,6 +1,6 @@
 // docs: https://whtwnd.com/did:plc:xz3euvkhf44iadavovbsmqoo/3laxrz4dl4s2f
 atprotoSite({
-    PDS: 'pds.ewancroft.uk',
+    PDS: 'altq.net',
     title: "Ewan's Web Corner",
     postsPerPage: 10,
     pageLimit: 5,
