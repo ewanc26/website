@@ -1,6 +1,6 @@
-# Ewan's Web Corner
+# Ewan's Corner
 
-Welcome to the repository for **Ewan's Web Corner**, my personal website. This site is where I share my thoughts on coding, technology, and various aspects of my life.
+Welcome to the repository for **Ewan's Corner**, my personal website. This site is where I share my thoughts on coding, technology, and various aspects of my life.
 
 ## Site Overview
 
