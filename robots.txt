@@ -1,9 +1,7 @@
 User-agent: *
-Disallow: /
-Allow: /robots.txt
+Allow: /
 
 User-agent: Bingbot
 User-agent: DuckDuckBot
 User-agent: Googlebot
-Allow: /$
-Disallow: /
+Allow: /
