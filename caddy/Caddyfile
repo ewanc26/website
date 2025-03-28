@@ -1,5 +1,0 @@
-:80 {
-    root * /srv/www/ewancroft.uk
-    php_fastcgi php-fpm:9000
-    file_server
-}
