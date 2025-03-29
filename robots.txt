@@ -4,4 +4,7 @@ Allow: /
 User-agent: Bingbot
 User-agent: DuckDuckBot
 User-agent: Googlebot
+User-agent: Yandex
 Allow: /
+
+Sitemap: https://ewancroft.uk/sitemap.xml
