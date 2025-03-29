@@ -10,6 +10,12 @@
     --embed-border-radius: 8px;
     --link-color: #29a12d;
     --link-hover-color: #8ced91;
+    
+    /* Animation variables */
+    --transition-duration: 0.3s;
+    --transition-timing: ease;
+    --animation-scale: 1.05;
+    --shadow-color: rgba(0, 0, 0, 0.2);
   }
 
   :root.red {

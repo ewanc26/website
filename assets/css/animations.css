@@ -1,0 +1,169 @@
+/* Modern animations for Ewan's Corner website */
+/* These animations can be toggled on/off via the animations setting */
+
+/* Animation classes will only apply when animations are enabled */
+:root {
+  --transition-speed: 0.3s;
+  --transition-function: ease;
+}
+
+/* Animation toggle classes */
+.animations-enabled .animate-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.animations-enabled .animate-slide-up {
+  animation: slideUp 0.5s ease forwards;
+}
+
+.animations-enabled .animate-slide-down {
+  animation: slideDown 0.5s ease forwards;
+}
+
+.animations-enabled .animate-slide-left {
+  animation: slideLeft 0.5s ease forwards;
+}
+
+.animations-enabled .animate-slide-right {
+  animation: slideRight 0.5s ease forwards;
+}
+
+.animations-enabled .animate-scale {
+  animation: scale 0.5s ease forwards;
+}
+
+.animations-enabled .animate-rotate {
+  animation: rotate 0.5s ease forwards;
+}
+
+.animations-enabled .animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+.animations-enabled .animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+/* Hover animations - these work regardless of animation toggle */
+.hover-scale:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg);
+  transition: transform 0.3s ease;
+}
+
+.hover-elevate:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Enhanced button animations */
+.animations-enabled #theme-toggle {
+  transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.animations-enabled #theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+.animations-enabled #theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Enhanced link animations */
+.animations-enabled .links a {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.animations-enabled .links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--link-hover-color);
+  transition: width 0.3s ease;
+}
+
+.animations-enabled .links a:hover::after {
+  width: 100%;
+}
+
+/* Profile picture animations */
+.animations-enabled profile-picture img {
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.animations-enabled profile-picture img:hover {
+  transform: scale(1.05) rotate(3deg);
+  box-shadow: 0 0 15px 5px var(--link-color);
+}
+
+/* Post animations - enhanced from existing transitions */
+.animations-enabled .post {
+  transition: transform 0.4s ease, opacity 0.4s ease, box-shadow 0.4s ease;
+}
+
+.animations-enabled .post:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Page transition animations */
+.animations-enabled #page {
+  animation: fadeIn 0.5s ease;
+}
+
+/* Keyframes definitions */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes rotate {
+  from { opacity: 0; transform: rotate(-10deg); }
+  to { opacity: 1; transform: rotate(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}

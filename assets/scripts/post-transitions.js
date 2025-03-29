@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", function() {
       // Get all posts that don't have the transition class yet
       const posts = document.querySelectorAll('.post:not(.has-transition)');
       
+      // Check if animations are enabled
+      const animationsEnabled = localStorage.getItem("animations-enabled") !== "false";
+      const staggerDelay = animationsEnabled ? 100 : 0; // No stagger if animations disabled
+      
       posts.forEach((post, index) => {
         // Mark this post as having transitions
         post.classList.add('has-transition', 'post-transition');
@@ -24,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
         setTimeout(() => {
           post.style.opacity = '1';
           post.style.transform = 'translateY(0)';
-        }, 100 * index); // Stagger each post by 100ms
+        }, staggerDelay * index); // Stagger each post based on animation preference
       });
     }
     

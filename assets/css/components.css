@@ -5,6 +5,7 @@ profile-picture img {
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 0 10px 3px var(--link-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 profile-username {
@@ -38,8 +39,10 @@ nav {
   border-radius: 8px;
   justify-content: center;
   align-items: center;
-  transition: background 0.25s;
+  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
 }
 
 .links a:hover {
@@ -53,12 +56,13 @@ nav .links a {
 }
 
 nav .links a:hover {
-  color: var(--link-hover-color);;
+  color: var(--link-hover-color);
   background: var(--button-hover-bg);
-  transform: scale(1.1)
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-#theme-toggle {
+#theme-toggle, .settings-button {
   display: block;
   margin: 0 auto;
   padding: 10px 20px;
@@ -67,13 +71,20 @@ nav .links a:hover {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.25s, color 0.25s;
+  transition: background 0.25s, color 0.25s, transform 0.25s;
   text-align: center;
+  font-family: inherit;
+  font-size: 0.9rem;
 }
 
-#theme-toggle:hover {
+#theme-toggle:hover, .settings-button:hover {
   background: var(--button-hover-bg);
   color: var(--text-color);
+  transform: scale(1.05);
+}
+
+#theme-toggle:active, .settings-button:active {
+  transform: scale(0.95);
 }
 
 if-pagination {
