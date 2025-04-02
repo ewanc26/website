@@ -1,0 +1,170 @@
+/* animations.css - Additional animation styles for Ewan's Corner */
+
+/* General animation utilities */
+.fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.8s ease forwards;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.8s ease forwards;
+}
+
+.slide-in-up {
+  animation: slideInUp 0.8s ease forwards;
+}
+
+.slide-in-down {
+  animation: slideInDown 0.8s ease forwards;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Page transition effects */
+#page {
+  transition: opacity 0.4s ease;
+}
+
+/* Enhanced sidebar animations */
+#sidebar {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* Profile picture animations */
+profile-picture img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+profile-picture img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px 5px var(--link-color);
+}
+
+/* Theme toggle animation */
+#theme-toggle {
+  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+#theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+#theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Navigation link animations - enhanced from existing styles */
+.links a {
+  position: relative;
+  overflow: hidden;
+}
+
+.links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--link-hover-color);
+  transition: width 0.3s ease;
+}
+
+.links a:hover::after {
+  width: 100%;
+}
+
+/* Post hover effects */
+.post {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Image content hover effects */
+image-content img {
+  transition: transform 0.3s ease;
+}
+
+image-content img:hover {
+  transform: scale(1.02);
+}
+
+/* Tag animations */
+tag-container a {
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+tag-container a:hover {
+  transform: scale(1.1);
+}
