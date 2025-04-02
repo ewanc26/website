@@ -1,0 +1,16 @@
+services:
+  web:
+    image: caddy:alpine
+    container_name: caddy-apex
+    
+    ports:
+      - "3002:80"
+    volumes:
+      - .:/srv/www/ewancroft.uk
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - www
+
+networks:
+  www:
+    external: false
