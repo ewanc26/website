@@ -27,7 +27,7 @@ atprotoSite({
             handle: 'ewancroft.uk',
             sources: {
                 Bluesky: true,
-                WhiteWind: true,
+                WhiteWind: false,
                 Frontpage: true,
                 PinkSea: false,
                 pastesphere: false,
