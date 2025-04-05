@@ -839,7 +839,6 @@ async function goToTagPage(tag) {
 	addPosts(refs.postContainer, records);
 }
 
-// custom page: the specified post
 async function goToCustomPage(url) {
 	hideCustomElements(document.body, 'if-tag-page');
 	hideCustomElements(document.body, 'if-index-page');
@@ -850,6 +849,17 @@ async function goToCustomPage(url) {
 	// add the new page as a post
 	clearContainer(refs.postContainer);
 	await addPostByURI(refs.postContainer, page.post, false);
+	
+	// Insert new code here (after post is added to container)
+	if (url === 'about' || url === 'verification') {
+		const posts = refs.postContainer.querySelectorAll('.post');
+		posts.forEach(post => {
+			const remoteLink = post.querySelector('remote-link');
+			const createdAt = post.querySelector('created-at');
+			if (remoteLink) remoteLink.style.display = 'none';
+			if (createdAt) createdAt.style.display = 'none';
+		});
+	}
 }
 
 async function handleURL(url) {
