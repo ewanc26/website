@@ -1,0 +1,25 @@
+# Local Vercel directory
+.vercel
+
+# Docker related files (not needed for Vercel deployment)
+server/Dockerfile
+server/compose.yml
+server/Caddyfile
+server/.dockerignore
+
+# Node.js
+node_modules
+.npm
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo

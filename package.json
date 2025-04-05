@@ -1,0 +1,17 @@
+{
+  "name": "ewans-corner",
+  "version": "1.0.0",
+  "description": "Ewan's personal website powered by atproto",
+  "private": true,
+  "scripts": {
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vercel": "^32.5.0"
+  }
+}
