@@ -1,0 +1,25 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "atproto",
+    "diddoc",
+    "Ewan",
+    "Initialising",
+    "mdcontent",
+    "mdposts",
+    "pdsurl",
+    "rkey",
+    "whtwnd",
+    "xrpc"
+  ],
+  "flagWords": [],
+  "ignorePaths": [
+    "package-lock.json",
+    "node_modules/**",
+    ".git/**",
+    ".svelte-kit/**",
+    "build/**",
+    "dist/**"
+  ]
+}
