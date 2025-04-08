@@ -8,6 +8,8 @@ The site is built using **atproto** technology, and the structure is optimised t
 
 It is based on the fantastic work by [fei.chicory.blue](https://codeberg.org/fei-chicory-blue/atproto-site), just with my own tweaks.
 
+***This repository is available on [GitHub](https://github.com/ewanc26/website) and [Tangled](https://tangled.sh/ewancroft.uk/website). GitHub is the primary version, and the Tangled version is a mirror.***
+
 ### Features
 
 - **Customisable Layout:** The page layout features a left sidebar with profile info, navigation links, and pagination. The right column is dedicated to displaying posts.
