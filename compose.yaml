@@ -1,0 +1,11 @@
+services:
+  whitebreeze:
+    container_name: whitebreeze
+    pull_policy: build
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - 3003:3000 # host:container
