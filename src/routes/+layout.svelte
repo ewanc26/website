@@ -54,9 +54,6 @@
             <div>
                 © 2023-<span id="copyright-year"></span> ewan croft • personal views only
             </div>
-            <script>
-                document.getElementById('copyright-year').textContent = new Date().getFullYear();
-            </script>
             <div>
                 <a class="hover:underline hover:text-[#b7e6c4]" href="https://opensource.org/licenses/MIT">MIT licensed code</a> • <a class="hover:underline hover:text-[#b7e6c4]" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 text &amp; imagery</a>
             </div>
