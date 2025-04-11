@@ -1,5 +1,4 @@
 import { PUBLIC_HANDLE } from "$env/static/public"
-import { parse, type MarkdownPost, type Post } from '$lib/parser';
 
 interface Profile {
     avatar: string,
@@ -19,7 +18,7 @@ async function safeFetch(url: string) {
 
 async function getProfile(): Promise<Profile> {
     const fetchProfile = await safeFetch(`https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${PUBLIC_HANDLE}`)
-    let split = fetchProfile["did"].split(":")
+    const split = fetchProfile["did"].split(":")
     let diddoc;
     if (split[0] === "did") {
         if (split[1] === "plc") {
@@ -33,7 +32,7 @@ async function getProfile(): Promise<Profile> {
         throw new Error("Invalid DID, malformed")
     }
     let pdsurl;
-    for (let service of diddoc["service"]) {
+    for (const service of diddoc["service"]) {
         if (service["id"] === "#atproto_pds") {
             pdsurl = service["serviceEndpoint"]
         }
@@ -52,47 +51,14 @@ async function getProfile(): Promise<Profile> {
     };
 }
 
-// TODO: Maybe also add the option to show "url" level records as an env setting.
-
+// Profile data cache
 let profile: Profile;
-let posts: Map<string, Post>;
-let sortedPosts: Post[] = [];
 
 export async function load() {
     if (profile === undefined) {
         profile = await getProfile();
     }
-    if (posts === undefined) {
-        const rawResponse = await fetch(`${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=com.whtwnd.blog.entry`)
-        const response = await rawResponse.json()
-        let mdposts: Map<string, MarkdownPost> = new Map();
-        for (let data of response["records"]) {
-            const matches = data["uri"].split("/")
-            const rkey = matches[matches.length - 1]
-            const record = data["value"]
-            if (matches && matches.length === 5 && record && (record["visibility"] === "public" || !record["visibility"])) {
-                mdposts.set(rkey, {
-                    title: record["title"],
-                    createdAt: new Date(record["createdAt"]),
-                    mdcontent: record["content"],
-                    rkey
-                })
-            }
-        }
-        posts = await parse(mdposts)
-        sortedPosts = Array.from(posts.values()).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-    }
     return { 
-        posts,
-        profile,
-        sortedPosts,
-        getPost: (rkey: string) => posts.get(rkey),
-        getAdjacentPosts: (rkey: string): { previous: Post | null; next: Post | null } => {
-            const index = sortedPosts.findIndex(post => post.rkey === rkey);
-            return {
-                previous: index > 0 ? sortedPosts[index - 1] : null,
-                next: index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null
-            };
-        }
+        profile
     };
 }
