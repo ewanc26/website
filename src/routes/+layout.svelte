@@ -58,7 +58,7 @@
                 document.getElementById('copyright-year').textContent = new Date().getFullYear();
             </script>
             <div>
-                <a class="hover:underline hover:text-[#b7e6c4]" href="https://opensource.org/licenses/MIT">MIT licensed code</a> • <a class="hover:underline hover:text-[#b7e6c4]" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 licensed text &amp; imagery</a>
+              <a class="hover:underline hover:text-[#b7e6c4]" href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3 licensed code</a> • <a class="hover:underline hover:text-[#b7e6c4]" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 licensed text &amp; imagery</a>
             </div>
         </div>
     </div>
