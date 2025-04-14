@@ -16,8 +16,8 @@
   />
   <div class="text-center p-3">
     <h4 class="text-center">{profile.displayName}</h4>
-    <h6 class="text-center text-[#8bd5a0] hover:text-[#b7e6c4] hover:underline">
-      <a href="https://bsky.app/profile/{profile.handle}">@{profile.handle}</a>
+    <h6 class="text-center hover:underline">
+      <a href="https://bsky.app/profile/{profile.handle}" class="text-link hover:text-link-hover">@{profile.handle}</a>
     </h6>
   </div>
   <div class="p-3 w-full text-center">

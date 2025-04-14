@@ -31,10 +31,10 @@
         <div class="post-card">
             <a href="https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol" target="_blank">
                 <div class="flex flex-col h-[110px] justify-between">
-                    <p class="text-[#8bd5a0] leading-[1.5] pb-2 title-truncate font-medium">Bluesky</p>
+                    <p class="text-link leading-[1.5] pb-2 title-truncate font-medium">Bluesky</p>
                     <div>
-                        <p class="text-[#a9c8b3] text-sm">Username:</p>
-                        <p class="object-bottom text-[#c9e8d3]">@ewancroft.uk</p>
+                        <p class="text-muted text-sm">Username:</p>
+                        <p class="object-bottom text-primary">@ewancroft.uk</p>
                     </div>
                 </div>
             </a>
@@ -42,10 +42,10 @@
         <div class="post-card">
             <a href="https://tumblr.com/greenwerewolf745" target="_blank">
                 <div class="flex flex-col h-[110px] justify-between">
-                    <p class="text-[#8bd5a0] leading-[1.5] pb-2 title-truncate font-medium">Tumblr</p>
+                    <p class="text-link leading-[1.5] pb-2 title-truncate font-medium">Tumblr</p>
                     <div>
-                        <p class="text-[#a9c8b3] text-sm">Username:</p>
-                        <p class="object-bottom text-[#c9e8d3]">@greenwerewolf745</p>
+                        <p class="text-muted text-sm">Username:</p>
+                        <p class="object-bottom text-primary">@greenwerewolf745</p>
                     </div>
                 </div>
             </a>
@@ -53,10 +53,10 @@
         <div class="post-card">
             <a href="https://www.last.fm/user/greenwolf745" target="_blank">
                 <div class="flex flex-col h-[110px] justify-between">
-                    <p class="text-[#8bd5a0] leading-[1.5] pb-2 title-truncate font-medium">Last.fm</p>
+                    <p class="text-link leading-[1.5] pb-2 title-truncate font-medium">Last.fm</p>
                     <div>
-                        <p class="text-[#a9c8b3] text-sm">Username:</p>
-                        <p class="object-bottom text-[#c9e8d3]">@greenwolf745</p>
+                        <p class="text-muted text-sm">Username:</p>
+                        <p class="object-bottom text-primary">@greenwolf745</p>
                     </div>
                 </div>
             </a>
@@ -69,10 +69,10 @@
         <div class="post-card">
             <a href="https://github.com/ewanc26" target="_blank">
                 <div class="flex flex-col h-[110px] justify-between">
-                    <p class="text-[#8bd5a0] leading-[1.5] pb-2 title-truncate font-medium">GitHub</p>
+                    <p class="text-link leading-[1.5] pb-2 title-truncate font-medium">GitHub</p>
                     <div>
-                        <p class="text-[#a9c8b3] text-sm">Username:</p>
-                        <p class="object-bottom text-[#c9e8d3]">ewanc26</p>
+                        <p class="text-muted text-sm">Username:</p>
+                        <p class="object-bottom text-primary">ewanc26</p>
                     </div>
                 </div>
             </a>
@@ -80,10 +80,10 @@
         <div class="post-card">
             <a href="https://tangled.sh/did:plc:ofrbh253gwicbkc5nktqepol" target="_blank">
                 <div class="flex flex-col h-[110px] justify-between">
-                    <p class="text-[#8bd5a0] leading-[1.5] pb-2 title-truncate font-medium">Tangled</p>
+                    <p class="text-link leading-[1.5] pb-2 title-truncate font-medium">Tangled</p>
                     <div>
-                        <p class="text-[#a9c8b3] text-sm">Username:</p>
-                        <p class="object-bottom text-[#c9e8d3]">ewancroft.uk</p>
+                        <p class="text-muted text-sm">Username:</p>
+                        <p class="object-bottom text-primary">ewancroft.uk</p>
                     </div>
                 </div>
             </a>
@@ -96,10 +96,10 @@
         <div class="post-card">
             <a href="https://blog.ewancroft.uk" target="_blank">
                 <div class="flex flex-col h-[110px] justify-between">
-                    <p class="text-[#8bd5a0] leading-[1.5] pb-2 title-truncate font-medium">Personal Blog</p>
+                    <p class="text-link leading-[1.5] pb-2 title-truncate font-medium">Personal Blog</p>
                     <div>
-                        <p class="text-[#a9c8b3] text-sm">URL:</p>
-                        <p class="object-bottom text-[#c9e8d3]">blog.ewancroft.uk</p>
+                        <p class="text-muted text-sm">URL:</p>
+                        <p class="object-bottom text-primary">blog.ewancroft.uk</p>
                     </div>
                 </div>
             </a>

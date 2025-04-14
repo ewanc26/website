@@ -5,7 +5,7 @@
 
 @layer base {
     :root {
-        --background-color: #1a2a20;
+        --background-color: #0f0f0f;
         --text-color: #e7f0e7;
         --header-footer-bg: #202e25;
         --button-bg: #304a3d;
@@ -13,6 +13,17 @@
         --link-color: #7ec491;
         --link-hover-color: #a9e6b9;
         --card-bg: #202e25;
+    }
+
+    :root.light {
+        --background-color: #f0f7f2;
+        --text-color: #1a2a20;
+        --header-footer-bg: #e0ede4;
+        --button-bg: #7ec491;
+        --button-hover-bg: #a9e6b9;
+        --link-color: #2a7d4b;
+        --link-hover-color: #1e5935;
+        --card-bg: #e0ede4;      
     }
     
     /* Scrollbar styling */
@@ -39,7 +50,8 @@
     }
 
     body {
-        @apply bg-[#1a2a20];
+        background-color: var(--background-color);
+        color: var(--text-color);
     }
 
     h1 {
@@ -90,20 +102,39 @@
         @apply border-0 rounded-lg mx-auto;
     }
 
+    a {
+        color: var(--link-color);
+        transition: color 0.3s ease;
+    }
+    
+    a:hover {
+        color: var(--link-hover-color);
+        text-decoration: none;
+    }
+    
+    /* Update prose elements to use variables */
     .prose a {
-        @apply text-[#7ec491] hover:text-[#a9e6b9] no-underline transition-colors duration-300;
+        color: var(--link-color);
     }
-
+    
+    .prose a:hover {
+        color: var(--link-hover-color);
+    }
+    
     .prose blockquote {
-        @apply border-l-2 border-[#304a3d] pl-4 bg-[#1a2a20] rounded-none mx-auto;
+        @apply border-l-2 pl-4 rounded-none mx-auto;
+        border-color: var(--button-bg);
+        background-color: var(--background-color);
     }
-
+    
     .prose code {
-        @apply bg-[#1a2a20] rounded px-1 font-mono;
+        background-color: var(--background-color);
+        @apply rounded px-1 font-mono;
     }
-
+    
     .prose pre {
-        @apply bg-[#1a2a20] rounded-md mx-auto text-left font-mono p-4 overflow-x-auto;
+        background-color: var(--background-color);
+        @apply rounded-md mx-auto text-left font-mono p-4 overflow-x-auto;
         box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
         line-height: 1.5;
     }
@@ -115,9 +146,16 @@
     /* Post grid and cards */
     .post-card {
         @apply border-0 rounded-md p-4 transition-all duration-300
-               hover:bg-[#202e25] bg-[#1d2922] hover:scale-105 shadow-md hover:shadow-lg;
+               hover:scale-105 shadow-md hover:shadow-lg;
+        background-color: var(--card-bg);
+        color: var(--text-color);
         transform-style: preserve-3d;
         will-change: transform, box-shadow;
+    }
+    
+    .post-card:hover {
+        background-color: var(--header-footer-bg);
+        box-shadow: var(--button-bg) 0px 5px 15px;
     }
 
     .title-truncate {
@@ -159,8 +197,17 @@
     div.items-center a,
     h4.content-around a,
     h6.content-around a {
-        @apply text-[#7ec491] hover:text-[#a9e6b9] no-underline hover:no-underline 
+        @apply no-underline hover:no-underline 
                transition-all duration-300 hover:scale-110 inline-block;
+        color: var(--link-color);
+    }
+    
+    .profile-banner a:hover,
+    .flex-wrap a:hover,
+    div.items-center a:hover,
+    h4.content-around a:hover,
+    h6.content-around a:hover {
+        color: var(--link-hover-color);
     }
 
     /* Add subtle hover effects to containers */
@@ -204,4 +251,21 @@
 
 .prose + .flex.justify-between a:last-child {
     @apply text-right;
+}
+
+.text-link {
+    color: var(--link-color);
+}
+
+.text-link-hover, .text-link:hover {
+    color: var(--link-hover-color);
+}
+
+.text-primary {
+    color: var(--text-color);
+}
+
+.text-muted {
+    color: var(--link-color);
+    opacity: 0.8;
 }
