@@ -16,7 +16,7 @@
     { id: 'sunset', name: 'Sunset' },
     { id: 'mint', name: 'Mint' },
     { id: 'lavender', name: 'Lavender' },
-    { id: 'rose', name: 'Rose/Crimson' },
+    { id: 'rose', name: 'Rose' },
     { id: 'amber', name: 'Amber' },
     { id: 'teal', name: 'Teal' },
     { id: 'olive', name: 'Olive' },
