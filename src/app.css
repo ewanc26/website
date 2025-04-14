@@ -55,7 +55,7 @@
     }
 
     a {
-        @apply text-[#7ec491] hover:text-[#a9e6b9] transition-colors duration-300 no-underline;
+        @apply text-[var(--link-color)] hover:text-[var(--link-hover-color)] transition-colors duration-300 no-underline;
     }
 
     /* Header links - explicitly removing underline and adding growth effect */
@@ -210,11 +210,11 @@
 
     /* Comments section styling */
     :global(.comments-section) {
-        @apply mt-8 p-4 border-0 rounded-md bg-[#1d2922];
+        @apply mt-8 p-4 border-0 rounded-md bg-[var(--header-footer-bg)];
     }
     
     :global(.comments-section input, .comments-section button) {
-        @apply bg-[#1a2a20] border-0 rounded-sm;
+        @apply bg-[var(--button-bg)] border-0 rounded-sm;
     }
 }
 
@@ -249,4 +249,12 @@
 .text-muted {
     color: var(--link-color);
     opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001s !important;
+    }
 }
