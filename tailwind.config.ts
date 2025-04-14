@@ -8,47 +8,57 @@ export default {
 
   theme: {
     extend: {
+      colors: {
+        primary: 'var(--link-color)',
+        'primary-hover': 'var(--link-hover-color)',
+        background: 'var(--background-color)',
+        text: 'var(--text-color)',
+        card: 'var(--card-bg)',
+        'header-footer': 'var(--header-footer-bg)',
+        button: 'var(--button-bg)',
+        'button-hover': 'var(--button-hover-bg)',
+      },
       typography: {
         DEFAULT: {
           css: {
-            color: '#e7f0e7',
+            color: 'var(--text-color)',
             a: {
-              color: '#8bd5a0',
+              color: 'var(--link-color)',
               '&:hover': {
-                color: '#b7e6c4',
+                color: 'var(--link-hover-color)',
               },
             },
             h1: {
-              color: '#e7f0e7',
+              color: 'var(--text-color)',
             },
             h2: {
-              color: '#e7f0e7',
+              color: 'var(--text-color)',
             },
             h3: {
-              color: '#e7f0e7',
+              color: 'var(--text-color)',
             },
             h4: {
-              color: '#e7f0e7',
+              color: 'var(--text-color)',
             },
             h5: {
-              color: '#e7f0e7',
+              color: 'var(--text-color)',
             },
             h6: {
-              color: '#e7f0e7',
+              color: 'var(--text-color)',
             },
             strong: {
-              color: '#e7f0e7',
+              color: 'var(--text-color)',
             },
             code: {
-              color: '#e7f0e7',
-              backgroundColor: '#1e3025',
+              color: 'var(--text-color)',
+              backgroundColor: 'var(--background-color)',
               borderRadius: '0.25rem',
               padding: '0.1rem 0.3rem',
             },
             blockquote: {
-              color: '#c9e8d3',
-              borderLeftColor: '#3b574a',
-              backgroundColor: '#1e3025',
+              color: 'var(--text-color)',
+              borderLeftColor: 'var(--button-bg)',
+              backgroundColor: 'var(--background-color)',
               borderRadius: '0 0.5rem 0.5rem 0',
               padding: '0.5rem 1rem',
             },
@@ -57,27 +67,27 @@ export default {
             },
             '[type="checkbox"]': {
               'border-radius': '5px',
-              'border-color': '#3b574a',
+              'border-color': 'var(--button-bg)',
             },
             'img': {
               'border-style': 'solid',
-              'border-color': '#3b574a',
+              'border-color': 'var(--button-bg)',
               'border-width': '1px',
               'border-radius': '1em'
             },
             hr: {
-              borderColor: '#3b574a',
+              borderColor: 'var(--button-bg)',
             },
             pre: {
-              backgroundColor: '#1e3025',
-              color: '#e7f0e7',
+              backgroundColor: 'var(--background-color)',
+              color: 'var(--text-color)',
             }
           },
         },
         invert: {
           css: {
             code: {
-              backgroundColor: '#1e3025',
+              backgroundColor: 'var(--background-color)',
             },
           }
         }

@@ -3,5 +3,19 @@
         {
             "path": "."
         }
-    ]
+    ],
+    "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "css.validate": false,
+        "tailwindCSS.includeLanguages": {
+            "svelte": "html"
+        },
+        "tailwindCSS.experimental.configFile": "./tailwind.config.ts",
+        "workbench.colorCustomizations": {
+            "activityBar.background": "#1a2a20",
+            "titleBar.activeBackground": "#1a2a20",
+            "titleBar.activeForeground": "#e7f0e7"
+        }
+    }
 }
