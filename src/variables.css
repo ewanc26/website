@@ -1,0 +1,21 @@
+:root {
+    --background-color: #0f0f0f;
+    --text-color: #e7f0e7;
+    --header-footer-bg: #202e25;
+    --button-bg: #304a3d;
+    --button-hover-bg: #3d5a4b;
+    --link-color: #7ec491;
+    --link-hover-color: #a9e6b9;
+    --card-bg: #202e25;
+}
+
+:root.light {
+    --background-color: #f0f7f2;
+    --text-color: #1a2a20;
+    --header-footer-bg: #e0ede4;
+    --button-bg: #7ec491;
+    --button-hover-bg: #a9e6b9;
+    --link-color: #2a7d4b;
+    --link-hover-color: #1e5935;
+    --card-bg: #e0ede4;      
+}
