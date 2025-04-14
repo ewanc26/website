@@ -2,11 +2,8 @@
     import Profile from '$lib/Profile.svelte';
     import '../app.css';
     import { page } from '$app/stores';
-    
+
     let { data, children } = $props();
-    
-    // Check if we're on the home page or a blog post page using $derived
-    const isHomePage = $derived($page.route.id === '/');
 </script>
 
 <svelte:head>
@@ -39,9 +36,7 @@
         </a>
     </nav>
     
-    {#if isHomePage}
-        <Profile profile={data.profile}/>
-    {/if}
+    <Profile profile={data.profile}/>
     
     {@render children()}
 </div>
