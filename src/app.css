@@ -136,7 +136,6 @@
     
     .post-card:hover {
         background-color: var(--header-footer-bg);
-        box-shadow: var(--button-bg) 0px 5px 15px;
     }
 
     .title-truncate {
