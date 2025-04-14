@@ -1,21 +1,479 @@
+/* Default green theme - dark mode */
 :root {
-    --background-color: #0f0f0f;
-    --text-color: #e7f0e7;
-    --header-footer-bg: #202e25;
-    --button-bg: #304a3d;
-    --button-hover-bg: #3d5a4b;
-    --link-color: #7ec491;
-    --link-hover-color: #a9e6b9;
-    --card-bg: #202e25;
+    --background-color: #121c17;
+    --text-color: #d8e8d8;
+    --header-footer-bg: #1e2c23;
+    --button-bg: #2d4839;
+    --button-hover-bg: #3a5847;
+    --link-color: #6db880;
+    --link-hover-color: #8fd0a0;
+    --card-bg: #1e2c23;
 }
 
+/* Default green theme - light mode */
 :root.light {
-    --background-color: #d0eed9;
-    --text-color: #1a2a20;
-    --header-footer-bg: #e0ede4;
-    --button-bg: #7ec491;
-    --button-hover-bg: #a9e6b9;
+    --background-color: #e0f5e8;
+    --text-color: #1e3026;
+    --header-footer-bg: #c8e6d2;
+    --button-bg: #5aaa76;
+    --button-hover-bg: #7bc293;
     --link-color: #2a7d4b;
     --link-hover-color: #1e5935;
-    --card-bg: #e0ede4;      
+    --card-bg: #c8e6d2;      
+}
+
+/* Blue theme - dark mode */
+:root.blue {
+    --background-color: #121a24;
+    --text-color: #d8e5f0;
+    --header-footer-bg: #1e2c3d;
+    --button-bg: #2d4865;
+    --button-hover-bg: #3a5c80;
+    --link-color: #6d9fd8;
+    --link-hover-color: #8fb8e6;
+    --card-bg: #1e2c3d;
+}
+
+/* Blue theme - light mode */
+:root.blue.light {
+    --background-color: #e0eef8;
+    --text-color: #1e3048;
+    --header-footer-bg: #c8ddef;
+    --button-bg: #5a8cc6;
+    --button-hover-bg: #7ba6d8;
+    --link-color: #2a5d7d;
+    --link-hover-color: #1e4159;
+    --card-bg: #c8ddef;
+}
+
+/* Purple theme - dark mode */
+:root.purple {
+    --background-color: #1a1424;
+    --text-color: #e5d8f0;
+    --header-footer-bg: #2c1e3d;
+    --button-bg: #482d65;
+    --button-hover-bg: #5c3a80;
+    --link-color: #a06dd8;
+    --link-hover-color: #b88fe6;
+    --card-bg: #2c1e3d;
+}
+
+/* Purple theme - light mode */
+:root.purple.light {
+    --background-color: #eee0f8;
+    --text-color: #301e48;
+    --header-footer-bg: #ddc8ef;
+    --button-bg: #8c5ac6;
+    --button-hover-bg: #a67bd8;
+    --link-color: #5d2a7d;
+    --link-hover-color: #411e59;
+    --card-bg: #ddc8ef;
+}
+
+/* High contrast theme - dark mode (accessibility) */
+:root.high-contrast {
+    --background-color: #101010;
+    --text-color: #f0f0f0;
+    --header-footer-bg: #202020;
+    --button-bg: #0066cc;
+    --button-hover-bg: #0052a3;
+    --link-color: #00ccff;
+    --link-hover-color: #66e0ff;
+    --card-bg: #202020;
+}
+
+/* High contrast theme - light mode (accessibility) */
+:root.high-contrast.light {
+    --background-color: #f0f0f0;
+    --text-color: #101010;
+    --header-footer-bg: #e0e0e0;
+    --button-bg: #0066cc;
+    --button-hover-bg: #0052a3;
+    --link-color: #0000cc;
+    --link-hover-color: #000099;
+    --card-bg: #e0e0e0;
+}
+
+/* Bubblegum theme - dark mode */
+:root.bubblegum {
+    --background-color: #241824;
+    --text-color: #f0d8e5;
+    --header-footer-bg: #3d1e2c;
+    --button-bg: #c13d7a;
+    --button-hover-bg: #d65a93;
+    --link-color: #f07ab6;
+    --link-hover-color: #f8a6cc;
+    --card-bg: #3d1e2c;
+}
+
+/* Bubblegum theme - light mode */
+:root.bubblegum.light {
+    --background-color: #f8e0ec;
+    --text-color: #481e36;
+    --header-footer-bg: #efc8d8;
+    --button-bg: #d65a93;
+    --button-hover-bg: #e67aaa;
+    --link-color: #c13d7a;
+    --link-hover-color: #a32e65;
+    --card-bg: #efc8d8;
+}
+
+/* Slate theme - dark mode */
+:root.slate {
+    --background-color: #1e2328;
+    --text-color: #dde3e8;
+    --header-footer-bg: #2a3038;
+    --button-bg: #455060;
+    --button-hover-bg: #566275;
+    --link-color: #7da1c6;
+    --link-hover-color: #a3c0db;
+    --card-bg: #2a3038;
+}
+
+/* Slate theme - light mode */
+:root.slate.light {
+    --background-color: #edf2f7;
+    --text-color: #2d3748;
+    --header-footer-bg: #dae1e9;
+    --button-bg: #5a6c87;
+    --button-hover-bg: #7889a3;
+    --link-color: #3a4a5e;
+    --link-hover-color: #2d3748;
+    --card-bg: #dae1e9;
+}
+
+/* Sand theme - dark mode */
+:root.sand {
+    --background-color: #24201c;
+    --text-color: #e8e0d0;
+    --header-footer-bg: #38302a;
+    --button-bg: #7d6a4d;
+    --button-hover-bg: #96815f;
+    --link-color: #c9a96c;
+    --link-hover-color: #d8bf8c;
+    --card-bg: #38302a;
+}
+
+/* Sand theme - light mode */
+:root.sand.light {
+    --background-color: #f5efe2;
+    --text-color: #483a28;
+    --header-footer-bg: #e8dcc8;
+    --button-bg: #b09060;
+    --button-hover-bg: #c5a87c;
+    --link-color: #7d6a4d;
+    --link-hover-color: #5a4c38;
+    --card-bg: #e8dcc8;
+}
+
+/* Ocean theme - dark mode */
+:root.ocean {
+    --background-color: #121c24;
+    --text-color: #d8e5f0;
+    --header-footer-bg: #1e2c38;
+    --button-bg: #1e6080;
+    --button-hover-bg: #2a7a9c;
+    --link-color: #4da6c9;
+    --link-hover-color: #7bc0db;
+    --card-bg: #1e2c38;
+}
+
+/* Ocean theme - light mode */
+:root.ocean.light {
+    --background-color: #e0f0f8;
+    --text-color: #1e3648;
+    --header-footer-bg: #c8e0ef;
+    --button-bg: #2a7a9c;
+    --button-hover-bg: #4da6c9;
+    --link-color: #1e6080;
+    --link-hover-color: #0a3142;
+    --card-bg: #c8e0ef;
+}
+
+/* Sunset theme - dark mode */
+:root.sunset {
+    --background-color: #24181c;
+    --text-color: #f0dcd8;
+    --header-footer-bg: #382a28;
+    --button-bg: #a34038;
+    --button-hover-bg: #bf5048;
+    --link-color: #e68070;
+    --link-hover-color: #f0a698;
+    --card-bg: #382a28;
+}
+
+/* Sunset theme - light mode */
+:root.sunset.light {
+    --background-color: #f8e8e4;
+    --text-color: #482824;
+    --header-footer-bg: #efd4cc;
+    --button-bg: #c65a48;
+    --button-hover-bg: #d87a68;
+    --link-color: #a34038;
+    --link-hover-color: #7d2820;
+    --card-bg: #efd4cc;
+}
+
+/* Mint theme - dark mode */
+:root.mint {
+    --background-color: #12241c;
+    --text-color: #d8f0e5;
+    --header-footer-bg: #1e382c;
+    --button-bg: #2a9c80;
+    --button-hover-bg: #38bf9c;
+    --link-color: #60d0b0;
+    --link-hover-color: #8ce0c6;
+    --card-bg: #1e382c;
+}
+
+/* Mint theme - light mode */
+:root.mint.light {
+    --background-color: #e0f8f0;
+    --text-color: #1e4838;
+    --header-footer-bg: #c8efd8;
+    --button-bg: #38bf9c;
+    --button-hover-bg: #60d0b0;
+    --link-color: #0a8c73;
+    --link-hover-color: #066352;
+    --card-bg: #c8efd8;
+}
+
+/* Lavender theme - dark mode */
+:root.lavender {
+    --background-color: #1c1824;
+    --text-color: #e5d8f0;
+    --header-footer-bg: #2c2438;
+    --button-bg: #604d9c;
+    --button-hover-bg: #7660bf;
+    --link-color: #a890e0;
+    --link-hover-color: #c0aef0;
+    --card-bg: #2c2438;
+}
+
+/* Lavender theme - light mode */
+:root.lavender.light {
+    --background-color: #f0e8f8;
+    --text-color: #362448;
+    --header-footer-bg: #e0d4ef;
+    --button-bg: #7660bf;
+    --button-hover-bg: #9480d8;
+    --link-color: #604d9c;
+    --link-hover-color: #483878;
+    --card-bg: #e0d4ef;
+}
+
+/* Low contrast theme - dark mode (accessibility) */
+:root.low-contrast {
+    --background-color: #303030;
+    --text-color: #b0b0b0;
+    --header-footer-bg: #404040;
+    --button-bg: #606060;
+    --button-hover-bg: #707070;
+    --link-color: #909090;
+    --link-hover-color: #a0a0a0;
+    --card-bg: #404040;
+}
+
+/* Low contrast theme - light mode (accessibility) */
+:root.low-contrast.light {
+    --background-color: #d0d0d0;
+    --text-color: #505050;
+    --header-footer-bg: #c0c0c0;
+    --button-bg: #909090;
+    --button-hover-bg: #808080;
+    --link-color: #606060;
+    --link-hover-color: #505050;
+    --card-bg: #c0c0c0;
+}
+
+/* Amber theme - dark mode */
+:root.amber {
+    --background-color: #241c12;
+    --text-color: #f0e5d0;
+    --header-footer-bg: #382e1e;
+    --button-bg: #9c7830;
+    --button-hover-bg: #b89038;
+    --link-color: #e0b050;
+    --link-hover-color: #f0c878;
+    --card-bg: #382e1e;
+}
+
+/* Amber theme - light mode */
+:root.amber.light {
+    --background-color: #f8f0e0;
+    --text-color: #483c1e;
+    --header-footer-bg: #efe0c0;
+    --button-bg: #c09030;
+    --button-hover-bg: #d8a848;
+    --link-color: #8c6824;
+    --link-hover-color: #6a4c18;
+    --card-bg: #efe0c0;
+}
+
+/* Teal theme - dark mode */
+:root.teal {
+    --background-color: #122420;
+    --text-color: #d0ece8;
+    --header-footer-bg: #1e3834;
+    --button-bg: #1e7d78;
+    --button-hover-bg: #289994;
+    --link-color: #4cc5c0;
+    --link-hover-color: #78d8d4;
+    --card-bg: #1e3834;
+}
+
+/* Teal theme - light mode */
+:root.teal.light {
+    --background-color: #e0f5f2;
+    --text-color: #1e3c38;
+    --header-footer-bg: #c8e8e4;
+    --button-bg: #289994;
+    --button-hover-bg: #4cc5c0;
+    --link-color: #1e7d78;
+    --link-hover-color: #0a5c58;
+    --card-bg: #c8e8e4;
+}
+
+/* Olive theme - dark mode */
+:root.olive {
+    --background-color: #1c2412;
+    --text-color: #e0ecd0;
+    --header-footer-bg: #2c381e;
+    --button-bg: #5a7d30;
+    --button-hover-bg: #6c9438;
+    --link-color: #a0cc60;
+    --link-hover-color: #bce084;
+    --card-bg: #2c381e;
+}
+
+/* Olive theme - light mode */
+:root.olive.light {
+    --background-color: #f0f5e0;
+    --text-color: #38481e;
+    --header-footer-bg: #e0eac8;
+    --button-bg: #6c9438;
+    --button-hover-bg: #8cb048;
+    --link-color: #5a7d30;
+    --link-hover-color: #3c5c18;
+    --card-bg: #e0eac8;
+}
+
+/* Indigo theme - dark mode */
+:root.indigo {
+    --background-color: #181a30;
+    --text-color: #d8daf0;
+    --header-footer-bg: #242648;
+    --button-bg: #3a3d80;
+    --button-hover-bg: #484c9c;
+    --link-color: #7a80e0;
+    --link-hover-color: #9ca0f0;
+    --card-bg: #242648;
+}
+
+/* Indigo theme - light mode */
+:root.indigo.light {
+    --background-color: #e8eaf8;
+    --text-color: #242648;
+    --header-footer-bg: #d0d4ef;
+    --button-bg: #484c9c;
+    --button-hover-bg: #6a70c0;
+    --link-color: #3a3d80;
+    --link-hover-color: #242648;
+    --card-bg: #d0d4ef;
+}
+
+/* Coral theme - dark mode */
+:root.coral {
+    --background-color: #241812;
+    --text-color: #f0dcd8;
+    --header-footer-bg: #38241e;
+    --button-bg: #c05a48;
+    --button-hover-bg: #d87058;
+    --link-color: #ff9e80;
+    --link-hover-color: #ffb8a0;
+    --card-bg: #38241e;
+}
+
+/* Coral theme - light mode */
+:root.coral.light {
+    --background-color: #f8ece8;
+    --text-color: #482418;
+    --header-footer-bg: #efd8d0;
+    --button-bg: #e07860;
+    --button-hover-bg: #f09078;
+    --link-color: #c05a48;
+    --link-hover-color: #9c3828;
+    --card-bg: #efd8d0;
+}
+
+/* Charcoal theme - dark mode */
+:root.charcoal {
+    --background-color: #1a1c1e;
+    --text-color: #d8dcde;
+    --header-footer-bg: #282c30;
+    --button-bg: #485058;
+    --button-hover-bg: #586068;
+    --link-color: #90a0b0;
+    --link-hover-color: #b0c0d0;
+    --card-bg: #282c30;
+}
+
+/* Charcoal theme - light mode */
+:root.charcoal.light {
+    --background-color: #eef0f2;
+    --text-color: #282c30;
+    --header-footer-bg: #dce0e4;
+    --button-bg: #586068;
+    --button-hover-bg: #687078;
+    --link-color: #384048;
+    --link-hover-color: #282c30;
+    --card-bg: #dce0e4;
+}
+
+/* Rose/Crimson theme - dark mode */
+:root.rose {
+    --background-color: #241218;
+    --text-color: #f0d8dc;
+    --header-footer-bg: #381e24;
+    --button-bg: #9c2838;
+    --button-hover-bg: #b83848;
+    --link-color: #d86070;
+    --link-hover-color: #e88090;
+    --card-bg: #381e24;
+}
+
+/* Rose/Crimson theme - light mode */
+:root.rose.light {
+    --background-color: #f8e4e8;
+    --text-color: #482428;
+    --header-footer-bg: #efd0d8;
+    --button-bg: #b83848;
+    --button-hover-bg: #d86070;
+    --link-color: #9c2838;
+    --link-hover-color: #7d1e2b;
+    --card-bg: #efd0d8;
+}
+
+/* Wood theme - dark mode */
+:root.wood {
+    --background-color: #201a14;
+    --text-color: #e8dcd0;
+    --header-footer-bg: #342b20;
+    --button-bg: #6b4c33;
+    --button-hover-bg: #7d5a3d;
+    --link-color: #c49a6c;
+    --link-hover-color: #d8b48c;
+    --card-bg: #342b20;
+}
+
+/* Wood theme - light mode */
+:root.wood.light {
+    --background-color: #f5efe6;
+    --text-color: #3c2a1c;
+    --header-footer-bg: #e6d7c3;
+    --button-bg: #8c6240;
+    --button-hover-bg: #a07a54;
+    --link-color: #6b4c33;
+    --link-hover-color: #4d3520;
+    --card-bg: #e6d7c3;
 }
