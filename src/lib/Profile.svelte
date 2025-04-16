@@ -19,12 +19,6 @@
     <h6 class="text-center hover:underline">
       <a href="https://bsky.app/profile/{profile.handle}" class="text-link hover:text-link-hover">@{profile.handle}</a>
     </h6>
-    <div class="flex flex-wrap justify-center gap-4 mt-2 text-sm opacity-75">
-      <span>{profile.followersCount} {profile.followersCount === 1 ? 'follower' : 'followers'}</span>
-      <span>{profile.followingCount} {profile.followingCount === 1 ? 'following' : 'following'}</span>
-      <span>{profile.postsCount} {profile.postsCount === 1 ? 'post' : 'posts'}</span>
-      <span>{profile.repliesCount} {profile.repliesCount === 1 ? 'reply' : 'replies'}</span>
-    </div>
   </div>
   <div class="p-3 w-full text-center">
     <p>{profile.description}</p>

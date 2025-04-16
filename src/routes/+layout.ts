@@ -7,11 +7,7 @@ interface Profile {
     did: string,
     handle: string,
     description: string,
-    pds: string,
-    followersCount: number,
-    followingCount: number,
-    postsCount: number,
-    repliesCount: number
+    pds: string
 }
 
 async function safeFetch(url: string) {
@@ -44,37 +40,6 @@ async function getProfile(): Promise<Profile> {
     if (!pdsurl) {
         throw new Error("DID lacks #atproto_pds service")
     }
-    // Fetch posts and analyze for posts/replies
-    let postsCount = 0;
-    let repliesCount = 0;
-    try {
-        let cursor = undefined;
-        const actor = fetchProfile.handle;
-        do {
-            const url = `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${actor}&limit=100${cursor ? `&cursor=${cursor}` : ''}`;
-            const feed = await safeFetch(url);
-            for (const item of feed.feed) {
-                if (item.post && item.post.record) {
-                    if (item.post.record.reply) {
-                        repliesCount += 1;
-                    } else {
-                        postsCount += 1;
-                    }
-                }
-            }
-            cursor = feed.cursor;
-        } while (cursor);
-    } catch {
-        // fallback to API values if error
-        postsCount = fetchProfile.postsCount || 0;
-        repliesCount = fetchProfile.repliesCount || 0;
-    }
-    const analytics = {
-      followersCount: fetchProfile.followersCount || 0,
-      followingCount: fetchProfile.followsCount || 0,
-      postsCount: postsCount || 0, 
-      repliesCount: repliesCount || 0
-    };
     return {
         avatar: fetchProfile["avatar"],
         banner: fetchProfile["banner"],
@@ -82,11 +47,7 @@ async function getProfile(): Promise<Profile> {
         did: fetchProfile["did"],
         handle: fetchProfile["handle"],
         description: fetchProfile["description"],
-        pds: pdsurl,
-        followersCount: analytics.followersCount,
-        followingCount: analytics.followingCount,
-        postsCount: analytics.postsCount,
-        repliesCount: analytics.repliesCount
+        pds: pdsurl
     };
 }
 
