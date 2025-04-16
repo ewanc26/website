@@ -72,8 +72,8 @@ async function getProfile(): Promise<Profile> {
     const analytics = {
       followersCount: fetchProfile.followersCount || 0,
       followingCount: fetchProfile.followsCount || 0,
-      postsCount,
-      repliesCount
+      postsCount: postsCount || 0, 
+      repliesCount: repliesCount || 0
     };
     return {
         avatar: fetchProfile["avatar"],
