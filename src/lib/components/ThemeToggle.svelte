@@ -106,7 +106,7 @@
   <div class="flex items-center gap-2">
     <button 
       on:click={toggleDropdown}
-      class="theme-palette p-2 rounded-full transition-colors duration-300"
+      class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
       style="background-color: var(--card-bg);"
       aria-label="Change theme"
       aria-expanded={isDropdownOpen}
@@ -120,7 +120,7 @@
     
     <button 
       on:click={toggleTheme} 
-      class="theme-toggle p-2 rounded-full transition-colors duration-300"
+      class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
       style="background-color: var(--card-bg);"
       aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
@@ -167,10 +167,13 @@
 </div>
 
 <style>
-  .theme-palette:hover,
-  .theme-toggle:hover {
+  /* Common icon styling */
+  .icon-button {
+    color: var(--text-color);
+  }
+
+  .icon-button:hover {
     background-color: var(--button-hover-bg) !important;
-    transform: scale(1.1);
   }
   
   .theme-option {
@@ -190,7 +193,7 @@
     max-height: 80vh;
   }
   
-  /* Ensure the controls are responsive */
+  /* Responsive adjustments */
   @media (max-width: 640px) {
     .theme-dropdown {
       width: 12rem;
