@@ -43,8 +43,8 @@
     
     {@render children()}
 </div>
-<footer class="text-center py-4 text-[#a9c8b3]/50 text-sm">
-    <div class="text-center py-4 text-[#a9c8b3]/50">
+<footer class="text-center py-4 text-primary/50 text-sm">
+    <div class="text-center py-4 text-primary/50">
         <div class="space-y-1">
             <div>
                 powered by <a class="hover:underline hover:text-[var(--link-hover-color)]" href="https://atproto.com/guides/glossary#at-protocol">atproto</a> • codebase on <a class="hover:underline hover:text-[var(--link-hover-color)]" href="https://github.com/ewanc26/website">GitHub</a> and <a class="hover:underline hover:text-[var(--link-hover-color)]" href="https://tangled.sh/@ewancroft.uk/website">Tangled</a>
