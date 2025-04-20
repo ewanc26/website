@@ -105,16 +105,16 @@
     .prose blockquote {
         @apply border-l-2 pl-4 rounded-none mx-auto;
         border-color: var(--button-bg);
-        background-color: var(--background-color);
+        background-color: var(--card-bg);
     }
     
     .prose code {
-        background-color: var(--background-color);
+        background-color: var(--card-bg);
         @apply rounded px-1 font-mono;
     }
     
     .prose pre {
-        background-color: var(--background-color);
+        background-color: var(--card-bg);
         @apply rounded-md mx-auto text-left font-mono p-4 overflow-x-auto;
         box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
         line-height: 1.5;
