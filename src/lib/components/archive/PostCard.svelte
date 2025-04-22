@@ -28,7 +28,7 @@
   }}
 >
   <a href={`/blog/${post.rkey}`}>
-    <div class="flex flex-col h-[110px] justify-between">
+    <div class="flex flex-col h-[140px] justify-between">
       <p class="text-[var(--link-color)] leading-[1.5] pb-2 title-truncate font-medium" title={title}>{title}</p>
       <div>
         <p class="text-[var(--text-color)] opacity-80 text-sm">Last Updated:</p>
@@ -38,6 +38,9 @@
           {:else}
             <span class="opacity-50">Loading...</span>
           {/if}
+        </p>
+        <p class="text-[var(--text-color)] opacity-80 text-sm mt-1">
+          {Math.ceil(post.wordCount / 200)} min read
         </p>
       </div>
     </div>
