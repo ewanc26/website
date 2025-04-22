@@ -9,7 +9,8 @@
   ></div>
 {/if}
 <div
-  class="profile-content flex flex-col items-center justify-center text-center m-2 p-4 -mt-20 ml-4 mr-4 relative rounded-[1em]"
+  class="profile-content flex flex-col items-center justify-center text-center m-2 p-4 ml-4 mr-4 relative rounded-[1em]"
+  style="margin-top: 0; z-index: 1;"
 >
   {#if profile.avatar}
     <img
