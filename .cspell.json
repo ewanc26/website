@@ -1,0 +1,54 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "atproto",
+    "bandcamp",
+    "bsky",
+    "customised",
+    "diddoc",
+    "Dockerised",
+    "Dragonsbreath",
+    "Ewan",
+    "Ewan's",
+    "ewanc",
+    "ewancroft",
+    "Fira",
+    "Instgrm",
+    "mdcontent",
+    "mdposts",
+    "Moonshadow",
+    "myhandle",
+    "nosniff",
+    "ogimage",
+    "pdsurl",
+    "referrerpolicy",
+    "resvg",
+    "Resvg",
+    "rkey",
+    "shapeshifting",
+    "svelte",
+    "whtwnd",
+    "Wyrmrest",
+    "xrpc"
+  ],
+  "flagWords": [],
+  "ignorePaths": [
+    "node_modules",
+    "package-lock.json",
+    "dist",
+    "build"
+  ],
+  "ignoreRegExpList": [
+    "/(\\w+)'s/g"
+  ],
+  "overrides": [
+    {
+      "filename": "**/*.svelte",
+      "ignoreRegExpList": [
+        "/>.*</",
+        "/(\\w+)'s/g"
+      ]
+    }
+  ]
+}

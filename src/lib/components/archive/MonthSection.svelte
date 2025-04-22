@@ -1,0 +1,29 @@
+<script lang="ts">
+  import { slide } from 'svelte/transition';
+  import { quintOut } from 'svelte/easing';
+  import PostCard from './PostCard.svelte';
+  
+  export let monthName: string;
+  export let postsInMonth: any[];
+  export let monthIndex: number;
+  export let localeLoaded: boolean;
+  export let formatDate: (date: Date) => string;
+</script>
+
+<div 
+  class="mb-12 ml-4"
+  in:slide={{ delay: 100 + monthIndex * 50, duration: 300, easing: quintOut }}
+>
+  <h2 class="text-2xl font-bold mb-4 ml-2">{monthName}</h2>
+  <div class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr)_)] gap-x-4 gap-y-6 mx-2 my-6">
+    {#each postsInMonth as post, postIndex (post.rkey)}
+      <PostCard 
+        {post} 
+        {monthIndex} 
+        {postIndex} 
+        {localeLoaded} 
+        {formatDate} 
+      />
+    {/each}
+  </div>
+</div>

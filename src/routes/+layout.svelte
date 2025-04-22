@@ -1,22 +1,25 @@
 <script lang="ts">
-    import Profile from '$lib/Profile.svelte';
     import '../app.css';
     import { page } from '$app/stores';
-    import ThemeToggle from '$lib/components/ThemeToggle.svelte';
-    import Footer from '$lib/components/Footer.svelte';
-
-    let { data, children } = $props();
-</script>
-
-<div class="box-border mx-auto px-4 sm:px-8 max-w-[1000px] pb-8">
-    <nav class="flex items-center box-border my-6">
-        <div class="ml-auto"></div>
-        <ThemeToggle />
-    </nav>
+    import Profile from '$lib/components/profile/Profile.svelte';
+    import Navigation from '$lib/components/layout/Navigation.svelte';
+    import Footer from '$lib/components/layout/Footer.svelte';
     
-    <Profile profile={data.profile}/>
+    let { data, children } = $props();
+    
+    // Check if we're on the home page or blog page using $derived
+    const showProfile = $derived($page.route.id ? ['/', '/blog'].includes($page.route.id) : false);
+    const isHomePage = $derived($page.route.id === '/');
+  </script>
+  
+  <div class="box-border mx-auto px-4 sm:px-8 max-w-[1000px] pb-8">
+    <Navigation {isHomePage} />
+    
+    {#if showProfile}
+      <Profile profile={data.profile}/>
+    {/if}
     
     {@render children()}
-</div>
-
-<Footer profile={data.profile} />
+    
+    <Footer profile={data.profile} posts={data.posts} />
+  </div>
