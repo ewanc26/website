@@ -1,14 +1,8 @@
-# Ewan's Personal Website
+# WhiteBreeze (Personal Fork)
 
-A customized personal website built using SvelteKit and Tailwind CSS, based on [my blog](https://blog.ewancroft.uk) which was originally forked from [WhiteBreeze](https://github.com/whitewind/whitebreeze).
+A customised version of [WhiteBreeze](https://github.com/whitewind/whitebreeze), a small frontend for [WhiteWind](https://whtwnd.com/) - a Markdown blog service using [ATProto](https://atproto.com/).
 
-This repository contains all configuration files for my personal website including:
-
-- Core configuration: `package.json`, `vite.config.ts`, `svelte.config.js`
-- Styling: `tailwind.config.ts`, `postcss.config.js`
-- Linting: `eslint.config.js`, `.prettierignore`
-- Build/deployment: `Dockerfile`, `compose.yaml`, `.vercelignore`
-- Project structure: `src/`, `static/`, `.svelte-kit/`
+This fork serves as both my personal website and blog, modified for personal usage while maintaining the original functionality of allowing self-hosting WhiteWind blog posts.
 
 ***This repository is available on [GitHub](https://github.com/ewanc26/website) and [Tangled](https://tangled.sh/@ewancroft.uk/website). GitHub is the primary version, and the Tangled version is a mirror.***
 

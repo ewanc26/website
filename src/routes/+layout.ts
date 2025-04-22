@@ -59,6 +59,7 @@ export async function load() {
         profile = await getProfile();
     }
     return { 
-        profile
+        profile,
+        posts: new Map() // Add empty posts map to match the expected type
     };
 }
