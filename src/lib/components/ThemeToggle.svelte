@@ -101,7 +101,8 @@
     }
     
     // Update theme-color meta tag for browser tab colors
-    const themeColor = getComputedStyle(document.documentElement).getPropertyValue('--theme-color');
+    const themeColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
+    
     let metaTag = document.querySelector('meta[name="theme-color"]');
     if (!metaTag) {
       metaTag = document.createElement('meta');
