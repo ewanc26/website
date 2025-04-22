@@ -15,7 +15,7 @@
   in:slide={{ delay: 100 + monthIndex * 50, duration: 300, easing: quintOut }}
 >
   <h2 class="text-2xl font-bold mb-4 ml-2">{monthName}</h2>
-  <div class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr)_)] gap-x-4 gap-y-6 mx-2 my-6">
+  <div class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr)_)] gap-x-6 gap-y-8 mx-4 my-8">
     {#each postsInMonth as post, postIndex (post.rkey)}
       <PostCard 
         {post} 

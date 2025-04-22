@@ -38,7 +38,7 @@
     {/if}
   </p>
   <p class="text-sm opacity-80 mt-2">
-    View on <a
+    {Math.ceil(post.wordCount / 200)} min read • View on <a
       href={`https://whtwnd.com/${profile?.did}/${rkey}`}
       class="hover:text-[var(--link-hover-color)]">WhiteWind</a
     >

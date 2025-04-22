@@ -18,7 +18,8 @@ export interface Post {
     rkey: string,
     createdAt: Date,
     content: string, // content parsed to html
-    excerpt: string  // plain text excerpt for meta descriptions
+    excerpt: string,  // plain text excerpt for meta descriptions
+    wordCount: number // word count for reading time calculation
 }
 
 export interface MarkdownPost {
@@ -137,12 +138,16 @@ export async function parse(mdposts: Map<string, MarkdownPost>) {
         // Extract plain text for excerpt
         const excerpt = await extractTextFromMarkdown(post.mdcontent);
         
+        // Calculate word count from markdown content
+        const wordCount = post.mdcontent.split(/\s+/).filter(word => word.length > 0).length;
+        
         posts.set(rkey, {
             title: post.title,
             rkey: post.rkey,
             createdAt: post.createdAt,
             content: parsedHtml,
-            excerpt
+            excerpt,
+            wordCount
         });
     }
     return posts
