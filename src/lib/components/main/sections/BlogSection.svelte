@@ -1,13 +1,12 @@
 <script lang="ts">
   import Section from './Section.svelte';
-  import LinkCard from '../LinkCard.svelte';
+  import LinkCard from '../../archive/LinkCard.svelte';
 </script>
 
 <Section title="Blog">
   <LinkCard 
     title="Personal Blog" 
-    subtitle="URL" 
-    value="blog.ewancroft.uk" 
-    url="https://blog.ewancroft.uk" 
+    value="View all posts" 
+    url="/blog" 
   />
 </Section>

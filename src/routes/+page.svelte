@@ -1,8 +1,8 @@
 <script lang="ts">
     import { page } from '$app/stores';
-    import BlogSection from '$lib/components/sections/BlogSection.svelte';
-    import SocialMediaSection from '$lib/components/sections/SocialMediaSection.svelte';
-    import DevelopmentSection from '$lib/components/sections/DevelopmentSection.svelte';
+    import BlogSection from '$lib/components/main/sections/BlogSection.svelte';
+    import SocialMediaSection from '$lib/components/main/sections/SocialMediaSection.svelte';
+    import DevelopmentSection from '$lib/components/main/sections/DevelopmentSection.svelte';
 </script>
 
 <svelte:head>
@@ -16,7 +16,7 @@
     <meta property="og:title" content="Ewan's Corner" />
     <meta property="og:description" content="Welcome to Ewan's Corner - A personal space where I share my thoughts on coding, technology, and life." />
     <meta property="og:site_name" content="Ewan's Corner" />
-    <meta property="og:image" content={$page.url.origin + '/embed-preview.png'} />
+    <meta property="og:image" content={$page.url.origin + '/embed/main.png'} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     
@@ -25,7 +25,7 @@
     <meta name="twitter:url" content={$page.url.origin + $page.url.pathname} />
     <meta name="twitter:title" content="Ewan's Corner" />
     <meta name="twitter:description" content="Welcome to Ewan's Corner - A personal space where I share my thoughts on coding, technology, and life." />
-    <meta name="twitter:image" content={$page.url.origin + '/embed-preview.png'} />
+    <meta name="twitter:image" content={$page.url.origin + '/embed/main.png'} />
 </svelte:head>
 
 <BlogSection />

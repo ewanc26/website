@@ -1,5 +1,5 @@
 <script lang="ts">
-  const { profile } = $props();
+  export let profile: any;
 </script>
 
 <div
