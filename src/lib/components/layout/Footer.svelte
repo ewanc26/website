@@ -1,5 +1,6 @@
 <script lang="ts">
   export let profile: any;
+  export const posts: any = undefined;
 </script>
 
 <footer class="text-center py-4 text-primary/50 text-sm">
