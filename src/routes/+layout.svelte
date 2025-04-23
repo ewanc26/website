@@ -1,8 +1,6 @@
 <script lang="ts">
     import '../app.css';
     import { page } from '$app/stores';
-    import { browser } from '$app/environment';
-    import { goto } from '$app/navigation';
     import Profile from '$lib/components/profile/Profile.svelte';
     import Navigation from '$lib/components/layout/Navigation.svelte';
     import Footer from '$lib/components/layout/Footer.svelte';
@@ -12,13 +10,6 @@
     // Check if we're on the home page or blog page using $derived
     const showProfile = $derived($page.route.id ? ['/', '/blog'].includes($page.route.id) : false);
     const isHomePage = $derived($page.route.id === '/');
-    
-    // Redirect from root to /blog if referrer is blog.ewancroft.uk
-    $effect(() => {
-        if (browser && isHomePage && document.referrer.includes('blog.ewancroft.uk')) {
-            goto('/blog');
-        }
-    });
   </script>
   
   <div class="box-border mx-auto px-4 sm:px-8 max-w-[1000px] pb-8">
