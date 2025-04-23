@@ -9,7 +9,7 @@
         powered by <a class="hover:underline hover:text-[var(--link-hover-color)]" href="https://atproto.com/guides/glossary#at-protocol">atproto</a> • codebase on <a class="hover:underline hover:text-[var(--link-hover-color)]" href="https://github.com/ewanc26/blog">GitHub</a> and <a class="hover:underline hover:text-[var(--link-hover-color)]" href="https://tangled.sh/@ewancroft.uk/blog">Tangled</a>
       </div>
       <div>
-        © <span id="copyright-year"></span> {profile?.displayName || '@' + profile?.handle} • <a class="hover:underline hover:text-[var(--link-hover-color)]" href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3 licensed code</a>
+        © <span id="copyright-year"></span> {profile?.displayName || '@' + profile?.handle} • <a class="hover:underline hover:text-[var(--link-hover-color)]" href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3 licensed code</a> • <a class="hover:underline hover:text-[var(--link-hover-color)]" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 licensed text &amp; imagery</a>
       </div>
       <script>
         document.getElementById('copyright-year').textContent = new Date().getFullYear().toString();
