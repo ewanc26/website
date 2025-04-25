@@ -2,7 +2,7 @@ import { formatDate } from '$lib/dateFormatter';
 import type { RequestHandler } from '@sveltejs/kit';
 
 // Simple SVG template function
-function createSvg(post: {title: string, createdAt: string}, profile: {displayName?: string, avatar?: string, handle?: string}, width = 1200, height = 630) {
+async function createSvg(post: {title: string, createdAt: string}, profile: {displayName?: string, avatar?: string, handle?: string}, width = 1200, height = 630) {
     // Truncate title if too long
     const truncatedTitle = post.title.length > 60 
         ? post.title.substring(0, 57) + '...' 
@@ -15,6 +15,17 @@ function createSvg(post: {title: string, createdAt: string}, profile: {displayNa
         formattedDate = formatDate(date);
     } catch {
         formattedDate = date.toLocaleDateString();
+    }
+    
+    // Check if avatar exists and is loadable
+    let avatarLoaded = false;
+    if (profile?.avatar) {
+        try {
+            const response = await fetch(profile.avatar);
+            avatarLoaded = response.ok;
+        } catch {
+            avatarLoaded = false;
+        }
     }
     
     // Generate SVG
@@ -74,16 +85,18 @@ function createSvg(post: {title: string, createdAt: string}, profile: {displayNa
           fill="#1e2c23" 
         />
         
-        <!-- For server-side SVG, we'll use a simple approach since foreignObject might not be supported everywhere -->
-        <image 
-          x="30" 
-          y="${height - 80}" 
-          width="60" 
-          height="60" 
-          href="${profile?.avatar || ''}" 
-          clip-path="circle(30px at 30px 30px)"
-          preserveAspectRatio="xMidYMid slice"
-        />
+        ${avatarLoaded ? 
+          `<image 
+            x="30" 
+            y="${height - 80}" 
+            width="60" 
+            height="60" 
+            href="${profile.avatar}" 
+            clip-path="circle(30px at 30px 30px)"
+            preserveAspectRatio="xMidYMid slice"
+          />` : ''
+        }
+        
         <!-- Fallback circle (appears if image fails to load) -->
         <circle 
           cx="60" 
@@ -93,6 +106,16 @@ function createSvg(post: {title: string, createdAt: string}, profile: {displayNa
           stroke="#f8f9fa" 
           stroke-width="2" 
         />
+        
+        <!-- Initials text -->
+        <text 
+          x="60" 
+          y="${height - 42}" 
+          font-family="system-ui, -apple-system, sans-serif" 
+          font-size="26" 
+          text-anchor="middle" 
+          fill="#ffffff"
+        >${profile?.displayName?.[0]?.toUpperCase() || '?'}</text>
         
         <!-- Author name -->
         <text 
@@ -153,7 +176,7 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
                 const routeData = data.nodes?.[1]?.data;
                 
                 if (routeData?.post && routeData?.profile) {
-                    const svg = createSvg(routeData.post, routeData.profile);
+                    const svg = await createSvg(routeData.post, routeData.profile);
                     return new Response(svg, {
                         headers: {
                             'Content-Type': 'image/svg+xml',
