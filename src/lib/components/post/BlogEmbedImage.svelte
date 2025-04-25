@@ -11,6 +11,10 @@
   };
   export let width = 1200;
   export let height = 630;
+  export let showBackground = true;
+  export let showBorder = true;
+  export let showAuthorSection = true;
+  export let showLogo = true;
   
   let mounted = false;
   let formattedDate = '';
@@ -207,19 +211,23 @@
     width={width} 
     height={height}
   >
-    <!-- Background -->
-    <rect width="100%" height="100%" fill="var(--background-color, #121c17)" />
+    {#if showBackground}
+      <!-- Background -->
+      <rect width="100%" height="100%" fill="var(--background-color, #121c17)" />
+    {/if}
     
-    <!-- Border -->
-    <rect 
-      x="10" 
-      y="10" 
-      width={width - 20} 
-      height={height - 20} 
-      stroke="var(--header-footer-bg, #1e2c23)" 
-      stroke-width="2" 
-      fill="none" 
-    />
+    {#if showBorder}
+      <!-- Border -->
+      <rect 
+        x="10" 
+        y="10" 
+        width={width - 20} 
+        height={height - 20} 
+        stroke="var(--header-footer-bg, #1e2c23)" 
+        stroke-width="2" 
+        fill="none" 
+      />
+    {/if}
     
     <!-- Title with wrapping -->
     <text 
@@ -249,14 +257,16 @@
       fill="var(--link-hover-color, #8fd0a0)"
     >{mounted ? formattedDate : 'Loading date...'}</text>
 
-    <!-- Bottom section with author info -->
-    <rect 
-      x="0" 
-      y={height - 100} 
-      width={width} 
-      height="100" 
-      fill="var(--header-footer-bg, #1e2c23)" 
-    />
+    {#if showAuthorSection}
+      <!-- Bottom section with author info -->
+      <rect 
+        x="0" 
+        y={height - 100} 
+        width={width} 
+        height="100" 
+        fill="var(--header-footer-bg, #1e2c23)" 
+      />
+    {/if}
     
     {#if profile?.avatar}
       <!-- Avatar image with fallback -->
@@ -328,16 +338,18 @@
       >@{profile?.handle || 'unknown'}</text>
     {/if}
     
-    <!-- Logo or site brand -->
-    <text 
-      x={width - 60} 
-      y={height - 40} 
-      font-family="system-ui, -apple-system, sans-serif" 
-      font-size="24" 
-      font-weight="bold" 
-      text-anchor="end" 
-      fill="var(--text-color, #d8e8d8)"
-    >Ewan's Blog</text>
+    {#if showLogo}
+      <!-- Logo or site brand -->
+      <text 
+        x={width - 60} 
+        y={height - 40} 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="24" 
+        font-weight="bold" 
+        text-anchor="end" 
+        fill="var(--text-color, #d8e8d8)"
+      >Ewan's Blog</text>
+    {/if}
   </svg>
   
   <div class="controls mt-4">
