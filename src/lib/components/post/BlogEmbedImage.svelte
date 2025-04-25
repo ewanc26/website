@@ -74,6 +74,13 @@
         // Create a group to hold both the image and fallback circle
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         
+        // Create a fallback circle first (will be visible if image fails to load)
+        const fallbackCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        fallbackCircle.setAttribute('cx', '60');
+        fallbackCircle.setAttribute('cy', `${height - 50}`);
+        fallbackCircle.setAttribute('r', '30');
+        fallbackCircle.setAttribute('fill', '#a0aec0');
+        
         // Create an image element to replace the foreignObject
         const imageElement = document.createElementNS('http://www.w3.org/2000/svg', 'image');
         imageElement.setAttribute('x', '30');
@@ -83,13 +90,6 @@
         imageElement.setAttribute('href', avatarSrc);
         imageElement.setAttribute('clip-path', 'circle(30px at 30px 30px)');
         imageElement.setAttribute('preserveAspectRatio', 'xMidYMid slice');
-        
-        // Create a fallback circle (will be visible if image fails to load)
-        const fallbackCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        fallbackCircle.setAttribute('cx', '60');
-        fallbackCircle.setAttribute('cy', `${height - 50}`);
-        fallbackCircle.setAttribute('r', '30');
-        fallbackCircle.setAttribute('fill', '#a0aec0');
         
         // Create a text element for the initials
         const initialsText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -101,7 +101,7 @@
         initialsText.setAttribute('fill', '#ffffff');
         initialsText.textContent = profile?.displayName?.[0]?.toUpperCase() || '?';
         
-        // Add elements to the group
+        // Add elements to the group in the correct order
         group.appendChild(fallbackCircle);
         group.appendChild(imageElement);
         group.appendChild(initialsText);
@@ -141,14 +141,19 @@
         foreignObject.parentNode?.replaceChild(group, foreignObject);
       } else {
         // No foreignObject found, try to add fallback to the author section
-        const authorSection = exportSvg.querySelector('rect[y="' + (height - 100) + '"]');
+        const authorSection = exportSvg.querySelector(`rect[y="${height - 100}"]`);
         if (authorSection && authorSection.parentNode) {
+          // Create a group for better organization
+          const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          
+          // Create a fallback circle
           const fallbackCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
           fallbackCircle.setAttribute('cx', '60');
           fallbackCircle.setAttribute('cy', `${height - 50}`);
           fallbackCircle.setAttribute('r', '30');
           fallbackCircle.setAttribute('fill', '#a0aec0');
           
+          // Create a text element for the initials
           const initialsText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
           initialsText.setAttribute('x', '60');
           initialsText.setAttribute('y', `${height - 42}`);
@@ -158,8 +163,12 @@
           initialsText.setAttribute('fill', '#ffffff');
           initialsText.textContent = profile?.displayName?.[0]?.toUpperCase() || '?';
           
-          authorSection.parentNode.insertBefore(fallbackCircle, authorSection.nextSibling);
-          authorSection.parentNode.insertBefore(initialsText, authorSection.nextSibling);
+          // Add elements to the group
+          group.appendChild(fallbackCircle);
+          group.appendChild(initialsText);
+          
+          // Insert the group after the author section
+          authorSection.parentNode.insertBefore(group, authorSection.nextSibling);
         }
       }
     }
@@ -175,7 +184,9 @@
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
       
-      ctx.fillStyle = '#ffffff';
+      // Use the background color from CSS variables if possible
+      const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim() || '#121c17';
+      ctx.fillStyle = bgColor;
       ctx.fillRect(0, 0, width, height);
       ctx.drawImage(img, 0, 0);
       
