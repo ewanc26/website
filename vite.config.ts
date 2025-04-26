@@ -4,6 +4,8 @@ import { defineConfig } from 'vite';
 export default defineConfig({
     plugins: [sveltekit()],
     build: {
-        target: 'esnext'
+        target: 'esnext',
+        minify: 'esbuild',
+        sourcemap: true
     }
 });
