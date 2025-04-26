@@ -63,3 +63,5 @@ export async function load() {
         posts: new Map() // Add empty posts map to match the expected type
     };
 }
+
+export const prerender = true;
