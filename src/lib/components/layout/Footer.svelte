@@ -16,7 +16,7 @@
     <div>
       &copy; <span id="copyright-year"></span>
       {#if profile?.handle}
-        <a href="https://bsky.app/profile/{profile.handle}" class="hover:underline hover:text-[var(--link-hover-color)]">@{profile.handle}</a>
+        <a href="https://bsky.app/profile/{profile.did}" class="hover:underline hover:text-[var(--link-hover-color)]">@{profile.handle}</a>
       {:else}
         {profile?.displayName || page.url.origin}
       {/if}
@@ -34,7 +34,7 @@
       and
       <a
         class="hover:underline hover:text-[var(--link-hover-color)]"
-        href="https://tangled.sh/@ewancroft.uk/website">Tangled</a
+        href="https://tangled.sh/did:plc:ofrbh253gwicbkc5nktqepol/website">Tangled</a
       >
     </div>
     <div>
