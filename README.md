@@ -1,5 +1,7 @@
 # WhiteBreeze (Personal Fork)
 
+![A screenshot of the website](./static/Screenshot%202025-04-26%20at%2020-09-27%20Ewan's%20Corner.png)
+
 A customised version of [WhiteBreeze](https://github.com/whitewind/whitebreeze), a small frontend for [WhiteWind](https://whtwnd.com/) - a Markdown blog service using [ATProto](https://atproto.com/).
 
 This fork serves as both my personal website and blog, modified for personal usage while maintaining the original functionality of allowing self-hosting WhiteWind blog posts.
