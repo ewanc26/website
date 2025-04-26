@@ -18,7 +18,9 @@ const config = {
 		csp: {
 			mode: 'auto',
 			directives: {
-				'script-src': ['self'],
+				'script-src': ['self', 'https://public.api.bsky.app'],
+				'script-src-elem': ['self', 'unsafe-inline', 'https://public.api.bsky.app'],
+				'connect-src': ['self', 'https://public.api.bsky.app'],
 				'style-src': ['self', 'unsafe-inline']
 			}
 		}
