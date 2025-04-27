@@ -48,6 +48,12 @@
         href="https://creativecommons.org/licenses/by/4.0/"
         >CC BY 4.0 licensed text &amp; imagery</a
       >
+      •
+      <a
+        class="hover:underline hover:text-[var(--link-hover-color)]"
+        href="/info"
+        >More about this site</a
+      >
     </div>
   </div>
 </footer>
