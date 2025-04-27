@@ -17,7 +17,7 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article" />
     <meta property="og:url" content={$page.url.origin + $page.url.pathname} />
-    <meta property="og:title" content={`${post.title} - Ewan's Blog`} />
+    <meta property="og:title" content={`${post.title} - Blog - Ewan's Corner`} />
     <meta property="og:description" content={post.excerpt} />
     <meta property="og:site_name" content="Ewan's Blog" />
     <meta
@@ -35,14 +35,14 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={$page.url.origin + $page.url.pathname} />
-    <meta name="twitter:title" content={`${post.title} - Ewan's Blog`} />
+    <meta name="twitter:title" content={`${post.title} - Blog - Ewan's Corner`} />
     <meta name="twitter:description" content={post.excerpt} />
     <meta
       name="twitter:image"
       content={$page.url.origin + "/embed/blog.png"}
     />
   {:else}
-    <title>Post Not Found - Ewan's Blog</title>
+    <title>Post Not Found - Blog - Ewan's Corner</title>
     <meta
       name="description"
       content="The requested blog post could not be found."
