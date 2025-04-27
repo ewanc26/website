@@ -1,25 +1,13 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { page } from '$app/state';
   export let profile: any;
   export const posts: any = undefined;
-  onMount(() => {
-    const copyrightYearElement = document.getElementById("copyright-year");
-    if (copyrightYearElement) {
-      copyrightYearElement.textContent = new Date().getFullYear().toString();
-    }
-  });
 </script>
 
 <footer class="text-center py-4 text-primary opacity-50 text-sm">
   <div class="space-y-1">
     <div>
-      &copy; <span id="copyright-year"></span>
-      {#if profile?.handle}
-        <a href="https://bsky.app/profile/{profile.did}" class="hover:underline hover:text-[var(--link-hover-color)]">@{profile.handle}</a>
-      {:else}
-        {profile?.displayName || page.url.origin}
-      {/if}
+      © <span id="copyright-year"></span>
+      {profile?.displayName || "@" + profile?.handle}
     </div>
     <div>
       powered by <a
@@ -34,7 +22,7 @@
       and
       <a
         class="hover:underline hover:text-[var(--link-hover-color)]"
-        href="https://tangled.sh/did:plc:ofrbh253gwicbkc5nktqepol/website">Tangled</a
+        href="https://tangled.sh/@ewancroft.uk/website">Tangled</a
       >
     </div>
     <div>
@@ -50,5 +38,10 @@
         >CC BY 4.0 licensed text &amp; imagery</a
       >
     </div>
+    <script>
+      document.getElementById("copyright-year").textContent = new Date()
+        .getFullYear()
+        .toString();
+    </script>
   </div>
 </footer>

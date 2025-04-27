@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { injectAnalytics } from '@vercel/analytics/sveltekit';
     import '../app.css';
     import { page } from '$app/stores';
     import Profile from '$lib/components/profile/Profile.svelte';
@@ -11,8 +10,6 @@
     // Check if we're on the home page or blog page using $derived
     const showProfile = $derived($page.route.id ? ['/', '/blog'].includes($page.route.id) : false);
     const isHomePage = $derived($page.route.id === '/');
-
-    injectAnalytics();
   </script>
   
   <div class="box-border mx-auto px-4 sm:px-8 max-w-[1000px] pb-8">
