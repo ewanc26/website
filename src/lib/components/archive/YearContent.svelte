@@ -3,7 +3,7 @@
   import { quintOut } from 'svelte/easing';
   import MonthSection from './MonthSection.svelte';
   
-  export let year: number;
+  export const year: number = 0;
   export let months: Record<string, any[]>;
   export let localeLoaded: boolean;
   export let formatDate: (date: Date) => string;
