@@ -106,7 +106,7 @@
         href="https://github.com/hugeblank/whitebreeze"
         class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
         >WhiteBreeze</a
-      >, a frontend for
+      >, a frontend for the AT Protocol powered
       <a
         href="https://whtwnd.com/"
         class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
