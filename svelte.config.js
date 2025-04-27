@@ -13,17 +13,8 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(),
 		prerender: {
-			entries: ['*']
+			origin: 'https://blog.ewancroft.uk'
 		},
-		csp: {
-			mode: 'auto',
-			directives: {
-				'script-src': ['self', 'https://public.api.bsky.app'],
-				'script-src-elem': ['self', 'unsafe-inline', 'https://public.api.bsky.app'],
-				'connect-src': ['self', 'https://public.api.bsky.app'],
-				'style-src': ['self', 'unsafe-inline']
-			}
-		}
 	}
 };
 
