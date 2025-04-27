@@ -7,6 +7,13 @@
   export let months: Record<string, any[]>;
   export let localeLoaded: boolean;
   export let formatDate: (date: Date) => string;
+  
+  // Calculate total read time for each month
+  function calculateTotalReadTime(posts: any[]): number {
+    return posts.reduce((total, post) => {
+      return total + Math.ceil(post.wordCount / 200);
+    }, 0);
+  }
 </script>
 
 <div 
@@ -20,7 +27,8 @@
       {postsInMonth} 
       {monthIndex} 
       {localeLoaded} 
-      {formatDate} 
+      {formatDate}
+      totalReadTime={calculateTotalReadTime(postsInMonth)}
     />
   {/each}
 </div>
