@@ -10,7 +10,7 @@
 <div class="flex justify-between mt-8 mb-8 gap-4">
   {#if adjacentPosts.previous}
     <a
-      href="/{adjacentPosts.previous.rkey}"
+      href="/blog/{adjacentPosts.previous.rkey}"
       class="text-[var(--link-color)] hover:text-[var(--link-hover-color)] hover:underline max-w-[45%] truncate"
       title={adjacentPosts.previous.title}
     >
@@ -22,7 +22,7 @@
 
   {#if adjacentPosts.next}
     <a
-      href="/{adjacentPosts.next.rkey}"
+      href="/blog/{adjacentPosts.next.rkey}"
       class="text-[var(--link-color)] hover:text-[var(--link-hover-color)] hover:underline max-w-[45%] truncate"
       title={adjacentPosts.next.title}
     >
