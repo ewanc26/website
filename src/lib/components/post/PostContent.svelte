@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { CommentSection } from "bluesky-comments-svelte";
-  import { PUBLIC_HANDLE } from "$env/static/public";
   import type { Post } from "$lib/parser.ts";
 
   export let post: Post;
@@ -11,6 +9,3 @@
   {@html post.content}
 </article>
 <hr class="my-6 border-[var(--button-bg)]" />
-<div class="comments-section">
-  <CommentSection author={PUBLIC_HANDLE} />
-</div>
