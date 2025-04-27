@@ -73,7 +73,7 @@
 </script>
 
 <svelte:head>
-  <title>Ewan's Blog</title>
+  <title>Blog - Ewan's Corner</title>
   <meta name="description" content="Welcome to Ewan's Blog - A personal blog where I share my thoughts on coding, technology, and life." />
   <meta name="keywords" content="Ewan, personal blog, coding, technology, programming, tech blog, Ewan's Blog" />
   

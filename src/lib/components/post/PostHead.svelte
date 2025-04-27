@@ -7,7 +7,7 @@
 
 <svelte:head>
   {#if post !== undefined}
-    <title>{post.title} - Ewan's Blog</title>
+    <title>{post?.title} - Blog - Ewan's Corner</title>
     <meta name="description" content={post.excerpt} />
     <meta
       name="keywords"
