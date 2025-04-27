@@ -1,8 +1,9 @@
 <script lang="ts">
     import { page } from '$app/stores';
-    import BlogSection from '$lib/components/main/sections/BlogSection.svelte';
-    import SocialMediaSection from '$lib/components/main/sections/SocialMediaSection.svelte';
-    import DevelopmentSection from '$lib/components/main/sections/DevelopmentSection.svelte';
+    import DynamicSection from '$lib/components/main/sections/DynamicSection.svelte';
+    import links from '$lib/components/main/links.json';
+
+    const sectionKeys = Object.keys(links.sections) as Array<keyof typeof links.sections>;
 </script>
 
 <svelte:head>
@@ -28,6 +29,6 @@
     <meta name="twitter:image" content={$page.url.origin + '/embed/main.png'} />
 </svelte:head>
 
-<BlogSection />
-<SocialMediaSection />
-<DevelopmentSection />
+{#each sectionKeys as sectionKey}
+    <DynamicSection {sectionKey} />
+{/each}
