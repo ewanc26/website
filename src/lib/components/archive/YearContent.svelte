@@ -14,6 +14,10 @@
       return total + Math.ceil(post.wordCount / 200);
     }, 0);
   }
+  
+  function calculateTotalWordCount(posts: any[]): number {
+    return posts.reduce((total, post) => total + post.wordCount, 0);
+  }
 </script>
 
 <div 
@@ -29,6 +33,7 @@
       {localeLoaded} 
       {formatDate}
       totalReadTime={calculateTotalReadTime(postsInMonth)}
+      totalWordCount={calculateTotalWordCount(postsInMonth)}
     />
   {/each}
 </div>

@@ -40,7 +40,7 @@
           {/if}
         </p>
         <p class="text-[var(--text-color)] opacity-80 text-sm mt-1">
-          {Math.ceil(post.wordCount / 200)} min read
+          {post.wordCount} words • {Math.ceil(post.wordCount / 200)} min read
         </p>
       </div>
     </div>
