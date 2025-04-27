@@ -56,7 +56,7 @@ let profile: Profile;
 let posts: Map<string, Post>;
 let sortedPosts: Post[] = [];
 
-export const prerender = true;
+export const prerender = false;
 export const trailingSlash = 'never';
 
 export async function load() {
