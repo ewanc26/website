@@ -38,7 +38,7 @@
     {/if}
   </p>
   <p class="text-sm opacity-80 mt-2">
-    {Math.ceil(post.wordCount / 200)} min read • View on <a
+    View on <a
       href={`https://whtwnd.com/${profile?.did}/${rkey}`}
       class="hover:text-[var(--link-hover-color)]">WhiteWind</a
     >
@@ -47,6 +47,9 @@
       href={`https://pdsls.dev/at://${profile?.did}/com.whtwnd.blog.entry/${rkey}`}
       class="hover:text-[var(--link-hover-color)]">PDSls</a
     >
+  </p>
+  <p class="text-sm opacity-80 mt-2">
+    {Math.ceil(post.wordCount / 200)} min read • {post.wordCount} words
   </p>
   <ShareIcon title={post.title} profile={profile} {data} />
 </div>
