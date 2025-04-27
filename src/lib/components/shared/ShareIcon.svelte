@@ -87,7 +87,7 @@
       );
       if (instance) {
         mastodonInstance = instance;
-        window.open(`https://${mastodonInstance}/share?text=${encodedShareText}`, '_blank', 'noopener,noreferrer');
+        window.open(`${mastodonShareUrl}`, '_blank', 'noopener,noreferrer');
       }
     }}
     on:keydown={(e) => {
@@ -98,7 +98,7 @@
         );
         if (instance) {
           mastodonInstance = instance;
-          window.open(`https://${mastodonInstance}/share?text=${encodedShareText}`, '_blank', 'noopener,noreferrer');
+          window.open(`${mastodonShareUrl}`, '_blank', 'noopener,noreferrer');
         }
       }
     }}
