@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-  <title>About - Ewan's Corner</title>
+  <title>About This Website - Ewan's Corner</title>
   <meta
     name="description"
     content="Information about Ewan's Corner including privacy policy, technology stack, and website purpose."
@@ -16,10 +16,10 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content={$page.url.origin + $page.url.pathname} />
-  <meta property="og:title" content="Privacy Policy - Ewan's Corner" />
+  <meta property="og:title" content="About This Website - Ewan's Corner" />
   <meta
     property="og:description"
-    content="Privacy policy for Ewan's Corner - This website does not track your activity or use cookies."
+    content="Learn about Ewan's Corner - including technology stack, website purpose, and privacy information."
   />
   <meta property="og:site_name" content="Ewan's Corner" />
   <meta property="og:image" content={$page.url.origin + "/embed/main.png"} />
@@ -29,10 +29,10 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content={$page.url.origin + $page.url.pathname} />
-  <meta name="twitter:title" content="Privacy Policy - Ewan's Corner" />
+  <meta name="twitter:title" content="About This Website - Ewan's Corner" />
   <meta
     name="twitter:description"
-    content="Privacy policy for Ewan's Corner - This website does not track your activity or use cookies."
+    content="Learn about Ewan's Corner - including technology stack, website purpose, and privacy information."
   />
   <meta name="twitter:image" content={$page.url.origin + "/embed/main.png"} />
 </svelte:head>
