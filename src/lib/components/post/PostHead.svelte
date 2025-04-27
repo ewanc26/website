@@ -30,6 +30,7 @@
       property="article:published_time"
       content={post.createdAt.toISOString()}
     />
+    <meta property="article:word_count" content={post.wordCount.toString()} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
