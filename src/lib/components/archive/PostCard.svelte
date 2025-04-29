@@ -1,27 +1,6 @@
 <style>
   .post-card {
     backface-visibility: hidden;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 16px;
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-
-  .post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  .post-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: var(--link-color);
-  }
-
-  .post-details {
-    font-size: 0.875rem;
-    color: var(--text-color);
-    opacity: 0.8;
   }
 </style>
 
@@ -49,18 +28,20 @@
   }}
 >
   <a href={`/blog/${post.rkey}`}>
-    <div class="flex flex-col justify-between">
-      <p class="post-title" title={title}>{title}</p>
-      <div class="post-details">
-        <p>Last Updated:</p>
-        <p>
+    <div class="flex flex-col h-[140px] justify-between">
+      <p class="text-[var(--link-color)] leading-[1.5] pb-2 title-truncate font-medium" title={title}>{title}</p>
+      <div>
+        <p class="text-[var(--text-color)] opacity-80 text-sm">Last Updated:</p>
+        <p class="object-bottom text-[var(--text-color)]">
           {#if localeLoaded}
             <span transition:fade>{formatDate(post.createdAt)}</span>
           {:else}
             <span class="opacity-50">Loading...</span>
           {/if}
         </p>
-        <p>{post.wordCount} words • {Math.ceil(post.wordCount / 200)} min read</p>
+        <p class="text-[var(--text-color)] opacity-80 text-sm mt-1">
+          {post.wordCount} words • {Math.ceil(post.wordCount / 200)} min read
+        </p>
       </div>
     </div>
   </a>
