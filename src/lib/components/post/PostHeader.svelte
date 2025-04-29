@@ -9,6 +9,9 @@
   export let rkey: string;
   export let localeLoaded: boolean;
   export let data: any;
+
+  // Determine singular or plural for word count
+  let wordLabel = post.wordCount === 1 ? 'word' : 'words';
 </script>
 
 <div class="flex items-center justify-between">
@@ -49,7 +52,7 @@
     >
   </p>
   <p class="text-sm opacity-80 mt-2">
-    {Math.ceil(post.wordCount / 200)} min read • {post.wordCount} words
+    {Math.ceil(post.wordCount / 200)} min read • {post.wordCount} {wordLabel}
   </p>
   <ShareIcon title={post.title} profile={profile} {data} />
 </div>
