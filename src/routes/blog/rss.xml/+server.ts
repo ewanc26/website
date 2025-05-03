@@ -79,13 +79,13 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     const rssXml = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:media="http://search.yahoo.com/mrss/">
 <channel>
-  <title>Ewan's Blog</title>
+  <title>Blog - Ewan's Corner</title>
   <description>A personal blog where I share my thoughts on coding, technology, and life.</description>
   <link>${baseUrl}/blog</link>
   <atom:link href="${baseUrl}/blog/rss.xml" rel="self" type="application/rss+xml" />
   <image>
     <url>${baseUrl}/embed/blog.png</url>
-    <title>Ewan's Blog</title>
+    <title>Blog - Ewan's Corner</title>
     <link>${baseUrl}/blog</link>
   </image>
   <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
@@ -116,7 +116,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     return new Response(`<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-  <title>Ewan's Blog</title>
+  <title>Blog - Ewan's Corner</title>
   <description>A personal blog where I share my thoughts on coding, technology, and life.</description>
   <link>${url.origin}/blog</link>
   <atom:link href="${url.origin}/blog/rss.xml" rel="self" type="application/rss+xml" />
