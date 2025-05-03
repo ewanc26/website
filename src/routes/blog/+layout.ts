@@ -1,58 +1,39 @@
 import { getProfile } from "$lib/components/profile/profile";
 import type { Profile } from "$lib/components/profile/profile";
 import { parse, type MarkdownPost, type Post } from '$lib/parser';
-import { updated } from '$app/stores';
-import { onMount } from 'svelte';
 
 let profile: Profile;
 let posts: Map<string, Post>;
 let sortedPosts: Post[] = [];
-let lastFetchTime = 0;
 
 export const prerender = false;
 export const trailingSlash = 'never';
-
-async function fetchPosts() {
-    const rawResponse = await fetch(`${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=com.whtwnd.blog.entry`)
-    const response = await rawResponse.json()
-    const mdposts: Map<string, MarkdownPost> = new Map();
-    for (const data of response["records"]) {
-        const matches = data["uri"].split("/")
-        const rkey = matches[matches.length - 1]
-        const record = data["value"]
-        if (matches && matches.length === 5 && record && (record["visibility"] === "public" || !record["visibility"])) {
-            mdposts.set(rkey, {
-                title: record["title"],
-                createdAt: new Date(record["createdAt"]),
-                mdcontent: record["content"],
-                rkey
-            })
-        }
-    }
-    posts = await parse(mdposts)
-    sortedPosts = Array.from(posts.values()).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-    lastFetchTime = Date.now();
-}
 
 export async function load() {
     try {
         if (profile === undefined) {
             profile = await getProfile();
         }
-        if (posts === undefined || Date.now() - lastFetchTime > 3600000) {
-            await fetchPosts();
-        }
-
-        onMount(() => {
-            const interval = setInterval(async () => {
-                const hasUpdates = await updated.check();
-                if (hasUpdates === true) {
-                    await fetchPosts();
+        if (posts === undefined) {
+            const rawResponse = await fetch(`${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=com.whtwnd.blog.entry`)
+            const response = await rawResponse.json()
+            const mdposts: Map<string, MarkdownPost> = new Map();
+            for (const data of response["records"]) {
+                const matches = data["uri"].split("/")
+                const rkey = matches[matches.length - 1]
+                const record = data["value"]
+                if (matches && matches.length === 5 && record && (record["visibility"] === "public" || !record["visibility"])) {
+                    mdposts.set(rkey, {
+                        title: record["title"],
+                        createdAt: new Date(record["createdAt"]),
+                        mdcontent: record["content"],
+                        rkey
+                    })
                 }
-            }, 300000);
-            
-            return () => clearInterval(interval);
-        });
+            }
+            posts = await parse(mdposts)
+            sortedPosts = Array.from(posts.values()).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        }
 
         return { 
             posts,
