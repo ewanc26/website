@@ -76,6 +76,7 @@
   <title>Blog - Ewan's Corner</title>
   <meta name="description" content="Welcome to Ewan's Blog - A personal blog where I share my thoughts on coding, technology, and life." />
   <meta name="keywords" content="Ewan, personal blog, coding, technology, programming, tech blog, Ewan's Blog" />
+  <link rel="alternate" type="application/rss+xml" title="Ewan's Blog RSS Feed" href="{$page.url.origin}/blog/rss.xml" />
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
