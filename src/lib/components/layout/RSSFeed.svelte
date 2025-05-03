@@ -10,6 +10,7 @@
       href="{$page.url.origin}/blog/rss.xml" 
       class="font-medium text-[large] hover:text-[var(--link-hover-color)]" 
       aria-label="RSS Feed"
+      download="Ewans_Blog_RSS.xml"
     >
       <svg 
         xmlns="http://www.w3.org/2000/svg" 
