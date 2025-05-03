@@ -11,7 +11,7 @@
     <meta name="description" content={post.excerpt} />
     <meta
       name="keywords"
-      content="Ewan, personal blog, coding, technology, programming, tech blog, Ewan's Blog"
+      content="Ewan, personal blog, coding, technology, programming, tech blog, Blog - Ewan's Corner"
     />
 
     <!-- Open Graph / Facebook -->
@@ -19,7 +19,7 @@
     <meta property="og:url" content={$page.url.origin + $page.url.pathname} />
     <meta property="og:title" content={`${post.title} - Blog - Ewan's Corner`} />
     <meta property="og:description" content={post.excerpt} />
-    <meta property="og:site_name" content="Ewan's Blog" />
+    <meta property="og:site_name" content="Blog - Ewan's Corner" />
     <meta
       property="og:image"
       content={$page.url.origin + "/embed/blog.png"}
