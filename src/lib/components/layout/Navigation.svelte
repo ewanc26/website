@@ -21,6 +21,7 @@
         href="{$page.url.origin}/blog/rss.xml" 
         class="font-medium text-[large] hover:text-[var(--link-hover-color)]" 
         aria-label="RSS Feed"
+        download="rss.xml"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 11a9 9 0 0 1 9 9"/>
