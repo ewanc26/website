@@ -1,6 +1,4 @@
 import { PUBLIC_HANDLE } from "$env/static/public";
-import { updated } from '$app/stores';
-import { onMount } from 'svelte';
 
 export interface Profile {
     avatar: string,
@@ -51,21 +49,4 @@ export async function getProfile(): Promise<Profile> {
         description: fetchProfile["description"],
         pds: pdsurl
     };
-}
-
-export async function fetchProfileWithUpdates() {
-    let profile = await getProfile();
-    
-    onMount(() => {
-        const interval = setInterval(async () => {
-            const hasUpdates = await updated.check();
-            if (hasUpdates === true) {
-                profile = await getProfile();
-            }
-        }, 3600000);
-        
-        return () => clearInterval(interval);
-    });
-    
-    return profile;
 }
