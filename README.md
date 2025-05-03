@@ -32,13 +32,14 @@ This fork serves as both my personal website and blog, modified for personal usa
   - `app.html`: Main HTML template
   - `lib/`: Shared components and utilities
     - `components/`: Reusable Svelte components
+      - `profile/profile.ts`: Shared logic for fetching and caching ATProto profile data, used by both the root and blog layouts.
     - `dateFormatter.ts`: Date formatting utilities
     - `parser.ts`: Content parsing utilities
   - `routes/`: Application routes
     - `+layout.svelte`: Root layout component
-    - `+layout.ts`: Layout server-side code
+    - `+layout.ts`: Layout server-side code (imports profile logic from `lib/components/profile/profile.ts`)
     - `+page.svelte`: Home page component
-    - `blog/`: Blog-related routes
+    - `blog/`: Blog-related routes (also imports profile logic from `lib/components/profile/profile.ts`)
 
 ### Static Assets
 
