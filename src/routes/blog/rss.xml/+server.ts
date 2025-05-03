@@ -83,6 +83,11 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
   <description>A personal blog where I share my thoughts on coding, technology, and life.</description>
   <link>${baseUrl}/blog</link>
   <atom:link href="${baseUrl}/blog/rss.xml" rel="self" type="application/rss+xml" />
+  <image>
+    <url>${baseUrl}/embed/blog.png</url>
+    <title>Ewan's Blog</title>
+    <link>${baseUrl}/blog</link>
+  </image>
   <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
   ${sortedPosts.map(post => `
   <item>
@@ -93,6 +98,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     <description><![CDATA[${post.excerpt || ''}]]></description>
     <content:encoded><![CDATA[${post.content || ''}]]></content:encoded>
     <author>${profileData.displayName || profileData.handle} (${profileData.handle})</author>
+    <media:content url="${baseUrl}/embed/blog.png" medium="image" />
   </item>`).join('')}
 </channel>
 </rss>`;
