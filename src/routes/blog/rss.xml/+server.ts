@@ -92,7 +92,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     <pubDate>${new Date(post.createdAt).toUTCString()}</pubDate>
     <description><![CDATA[${post.excerpt || ''}]]></description>
     <content:encoded><![CDATA[${post.content || ''}]]></content:encoded>
-    <author>ewan@ewancroft.uk (Ewan)</author>
+    <author>${profileData.displayName || profileData.handle} (${profileData.handle})</author>
   </item>`).join('')}
 </channel>
 </rss>`;
