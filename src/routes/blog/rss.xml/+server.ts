@@ -1,16 +1,12 @@
 import type { RequestHandler } from './$types';
 import { dev } from '$app/environment';
 import { parse, type MarkdownPost } from '$lib/parser';
+import { getProfile } from '$lib/components/profile/profile'; // Import getProfile
 
 export const GET: RequestHandler = async ({ url, fetch }) => {
   try {
-    // Import the profile and post loading logic from the blog layout
-    const { PUBLIC_HANDLE } = await import('$env/static/public');
-    
-    // Get profile data
-    const profileResponse = await fetch(`https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${PUBLIC_HANDLE}`);
-    if (!profileResponse.ok) throw new Error(`Profile fetch failed: ${profileResponse.status}`);
-    const profileData = await profileResponse.json();
+    // Use getProfile to get profile data
+    const profileData = await getProfile();
     
     // Get DID document to find PDS URL
     const did = profileData.did;
