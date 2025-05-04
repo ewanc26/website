@@ -13,7 +13,7 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(),
 		prerender: {
-			origin: 'https://blog.ewancroft.uk'
+			origin: 'https://ewancroft.uk'
 		},
 	}
 };
