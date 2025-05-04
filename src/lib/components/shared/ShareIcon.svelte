@@ -80,7 +80,7 @@
 
   <!-- Mastodon Share Button -->
   <button 
-    onclick|preventDefault={() => {
+    on:click|preventDefault={() => {
       const instance = prompt(
         'Enter your Mastodon instance (e.g. mastodon.social):', 
         mastodonInstance
