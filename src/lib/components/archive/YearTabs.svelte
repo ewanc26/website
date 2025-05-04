@@ -19,7 +19,7 @@
     <button 
       class="w-[100px] min-w-[100px] px-4 py-2 font-medium transition-all duration-300 relative z-10 text-center
             {activeYear === year ? 'text-[var(--link-color)]' : 'text-[var(--text-color)] opacity-80 hover:text-[var(--link-hover-color)]'}"
-      on:click={() => setActiveYear(year)}
+      onclick={() => setActiveYear(year)}
     >
       <span class="relative {activeYear === year ? 'transform transition-transform duration-300 scale-105' : ''}">
         {year}
