@@ -30,6 +30,16 @@
         }
       ]
     },
+    "music analysis": {
+      "title": "Music Analysis",
+      "links": [
+        {
+          "title": "Last.fm Stats",
+          "value": "@greenwolf745",
+          "url": "https://lastfmstats.com/user/greenwolf745/general"
+        }
+      ]
+    },
     "development": {
       "title": "Development",
       "links": [
