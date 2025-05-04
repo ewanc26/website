@@ -110,13 +110,18 @@
       document.head.appendChild(metaTag);
     }
     metaTag.setAttribute('content', themeColor);
+    
+    // Dispatch a custom event to notify other components about theme change
+    document.dispatchEvent(new CustomEvent('themeChanged', {
+      detail: { isDarkMode: dark, theme: theme }
+    }));
   }
 </script>
 
 <div class="theme-controls relative">
   <div class="flex items-center gap-2">
     <button 
-      on:click={toggleDropdown}
+      onclick={toggleDropdown}
       class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
       style="background-color: var(--card-bg);"
       aria-label="Change theme"
@@ -130,7 +135,7 @@
     </button>
     
     <button 
-      on:click={toggleTheme} 
+      onclick={toggleTheme} 
       class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
       style="background-color: var(--card-bg);"
       aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
@@ -167,7 +172,7 @@
           <button 
             class="theme-option w-full text-left px-4 py-2 transition-colors duration-200"
             class:active={currentTheme === theme.id}
-            on:click={() => changeColorTheme(theme.id)}
+            onclick={() => changeColorTheme(theme.id)}
           >
             {theme.name}
           </button>

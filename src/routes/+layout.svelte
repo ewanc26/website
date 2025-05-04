@@ -3,6 +3,7 @@
     import { page } from '$app/stores';
     import Profile from '$lib/components/profile/Profile.svelte';
     import { Navigation, Footer } from '$lib/components/layout';
+    import Blob from '$lib/components/shared/Blob.svelte';
     
     let { data, children } = $props();
     
@@ -13,6 +14,7 @@
   </script>
   
   <div class="box-border mx-auto px-4 sm:px-8 max-w-[1000px] pb-8">
+    <Blob count={15} />
     <Navigation {isHomePage} {isBlogIndex}/>
     
     {#if showProfile}
