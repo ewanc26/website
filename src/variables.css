@@ -1,5 +1,16 @@
+/* Recursive font definitions with all variable axes */
+@font-face {
+  font-family: 'Recursive';
+  src: url('/fonts/ArrowType-Recursive-1.085/Recursive_Web/woff2_variable/Recursive_VF_1.085.woff2') format('woff2');
+  font-weight: 300 1000;
+  font-style: oblique 0deg 15deg;
+  font-display: swap;
+  font-variation-settings: 'MONO' 0, 'CASL' 0, 'wght' 400, 'slnt' 0, 'CRSV' 0.5;
+}
+
 /* Default green theme - dark mode */
 :root {
+  font-family: 'Recursive', sans-serif;
   --background-color: #121c17;
   --text-color: #d8e8d8;
   --header-footer-bg: #1e2c23;
