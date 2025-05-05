@@ -11,7 +11,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import type { Post } from "$lib/parser.ts";
-  import { PostHead, PostHeader, PostContent, PostNavigation } from "$lib/components/post";
+  import {
+    PostHead,
+    PostHeader,
+    PostContent,
+    PostNavigation,
+  } from "$lib/components/post";
   import { NotFoundMessage } from "$lib/components/shared";
 
   let { data }: { data: any } = $props();
@@ -31,12 +36,12 @@
 
 {#if post !== undefined}
   <div class="max-w-4xl mx-auto px-4">
-    <PostHeader 
-      {post} 
-      profile={data.profile} 
-      rkey={data.rkey} 
-      {localeLoaded} 
-      {data} 
+    <PostHeader
+      {post}
+      profile={data.profile}
+      rkey={data.rkey}
+      {localeLoaded}
+      {data}
     />
     <PostContent {post} />
     <PostNavigation {adjacentPosts} />

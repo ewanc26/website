@@ -1,71 +1,71 @@
 {
-    "folders": [
-        {
-            "path": "."
-        }
-    ],
-    "settings": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "css.validate": false,
-        "tailwindCSS.includeLanguages": {
-            "svelte": "html"
-        },
-        "tailwindCSS.experimental.configFile": "./tailwind.config.ts",
-        "workbench.colorCustomizations": {
-            "activityBar.background": "#1a2a20",
-            "titleBar.activeBackground": "#1a2a20",
-            "titleBar.activeForeground": "#e7f0e7"
-        },
-        "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": "explicit"
-        },
-        "editor.tabSize": 2,
-        "editor.detectIndentation": false,
-        "svelte.enable-ts-plugin": true,
-        "svelte.plugin.svelte.format.enable": true,
-        "files.associations": {
-            "*.svelte": "svelte"
-        },
-        "emmet.includeLanguages": {
-            "svelte": "html"
-        },
-        "typescript.tsdk": "node_modules/typescript/lib",
-        "cSpell.words": [
-            "atproto",
-            "bluesky",
-            "rehype",
-            "remark",
-            "svelte",
-            "tailwindcss",
-            "whitebreeze",
-            "whitewind",
-            "whtwnd"
-        ]
-    },
-    "extensions": {
-        "recommendations": [
-            "svelte.svelte-vscode",
-            "esbenp.prettier-vscode",
-            "bradlc.vscode-tailwindcss",
-            "dbaeumer.vscode-eslint",
-            "streetsidesoftware.code-spell-checker",
-            "csstools.postcss",
-            "ardenivanov.svelte-intellisense",
-            "formulahendry.auto-rename-tag",
-            "christian-kohler.path-intellisense",
-            "eamodio.gitlens"
-        ]
-    },
-    "launch": {
-        "configurations": [
-            {
-                "type": "chrome",
-                "request": "launch",
-                "name": "Launch Chrome against localhost",
-                "url": "http://localhost:5173",
-                "webRoot": "${workspaceFolder}"
-            }
-        ]
+  "folders": [
+    {
+      "path": "."
     }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "css.validate": false,
+    "tailwindCSS.includeLanguages": {
+      "svelte": "html"
+    },
+    "tailwindCSS.experimental.configFile": "./tailwind.config.ts",
+    "workbench.colorCustomizations": {
+      "activityBar.background": "#1a2a20",
+      "titleBar.activeBackground": "#1a2a20",
+      "titleBar.activeForeground": "#e7f0e7"
+    },
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false,
+    "svelte.enable-ts-plugin": true,
+    "svelte.plugin.svelte.format.enable": true,
+    "files.associations": {
+      "*.svelte": "svelte"
+    },
+    "emmet.includeLanguages": {
+      "svelte": "html"
+    },
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "cSpell.words": [
+      "atproto",
+      "bluesky",
+      "rehype",
+      "remark",
+      "svelte",
+      "tailwindcss",
+      "whitebreeze",
+      "whitewind",
+      "whtwnd"
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      "svelte.svelte-vscode",
+      "esbenp.prettier-vscode",
+      "bradlc.vscode-tailwindcss",
+      "dbaeumer.vscode-eslint",
+      "streetsidesoftware.code-spell-checker",
+      "csstools.postcss",
+      "ardenivanov.svelte-intellisense",
+      "formulahendry.auto-rename-tag",
+      "christian-kohler.path-intellisense",
+      "eamodio.gitlens"
+    ]
+  },
+  "launch": {
+    "configurations": [
+      {
+        "type": "chrome",
+        "request": "launch",
+        "name": "Launch Chrome against localhost",
+        "url": "http://localhost:5173",
+        "webRoot": "${workspaceFolder}"
+      }
+    ]
+  }
 }

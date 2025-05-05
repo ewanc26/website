@@ -5,11 +5,11 @@ import type { Profile } from "$lib/components/profile/profile";
 let profile: Profile;
 
 export async function load() {
-    if (profile === undefined) {
-        profile = await getProfile();
-    }
-    return { 
-        profile,
-        posts: new Map() // Add empty posts map to match the expected type
-    };
+  if (profile === undefined) {
+    profile = await getProfile();
+  }
+  return {
+    profile,
+    posts: new Map(), // Add empty posts map to match the expected type
+  };
 }

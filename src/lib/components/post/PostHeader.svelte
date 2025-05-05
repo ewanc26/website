@@ -11,7 +11,7 @@
   export let data: any;
 
   // Determine singular or plural for word count
-  let wordLabel = post.wordCount === 1 ? 'word' : 'words';
+  let wordLabel = post.wordCount === 1 ? "word" : "words";
 </script>
 
 <div class="flex items-center justify-between">
@@ -27,9 +27,7 @@
       href={`https://bsky.app/profile/${profile?.handle}`}
       class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
       >{#key profile?.displayName}
-        <span transition:fade={{ duration: 200 }}
-          >{profile?.displayName}</span
-        >
+        <span transition:fade={{ duration: 200 }}>{profile?.displayName}</span>
       {/key}</a
     >
     on {#if localeLoaded}
@@ -52,7 +50,8 @@
     >
   </p>
   <p class="text-sm opacity-80 mt-2">
-    {Math.ceil(post.wordCount / 200)} min read • {post.wordCount} {wordLabel}
+    {Math.ceil(post.wordCount / 200)} min read • {post.wordCount}
+    {wordLabel}
   </p>
-  <ShareIcon title={post.title} profile={profile} {data} />
+  <ShareIcon title={post.title} {profile} {data} />
 </div>
