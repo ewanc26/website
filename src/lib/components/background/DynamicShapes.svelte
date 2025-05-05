@@ -18,6 +18,8 @@
     targetColor: string;
     speed: number;
     verticalDirection: number; // 1 for down, -1 for up, 0 for neutral
+    opacity: number; // For fade-in effect
+    pattern: string; // For logical placement patterns
   }> = [];
   
   let mounted = false;
@@ -36,6 +38,9 @@
   
   // Shape types
   const shapeTypes = ['circle', 'square', 'triangle', 'blob'];
+  
+  // Placement patterns
+  const placementPatterns = ['grid', 'diagonal', 'circular', 'clustered', 'corners'];
   
   // Calculate blend factor for smooth transitions between time phases
   function getTimeBlendFactor() {
@@ -69,16 +74,20 @@
     }
   }
   
-  // Generate random shapes based on theme and time
+  // Generate shapes with pseudo-random logical placement patterns based on theme and time
   function generateShapes() {
     const newShapes = [];
     
+    // Choose a placement pattern for this set of shapes
+    const patternIndex = Math.floor(Math.random() * placementPatterns.length);
+    const pattern = placementPatterns[patternIndex];
+    
+    // Get theme-based colors from CSS variables
+    const linkColor = getComputedStyle(document.documentElement).getPropertyValue('--link-color').trim();
+    const buttonBg = getComputedStyle(document.documentElement).getPropertyValue('--button-bg').trim();
+    const buttonHoverBg = getComputedStyle(document.documentElement).getPropertyValue('--button-hover-bg').trim();
+    
     for (let i = 0; i < count; i++) {
-      // Get theme-based colors from CSS variables
-      const linkColor = getComputedStyle(document.documentElement).getPropertyValue('--link-color').trim();
-      const buttonBg = getComputedStyle(document.documentElement).getPropertyValue('--button-bg').trim();
-      const buttonHoverBg = getComputedStyle(document.documentElement).getPropertyValue('--button-hover-bg').trim();
-      
       // Choose color based on index and time
       let color: string = '';
       let targetColor: string = '';
@@ -108,22 +117,99 @@
         verticalDirection = 0;
       }
       
-      // Create shape with random properties
+      // Calculate position based on the chosen pattern
+      let x, y;
+      
+      switch (pattern) {
+        case 'grid':
+          // Create a grid pattern
+          const cols = Math.ceil(Math.sqrt(count));
+          const rows = Math.ceil(count / cols);
+          x = (i % cols) * (100 / (cols - 1 || 1));
+          y = Math.floor(i / cols) * (100 / (rows - 1 || 1));
+          // Add slight randomness to grid
+          x += (Math.random() - 0.5) * 10;
+          y += (Math.random() - 0.5) * 10;
+          break;
+          
+        case 'diagonal':
+          // Create a diagonal pattern
+          const progress = i / (count - 1 || 1);
+          x = progress * 100;
+          y = progress * 100;
+          // Add slight randomness to diagonal
+          x += (Math.random() - 0.5) * 15;
+          y += (Math.random() - 0.5) * 15;
+          break;
+          
+        case 'circular':
+          // Create a circular pattern
+          const angle = (i / count) * 2 * Math.PI;
+          const radius = 30 + Math.random() * 20; // Distance from center
+          x = 50 + Math.cos(angle) * radius;
+          y = 50 + Math.sin(angle) * radius;
+          break;
+          
+        case 'clustered':
+          // Create 2-3 clusters of shapes
+          const clusterCount = 2 + Math.floor(Math.random() * 2);
+          const clusterIndex = i % clusterCount;
+          const clusterCenterX = 20 + (clusterIndex * (60 / (clusterCount - 1 || 1)));
+          const clusterCenterY = 30 + (clusterIndex * 40) % 60;
+          x = clusterCenterX + (Math.random() - 0.5) * 30;
+          y = clusterCenterY + (Math.random() - 0.5) * 30;
+          break;
+          
+        case 'corners':
+          // Place shapes in the corners and center
+          const cornerPositions = [
+            [10, 10],   // top-left
+            [90, 10],   // top-right
+            [10, 90],   // bottom-left
+            [90, 90],   // bottom-right
+            [50, 50]    // center
+          ];
+          const posIndex = i % cornerPositions.length;
+          x = cornerPositions[posIndex][0] + (Math.random() - 0.5) * 20;
+          y = cornerPositions[posIndex][1] + (Math.random() - 0.5) * 20;
+          break;
+          
+        default:
+          // Fallback to random placement
+          x = Math.random() * 100;
+          y = Math.random() * 100;
+      }
+      
+      // Ensure coordinates are within bounds
+      x = Math.max(0, Math.min(100, x));
+      y = Math.max(0, Math.min(100, y));
+      
+      // Create shape with properties
       newShapes.push({
         id: i,
         type: shapeTypes[Math.floor(Math.random() * shapeTypes.length)],
-        x: Math.random() * 100, // percentage of container width
-        y: Math.random() * 100, // percentage of container height
+        x,
+        y,
         size: 20 + Math.random() * 80, // size in pixels
         rotation: Math.random() * 360, // degrees
         color,
         targetColor,
         speed: 0.1 + Math.random() * 0.3, // rotation speed
-        verticalDirection
+        verticalDirection,
+        opacity: 0, // Start with 0 opacity for fade-in
+        pattern
       });
     }
     
     shapes = newShapes;
+    
+    // Trigger fade-in animation after shapes are created
+    setTimeout(() => {
+      shapes = shapes.map(shape => ({
+        ...shape,
+        opacity: 1 // Animate to full opacity
+      }));
+    }, 50); // Small delay to ensure DOM is updated
   }
   
   // Helper function to blend colors for transitions
@@ -225,7 +311,8 @@
           y: newY,
           color: blendedColor,
           targetColor: newTargetColor,
-          verticalDirection: newVerticalDirection
+          verticalDirection: newVerticalDirection,
+          opacity: shape.opacity // Preserve opacity
         };
       } else {
         // Without time influence
@@ -235,7 +322,8 @@
           x: newX,
           y: newY,
           color: shape.color,
-          targetColor: shape.targetColor
+          targetColor: shape.targetColor,
+          opacity: shape.opacity // Preserve opacity
         };
       }
     });
@@ -315,6 +403,7 @@
         height: {shape.size}px;
         transform: rotate({shape.rotation}deg);
         background-color: {shape.color};
+        opacity: {shape.opacity !== undefined ? shape.opacity : 1};
       "
     ></div>
   {/each}
@@ -336,7 +425,7 @@
     position: absolute;
     border-radius: 50%;
     filter: blur(8px);
-    transition: transform 0.5s ease, background-color 1s ease;
+    transition: transform 0.5s ease, background-color 1s ease, opacity 1.2s ease-in;
   }
   
   .circle {
