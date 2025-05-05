@@ -17,7 +17,7 @@
       {#if profile?.handle}
         <a
           href="https://bsky.app/profile/{profile.did}"
-          class="hover:underline hover:text-[var(--link-hover-color)]"
+          class="hover:text-[var(--link-hover-color)]"
           >@{profile.handle}</a
         >
       {:else}
@@ -26,36 +26,36 @@
     </div>
     <div>
       powered by <a
-        class="hover:underline hover:text-[var(--link-hover-color)]"
+        class="hover:text-[var(--link-hover-color)]"
         href="https://atproto.com/guides/glossary#at-protocol">atproto</a
       >
       • codebase on
       <a
-        class="hover:underline hover:text-[var(--link-hover-color)]"
+        class="hover:text-[var(--link-hover-color)]"
         href="https://github.com/ewanc26/website">GitHub</a
       >
       and
       <a
-        class="hover:underline hover:text-[var(--link-hover-color)]"
+        class="hover:text-[var(--link-hover-color)]"
         href="https://tangled.sh/did:plc:ofrbh253gwicbkc5nktqepol/website"
         >Tangled</a
       >
     </div>
     <div>
       <a
-        class="hover:underline hover:text-[var(--link-hover-color)]"
+        class="hover:text-[var(--link-hover-color)]"
         href="https://www.gnu.org/licenses/agpl-3.0.en.html"
         >GNU AGPLv3 licensed code</a
       >
       •
       <a
-        class="hover:underline hover:text-[var(--link-hover-color)]"
+        class="hover:text-[var(--link-hover-color)]"
         href="https://creativecommons.org/licenses/by/4.0/"
         >CC BY 4.0 licensed text &amp; imagery</a
       >
       •
       <a
-        class="hover:underline hover:text-[var(--link-hover-color)]"
+        class="hover:text-[var(--link-hover-color)]"
         href="/info">More about this site</a
       >
     </div>

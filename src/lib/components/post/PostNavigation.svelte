@@ -11,7 +11,7 @@
   {#if adjacentPosts.previous}
     <a
       href="/blog/{adjacentPosts.previous.rkey}"
-      class="text-[var(--link-color)] hover:text-[var(--link-hover-color)] hover:underline max-w-[45%] truncate"
+      class="text-[var(--link-color)] hover:text-[var(--link-hover-color)] max-w-[45%] truncate"
       title={adjacentPosts.previous.title}
     >
       ← {adjacentPosts.previous.title}
@@ -23,7 +23,7 @@
   {#if adjacentPosts.next}
     <a
       href="/blog/{adjacentPosts.next.rkey}"
-      class="text-[var(--link-color)] hover:text-[var(--link-hover-color)] hover:underline max-w-[45%] truncate"
+      class="text-[var(--link-color)] hover:text-[var(--link-hover-color)] max-w-[45%] truncate"
       title={adjacentPosts.next.title}
     >
       {adjacentPosts.next.title} →
