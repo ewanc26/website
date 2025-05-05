@@ -14,7 +14,7 @@
   </script>
   
   <!-- Add the dynamic background shapes component -->
-  <DynamicShapes opacity={0.3} timeEnabled={true} count={6} />
+  <DynamicShapes opacity={0.3} timeEnabled={true} count={Math.floor(Math.random() * 14) + 3} />
   
   <div class="box-border mx-auto px-4 sm:px-8 max-w-[1000px] pb-8">
     <Navigation {isHomePage} {isBlogIndex}/>
