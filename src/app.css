@@ -1,4 +1,4 @@
-@import './variables.css';
+@import "./variables.css";
 
 /* Minimalist flat styles with gentle dark pastel green theme */
 @tailwind base;
@@ -6,254 +6,264 @@
 @tailwind utilities;
 
 @layer base {
-    
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-    }
-    
-    ::-webkit-scrollbar-track {
-        background: var(--header-footer-bg);
-    }
-    
-    ::-webkit-scrollbar-thumb {
-        background: var(--button-bg);
-        border-radius: 5px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--button-hover-bg);
-    }
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
 
-    * {
-        color: var(--text-color);
-    }
+  ::-webkit-scrollbar-track {
+    background: var(--header-footer-bg);
+  }
 
-    body {
-        background-color: var(--background-color);
-        color: var(--text-color);
-    }
+  ::-webkit-scrollbar-thumb {
+    background: var(--button-bg);
+    border-radius: 5px;
+  }
 
-    h1 {
-        @apply text-4xl font-bold;
-    }
-    h2 {
-        @apply text-3xl font-bold;
-    }
-    h3 {
-        @apply text-2xl font-bold;
-    }
-    h4 {
-        @apply text-xl font-semibold;
-    }
-    h5 {
-        @apply text-lg font-semibold;
-    }
-    h6 {
-        @apply text-sm font-semibold;
-    }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--button-hover-bg);
+  }
 
-    a {
-        @apply text-[var(--link-color)] hover:text-[var(--link-hover-color)] transition-colors duration-300 no-underline;
-    }
+  * {
+    color: var(--text-color);
+  }
 
-    /* Header links - explicitly removing underline and adding growth effect */
-    header a, 
-    a.font-medium {
-        @apply no-underline hover:no-underline transition-transform duration-300 hover:scale-110 inline-block;
-    }
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
 
-    /* Typography styles for blog content */
-    .prose {
-        @apply max-w-none;
-    }
+  h1 {
+    @apply text-4xl font-bold;
+  }
+  h2 {
+    @apply text-3xl font-bold;
+  }
+  h3 {
+    @apply text-2xl font-bold;
+  }
+  h4 {
+    @apply text-xl font-semibold;
+  }
+  h5 {
+    @apply text-lg font-semibold;
+  }
+  h6 {
+    @apply text-sm font-semibold;
+  }
 
-    /* Left-align headings in blog posts */
-    .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-        @apply text-left;
-    }
-    
-    /* Left-align paragraphs and lists */
-    .prose p, .prose ul, .prose ol {
-        @apply text-left;
-    }
+  a {
+    @apply text-[var(--link-color)] hover:text-[var(--link-hover-color)] transition-colors duration-300 no-underline;
+  }
 
-    .prose img {
-        @apply border-0 rounded-lg mx-auto;
-    }
+  /* Header links - explicitly removing underline and adding growth effect */
+  header a,
+  a.font-medium {
+    @apply no-underline hover:no-underline transition-transform duration-300 hover:scale-110 inline-block;
+  }
 
-    a {
-        color: var(--link-color);
-        transition: color 0.3s ease;
-    }
-    
-    a:hover {
-        color: var(--link-hover-color);
-        text-decoration: none;
-    }
-    
-    /* Update prose elements to use variables */
-    .prose a {
-        color: var(--link-color);
-    }
-    
-    .prose a:hover {
-        color: var(--link-hover-color);
-    }
-    
-    .prose blockquote {
-        @apply border-l-2 pl-4 rounded-none mx-auto;
-        border-color: var(--button-bg);
-        background-color: var(--card-bg);
-    }
-    
-    .prose code {
-        background-color: var(--card-bg);
-        @apply rounded px-1 font-mono;
-    }
-    
-    .prose pre {
-        background-color: var(--card-bg);
-        @apply rounded-md mx-auto text-left font-mono p-4 overflow-x-auto;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
-        line-height: 1.5;
-    }
-    
-    .prose pre code {
-        @apply bg-transparent p-0;
-    }
+  /* Typography styles for blog content */
+  .prose {
+    @apply max-w-none;
+  }
 
-    /* Post grid and cards */
-    .post-card {
-        @apply border-0 rounded-md p-4 transition-all duration-300
+  /* Left-align headings in blog posts */
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    @apply text-left;
+  }
+
+  /* Left-align paragraphs and lists */
+  .prose p,
+  .prose ul,
+  .prose ol {
+    @apply text-left;
+  }
+
+  .prose img {
+    @apply border-0 rounded-lg mx-auto;
+  }
+
+  a {
+    color: var(--link-color);
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    color: var(--link-hover-color);
+    text-decoration: none;
+  }
+
+  /* Update prose elements to use variables */
+  .prose a {
+    color: var(--link-color);
+  }
+
+  .prose a:hover {
+    color: var(--link-hover-color);
+  }
+
+  .prose blockquote {
+    @apply border-l-2 pl-4 rounded-none mx-auto;
+    border-color: var(--button-bg);
+    background-color: var(--card-bg);
+  }
+
+  .prose code {
+    background-color: var(--card-bg);
+    @apply rounded px-1 font-mono;
+  }
+
+  .prose pre {
+    background-color: var(--card-bg);
+    @apply rounded-md mx-auto text-left font-mono p-4 overflow-x-auto;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    line-height: 1.5;
+  }
+
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+
+  /* Post grid and cards */
+  .post-card {
+    @apply border-0 rounded-md p-4 transition-all duration-300
                hover:scale-105 shadow-md hover:shadow-lg;
-        background-color: var(--card-bg);
-        color: var(--text-color);
-        transform-style: preserve-3d;
-        will-change: transform, box-shadow;
-    }
-    
-    .post-card:hover {
-        background-color: var(--header-footer-bg);
-    }
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    transform-style: preserve-3d;
+    will-change: transform, box-shadow;
+  }
 
-    .title-truncate {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-height: 3em;
-    }
+  .post-card:hover {
+    background-color: var(--header-footer-bg);
+  }
 
-    /* Profile banner - explicitly removing border */
-    .profile-banner {
-        @apply bg-cover bg-center rounded-md border-0 transition-all duration-300;
-    }
+  .title-truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 3em;
+  }
 
-    /* Profile section elements */
-    .flex-wrap {
-        @apply gap-4 items-center;
-    }
+  /* Profile banner - explicitly removing border */
+  .profile-banner {
+    @apply bg-cover bg-center rounded-md border-0 transition-all duration-300;
+  }
 
-    div.items-center {
-        @apply p-3 transition-all duration-300;
-    }
+  /* Profile section elements */
+  .flex-wrap {
+    @apply gap-4 items-center;
+  }
 
-    .rounded-full {
-        @apply shadow-none transition-transform duration-300 hover:scale-105;
-    }
+  div.items-center {
+    @apply p-3 transition-all duration-300;
+  }
 
-    /* Account handle and related info - explicitly left-aligned */
-    h4.content-around, h6.content-around {
-        @apply my-2 text-left transition-all duration-300;
-    }
+  .rounded-full {
+    @apply shadow-none transition-transform duration-300 hover:scale-105;
+  }
 
-    /* Links styling within the profile section */
-    .profile-banner a,
-    .flex-wrap a,
-    div.items-center a,
-    h4.content-around a,
-    h6.content-around a {
-        @apply no-underline hover:no-underline 
+  /* Account handle and related info - explicitly left-aligned */
+  h4.content-around,
+  h6.content-around {
+    @apply my-2 text-left transition-all duration-300;
+  }
+
+  /* Links styling within the profile section */
+  .profile-banner a,
+  .flex-wrap a,
+  div.items-center a,
+  h4.content-around a,
+  h6.content-around a {
+    @apply no-underline hover:no-underline 
                transition-all duration-300 hover:scale-110 inline-block;
-        color: var(--link-color);
-    }
-    
-    .profile-banner a:hover,
-    .flex-wrap a:hover,
-    div.items-center a:hover,
-    h4.content-around a:hover,
-    h6.content-around a:hover {
-        color: var(--link-hover-color);
-    }
+    color: var(--link-color);
+  }
 
-    /* Add subtle hover effects to containers */
-    .profile-banner:hover,
-    div.items-center:hover {
-        @apply bg-opacity-95;
-    }
+  .profile-banner a:hover,
+  .flex-wrap a:hover,
+  div.items-center a:hover,
+  h4.content-around a:hover,
+  h6.content-around a:hover {
+    color: var(--link-hover-color);
+  }
 
-    /* Remove any borders throughout profile section */
-    .profile-banner,
-    .profile-banner *,
-    .flex-wrap *,
-    div.items-center *,
-    .rounded-full,
-    h4.content-around *,
-    h6.content-around * {
-        @apply border-0;
-    }
+  /* Add subtle hover effects to containers */
+  .profile-banner:hover,
+  div.items-center:hover {
+    @apply bg-opacity-95;
+  }
 
-    /* Comments section styling */
-    :global(.comments-section) {
-        @apply mt-8 p-4 border-0 rounded-md bg-[var(--header-footer-bg)];
-    }
-    
-    :global(.comments-section input, .comments-section button) {
-        @apply bg-[var(--button-bg)] border-0 rounded-sm;
-    }
+  /* Remove any borders throughout profile section */
+  .profile-banner,
+  .profile-banner *,
+  .flex-wrap *,
+  div.items-center *,
+  .rounded-full,
+  h4.content-around *,
+  h6.content-around * {
+    @apply border-0;
+  }
+
+  /* Comments section styling */
+  :global(.comments-section) {
+    @apply mt-8 p-4 border-0 rounded-md bg-[var(--header-footer-bg)];
+  }
+
+  :global(.comments-section input, .comments-section button) {
+    @apply bg-[var(--button-bg)] border-0 rounded-sm;
+  }
 }
 
 .prose + .flex.justify-between {
-    @apply mt-12 mb-8;
+  @apply mt-12 mb-8;
 }
 
 .prose + .flex.justify-between a {
-    @apply max-w-[45%] truncate;
+  @apply max-w-[45%] truncate;
 }
 
 .prose + .flex.justify-between a:first-child {
-    @apply text-left;
+  @apply text-left;
 }
 
 .prose + .flex.justify-between a:last-child {
-    @apply text-right;
+  @apply text-right;
 }
 
 .text-link {
-    color: var(--link-color);
+  color: var(--link-color);
 }
 
-.text-link-hover, .text-link:hover {
-    color: var(--link-hover-color);
+.text-link-hover,
+.text-link:hover {
+  color: var(--link-hover-color);
 }
 
 .text-primary {
-    color: var(--text-color);
+  color: var(--text-color);
 }
 
 .text-muted {
-    color: var(--link-color);
-    opacity: 0.8;
+  color: var(--link-color);
+  opacity: 0.8;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.001s !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.001s !important;
-    }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
 }

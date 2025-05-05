@@ -17,13 +17,13 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article" />
     <meta property="og:url" content={$page.url.origin + $page.url.pathname} />
-    <meta property="og:title" content={`${post.title} - Blog - Ewan's Corner`} />
+    <meta
+      property="og:title"
+      content={`${post.title} - Blog - Ewan's Corner`}
+    />
     <meta property="og:description" content={post.excerpt} />
     <meta property="og:site_name" content="Blog - Ewan's Corner" />
-    <meta
-      property="og:image"
-      content={$page.url.origin + "/embed/blog.png"}
-    />
+    <meta property="og:image" content={$page.url.origin + "/embed/blog.png"} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
@@ -35,12 +35,12 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={$page.url.origin + $page.url.pathname} />
-    <meta name="twitter:title" content={`${post.title} - Blog - Ewan's Corner`} />
-    <meta name="twitter:description" content={post.excerpt} />
     <meta
-      name="twitter:image"
-      content={$page.url.origin + "/embed/blog.png"}
+      name="twitter:title"
+      content={`${post.title} - Blog - Ewan's Corner`}
     />
+    <meta name="twitter:description" content={post.excerpt} />
+    <meta name="twitter:image" content={$page.url.origin + "/embed/blog.png"} />
   {:else}
     <title>Post Not Found - Blog - Ewan's Corner</title>
     <meta
