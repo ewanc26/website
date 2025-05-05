@@ -33,7 +33,7 @@
     background-color: var(--background-color);
     color: var(--text-color);
     font-family: "Recursive", sans-serif;
-    font-variation-settings: "MONO" 0, "CASL" 0, "wght" 400, "slnt" 0,
+    font-variation-settings: "MONO" 0, "CASL" 0, "wght" 300, "slnt" 0,
       "CRSV" 0.5;
   }
 
