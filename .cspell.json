@@ -3,23 +3,30 @@
   "language": "en",
   "words": [
     "apos",
+    "ardenivanov",
     "atproto",
     "bandcamp",
+    "bradlc",
     "bsky",
     "customised",
+    "dbaeumer",
     "diddoc",
     "Dockerised",
     "Dragonsbreath",
+    "eamodio",
+    "esbenp",
     "Ewan",
     "Ewan's",
     "ewanc",
     "ewancroft",
     "Ewans",
     "Fira",
+    "formulahendry",
     "fullsize",
     "greenwerewolf",
     "greenwolf",
     "Instgrm",
+    "kohler",
     "maxage",
     "mdcontent",
     "mdposts",
@@ -36,17 +43,29 @@
     "shapeshifting",
     "svelte",
     "vercelignore",
+    "whitebreeze",
+    "whitewind",
     "whtwnd",
     "Wyrmrest",
     "xrpc"
   ],
   "flagWords": [],
-  "ignorePaths": ["node_modules", "package-lock.json", "dist", "build"],
-  "ignoreRegExpList": ["/(\\w+)'s/g"],
+  "ignorePaths": [
+    "node_modules",
+    "package-lock.json",
+    "dist",
+    "build"
+  ],
+  "ignoreRegExpList": [
+    "/(\\w+)'s/g"
+  ],
   "overrides": [
     {
       "filename": "**/*.svelte",
-      "ignoreRegExpList": ["/>.*</", "/(\\w+)'s/g"]
+      "ignoreRegExpList": [
+        "/>.*</",
+        "/(\\w+)'s/g"
+      ]
     }
   ]
 }
