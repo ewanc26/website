@@ -32,29 +32,43 @@
   body {
     background-color: var(--background-color);
     color: var(--text-color);
+    font-family: 'Recursive', sans-serif;
+    font-variation-settings: 'MONO' 0, 'CASL' 0, 'wght' 400, 'slnt' 0, 'CRSV' 0.5;
   }
 
   h1 {
     @apply text-4xl font-bold;
+    font-variation-settings: 'MONO' 0, 'CASL' 0.8, 'wght' 700, 'slnt' 0, 'CRSV' 0.9;
   }
   h2 {
     @apply text-3xl font-bold;
+    font-variation-settings: 'MONO' 0, 'CASL' 0.7, 'wght' 650, 'slnt' 0, 'CRSV' 0.85;
   }
   h3 {
     @apply text-2xl font-bold;
+    font-variation-settings: 'MONO' 0, 'CASL' 0.6, 'wght' 600, 'slnt' 0, 'CRSV' 0.8;
   }
   h4 {
     @apply text-xl font-semibold;
+    font-variation-settings: 'MONO' 0, 'CASL' 0.5, 'wght' 550, 'slnt' 0, 'CRSV' 0.75;
   }
   h5 {
     @apply text-lg font-semibold;
+    font-variation-settings: 'MONO' 0, 'CASL' 0.4, 'wght' 500, 'slnt' 0, 'CRSV' 0.7;
   }
   h6 {
     @apply text-sm font-semibold;
+    font-variation-settings: 'MONO' 0, 'CASL' 0.3, 'wght' 450, 'slnt' 0, 'CRSV' 0.6;
   }
 
   a {
     @apply text-[var(--link-color)] hover:text-[var(--link-hover-color)] transition-colors duration-300 no-underline;
+    font-variation-settings: 'MONO' 0, 'CASL' 0, 'wght' 450, 'slnt' 0, 'CRSV' 0.5;
+    transition: font-variation-settings 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  a:hover {
+    font-variation-settings: 'MONO' 0, 'CASL' 0, 'wght' 450, 'slnt' -10, 'CRSV' 0.5;
   }
 
   /* Header links - explicitly removing underline and adding growth effect */
@@ -92,6 +106,7 @@
   a {
     color: var(--link-color);
     transition: color 0.3s ease;
+    text-decoration: none;
   }
 
   a:hover {
@@ -102,6 +117,7 @@
   /* Update prose elements to use variables */
   .prose a {
     color: var(--link-color);
+    text-decoration: none;
   }
 
   .prose a:hover {

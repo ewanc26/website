@@ -132,6 +132,20 @@
       licensing details, please see the links in the footer.
     </p>
 
+    <h2 class="text-xl font-semibold mt-6 mb-2">Font Credits</h2>
+    <p>
+      This website uses the <a
+        href="https://recursive.design/"
+        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+        >Recursive</a
+      > font by ArrowType, available under the
+      <a
+        href="/fonts/ArrowType-Recursive-1.085/LICENSE.txt"
+        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+        >SIL Open Font License</a
+      >.
+    </p>
+
     <p class="mt-6">Thank you for visiting!</p>
   </div>
 </div>
