@@ -16,7 +16,7 @@
   />
   <div class="text-center p-3">
     <h4 class="text-center">{profile.displayName}</h4>
-    <h6 class="text-center hover:underline">
+    <h6 class="text-center">
       <a
         href="https://bsky.app/profile/{profile.did}"
         class="text-link hover:text-link-hover">@{profile.handle}</a
