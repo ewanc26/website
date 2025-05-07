@@ -94,10 +94,9 @@
     </p>
     <h2 class="text-xl font-semibold mt-6 mb-2">No Cookies</h2>
     <p>
-      As a static website, there are no cookies used on this site. Cookies are
-      small data files placed on your device by websites you visit, but since my
-      site is static and does not involve database storage, cookies are not
-      employed.
+      There are no cookies used on this website; "Cookies" are
+      small data files placed on your device by websites you visit, however,
+      I do not use them on this website.
     </p>
 
     <h2 class="text-xl font-semibold mt-6 mb-2">Open Source</h2>
