@@ -1,12 +1,4 @@
-/* Recursive font definitions with all variable axes */
-@font-face {
-  font-family: "Recursive";
-  src: url('https://fonts.googleapis.com/css2?family=Recursive&display=swap');
-  font-weight: 300 1000;
-  font-style: oblique 0deg 15deg;
-  font-display: swap;
-  font-variation-settings: "MONO" 0, "CASL" 0, "wght" 400, "slnt" 0, "CRSV" 0.5;
-}
+@import url('https://fonts.googleapis.com/css2?family=Recursive&display=swap');
 
 /* Default green theme - dark mode */
 :root {
