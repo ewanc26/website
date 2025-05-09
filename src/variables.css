@@ -1,8 +1,7 @@
 /* Recursive font definitions with all variable axes */
 @font-face {
   font-family: "Recursive";
-  src: url("/fonts/ArrowType-Recursive-1.085/Recursive_Web/woff2_variable/Recursive_VF_1.085.woff2")
-    format("woff2");
+  src: url('https://fonts.googleapis.com/css2?family=Recursive&display=swap');
   font-weight: 300 1000;
   font-style: oblique 0deg 15deg;
   font-display: swap;
