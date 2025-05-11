@@ -4,6 +4,9 @@
 
   export const isHomePage: boolean = false;
   export let isBlogIndex: boolean = false;
+
+  // Reactive statement to get the origin without http:// or https://
+  $: cleanOrigin = $page.url.origin.replace(/^https?:\/\//, '');
 </script>
 
 <nav class="flex items-center box-border my-6">
@@ -37,7 +40,7 @@
         href="{$page.url.origin}/blog/rss.xml"
         class="font-medium text-[large] hover:text-[var(--link-hover-color)]"
         aria-label="RSS Feed"
-        download="{$page.url.origin}_Blog_RSS.xml"
+        download="{cleanOrigin}_Blog_RSS.xml"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
