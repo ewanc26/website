@@ -2,6 +2,7 @@
   import { browser } from "$app/environment";
   import { safeFetch } from "./profile";
   import { formatDate as formatDateShared } from "$lib/dateFormatter";
+  import { fade } from "svelte/transition";
 
   /**
    * The profile object is passed as a prop to this component.
@@ -63,11 +64,15 @@
 -->
 {#if latestNowText}
   <p class="text-center mt-2 text-sm italic">
-    "{latestNowText}"
+    "{#key latestNowText}
+      <span transition:fade={{ duration: 200 }}>{latestNowText}</span>
+    {/key}"
   </p>
   {#if latestNowDate}
     <p class="text-center mt-1 text-xs opacity-75">
-      {formatDateShared(latestNowDate)}
+      {#key latestNowDate}
+        <span transition:fade={{ duration: 200 }}>{formatDateShared(latestNowDate)}</span>
+      {/key}
     </p>
   {/if}
 {/if}
