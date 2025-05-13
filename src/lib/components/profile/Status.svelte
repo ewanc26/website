@@ -26,7 +26,9 @@
     }
     try {
       const pdsUrl = profile.pds;
-      const listRecordsUrl = `${pdsUrl}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=uk.ewancroft.now`;
+      // Add timestamp parameter to prevent caching
+      const timestamp = Date.now();
+      const listRecordsUrl = `${pdsUrl}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=uk.ewancroft.now&_=${timestamp}`;
       const data = await safeFetch(listRecordsUrl);
       if (data && data.records && data.records.length > 0) {
         const sortedRecords = data.records.sort((a: any, b: any) => {
