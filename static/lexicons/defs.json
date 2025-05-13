@@ -5,16 +5,20 @@
   "defs": {
     "main": {
       "type": "record",
-      "required": ["text", "createdAt"],
-      "properties": {
-        "text": {
-          "type": "string",
-          "description": "The status text formatted as plain text."
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "datetime",
-          "description": "The ISO 8601 date and time when the status was created."
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["text", "createdAt"],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "The status text formatted as plain text."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "The ISO 8601 date and time when the status was created."
+          }
         }
       }
     }
