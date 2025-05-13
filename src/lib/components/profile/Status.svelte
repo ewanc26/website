@@ -65,16 +65,18 @@
   Expects a 'profile' prop with 'pds' and 'did'.
 -->
 {#if latestNowText}
-  <p class="text-center mt-2 text-sm italic">
-    "{#key latestNowText}
-      <span transition:fade={{ duration: 200 }}>{latestNowText}</span>
-    {/key}"
-  </p>
-  {#if latestNowDate}
-    <p class="text-center mt-1 text-xs opacity-75">
-      {#key latestNowDate}
-        <span transition:fade={{ duration: 200 }}>{formatDateShared(latestNowDate)}</span>
-      {/key}
+  <div class="bg-card rounded-[1em] p-4 m-2 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <p class="text-center text-sm italic">
+      "{#key latestNowText}
+        <span transition:fade={{ duration: 200 }}>{latestNowText}</span>
+      {/key}"
     </p>
-  {/if}
+    {#if latestNowDate}
+      <p class="text-center mt-1 text-xs opacity-75">
+        {#key latestNowDate}
+          <span transition:fade={{ duration: 200 }}>{formatDateShared(latestNowDate)}</span>
+        {/key}
+      </p>
+    {/if}
+  </div>
 {/if}
