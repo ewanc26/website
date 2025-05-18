@@ -8,10 +8,7 @@
   export let postIndex: number;
   export let localeLoaded: boolean;
 
-  export let formatDate: (date: Date) => string;
-
-  // Import functions for relative date formatting
-  import { formatRelativeTime, isRecent } from "$lib/dateFormatter";
+  import { formatDate } from "$lib/dateFormatter";
 
   // Reactive variable to store the display date string
   let displayDate: string;
@@ -20,11 +17,7 @@
   $: {
     if (localeLoaded && post?.createdAt) {
       const postDate = new Date(post.createdAt);
-      if (isRecent(postDate)) {
-        displayDate = formatRelativeTime(postDate);
-      } else {
-        displayDate = formatDate(postDate);
-      }
+      displayDate = formatDate(postDate);
     } else {
       displayDate = "Loading...";
     }
