@@ -1,7 +1,7 @@
 <script lang="ts">
   import { browser } from "$app/environment";
   import { safeFetch } from "./profile";
-  import { formatDate as formatDateShared } from "$lib/dateFormatter";
+  import { formatRelativeTime } from "$lib/dateFormatter";
   import { fade } from "svelte/transition";
 
   /**
@@ -74,7 +74,7 @@
     {#if latestNowDate}
       <p class="text-center mt-1 text-xs opacity-75">
         {#key latestNowDate}
-          <span transition:fade={{ duration: 200 }}>{formatDateShared(latestNowDate)}</span>
+          <span transition:fade={{ duration: 200 }}>{formatRelativeTime(latestNowDate)}</span>
         {/key}
       </p>
     {/if}
