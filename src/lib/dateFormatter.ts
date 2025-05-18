@@ -83,10 +83,3 @@ export function formatRelativeTime(
 
   return rtf.format(0, "second"); // Should ideally not happen if date is in the past
 }
-
-// Function to determine if the date is recent (e.g., within the last 30 days)
-export const isRecent = (date: Date): boolean => {
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-  return date > thirtyDaysAgo;
-};
