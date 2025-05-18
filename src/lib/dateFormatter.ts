@@ -50,3 +50,43 @@ export function formatMonthYear(
 
   return new Intl.DateTimeFormat(locale, options).format(dateObj);
 }
+
+// Function to format a date relative to the current time (e.g., '2 hours ago')
+export function formatRelativeTime(
+  date: Date | string,
+  locale: string = typeof window !== "undefined"
+    ? window.navigator.language
+    : "en-GB"
+): string {
+  const dateObj = new Date(date);
+  const now = new Date();
+  const diffInSeconds = Math.round((now.getTime() - dateObj.getTime()) / 1000);
+
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+
+  const units: { unit: Intl.RelativeTimeFormatUnit; seconds: number }[] = [
+    { unit: "year", seconds: 31536000 },
+    { unit: "month", seconds: 2592000 },
+    { unit: "week", seconds: 604800 },
+    { unit: "day", seconds: 86400 },
+    { unit: "hour", seconds: 3600 },
+    { unit: "minute", seconds: 60 },
+    { unit: "second", seconds: 1 },
+  ];
+
+  for (const { unit, seconds } of units) {
+    if (Math.abs(diffInSeconds) >= seconds) {
+      const value = Math.round(diffInSeconds / seconds);
+      return rtf.format(-value, unit);
+    }
+  }
+
+  return rtf.format(0, "second"); // Should ideally not happen if date is in the past
+}
+
+// Function to determine if the date is recent (e.g., within the last 30 days)
+export const isRecent = (date: Date): boolean => {
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  return date > thirtyDaysAgo;
+};
