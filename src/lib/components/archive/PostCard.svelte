@@ -9,6 +9,26 @@
   export let localeLoaded: boolean;
 
   export let formatDate: (date: Date) => string;
+
+  // Import functions for relative date formatting
+  import { formatRelativeTime, isRecent } from "$lib/dateFormatter";
+
+  // Reactive variable to store the display date string
+  let displayDate: string;
+
+  // Update displayDate whenever post.createdAt or localeLoaded changes
+  $: {
+    if (localeLoaded && post?.createdAt) {
+      const postDate = new Date(post.createdAt);
+      if (isRecent(postDate)) {
+        displayDate = formatRelativeTime(postDate);
+      } else {
+        displayDate = formatDate(postDate);
+      }
+    } else {
+      displayDate = "Loading...";
+    }
+  }
 </script>
 
 <div
@@ -30,10 +50,10 @@
         {title}
       </p>
       <div>
-        <p class="text-[var(--text-color)] opacity-80 text-sm">Last Updated:</p>
+        <p class="text-[var(--text-color)] opacity-80 text-sm">Last Updated</p>
         <p class="object-bottom text-[var(--text-color)]">
-          {#if localeLoaded}
-            <span transition:fade>{formatDate(post.createdAt)}</span>
+          {#if localeLoaded && displayDate !== "Loading..."}
+            <span transition:fade>{displayDate}</span>
           {:else}
             <span class="opacity-50">Loading...</span>
           {/if}
