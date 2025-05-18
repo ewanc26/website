@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { formatDate, formatRelativeTime, isRecent } from "$lib/dateFormatter";
+  import { formatRelativeTime } from "$lib/dateFormatter";
   import ShareIcon from "$lib/components/shared/ShareIcon.svelte";
   import type { Post } from "$lib/parser.ts";
 
@@ -15,7 +15,7 @@
   // Determine singular or plural for word count
   let wordLabel = post.wordCount === 1 ? "word" : "words";
 
-  let displayDate = $derived(localeLoaded && post.createdAt ? (isRecent(post.createdAt) ? formatRelativeTime(post.createdAt) : formatDate(post.createdAt)) : 'datetime loading...');
+  let displayDate = $derived(localeLoaded && post.createdAt ? formatRelativeTime(post.createdAt) : 'datetime loading...');
 </script>
 
 <div class="flex items-center justify-between">
@@ -34,9 +34,7 @@
         <span transition:fade={{ duration: 200 }}>{profile?.displayName}</span>
       {/key}</a
     >
-    {#if !isRecent(post.createdAt) && localeLoaded && post.createdAt}
-      on
-    {/if}
+
     <span transition:fade={{ duration: 200 }}>{displayDate}</span>
   </p>
   <p class="text-sm opacity-80 mt-2">
