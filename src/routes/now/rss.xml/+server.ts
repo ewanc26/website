@@ -48,6 +48,17 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
       (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
     );
 
+    // Format date for titles
+    const formatDate = (date: Date): string => {
+      return date.toLocaleString('en-GB', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+    };
+
     // Build the RSS XML
     const baseUrl = dev ? url.origin : "https://ewancroft.uk"; // Update with your production domain
     const rssXml = `<?xml version="1.0" encoding="UTF-8" ?>
@@ -67,10 +78,10 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     .map(
       (status) => `
   <item>
-    <title>${escapeXml(status.text)}</title>
+    <title>Status update from ${formatDate(status.createdAt)}</title>
     <link>${baseUrl}/now#${status.tid}</link>
-    <guid isPermaLink="true">${baseUrl}/now#${status.tid}</guid>
-    <pubDate>${new Date(status.createdAt).toUTCString()}</pubDate>
+    <guid isPermaLink="false">${did}/uk.ewancroft.now/${status.tid}</guid>
+    <pubDate>${status.createdAt.toUTCString()}</pubDate>
     <description><![CDATA[${escapeXml(status.text)}]]></description>
     <content:encoded><![CDATA[${escapeXml(status.text)}]]></content:encoded>
     <author>${profileData.displayName || profileData.handle} (${profileData.handle})</author>
@@ -83,7 +94,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     return new Response(rssXml, {
       headers: {
         "Content-Type": "application/xml",
-        "Cache-Control": "max-age=0, s-maxage=3600",
+        "Cache-Control": "max-age=0, s-maxage=600", // Reduced cache time to 10 minutes
       },
     });
   } catch (error) {
