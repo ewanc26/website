@@ -1,17 +1,16 @@
 import type { RequestHandler } from "./$types";
 import { dev } from "$app/environment";
 import { getProfile } from "$lib/components/profile/profile";
+import { formatDate } from "$lib/dateFormatter";
 
-// Define a type for status updates based on the lexicon
 interface StatusUpdate {
   text: string;
   createdAt: Date;
-  tid: string; // The record key
+  tid: string;
 }
 
 export const GET: RequestHandler = async ({ url, fetch }) => {
   try {
-    // Use getProfile to get profile data
     const profileData = await getProfile();
 
     const did = profileData.did;
@@ -19,7 +18,6 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
 
     if (!pdsUrl) throw new Error("Could not find PDS URL");
 
-    // Get status updates
     const statusResponse = await fetch(
       `${pdsUrl}/xrpc/com.atproto.repo.listRecords?repo=${did}&collection=uk.ewancroft.now`
     );
@@ -27,7 +25,6 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
       throw new Error(`Status fetch failed: ${statusResponse.status}`);
     const statusData = await statusResponse.json();
 
-    // Process status updates
     const statusUpdates: StatusUpdate[] = [];
     for (const data of statusData.records) {
       const matches = data.uri.split("/");
@@ -43,24 +40,12 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
       }
     }
 
-    // Sort status updates by date (newest first)
     const sortedUpdates = statusUpdates.sort(
       (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
     );
 
-    // Format date for titles
-    const formatDate = (date: Date): string => {
-      return date.toLocaleString('en-GB', {
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-      });
-    };
+    const baseUrl = dev ? url.origin : "https://ewancroft.uk";
 
-    // Build the RSS XML
-    const baseUrl = dev ? url.origin : "https://ewancroft.uk"; // Update with your production domain
     const rssXml = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 <channel>
@@ -94,13 +79,12 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     return new Response(rssXml, {
       headers: {
         "Content-Type": "application/xml",
-        "Cache-Control": "max-age=0, s-maxage=600", // Reduced cache time to 10 minutes
+        "Cache-Control": "max-age=0, s-maxage=600",
       },
     });
   } catch (error) {
     console.error("Error generating status RSS feed:", error);
 
-    // Return a minimal valid RSS feed in case of error
     return new Response(
       `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -110,7 +94,6 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
   <link>${url.origin}/now</link>
   <atom:link href="${url.origin}/now/rss.xml" rel="self" type="application/rss+xml" />
   <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-  <!-- Error occurred while generating feed items -->
 </channel>
 </rss>`,
       {
@@ -123,7 +106,6 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
   }
 };
 
-// Helper function to escape XML special characters
 function escapeXml(unsafe: string): string {
   if (!unsafe) return "";
   return unsafe
