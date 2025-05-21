@@ -8,40 +8,8 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     // Use getProfile to get profile data
     const profileData = await getProfile();
 
-    // Get DID document to find PDS URL
     const did = profileData.did;
-    const didParts = did.split(":");
-    let pdsUrl;
-
-    if (didParts[0] === "did") {
-      if (didParts[1] === "plc") {
-        const didDocResponse = await fetch(`https://plc.directory/${did}`);
-        if (!didDocResponse.ok)
-          throw new Error(`DID doc fetch failed: ${didDocResponse.status}`);
-        const didDoc = await didDocResponse.json();
-
-        for (const service of didDoc.service) {
-          if (service.id === "#atproto_pds") {
-            pdsUrl = service.serviceEndpoint;
-            break;
-          }
-        }
-      } else if (didParts[1] === "web") {
-        const didDocResponse = await fetch(
-          `https://${didParts[2]}/.well-known/did.json`
-        );
-        if (!didDocResponse.ok)
-          throw new Error(`DID doc fetch failed: ${didDocResponse.status}`);
-        const didDoc = await didDocResponse.json();
-
-        for (const service of didDoc.service) {
-          if (service.id === "#atproto_pds") {
-            pdsUrl = service.serviceEndpoint;
-            break;
-          }
-        }
-      }
-    }
+    const pdsUrl = profileData.pds;
 
     if (!pdsUrl) throw new Error("Could not find PDS URL");
 
