@@ -6,7 +6,7 @@
 
   /**
    * The profile object is passed as a prop to this component.
-   * It should contain at least 'pds' and 'did' fields.
+   * It should contain at least 'pds', 'did', 'handle', and 'displayName' fields.
    */
   export let profile: any;
 
@@ -61,18 +61,22 @@
 </script>
 
 <!--
-  Displays the latest "now" status and its date for a given profile.
-  Expects a 'profile' prop with 'pds' and 'did'.
+  Displays the latest "now" status in the format: (handle) / (displayName) is (status) (relative timestamp)
+  Expects a 'profile' prop with 'pds', 'did', 'handle', and 'displayName'.
 -->
-{#if latestNowText}
-  <div class="bg-card rounded-[1em] p-4 m-2 shadow-sm hover:shadow-md transition-shadow duration-200">
-    <p class="text-center text-sm italic">
-      "{#key latestNowText}
-        <span transition:fade={{ duration: 200 }}>{latestNowText}</span>
-      {/key}"
+{#if latestNowText && profile}
+  <div class="p-4">
+    <p class="text-center text-sm">
+      {#key latestNowText}
+        <span transition:fade={{ duration: 200 }}>
+          <span class="font-medium">{profile.displayName || profile.handle || profile.did}</span>
+          <span> is </span>
+          <span class="italic">{latestNowText}</span>
+        </span>
+      {/key}
     </p>
     {#if latestNowDate}
-      <p class="text-center mt-1 text-xs opacity-75">
+      <p class="text-center text-xs opacity-60 mt-1">
         {#key latestNowDate}
           <span transition:fade={{ duration: 200 }}>{formatRelativeTime(latestNowDate)}</span>
         {/key}

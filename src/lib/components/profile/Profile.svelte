@@ -33,19 +33,24 @@
       <h6 class="text-center opacity-50">
         <span class="text-sm">{profile?.did}</span>
       </h6>
+      <!-- Profile Description -->
+      <div class="p-3 w-full text-center">
+        <p>{profile?.description}</p>
+      </div>
       <!-- Display the latest "now" status using the Status component. -->
       <Status {profile} />
-    </div>
-    <!-- Profile Description -->
-    <div class="p-3 w-full text-center">
-      <p>{profile?.description}</p>
     </div>
   </div>
 {:else}
   <!-- Placeholder for app.bsky.actor.profile -->
-  <div class="profile-content flex flex-col items-center justify-center text-center m-2 p-4 -mt-20 ml-4 mr-4 relative rounded-[1em]">
+  <div
+    class="profile-content flex flex-col items-center justify-center text-center m-2 p-4 -mt-20 ml-4 mr-4 relative rounded-[1em]"
+  >
     <p class="text-center text-sm italic opacity-75">
-      create a `app.bsky.actor.profile` record at <a href="https://bsky.app/" class="text-link hover:text-link-hover">https://bsky.app/</a>
+      create a `app.bsky.actor.profile` record at <a
+        href="https://bsky.app/"
+        class="text-link hover:text-link-hover">https://bsky.app/</a
+      >
     </p>
   </div>
 {/if}
