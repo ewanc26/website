@@ -71,21 +71,6 @@
       activeYear = groupedByYear[0].year;
     }
   });
-
-  // Function to handle the chance of a Rickroll (Russian Roulette)
-  function maybeRickroll() {
-    const randomNumber = Math.floor(Math.random() * 1000000);
-    if (randomNumber === 0) { // 1 in a million chance
-      window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // Rickroll URL
-    }
-  }
-
-  // Call the Rickroll function when the posts are empty or an error occurs
-  $effect(() => {
-    if (!posts || posts.length === 0) {
-      maybeRickroll();
-    }
-  });
 </script>
 
 <svelte:head>
