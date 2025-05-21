@@ -1,11 +1,8 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import DynamicSection from "$lib/components/main/sections/DynamicSection.svelte";
-  import links from "$lib/components/main/links.json";
+  import DynamicLinks from "$lib/components/main/DynamicLinks.svelte";
 
-  const sectionKeys = Object.keys(links.sections) as Array<
-    keyof typeof links.sections
-  >;
+  let { data } = $props();
 </script>
 
 <svelte:head>
@@ -43,6 +40,5 @@
   <meta name="twitter:image" content={$page.url.origin + "/embed/main.png"} />
 </svelte:head>
 
-{#each sectionKeys as sectionKey}
-  <DynamicSection {sectionKey} />
-{/each}
+<!-- Add the DynamicLinks component -->
+<DynamicLinks data={data.dynamicLinks} />

@@ -114,12 +114,19 @@
   <meta name="twitter:image" content={$page.url.origin + "/embed/blog.png"} />
 </svelte:head>
 
-{#if !localeLoaded || !posts || posts.length === 0}
-  <div
-    class="flex justify-center items-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70"
-  >
-    Loading...
-  </div>
+{#if !localeLoaded}
+    <div
+      class="flex justify-center items-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70"
+    >
+      Loading...
+    </div>
+  {:else if !posts || posts.length === 0}
+    <div
+      class="flex flex-col items-center justify-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70 text-center"
+    >
+      <p>No blog posts found.</p>
+      <p class="mt-2 text-sm">This blog uses the com.whtwnd.blog.entry collection.</p>
+    </div>
 {:else}
   <!-- Year tabs with animated indicator -->
   <YearTabs {groupedByYear} bind:activeYear />
