@@ -44,6 +44,6 @@
 {:else}
   <!-- Placeholder for blue.linkat.board -->
   <div class="mb-12 ml-4 text-center text-sm italic opacity-75">
-    create a `blue.linkat.board` record at <a href="https://linkat.blue/" class="text-link hover:text-link-hover">https://linkat.blue/</a>
+    create a <code>blue.linkat.board</code> record at <a href="https://linkat.blue/" class="text-link hover:text-link-hover">https://linkat.blue/</a>
   </div>
 {/if}
