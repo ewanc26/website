@@ -18,7 +18,23 @@ export async function load() {
       const rawResponse = await fetch(
         `${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=com.whtwnd.blog.entry`
       );
+      
+      if (!rawResponse.ok) {
+        throw new Error(`Failed to fetch posts: ${rawResponse.status}`);
+      }
+      
       const response = await rawResponse.json();
+      
+      if (!response.records || response.records.length === 0) {
+        return {
+          posts: new Map(),
+          profile,
+          sortedPosts: [],
+          getPost: () => null,
+          getAdjacentPosts: () => ({ previous: null, next: null })
+        };
+      }
+      
       const mdposts: Map<string, MarkdownPost> = new Map();
       for (const data of response["records"]) {
         const matches = data["uri"].split("/");

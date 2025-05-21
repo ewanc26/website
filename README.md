@@ -40,6 +40,7 @@ This fork serves as both my personal website and blog, modified for personal usa
     - `+layout.ts`: Layout server-side code (imports profile logic from `lib/components/profile/profile.ts`)
     - `+page.svelte`: Home page component
     - `blog/`: Blog-related routes (also imports profile logic from `lib/components/profile/profile.ts`)
+    - `info/`: Information page routes
 
 ### Static Assets
 
@@ -48,6 +49,7 @@ This fork serves as both my personal website and blog, modified for personal usa
   - `Screenshot.png`: Website screenshot
   - `embed/`: Social media embed images
   - `favicon/`: Favicon and related assets
+  - `lexicons/`: Lexicon configuration
 
 ### Developmental and Deployment
 
@@ -73,6 +75,13 @@ Change environment variables:
 ```env
 PUBLIC_HANDLE="myhandle.bsky.social" # Your handle, or DID
 ```
+
+For optimal usage, you need the following record types in your [AT Protocol repository](https://atproto.com/specs/repository):
+
+- `app.bsky.actor.profile`: Your profile
+- `com.whtwnd.blog.entry`: Your blog posts
+- `blue.linkat.board`: Your links
+- `uk.ewancroft.now`: Your status, although it's not required
 
 #### Standalone
 
