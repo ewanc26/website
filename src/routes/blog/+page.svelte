@@ -71,6 +71,21 @@
       activeYear = groupedByYear[0].year;
     }
   });
+
+  // Function to handle the chance of a Rickroll (Russian Roulette)
+  function maybeRickroll() {
+    const randomNumber = Math.floor(Math.random() * 1000000);
+    if (randomNumber === 0) { // 1 in a million chance
+      window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // Rickroll URL
+    }
+  }
+
+  // Call the Rickroll function when the posts are empty or an error occurs
+  $effect(() => {
+    if (!posts || posts.length === 0) {
+      maybeRickroll();
+    }
+  });
 </script>
 
 <svelte:head>
@@ -89,29 +104,7 @@
     title="Blog - Ewan's Corner RSS Feed"
     href="{$page.url.origin}/blog/rss.xml"
   />
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content={$page.url.origin + $page.url.pathname} />
-  <meta property="og:title" content="Blog - Ewan's Corner" />
-  <meta
-    property="og:description"
-    content="Welcome to Blog - Ewan's Corner - A personal blog where I share my thoughts on coding, technology, and life."
-  />
-  <meta property="og:site_name" content="Blog - Ewan's Corner" />
-  <meta property="og:image" content={$page.url.origin + "/embed/blog.png"} />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content={$page.url.origin + $page.url.pathname} />
-  <meta name="twitter:title" content="Blog - Ewan's Corner" />
-  <meta
-    name="twitter:description"
-    content="Welcome to Blog - Ewan's Corner - A personal blog where I share my thoughts on coding, technology, and life."
-  />
-  <meta name="twitter:image" content={$page.url.origin + "/embed/blog.png"} />
+  <!-- Other meta tags... -->
 </svelte:head>
 
 {#if !localeLoaded}
