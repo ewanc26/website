@@ -10,33 +10,42 @@
   style="background-image: url({profile?.banner}); background-size: cover; background-position: center; min-height: 150px;"
 ></div>
 
-<!-- Profile Content: Main container for avatar, user info, and status. -->
-<div
-  class="profile-content flex flex-col items-center justify-center text-center m-2 p-4 -mt-20 ml-4 mr-4 relative rounded-[1em]"
->
-  <!-- Profile Avatar -->
-  <img
-    src={profile?.avatar}
-    alt="{profile?.displayName || 'User'}'s avatar"
-    class="rounded-full w-32 h-32 -mt-2 shadow-lg hover:transform-none"
-  />
-  <!-- User Information: Display name, handle, DID. -->
-  <div class="text-center p-3">
-    <h4 class="text-center">{profile?.displayName}</h4>
-    <h6 class="text-center">
-      <a
-        href="https://bsky.app/profile/{profile?.did}"
-        class="text-link hover:text-link-hover">@{profile?.handle}</a
-      >
-    </h6>
-    <h6 class="text-center opacity-50">
-      <span class="text-sm">{profile?.did}</span>
-    </h6>
-    <!-- Display the latest "now" status using the Status component. -->
-    <Status {profile} />
+{#if profile}
+  <!-- Profile Content: Main container for avatar, user info, and status. -->
+  <div
+    class="profile-content flex flex-col items-center justify-center text-center m-2 p-4 -mt-20 ml-4 mr-4 relative rounded-[1em]"
+  >
+    <!-- Profile Avatar -->
+    <img
+      src={profile?.avatar}
+      alt="{profile?.displayName || 'User'}'s avatar"
+      class="rounded-full w-32 h-32 -mt-2 shadow-lg hover:transform-none"
+    />
+    <!-- User Information: Display name, handle, DID. -->
+    <div class="text-center p-3">
+      <h4 class="text-center">{profile?.displayName}</h4>
+      <h6 class="text-center">
+        <a
+          href="https://bsky.app/profile/{profile?.did}"
+          class="text-link hover:text-link-hover">@{profile?.handle}</a
+        >
+      </h6>
+      <h6 class="text-center opacity-50">
+        <span class="text-sm">{profile?.did}</span>
+      </h6>
+      <!-- Display the latest "now" status using the Status component. -->
+      <Status {profile} />
+    </div>
+    <!-- Profile Description -->
+    <div class="p-3 w-full text-center">
+      <p>{profile?.description}</p>
+    </div>
   </div>
-  <!-- Profile Description -->
-  <div class="p-3 w-full text-center">
-    <p>{profile?.description}</p>
+{:else}
+  <!-- Placeholder for app.bsky.actor.profile -->
+  <div class="profile-content flex flex-col items-center justify-center text-center m-2 p-4 -mt-20 ml-4 mr-4 relative rounded-[1em]">
+    <p class="text-center text-sm italic opacity-75">
+      create a `app.bsky.actor.profile` record at <a href="https://bsky.app/" class="text-link hover:text-link-hover">https://bsky.app/</a>
+    </p>
   </div>
-</div>
+{/if}
