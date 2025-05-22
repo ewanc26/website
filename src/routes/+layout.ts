@@ -38,6 +38,8 @@ export async function load({ fetch }) {
 
   return {
     profile,
+    pdsUrl: profile.pds, // Add pdsUrl from profile
+    did: profile.did, // Add did from profile
     posts: new Map(), // Add empty posts map to match the expected type
     dynamicLinks, // Return the fetched dynamic links
   };
