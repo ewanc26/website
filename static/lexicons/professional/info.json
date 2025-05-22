@@ -57,11 +57,6 @@
               "maxLength": 500
             },
             "maxLength": 50
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "datetime",
-            "description": "Timestamp of when the portfolio profile was created or last significantly updated."
           }
         }
       }
