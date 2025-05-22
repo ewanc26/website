@@ -1,4 +1,4 @@
-import { getProfile } from "$lib/components/profile/profile";
+import { getProfile, getProfessionalInfo } from "$lib/components/profile/profile";
 import type { Profile } from "$lib/components/profile/profile";
 
 // Profile data cache
@@ -36,11 +36,14 @@ export async function load({ fetch }) {
     // Handle error or return undefined links
   }
 
+  const professionalInfo = await getProfessionalInfo();
+
   return {
     profile,
     pdsUrl: profile.pds, // Add pdsUrl from profile
     did: profile.did, // Add did from profile
     posts: new Map(), // Add empty posts map to match the expected type
-    dynamicLinks, // Return the fetched dynamic links
+    dynamicLinks,
+    professionalInfo, // Add professionalInfo to the returned data
   };
 }
