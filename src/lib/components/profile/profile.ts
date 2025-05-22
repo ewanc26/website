@@ -10,6 +10,28 @@ export interface Profile {
   pds: string;
 }
 
+export interface ProfessionalInfo {
+  displayName?: string;
+  description?: string;
+  avatar?: {
+    image: {
+      $type: string;
+      ref: {
+        $link: string;
+      };
+      mimeType: string;
+      size: number;
+    };
+    alt: string;
+    aspectRatio?: { width: number; height: number };
+  };
+  headline?: string;
+  websiteUrl?: string;
+  contactEmail?: string;
+  country?: string;
+  skills?: string[];
+}
+
 export async function safeFetch(url: string) {
   try {
     const response = await fetch(url);
@@ -26,6 +48,8 @@ export async function safeFetch(url: string) {
     }
   }
 }
+
+
 
 export async function getProfile(): Promise<Profile> {
   try {
@@ -70,5 +94,30 @@ export async function getProfile(): Promise<Profile> {
     } else {
       throw new Error("An unknown error occurred while fetching profile");
     }
+  }
+}
+
+/**
+ * Fetches professional information from the user's PDS.
+ * @returns A Promise that resolves to ProfessionalInfo or null if not found or an error occurs.
+ */
+export async function getProfessionalInfo(): Promise<ProfessionalInfo | null> {
+  try {
+    const profile: Profile = await getProfile(); // Assuming getProfile is available and returns the user's profile with PDS and DID
+    const rawResponse = await fetch(
+      `${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=uk.ewancroft.pro.info&rkey=self`
+    );
+    const response = await rawResponse.json();
+
+    if (response && response.records && response.records.length > 0) {
+      // Assuming the record structure matches the ProfessionalInfo interface
+      return response.records[0].value as ProfessionalInfo;
+    } else {
+      console.log("No professional info record found.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching professional info:", error);
+    return null;
   }
 }
