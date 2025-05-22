@@ -23,9 +23,24 @@
           },
           "avatar": {
             "type": "blob",
-            "description": "A profile picture or logo.",
+            "description": "A profile picture or logo. Recommended to be a square image.",
             "accept": ["image/png", "image/jpeg"],
-            "maxSize": 1000000
+            "maxSize": 1000000,
+            "aspectRatio": {
+              "type": "object",
+              "description": "Recommended aspect ratio for the image. For a square image, width and height would be equal (e.g., 1:1).",
+              "properties": {
+                "width": {
+                  "type": "integer",
+                  "description": "The width component of the aspect ratio (e.g., 1 for a square)."
+                },
+                "height": {
+                  "type": "integer",
+                  "description": "The height component of the aspect ratio (e.g., 1 for a square)."
+                }
+              },
+              "required": ["width", "height"]
+            }
           },
           "headline": {
             "type": "string",
