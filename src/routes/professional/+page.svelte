@@ -23,6 +23,14 @@
       avatarImageUrl = undefined;
     }
   });
+
+  // State to track if the avatar image failed to load
+  let imageLoadError = $state(false);
+
+  // Handle image load error
+  function handleImageError() {
+    imageLoadError = true;
+  }
 </script>
 
 <svelte:head>
@@ -72,15 +80,22 @@
   <div class="container mx-auto px-4 py-8 professional-info">
     <div class="text-center mb-8">
       {#if professionalInfo?.avatar}
-        <img
-          src={avatarImageUrl}
-          alt={professionalInfo.avatar.alt}
-          class="rounded-full mx-auto mb-4 w-32 h-32 object-cover shadow-lg"
-          style="aspect-ratio: {professionalInfo.avatar.aspectRatio?.width} / {professionalInfo.avatar.aspectRatio?.height};"
-        />
+        {#if !imageLoadError}
+          <img
+            src={avatarImageUrl}
+            alt={professionalInfo.avatar.alt}
+            class="rounded-full mx-auto mb-4 w-32 h-32 object-cover shadow-lg"
+            style="aspect-ratio: {professionalInfo.avatar.aspectRatio?.width} / {professionalInfo.avatar.aspectRatio?.height};"
+            onerror={handleImageError}
+          />
+        {/if}
       {/if}
-      <h1 class="text-4xl font-bold mb-2">{professionalInfo.displayName ?? 'Professional Profile'}</h1>
-      <p class="text-lg text-[var(--text-color)] opacity-90">{professionalInfo.description ?? 'No description available.'}</p>
+      {#if professionalInfo?.displayName}
+      <h1 class="text-4xl font-bold mb-2">{professionalInfo.displayName}</h1>
+      {/if}
+      {#if professionalInfo?.description}
+      <p class="text-lg text-[var(--text-color)] opacity-90">{professionalInfo.description}</p>
+      {/if}
       {#if professionalInfo.country}
         <p class="text-md text-[var(--text-color)] opacity-80 mt-2">Country: {professionalInfo.country}</p>
       {/if}
