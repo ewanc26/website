@@ -18,7 +18,7 @@
   let avatarImageUrl: string | undefined = $state(undefined);
   $effect(() => {
     if (professionalInfo?.avatar?.image?.ref?.$link && data.pdsUrl && data.did) {
-      avatarImageUrl = `${data.pdsUrl}/xrpc/com.atproto.sync.getBlob?did=${data.did}&cid=${professionalInfo.avatar.image.ref.$link}`;
+      avatarImageUrl = `${data.pdsUrl}/xrpc/com.atproto.sync.getBlob?did=${data.did}&cid=${professionalInfo?.avatar.image.ref.$link}`;
     } else {
       avatarImageUrl = undefined;
     }
@@ -83,32 +83,38 @@
         {#if !imageLoadError}
           <img
             src={avatarImageUrl}
-            alt={professionalInfo.avatar.alt}
+            alt={professionalInfo?.avatar.alt}
             class="rounded-full mx-auto mb-4 w-32 h-32 object-cover shadow-lg"
-            style="aspect-ratio: {professionalInfo.avatar.aspectRatio?.width} / {professionalInfo.avatar.aspectRatio?.height};"
+            style="aspect-ratio: {professionalInfo?.avatar.aspectRatio?.width} / {professionalInfo?.avatar.aspectRatio?.height};"
             onerror={handleImageError}
           />
         {/if}
       {/if}
       {#if professionalInfo?.displayName}
-      <h1 class="text-4xl font-bold mb-2">{professionalInfo.displayName}</h1>
+      <h1 class="text-4xl font-bold mb-2">{professionalInfo?.displayName}</h1>
+      {/if}
+      {#if professionalInfo?.headline}
+      <p class="text-md text-[var(--text-color)] opacity-80 mt-2">{professionalInfo?.headline}</p>
       {/if}
       {#if professionalInfo?.description}
-      <p class="text-lg text-[var(--text-color)] opacity-90">{professionalInfo.description}</p>
+      <p class="text-lg text-[var(--text-color)] opacity-90">{professionalInfo?.description}</p>
       {/if}
-      {#if professionalInfo.country}
-        <p class="text-md text-[var(--text-color)] opacity-80 mt-2">Country: {professionalInfo.country}</p>
+      {#if professionalInfo?.country}
+        <p class="text-md text-[var(--text-color)] opacity-80 mt-2">Country: {professionalInfo?.country}</p>
       {/if}
-      {#if professionalInfo.contactEmail}
-        <p class="text-md text-[var(--text-color)] opacity-80">Contact: <a href="mailto:{professionalInfo.contactEmail}" class="text-[var(--link-color)] hover:underline">{professionalInfo.contactEmail}</a></p>
+      {#if professionalInfo?.contactEmail}
+        <p class="text-md text-[var(--text-color)] opacity-80">Contact: <a href="mailto:{professionalInfo?.contactEmail}" class="text-[var(--link-color)] hover:underline">{professionalInfo?.contactEmail}</a></p>
+      {/if}
+      {#if professionalInfo?.websiteUrl}
+        <p class="text-md text-[var(--text-color)] opacity-80">Website: <a href="{professionalInfo?.websiteUrl}" class="text-[var(--link-color)] hover:underline" target="_blank" rel="noopener noreferrer">{professionalInfo?.websiteUrl}</a></p>
       {/if}
     </div>
 
-    {#if professionalInfo.skills && professionalInfo.skills.length > 0}
+    {#if professionalInfo?.skills && professionalInfo?.skills.length > 0}
       <div class="mt-8">
         <h2 class="text-2xl font-semibold mb-4 text-center">Skills</h2>
         <ul class="flex flex-wrap justify-center gap-4">
-          {#each professionalInfo.skills as skill}
+          {#each professionalInfo?.skills as skill}
             <li class="bg-[var(--card-bg)] text-[var(--text-color)] px-4 py-2 rounded-full shadow-md">
               {skill}
             </li>
