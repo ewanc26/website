@@ -13,6 +13,7 @@
   // Access data from layout
   let { data } = $props();
   let professionalInfo: ProfessionalInfo | null = data.professionalInfo;
+  console.log(professionalInfo);
 
   // Construct the full avatar image URL
   let avatarImageUrl: string | undefined = $state(undefined);
@@ -77,7 +78,7 @@
     <p class="mt-2 text-sm">Please check back later for updates.</p>
   </div>
 {:else}
-  <div class="container mx-auto px-4 py-8 professional-info">
+  <div class="container mx-auto px-4 py-12 professional-info">
     <div class="text-center mb-8">
       {#if professionalInfo?.avatar}
         {#if !imageLoadError}
@@ -94,7 +95,7 @@
       <h1 class="text-4xl font-bold mb-2">{professionalInfo?.displayName}</h1>
       {/if}
       {#if professionalInfo?.headline}
-      <p class="text-md text-[var(--text-color)] opacity-80 mt-2">{professionalInfo?.headline}</p>
+      <p class="text-md text-[var(--text-color)] opacity-80 mb-4">{professionalInfo?.headline}</p>
       {/if}
       {#if professionalInfo?.description}
       <p class="text-lg text-[var(--text-color)] opacity-90">{professionalInfo?.description}</p>
@@ -106,14 +107,14 @@
         <p class="text-md text-[var(--text-color)] opacity-80">Contact: <a href="mailto:{professionalInfo?.contactEmail}" class="text-[var(--link-color)] hover:underline">{professionalInfo?.contactEmail}</a></p>
       {/if}
       {#if professionalInfo?.websiteUrl}
-        <p class="text-md text-[var(--text-color)] opacity-80">Website: <a href="{professionalInfo?.websiteUrl}" class="text-[var(--link-color)] hover:underline" target="_blank" rel="noopener noreferrer">{professionalInfo?.websiteUrl}</a></p>
+        <p class="text-md text-[var(--text-color)] opacity-80">Website: <a href="{professionalInfo?.websiteUrl}" class="text-[var(--link-color)] hover:underline" target="_blank" rel="noopener noreferrer">{professionalInfo?.websiteUrl ? professionalInfo.websiteUrl.replace(/^(https?:\/\/)/, '') : ''}</a></p>
       {/if}
     </div>
 
     {#if professionalInfo?.skills && professionalInfo?.skills.length > 0}
       <div class="mt-8">
         <h2 class="text-2xl font-semibold mb-4 text-center">Skills</h2>
-        <ul class="flex flex-wrap justify-center gap-4">
+        <ul class="flex flex-wrap justify-center gap-3">
           {#each professionalInfo?.skills as skill}
             <li class="bg-[var(--card-bg)] text-[var(--text-color)] px-4 py-2 rounded-full shadow-md">
               {skill}
