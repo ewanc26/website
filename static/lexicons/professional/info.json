@@ -22,9 +22,34 @@
             "maxLength": 5120
           },
           "avatar": {
-            "type": "ref",
-            "description": "A profile picture or logo, referencing the professional image lexicon.",
-            "ref": "uk.ewancroft.pro.image#main"
+            "type": "object",
+            "required": ["image", "alt"],
+            "properties": {
+              "image": {
+                "type": "blob",
+                "accept": ["image/png", "image/jpeg"],
+                "maxSize": 1000000
+              },
+              "alt": {
+                "type": "string",
+                "description": "Alt text description of the image, for accessibility."
+              },
+              "aspectRatio": {
+                "type": "object",
+                "description": "Recommended aspect ratio for the image. For a square image, width and height would be equal (e.g., 1:1).",
+                "properties": {
+                  "width": {
+                    "type": "integer",
+                    "description": "The width component of the aspect ratio (e.g., 1 for a square)."
+                  },
+                  "height": {
+                    "type": "integer",
+                    "description": "The height component of the aspect ratio (e.g., 1 for a square)."
+                  }
+                },
+                "required": ["width", "height"]
+              }
+            }
           },
           "headline": {
             "type": "string",
