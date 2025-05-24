@@ -33,9 +33,11 @@
       {/if}
       <a href="{crumb.href}" class="font-mono text-xs sm:text-sm md:text-base lg:text-lg text-[var(--text-color)] hover:underline">
         {#if crumb.name === 'Home'}
-          🏠
+          <!-- Home Icon -->
+          &#x1F3E0;
         {:else if crumb.name === 'Blog'}
-          📝
+          <!-- Blog Icon -->
+          &#x1F4DD;
         {:else}
           {crumb.name}
         {/if}
