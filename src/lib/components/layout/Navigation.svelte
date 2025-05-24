@@ -29,7 +29,7 @@
     <!-- Breadcrumbs -->
     {#each breadcrumbs as crumb, index}
       {#if index > 0}
-        <span class="text-[var(--text-color)] mx-px">></span>
+        <span class="text-[var(--text-color)] mx-px">/</span>
       {/if}
       <a href="{crumb.href}" class="font-mono text-xs sm:text-sm md:text-base lg:text-lg text-[var(--text-color)] hover:underline">
         {#if crumb.name === 'Home'}
