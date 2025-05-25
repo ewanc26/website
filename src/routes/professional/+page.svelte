@@ -17,6 +17,8 @@
 
   // Construct the full avatar image URL
   let avatarImageUrl: string | undefined = $state(undefined);
+  let avatarAspectRatioStyle: string | undefined = $state(undefined);
+
   $effect(() => {
     if (professionalInfo?.avatar?.image?.ref?.$link && data.pdsUrl && data.did) {
       avatarImageUrl = `${data.pdsUrl}/xrpc/com.atproto.sync.getBlob?did=${data.did}&cid=${professionalInfo?.avatar.image.ref.$link}`;
@@ -24,6 +26,13 @@
       avatarImageUrl = undefined;
     }
     console.log('avatarImageUrl:', avatarImageUrl);
+
+    // Compute aspect ratio style
+    if (professionalInfo?.avatar?.image?.aspectRatio?.width !== undefined && professionalInfo?.avatar.image?.aspectRatio?.height !== undefined) {
+        avatarAspectRatioStyle = `aspect-ratio: ${professionalInfo.avatar.image.aspectRatio.width} / ${professionalInfo.avatar.image.aspectRatio.height};`;
+    } else {
+        avatarAspectRatioStyle = undefined;
+    }
   });
 
   // State to track if the avatar image failed to load
@@ -88,7 +97,7 @@
             src={avatarImageUrl}
             alt={professionalInfo?.avatar.alt}
             class="rounded-full mx-auto mb-4 w-32 h-32 object-cover shadow-lg"
-            {...professionalInfo?.avatar.aspectRatio && { style: `aspect-ratio: ${professionalInfo?.avatar.aspectRatio?.width} / ${professionalInfo?.avatar.aspectRatio?.height};` }}
+            style={avatarAspectRatioStyle}
             onerror={handleImageError}
           />
         {/if}
