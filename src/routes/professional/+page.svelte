@@ -28,8 +28,8 @@
     console.log('avatarImageUrl:', avatarImageUrl);
 
     // Compute aspect ratio style
-    if (professionalInfo?.avatar?.image?.aspectRatio?.width !== undefined && professionalInfo?.avatar.image?.aspectRatio?.height !== undefined) {
-        avatarAspectRatioStyle = `aspect-ratio: ${professionalInfo.avatar.image.aspectRatio.width} / ${professionalInfo.avatar.image.aspectRatio.height};`;
+    if (professionalInfo?.avatar?.aspectRatio?.width !== undefined && professionalInfo?.avatar?.aspectRatio?.height !== undefined) {
+        avatarAspectRatioStyle = `aspect-ratio: ${professionalInfo.avatar.aspectRatio.width} / ${professionalInfo.avatar.aspectRatio.height};`;
     } else {
         avatarAspectRatioStyle = undefined;
     }
