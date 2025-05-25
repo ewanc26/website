@@ -9,7 +9,11 @@ interface StatusUpdate {
   tid: string;
 }
 
-export const GET: RequestHandler = async ({ url, fetch }) => {
+export const GET: RequestHandler = async ({ url, fetch }: { url: URL, fetch: typeof globalThis.fetch }) => {
+  let baseUrl: string;
+
+  baseUrl = dev ? url.origin : "https://ewancroft.uk";
+
   try {
     const profileData = await getProfile();
 
@@ -44,7 +48,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
       (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
     );
 
-    const baseUrl = dev ? url.origin : "https://ewancroft.uk";
+    baseUrl = dev ? url.origin : "https://ewancroft.uk";
 
     const rssXml = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -86,16 +90,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     console.error("Error generating status RSS feed:", error);
 
     return new Response(
-      `<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-<channel>
-  <title>Now - Status Updates</title>
-  <description>Short status updates showing what I'm currently doing.</description>
-  <link>${url.origin}/now</link>
-  <atom:link href="${url.origin}/now/rss" rel="self" type="application/rss+xml" />
-  <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-</channel>
-</rss>`,
+      `<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n<channel>\n  <title>Now - Status Updates</title>\n  <description>Short status updates showing what I'm currently doing.</description>\n  <link>${url.origin}/now</link>\n  <atom:link href="${url.origin}/now" rel="self" type="application/rss+xml" />\n  <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>\n</channel>\n</rss>`,
       {
         headers: {
           "Content-Type": "application/xml",
