@@ -88,7 +88,7 @@
             src={avatarImageUrl}
             alt={professionalInfo?.avatar.alt}
             class="rounded-full mx-auto mb-4 w-32 h-32 object-cover shadow-lg"
-            style="aspect-ratio: {professionalInfo?.avatar.aspectRatio?.width} / {professionalInfo?.avatar.aspectRatio?.height};"
+            {...professionalInfo?.avatar.aspectRatio && { style: `aspect-ratio: ${professionalInfo?.avatar.aspectRatio?.width} / ${professionalInfo?.avatar.aspectRatio?.height};` }}
             onerror={handleImageError}
           />
         {/if}
