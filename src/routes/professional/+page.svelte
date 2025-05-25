@@ -54,7 +54,7 @@
     content="Explore professional insights and experiences at Ewan's Corner."
   />
   <meta property="og:site_name" content="Professional - Ewan's Corner" />
-  <meta property="og:image" content={$page.url.origin + "/embed/professional.png"} />
+  <meta property="og:image" content={$page.url.origin + "/embed/main.png"} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
@@ -66,7 +66,7 @@
     name="twitter:description"
     content="Explore professional insights and experiences at Ewan's Corner."
   />
-  <meta name="twitter:image" content={$page.url.origin + "/embed/professional.png"} />
+  <meta name="twitter:image" content={$page.url.origin + "/embed/main.png"} />
 </svelte:head>
 
 
