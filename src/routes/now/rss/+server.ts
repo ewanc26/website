@@ -52,7 +52,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
   <title>Now - ${profileData.displayName || profileData.handle}'s Status Updates</title>
   <description>Short status updates showing what ${profileData.displayName || profileData.handle} is currently doing.</description>
   <link>${baseUrl}/now</link>
-  <atom:link href="${baseUrl}/now/rss.xml" rel="self" type="application/rss+xml" />
+  <atom:link href="${baseUrl}/now/rss" rel="self" type="application/rss+xml" />
   <image>
     <url>${baseUrl}/embed/now.png</url>
     <title>Now - ${profileData.displayName || profileData.handle}'s Status Updates</title>
@@ -92,7 +92,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
   <title>Now - Status Updates</title>
   <description>Short status updates showing what I'm currently doing.</description>
   <link>${url.origin}/now</link>
-  <atom:link href="${url.origin}/now/rss.xml" rel="self" type="application/rss+xml" />
+  <atom:link href="${url.origin}/now/rss" rel="self" type="application/rss+xml" />
   <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
 </channel>
 </rss>`,
