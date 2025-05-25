@@ -13,7 +13,7 @@
   // Access data from layout
   let { data } = $props();
   let professionalInfo: ProfessionalInfo | null = data.professionalInfo;
-  console.log(professionalInfo);
+  console.log('professionalInfo:', professionalInfo);
 
   // Construct the full avatar image URL
   let avatarImageUrl: string | undefined = $state(undefined);
@@ -23,6 +23,7 @@
     } else {
       avatarImageUrl = undefined;
     }
+    console.log('avatarImageUrl:', avatarImageUrl);
   });
 
   // State to track if the avatar image failed to load
@@ -31,6 +32,7 @@
   // Handle image load error
   function handleImageError() {
     imageLoadError = true;
+    console.error('Avatar image failed to load.');
   }
 </script>
 
