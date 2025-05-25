@@ -59,7 +59,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
   <title>Blog - Ewan's Corner</title>
   <description>A personal blog where I share my thoughts on coding, technology, and life.</description>
   <link>${baseUrl}/blog</link>
-  <atom:link href="${baseUrl}/blog/rss.xml" rel="self" type="application/rss+xml" />
+  <atom:link href="${baseUrl}/blog/rss" rel="self" type="application/rss+xml" />
   <image>
     <url>${baseUrl}/embed/blog.png</url>
     <title>Blog - Ewan's Corner</title>
@@ -105,7 +105,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
   <link>${url.origin}/blog</link>
   <atom:link href="${
     url.origin
-  }/blog/rss.xml" rel="self" type="application/rss+xml" />
+  }/blog/rss" rel="self" type="application/rss+xml" />
   <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
   <!-- Error occurred while generating feed items -->
 </channel>

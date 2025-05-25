@@ -87,7 +87,7 @@
     rel="alternate"
     type="application/rss+xml"
     title="Blog - Ewan's Corner RSS Feed"
-    href="{$page.url.origin}/blog/rss.xml"
+    href="{$page.url.origin}/blog/rss"
   />
 
   <!-- Open Graph / Facebook -->
