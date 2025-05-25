@@ -1,5 +1,9 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import type { SiteInfo } from "$lib/components/profile/profile";
+
+  // Access the siteInfo data from the layout load function
+  const siteInfo: SiteInfo | null = $page.data.siteInfo;
 </script>
 
 <svelte:head>
@@ -40,111 +44,226 @@
 <div class="max-w-2xl mx-auto px-4 py-8">
   <h1 class="text-3xl font-bold mb-6">About This Website</h1>
 
-  <div class="prose dark:prose-invert">
-    <h2 class="text-xl font-semibold mt-6 mb-2">Website Purpose</h2>
-    <p>
-      This is my personal website where I share thoughts, projects, and
-      occasional blog posts. It serves as a creative outlet and link aggregate.
-    </p>
+  {#if siteInfo}
+    <div class="prose dark:prose-invert">
+      {#if siteInfo.additionalInfo?.purpose}
+        <h2 class="text-xl font-semibold mt-6 mb-2">Website Purpose</h2>
+        <p>{@html siteInfo.additionalInfo.purpose}</p>
+      {/if}
 
-    <h2 class="text-xl font-semibold mt-6 mb-2">Technology Stack</h2>
-    <p>This website is built with:</p>
-    <ul>
-      <li>
-        <a
-          href="https://svelte.dev/docs/kit/introduction"
-          class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-          >SvelteKit</a
-        > for the frontend framework
-      </li>
-      <li>
-        <a
-          href="https://tailwindcss.com/"
-          class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-          >Tailwind CSS</a
-        > for styling
-      </li>
-      <li>
-        <a
-          href="https://vite.dev/"
-          class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-          >Vite</a
-        > as the build tool
-      </li>
-      <li>
-        <a
-          href="https://www.markdownguide.org/"
-          class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-          >Markdown</a
-        > for content authoring
-      </li>
-      <li>
-        <a
-          href="https://atproto.com/"
-          class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-          >AT Protocol</a
-        > for decentralized identity and data handling
-      </li>
-    </ul>
+      {#if siteInfo.technologyStack && siteInfo.technologyStack.length > 0}
+        <h2 class="text-xl font-semibold mt-6 mb-2">Technology Stack</h2>
+        <p>This website is built with:</p>
+        <ul>
+          {#each siteInfo.technologyStack as tech}
+            <li>
+              {#if tech.url}
+                <a
+                  href="{tech.url}"
+                  class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+                  >{tech.name}</a
+                >
+              {:else}
+                {tech.name}
+              {/if}
+              {#if tech.description}
+                - {@html tech.description}
+              {/if}
+            </li>
+          {/each}
+        </ul>
+      {/if}
 
-    <h2 class="text-xl font-semibold mt-6 mb-2">Privacy Notice</h2>
-    <p>
-      Please note the following important information regarding your privacy
-      while on the website:
-    </p>
-    <h2 class="text-xl font-semibold mt-6 mb-2">No Cookies</h2>
-    <p>
-      There are no cookies used on this website; "Cookies" are
-      small data files placed on your device by websites you visit, however,
-      I do not use them on this website.
-    </p>
+      {#if siteInfo.privacyStatement}
+        <h2 class="text-xl font-semibold mt-6 mb-2">Privacy Notice</h2>
+        <p>{@html siteInfo.privacyStatement}</p>
+      {/if}
 
-    <h2 class="text-xl font-semibold mt-6 mb-2">Open Source</h2>
-    <p>
-      This website is a customised fork of <a
-        href="https://github.com/hugeblank/whitebreeze"
-        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-        >WhiteBreeze</a
-      >, a frontend for the AT Protocol powered
-      <a
-        href="https://whtwnd.com/"
-        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-        >WhiteWind</a
-      >
-      markdown blog service. The source code is available on
-      <a
-        href="https://github.com/ewanc26/website"
-        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-        >GitHub</a
-      >
-      and mirrored on
-      <a
-        href="https://tangled.sh/did:plc:ofrbh253gwicbkc5nktqepol/website"
-        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-        >Tangled</a
-      >. There is no hidden tracking or data collection.
-    </p>
+      {#if siteInfo.openSourceInfo}
+        <h2 class="text-xl font-semibold mt-6 mb-2">Open Source</h2>
+        {#if siteInfo.openSourceInfo.description}
+          <p>{@html siteInfo.openSourceInfo.description}</p>
+        {/if}
+        {#if siteInfo.openSourceInfo.basedOn && siteInfo.openSourceInfo.basedOn.length > 0}
+          <p>Based on:</p>
+          <ul>
+            {#each siteInfo.openSourceInfo.basedOn as item}
+              <li>
+                {#if item.url}
+                  <a
+                    href="{item.url}"
+                    class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+                    >{item.name}</a
+                  >
+                {:else}
+                  {item.name}
+                {/if}
+                {#if item.type}
+                  ({item.type})
+                {/if}
+                {#if item.description}
+                  - {@html item.description}
+                {/if}
+              </li>
+            {/each}
+          </ul>
+        {/if}
+        {#if siteInfo.openSourceInfo.repositories && siteInfo.openSourceInfo.repositories.length > 0}
+          <p>Repositories:</p>
+          <ul>
+            {#each siteInfo.openSourceInfo.repositories as repo}
+              <li>
+                {#if repo.url}
+                  <a
+                    href="{repo.url}"
+                    class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+                    >{repo.platform || 'Repository'}</a
+                  >
+                {:else}
+                  {repo.platform || 'Repository'}
+                {/if}
+                {#if repo.type}
+                  ({repo.type})
+                {/if}
+                {#if repo.description}
+                  - {@html repo.description}
+                {/if}
+              </li>
+            {/each}
+          </ul>
+        {/if}
+        {#if siteInfo.openSourceInfo.license}
+          <p>
+            License: {#if siteInfo.openSourceInfo.license.url}
+              <a
+                href="{siteInfo.openSourceInfo.license.url}"
+                class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+                >{siteInfo.openSourceInfo.license.name || 'License'}</a
+              >
+            {:else}
+              {siteInfo.openSourceInfo.license.name || 'License'}
+            {/if}
+          </p>
+        {/if}
+        {#if siteInfo.openSourceInfo.relatedServices && siteInfo.openSourceInfo.relatedServices.length > 0}
+          <p>Related Services:</p>
+          <ul>
+            {#each siteInfo.openSourceInfo.relatedServices as service}
+              <li>
+                {#if service.url}
+                  <a
+                    href="{service.url}"
+                    class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+                    >{service.name}</a
+                  >
+                {:else}
+                  {service.name}
+                {/if}
+                {#if service.relationship}
+                  ({service.relationship})
+                {/if}
+                {#if service.description}
+                  - {@html service.description}
+                {/if}
+              </li>
+            {/each}
+          </ul>
+        {/if}
+      {/if}
 
-    <p class="mt-6">
-      This website is intended for personal use to blog and share content. I do
-      not intend to collect or mine any data from you. If you'd like to read the
-      licensing details, please see the links in the footer.
-    </p>
+      {#if siteInfo.credits && siteInfo.credits.length > 0}
+        <h2 class="text-xl font-semibold mt-6 mb-2">Credits</h2>
+        <ul>
+          {#each siteInfo.credits as credit}
+            <li>
+              {#if credit.url}
+                <a
+                  href="{credit.url}"
+                  class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+                  >{credit.name}</a
+                >
+              {:else}
+                {credit.name}
+              {/if}
+              {#if credit.type}
+                ({credit.type})
+              {/if}
+              {#if credit.author}
+                by {credit.author}
+              {/if}
+              {#if credit.license}
+                under {#if credit.license.url}
+                  <a
+                    href="{credit.license.url}"
+                    class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+                    >{credit.license.name || 'License'}</a
+                  >
+                {:else}
+                  {credit.license.name || 'License'}
+                {/if}
+              {/if}
+              {#if credit.description}
+                - {@html credit.description}
+              {/if}
+            </li>
+          {/each}
+        </ul>
+      {/if}
 
-    <h2 class="text-xl font-semibold mt-6 mb-2">Font Credits</h2>
-    <p>
-      This website uses the <a
-        href="https://recursive.design/"
-        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-        >Recursive</a
-      > font by ArrowType, available under the
-      <a
-        href="/fonts/ArrowType-Recursive-1.085/LICENSE.txt"
-        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-        >SIL Open Font License</a
-      >.
-    </p>
+      {#if siteInfo.additionalInfo}
+        {#if siteInfo.additionalInfo.contact}
+          <h2 class="text-xl font-semibold mt-6 mb-2">Contact</h2>
+          {#if siteInfo.additionalInfo.contact.email}
+            <p>Email: <a href="mailto:{siteInfo.additionalInfo.contact.email}" class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]">{siteInfo.additionalInfo.contact.email}</a></p>
+          {/if}
+          {#if siteInfo.additionalInfo.contact.social && siteInfo.additionalInfo.contact.social.length > 0}
+            <p>Social:</p>
+            <ul>
+              {#each siteInfo.additionalInfo.contact.social as social}
+                <li>
+                  {#if social.url}
+                    <a
+                      href="{social.url}"
+                      class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+                      >{social.platform}</a
+                    >
+                  {:else}
+                    {social.platform}
+                  {/if}
+                  {#if social.handle}
+                    ({social.handle})
+                  {/if}
+                </li>
+              {/each}
+            </ul>
+          {/if}
+        {/if}
 
-    <p class="mt-6">Thank you for visiting!</p>
-  </div>
+        {#if siteInfo.additionalInfo.analytics}
+          <h2 class="text-xl font-semibold mt-6 mb-2">Analytics</h2>
+          {#if siteInfo.additionalInfo.analytics.services && siteInfo.additionalInfo.analytics.services.length > 0}
+            <p>Services: {siteInfo.additionalInfo.analytics.services.join(', ')}</p>
+          {/if}
+          {#if siteInfo.additionalInfo.analytics.cookiePolicy}
+            <p>Cookie Policy: {@html siteInfo.additionalInfo.analytics.cookiePolicy}</p>
+          {/if}
+        {/if}
+
+        {#if siteInfo.additionalInfo.deployment}
+          <h2 class="text-xl font-semibold mt-6 mb-2">Deployment</h2>
+          {#if siteInfo.additionalInfo.deployment.platform}
+            <p>Platform: {siteInfo.additionalInfo.deployment.platform}</p>
+          {/if}
+          {#if siteInfo.additionalInfo.deployment.cdn}
+            <p>CDN: {siteInfo.additionalInfo.deployment.cdn}</p>
+          {/if}
+          {#if siteInfo.additionalInfo.deployment.customDomain !== undefined}
+            <p>Custom Domain: {siteInfo.additionalInfo.deployment.customDomain ? 'Yes' : 'No'}</p>
+          {/if}
+        {/if}
+      {/if}
+    </div>
+  {:else}
+    <p>Loading site information...</p>
+  {/if}
 </div>
