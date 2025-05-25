@@ -32,6 +32,32 @@ export interface ProfessionalInfo {
   skills?: string[];
 }
 
+export interface SiteInfo {
+  technologyStack?: Array<{ name: string; url?: string; description?: string }>;
+  privacyStatement?: string;
+  openSourceInfo?: {
+    description?: string;
+    license?: { name?: string; url?: string };
+    basedOn?: Array<{ name: string; url?: string; description?: string; type?: string }>;
+    relatedServices?: Array<{ name: string; url?: string; description?: string; relationship?: string }>;
+    repositories?: Array<{ platform?: string; url: string; type?: string; description?: string }>;
+  };
+  credits?: Array<{
+    name: string;
+    type: string;
+    url?: string;
+    author?: string;
+    license?: { name?: string; url?: string };
+    description?: string;
+  }>;
+  additionalInfo?: {
+    purpose?: string;
+    contact?: { email?: string; social?: Array<{ platform: string; url: string; handle?: string }> };
+    analytics?: { services?: string[]; cookiePolicy?: string };
+    deployment?: { platform?: string; cdn?: string; customDomain?: boolean };
+  };
+}
+
 export async function safeFetch(url: string) {
   try {
     const response = await fetch(url);
@@ -118,6 +144,31 @@ export async function getProfessionalInfo(): Promise<ProfessionalInfo | null> {
     }
   } catch (error) {
     console.error("Error fetching professional info:", error);
+    return null;
+  }
+}
+
+/**
+ * Fetches site information from the user's PDS.
+ * @returns A Promise that resolves to SiteInfo or null if not found or an error occurs.
+ */
+export async function getSiteInfo(): Promise<SiteInfo | null> {
+  try {
+    const profile: Profile = await getProfile(); // Assuming getProfile is available and returns the user's profile with PDS and DID
+    const rawResponse = await fetch(
+      `${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=uk.ewancroft.site.info&rkey=self`
+    );
+    const response = await rawResponse.json();
+
+    if (response && response.records && response.records.length > 0) {
+      // Assuming the record structure matches the SiteInfo interface
+      return response.records[0].value as SiteInfo;
+    } else {
+      console.log("No site info record found.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching site info:", error);
     return null;
   }
 }

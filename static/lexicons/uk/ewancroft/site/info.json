@@ -1,0 +1,303 @@
+{
+  "lexicon": 1,
+  "id": "uk.ewancroft.site.info",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "Information about the website.",
+      "key": "literal:self",
+      "record": {
+        "type": "object",
+        "properties": {
+          "technologyStack": {
+            "type": "array",
+            "description": "A list of technologies used to build the website.",
+            "items": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "maxGraphemes": 100,
+                  "maxLength": 1000
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "description": {
+                  "type": "string",
+                  "maxGraphemes": 500,
+                  "maxLength": 5000
+                }
+              }
+            },
+            "maxLength": 50
+          },
+          "privacyStatement": {
+            "type": "string",
+            "description": "A statement about website privacy and data handling.",
+            "maxGraphemes": 5000,
+            "maxLength": 50000
+          },
+          "openSourceInfo": {
+            "type": "object",
+            "description": "Information about the open-source nature of the website.",
+            "properties": {
+              "description": {
+                "type": "string",
+                "description": "General description of the open-source nature.",
+                "maxGraphemes": 2000,
+                "maxLength": 20000
+              },
+              "license": {
+                "type": "object",
+                "description": "License information for the project.",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxGraphemes": 100,
+                    "maxLength": 1000
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              },
+              "basedOn": {
+                "type": "array",
+                "description": "Projects or libraries this is based on or forked from.",
+                "items": {
+                  "type": "object",
+                  "required": ["name"],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "maxGraphemes": 100,
+                      "maxLength": 1000
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "description": {
+                      "type": "string",
+                      "maxGraphemes": 500,
+                      "maxLength": 5000
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Type of relationship (fork, inspiration, dependency, etc.)",
+                      "maxGraphemes": 50,
+                      "maxLength": 500
+                    }
+                  }
+                },
+                "maxLength": 20
+              },
+              "relatedServices": {
+                "type": "array",
+                "description": "Related services or platforms.",
+                "items": {
+                  "type": "object",
+                  "required": ["name"],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "maxGraphemes": 100,
+                      "maxLength": 1000
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "description": {
+                      "type": "string",
+                      "maxGraphemes": 500,
+                      "maxLength": 5000
+                    },
+                    "relationship": {
+                      "type": "string",
+                      "description": "How this service relates to the website",
+                      "maxGraphemes": 100,
+                      "maxLength": 1000
+                    }
+                  }
+                },
+                "maxLength": 20
+              },
+              "repositories": {
+                "type": "array",
+                "description": "Source code repositories.",
+                "items": {
+                  "type": "object",
+                  "required": ["url"],
+                  "properties": {
+                    "platform": {
+                      "type": "string",
+                      "description": "Platform name (github, gitlab, tangled, etc.)",
+                      "maxGraphemes": 50,
+                      "maxLength": 500
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Repository type (primary, mirror, fork, etc.)",
+                      "maxGraphemes": 50,
+                      "maxLength": 500
+                    },
+                    "description": {
+                      "type": "string",
+                      "maxGraphemes": 200,
+                      "maxLength": 2000
+                    }
+                  }
+                },
+                "maxLength": 20
+              }
+            }
+          },
+          "credits": {
+            "type": "array",
+            "description": "Credits for assets, fonts, libraries, or other resources used.",
+            "items": {
+              "type": "object",
+              "required": ["name", "type"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "maxGraphemes": 100,
+                  "maxLength": 1000
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Type of credit (font, library, asset, etc.)",
+                  "maxGraphemes": 50,
+                  "maxLength": 500
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "author": {
+                  "type": "string",
+                  "maxGraphemes": 100,
+                  "maxLength": 1000
+                },
+                "license": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "maxGraphemes": 100,
+                      "maxLength": 1000
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  }
+                },
+                "description": {
+                  "type": "string",
+                  "maxGraphemes": 500,
+                  "maxLength": 5000
+                }
+              }
+            },
+            "maxLength": 50
+          },
+          "additionalInfo": {
+            "type": "object",
+            "description": "Additional flexible information about the website.",
+            "properties": {
+              "purpose": {
+                "type": "string",
+                "description": "Website purpose or mission statement.",
+                "maxGraphemes": 1000,
+                "maxLength": 10000
+              },
+              "contact": {
+                "type": "object",
+                "description": "Contact information.",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "social": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["platform", "url"],
+                      "properties": {
+                        "platform": {
+                          "type": "string",
+                          "maxGraphemes": 50,
+                          "maxLength": 500
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "handle": {
+                          "type": "string",
+                          "maxGraphemes": 100,
+                          "maxLength": 1000
+                        }
+                      }
+                    },
+                    "maxLength": 20
+                  }
+                }
+              },
+              "analytics": {
+                "type": "object",
+                "description": "Analytics and tracking information.",
+                "properties": {
+                  "services": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "maxGraphemes": 100,
+                      "maxLength": 1000
+                    },
+                    "maxLength": 10
+                  },
+                  "cookiePolicy": {
+                    "type": "string",
+                    "maxGraphemes": 1000,
+                    "maxLength": 10000
+                  }
+                }
+              },
+              "deployment": {
+                "type": "object",
+                "description": "Deployment and hosting information.",
+                "properties": {
+                  "platform": {
+                    "type": "string",
+                    "maxGraphemes": 100,
+                    "maxLength": 1000
+                  },
+                  "cdn": {
+                    "type": "string",
+                    "maxGraphemes": 100,
+                    "maxLength": 1000
+                  },
+                  "customDomain": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
