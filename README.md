@@ -41,6 +41,8 @@ This fork serves as both my personal website and blog, modified for personal usa
     - `+page.svelte`: Home page component
     - `blog/`: Blog-related routes (also imports profile logic from `lib/components/profile/profile.ts`)
     - `info/`: Information page routes
+    - `now/`: Now page routes (contains `+server.ts` for RSS feed generation)
+    - `professional/`: Professional information page routes
 
 ### Static Assets
 
@@ -49,7 +51,7 @@ This fork serves as both my personal website and blog, modified for personal usa
   - `Screenshot.png`: Website screenshot
   - `embed/`: Social media embed images
   - `favicon/`: Favicon and related assets
-  - `lexicons/`: Lexicon configuration
+  - `lexicons/`: Custom ATProto lexicons
 
 ### Developmental and Deployment
 
@@ -82,6 +84,8 @@ For optimal usage, you need the following record types in your [AT Protocol repo
 - `com.whtwnd.blog.entry`: Your blog posts
 - `blue.linkat.board`: Your links
 - `uk.ewancroft.now`: Your status, although it's not required
+- `uk.ewancroft.pro.info`: Your professional information, displayed on the `/professional` route.
+- `uk.ewancroft.site.info`: Information about this site, displayed on the `/info` route.
 
 #### Standalone
 
