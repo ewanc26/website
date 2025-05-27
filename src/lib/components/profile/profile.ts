@@ -60,7 +60,7 @@ export interface SiteInfo {
   };
 }
 
-export async function safeFetch(url: string) {
+export async function safeFetch(url: string, fetch: typeof globalThis.fetch) {
   try {
     const response = await fetch(url);
     if (!response.ok)
@@ -79,18 +79,19 @@ export async function safeFetch(url: string) {
 
 
 
-export async function getProfile(): Promise<Profile> {
+export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profile> {
   try {
     const fetchProfile = await safeFetch(
-      `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${PUBLIC_HANDLE}`
+      `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${PUBLIC_HANDLE}`,
+      fetch
     );
     const split = fetchProfile["did"].split(":");
     let diddoc;
     if (split[0] === "did") {
       if (split[1] === "plc") {
-        diddoc = await safeFetch(`https://plc.directory/${fetchProfile["did"]}`);
+        diddoc = await safeFetch(`https://plc.directory/${fetchProfile["did"]}`, fetch);
       } else if (split[1] === "web") {
-        diddoc = await safeFetch("https://" + split[2] + "/.well-known/did.json");
+        diddoc = await safeFetch("https://" + split[2] + "/.well-known/did.json", fetch);
       } else {
         throw new Error("Invalid DID, Not blessed method");
       }
@@ -129,9 +130,9 @@ export async function getProfile(): Promise<Profile> {
  * Fetches professional information from the user's PDS.
  * @returns A Promise that resolves to ProfessionalInfo or null if not found or an error occurs.
  */
-export async function getProfessionalInfo(): Promise<ProfessionalInfo | null> {
+export async function getProfessionalInfo(fetch: typeof globalThis.fetch): Promise<ProfessionalInfo | null> {
   try {
-    const profile: Profile = await getProfile(); // Assuming getProfile is available and returns the user's profile with PDS and DID
+    const profile: Profile = await getProfile(fetch); // Assuming getProfile is available and returns the user's profile with PDS and DID
     const rawResponse = await fetch(
       `${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=uk.ewancroft.pro.info&rkey=self`
     );
@@ -154,9 +155,9 @@ export async function getProfessionalInfo(): Promise<ProfessionalInfo | null> {
  * Fetches site information from the user's PDS.
  * @returns A Promise that resolves to SiteInfo or null if not found or an error occurs.
  */
-export async function getSiteInfo(): Promise<SiteInfo | null> {
+export async function getSiteInfo(fetch: typeof globalThis.fetch): Promise<SiteInfo | null> {
   try {
-    const profile: Profile = await getProfile(); // Assuming getProfile is available and returns the user's profile with PDS and DID
+    const profile: Profile = await getProfile(fetch); // Assuming getProfile is available and returns the user's profile with PDS and DID
     const rawResponse = await fetch(
       `${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=uk.ewancroft.site.info&rkey=self`
     );

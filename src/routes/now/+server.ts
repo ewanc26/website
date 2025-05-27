@@ -15,7 +15,7 @@ export const GET: RequestHandler = async ({ url, fetch }: { url: URL, fetch: typ
   baseUrl = dev ? url.origin : "https://ewancroft.uk";
 
   try {
-    const profileData = await getProfile();
+    const profileData = await getProfile(fetch);
 
     const did = profileData.did;
     const pdsUrl = profileData.pds;

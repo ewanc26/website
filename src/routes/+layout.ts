@@ -18,7 +18,7 @@ interface LinkBoard {
 
 export async function load({ fetch }) {
   if (profile === undefined) {
-    profile = await getProfile();
+    profile = await getProfile(fetch);
   }
 
   let dynamicLinks: LinkBoard | undefined;
@@ -36,7 +36,7 @@ export async function load({ fetch }) {
     // Handle error or return undefined links
   }
 
-  const professionalInfo = await getProfessionalInfo();
+  const professionalInfo = await getProfessionalInfo(fetch);
 
   return {
     profile,
