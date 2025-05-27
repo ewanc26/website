@@ -52,6 +52,8 @@ export interface SiteInfo {
   }>;
   additionalInfo?: {
     purpose?: string;
+    websiteBirthYear?: number;
+    sectionLicense?: Array<{ section?: string; name?: string; url?: string }>;
     contact?: { email?: string; social?: Array<{ platform: string; url: string; handle?: string }> };
     analytics?: { services?: string[]; cookiePolicy?: string };
     deployment?: { platform?: string; cdn?: string; customDomain?: boolean };

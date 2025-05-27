@@ -211,56 +211,83 @@
       {/if}
 
       {#if siteInfo.additionalInfo}
-        {#if siteInfo.additionalInfo.contact}
-          <h2 class="text-xl font-semibold mt-6 mb-2">Contact</h2>
-          {#if siteInfo.additionalInfo.contact.email}
-            <p>Email: <a href="mailto:{siteInfo.additionalInfo.contact.email}" class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]">{siteInfo.additionalInfo.contact.email}</a></p>
+        {#if siteInfo.additionalInfo.websiteBirthYear}
+            <h2 class="text-xl font-semibold mt-6 mb-2">Website Creation Year</h2>
+            <p>{siteInfo.additionalInfo.websiteBirthYear}</p>
           {/if}
-          {#if siteInfo.additionalInfo.contact.social && siteInfo.additionalInfo.contact.social.length > 0}
-            <p>Social:</p>
+
+          {#if siteInfo.additionalInfo.contact}
+            <h2 class="text-xl font-semibold mt-6 mb-2">Contact</h2>
+            {#if siteInfo.additionalInfo.contact.email}
+              <p>Email: <a href="mailto:{siteInfo.additionalInfo.contact.email}" class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]">{siteInfo.additionalInfo.contact.email}</a></p>
+            {/if}
+            {#if siteInfo.additionalInfo.contact.social && siteInfo.additionalInfo.contact.social.length > 0}
+              <p>Social:</p>
+              <ul>
+                {#each siteInfo.additionalInfo.contact.social as social}
+                  <li>
+                    {#if social.url}
+                      <a
+                        href="{social.url}"
+                        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+                        >{social.platform}</a
+                      >
+                    {:else}
+                      {social.platform}
+                    {/if}
+                    {#if social.handle}
+                      ({social.handle})
+                    {/if}
+                  </li>
+                {/each}
+              </ul>
+            {/if}
+          {/if}
+
+          {#if siteInfo.additionalInfo.deployment}
+            <h2 class="text-xl font-semibold mt-6 mb-2">Deployment</h2>
+            {#if siteInfo.additionalInfo.deployment.platform}
+              <p>Platform: {siteInfo.additionalInfo.deployment.platform}</p>
+            {/if}
+            {#if siteInfo.additionalInfo.deployment.cdn}
+              <p>CDN: {siteInfo.additionalInfo.deployment.cdn}</p>
+            {/if}
+            {#if siteInfo.additionalInfo.deployment.customDomain !== undefined}
+              <p>Custom Domain: {siteInfo.additionalInfo.deployment.customDomain ? 'Yes' : 'No'}</p>
+            {/if}
+          {/if}
+
+          {#if siteInfo.additionalInfo.analytics}
+            <h2 class="text-xl font-semibold mt-6 mb-2">Analytics</h2>
+            {#if siteInfo.additionalInfo.analytics.services && siteInfo.additionalInfo.analytics.services.length > 0}
+              <p>Services: {siteInfo.additionalInfo.analytics.services.join(', ')}</p>
+            {/if}
+            {#if siteInfo.additionalInfo.analytics.cookiePolicy}
+              <p>Cookie Policy: {@html siteInfo.additionalInfo.analytics.cookiePolicy}</p>
+            {/if}
+          {/if}
+
+          {#if siteInfo.additionalInfo.sectionLicense && siteInfo.additionalInfo.sectionLicense.length > 0}
+            <h2 class="text-xl font-semibold mt-6 mb-2">Section Licenses</h2>
             <ul>
-              {#each siteInfo.additionalInfo.contact.social as social}
+              {#each siteInfo.additionalInfo.sectionLicense as license}
                 <li>
-                  {#if social.url}
+                  {#if license.url}
                     <a
-                      href="{social.url}"
+                      href="{license.url}"
                       class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-                      >{social.platform}</a
+                      >{license.name || 'License'}</a
                     >
                   {:else}
-                    {social.platform}
+                    {license.name || 'License'}
                   {/if}
-                  {#if social.handle}
-                    ({social.handle})
+                  {#if license.section}
+                    ({license.section})
                   {/if}
                 </li>
               {/each}
             </ul>
           {/if}
-        {/if}
-
-        {#if siteInfo.additionalInfo.analytics}
-          <h2 class="text-xl font-semibold mt-6 mb-2">Analytics</h2>
-          {#if siteInfo.additionalInfo.analytics.services && siteInfo.additionalInfo.analytics.services.length > 0}
-            <p>Services: {siteInfo.additionalInfo.analytics.services.join(', ')}</p>
-          {/if}
-          {#if siteInfo.additionalInfo.analytics.cookiePolicy}
-            <p>Cookie Policy: {@html siteInfo.additionalInfo.analytics.cookiePolicy}</p>
-          {/if}
-        {/if}
-
-        {#if siteInfo.additionalInfo.deployment}
-          <h2 class="text-xl font-semibold mt-6 mb-2">Deployment</h2>
-          {#if siteInfo.additionalInfo.deployment.platform}
-            <p>Platform: {siteInfo.additionalInfo.deployment.platform}</p>
-          {/if}
-          {#if siteInfo.additionalInfo.deployment.cdn}
-            <p>CDN: {siteInfo.additionalInfo.deployment.cdn}</p>
-          {/if}
-          {#if siteInfo.additionalInfo.deployment.customDomain !== undefined}
-            <p>Custom Domain: {siteInfo.additionalInfo.deployment.customDomain ? 'Yes' : 'No'}</p>
-          {/if}
-        {/if}
       {/if}
     </div>
   {:else}
