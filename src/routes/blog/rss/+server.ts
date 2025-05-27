@@ -6,7 +6,7 @@ import { getProfile } from "$lib/components/profile/profile"; // Import getProfi
 export const GET: RequestHandler = async ({ url, fetch }) => {
   try {
     // Use getProfile to get profile data
-    const profileData = await getProfile();
+    const profileData = await getProfile(fetch);
 
     const did = profileData.did;
     const pdsUrl = profileData.pds;

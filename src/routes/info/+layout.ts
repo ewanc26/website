@@ -6,16 +6,16 @@ export const trailingSlash = "never";
 
 import type { LayoutLoad } from './$types';
 
-export const load: LayoutLoad = async () => {
+export const load: LayoutLoad = async ({ fetch }) => {
   let profile: Profile | null = null;
   let siteInfo: SiteInfo | null = null;
 
   try {
     // Fetch site info using the utility function
-    siteInfo = await getSiteInfo();
+    siteInfo = await getSiteInfo(fetch);
 
     // Fetch profile data
-    profile = await getProfile();
+    profile = await getProfile(fetch);
 
     return {
       siteInfo,

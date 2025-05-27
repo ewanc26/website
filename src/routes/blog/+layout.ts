@@ -9,10 +9,10 @@ let sortedPosts: Post[] = [];
 export const prerender = false;
 export const trailingSlash = "never";
 
-export async function load() {
+export async function load({ fetch }) {
   try {
     if (profile === undefined) {
-      profile = await getProfile();
+      profile = await getProfile(fetch);
     }
     if (posts === undefined) {
       const rawResponse = await fetch(
