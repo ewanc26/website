@@ -1,17 +1,70 @@
 import { PUBLIC_HANDLE } from "$env/static/public";
-import type {
-  Profile,
-  ProfessionalInfo,
-  SiteInfo,
-} from "$lib/components/profile/interfaces";
+
+export interface Profile {
+  avatar: string;
+  banner: string;
+  displayName: string;
+  did: string;
+  handle: string;
+  description: string;
+  pds: string;
+}
+
+export interface ProfessionalInfo {
+  displayName?: string;
+  description?: string;
+  avatar?: {
+    image: {
+      $type: string;
+      ref: {
+        $link: string;
+      };
+      mimeType: string;
+      size: number;
+    };
+    alt: string;
+    aspectRatio?: { width: number; height: number };
+  };
+  headline?: string;
+  websiteUrl?: string;
+  contactEmail?: string;
+  country?: string;
+  skills?: string[];
+}
+
+export interface SiteInfo {
+  technologyStack?: Array<{ name: string; url?: string; description?: string }>;
+  privacyStatement?: string;
+  openSourceInfo?: {
+    description?: string;
+    license?: { name?: string; url?: string };
+    basedOn?: Array<{ name: string; url?: string; description?: string; type?: string }>;
+    relatedServices?: Array<{ name: string; url?: string; description?: string; relationship?: string }>;
+    repositories?: Array<{ platform?: string; url: string; type?: string; description?: string }>;
+  };
+  credits?: Array<{
+    name: string;
+    type: string;
+    url?: string;
+    author?: string;
+    license?: { name?: string; url?: string };
+    description?: string;
+  }>;
+  additionalInfo?: {
+    purpose?: string;
+    websiteBirthYear?: number;
+    sectionLicense?: Array<{ section?: string; name?: string; url?: string }>;
+    contact?: { email?: string; social?: Array<{ platform: string; url: string; handle?: string }> };
+    analytics?: { services?: string[]; cookiePolicy?: string };
+    deployment?: { platform?: string; cdn?: string; customDomain?: boolean };
+  };
+}
 
 export async function safeFetch(url: string, fetch: typeof globalThis.fetch) {
   try {
     const response = await fetch(url);
     if (!response.ok)
-      throw new Error(
-        `HTTP error! status: ${response.status}, statusText: ${response.statusText}`
-      );
+      throw new Error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
     return await response.json();
   } catch (error: unknown) {
     // Catch network errors (e.g., connection refused, timeout)
@@ -24,9 +77,9 @@ export async function safeFetch(url: string, fetch: typeof globalThis.fetch) {
   }
 }
 
-export async function getProfile(
-  fetch: typeof globalThis.fetch
-): Promise<Profile> {
+
+
+export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profile> {
   try {
     const fetchProfile = await safeFetch(
       `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${PUBLIC_HANDLE}`,
@@ -36,15 +89,9 @@ export async function getProfile(
     let diddoc;
     if (split[0] === "did") {
       if (split[1] === "plc") {
-        diddoc = await safeFetch(
-          `https://plc.directory/${fetchProfile["did"]}`,
-          fetch
-        );
+        diddoc = await safeFetch(`https://plc.directory/${fetchProfile["did"]}`, fetch);
       } else if (split[1] === "web") {
-        diddoc = await safeFetch(
-          "https://" + split[2] + "/.well-known/did.json",
-          fetch
-        );
+        diddoc = await safeFetch("https://" + split[2] + "/.well-known/did.json", fetch);
       } else {
         throw new Error("Invalid DID, Not blessed method");
       }
@@ -83,9 +130,7 @@ export async function getProfile(
  * Fetches professional information from the user's PDS.
  * @returns A Promise that resolves to ProfessionalInfo or null if not found or an error occurs.
  */
-export async function getProfessionalInfo(
-  fetch: typeof globalThis.fetch
-): Promise<ProfessionalInfo | null> {
+export async function getProfessionalInfo(fetch: typeof globalThis.fetch): Promise<ProfessionalInfo | null> {
   try {
     const profile: Profile = await getProfile(fetch); // Assuming getProfile is available and returns the user's profile with PDS and DID
     const rawResponse = await fetch(
@@ -110,9 +155,7 @@ export async function getProfessionalInfo(
  * Fetches site information from the user's PDS.
  * @returns A Promise that resolves to SiteInfo or null if not found or an error occurs.
  */
-export async function getSiteInfo(
-  fetch: typeof globalThis.fetch
-): Promise<SiteInfo | null> {
+export async function getSiteInfo(fetch: typeof globalThis.fetch): Promise<SiteInfo | null> {
   try {
     const profile: Profile = await getProfile(fetch); // Assuming getProfile is available and returns the user's profile with PDS and DID
     const rawResponse = await fetch(
