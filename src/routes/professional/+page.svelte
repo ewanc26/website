@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
-    import type { ProfessionalInfo, Profile } from "$lib/components/profile/profile";
+    import type { ProfessionalInfo, Profile } from "$lib/components/profile/interfaces";
 
   // Define the type for the page data
   interface PageData {

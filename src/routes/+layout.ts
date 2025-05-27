@@ -1,5 +1,5 @@
 import { getProfile, getProfessionalInfo } from "$lib/components/profile/profile";
-import type { Profile } from "$lib/components/profile/profile";
+import type { Profile } from "$lib/components/profile/interfaces";
 
 // Profile data cache
 let profile: Profile;
