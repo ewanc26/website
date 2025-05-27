@@ -72,6 +72,11 @@
                   "type": "object",
                   "required": ["name"],
                   "properties": {
+                    "section": {
+                      "type": "string",
+                      "maxGraphemes": 100,
+                      "maxLength": 1000
+                    },
                     "name": {
                       "type": "string",
                       "maxGraphemes": 100,
@@ -103,6 +108,11 @@
                   "type": "object",
                   "required": ["name"],
                   "properties": {
+                    "section": {
+                      "type": "string",
+                      "maxGraphemes": 100,
+                      "maxLength": 1000
+                    },
                     "name": {
                       "type": "string",
                       "maxGraphemes": 100,
@@ -168,6 +178,11 @@
               "type": "object",
               "required": ["name", "type"],
               "properties": {
+                "section": {
+                  "type": "string",
+                  "maxGraphemes": 100,
+                  "maxLength": 1000
+                },
                 "name": {
                   "type": "string",
                   "maxGraphemes": 100,
@@ -215,83 +230,111 @@
             "type": "object",
             "description": "Additional flexible information about the website.",
             "properties": {
+              "websiteBirthYear": {
+                "type": "integer",
+                "description": "The year the website was first launched or created.",
+                "minimum": 1990
+              },
               "purpose": {
                 "type": "string",
                 "description": "Website purpose or mission statement.",
                 "maxGraphemes": 1000,
                 "maxLength": 10000
               },
-              "contact": {
-                "type": "object",
-                "description": "Contact information.",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "format": "email"
-                  },
-                  "social": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "required": ["platform", "url"],
-                      "properties": {
-                        "platform": {
-                          "type": "string",
-                          "maxGraphemes": 50,
-                          "maxLength": 500
-                        },
-                        "url": {
-                          "type": "string",
-                          "format": "uri"
-                        },
-                        "handle": {
-                          "type": "string",
-                          "maxGraphemes": 100,
-                          "maxLength": 1000
-                        }
-                      }
-                    },
-                    "maxLength": 20
-                  }
-                }
-              },
-              "analytics": {
-                "type": "object",
-                "description": "Analytics and tracking information.",
-                "properties": {
-                  "services": {
-                    "type": "array",
-                    "items": {
+              "sectionLicense": {
+                "type": "array",
+                "description": "License information for specific content sections, such as a blog.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "section": {
                       "type": "string",
                       "maxGraphemes": 100,
                       "maxLength": 1000
                     },
-                    "maxLength": 10
-                  },
-                  "cookiePolicy": {
-                    "type": "string",
-                    "maxGraphemes": 1000,
-                    "maxLength": 10000
+                    "name": {
+                      "type": "string",
+                      "maxGraphemes": 100,
+                      "maxLength": 1000
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    }
                   }
                 }
-              },
-              "deployment": {
-                "type": "object",
-                "description": "Deployment and hosting information.",
-                "properties": {
-                  "platform": {
+              }
+            },
+            "contact": {
+              "type": "object",
+              "description": "Contact information.",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "social": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["platform", "url"],
+                    "properties": {
+                      "platform": {
+                        "type": "string",
+                        "maxGraphemes": 50,
+                        "maxLength": 500
+                      },
+                      "url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "handle": {
+                        "type": "string",
+                        "maxGraphemes": 100,
+                        "maxLength": 1000
+                      }
+                    }
+                  },
+                  "maxLength": 20
+                }
+              }
+            },
+            "analytics": {
+              "type": "object",
+              "description": "Analytics and tracking information.",
+              "properties": {
+                "services": {
+                  "type": "array",
+                  "items": {
                     "type": "string",
                     "maxGraphemes": 100,
                     "maxLength": 1000
                   },
-                  "cdn": {
-                    "type": "string",
-                    "maxGraphemes": 100,
-                    "maxLength": 1000
-                  },
-                  "customDomain": {
-                    "type": "boolean"
-                  }
+                  "maxLength": 10
+                },
+                "cookiePolicy": {
+                  "type": "string",
+                  "maxGraphemes": 1000,
+                  "maxLength": 10000
+                }
+              }
+            },
+            "deployment": {
+              "type": "object",
+              "description": "Deployment and hosting information.",
+              "properties": {
+                "platform": {
+                  "type": "string",
+                  "maxGraphemes": 100,
+                  "maxLength": 1000
+                },
+                "cdn": {
+                  "type": "string",
+                  "maxGraphemes": 100,
+                  "maxLength": 1000
+                },
+                "customDomain": {
+                  "type": "boolean"
                 }
               }
             }
