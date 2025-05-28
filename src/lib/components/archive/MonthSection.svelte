@@ -7,7 +7,6 @@
   export let postsInMonth: any[];
   export let monthIndex: number;
   export let localeLoaded: boolean;
-  export let formatDate: (date: Date) => string;
   export let totalReadTime: number = 0;
   export let totalWordCount: number = 0;
 
@@ -33,7 +32,7 @@
     class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr)_)] gap-x-6 gap-y-8 mx-4 my-8"
   >
     {#each postsInMonth as post, postIndex (post.rkey)}
-      <PostCard {post} {monthIndex} {postIndex} {localeLoaded} {formatDate} />
+      <PostCard {post} {monthIndex} {postIndex} {localeLoaded} />
     {/each}
   </div>
 </div>
