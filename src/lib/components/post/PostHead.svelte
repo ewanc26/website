@@ -32,6 +32,9 @@
     />
     <meta property="article:word_count" content={post.wordCount.toString()} />
 
+    <!-- Fediverse -->
+    <meta name="fediverse:creator" content="@ewanc26@mas.to">
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={$page.url.origin + $page.url.pathname} />
