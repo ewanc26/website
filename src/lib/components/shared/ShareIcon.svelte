@@ -5,32 +5,37 @@
   export let title: string;
   export let showInHeader: boolean = false;
   export let profile: { handle: string; displayName?: string };
-  export let data: { profile?: { handle: string } };
   export let mastodonInstance: string = "mastodon.social";
   export let fediverseCreator: string; // Add fediverseCreator prop for Mastodon tagging
 
   $: mastodonUserTag = fediverseCreator.startsWith('http://') || fediverseCreator.startsWith('https://') ? fediverseCreator : (fediverseCreator.startsWith('@') ? fediverseCreator : `@${fediverseCreator}`);
 
-  $: baseShareText = `${title} by ${profile?.displayName || data.profile?.handle}`;
-  $: blueskyShareText = `${baseShareText} - ${$page.url.href}`;
-  $: mastodonShareText = `${baseShareText} ${mastodonUserTag.startsWith('http://') || mastodonUserTag.startsWith('https://') ? mastodonUserTag : `(${mastodonUserTag})`} - ${$page.url.href}`;
+  // Define specific share texts for each platform
+  $: blueskyShareText = `${title} by @${profile?.handle} - ${$page.url.href}`;
+  $: mastodonShareText = mastodonUserTag.startsWith('http://') || mastodonUserTag.startsWith('https://') ? `${title} by ${mastodonUserTag} - ${$page.url.href}` : `${title} by ${mastodonUserTag} - ${$page.url.href}`;
+  $: facebookShareText = `${title} - ${$page.url.href}`;
+  $: redditShareText = `${title} - ${$page.url.href}`;
 
   // Truncate for character limits
   $: truncatedBlueskyText = blueskyShareText.length > 300 ? blueskyShareText.substring(0, 297) + '...' : blueskyShareText;
   $: truncatedMastodonText = mastodonShareText.length > 500 ? mastodonShareText.substring(0, 497) + '...' : mastodonShareText;
+  $: truncatedFacebookText = facebookShareText.length > 280 ? facebookShareText.substring(0, 277) + '...' : facebookShareText;
+  $: truncatedRedditText = redditShareText.length > 300 ? redditShareText.substring(0, 297) + '...' : redditShareText;
 
   // Encode the share texts for use in URLs
   $: encodedBlueskyText = encodeURIComponent(truncatedBlueskyText);
   $: encodedMastodonText = encodeURIComponent(truncatedMastodonText);
+  $: encodedFacebookText = encodeURIComponent(truncatedFacebookText);
+  $: encodedRedditText = encodeURIComponent(truncatedRedditText);
 
   // Construct the Bluesky share URL
   $: blueskyShareUrl = `https://bsky.app/intent/compose?text=${encodedBlueskyText}`;
 
   // Construct the Reddit share URL
-  $: redditShareUrl = `https://www.reddit.com/submit?url=${encodeURIComponent($page.url.href)}&title=${encodeURIComponent(title)}`;
+  $: redditShareUrl = `https://www.reddit.com/submit?url=${encodeURIComponent($page.url.href)}&title=${encodedRedditText}`;
 
   // Construct the Facebook share URL
-  $: facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent($page.url.href)}`;
+  $: facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent($page.url.href)}&quote=${encodedFacebookText}`;
 
   // Construct the Mastodon share URL
   $: mastodonShareUrl = `https://${mastodonInstance}/share?text=${encodedMastodonText}`;
