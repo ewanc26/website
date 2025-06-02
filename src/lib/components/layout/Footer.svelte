@@ -36,4 +36,5 @@
       >
     </div>
   </div>
+  <a rel="me" href="https://mas.to/@ewanc26" aria-label="Mastodon link."></a>
 </footer>
