@@ -7,14 +7,41 @@
   export let profile: { handle: string; displayName?: string };
   export let data: { profile?: { handle: string } };
   export let mastodonInstance: string = "mastodon.social";
+  export let postContent: string; // Add postContent prop for hashtag generation
+  export let fediverseCreator: string; // Add fediverseCreator prop for Mastodon tagging
+
+  // Function to generate hashtags from text
+  function generateHashtags(text: string | undefined, limit: number = 5): string[] {
+    if (!text) return [];
+    const words = text.toLowerCase().match(/\b\w+\b/g) || [];
+    const commonWords = new Set(["a", "an", "the", "and", "or", "but", "for", "nor", "so", "yet", "at", "by", "in", "of", "on", "to", "up", "down", "out", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"]);
+    const hashtags = new Set<string>();
+
+    for (const word of words) {
+      if (!commonWords.has(word) && word.length > 2) {
+        hashtags.add(word);
+        if (hashtags.size >= limit) break;
+      }
+    }
+    return Array.from(hashtags).map(tag => `#${tag}`);
+  }
 
   // Reactive statement to construct the share text
-  $: shareText = `${title} by ${profile?.displayName || data.profile?.handle} on Bluesky (https://bsky.app/profile/${profile?.handle || data.profile?.handle}) - ${$page.url.href}`;
-  $: blueskyShareText = `${title} by @${profile?.handle || data.profile?.handle} - ${$page.url.href}`;
+  $: generatedHashtags = generateHashtags(postContent);
+
+  $: mastodonUserTag = fediverseCreator.startsWith('@') ? fediverseCreator : `@${fediverseCreator}`;
+
+  $: baseShareText = `${title} by ${profile?.displayName || data.profile?.handle}`;
+  $: blueskyShareText = `${baseShareText} - ${$page.url.href} ${generatedHashtags.join(' ')}`;
+  $: mastodonShareText = `${baseShareText} ${mastodonUserTag} - ${$page.url.href} ${generatedHashtags.join(' ')}`;
+
+  // Truncate for character limits
+  $: truncatedBlueskyText = blueskyShareText.length > 300 ? blueskyShareText.substring(0, 297) + '...' : blueskyShareText;
+  $: truncatedMastodonText = mastodonShareText.length > 500 ? mastodonShareText.substring(0, 497) + '...' : mastodonShareText;
 
   // Encode the share texts for use in URLs
-  $: encodedShareText = encodeURIComponent(shareText);
-  $: encodedBlueskyText = encodeURIComponent(blueskyShareText);
+  $: encodedBlueskyText = encodeURIComponent(truncatedBlueskyText);
+  $: encodedMastodonText = encodeURIComponent(truncatedMastodonText);
 
   // Construct the Bluesky share URL
   $: blueskyShareUrl = `https://bsky.app/intent/compose?text=${encodedBlueskyText}`;
@@ -26,7 +53,7 @@
   $: facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent($page.url.href)}`;
 
   // Construct the Mastodon share URL
-  $: mastodonShareUrl = `https://${mastodonInstance}/share?text=${encodedShareText}`;
+  $: mastodonShareUrl = `https://${mastodonInstance}/share?text=${encodedMastodonText}`;
 </script>
 
 <div
