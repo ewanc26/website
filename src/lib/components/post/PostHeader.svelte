@@ -64,5 +64,5 @@
     {Math.ceil(post.wordCount / 200)} min read • {post.wordCount}
     {wordLabel}
   </p>
-  <ShareIcon title={post.title} {profile} {data} {fediverseCreator} />
+  <ShareIcon title={post.title} {profile} {fediverseCreator} />
 </div>
