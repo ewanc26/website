@@ -73,7 +73,7 @@ npm run dev
 Change environment variables:
 
 ```env
-PUBLIC_HANDLE="myhandle.bsky.social" # Your handle, or DID
+PUBLIC_ATPROTOCOL_USER="myhandle.bsky.social" # Your handle, or DID
 ```
 
 For optimal usage, you need the following record types in your [AT Protocol repository](https://atproto.com/specs/repository):
@@ -91,6 +91,18 @@ For optimal usage, you need the following record types in your [AT Protocol repo
 - `uk.ewancroft.now`: Your status, displayed on the index page, although it's not required.
 - `uk.ewancroft.pro.info`: Your professional information, displayed on the `/professional` route.
 - `uk.ewancroft.site.info`: Information about this site, displayed on the `/info` route.
+
+##### ActivityPub
+
+This website is primarily built for the AT Protocol, but includes minor compatibility with the Fediverse/ActivityPub through the use of `fediverse:creator` meta tags for improved content sharing and discoverability on platforms like Mastodon.
+
+To enable this, add the following to your `.env` file:
+
+```env
+PUBLIC_ACTIVITYPUB_USER=@user@server.tld
+```
+
+This variable is used in `src/lib/components/post/PostHead.svelte` to add a `fediverse:creator` meta tag and in `src/lib/components/shared/ShareIcon.svelte` to enable and configure the Mastodon share button.
 
 #### Standalone
 

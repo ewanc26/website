@@ -33,7 +33,9 @@
     <meta property="article:word_count" content={post.wordCount.toString()} />
 
     <!-- Fediverse -->
-    <meta name="fediverse:creator" content="@ewanc26@mas.to">
+    {#if import.meta.env.PUBLIC_ACTIVITYPUB_USER}
+      <meta name="fediverse:creator" content={import.meta.env.PUBLIC_ACTIVITYPUB_USER}>
+    {/if}
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
