@@ -24,6 +24,8 @@
       const metaTag = document.querySelector('meta[name="fediverse:creator"]');
       if (metaTag) {
           fediverseCreator = metaTag.getAttribute('content') || '';
+      } else if (profile?.did) {
+          fediverseCreator = `https://bsky.app/profile/${profile.handle}`;
       }
   });
 </script>
