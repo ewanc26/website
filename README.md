@@ -30,7 +30,7 @@ This fork serves as both my personal website and blog, modified for personal usa
   - `app.html`: Main HTML template
   - `lib/`: Shared components and utilities
     - `components/`: Reusable Svelte components
-      - `profile/profile.ts`: Shared logic for fetching and caching ATProto profile data, used by both the root and blog layouts.
+      - `profile/`: Shared logic for fetching and caching ATProto profile data, used by both the root and blog layouts.
     - `dateFormatter.ts`: Date formatting utilities
     - `parser.ts`: Content parsing utilities
   - `routes/`: Application routes
