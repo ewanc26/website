@@ -3,6 +3,7 @@
   import { formatRelativeTime } from "$lib/dateFormatter";
   import ShareIcon from "$lib/components/shared/ShareIcon.svelte";
   import type { Post } from "$lib/parser.ts";
+  import { onMount } from 'svelte';
 
   let { post, profile, rkey, localeLoaded, data } = $props<{
     post: Post;
@@ -16,6 +17,15 @@
   let wordLabel = post.wordCount === 1 ? "word" : "words";
 
   let displayDate = $derived(localeLoaded && post.createdAt ? formatRelativeTime(post.createdAt) : 'datetime loading...');
+
+  let fediverseCreator = $state('');
+
+  onMount(() => {
+      const metaTag = document.querySelector('meta[name="fediverse:creator"]');
+      if (metaTag) {
+          fediverseCreator = metaTag.getAttribute('content') || '';
+      }
+  });
 </script>
 
 <div class="flex items-center justify-between">
@@ -52,5 +62,5 @@
     {Math.ceil(post.wordCount / 200)} min read • {post.wordCount}
     {wordLabel}
   </p>
-  <ShareIcon title={post.title} {profile} {data} />
+  <ShareIcon title={post.title} {profile} {data} postContent={post.mdcontent} {fediverseCreator} />
 </div>
