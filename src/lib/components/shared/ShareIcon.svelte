@@ -33,7 +33,7 @@
 
   $: baseShareText = `${title} by ${profile?.displayName || data.profile?.handle}`;
   $: blueskyShareText = `${baseShareText} - ${$page.url.href} ${generatedHashtags.join(' ')}`;
-  $: mastodonShareText = `${baseShareText} ${mastodonUserTag} - ${$page.url.href} ${generatedHashtags.join(' ')}`;
+  $: mastodonShareText = `${baseShareText} (${mastodonUserTag}) - ${$page.url.href} ${generatedHashtags.join(' ')}`;
 
   // Truncate for character limits
   $: truncatedBlueskyText = blueskyShareText.length > 300 ? blueskyShareText.substring(0, 297) + '...' : blueskyShareText;
@@ -54,6 +54,13 @@
 
   // Construct the Mastodon share URL
   $: mastodonShareUrl = `https://${mastodonInstance}/share?text=${encodedMastodonText}`;
+
+  // Reactive statement to open Mastodon share URL when mastodonInstance changes
+  let mastodonShareTrigger = false;
+  $: if (mastodonShareTrigger && mastodonInstance) {
+    window.open(mastodonShareUrl, "_blank", "noopener,noreferrer");
+    mastodonShareTrigger = false; // Reset trigger
+  }
 </script>
 
 <div
@@ -142,7 +149,7 @@
       );
       if (instance) {
         mastodonInstance = instance;
-        window.open(`${mastodonShareUrl}`, "_blank", "noopener,noreferrer");
+        mastodonShareTrigger = true;
       }
     }}
     on:keydown={(e) => {
@@ -153,7 +160,7 @@
         );
         if (instance) {
           mastodonInstance = instance;
-          window.open(`${mastodonShareUrl}`, "_blank", "noopener,noreferrer");
+          mastodonShareTrigger = true;
         }
       }
     }}
