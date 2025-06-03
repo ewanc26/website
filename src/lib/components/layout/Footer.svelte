@@ -36,5 +36,7 @@
       >
     </div>
   </div>
-  <a rel="me" href="https://mas.to/@ewanc26" aria-label="Mastodon link."></a>
+  {#if import.meta.env.PUBLIC_ACTIVITYPUB_USER}
+    <a rel="me" href={`https://${import.meta.env.PUBLIC_ACTIVITYPUB_USER.split('@')[2]}/@${import.meta.env.PUBLIC_ACTIVITYPUB_USER.split('@')[1]}`} aria-label="Mastodon link."></a>
+  {/if}
 </footer>
