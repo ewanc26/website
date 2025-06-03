@@ -5,6 +5,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Recursive:wght@300..800&display=swap');
+
+@font-face {
+  font-family: 'Recursive';
+  src: url('https://fonts.gstatic.com/s/recursive/v43/8vJN7wMr0mhh-RQChyHEH06TlXhq_gukbYrFMk1QuAIcyEwG_X-dpEfaE5YaERmK-CImKsvxvU-MXGX2fSqasNfUvz2xbXfn1uEQadCCk317tQtBCYCK6v8.woff2') format('woff2'),
+       url('https://fonts.gstatic.com/s/recursive/v43/8vJN7wMr0mhh-RQChyHEH06TlXhq_gukbYrFMk1QuAIcyEwG_X-dpEfaE5YaERmK-CImKsvxvU-MXGX2fSqasNfUvz2xbXfn1uEQadCCk317tQtBCYCK6v8.woff') format('woff');
+  font-weight: 300..800;
+  font-stretch: 100%;
+  font-display: swap;
+}
+
 @layer base {
   /* Scrollbar styling */
   ::-webkit-scrollbar {
