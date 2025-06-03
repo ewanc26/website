@@ -1,4 +1,5 @@
 import { PUBLIC_ATPROTOCOL_USER } from "$env/static/public";
+import { getCache, setCache } from "$lib/utils/cache";
 
 export interface Profile {
   avatar: string;
@@ -80,6 +81,13 @@ export async function safeFetch(url: string, fetch: typeof globalThis.fetch) {
 
 
 export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profile> {
+  const cacheKey = `profile_${PUBLIC_ATPROTOCOL_USER}`;
+  let profile: Profile | null = getCache<Profile>(cacheKey);
+
+  if (profile) {
+    return profile;
+  }
+
   try {
     const fetchProfile = await safeFetch(
       `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${PUBLIC_ATPROTOCOL_USER}`,
@@ -107,7 +115,7 @@ export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profil
     if (!pdsurl) {
       throw new Error("DID lacks #atproto_pds service");
     }
-    return {
+    profile = {
       avatar: fetchProfile["avatar"],
       banner: fetchProfile["banner"],
       displayName: fetchProfile["displayName"],
@@ -116,6 +124,8 @@ export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profil
       description: fetchProfile["description"],
       pds: pdsurl,
     };
+    setCache(cacheKey, profile);
+    return profile;
   } catch (error: unknown) {
     console.error("Error fetching profile:", error);
     if (error instanceof Error) {
@@ -131,6 +141,13 @@ export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profil
  * @returns A Promise that resolves to ProfessionalInfo or null if not found or an error occurs.
  */
 export async function getProfessionalInfo(fetch: typeof globalThis.fetch): Promise<ProfessionalInfo | null> {
+  const cacheKey = `professionalInfo_${PUBLIC_ATPROTOCOL_USER}`;
+  let professionalInfo: ProfessionalInfo | null = getCache<ProfessionalInfo>(cacheKey);
+
+  if (professionalInfo) {
+    return professionalInfo;
+  }
+
   try {
     const profile: Profile = await getProfile(fetch); // Assuming getProfile is available and returns the user's profile with PDS and DID
     const rawResponse = await fetch(
@@ -139,8 +156,9 @@ export async function getProfessionalInfo(fetch: typeof globalThis.fetch): Promi
     const response = await rawResponse.json();
 
     if (response && response.records && response.records.length > 0) {
-      // Assuming the record structure matches the ProfessionalInfo interface
-      return response.records[0].value as ProfessionalInfo;
+      professionalInfo = response.records[0].value as ProfessionalInfo;
+      setCache(cacheKey, professionalInfo);
+      return professionalInfo;
     } else {
       console.log("No professional info record found.");
       return null;
@@ -156,6 +174,13 @@ export async function getProfessionalInfo(fetch: typeof globalThis.fetch): Promi
  * @returns A Promise that resolves to SiteInfo or null if not found or an error occurs.
  */
 export async function getSiteInfo(fetch: typeof globalThis.fetch): Promise<SiteInfo | null> {
+  const cacheKey = `siteInfo_${PUBLIC_ATPROTOCOL_USER}`;
+  let siteInfo: SiteInfo | null = getCache<SiteInfo>(cacheKey);
+
+  if (siteInfo) {
+    return siteInfo;
+  }
+
   try {
     const profile: Profile = await getProfile(fetch); // Assuming getProfile is available and returns the user's profile with PDS and DID
     const rawResponse = await fetch(
@@ -164,8 +189,9 @@ export async function getSiteInfo(fetch: typeof globalThis.fetch): Promise<SiteI
     const response = await rawResponse.json();
 
     if (response && response.records && response.records.length > 0) {
-      // Assuming the record structure matches the SiteInfo interface
-      return response.records[0].value as SiteInfo;
+      siteInfo = response.records[0].value as SiteInfo;
+      setCache(cacheKey, siteInfo);
+      return siteInfo;
     } else {
       console.log("No site info record found.");
       return null;
