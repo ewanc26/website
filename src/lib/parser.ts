@@ -10,9 +10,6 @@ import type { Node } from "unist";
 import type { Root, Element } from "hast";
 import type { Plugin } from "unified";
 
-type TextNode = Node & { type: "text"; value: string };
-type ParentNode = Node & { children: Node[] };
-
 export interface Post {
   title: string;
   rkey: string;
@@ -94,51 +91,7 @@ const rehypeUpgradeImage: Plugin<[], Root, Node> = () => {
   };
 };
 
-// Extract plain text from markdown for excerpts
-async function extractTextFromMarkdown(
-  markdown: string,
-  maxLength: number = 160
-): Promise<string> {
-  // Process the markdown to get plain text
-  const plainText = String(
-    await unified()
-      .use(remarkParse, { fragment: true })
-      .use(remarkGfm)
-      .use(() => (tree) => {
-        // Simple transformer that visits all nodes and removes everything but text
-        const visit = (node: Node): string => {
-          if (node.type === "text") {
-            const textNode = node as TextNode;
-            return textNode.value;
-          }
-          if ("children" in node) {
-            const parentNode = node as ParentNode;
-            return parentNode.children.map(visit).filter(Boolean).join(" ");
-          }
-          return "";
-        };
-
-        // Replace tree with just text content
-        return {
-          type: "root",
-          children: [{ type: "text", value: visit(tree) }],
-        };
-      })
-      .use(remarkRehype)
-      .use(rehypeStringify)
-      .process(markdown)
-  );
-
-  // Clean up the text
-  let cleaned = plainText.replace(/\s+/g, " ").trim();
-
-  // Truncate to maxLength if necessary
-  if (cleaned.length > maxLength) {
-    cleaned = cleaned.substring(0, maxLength) + "...";
-  }
-
-  return cleaned;
-}
+import { extractTextFromMarkdown, calculateWordCount } from "$lib/utils/textProcessor";
 
 export async function parse(mdposts: Map<string, MarkdownPost>) {
   const posts: Map<string, Post> = new Map();
@@ -159,9 +112,7 @@ export async function parse(mdposts: Map<string, MarkdownPost>) {
     const excerpt = await extractTextFromMarkdown(post.mdcontent);
 
     // Calculate word count from markdown content
-    const wordCount = post.mdcontent
-      .split(/\s+/)
-      .filter((word) => word.length > 0).length;
+    const wordCount = calculateWordCount(post.mdcontent);
 
     posts.set(rkey, {
       title: post.title,
