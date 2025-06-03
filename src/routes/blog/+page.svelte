@@ -3,7 +3,7 @@
   import YearTabs from "$lib/components/archive/YearTabs.svelte";
   import YearContent from "$lib/components/archive/YearContent.svelte";
   import { page } from "$app/stores";
-  import { formatDate } from "$lib/dateFormatter";
+  import { formatDate } from "$lib/utils/dateFormatter";
   const { data } = $props();
   import type { Post } from "$lib/parser.ts";
 
@@ -136,7 +136,7 @@
   <!-- Content for active year with animations -->
   {#each groupedByYear as { year, months } (year)}
     {#if year === activeYear}
-      <YearContent {year} {months} {localeLoaded} {formatDate} />
+      <YearContent {year} {months} {localeLoaded} />
     {/if}
   {/each}
 {/if}
