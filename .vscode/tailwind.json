@@ -1,0 +1,56 @@
+{
+  "css": {
+    "atDirectives": [
+      {
+        "name": "@tailwind",
+        "description": "Use the @tailwind directive to insert Tailwind’s `base`, `components`, `utilities`, and `variants` styles into your stylesheet.",
+        "references": [
+          {
+            "name": "Tailwind CSS Documentation",
+            "url": "https://tailwindcss.com/docs/functions-and-directives#tailwind"
+          }
+        ]
+      },
+      {
+        "name": "@apply",
+        "description": "Use @apply to inline any existing utility classes from Tailwind into your own custom CSS.",
+        "references": [
+          {
+            "name": "Tailwind CSS Documentation",
+            "url": "https://tailwindcss.com/docs/functions-and-directives#apply"
+          }
+        ]
+      },
+      {
+        "name": "@layer",
+        "description": "Use the @layer directive to tell Tailwind which of your custom CSS rules belong to which ‘layer’.",
+        "references": [
+          {
+            "name": "Tailwind CSS Documentation",
+            "url": "https://tailwindcss.com/docs/functions-and-directives#layer"
+          }
+        ]
+      },
+      {
+        "name": "@variants",
+        "description": "You can generate `responsive`, `hover`, `focus`, `active`, etc. variants of your own utilities by wrapping them in the @variants directive.",
+        "references": [
+          {
+            "name": "Tailwind CSS Documentation",
+            "url": "https://tailwindcss.com/docs/functions-and-directives#variants"
+          }
+        ]
+      },
+      {
+        "name": "@screen",
+        "description": "The @screen directive allows you to create media queries that reference your Tailwind breakpoints by name instead of duplicating their values in your CSS.",
+        "references": [
+          {
+            "name": "Tailwind CSS Documentation",
+            "url": "https://tailwindcss.com/docs/functions-and-directives#screen"
+          }
+        ]
+      }
+    ]
+  }
+}
