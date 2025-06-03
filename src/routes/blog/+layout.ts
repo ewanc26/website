@@ -1,6 +1,7 @@
 import { getProfile } from "$lib/components/profile/profile";
 import type { Profile } from "$lib/components/profile/profile";
 import { parse, type MarkdownPost, type Post } from "$lib/parser";
+import { getCache, setCache } from "$lib/utils/cache";
 
 let profile: Profile;
 let posts: Map<string, Post>;
@@ -14,17 +15,23 @@ export async function load({ fetch }) {
     if (profile === undefined) {
       profile = await getProfile(fetch);
     }
-    if (posts === undefined) {
+    const cacheKey = `blogPosts_${profile.did}`;
+    const cachedData: { posts: Map<string, Post>; sortedPosts: Post[]; } | null = getCache(cacheKey);
+
+    if (cachedData) {
+      posts = cachedData.posts;
+      sortedPosts = cachedData.sortedPosts;
+    } else if (posts === undefined) {
       const rawResponse = await fetch(
         `${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=com.whtwnd.blog.entry`
       );
-      
+
       if (!rawResponse.ok) {
         throw new Error(`Failed to fetch posts: ${rawResponse.status}`);
       }
-      
+
       const response = await rawResponse.json();
-      
+
       if (!response.records || response.records.length === 0) {
         return {
           posts: new Map(),
@@ -34,7 +41,7 @@ export async function load({ fetch }) {
           getAdjacentPosts: () => ({ previous: null, next: null })
         };
       }
-      
+
       const mdposts: Map<string, MarkdownPost> = new Map();
       for (const data of response["records"]) {
         const matches = data["uri"].split("/");
@@ -58,6 +65,7 @@ export async function load({ fetch }) {
       sortedPosts = Array.from(posts.values()).sort(
         (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
       );
+      setCache(cacheKey, { posts, sortedPosts });
     }
 
     return {
