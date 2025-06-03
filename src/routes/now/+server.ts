@@ -1,7 +1,7 @@
 import type { RequestHandler } from "./$types";
 import { dev } from "$app/environment";
 import { getProfile } from "$lib/components/profile/profile";
-import { formatDate } from "$lib/dateFormatter";
+import { formatDate } from "$lib/utils/dateFormatter";
 
 interface StatusUpdate {
   text: string;
