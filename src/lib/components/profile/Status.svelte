@@ -1,7 +1,7 @@
 <script lang="ts">
   import { browser } from "$app/environment";
   import { safeFetch } from "./profile";
-  import { formatRelativeTime } from "$lib/dateFormatter";
+  import { formatRelativeTime } from "$lib/utils/dateFormatter";
   import { fade } from "svelte/transition";
 
   /**
