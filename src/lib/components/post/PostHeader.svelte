@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { formatRelativeTime } from "$lib/dateFormatter";
+  import { formatRelativeTime } from "$lib/utils/dateFormatter";
   import ShareIcon from "$lib/components/shared/ShareIcon.svelte";
   import type { Post } from "$lib/parser.ts";
   import { onMount } from 'svelte';

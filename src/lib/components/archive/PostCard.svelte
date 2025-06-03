@@ -8,7 +8,7 @@
   export let postIndex: number;
   export let localeLoaded: boolean;
 
-  import { formatDate } from "$lib/dateFormatter";
+  import { formatDate } from "$lib/utils/dateFormatter";
 
   // Reactive variable to store the display date string
   let displayDate: string;
