@@ -1,4 +1,4 @@
-import { PUBLIC_HANDLE } from "$env/static/public";
+import { PUBLIC_ATPROTOCOL_USER } from "$env/static/public";
 
 export interface Profile {
   avatar: string;
@@ -82,7 +82,7 @@ export async function safeFetch(url: string, fetch: typeof globalThis.fetch) {
 export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profile> {
   try {
     const fetchProfile = await safeFetch(
-      `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${PUBLIC_HANDLE}`,
+      `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${PUBLIC_ATPROTOCOL_USER}`,
       fetch
     );
     const split = fetchProfile["did"].split(":");
