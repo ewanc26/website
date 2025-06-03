@@ -1,7 +1,7 @@
 import { getProfile } from "$lib/components/profile/profile";
 import type { Profile } from "$lib/components/profile/profile";
 import { parse, type MarkdownPost, type Post } from "$lib/parser";
-import { getCache, setCache } from "$lib/utils/cache";
+
 
 let profile: Profile;
 let posts: Map<string, Post>;
@@ -15,13 +15,7 @@ export async function load({ fetch }) {
     if (profile === undefined) {
       profile = await getProfile(fetch);
     }
-    const cacheKey = `blogPosts_${profile.did}`;
-    const cachedData: { posts: Map<string, Post>; sortedPosts: Post[]; } | null = getCache(cacheKey);
-
-    if (cachedData) {
-      posts = cachedData.posts;
-      sortedPosts = cachedData.sortedPosts;
-    } else if (posts === undefined) {
+    if (posts === undefined) {
       const rawResponse = await fetch(
         `${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=com.whtwnd.blog.entry`
       );
@@ -65,7 +59,7 @@ export async function load({ fetch }) {
       sortedPosts = Array.from(posts.values()).sort(
         (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
       );
-      setCache(cacheKey, { posts, sortedPosts });
+
     }
 
     return {
