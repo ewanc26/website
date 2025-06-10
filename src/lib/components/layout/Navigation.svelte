@@ -40,7 +40,7 @@
         href="{$page.url.origin}/blog/rss"
         class="font-medium text-[large] hover:text-[var(--link-hover-color)]"
         aria-label="RSS Feed"
-        download="{cleanOrigin}_Blog_rss"
+        download="{cleanOrigin}_Blog.rss"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
