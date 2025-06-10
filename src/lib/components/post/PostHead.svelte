@@ -23,7 +23,7 @@
     />
     <meta property="og:description" content={post.excerpt} />
     <meta property="og:site_name" content="Blog - Ewan's Corner" />
-    <meta property="og:image" content={$page.url.origin + `/blog/${post.rkey}/embed.png`} />
+    <meta property="og:image" content={$page.url.origin + "/embed/blog.png"} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
@@ -45,7 +45,7 @@
       content={`${post.title} - Blog - Ewan's Corner`}
     />
     <meta name="twitter:description" content={post.excerpt} />
-    <meta name="twitter:image" content={$page.url.origin + `/blog/${post.rkey}/embed.png`} />
+    <meta name="twitter:image" content={$page.url.origin + "/embed/blog.png"} />
   {:else}
     <title>Post Not Found - Blog - Ewan's Corner</title>
     <meta
