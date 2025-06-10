@@ -45,16 +45,14 @@ This fork serves as both my personal website and blog, modified for personal usa
 ### Static Assets
 
 - `static/`: Static files served directly
-  - `.well-known/atproto-did`: AT Protocol DID configuration (auto-generated)
+  - `.well-known/atproto-did`: AT Protocol DID configuration
   - `Screenshot.png`: Website screenshot
   - `embed/`: Social media embed images
   - `favicon/`: Favicon and related assets
   - `lexicons/`: Custom ATProto lexicons
 
-### Development and Deployment Scripts
+### Developmental and Deployment
 
-- `scripts/`: Build and deployment utilities
-  - `at-res-gen.js`: AT Protocol DID generation script
 - `Dockerfile`: Docker container configuration
 - `LICENSE`: Project license
 - `README.md`: Project documentation
@@ -64,8 +62,6 @@ This fork serves as both my personal website and blog, modified for personal usa
 ## Usage
 
 ### Development
-
-The development server automatically generates the AT Protocol DID configuration before starting:
 
 ```sh
 npm install
@@ -79,8 +75,6 @@ Change environment variables:
 ```env
 PUBLIC_ATPROTOCOL_USER="myhandle.bsky.social" # Your handle, or DID
 ```
-
-The build process automatically generates the `.well-known/atproto-did` file based on your `PUBLIC_ATPROTOCOL_USER` environment variable, resolving handles to DIDs as needed.
 
 For optimal usage, you need the following record types in your [AT Protocol repository](https://atproto.com/specs/repository):
 
@@ -112,8 +106,6 @@ This variable is used in `src/lib/components/post/PostHead.svelte` to add a `fed
 
 #### Standalone
 
-The build process includes automatic DID generation:
-
 ```sh
 npm install
 npm run build
@@ -129,14 +121,3 @@ Modify `docker-compose.yaml` and change the host port if necessary.
 ```sh
 docker compose up -d
 ```
-
-## AT Protocol Integration
-
-This project includes automatic AT Protocol DID configuration:
-
-- **Automatic DID Resolution**: The build script automatically resolves your handle to a DID if needed
-- **Domain Verification**: Generates `.well-known/atproto-did` for domain-based identity verification
-- **Environment Integration**: Uses `PUBLIC_ATPROTOCOL_USER` from your environment variables or `.env` file
-- **Build Integration**: DID generation runs automatically during both development and production builds
-
-The `scripts/at-res-gen.js` handles the complete AT Protocol identity setup, ensuring your domain properly verifies your AT Protocol identity.
