@@ -27,29 +27,55 @@ This fork serves as both my personal website and blog, modified for personal usa
 
 - `src/`: Main application source
   - `app.css`: Global CSS styles
+  - `app.d.ts`: TypeScript declaration file for the SvelteKit app
   - `app.html`: Main HTML template
+  - `env.d.ts`: Environment variable declarations
   - `lib/`: Shared components and utilities
     - `components/`: Reusable Svelte components
-      - `profile/`: Shared logic for fetching and caching ATProto profile data, used by both the root and blog layouts.
-    - `dateFormatter.ts`: Date formatting utilities
-    - `parser.ts`: Content parsing utilities
+      - `archive/`: Components related to the archive section (e.g., `YearTabs.svelte`, `PostCard.svelte`)
+      - `background/`: Background animation components (e.g., `DynamicShapes.svelte`)
+      - `layout/`: Layout components (e.g., `Navigation.svelte`, `Footer.svelte`, `ThemeToggle.svelte`)
+      - `main/`: Main page components (e.g., `DynamicLinks.svelte`)
+      - `post/`: Blog post components (e.g., `PostContent.svelte`, `PostHeader.svelte`)
+      - `profile/`: Shared logic and components for fetching and displaying ATProto profile data (e.g., `Profile.svelte`, `Status.svelte`, `profile.ts`)
+      - `shared/`: General shared components (e.g., `NotFoundMessage.svelte`, `ShareIcon.svelte`)
+    - `parser.ts`: Content parsing utilities for Markdown
+    - `utils/`: Utility functions (e.g., `cache.ts`, `dateFormatter.ts`, `tally.ts`, `textProcessor.ts`)
   - `routes/`: Application routes
     - `+layout.svelte`: Root layout component
-    - `+layout.ts`: Layout server-side code (imports profile logic from `lib/components/profile/profile.ts`)
+    - `+layout.ts`: Root layout server-side code
     - `+page.svelte`: Home page component
-    - `blog/`: Blog-related routes (also imports profile logic from `lib/components/profile/profile.ts`)
+    - `blog/`: Blog-related routes
+      - `+layout.ts`: Blog layout server-side code
+      - `+page.svelte`: Blog index page
+      - `[rkey]/`: Dynamic routes for individual blog posts
+        - `+page.svelte`: Individual blog post page
+        - `+page.ts`: Individual blog post server-side code
+      - `rss/`: RSS feed generation
+        - `+server.ts`: RSS feed endpoint
     - `info/`: Information page routes
-    - `now/`: Now page routes (contains `+server.ts` for RSS feed generation)
+      - `+layout.ts`: Info layout server-side code
+      - `+page.svelte`: Info page
+    - `now/`: Now page routes
+      - `+server.ts`: Now page API endpoint
     - `professional/`: Professional information page routes
+      - `+layout.ts`: Professional layout server-side code
+      - `+page.svelte`: Professional page
+  - `variables.css`: CSS variables for theming
 
 ### Static Assets
 
 - `static/`: Static files served directly
-  - `.well-known/atproto-did`: AT Protocol DID configuration, replace with [your own AT Protocol DID](https://atproto.com/guides/glossary#did-decentralized-id)
-  - `Screenshot.png`: Website screenshot
+  - `.well-known/`: Well-known URIs
+    - `atproto-did`: AT Protocol DID configuration, replace with [your own AT Protocol DID](https://atproto.com/guides/glossary#did-decentralized-id)
   - `embed/`: Social media embed images
   - `favicon/`: Favicon and related assets
+  - `fonts/`: Custom fonts
   - `lexicons/`: Custom ATProto lexicons
+    - `uk/ewancroft/`: Custom lexicons for the project
+      - `now.json`: Now page lexicon
+      - `pro/`: Professional-specific lexicons
+      - `site/`: Site-wide lexicons
 
 ### Developmental and Deployment
 
