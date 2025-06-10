@@ -45,7 +45,7 @@ This fork serves as both my personal website and blog, modified for personal usa
 ### Static Assets
 
 - `static/`: Static files served directly
-  - `.well-known/atproto-did`: AT Protocol DID configuration
+  - `.well-known/atproto-did`: AT Protocol DID configuration, replace with [your own AT Protocol DID](https://atproto.com/guides/glossary#did-decentralized-id)
   - `Screenshot.png`: Website screenshot
   - `embed/`: Social media embed images
   - `favicon/`: Favicon and related assets
