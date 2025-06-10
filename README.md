@@ -51,6 +51,7 @@ This fork serves as both my personal website and blog, modified for personal usa
       - `[rkey]/`: Dynamic routes for individual blog posts
         - `+page.svelte`: Individual blog post page
         - `+page.ts`: Individual blog post server-side code
+        - `embed.png/+server.ts`: Endpoint for generating dynamic Open Graph images for blog posts
       - `rss/`: RSS feed generation
         - `+server.ts`: RSS feed endpoint
     - `info/`: Information page routes
