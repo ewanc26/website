@@ -22,11 +22,12 @@
   // Define specific share texts for each platform
   $: blueskyShareText = `${title} by @${profile?.handle} - ${$page.url.href}`;
   $: mastodonShareText =
-    mastodonUserTag &&
-    (mastodonUserTag.startsWith("http://") ||
-      mastodonUserTag.startsWith("https://"))
-      ? `${title} by ${mastodonUserTag} - ${$page.url.href}`
-      : `${title} by ${mastodonUserTag} - ${$page.url.href}`;
+    mastodonUserTag
+      ? mastodonUserTag.startsWith("http://") ||
+        mastodonUserTag.startsWith("https://")
+        ? `${title} by ${mastodonUserTag} - ${$page.url.href}`
+        : `${title} by ${mastodonUserTag} - ${$page.url.href}`
+      : `${title} - ${$page.url.href}`;
   $: facebookShareText = `${title} - ${$page.url.href}`;
   $: redditShareText = `${title} - ${$page.url.href}`;
 
