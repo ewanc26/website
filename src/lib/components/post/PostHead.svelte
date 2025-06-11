@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import type { Post } from "$lib/parser.ts";
+  import { PUBLIC_ACTIVITYPUB_USER } from "$env/static/public";
 
   export let post: Post | undefined;
 </script>
@@ -33,8 +34,8 @@
     <meta property="article:word_count" content={post.wordCount.toString()} />
 
     <!-- Fediverse -->
-    {#if import.meta.env.PUBLIC_ACTIVITYPUB_USER}
-      <meta name="fediverse:creator" content={import.meta.env.PUBLIC_ACTIVITYPUB_USER}>
+    {#if PUBLIC_ACTIVITYPUB_USER}
+<meta name="fediverse:creator" content={PUBLIC_ACTIVITYPUB_USER}>
     {/if}
 
     <!-- Twitter -->
