@@ -34,8 +34,8 @@
     <meta property="article:word_count" content={post.wordCount.toString()} />
 
     <!-- Fediverse -->
-    {#if PUBLIC_ACTIVITYPUB_USER}
-<meta name="fediverse:creator" content={PUBLIC_ACTIVITYPUB_USER}>
+    {#if PUBLIC_ACTIVITYPUB_USER && PUBLIC_ACTIVITYPUB_USER.length > 0}
+      <meta name="fediverse:creator" content={PUBLIC_ACTIVITYPUB_USER}>
     {/if}
 
     <!-- Twitter -->
