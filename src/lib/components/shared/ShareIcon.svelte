@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { PUBLIC_ACTIVITYPUB_USER } from '$env/static/public';
 
   // Props
   export let title: string;
@@ -7,8 +8,7 @@
   export let profile: { handle: string; displayName?: string };
   export let mastodonInstance: string = "mastodon.social";
   // Add fediverseCreator prop for Mastodon tagging
-  let fediverseCreator: string | undefined = import.meta.env
-    .PUBLIC_ACTIVITYPUB_USER;
+  let fediverseCreator: string | undefined = PUBLIC_ACTIVITYPUB_USER;
 
   $: mastodonUserTag =
     fediverseCreator &&
