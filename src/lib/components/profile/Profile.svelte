@@ -1,7 +1,7 @@
 <script lang="ts">
   // The profile object is passed as a prop to this component.
   export let profile: any;
-  import Status from "./Status.svelte";
+  import { Status } from ".";
 </script>
 
 <!-- Profile Banner: Displays the user's banner image. -->
