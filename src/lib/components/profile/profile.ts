@@ -11,27 +11,6 @@ export interface Profile {
   pds: string;
 }
 
-export interface ProfessionalInfo {
-  displayName?: string;
-  description?: string;
-  avatar?: {
-    image: {
-      $type: string;
-      ref: {
-        $link: string;
-      };
-      mimeType: string;
-      size: number;
-    };
-    alt: string;
-    aspectRatio?: { width: number; height: number };
-  };
-  headline?: string;
-  websiteUrl?: string;
-  contactEmail?: string;
-  country?: string;
-  skills?: string[];
-}
 
 export interface SiteInfo {
   technologyStack?: Array<{ name: string; url?: string; description?: string }>;
@@ -133,39 +112,6 @@ export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profil
     } else {
       throw new Error("An unknown error occurred while fetching profile");
     }
-  }
-}
-
-/**
- * Fetches professional information from the user's PDS.
- * @returns A Promise that resolves to ProfessionalInfo or null if not found or an error occurs.
- */
-export async function getProfessionalInfo(fetch: typeof globalThis.fetch): Promise<ProfessionalInfo | null> {
-  const cacheKey = `professionalInfo_${PUBLIC_ATPROTOCOL_USER}`;
-  let professionalInfo: ProfessionalInfo | null = getCache<ProfessionalInfo>(cacheKey);
-
-  if (professionalInfo) {
-    return professionalInfo;
-  }
-
-  try {
-    const profile: Profile = await getProfile(fetch); // Assuming getProfile is available and returns the user's profile with PDS and DID
-    const rawResponse = await fetch(
-      `${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=uk.ewancroft.pro.info&rkey=self`
-    );
-    const response = await rawResponse.json();
-
-    if (response && response.records && response.records.length > 0) {
-      professionalInfo = response.records[0].value as ProfessionalInfo;
-      setCache(cacheKey, professionalInfo);
-      return professionalInfo;
-    } else {
-      console.log("No professional info record found.");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching professional info:", error);
-    return null;
   }
 }
 
