@@ -11,7 +11,6 @@ export interface Profile {
   pds: string;
 }
 
-
 export interface SiteInfo {
   technologyStack?: Array<{ name: string; url?: string; description?: string }>;
   privacyStatement?: string;
@@ -57,8 +56,6 @@ export async function safeFetch(url: string, fetch: typeof globalThis.fetch) {
   }
 }
 
-
-
 export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profile> {
   const cacheKey = `profile_${PUBLIC_ATPROTOCOL_USER}`;
   let profile: Profile | null = getCache<Profile>(cacheKey);
@@ -79,8 +76,6 @@ export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profil
         diddoc = await safeFetch(`https://plc.directory/${fetchProfile["did"]}`, fetch);
       } else if (split[1] === "web") {
         diddoc = await safeFetch("https://" + split[2] + "/.well-known/did.json", fetch);
-      } else {
-        throw new Error("Invalid DID, Not blessed method");
       }
     } else {
       throw new Error("Invalid DID, malformed");
