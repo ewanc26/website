@@ -59,9 +59,6 @@ This fork serves as both my personal website and blog, modified for personal usa
       - `+page.svelte`: Info page
     - `now/`: Now page routes
       - `+server.ts`: Now page API endpoint
-    - `professional/`: Professional information page routes
-      - `+layout.ts`: Professional layout server-side code
-      - `+page.svelte`: Professional page
   - `variables.css`: CSS variables for theming
 
 ### Static Assets
@@ -116,7 +113,6 @@ For optimal usage, you need the following record types in your [AT Protocol repo
 > My own lexicons, you can remove them if you want. I'm using them for my own purposes. See `static/lexicons/uk/ewancroft` for the schematic definitions.
 
 - `uk.ewancroft.now`: Your status, displayed on the index page, although it's not required.
-- `uk.ewancroft.pro.info`: Your professional information, displayed on the `/professional` route.
 - `uk.ewancroft.site.info`: Information about this site, displayed on the `/info` route.
 
 ##### ActivityPub
