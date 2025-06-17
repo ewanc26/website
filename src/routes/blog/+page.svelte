@@ -3,7 +3,6 @@
   import YearTabs from "$lib/components/archive/YearTabs.svelte";
   import YearContent from "$lib/components/archive/YearContent.svelte";
   import { page } from "$app/stores";
-  import { formatDate } from "$lib/utils/dateFormatter";
   const { data } = $props();
   import type { Post } from "$lib/parser.ts";
 
