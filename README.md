@@ -38,7 +38,8 @@ This fork serves as both my personal website and blog, modified for personal usa
       - `main/`: Main page components (e.g., `DynamicLinks.svelte`)
       - `post/`: Blog post components (e.g., `PostContent.svelte`, `PostHeader.svelte`)
       - `profile/`: Shared logic and components for fetching and displaying ATProto profile data (e.g., `Profile.svelte`, `Status.svelte`, `profile.ts`)
-      - `shared/`: General shared components (e.g., `NotFoundMessage.svelte`, `ShareIcon.svelte`)
+      - `shared/`: General shared components (e.g., `NotFoundMessage.svelte`)
+      - `icons/`: Icon components (e.g., `ShareIcon.svelte`, `HomeIcon.svelte`)
     - `parser.ts`: Content parsing utilities for Markdown
     - `utils/`: Utility functions (e.g., `cache.ts`, `dateFormatter.ts`, `tally.ts`, `textProcessor.ts`)
   - `routes/`: Application routes
@@ -128,7 +129,7 @@ To enable this, add the following to your `.env` file:
 PUBLIC_ACTIVITYPUB_USER=@user@server.tld
 ```
 
-This variable is used in `src/lib/components/post/PostHead.svelte` to add a `fediverse:creator` meta tag, in `src/lib/components/shared/ShareIcon.svelte` to enable and configure the Mastodon share button, and in `src/lib/components/layout/Footer.svelte` to conditionally display a Mastodon link in the footer.
+This variable is used in `src/lib/components/post/PostHead.svelte` to add a `fediverse:creator` meta tag, in `src/lib/components/icons/ShareIcon.svelte` to enable and configure the Mastodon share button, and in `src/lib/components/layout/Footer.svelte` to conditionally display a Mastodon link in the footer.
 
 #### Standalone
 
