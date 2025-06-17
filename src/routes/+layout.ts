@@ -1,10 +1,10 @@
-import { getProfile, getProfessionalInfo } from "$lib/components/profile/profile";
-import type { Profile, ProfessionalInfo } from "$lib/components/profile/profile";
+import { getProfile } from "$lib/components/profile/profile";
+import type { Profile } from "$lib/components/profile/profile";
 
 // Profile data cache
 let profile: Profile;
 let dynamicLinks: LinkBoard | undefined;
-let professionalInfo: ProfessionalInfo | null = null;
+
 
 // Define the type for the fetched links data
 interface LinkCard {
@@ -44,10 +44,7 @@ export async function load({ fetch }) {
     }
   }
 
-  // Fetch professional info only if not already cached
-  if (professionalInfo === null) {
-    professionalInfo = await getProfessionalInfo(fetch);
-  }
+
 
   return {
     profile,
@@ -55,6 +52,6 @@ export async function load({ fetch }) {
     did: profile.did, // Add did from profile
     posts: new Map(), // Add empty posts map to match the expected type
     dynamicLinks,
-    professionalInfo, // Add professionalInfo to the returned data
+
   };
 }
