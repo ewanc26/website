@@ -51,13 +51,26 @@
   </p>
   <p class="text-sm opacity-80 mt-2">
     View on <a
-      href={`https://whtwnd.com/${profile?.did}/${rkey}`}
+      href={`https://whtwnd.nat.vg/${profile?.did}/${rkey}`}
+      onerror={(e) => {
+        e.preventDefault();
+        if (e.target instanceof HTMLAnchorElement) {
+          e.target.href = `https://whtwnd.com/${profile?.did}/${rkey}`;
+        }
+      }}
       class="hover:text-[var(--link-hover-color)]">WhiteWind</a
     >
     or see the record at
     <a
-      href={`https://pdsls.dev/at://${profile?.did}/com.whtwnd.blog.entry/${rkey}`}
-      class="hover:text-[var(--link-hover-color)]">PDSls</a
+      href={`https://atproto.at/viewer?uri=${profile?.did}/com.whtwnd.blog.entry/${rkey}`}
+      onerror={(e) => {
+        e.preventDefault();
+        if (e.target instanceof HTMLAnchorElement) {
+          e.target.href = `https://pdsls.dev/at://${profile?.did}/com.whtwnd.blog.entry/${rkey}`;
+          e.target.textContent = 'PDSls';
+        }
+      }}
+      class="hover:text-[var(--link-hover-color)]">atproto.at</a
     >
   </p>
   <p class="text-sm opacity-80 mt-2">
