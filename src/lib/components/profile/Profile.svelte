@@ -22,20 +22,20 @@
       class="rounded-full w-32 h-32 -mt-2 shadow-lg hover:transform-none"
     />
     <!-- User Information: Display name, handle, DID. -->
-    <div class="text-center p-3">
-      <h4 class="text-center">{profile?.displayName}</h4>
-      <h6 class="text-center">
+    <div class="text-center p-2">
+      <h4 class="text-center text-lg font-semibold mb-1">{profile?.displayName}</h4>
+      <h6 class="text-center mb-1">
         <a
           href="https://bsky.app/profile/{profile?.did}"
-          class="text-link hover:text-link-hover">@{profile?.handle}</a
+          class="text-link hover:text-link-hover text-sm">@{profile?.handle}</a
         >
       </h6>
-      <h6 class="text-center opacity-50">
-        <span class="text-sm">{profile?.did}</span>
+      <h6 class="text-center opacity-40 mb-2">
+        <span class="text-xs">{profile?.did}</span>
       </h6>
       <!-- Profile Description -->
-      <div class="p-3 w-full text-center">
-        <p>{profile?.description}</p>
+      <div class="p-1 w-full text-center mb-2">
+        <p class="text-sm">{profile?.description}</p>
       </div>
       <!-- Display the latest "now" status using the Status component. -->
       <Status {profile} />
