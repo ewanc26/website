@@ -1,6 +1,7 @@
 <script lang="ts">
   import "../app.css";
-  import { page } from "$app/stores";
+  import { getStores } from "$app/stores";
+  const { page } = getStores();
   import Profile from "$lib/components/profile/Profile.svelte";
   import { Navigation, Footer } from "$lib/components/layout";
 

@@ -2,7 +2,8 @@
   import { onMount } from "svelte";
   import YearTabs from "$lib/components/archive/YearTabs.svelte";
   import YearContent from "$lib/components/archive/YearContent.svelte";
-  import { page } from "$app/stores";
+  import { getStores } from "$app/stores";
+  const { page } = getStores();
   const { data } = $props();
   import type { Post } from "$lib/parser.ts";
 
