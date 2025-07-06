@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LinkCard from "../archive/LinkCard.svelte";
+  import ArchiveCard from "../archive/ArchiveCard.svelte";
 
   // Define the type for a single link card
   interface Card {
@@ -37,7 +37,7 @@
       class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr)_)] gap-x-4 gap-y-6 mx-2 my-6"
     >
       {#each data.cards as link}
-        <LinkCard url={link.url} title={link.text} value={link.emoji} />
+        <ArchiveCard type="link" url={link.url} title={link.text} value={link.emoji} />
       {/each}
     </div>
   </div>
