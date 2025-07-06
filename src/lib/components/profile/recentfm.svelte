@@ -4,13 +4,18 @@
   
   interface Props {
     nomoji?: boolean;
+    displayName?: string;
   }
   
-  let { nomoji = true }: Props = $props();
+  let { nomoji = true, displayName = 'User' }: Props = $props();
   
   let loading = $state(false);
   let error = $state<string | null>(null);
-  let content = $state<string>('');
+  let trackData = $state<{
+    name: string;
+    artist: string;
+    url: string;
+  } | null>(null);
   
   onMount(async () => {
     // Don't load if no username is configured
@@ -21,11 +26,10 @@
     loading = true;
     
     try {
-      const emoji = nomoji ? '' : '🎧';
       const params = new URLSearchParams({
         username: PUBLIC_LASTFM_USERNAME,
-        emoji: emoji,
-        nomoji: nomoji.toString()
+        emoji: '🎧',
+        nomoji: 'false'
       });
       
       const response = await fetch(`https://recentfm.rknight.me/now.php?${params.toString()}`);
@@ -35,7 +39,28 @@
       }
       
       const data = await response.json();
-      content = data.content || '';
+      
+      // Parse the HTML content to extract track info
+      if (data.content) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data.content, 'text/html');
+        const link = doc.querySelector('a');
+        
+        if (link) {
+          const fullText = link.textContent || '';
+          const url = link.href;
+          
+          // Extract track name and artist from "Track Name by Artist Name"
+          const match = fullText.match(/^(.+?) by (.+)$/);
+          if (match) {
+            trackData = {
+              name: match[1].trim(),
+              artist: match[2].trim(),
+              url: url
+            };
+          }
+        }
+      }
       
     } catch (err) {
       console.error('Error fetching RecentFM data:', err);
@@ -47,19 +72,37 @@
 </script>
 
 {#if PUBLIC_LASTFM_USERNAME && !error}
-  <div class="recent-played">
+  <div class="recent-played mt-3">
     {#if loading}
       <div class="recentfm-loading">
-        <p>Loading recent tracks...</p>
+        <p class="text-sm opacity-75 italic">Loading recent tracks...</p>
       </div>
-    {:else if content}
-      {@html content}
+    {:else if trackData}
+      <div class="recent-track-info">
+        <p class="text-sm opacity-75">
+          {#if !nomoji}🎧 {/if}{displayName} was last listening to
+        </p>
+        <p class="text-sm font-medium">
+          <a 
+            href={trackData.url} 
+            class="text-link hover:text-link-hover"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            "{trackData.name}" by {trackData.artist}
+          </a>
+        </p>
+      </div>
     {/if}
   </div>
 {/if}
 
 <style>
   .recent-played {
-    @apply text-center text-sm;
+    @apply text-center;
+  }
+  
+  .recent-track-info {
+    @apply space-y-1;
   }
 </style>
