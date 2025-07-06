@@ -110,6 +110,12 @@ For optimal usage, you need the following record types in your [AT Protocol repo
 
 #### Optional
 
+##### Now Playing (Last.fm)
+
+- `src/lib/components/profile/recentfm.svelte`: This component displays recent tracks from [Last.fm](https://last.fm). It requires `PUBLIC_LASTFM_USERNAME` to be set in your `.env` file.
+
+##### Custom Lexicons
+
 > My own lexicons, you can remove them if you want. I'm using them for my own purposes. See `static/lexicons/uk/ewancroft` for the schematic definitions.
 
 - `uk.ewancroft.now`: Your status, displayed on the index page, although it's not required.
