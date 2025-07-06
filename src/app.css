@@ -88,6 +88,15 @@
       "CRSV" 0.5;
   }
 
+  /* Last.FM info styles */
+  .recent-played {
+    @apply text-center;
+  }
+  
+  .recent-track-info {
+    @apply space-y-0.5;
+  }
+
   /* Header links - explicitly removing underline and adding growth effect */
   header a,
   a.font-medium {

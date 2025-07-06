@@ -96,13 +96,3 @@
     {/if}
   </div>
 {/if}
-
-<style>
-  .recent-played {
-    @apply text-center;
-  }
-  
-  .recent-track-info {
-    @apply space-y-0.5;
-  }
-</style>
