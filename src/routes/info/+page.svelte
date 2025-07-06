@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { getStores } from "$app/stores";
+  const { page } = getStores();
   import type { SiteInfo } from "$lib/components/profile/profile";
 
   // Access the siteInfo data from the layout load function
