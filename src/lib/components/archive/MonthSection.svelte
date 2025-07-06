@@ -2,7 +2,7 @@
   import { slide } from "svelte/transition";
 
   import { quintOut } from "svelte/easing";
-  import PostCard from "./PostCard.svelte";
+  import ArchiveCard from "./ArchiveCard.svelte";
   import StatsDisplay from "./StatsDisplay.svelte";
 
   export let monthName: string;
@@ -29,7 +29,7 @@
     class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr)_)] gap-x-6 gap-y-8 mx-4 my-8"
   >
     {#each postsInMonth as post, postIndex (post.rkey)}
-      <PostCard {post} {monthIndex} {postIndex} {localeLoaded} />
+      <ArchiveCard type="post" {post} {monthIndex} {postIndex} {localeLoaded} />
     {/each}
   </div>
 </div>
