@@ -72,17 +72,17 @@
 </script>
 
 {#if PUBLIC_LASTFM_USERNAME && !error}
-  <div class="recent-played mt-3">
+  <div class="recent-played mt-1">
     {#if loading}
       <div class="recentfm-loading">
-        <p class="text-sm opacity-75 italic">Loading recent tracks...</p>
+        <p class="text-xs opacity-60 italic">Loading recent tracks...</p>
       </div>
     {:else if trackData}
       <div class="recent-track-info">
-        <p class="text-sm opacity-75">
+        <p class="text-xs opacity-60">
           {#if !nomoji}🎧 {/if}{displayName} was last listening to
         </p>
-        <p class="text-sm font-medium">
+        <p class="text-xs font-medium">
           <a 
             href={trackData.url} 
             class="text-link hover:text-link-hover"
@@ -103,6 +103,6 @@
   }
   
   .recent-track-info {
-    @apply space-y-1;
+    @apply space-y-0.5;
   }
 </style>
