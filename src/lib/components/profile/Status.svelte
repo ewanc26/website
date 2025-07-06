@@ -65,8 +65,8 @@
   Expects a 'profile' prop with 'pds', 'did', 'handle', and 'displayName'.
 -->
 {#if latestNowText && profile}
-  <div class="p-4">
-    <p class="text-center text-sm">
+  <div class="p-2">
+    <p class="text-center text-xs">
       {#key latestNowText}
         <span transition:fade={{ duration: 200 }}>
           <span class="font-medium">{profile.displayName || profile.handle || profile.did}</span>
@@ -76,7 +76,7 @@
       {/key}
     </p>
     {#if latestNowDate}
-      <p class="text-center text-xs opacity-60 mt-1">
+      <p class="text-center text-xs opacity-50 mt-0.5">
         {#key latestNowDate}
           <span transition:fade={{ duration: 200 }}>{formatRelativeTime(latestNowDate)}</span>
         {/key}
