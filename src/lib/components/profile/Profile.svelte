@@ -41,9 +41,7 @@
       <Status {profile} />
       
       <!-- RecentFM Integration -->
-      <div class="mt-4">
-        <RecentFM nomoji={true} />
-      </div>
+      <RecentFM nomoji={true} displayName={profile?.displayName || 'User'} />
     </div>
   </div>
 {:else}
