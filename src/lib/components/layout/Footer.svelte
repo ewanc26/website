@@ -39,6 +39,6 @@
     </div>
   </div>
   {#if PUBLIC_ACTIVITYPUB_USER && PUBLIC_ACTIVITYPUB_USER.length > 0}
-    <a rel="me" href={`https://${PUBLIC_ACTIVITYPUB_USER.split('@')[2]}/@${PUBLIC_ACTIVITYPUB_USER.split('@')[1]}`} aria-label="Mastodon link."></a>
+    <a rel="me" href={`https://${PUBLIC_ACTIVITYPUB_USER.split('@')[2]}/@${PUBLIC_ACTIVITYPUB_USER.split('@')[1]}`} aria-label="ActivityPub actor link."></a>
   {/if}
 </footer>
