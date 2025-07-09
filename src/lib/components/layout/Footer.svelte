@@ -33,7 +33,7 @@
         href="https://atproto.com/guides/glossary#at-protocol">atproto</a
       >
       -
-      <a class="hover:text-[var(--link-hover-color)]" href="/info"
+      <a class="hover:text-[var(--link-hover-color)]" href="/site/meta"
         >More about this site</a
       >
     </div>
