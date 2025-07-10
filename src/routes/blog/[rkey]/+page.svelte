@@ -41,7 +41,6 @@
       profile={data.profile}
       rkey={data.rkey}
       {localeLoaded}
-      {data}
     />
     <PostContent {post} />
     <PostNavigation {adjacentPosts} />
