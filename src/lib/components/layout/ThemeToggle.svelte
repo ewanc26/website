@@ -1,64 +1,32 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { SunIcon, MoonIcon } from "../icons";
+  import { 
+    THEMES,
+    applyTheme, 
+    getThemePreferences, 
+    saveThemePreferences,
+    updateThemeColorMeta,
+    dispatchThemeChangeEvent,
+    setupSystemThemeListener
+  } from "../../theme-loader";
 
   let isDarkMode: boolean = true;
   let currentTheme: string = "default";
   let isDropdownOpen: boolean = false;
 
-  const themes = [
-    { id: "default", name: "Green (Default)" },
-    { id: "blue", name: "Blue" },
-    { id: "purple", name: "Purple" },
-    { id: "bubblegum", name: "Bubblegum" },
-    { id: "slate", name: "Slate" },
-    { id: "sand", name: "Sand" },
-    { id: "ocean", name: "Ocean" },
-    { id: "sunset", name: "Sunset" },
-    { id: "mint", name: "Mint" },
-    { id: "lavender", name: "Lavender" },
-    { id: "rose", name: "Rose" },
-    { id: "amber", name: "Amber" },
-    { id: "teal", name: "Teal" },
-    { id: "olive", name: "Olive" },
-    { id: "indigo", name: "Indigo" },
-    { id: "coral", name: "Coral" },
-    { id: "charcoal", name: "Charcoal" },
-    { id: "wood", name: "Wood" },
-    { id: "high-contrast", name: "High Contrast (Accessibility)" },
-    { id: "low-contrast", name: "Low Contrast (Accessibility)" },
-  ];
-
   onMount(() => {
-    // Check for saved theme preference or use system preference
-    const savedTheme = localStorage.getItem("theme-mode");
-    const savedColorTheme = localStorage.getItem("color-theme");
+    // Get current theme preferences (already applied by theme-loader)
+    const preferences = getThemePreferences();
+    isDarkMode = preferences.isDarkMode;
+    currentTheme = preferences.themeId;
 
-    if (savedTheme) {
-      isDarkMode = savedTheme === "dark";
-    } else {
-      // Use system preference as default
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      isDarkMode = prefersDark;
-    }
+    // Update meta tag and dispatch event
+    updateThemeColorMeta();
+    dispatchThemeChangeEvent(isDarkMode, currentTheme);
 
-    if (savedColorTheme) {
-      currentTheme = savedColorTheme;
-    }
-
-    applyTheme(isDarkMode, currentTheme);
-
-    // Listen for system theme changes
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", (e) => {
-        if (localStorage.getItem("theme-mode") === null) {
-          isDarkMode = e.matches;
-          applyTheme(isDarkMode, currentTheme);
-        }
-      });
+    // Setup system theme listener
+    setupSystemThemeListener();
 
     // Close dropdown when clicking outside
     document.addEventListener("click", (e: MouseEvent) => {
@@ -76,58 +44,23 @@
   function toggleTheme(): void {
     isDarkMode = !isDarkMode;
     applyTheme(isDarkMode, currentTheme);
-    localStorage.setItem("theme-mode", isDarkMode ? "dark" : "light");
+    saveThemePreferences(isDarkMode, currentTheme);
+    updateThemeColorMeta();
+    dispatchThemeChangeEvent(isDarkMode, currentTheme);
   }
 
   function changeColorTheme(themeId: string): void {
     currentTheme = themeId;
     applyTheme(isDarkMode, currentTheme);
-    localStorage.setItem("color-theme", currentTheme);
+    saveThemePreferences(isDarkMode, currentTheme);
+    updateThemeColorMeta();
+    dispatchThemeChangeEvent(isDarkMode, currentTheme);
     isDropdownOpen = false;
   }
 
   function toggleDropdown(e: MouseEvent): void {
     e.stopPropagation();
     isDropdownOpen = !isDropdownOpen;
-  }
-
-  function applyTheme(dark: boolean, theme: string): void {
-    // First, remove all theme classes
-    document.documentElement.classList.remove("light");
-    themes.forEach((t) => {
-      if (t.id !== "default") {
-        document.documentElement.classList.remove(t.id);
-      }
-    });
-
-    // Then apply the selected theme
-    if (!dark) {
-      document.documentElement.classList.add("light");
-    }
-
-    if (theme !== "default") {
-      document.documentElement.classList.add(theme);
-    }
-
-    // Update theme-color meta tag for browser tab colors
-    const themeColor = getComputedStyle(
-      document.documentElement
-    ).getPropertyValue("--background-color");
-
-    let metaTag = document.querySelector('meta[name="theme-color"]');
-    if (!metaTag) {
-      metaTag = document.createElement("meta");
-      metaTag.setAttribute("name", "theme-color");
-      document.head.appendChild(metaTag);
-    }
-    metaTag.setAttribute("content", themeColor);
-
-    // Dispatch a custom event to notify other components about theme change
-    document.dispatchEvent(
-      new CustomEvent("themeChanged", {
-        detail: { isDarkMode: dark, theme: theme },
-      })
-    );
   }
 </script>
 
@@ -181,7 +114,7 @@
       style="background-color: var(--card-bg); border: 1px solid var(--button-bg);"
     >
       <div class="max-h-80 overflow-y-auto">
-        {#each themes as theme}
+        {#each THEMES as theme}
           <button
             class="theme-option w-full text-left px-4 py-2 transition-colors duration-200"
             class:active={currentTheme === theme.id}
