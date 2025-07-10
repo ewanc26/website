@@ -5,6 +5,7 @@ export { default as MastodonIcon } from './MastodonIcon.svelte';
 export { default as HomeIcon } from './HomeIcon.svelte';
 export { default as RssIcon } from './RssIcon.svelte';
 export { default as BookOpenIcon } from './BookOpenIcon.svelte';
-export { default as ShareIcon } from './ShareIcon.svelte';
+export { default as ShareIcons } from './ShareIcons.svelte';
 export { default as SunIcon } from './SunIcon.svelte';
+export { default as CopyLinkIcon } from './CopyLinkIcon.svelte';
 export { default as MoonIcon } from './MoonIcon.svelte';
