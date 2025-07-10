@@ -2,7 +2,7 @@
   import { getStores } from "$app/stores";
   const { page } = getStores();
   import { PUBLIC_ACTIVITYPUB_USER } from '$env/static/public';
-  import { BlueskyIcon, FacebookIcon, RedditIcon, MastodonIcon } from ".";
+  import { BlueskyIcon, FacebookIcon, RedditIcon, MastodonIcon, CopyLinkIcon } from ".";
 
   // Props
   export let title: string;
@@ -79,6 +79,30 @@
     window.open(mastodonShareUrl, "_blank", "noopener,noreferrer");
     mastodonShareTrigger = false; // Reset trigger
   }
+
+  // Copy Link
+  let copyLinkText = "Copy Link";
+  let showCopyFeedback = false;
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText($page.url.href);
+      copyLinkText = "Copied!";
+      showCopyFeedback = true;
+      setTimeout(() => {
+        showCopyFeedback = false;
+        copyLinkText = "Copy Link";
+      }, 2000);
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+      copyLinkText = "Failed!";
+      showCopyFeedback = true;
+      setTimeout(() => {
+        showCopyFeedback = false;
+        copyLinkText = "Copy Link";
+      }, 2000);
+    }
+  };
 </script>
 
 <div
@@ -158,6 +182,28 @@
       <MastodonIcon />
     </button>
   {/if}
+
+  <!-- Copy Link Button -->
+  <div class="relative flex items-center">
+    <button
+      on:click={copyLink}
+      class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
+      style="background-color: var(--card-bg);"
+      aria-label="Copy Link"
+      title="Copy Link"
+    >
+      <CopyLinkIcon />
+    </button>
+    {#if showCopyFeedback}
+      <span
+        class="copy-feedback absolute left-full ml-2 text-sm font-medium"
+        class:copied={copyLinkText === 'Copied!'}
+        class:failed={copyLinkText === 'Failed!'}
+      >
+        {copyLinkText}
+      </span>
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -174,6 +220,38 @@
   @media (max-width: 640px) {
     .share-icons {
       gap: 0.5rem;
+    }
+  }
+
+  .copy-feedback {
+    opacity: 0;
+    animation: fade-in-out 2s forwards;
+  }
+
+  .copy-feedback.copied {
+    color: var(--accent-color);
+  }
+
+  .copy-feedback.failed {
+    color: var(--error-color);
+  }
+
+  @keyframes fade-in-out {
+    0% {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    20% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    80% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(10px);
     }
   }
 </style>

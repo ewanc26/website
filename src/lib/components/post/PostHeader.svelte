@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
   import { formatRelativeTime } from "$lib/utils/dateFormatter";
-  import { ShareIcon } from "$lib/components/icons";
+  import { ShareIcons } from "$lib/components/icons";
   import type { Post } from "$lib/parser.ts";
   import { onMount } from 'svelte';
 
@@ -76,5 +76,5 @@
     {Math.ceil(post.wordCount / 200)} min read • {post.wordCount}
     {wordLabel}
   </p>
-  <ShareIcon title={post.title} {profile} />
+  <ShareIcons title={post.title} {profile} />
 </div>
