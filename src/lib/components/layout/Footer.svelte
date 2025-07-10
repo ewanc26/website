@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { page } from "$app/stores";
+  import { getStores } from "$app/stores";
+  const { page } = getStores();
   import { PUBLIC_ATPROTOCOL_USER, PUBLIC_ACTIVITYPUB_USER } from "$env/static/public";
 
   export let profile: any;
