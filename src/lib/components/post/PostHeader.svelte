@@ -5,12 +5,11 @@
   import type { Post } from "$lib/parser.ts";
   import { onMount } from 'svelte';
 
-  let { post, profile, rkey, localeLoaded, data } = $props<{
+  let { post, profile, rkey, localeLoaded } = $props<{
     post: Post;
     profile: any;
     rkey: string;
     localeLoaded: boolean;
-    data: any;
   }>();
 
   // Determine singular or plural for word count
