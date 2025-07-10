@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { getStores } from "$app/stores";
+  const { page } = getStores();
   import ThemeToggle from "./ThemeToggle.svelte";
   import { HomeIcon, RssIcon, BookOpenIcon } from "../icons";
 
