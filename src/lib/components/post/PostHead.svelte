@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { getStores } from "$app/stores";
+  const { page } = getStores();
   import type { Post } from "$lib/parser.ts";
   import { PUBLIC_ACTIVITYPUB_USER } from "$env/static/public";
 
