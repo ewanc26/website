@@ -111,79 +111,92 @@
   <span class="text-sm opacity-70 mr-1">Share to</span>
 
   <!-- Bluesky Share Button -->
-  <a
-    href={blueskyShareUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
-    style="background-color: var(--card-bg);"
-    aria-label="Share on Bluesky"
-    title="Share on Bluesky"
-  >
-    <BlueskyIcon />
+
+<a
+href={blueskyShareUrl}
+target=”_blank”
+rel=“noopener noreferrer”
+class=“icon-button p-2 rounded-full transition-all duration-300 hover:scale-110”
+style=“background-color: var(–card-bg);”
+aria-label=“Share on Bluesky”
+title=“Share on Bluesky”
+
+```
+<BlueskyIcon />
+```
+
   </a>
 
   <!-- Facebook Share Button -->
-  <a
-    href={facebookShareUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
-    style="background-color: var(--card-bg);"
-    aria-label="Share on Facebook"
-    title="Share on Facebook"
-  >
-    <FacebookIcon />
+
+<a
+href={facebookShareUrl}
+target=”_blank”
+rel=“noopener noreferrer”
+class=“icon-button p-2 rounded-full transition-all duration-300 hover:scale-110”
+style=“background-color: var(–card-bg);”
+aria-label=“Share on Facebook”
+title=“Share on Facebook”
+
+```
+<FacebookIcon />
+```
+
   </a>
 
   <!-- Reddit Share Button -->
-  <a
-    href={redditShareUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
-    style="background-color: var(--card-bg);"
-    aria-label="Share on Reddit"
-    title="Share on Reddit"
-  >
-    <RedditIcon />
+
+<a
+href={redditShareUrl}
+target=”_blank”
+rel=“noopener noreferrer”
+class=“icon-button p-2 rounded-full transition-all duration-300 hover:scale-110”
+style=“background-color: var(–card-bg);”
+aria-label=“Share on Reddit”
+title=“Share on Reddit”
+
+```
+<RedditIcon />
+```
+
   </a>
 
-  {#if PUBLIC_ACTIVITYPUB_USER && PUBLIC_ACTIVITYPUB_USER.length > 0}
-    <button
-      on:click|preventDefault={() => {
-        const instance = prompt(
-          "Enter your Mastodon instance (e.g. mastodon.social):",
-          mastodonInstance
-        );
-        if (instance) {
-          mastodonInstance = instance;
-          mastodonShareTrigger = true;
-        }
-      }}
-      on:keydown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          const instance = prompt(
-            "Enter your Mastodon instance (e.g. mastodon.social):",
-            mastodonInstance
-          );
-          if (instance) {
-            mastodonInstance = instance;
-            mastodonShareTrigger = true;
-          }
-        }
-      }}
-      class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
-      style="background-color: var(--card-bg);"
-      aria-label="Share on Mastodon"
-      title="Share on Mastodon"
-      tabindex="0"
-    >
-      <MastodonIcon />
-    </button>
-  {/if}
+{#if PUBLIC_ACTIVITYPUB_USER && PUBLIC_ACTIVITYPUB_USER.length > 0}
+<button
+on:click|preventDefault={() => {
+const instance = prompt(
+“Enter your Mastodon instance (e.g. mastodon.social):”,
+mastodonInstance
+);
+if (instance) {
+mastodonInstance = instance;
+mastodonShareTrigger = true;
+}
+}}
+on:keydown={(e) => {
+if (e.key === “Enter” || e.key === “ “) {
+const instance = prompt(
+“Enter your Mastodon instance (e.g. mastodon.social):”,
+mastodonInstance
+);
+if (instance) {
+mastodonInstance = instance;
+mastodonShareTrigger = true;
+}
+}
+}}
+class=“icon-button p-2 rounded-full transition-all duration-300 hover:scale-110”
+style=“background-color: var(–card-bg);”
+aria-label=“Share on Mastodon”
+title=“Share on Mastodon”
+tabindex=“0”
+>
+<MastodonIcon />
+</button>
+{/if}
 
   <!-- Copy Link Button -->
+
   <div class="relative flex items-center">
     <button
       on:click={copyLink}
@@ -220,6 +233,11 @@
   @media (max-width: 640px) {
     .share-icons {
       gap: 0.5rem;
+    }
+    
+    /* Hide copy feedback text on mobile */
+    .copy-feedback {
+      display: none;
     }
   }
 
