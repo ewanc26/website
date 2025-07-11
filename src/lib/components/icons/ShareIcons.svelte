@@ -108,8 +108,6 @@
 <div
   class={`share-icons flex items-center gap-2 ${showInHeader ? "ml-auto mr-2" : "justify-center my-4"}`}
 >
-  <span class="text-sm opacity-70 mr-1">Share to</span>
-
   <!-- Bluesky Share Button -->
   <a
     href={blueskyShareUrl}
