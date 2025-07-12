@@ -43,8 +43,11 @@
       const groups: Record<number, Record<string, Post[]>> = {}; // Change from string to number
 
       posts.forEach((post) => {
-        const year = post.createdAt.getFullYear(); // Remove toString()
-        const month = getMonthName(post.createdAt);
+        const year = post.createdAt.getFullYear();
+        // Ensure createdAt is a valid Date object before using it
+        const month = post.createdAt instanceof Date && !isNaN(post.createdAt.getTime())
+          ? getMonthName(post.createdAt)
+          : 'Invalid Date'; // Fallback for invalid dates
 
         if (!groups[year]) groups[year] = {};
         if (!groups[year][month]) groups[year][month] = [];
