@@ -108,11 +108,14 @@ export async function parse(mdposts: Map<string, MarkdownPost>) {
         .process(post.mdcontent)
     );
 
+    // Ensure mdcontent is a string before processing
+    const markdownContent = post.mdcontent || '';
+
     // Extract plain text for excerpt
-    const excerpt = await extractTextFromMarkdown(post.mdcontent);
+    const excerpt = await extractTextFromMarkdown(markdownContent);
 
     // Calculate word count from markdown content
-    const wordCount = calculateWordCount(post.mdcontent);
+    const wordCount = calculateWordCount(markdownContent);
 
     posts.set(rkey, {
       title: post.title,
