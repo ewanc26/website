@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "../app.css";
+  import "../css/app.css";
   import { getStores } from "$app/stores";
   const { page } = getStores();
   import Profile from "$lib/components/profile/Profile.svelte";
