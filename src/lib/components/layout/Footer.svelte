@@ -1,8 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getStores } from "$app/stores";
-  const { page } = getStores();
-  import { PUBLIC_ATPROTOCOL_USER, PUBLIC_ACTIVITYPUB_USER } from "$env/static/public";
+  import { PUBLIC_ACTIVITYPUB_USER } from "$env/static/public";
 
   export let profile: any;
   export const posts: any = undefined;
@@ -22,7 +20,7 @@
       {#if profile?.handle}
         <a
           href="https://bsky.app/profile/{profile.did}"
-          class="hover:text-[var(--link-hover-color)]">@{profile.handle}</a
+          class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]">@{profile.handle}</a
         >
       {:else}
         {profile?.displayName || profile?.did}
@@ -30,11 +28,11 @@
     </div>
     <div>
       powered by <a
-        class="hover:text-[var(--link-hover-color)]"
+        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
         href="https://atproto.com/guides/glossary#at-protocol">atproto</a
       >
       -
-      <a class="hover:text-[var(--link-hover-color)]" href="/site/meta"
+      <a class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]" href="/site/meta"
         >More about this site</a
       >
     </div>
