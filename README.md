@@ -42,7 +42,7 @@ For optimal usage, you need the following record types in your [AT Protocol repo
 > My own lexicons, you can remove them if you want. I'm using them for my own purposes. See `static/lexicons/uk/ewancroft` for the schematic definitions.
 
 - `uk.ewancroft.now`: Your status, displayed on the index page, although it's not required.
-- `uk.ewancroft.site.info`: Information about this site, displayed on the `/info` route.
+- `uk.ewancroft.site.info`: Information about this site, displayed on the `/site/meta` route.
 
 ##### ActivityPub
 
