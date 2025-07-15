@@ -1,4 +1,4 @@
-@import "./variables.css";
+@import "$lib/css/variables.css";
 
 /* Minimalist flat styles with gentle dark pastel green theme */
 @tailwind base;
