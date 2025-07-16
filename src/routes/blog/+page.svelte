@@ -7,11 +7,26 @@
   const { data } = $props();
   import type { Post } from "$lib/parser.ts";
 
-  // Get posts from data and sort them by createdAt in descending order (newest first)
+  // Get posts from data, filter out invalid dates, and sort them by createdAt in descending order (newest first)
   const posts = $derived(
-    Array.from(data.posts.values() as Iterable<Post>).sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-    )
+    Array.from(data.posts.values() as Iterable<Post>)
+      .filter((post) => {
+        // Check for invalid dates and log them
+        const isValidDate = post.createdAt instanceof Date && !isNaN(post.createdAt.getTime());
+        
+        if (!isValidDate) {
+          console.warn('Post with invalid date found:', {
+            title: post.title,
+            rkey: post.rkey,
+            createdAt: post.createdAt,
+            createdAtType: typeof post.createdAt,
+            createdAtString: String(post.createdAt)
+          });
+        }
+        
+        return isValidDate;
+      })
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
   );
 
   // State to track if locale has been properly loaded
@@ -34,20 +49,17 @@
 
   // Group posts by year and month
   type YearMonthGroup = {
-    year: number; // Change from string to number
+    year: number;
     months: Record<string, Post[]>;
   };
 
   const groupedByYear = $derived(
     (() => {
-      const groups: Record<number, Record<string, Post[]>> = {}; // Change from string to number
+      const groups: Record<number, Record<string, Post[]>> = {};
 
       posts.forEach((post) => {
         const year = post.createdAt.getFullYear();
-        // Ensure createdAt is a valid Date object before using it
-        const month = post.createdAt instanceof Date && !isNaN(post.createdAt.getTime())
-          ? getMonthName(post.createdAt)
-          : 'Invalid Date'; // Fallback for invalid dates
+        const month = getMonthName(post.createdAt);
 
         if (!groups[year]) groups[year] = {};
         if (!groups[year][month]) groups[year][month] = [];
@@ -59,14 +71,14 @@
       return Object.entries(groups)
         .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
         .map(([year, months]) => ({
-          year: Number(year), // Convert to number
+          year: Number(year),
           months,
         }));
     })() as YearMonthGroup[]
   );
 
-  // State for active year tab - Fix: Initialize as number
-  let activeYear = $state(0); // Initialize with 0 or another default number
+  // State for active year tab - Initialize as number
+  let activeYear = $state(0);
 
   // Set initial active year when data is loaded
   $effect(() => {
