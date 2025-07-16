@@ -41,15 +41,55 @@ export async function load({ fetch }) {
         const matches = data["uri"].split("/");
         const rkey = matches[matches.length - 1];
         const record = data["value"];
+        
+        // Debug the full record structure
+        console.log('Full record structure for', rkey, ':', {
+          dataKeys: Object.keys(data),
+          valueKeys: record ? Object.keys(record) : 'record is null/undefined',
+          record: record,
+          uri: data["uri"]
+        });
+        
         if (
           matches &&
           matches.length === 5 &&
           record &&
           (record["visibility"] === "public" || !record["visibility"])
         ) {
+          // Debug the date parsing
+          const rawCreatedAt = record["createdAt"];
+          console.log('Processing post:', {
+            rkey,
+            title: record["title"],
+            rawCreatedAt,
+            rawCreatedAtType: typeof rawCreatedAt,
+            parsedDate: rawCreatedAt ? new Date(rawCreatedAt) : 'No rawCreatedAt',
+            isValidParsedDate: rawCreatedAt ? !isNaN(new Date(rawCreatedAt).getTime()) : false
+          });
+
+          if (!rawCreatedAt) {
+            console.warn(`Skipping post with missing createdAt: ${rkey}`, {
+              title: record["title"],
+              availableFields: Object.keys(record)
+            });
+            continue;
+          }
+
+          const createdAtDate = new Date(rawCreatedAt);
+          
+          // Skip posts with invalid dates
+          if (isNaN(createdAtDate.getTime())) {
+            console.warn(`Skipping post with invalid date: ${rkey}`, {
+              title: record["title"],
+              rawCreatedAt,
+              rawCreatedAtType: typeof rawCreatedAt
+            });
+            continue;
+          }
+
           mdposts.set(rkey, {
             title: record["title"],
-            createdAt: new Date(record["createdAt"]),
+            createdAt: createdAtDate,
             mdcontent: record["content"],
             rkey,
           });
