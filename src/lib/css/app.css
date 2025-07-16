@@ -194,11 +194,6 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   }
 
-  .title-truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
   /* Profile banner - simplified */
   .profile-banner {
     @apply bg-cover bg-center rounded-md border-0;
