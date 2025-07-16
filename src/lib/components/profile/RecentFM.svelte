@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { PUBLIC_LASTFM_USERNAME } from '$env/static/public';
+  import { env } from '$env/dynamic/public';
   
   interface Props {
     nomoji?: boolean;
@@ -19,7 +19,8 @@
   
   onMount(async () => {
     // Don't load if no username is configured
-    if (!PUBLIC_LASTFM_USERNAME) {
+    const lastfmUsername = env.PUBLIC_LASTFM_USERNAME;
+    if (!lastfmUsername) {
       return;
     }
     
@@ -27,7 +28,7 @@
     
     try {
       const params = new URLSearchParams({
-        username: PUBLIC_LASTFM_USERNAME,
+        username: lastfmUsername,
         emoji: '🎧',
         nomoji: 'false'
       });
@@ -71,7 +72,7 @@
   });
 </script>
 
-{#if PUBLIC_LASTFM_USERNAME && !error}
+{#if env.PUBLIC_LASTFM_USERNAME && !error}
   <div class="recent-played mt-1">
     {#if loading}
       <div class="recentfm-loading">
