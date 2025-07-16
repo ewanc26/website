@@ -44,8 +44,9 @@
   <a {href}>
     <div class="flex flex-col {cardHeight} justify-between">
       <p
-        class="text-[var(--link-color)] leading-[1.5] pb-2 title-truncate font-medium"
+        class="text-[var(--link-color)] leading-[1.5] pb-2 font-medium overflow-hidden"
         title={displayTitle}
+        style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; word-break: break-word;"
       >
         {displayTitle}
       </p>
