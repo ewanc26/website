@@ -34,7 +34,7 @@
 {#if data && data.cards.length > 0}
   <div class="mb-12 ml-4">
     <div
-      class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr)_)] gap-x-4 gap-y-6 mx-2 my-6"
+      class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr)_)] gap-x-6 gap-y-6 mx-2 my-6"
     >
       {#each data.cards as link}
         <ArchiveCard type="link" url={link.url} title={link.text} value={link.emoji} />
