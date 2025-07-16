@@ -8,7 +8,7 @@
 @font-face {
   font-family: 'Recursive';
   src: url('/fonts/ArrowType-Recursive-1.085/Recursive_Web/woff2_variable/Recursive_VF_1.085.woff2') format('woff2');
-  font-weight: 300..800;
+  font-weight: 300 800;
   font-stretch: 100%;
   font-display: swap;
 }
