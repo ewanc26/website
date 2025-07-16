@@ -1,4 +1,4 @@
-import { PUBLIC_ATPROTOCOL_USER } from "$env/static/public";
+import { env } from "$env/dynamic/public";
 import { getCache, setCache } from "$lib/utils/cache";
 
 export interface Profile {
@@ -57,7 +57,7 @@ export async function safeFetch(url: string, fetch: typeof globalThis.fetch) {
 }
 
 export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profile> {
-  const cacheKey = `profile_${PUBLIC_ATPROTOCOL_USER}`;
+  const cacheKey = `profile_${env.PUBLIC_ATPROTOCOL_USER}`;
   let profile: Profile | null = getCache<Profile>(cacheKey);
 
   if (profile) {
@@ -66,7 +66,7 @@ export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profil
 
   try {
     const fetchProfile = await safeFetch(
-      `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${PUBLIC_ATPROTOCOL_USER}`,
+      `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${env.PUBLIC_ATPROTOCOL_USER}`,
       fetch
     );
     const split = fetchProfile["did"].split(":");
@@ -115,7 +115,7 @@ export async function getProfile(fetch: typeof globalThis.fetch): Promise<Profil
  * @returns A Promise that resolves to SiteInfo or null if not found or an error occurs.
  */
 export async function getSiteInfo(fetch: typeof globalThis.fetch): Promise<SiteInfo | null> {
-  const cacheKey = `siteInfo_${PUBLIC_ATPROTOCOL_USER}`;
+  const cacheKey = `siteInfo_${env.PUBLIC_ATPROTOCOL_USER}`;
   let siteInfo: SiteInfo | null = getCache<SiteInfo>(cacheKey);
 
   if (siteInfo) {

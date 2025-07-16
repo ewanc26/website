@@ -2,7 +2,7 @@
   import { getStores } from "$app/stores";
   const { page } = getStores();
   import type { Post } from "$lib/parser.ts";
-  import { PUBLIC_ACTIVITYPUB_USER } from "$env/static/public";
+  import { env } from "$env/dynamic/public";
 
   export let post: Post | undefined;
 </script>
@@ -35,8 +35,8 @@
     <meta property="article:word_count" content={post.wordCount.toString()} />
 
     <!-- Fediverse -->
-    {#if PUBLIC_ACTIVITYPUB_USER && PUBLIC_ACTIVITYPUB_USER.length > 0}
-      <meta name="fediverse:creator" content={PUBLIC_ACTIVITYPUB_USER}>
+    {#if env.PUBLIC_ACTIVITYPUB_USER && env.PUBLIC_ACTIVITYPUB_USER.length > 0}
+      <meta name="fediverse:creator" content={env.PUBLIC_ACTIVITYPUB_USER}>
     {/if}
 
     <!-- Twitter -->

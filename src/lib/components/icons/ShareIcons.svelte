@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getStores } from "$app/stores";
   const { page } = getStores();
-  import { PUBLIC_ACTIVITYPUB_USER } from '$env/static/public';
+  import { env } from '$env/dynamic/public';
   import { BlueskyIcon, FacebookIcon, RedditIcon, MastodonIcon, CopyLinkIcon } from ".";
 
   // Props
@@ -10,7 +10,7 @@
   export let profile: { handle: string; displayName?: string };
   export let mastodonInstance: string = "mastodon.social";
   // Add fediverseCreator prop for Mastodon tagging
-  let fediverseCreator: string | undefined = PUBLIC_ACTIVITYPUB_USER;
+  let fediverseCreator: string | undefined = env.PUBLIC_ACTIVITYPUB_USER;
 
   $: mastodonUserTag =
     fediverseCreator &&
@@ -147,7 +147,7 @@
     <RedditIcon />
   </a>
 
-  {#if PUBLIC_ACTIVITYPUB_USER && PUBLIC_ACTIVITYPUB_USER.length > 0}
+  {#if env.PUBLIC_ACTIVITYPUB_USER && env.PUBLIC_ACTIVITYPUB_USER.length > 0}
     <button
       on:click|preventDefault={() => {
         const instance = prompt(
