@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { PUBLIC_ACTIVITYPUB_USER } from "$env/static/public";
+  import { env } from "$env/dynamic/public";
 
   export let profile: any;
   export const posts: any = undefined;
@@ -37,7 +37,7 @@
       >
     </div>
   </div>
-  {#if PUBLIC_ACTIVITYPUB_USER && PUBLIC_ACTIVITYPUB_USER.length > 0}
-    <a rel="me" href={`https://${PUBLIC_ACTIVITYPUB_USER.split('@')[2]}/@${PUBLIC_ACTIVITYPUB_USER.split('@')[1]}`} aria-label="ActivityPub actor link."></a>
+  {#if env.PUBLIC_ACTIVITYPUB_USER && env.PUBLIC_ACTIVITYPUB_USER.length > 0}
+    <a rel="me" href={`https://${env.PUBLIC_ACTIVITYPUB_USER.split('@')[2]}/@${env.PUBLIC_ACTIVITYPUB_USER.split('@')[1]}`} aria-label="ActivityPub actor link."></a>
   {/if}
 </footer>
