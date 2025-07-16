@@ -37,10 +37,3 @@
     />
   {/each}
 </div>
-
-<style>
-  /* Smooth animation styles */
-  .year-content {
-    will-change: transform, opacity;
-  }
-</style>

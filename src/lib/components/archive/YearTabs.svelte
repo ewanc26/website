@@ -38,10 +38,6 @@
 </div>
 
 <style>
-  /* Ensure tab indicator transitions smoothly */
-  .tab-indicator {
-    will-change: transform, left, width;
-  }
 
   /* Custom scrollbar styling for tabs container */
   .tabs-container::-webkit-scrollbar {

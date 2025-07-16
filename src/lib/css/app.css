@@ -77,10 +77,11 @@
   }
 
   a {
-    @apply text-[var(--link-color)] hover:text-[var(--link-hover-color)] transition-colors duration-300 no-underline;
+    @apply text-[var(--link-color)] hover:text-[var(--link-hover-color)] no-underline;
     font-variation-settings: "MONO" 0, "CASL" 0, "wght" 450, "slnt" 0,
       "CRSV" 0.5;
-    transition: font-variation-settings 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Reduced transition complexity */
+    transition: color 0.2s ease;
   }
 
   a:hover {
@@ -97,10 +98,17 @@
     @apply space-y-0.5;
   }
 
-  /* Header links - explicitly removing underline and adding growth effect */
+  /* Header links - simplified transitions */
   header a,
   a.font-medium {
-    @apply no-underline hover:no-underline transition-transform duration-300 hover:scale-110 inline-block;
+    @apply no-underline hover:no-underline inline-block;
+    /* Only animate on hover, not constantly */
+    transition: transform 0.2s ease;
+  }
+
+  header a:hover,
+  a.font-medium:hover {
+    transform: scale(1.1);
   }
 
   /* Typography styles for blog content */
@@ -131,7 +139,6 @@
 
   a {
     color: var(--link-color);
-    transition: color 0.3s ease;
     text-decoration: none;
   }
 
@@ -172,17 +179,19 @@
     @apply bg-transparent p-0;
   }
 
-  /* Post grid and cards */
+  /* Post grid and cards - simplified animations */
   .post-card {
-    @apply border-0 rounded-md p-4 transition-all duration-300
-               hover:scale-105 shadow-md hover:shadow-lg;
+    @apply border-0 rounded-md p-4 shadow-md;
     background-color: var(--card-bg);
     color: var(--text-color);
-    transform-style: preserve-3d;
+    /* Only animate specific properties on hover */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
   }
 
   .post-card:hover {
     background-color: var(--header-footer-bg);
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   }
 
   .title-truncate {
@@ -190,9 +199,14 @@
     text-overflow: ellipsis;
   }
 
-  /* Profile banner - explicitly removing border */
+  /* Profile banner - simplified */
   .profile-banner {
-    @apply bg-cover bg-center rounded-md border-0 transition-all duration-300;
+    @apply bg-cover bg-center rounded-md border-0;
+    transition: opacity 0.2s ease;
+  }
+
+  .profile-banner:hover {
+    opacity: 0.95;
   }
 
   /* Profile section elements */
@@ -201,28 +215,33 @@
   }
 
   div.items-center {
-    @apply p-3 transition-all duration-300;
+    @apply p-3;
   }
 
   .rounded-full {
-    @apply shadow-none transition-transform duration-300 hover:scale-105;
+    @apply shadow-none;
+    transition: transform 0.2s ease;
   }
 
-  /* Account handle and related info - explicitly left-aligned */
+  .rounded-full:hover {
+    transform: scale(1.05);
+  }
+
+  /* Account handle and related info */
   h4.content-around,
   h6.content-around {
-    @apply my-2 text-left transition-all duration-300;
+    @apply my-2 text-left;
   }
 
-  /* Links styling within the profile section */
+  /* Links styling within the profile section - simplified */
   .profile-banner a,
   .flex-wrap a,
   div.items-center a,
   h4.content-around a,
   h6.content-around a {
-    @apply no-underline hover:no-underline 
-               transition-all duration-300 hover:scale-110 inline-block;
+    @apply no-underline hover:no-underline inline-block;
     color: var(--link-color);
+    transition: color 0.2s ease, transform 0.2s ease;
   }
 
   .profile-banner a:hover,
@@ -231,12 +250,7 @@
   h4.content-around a:hover,
   h6.content-around a:hover {
     color: var(--link-hover-color);
-  }
-
-  /* Add subtle hover effects to containers */
-  .profile-banner:hover,
-  div.items-center:hover {
-    @apply bg-opacity-95;
+    transform: scale(1.1);
   }
 
   /* Remove any borders throughout profile section */
@@ -294,6 +308,7 @@
   opacity: 0.8;
 }
 
+/* Respect user preferences for reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
