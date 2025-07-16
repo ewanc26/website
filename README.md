@@ -19,7 +19,7 @@ npm run dev
 
 Change environment variables:
 
-```env
+```ini
 PUBLIC_ATPROTOCOL_USER="myhandle.bsky.social" # Your handle, or DID
 ```
 
@@ -50,7 +50,7 @@ This website is primarily built for the AT Protocol, but includes minor compatib
 
 To enable this, add the following to your `.env` file:
 
-```env
+```ini
 PUBLIC_ACTIVITYPUB_USER=@user@server.tld
 ```
 
