@@ -26,7 +26,7 @@
   <h2 class="text-2xl font-bold mb-1 ml-2">{monthName}</h2>
   <StatsDisplay {totalReadTime} {totalWordCount} {postCount} />
   <div
-    class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr)_)] gap-x-6 gap-y-8 mx-4 my-8"
+    class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr)_)] gap-x-6 gap-y-6 mx-4 my-8"
   >
     {#each postsInMonth as post, postIndex (post.rkey)}
       <ArchiveCard type="post" {post} {monthIndex} {postIndex} {localeLoaded} />
