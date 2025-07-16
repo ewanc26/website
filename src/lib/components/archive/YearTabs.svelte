@@ -5,6 +5,10 @@
   function setActiveYear(year: number) {
     activeYear = year;
   }
+
+  // Calculate the active tab index more reliably
+  $: activeTabIndex = groupedByYear.findIndex((g) => g.year === activeYear);
+  $: indicatorLeft = activeTabIndex >= 0 ? activeTabIndex * 100 : 0;
 </script>
 
 <div
@@ -13,8 +17,7 @@
   <div class="tab-indicator-container absolute bottom-0 left-0 h-0.5 w-full">
     <div
       class="tab-indicator bg-[var(--link-color)] h-full absolute bottom-0 transition-all duration-300 ease-out"
-      style="left: {groupedByYear.findIndex((g) => g.year === activeYear) *
-        100}px; width: 100px;"
+      style="left: {indicatorLeft}px; width: 100px;"
     ></div>
   </div>
 
@@ -38,7 +41,6 @@
 </div>
 
 <style>
-
   /* Custom scrollbar styling for tabs container */
   .tabs-container::-webkit-scrollbar {
     height: 6px;
