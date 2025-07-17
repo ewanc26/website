@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { env } from "$env/dynamic/public";
+  import TidClock from "./TidClock.svelte";
 
   export let profile: any;
   export const posts: any = undefined;
@@ -36,6 +37,9 @@
         >More about this site</a
       >
     </div>
+    
+    <!-- TID Clock Component -->
+    <TidClock />
   </div>
   {#if env.PUBLIC_ACTIVITYPUB_USER && env.PUBLIC_ACTIVITYPUB_USER.length > 0}
     <a rel="me" href={`https://${env.PUBLIC_ACTIVITYPUB_USER.split('@')[2]}/@${env.PUBLIC_ACTIVITYPUB_USER.split('@')[1]}`} aria-label="ActivityPub actor link."></a>
