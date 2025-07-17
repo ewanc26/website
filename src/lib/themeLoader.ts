@@ -1,7 +1,3 @@
-// src/lib/theme-loader.ts
-// This file handles theme loading and prevents flash of default theme
-// It's designed to be loaded before any other scripts
-
 export interface Theme {
   id: string;
   name: string;

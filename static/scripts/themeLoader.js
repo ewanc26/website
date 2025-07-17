@@ -1,4 +1,4 @@
-// Inline theme loader - compiled from theme-loader.ts
+// Inline theme loader - compiled from themeLoader.ts
 // This runs immediately when the script loads
 (function() {
   'use strict';
