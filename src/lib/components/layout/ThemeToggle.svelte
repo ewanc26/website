@@ -9,7 +9,7 @@
     updateThemeColorMeta,
     dispatchThemeChangeEvent,
     setupSystemThemeListener
-  } from "../../theme-loader";
+  } from "../../themeLoader";
 
   let isDarkMode: boolean = true;
   let currentTheme: string = "default";

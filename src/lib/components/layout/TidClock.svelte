@@ -87,59 +87,10 @@
   });
 </script>
 
-<div class="tid-clock-container">
-  <div class="tid-display">
-    <span class="tid-label">TID:</span>
-    <button 
-      class="tid-value" 
-      on:click={copyTID}
-      title="Click to copy TID"
-    >
-      {currentTID}
-    </button>
-  </div>
-</div>
-
-<style>
-  .tid-clock-container {
-    font-family: 'Courier New', monospace;
-    font-size: 0.75rem;
-    opacity: 0.7;
-    margin-top: 0.5rem;
-  }
-
-  .tid-display {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    justify-content: center;
-  }
-
-  .tid-label {
-    color: var(--text-color);
-    font-weight: 500;
-  }
-
-  .tid-value {
-    background: none;
-    border: none;
-    color: var(--link-color);
-    font-family: inherit;
-    font-size: inherit;
-    cursor: pointer;
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.25rem;
-    transition: all 0.2s ease;
-  }
-
-  .tid-value:hover {
-    color: var(--link-hover-color);
-    background-color: var(--button-bg);
-  }
-
-  @media (max-width: 640px) {
-    .tid-clock-container {
-      display: none;
-    }
-  }
-</style>
+<button
+  class="min-w-[100px] inline-block bg-none border-none text-[var(--link-color)] font-mono text-xs cursor-pointer px-1 py-0.5 rounded-md transition-all duration-200 ease-in-out opacity-50 hover:text-[var(--link-hover-color)] hover:bg-[var(--button-bg)]"
+  on:click={copyTID}
+  title="Click to copy TID"
+>
+  {currentTID}
+</button>

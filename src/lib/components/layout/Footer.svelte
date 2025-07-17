@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { env } from "$env/dynamic/public";
+  import LastCommit from "./LastCommit.svelte";
   import TidClock from "./TidClock.svelte";
 
   export let profile: any;
@@ -14,31 +15,32 @@
   });
 </script>
 
-<footer class="text-center py-4 text-primary opacity-50 text-sm">
-  <div class="space-y-1">
-    <div>
-      &copy; <span id="copyright-year"></span>
-      {#if profile?.handle}
-        <a
-          href="https://bsky.app/profile/{profile.did}"
-          class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]">@{profile.handle}</a
-        >
-      {:else}
-        {profile?.displayName || profile?.did}
-      {/if}
-    </div>
-    <div>
-      powered by <a
-        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-        href="https://atproto.com/guides/glossary#at-protocol">atproto</a
+<footer class="text-center py-4 text-primary text-sm">
+  <div>
+    &copy; <span id="copyright-year"></span>
+    {#if profile?.handle}
+      <a
+        href="https://bsky.app/profile/{profile.did}"
+        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]">@{profile.handle}</a
       >
-      -
-      <a class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]" href="/site/meta"
-        >More about this site</a
-      >
-    </div>
-    
-    <!-- TID Clock Component -->
+    {:else}
+      {profile?.displayName || profile?.did}
+    {/if}
+  </div>
+  <div class="mt-1">
+    powered by <a
+      class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+      href="https://atproto.com/guides/glossary#at-protocol">atproto</a
+    >
+    <span class="mx-1">-</span>
+    <a class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]" href="/site/meta"
+      >More about this site</a
+    >
+  </div>
+  <div class="mt-2">
+    <LastCommit />
+  </div>
+  <div class="mt-2">
     <TidClock />
   </div>
   {#if env.PUBLIC_ACTIVITYPUB_USER && env.PUBLIC_ACTIVITYPUB_USER.length > 0}
