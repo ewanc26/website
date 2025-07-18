@@ -27,7 +27,7 @@
   let localeLoaded = $state(false);
 
   onMount(() => {
-    // Set locale loaded to true when component is mounted in the browser
+    // Set localeLoaded to true when component is mounted in the browser
     localeLoaded = true;
   });
 </script>
