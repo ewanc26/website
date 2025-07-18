@@ -88,7 +88,7 @@
 </script>
 
 <button
-  class="min-w-[100px] inline-block bg-none border-none text-[var(--link-color)] font-mono text-xs cursor-pointer px-1 py-0.5 rounded-md transition-all duration-200 ease-in-out opacity-50 hover:text-[var(--link-hover-color)] hover:bg-[var(--button-bg)]"
+  class="inline-block bg-none border-none text-[var(--link-color)] font-mono text-xs cursor-pointer px-0.5 py-0 rounded-md transition-all duration-200 ease-in-out hover:text-[var(--link-hover-color)] hover:bg-[var(--button-bg)]"
   on:click={copyTID}
   title="Click to copy TID"
 >
