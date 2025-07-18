@@ -77,7 +77,7 @@
     })() as YearMonthGroup[]
   );
 
-  // State for active year tab - Initialize as number
+  // State for active year tab – Initialise as number
   let activeYear = $state(0);
 
   // Set initial active year when data is loaded

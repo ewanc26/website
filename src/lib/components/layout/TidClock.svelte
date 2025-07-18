@@ -29,7 +29,7 @@
       num = num / 32n;
     }
     
-    // Pad to 13 characters
+    // Pad to 13 characters for consistent TID length
     return result.padStart(13, '2');
   }
 
@@ -45,14 +45,14 @@
     const clockId = generateClockId();
     
     // Combine timestamp (53 bits) and clock identifier (10 bits)
-    // The top bit is always 0, so we have 63 bits total
+    // The top bit is always 0, so we have 63 bits in total
     const tidBigInt = (nowMicroseconds << 10n) | BigInt(clockId);
     
     return toBase32Sortable(tidBigInt);
   }
 
   /**
-   * Update the TID display
+   * Update the TID display value
    */
   function updateTID() {
     if (isRunning) {
@@ -61,7 +61,7 @@
   }
 
   /**
-   * Copy TID to clipboard
+   * Copy the TID to the clipboard
    */
   async function copyTID() {
     try {
@@ -76,7 +76,7 @@
     // Generate initial TID
     updateTID();
     
-    // Update every 100ms for smooth display
+    // Update every 100ms for a smooth display
     interval = setInterval(updateTID, 100);
   });
 

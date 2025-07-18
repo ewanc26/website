@@ -41,7 +41,7 @@ export async function load({ fetch }) {
         const matches = data["uri"].split("/");
         const rkey = matches[matches.length - 1];
         
-        // Enhanced debugging - log the full structure
+        // Enhanced debugging – log the full structure
         console.log('=== Record Debug Info ===');
         console.log('Raw data keys:', Object.keys(data));
         console.log('URI:', data["uri"]);
@@ -110,7 +110,7 @@ export async function load({ fetch }) {
             continue;
           }
 
-          // Handle missing createdAt - use current time as fallback or skip
+          // Handle missing createdAt – use current time as fallback or skip
           let createdAtDate: Date;
           if (!hasCreatedAt) {
             console.warn(`Post missing createdAt, using current time: ${rkey}`, {

@@ -16,19 +16,19 @@
   let isDropdownOpen: boolean = false;
 
   onMount(() => {
-    // Get current theme preferences (already applied by theme-loader)
+    // Retrieve current theme preferences (already applied by theme-loader)
     const preferences = getThemePreferences();
     isDarkMode = preferences.isDarkMode;
     currentTheme = preferences.themeId;
 
-    // Update meta tag and dispatch event
+    // Update meta tag and dispatch a theme change event
     updateThemeColorMeta();
     dispatchThemeChangeEvent(isDarkMode, currentTheme);
 
-    // Setup system theme listener
+    // Set up system theme listener
     setupSystemThemeListener();
 
-    // Close dropdown when clicking outside
+    // Close dropdown when clicking outside the theme controls
     document.addEventListener("click", (e: MouseEvent) => {
       const themeControls = document.querySelector(".theme-controls");
       if (
@@ -49,6 +49,7 @@
     dispatchThemeChangeEvent(isDarkMode, currentTheme);
   }
 
+  // Change the colour theme
   function changeColorTheme(themeId: string): void {
     currentTheme = themeId;
     applyTheme(isDarkMode, currentTheme);
@@ -58,6 +59,7 @@
     isDropdownOpen = false;
   }
 
+  // Toggle the dropdown for theme selection
   function toggleDropdown(e: MouseEvent): void {
     e.stopPropagation();
     isDropdownOpen = !isDropdownOpen;
@@ -99,10 +101,10 @@
       aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
       {#if isDarkMode}
-        <!-- Sun icon for light mode -->
+        <!-- Sun icon for switching to light mode -->
         <SunIcon stroke="var(--text-color)" />
       {:else}
-        <!-- Moon icon for dark mode -->
+        <!-- Moon icon for switching to dark mode -->
         <MoonIcon stroke="var(--text-color)" />
       {/if}
     </button>
