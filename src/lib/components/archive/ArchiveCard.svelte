@@ -192,7 +192,7 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--link-color), var(--link-hover-color));
+    background: var(--link-color);
     transform: scaleX(0);
     transition: transform 0.3s ease;
     transform-origin: left;
@@ -386,7 +386,7 @@
 
   .long-read .card-content::before {
     height: 4px;
-    background: linear-gradient(90deg, var(--link-color), #f59e0b);
+    background: var(--link-color);
   }
 
   /* Screen reader only content */
