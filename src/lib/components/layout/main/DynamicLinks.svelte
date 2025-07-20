@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ArchiveCard from "../../archive/ArchiveCard.svelte";
+  import ArchiveCard from "$lib/components/archive/ArchiveCard.svelte";
 
   // Define the type for the fetched data structure
   interface LinkBoard {
