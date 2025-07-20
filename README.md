@@ -35,7 +35,7 @@ For optimal usage, you need the following record types in your [AT Protocol repo
 
 ##### Now Playing (Last.fm)
 
-- `src/lib/components/profile/RecentFM.svelte`: This component displays recent tracks from [Last.fm](https://last.fm). It requires `PUBLIC_LASTFM_USERNAME` to be set in your `.env` file.
+- `src/lib/components/profile/Status.svelte`: This component displays both recent tracks from [Last.fm](https://last.fm) and your current status. It requires `PUBLIC_LASTFM_USERNAME` to be set in your `.env` file for Last.fm integration.
 
 ##### Custom Lexicons
 
