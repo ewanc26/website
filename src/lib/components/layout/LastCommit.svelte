@@ -36,6 +36,6 @@
 
 {#if commitDate}
   <span title="{commitDate.toLocaleString()}">
-  Last commit: <a href="{commitUrl}" target="_blank" class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]">{commitHash}</a> ({relativeTime})
+  last commit: <a href="{commitUrl}" target="_blank" class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]">{commitHash}</a> ({relativeTime})
   </span>
 {/if}
