@@ -1,27 +1,9 @@
 <script lang="ts">
   import ArchiveCard from "$lib/components/archive/ArchiveCard.svelte";
-
-  // Define the type for the fetched data structure
-  interface LinkBoard {
-    $type: "blue.linkat.board";
-    cards: Card[];
-  }
+  import type { LinkBoard } from "$lib/components/shared";
 
   // Export the data prop that will receive the fetched links
   export let data: LinkBoard | undefined;
-
-  // Define the type for a single link card
-  interface Card {
-    url: string;
-    text: string;
-    emoji: string;
-  }
-
-  // Define the type for the fetched data structure
-  interface LinkBoard {
-    $type: "blue.linkat.board";
-    cards: Card[];
-  }
 </script>
 
 {#if data && data.cards.length > 0}
