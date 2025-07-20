@@ -1,7 +1,6 @@
 import { getProfile } from "$lib/components/profile/profile";
-import type { Profile } from "$lib/components/profile/profile";
-import { parse, type MarkdownPost, type Post } from "$lib/parser";
-
+import type { Profile, MarkdownPost, Post } from "$lib/components/shared";
+import { parse } from "$lib/parser";
 
 let profile: Profile;
 let posts: Map<string, Post>;

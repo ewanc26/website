@@ -1,13 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { env } from '$env/dynamic/public';
-  
-  interface Props {
-    nomoji?: boolean;
-    displayName?: string;
-  }
-  
-  let { nomoji = true, displayName = 'User' }: Props = $props();
+  import type { RecentFMProps } from '$lib/components/shared/interfaces';
+
+  let { nomoji = true, displayName = 'User' }: RecentFMProps = $props();
   
   let loading = $state(false);
   let error = $state<string | null>(null);

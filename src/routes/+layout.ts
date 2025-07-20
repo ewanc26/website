@@ -1,29 +1,14 @@
 import { getProfile } from "$lib/components/profile/profile";
-import type { Profile } from "$lib/components/profile/profile";
+import type { Profile, LinkBoard } from "$lib/components/shared";
 
 // Profile data cache
 let profile: Profile;
 let dynamicLinks: LinkBoard | undefined;
 
-
-// Define the type for the fetched links data
-interface LinkCard {
-  url: string;
-  text: string;
-  emoji: string;
-}
-
-interface LinkBoard {
-  $type: "blue.linkat.board";
-  cards: LinkCard[];
-}
-
 export async function load({ fetch }) {
   if (profile === undefined) {
     profile = await getProfile(fetch);
   }
-
-
 
   if (profile === undefined) {
     profile = await getProfile(fetch);
@@ -43,8 +28,6 @@ export async function load({ fetch }) {
       console.error("Error fetching dynamic links:", error);
     }
   }
-
-
 
   return {
     profile,
