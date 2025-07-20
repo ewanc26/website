@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getStores } from "$app/stores";
   const { page } = getStores();
-  import DynamicLinks from "$lib/components/main/DynamicLinks.svelte";
+  import DynamicLinks from "$lib/components/layout/main/DynamicLinks.svelte";
 
   let { data } = $props();
 </script>
