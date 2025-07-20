@@ -182,60 +182,62 @@
   Consolidated display of either status or recent music, prioritizing recent status updates
 -->
 {#if displayMode !== "none" && profile && showContent}
-  <div class="p-2">
-    {#if displayMode === "status" && latestNowText}
-      <!-- Status Display -->
-      <p class="text-center text-xs">
-        {#key latestNowText}
-          <span transition:fade={{ duration: 200 }}>
-            <span class="font-medium"
-              >{profile.displayName || profile.handle || profile.did}</span
+  <div transition:fade={{ duration: 500 }}>
+    <div class="p-2">
+      {#if displayMode === "status" && latestNowText}
+        <!-- Status Display -->
+        <p class="text-center text-xs">
+          {#key latestNowText}
+            <span transition:fade={{ duration: 200 }}>
+              <span class="font-medium"
+                >{profile.displayName || profile.handle || profile.did}</span
+              >
+              <span> is </span>
+              <span class="italic">{latestNowText}</span>
+              {#if latestNowDate}
+                <span class="opacity-50">
+                  ({formatRelativeTime(latestNowDate)})</span
+                >
+              {/if}
+              {#if trackData}
+                <span> and was last listening to </span>
+                <a
+                  href={trackData.url}
+                  class="text-link hover:text-link-hover"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  "{trackData.name}" by {trackData.artist}
+                </a>
+              {/if}
+            </span>
+          {/key}
+        </p>
+      {:else if displayMode === "music" && trackData}
+        <!-- Music Display -->
+        <div class="recent-track-info">
+          <p class="text-xs opacity-60 text-center">
+            {profile.displayName || profile.handle || profile.did} was last listening
+            to
+          </p>
+          <p class="text-xs font-medium text-center mt-0.5">
+            <a
+              href={trackData.url}
+              class="text-link hover:text-link-hover"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-            <span> is </span>
-            <span class="italic">{latestNowText}</span>
-            {#if latestNowDate}
-              <span class="opacity-50">
-                ({formatRelativeTime(latestNowDate)})</span
-              >
-            {/if}
-            {#if trackData}
-              <span> and was last listening to </span>
-              <a
-                href={trackData.url}
-                class="text-link hover:text-link-hover"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                "{trackData.name}" by {trackData.artist}
-              </a>
-            {/if}
-          </span>
-        {/key}
-      </p>
-    {:else if displayMode === "music" && trackData}
-      <!-- Music Display -->
-      <div class="recent-track-info">
-        <p class="text-xs opacity-60 text-center">
-          {profile.displayName || profile.handle || profile.did} was last listening
-          to
-        </p>
-        <p class="text-xs font-medium text-center mt-0.5">
-          <a
-            href={trackData.url}
-            class="text-link hover:text-link-hover"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            "{trackData.name}" by {trackData.artist}
-          </a>
-        </p>
-      </div>
-    {/if}
+              "{trackData.name}" by {trackData.artist}
+            </a>
+          </p>
+        </div>
+      {/if}
 
-    {#if musicLoading}
-      <p class="text-xs opacity-60 italic text-center">
-        Loading recent tracks...
-      </p>
-    {/if}
+      {#if musicLoading}
+        <p class="text-xs opacity-60 italic text-center">
+          Loading recent tracks...
+        </p>
+      {/if}
+    </div>
   </div>
 {/if}
