@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Post } from "$lib/parser.ts";
+  import type { Post } from "$lib/components/shared";
 
   export let post: Post;
 </script>
