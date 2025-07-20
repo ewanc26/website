@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ArchiveCard from "../archive/ArchiveCard.svelte";
+  import ArchiveCard from "../../archive/ArchiveCard.svelte";
 
   // Define the type for a single link card
   interface Card {
