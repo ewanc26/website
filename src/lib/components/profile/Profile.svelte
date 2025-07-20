@@ -1,7 +1,7 @@
 <script lang="ts">
   // The profile object is passed as a prop to this component.
   export let profile: any;
-  import { Status, RecentFM } from ".";
+  import { Status } from ".";
 </script>
 
 <!-- Profile Banner: Displays the user's banner image. -->
@@ -37,11 +37,8 @@
       <div class="p-1 w-full text-center mb-2">
         <p class="text-sm">{profile?.description}</p>
       </div>
-      <!-- Display the latest "now" status using the Status component. -->
+      <!-- Display consolidated status/music using the updated Status component -->
       <Status {profile} />
-      
-      <!-- RecentFM Integration -->
-      <RecentFM nomoji={true} displayName={profile?.displayName || 'User'} />
     </div>
   </div>
 {:else}
