@@ -2,7 +2,9 @@
   import { getStores } from "$app/stores";
   const { page } = getStores();
   import { env } from '$env/dynamic/public';
-  import { BlueskyIcon, FacebookIcon, RedditIcon, MastodonIcon, CopyLinkIcon } from ".";
+
+  // Icons
+  import { BlueskyIcon, FacebookIcon, RedditIcon, MastodonIcon, CopyLinkIcon } from "$lib/components/icons";
 
   // Props
   export let title: string;
