@@ -164,7 +164,7 @@
     // Introduce a delay before showing content
     setTimeout(() => {
       showContent = true;
-    }, 5000); // 5 seconds delay
+    }, 2000); // 2 second delay
   });
 
   // Reactively fetch status when profile changes (client-side only)
