@@ -1,4 +1,4 @@
-import type { Profile, SiteInfo } from "$lib/components/profile/profile";
+import type { Profile, SiteInfo } from "$lib/components/shared";
 import { getProfile, getSiteInfo } from "$lib/components/profile/profile";
 
 export const prerender = false;

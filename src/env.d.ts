@@ -1,7 +1,6 @@
 /// <reference types="sveltekit" />
+import type { PublicEnv } from "./lib/components/shared/interfaces";
+
 declare namespace App {
-  interface PublicEnv {
-    PUBLIC_ATPROTOCOL_USER: string;
-    PUBLIC_ACTIVITYPUB_USER: string;
-  }
+  interface PublicEnv extends PublicEnv {}
 }

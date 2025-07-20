@@ -10,7 +10,7 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { Post } from "$lib/parser.ts";
+  import type { Post } from "$lib/components/shared";
   import {
     PostHead,
     PostHeader,

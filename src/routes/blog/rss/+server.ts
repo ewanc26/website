@@ -1,6 +1,7 @@
 import type { RequestHandler } from "./$types";
 import { dev } from "$app/environment";
-import { parse, type MarkdownPost } from "$lib/parser";
+import { parse } from "$lib/parser";
+import type { MarkdownPost } from "$lib/components/shared";
 import { getProfile } from "$lib/components/profile/profile"; // Import getProfile
 
 export const GET: RequestHandler = async ({ url, fetch }) => {
