@@ -303,14 +303,3 @@
   color: var(--link-color);
   opacity: 0.8;
 }
-
-/* Respect user preferences for reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001s !important;
-  }
-}
