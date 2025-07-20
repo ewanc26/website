@@ -10,7 +10,7 @@ import type { Node } from "unist";
 import type { Root, Element } from "hast";
 import type { Plugin } from "unified";
 
-import type { Post, MarkdownPost } from "./components/shared/interfaces";
+import type { Post, MarkdownPost } from "$lib/components/shared";
 
 // WhiteWind's own custom schema:
 // https://github.com/whtwnd/whitewind-blog/blob/7eb8d4623eea617fd562b93d66a0e235323a2f9a/frontend/src/services/DocProvider.tsx#L122

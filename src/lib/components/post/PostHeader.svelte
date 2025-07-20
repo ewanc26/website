@@ -2,7 +2,7 @@
   import { fade } from "svelte/transition";
   import { formatRelativeTime, formatDate } from "$lib/utils/dateFormatter";
   import { ShareIcons } from "$lib/components/icons";
-  import type { Post } from "$lib/parser.ts";
+  import type { Post } from "$lib/components/shared";
   import { onMount } from 'svelte';
 
   let { post, profile, rkey, localeLoaded } = $props<{
