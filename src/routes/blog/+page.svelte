@@ -5,7 +5,7 @@
   import { getStores } from "$app/stores";
   const { page } = getStores();
   const { data } = $props();
-  import type { Post } from "$lib/parser.ts";
+  import type { Post } from "$lib/components/shared";
 
   // Get posts from data, filter out invalid dates, and sort them by createdAt in descending order (newest first)
   const posts = $derived(

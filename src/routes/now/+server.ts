@@ -2,12 +2,7 @@ import type { RequestHandler } from "./$types";
 import { dev } from "$app/environment";
 import { getProfile } from "$lib/components/profile/profile";
 import { formatDate } from "$lib/utils/dateFormatter";
-
-interface StatusUpdate {
-  text: string;
-  createdAt: Date;
-  tid: string;
-}
+import type { StatusUpdate } from "$lib/components/shared";
 
 export const GET: RequestHandler = async ({ url, fetch }: { url: URL, fetch: typeof globalThis.fetch }) => {
   let baseUrl: string;

@@ -1,7 +1,4 @@
-export interface Theme {
-  id: string;
-  name: string;
-}
+import type { Theme } from "./components/shared/interfaces";
 
 // Theme configuration - single source of truth
 export const THEMES: Theme[] = [
