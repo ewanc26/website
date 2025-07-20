@@ -31,7 +31,7 @@
   >
   <span class="mx-1"></span>
   <a class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]" href="/site/meta"
-    >More about this site</a
+    >more about this site</a
   >
   <span class="mx-1"></span>
   <LastCommit />
