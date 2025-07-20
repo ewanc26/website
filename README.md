@@ -6,9 +6,38 @@ This fork serves as both my personal website and blog, modified for personal usa
 
 **_This repository is available on [GitHub](https://github.com/ewanc26/website) and [Tangled](https://tangled.sh/did:plc:ofrbh253gwicbkc5nktqepol/website). GitHub is the primary version, and the Tangled version is a mirror._**
 
+## Purpose
+
+This project provides a personal website and blog frontend, built upon the WhiteBreeze framework, allowing for self-hosted blog posts using the AT Protocol.
+
+## Installation
+
+To get started with this project, ensure you have Node.js and npm installed.
+
+### Prerequisites
+
+- Node.js (LTS version recommended)
+- npm (comes with Node.js)
+- Docker and Docker Compose (for Dockerised deployment)
+
+### Environment Variables
+
+Before running the application, configure the following environment variables in a `.env` file in the project root:
+
+```ini
+PUBLIC_ATPROTOCOL_USER="myhandle.bsky.social" # Your handle, or DID
+```
+
+#### Optional Environment Variables
+
+- `PUBLIC_LASTFM_USERNAME`: Required for the Now Playing (Last.fm) feature in `src/lib/components/profile/Status.svelte`.
+- `PUBLIC_ACTIVITYPUB_USER=@user@server.tld`: Enables ActivityPub compatibility for improved content sharing and discoverability. This variable is used in `src/lib/components/post/PostHead.svelte`, `src/lib/components/icons/ShareIcon.svelte`, and `src/lib/components/layout/Footer.svelte`.
+
 ## Usage
 
 ### Development
+
+To run the project in development mode:
 
 ```sh
 npm install
@@ -17,46 +46,28 @@ npm run dev
 
 ### Production
 
-Change environment variables:
+For optimal usage in production, you need the following record types in your [AT Protocol repository](https://atproto.com/specs/repository):
 
-```ini
-PUBLIC_ATPROTOCOL_USER="myhandle.bsky.social" # Your handle, or DID
-```
+#### Required Records
 
-For optimal usage, you need the following record types in your [AT Protocol repository](https://atproto.com/specs/repository):
+- `app.bsky.actor.profile`: Your profile.
+- `com.whtwnd.blog.entry`: Your blog posts.
+- `blue.linkat.board`: Your links.
 
-#### Required
-
-- `app.bsky.actor.profile`: Your profile
-- `com.whtwnd.blog.entry`: Your blog posts
-- `blue.linkat.board`: Your links
-
-#### Optional
-
-##### Now Playing (Last.fm)
-
-- `src/lib/components/profile/Status.svelte`: This component displays both recent tracks from [Last.fm](https://last.fm) and your current status. It requires `PUBLIC_LASTFM_USERNAME` to be set in your `.env` file for Last.fm integration.
+#### Optional Features
 
 ##### Custom Lexicons
 
-> My own lexicons, you can remove them if you want. I'm using them for my own purposes. See `static/lexicons/uk/ewancroft` for the schematic definitions.
+This fork includes custom lexicons for specific functionalities:
 
-- `uk.ewancroft.now`: Your status, displayed on the index page, although it's not required.
-- `uk.ewancroft.site.info`: Information about this site, displayed on the `/site/meta` route.
+- `uk.ewancroft.now`: Displays your current status on the index page (optional).
+- `uk.ewancroft.site.info`: Provides information about this site, displayed on the `/site/meta` route.
 
-##### ActivityPub
-
-This website is primarily built for the AT Protocol, but includes minor compatibility with the Fediverse/ActivityPub through the use of `fediverse:creator` meta tags for improved content sharing and discoverability on platforms like Mastodon.
-
-To enable this, add the following to your `.env` file:
-
-```ini
-PUBLIC_ACTIVITYPUB_USER=@user@server.tld
-```
-
-This variable is used in `src/lib/components/post/PostHead.svelte` to add a `fediverse:creator` meta tag, in `src/lib/components/icons/ShareIcon.svelte` to enable and configure the Mastodon share button, and in `src/lib/components/layout/Footer.svelte` to conditionally display a Mastodon link in the footer.
+### Deployment
 
 #### Standalone
+
+To build and run the project as a standalone application:
 
 ```sh
 npm install
@@ -64,12 +75,23 @@ npm run build
 node index.js
 ```
 
-Put environment variables ahead of the last command, port can also be configured with `PORT`.
+Environment variables can be set before the last command, and the port can be configured with the `PORT` variable.
 
 #### Dockerised
 
-Modify `docker-compose.yaml` and change the host port if necessary.
+To deploy using Docker:
+
+1. Modify `compose.yaml` to change the host port if necessary.
+2. Run the following command:
 
 ```sh
 docker compose up -d
 ```
+
+## Licensing
+
+This project is a personal fork of WhiteBreeze. Please refer to the `LICENSE` file in the repository for licensing information.
+
+## Source Code Explanation
+
+You can find an explanation of the source code in the [`./src/README.md`](./src/README.md) file. It provides an overview of the source directory's structure and functionality.
