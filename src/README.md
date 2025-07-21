@@ -46,7 +46,7 @@ Contains all Svelte components used throughout the application, organised by the
   - <mcfile name="index.ts" path="/Users/ewan/Developer/Git/website/src/lib/components/layout/index.ts"></mcfile>: Export file for layout components.
   - `lib/components/layout/footer/`: Components specific to the website's footer.
     - <mcfile name="LastCommit.svelte" path="/Users/ewan/Developer/Git/website/src/lib/components/layout/footer/LastCommit.svelte"></mcfile>: Displays information about the last commit.
-    - <mcfile name="Main.svelte" path="/Users/ewan/Developer/Git/website/src/lib/components/layout/footer/Main.svelte"></mcfile>: The main footer component.
+    - <mcfile name="Main.svelte" path="/Users/ewan/Developer/Git/website/src/lib/components/layout/footer/Main.svelte"></mcfile>: The main footer component, which also displays the ActivityPub user if configured.
     - <mcfile name="TidClock.svelte" path="/Users/ewan/Developer/Git/website/src/lib/components/layout/footer/TidClock.svelte"></mcfile>: Displays a "TID" clock (likely a custom time format).
   - `lib/components/layout/main/`: Components for the main content area.
     - <mcfile name="DynamicLinks.svelte" path="/Users/ewan/Developer/Git/website/src/lib/components/layout/main/DynamicLinks.svelte"></mcfile>: Displays dynamically loaded links.
