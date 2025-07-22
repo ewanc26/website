@@ -1,4 +1,4 @@
-import type { Theme } from "./components/shared/interfaces";
+import type { Theme } from "$lib/components/shared/interfaces";
 
 // Theme configuration - single source of truth
 export const THEMES: Theme[] = [
