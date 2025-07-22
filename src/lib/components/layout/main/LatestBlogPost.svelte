@@ -1,9 +1,9 @@
 <script lang="ts">
   import { slide } from "svelte/transition";
   import { quintOut } from "svelte/easing";
-  import ArchiveCard from "$lib/components/archive/ArchiveCard.svelte";
+  import { ArchiveCard } from "$lib/components/archive";
   import type { Post } from "$lib/components/shared";
-  import ArrowRightUpIcon from "$lib/components/icons/utility/ArrowRightUpIcon.svelte";
+  import { ArrowRightUpIcon } from "$lib/components/icons";
 
   export let posts: Post[] = [];
   export let localeLoaded: boolean = false;

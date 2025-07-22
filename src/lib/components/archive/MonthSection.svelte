@@ -2,7 +2,7 @@
   import { slide } from "svelte/transition";
 
   import { quintOut } from "svelte/easing";
-  import ArchiveCard from "./ArchiveCard.svelte";
+  import { ArchiveCard } from "./index";
   import StatsDisplay from "./StatsDisplay.svelte";
 
   export let monthName: string;
