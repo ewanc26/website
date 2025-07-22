@@ -7,24 +7,31 @@
   const { data } = $props();
   import type { Post } from "$lib/components/shared";
 
-  // Get posts from data, filter out invalid dates, and sort them by createdAt in descending order (newest first)
+  // Get posts from data with enhanced validation
   const posts = $derived(
-    Array.from(data.posts.values() as Iterable<Post>)
+    Array.from((data.posts || new Map()).values() as Iterable<Post>)
       .filter((post) => {
-        // Check for invalid dates and log them
-        const isValidDate = post.createdAt instanceof Date && !isNaN(post.createdAt.getTime());
+        // Enhanced validation for posts
+        const hasValidTitle = post.title && typeof post.title === 'string';
+        const hasValidDate = post.createdAt instanceof Date && !isNaN(post.createdAt.getTime());
+        const hasValidContent = post.content && typeof post.content === 'string';
+        const hasValidRkey = post.rkey && typeof post.rkey === 'string';
         
-        if (!isValidDate) {
-          console.warn('Post with invalid date found:', {
+        const isValid = hasValidTitle && hasValidDate && hasValidContent && hasValidRkey;
+        
+        if (!isValid && process.env.NODE_ENV === 'development') {
+          console.warn('Invalid post filtered out:', {
             title: post.title,
             rkey: post.rkey,
+            hasValidTitle,
+            hasValidDate,
+            hasValidContent,
+            hasValidRkey,
             createdAt: post.createdAt,
-            createdAtType: typeof post.createdAt,
-            createdAtString: String(post.createdAt)
           });
         }
         
-        return isValidDate;
+        return isValid;
       })
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
   );
@@ -41,10 +48,15 @@
 
   // Helper function to get only month name
   function getMonthName(date: Date): string {
-    return new Intl.DateTimeFormat(
-      typeof window !== "undefined" ? window.navigator.language : "en-GB",
-      { month: "long" }
-    ).format(date);
+    try {
+      return new Intl.DateTimeFormat(
+        typeof window !== "undefined" ? window.navigator.language : "en-GB",
+        { month: "long" }
+      ).format(date);
+    } catch (error) {
+      console.warn('Error formatting month name:', error);
+      return date.toLocaleDateString('en-GB', { month: 'long' });
+    }
   }
 
   // Group posts by year and month
@@ -55,16 +67,24 @@
 
   const groupedByYear = $derived(
     (() => {
+      if (!posts || posts.length === 0) {
+        return [];
+      }
+
       const groups: Record<number, Record<string, Post[]>> = {};
 
       posts.forEach((post) => {
-        const year = post.createdAt.getFullYear();
-        const month = getMonthName(post.createdAt);
+        try {
+          const year = post.createdAt.getFullYear();
+          const month = getMonthName(post.createdAt);
 
-        if (!groups[year]) groups[year] = {};
-        if (!groups[year][month]) groups[year][month] = [];
+          if (!groups[year]) groups[year] = {};
+          if (!groups[year][month]) groups[year][month] = [];
 
-        groups[year][month].push(post);
+          groups[year][month].push(post);
+        } catch (error) {
+          console.warn('Error grouping post:', { post, error });
+        }
       });
 
       // Convert to array of year groups sorted by year (descending)
@@ -77,7 +97,7 @@
     })() as YearMonthGroup[]
   );
 
-  // State for active year tab – Initialise as number
+  // State for active year tab
   let activeYear = $state(0);
 
   // Set initial active year when data is loaded
@@ -86,6 +106,12 @@
       activeYear = groupedByYear[0].year;
     }
   });
+
+  // Computed loading and error states
+  const isLoading = $derived(!localeLoaded);
+  const hasData = $derived(data && data.posts && data.posts.size > 0);
+  const hasValidPosts = $derived(posts && posts.length > 0);
+  const hasProfile = $derived(data && data.profile);
 </script>
 
 <svelte:head>
@@ -129,21 +155,34 @@
   <meta name="twitter:image" content={$page.url.origin + "/embed/blog.png"} />
 </svelte:head>
 
-{#if !localeLoaded}
-    <div
-      class="flex justify-center items-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70"
-    >
-      Loading...
-    </div>
-  {:else if !posts || posts.length === 0}
-
-    <div
-      class="flex flex-col items-center justify-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70 text-center"
-    >
-      <p>No blog posts found.</p>
-      <p class="mt-2 text-sm">This blog uses the <a href="https://whtwnd.com">WhiteWind</a> blogging lexicon, 
-        <code>com.whtwnd.blog.entry</code>, but there seem to be no posts available.</p>
-    </div>
+{#if isLoading}
+  <div
+    class="flex justify-center items-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70"
+  >
+    Loading...
+  </div>
+{:else if !hasProfile}
+  <div
+    class="flex flex-col items-center justify-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70 text-center"
+  >
+    <p>Unable to load profile data.</p>
+    <p class="mt-2 text-sm">Please try refreshing the page.</p>
+  </div>
+{:else if !hasData}
+  <div
+    class="flex flex-col items-center justify-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70 text-center"
+  >
+    <p>No blog data available.</p>
+    <p class="mt-2 text-sm">This blog uses the <a href="https://whtwnd.com">WhiteWind</a> blogging lexicon, 
+      <code>com.whtwnd.blog.entry</code>, but there seem to be no records available.</p>
+  </div>
+{:else if !hasValidPosts}
+  <div
+    class="flex flex-col items-center justify-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70 text-center"
+  >
+    <p>No valid blog posts found.</p>
+    <p class="mt-2 text-sm">Posts were found but none have valid content, titles, and dates.</p>
+  </div>
 {:else}
   <!-- Year tabs with animated indicator -->
   <YearTabs {groupedByYear} bind:activeYear />
