@@ -18,4 +18,3 @@ export { default as ClockIcon } from "./utility/ClockIcon.svelte";
 export { default as BookIcon } from "./utility/BookIcon.svelte";
 export { default as BooksIcon } from "./utility/BooksIcon.svelte";
 export { default as EditIcon } from "./utility/EditIcon.svelte";
-export { default as ArrowRightUpIcon } from "./utility/ArrowRightUpIcon.svelte";
