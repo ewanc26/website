@@ -12,7 +12,7 @@
 </script>
 
 <div
-  class="flex mb-6 border-b border-[var(--button-bg)] overflow-x-auto relative tabs-container"
+  class="flex mb-6 ml-4 border-b border-[var(--button-bg)] overflow-x-auto relative tabs-container"
 >
   <div class="tab-indicator-container absolute bottom-0 left-0 h-0.5 w-full">
     <div

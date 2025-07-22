@@ -15,7 +15,7 @@
     {postLabel}
   </p>
 {:else}
-  <div class="mb-6 text-sm opacity-70">
+  <div class="mb-6 ml-4 text-sm opacity-70">
     <p>Total Read Time: {totalReadTime}</p>
     <p>Total Word Count: {totalWordCount} {wordLabel}</p>
   </div>
