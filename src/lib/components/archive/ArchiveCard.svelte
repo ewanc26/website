@@ -203,12 +203,12 @@
   }
 
   .post-indicator {
-    background: rgba(var(--link-color-rgb, 59, 130, 246), 0.1);
+    background: var(--button-bg);
     color: var(--link-color);
   }
 
   .link-indicator {
-    background: rgba(var(--text-color-rgb, 156, 163, 175), 0.1);
+    background: var(--button-bg);
     color: var(--text-color);
     opacity: 0.8;
   }
@@ -265,15 +265,15 @@
   }
 
   .reading-time-icon.quick {
-    color: #10b981; /* Green for quick reads */
+    color: var(--link-color); /* Green for quick reads */
   }
 
   .reading-time-icon.medium {
-    color: #f59e0b; /* Amber for medium reads */
+    color: var(--link-color); /* Amber for medium reads */
   }
 
   .reading-time-icon.long {
-    color: #ef4444; /* Red for long reads */
+    color: var(--link-color); /* Red for long reads */
   }
 
   .group:hover .reading-time-icon {
