@@ -202,12 +202,7 @@
     transition: all 0.3s ease;
   }
 
-  .post-indicator {
-    background: var(--button-bg);
-    color: var(--link-color);
-  }
-
-  .link-indicator {
+  .post-indicator, .link-indicator {
     background: var(--button-bg);
     color: var(--text-color);
     opacity: 0.8;
