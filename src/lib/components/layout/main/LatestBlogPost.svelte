@@ -7,11 +7,18 @@
   export let posts: Post[] = [];
   export let localeLoaded: boolean = false;
 
-  // Get the latest post (posts should already be sorted by createdAt descending)
+  // Get the latest post with proper validation
   $: latestPost = posts && posts.length > 0 ? posts[0] : null;
+  
+  // Additional validation to ensure the post has valid data
+  $: isValidPost = latestPost && 
+    latestPost.title && 
+    latestPost.createdAt instanceof Date && 
+    !isNaN(latestPost.createdAt.getTime()) &&
+    latestPost.content;
 </script>
 
-{#if latestPost}
+{#if isValidPost}
   <section 
     class="latest-blog-post"
     in:slide={{ delay: 200, duration: 400, easing: quintOut }}
