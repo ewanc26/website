@@ -3,7 +3,6 @@
   import { quintOut } from "svelte/easing";
   import { ArchiveCard } from "$lib/components/archive";
   import type { Post } from "$lib/components/shared";
-  import { ArrowRightUpIcon } from "$lib/components/icons";
 
   export let posts: Post[] = [];
   export let localeLoaded: boolean = false;
@@ -19,10 +18,6 @@
   >
     <div class="section-header">
       <h2 class="section-title">Latest Blog Post</h2>
-      <a href="/blog" class="view-all-link">
-        View All Posts
-        <ArrowRightUpIcon size="16" />
-      </a>
     </div>
     
     <div class="latest-post-container">
@@ -69,27 +64,6 @@
     border-radius: 2px;
   }
 
-  .view-all-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--link-color);
-    text-decoration: none;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    background: rgba(var(--link-color-rgb, 59, 130, 246), 0.1);
-  }
-
-  .view-all-link:hover {
-    color: var(--link-hover-color);
-    background: rgba(var(--link-color-rgb, 59, 130, 246), 0.15);
-    transform: translateY(-1px);
-  }
-
   .latest-post-container {
     display: grid;
     grid-template-columns: 1fr;
@@ -106,12 +80,6 @@
 
     .section-title {
       font-size: 1.5rem;
-    }
-
-    .view-all-link {
-      align-self: flex-end;
-      font-size: 0.85rem;
-      padding: 0.4rem 0.8rem;
     }
   }
 
