@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { SunIcon, MoonIcon } from "../icons";
+  import { SunIcon, MoonIcon } from "$lib/components/icons";
+  import EditIcon from "$lib/components/icons/utility/EditIcon.svelte";
   import { 
     THEMES,
     applyTheme, 
@@ -75,23 +76,7 @@
       aria-label="Change theme"
       aria-expanded={isDropdownOpen}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="var(--text-color)"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path
-          d="M20.71 4.04a1 1 0 0 1 .02 1.39l-9.6 9.6c-.1.1-.21.18-.33.24l-3.76 1.25a1 1 0 0 1-1.27-1.27l1.25-3.76c.06-.12.14-.23.24-.33l9.6-9.6a1 1 0 0 1 1.41.02z"
-        ></path>
-        <path d="M14 7l3 3"></path>
-        <path d="M5 16l-2 4 4-2z"></path>
-      </svg>
+      <EditIcon size="20" stroke="var(--text-color)" />
     </button>
 
     <button
