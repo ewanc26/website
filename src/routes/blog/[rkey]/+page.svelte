@@ -10,14 +10,14 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { Post } from "$lib/components/shared";
+  import type { Post } from "$components/shared";
   import {
     PostHead,
     PostHeader,
     PostContent,
     PostNavigation,
-  } from "$lib/components/post";
-  import { NotFoundMessage } from "$lib/components/shared";
+  } from "$components/post";
+  import { NotFoundMessage } from "$components/shared";
 
   let { data }: { data: any } = $props();
   let post = $derived(data.post as Post);

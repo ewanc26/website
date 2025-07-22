@@ -1,6 +1,6 @@
-import { getProfile } from "$lib/components/profile/profile";
-import { getLatestPosts } from "$lib/services/BlogService";
-import type { Profile, LinkBoard } from "$lib/components/shared";
+import { getProfile } from "$components/profile/profile";
+import { getLatestPosts } from "$services/blogService";
+import type { Profile, LinkBoard } from "$components/shared";
 
 // Profile data cache
 let profile: Profile;

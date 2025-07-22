@@ -1,5 +1,5 @@
-import type { Profile, SiteInfo } from "$lib/components/shared";
-import { getProfile, getSiteInfo } from "$lib/components/profile/profile";
+import type { Profile, SiteInfo } from "$components/shared";
+import { getProfile, getSiteInfo } from "$components/profile/profile";
 
 export const prerender = false;
 export const trailingSlash = "never";

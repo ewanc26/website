@@ -2,7 +2,7 @@
   import { getStores } from "$app/stores";
   const { page } = getStores();
   import ThemeToggle from "./ThemeToggle.svelte";
-  import { HomeIcon, RssIcon, BookOpenIcon } from "$lib/components/icons";
+  import { HomeIcon, RssIcon, BookOpenIcon } from "$components/icons";
 
   export const isHomePage: boolean = false;
   export let isBlogIndex: boolean = false;

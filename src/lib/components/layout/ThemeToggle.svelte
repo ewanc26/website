@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { SunIcon, MoonIcon } from "$lib/components/icons";
-  import EditIcon from "$lib/components/icons/utility/EditIcon.svelte";
+  import { SunIcon, MoonIcon } from "$components/icons";
+  import EditIcon from "$components/icons/utility/EditIcon.svelte";
   import { 
     THEMES,
     applyTheme, 

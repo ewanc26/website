@@ -9,7 +9,7 @@
   export let postsInMonth: any[];
   export let monthIndex: number;
   export let localeLoaded: boolean;
-  import { calculateTotalReadTime, calculateTotalWordCount, formatReadTime } from "$lib/utils/tally";
+  import { calculateTotalReadTime, calculateTotalWordCount, formatReadTime } from "$utils/tally";
 
   $: rawTotalReadTime = calculateTotalReadTime(postsInMonth);
   $: totalReadTime = formatReadTime(rawTotalReadTime);

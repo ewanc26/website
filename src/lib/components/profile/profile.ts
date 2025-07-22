@@ -1,6 +1,6 @@
 import { env } from "$env/dynamic/public";
-import { getCache, setCache } from "$lib/utils/cache";
-import type { Profile, SiteInfo } from "$lib/components/shared";
+import { getCache, setCache } from "$utils/cache";
+import type { Profile, SiteInfo } from "$components/shared";
 
 export async function safeFetch(url: string, fetch: typeof globalThis.fetch) {
   try {

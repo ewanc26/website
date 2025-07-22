@@ -1,6 +1,5 @@
-// src/lib/services/blogService.ts
-import { getProfile } from "$lib/components/profile/profile";
-import type { Profile, MarkdownPost, Post, BlogServiceResult } from "$lib/components/shared";
+import { getProfile } from "$components/profile/profile";
+import type { Profile, MarkdownPost, Post, BlogServiceResult } from "$components/shared";
 import { parse } from "$lib/parser";
 
 // Cache for blog data
