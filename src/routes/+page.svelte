@@ -1,9 +1,20 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { getStores } from "$app/stores";
   const { page } = getStores();
-  import DynamicLinks from "$lib/components/layout/main/DynamicLinks.svelte";
+  import { DynamicLinks, LatestBlogPost } from "$lib/components/layout/main";
 
   let { data } = $props();
+
+  // State to track if locale has been properly loaded
+  let localeLoaded = $state(false);
+
+  onMount(() => {
+    // Set a brief timeout to ensure the browser has time to determine locale
+    setTimeout(() => {
+      localeLoaded = true;
+    }, 10);
+  });
 </script>
 
 <svelte:head>
@@ -41,5 +52,9 @@
   <meta name="twitter:image" content={$page.url.origin + "/embed/main.png"} />
 </svelte:head>
 
-<!-- Add the DynamicLinks component -->
+<!-- Latest Blog Post section (only show if we have posts) -->
+{#if data.latestPosts && data.latestPosts.length > 0}
+  <LatestBlogPost posts={data.latestPosts} {localeLoaded} />
+{/if}
+
 <DynamicLinks data={data.dynamicLinks} />
