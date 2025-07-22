@@ -16,6 +16,12 @@ const config = {
 			entries: ['*'],
 			origin: 'https://ewancroft.uk'
 		},
+		alias: {
+			'$components': './src/lib/components',
+			'$css': './src/lib/css',
+			'$services': './src/lib/services',
+			'$utils': './src/lib/utils'
+		}
 	}
 };
 

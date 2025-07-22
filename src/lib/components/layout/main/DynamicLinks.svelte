@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { ArchiveCard } from "$lib/components/archive";
-  import type { LinkBoard } from "$lib/components/shared";
+  import { ArchiveCard } from "$components/archive";
+  import type { LinkBoard } from "$components/shared";
 
   // Export the data prop that will receive the fetched links
   export let data: LinkBoard | undefined;

@@ -2,7 +2,7 @@
   import { fly, fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import MonthSection from "./MonthSection.svelte";
-  import { calculateTotalReadTime, calculateTotalWordCount, formatReadTime } from "$lib/utils/tally";
+  import { calculateTotalReadTime, calculateTotalWordCount, formatReadTime } from "$utils/tally";
   import StatsDisplay from "./StatsDisplay.svelte";
 
   export const year: number = 0;

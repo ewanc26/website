@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getStores } from "$app/stores";
   const { page } = getStores();
-  import type { SiteInfo } from "$lib/components/shared";
+  import type { SiteInfo } from "$components/shared";
 
   // Access the siteInfo data from the layout load function
   const siteInfo: SiteInfo | null = $page.data.siteInfo;

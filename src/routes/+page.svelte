@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { getStores } from "$app/stores";
   const { page } = getStores();
-  import { DynamicLinks, LatestBlogPost } from "$lib/components/layout/main";
+  import { DynamicLinks, LatestBlogPost } from "$components/layout/main";
 
   let { data } = $props();
 

@@ -1,4 +1,4 @@
-import { loadAllPosts } from "$lib/services/BlogService";
+import { loadAllPosts } from "$services/blogService";
 
 export const prerender = false;
 export const trailingSlash = "never";

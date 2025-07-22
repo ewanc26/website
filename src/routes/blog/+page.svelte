@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import YearTabs from "$lib/components/archive/YearTabs.svelte";
-  import YearContent from "$lib/components/archive/YearContent.svelte";
+  import YearTabs from "$components/archive/YearTabs.svelte";
+  import YearContent from "$components/archive/YearContent.svelte";
   import { getStores } from "$app/stores";
   const { page } = getStores();
   const { data } = $props();
-  import type { Post } from "$lib/components/shared";
+  import type { Post } from "$components/shared";
 
   // Get posts from data with enhanced validation
   const posts = $derived(
