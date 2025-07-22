@@ -1,8 +1,8 @@
 <script lang="ts">
   import { slide } from "svelte/transition";
   import { quintOut } from "svelte/easing";
-  import { ArchiveCard } from "$lib/components/archive";
-  import type { Post } from "$lib/components/shared";
+  import { ArchiveCard } from "$components/archive";
+  import type { Post } from "$components/shared";
 
   export let posts: Post[] = [];
   export let localeLoaded: boolean = false;

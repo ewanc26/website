@@ -1,13 +1,13 @@
 <script lang="ts">
   import { fly, fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
-  import { formatDate } from "$lib/utils/dateFormatter";
-  import DocumentIcon from "$lib/components/icons/utility/DocumentIcon.svelte";
-  import LinkExternalIcon from "$lib/components/icons/utility/LinkExternalIcon.svelte";
-  import CoffeeIcon from "$lib/components/icons/utility/CoffeeIcon.svelte";
-  import ClockIcon from "$lib/components/icons/utility/ClockIcon.svelte";
-  import BookIcon from "$lib/components/icons/utility/BookIcon.svelte";
-  import BooksIcon from "$lib/components/icons/utility/BooksIcon.svelte";
+  import { formatDate } from "$utils/dateFormatter";
+  import DocumentIcon from "$components/icons/utility/DocumentIcon.svelte";
+  import LinkExternalIcon from "$components/icons/utility/LinkExternalIcon.svelte";
+  import CoffeeIcon from "$components/icons/utility/CoffeeIcon.svelte";
+  import ClockIcon from "$components/icons/utility/ClockIcon.svelte";
+  import BookIcon from "$components/icons/utility/BookIcon.svelte";
+  import BooksIcon from "$components/icons/utility/BooksIcon.svelte";
 
   export let type: 'post' | 'link';
   export let post: any = {}; // For post type

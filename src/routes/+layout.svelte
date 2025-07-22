@@ -1,9 +1,9 @@
 <script lang="ts">
-  import "$lib/css/app.css";
+  import "$css/app.css";
   import { getStores } from "$app/stores";
   const { page } = getStores();
-  import Profile from "$lib/components/profile/Profile.svelte";
-  import { Navigation, Footer } from "$lib/components/layout";
+  import Profile from "$components/profile/Profile.svelte";
+  import { Navigation, Footer } from "$components/layout";
 
   let { data, children } = $props();
 

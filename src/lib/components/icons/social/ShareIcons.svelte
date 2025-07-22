@@ -4,7 +4,7 @@
   import { env } from '$env/dynamic/public';
 
   // Icons
-  import { BlueskyIcon, FacebookIcon, RedditIcon, MastodonIcon, CopyLinkIcon } from "$lib/components/icons";
+  import { BlueskyIcon, FacebookIcon, RedditIcon, MastodonIcon, CopyLinkIcon } from "$components/icons";
 
   // Props
   export let title: string;

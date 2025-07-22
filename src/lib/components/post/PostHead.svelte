@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getStores } from "$app/stores";
   const { page } = getStores();
-  import type { Post } from "$lib/components/shared";
+  import type { Post } from "$components/shared";
   import { env } from "$env/dynamic/public";
 
   export let post: Post | undefined;
