@@ -221,6 +221,7 @@
     color: var(--link-color);
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     word-break: break-word;
