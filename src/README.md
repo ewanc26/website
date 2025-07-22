@@ -40,6 +40,13 @@ Contains all Svelte components used throughout the application, organised by the
     - `lib/components/icons/utility/MoonIcon.svelte`: Moon icon (often used for dark mode toggle).
     - `lib/components/icons/utility/PostIcon.svelte`: Post icon.
     - `lib/components/icons/utility/SunIcon.svelte`: Sun icon (often used for light mode toggle).
+    - `lib/components/icons/utility/BookIcon.svelte`: Book icon.
+    - `lib/components/icons/utility/BooksIcon.svelte`: Books icon.
+    - `lib/components/icons/utility/ClockIcon.svelte`: Clock icon.
+    - `lib/components/icons/utility/CoffeeIcon.svelte`: Coffee icon.
+    - `lib/components/icons/utility/DocumentIcon.svelte`: Document icon.
+    - `lib/components/icons/utility/EditIcon.svelte`: Edit icon.
+    - `lib/components/icons/utility/LinkExternalIcon.svelte`: External link icon.
 - `lib/components/layout/`: Components that define the overall structure and layout of the website.
   - `lib/components/layout/Navigation.svelte`: The main navigation bar of the site.
   - `lib/components/layout/ThemeToggle.svelte`: A component to switch between light and dark themes.
@@ -50,6 +57,7 @@ Contains all Svelte components used throughout the application, organised by the
     - `lib/components/layout/footer/TidClock.svelte`: Displays a "TID" clock ([a custom time format](https://atproto.com/specs/tid)).
   - `lib/components/layout/main/`: Components for the main content area.
     - `lib/components/layout/main/DynamicLinks.svelte`: Displays dynamically loaded links.
+    - `lib/components/layout/main/LatestBlogPost.svelte`: Displays the latest blog post.
     - `lib/components/layout/main/index.ts`: Export file for main layout components.
 - `lib/components/post/`: Components for displaying blog posts.
   - `lib/components/post/PostContent.svelte`: Renders the main content of a blog post.
@@ -91,7 +99,7 @@ Contains various utility functions used across the application.
 
 ## `routes` Directory
 
-This directory defines the different pages and API endpoints of the SvelteKit application.
+This directory defines the different pages and RSS API endpoints of the SvelteKit application.
 
 - `routes/+layout.svelte`: The root layout component applied to all pages.
 - `routes/+layout.ts`: The root layout load function, fetching data available to all pages.
@@ -105,7 +113,7 @@ This directory defines the different pages and API endpoints of the SvelteKit ap
   - `routes/blog/rss/`: Contains the RSS feed endpoint for the blog.
     - `routes/blog/rss/+server.ts`: An API endpoint that generates the RSS feed for blog posts.
 - `routes/now/`: Contains routes related to the "now" page.
-  - `routes/now/+server.ts`: An API endpoint for the "now" status.
+  - `routes/now/+server.ts`: An API endpoint that generates the RSS feed for the "now" statuses.
 - `routes/site/meta/`: Contains routes for site metadata and information.
   - `routes/site/meta/+layout.ts`: Layout load function for the site metadata pages.
   - `routes/site/meta/+page.svelte`: Displays information about the website, such as technology stack and privacy policy.
