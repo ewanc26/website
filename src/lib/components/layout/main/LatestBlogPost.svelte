@@ -42,7 +42,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1.5rem;
-    padding: 0 0.5rem;
+    padding: 0;
   }
 
   .section-title {
