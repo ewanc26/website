@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ArchiveCard from "$lib/components/archive/ArchiveCard.svelte";
+  import { ArchiveCard } from "$lib/components/archive";
   import type { LinkBoard } from "$lib/components/shared";
 
   // Export the data prop that will receive the fetched links
