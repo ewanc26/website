@@ -2,6 +2,12 @@
   import { fly, fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { formatDate } from "$lib/utils/dateFormatter";
+  import DocumentIcon from "$lib/components/icons/utility/DocumentIcon.svelte";
+  import LinkExternalIcon from "$lib/components/icons/utility/LinkExternalIcon.svelte";
+  import CoffeeIcon from "$lib/components/icons/utility/CoffeeIcon.svelte";
+  import ClockIcon from "$lib/components/icons/utility/ClockIcon.svelte";
+  import BookIcon from "$lib/components/icons/utility/BookIcon.svelte";
+  import BooksIcon from "$lib/components/icons/utility/BooksIcon.svelte";
 
   export let type: 'post' | 'link';
   export let post: any = {}; // For post type
@@ -62,21 +68,12 @@
       <header class="card-header">
         {#if type === 'post'}
           <div class="type-indicator post-indicator">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14,2 14,8 20,8"/>
-              <line x1="16" y1="13" x2="8" y2="13"/>
-              <line x1="16" y1="17" x2="8" y2="17"/>
-              <line x1="10" y1="9" x2="8" y2="9"/>
-            </svg>
+            <DocumentIcon size="14" />
             <span class="sr-only">Blog post</span>
           </div>
         {:else}
           <div class="type-indicator link-indicator">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-            </svg>
+            <LinkExternalIcon size="14" />
             <span class="sr-only">External link</span>
           </div>
         {/if}
@@ -99,32 +96,13 @@
             <div class="stat-item time" class:highlight={isLongRead}>
               <div class="reading-time-icon" class:quick={isQuickRead} class:medium={isMediumRead} class:long={isLongRead}>
                 {#if getReadingTimeIcon(readingTime) === 'quick'}
-                  <!-- Coffee cup for quick reads (≤2 min) -->
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M17 8h1a4 4 0 0 1 4 4v0a4 4 0 0 1-4 4h-1"/>
-                    <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8Z"/>
-                    <line x1="6" y1="2" x2="6" y2="4"/>
-                    <line x1="10" y1="2" x2="10" y2="4"/>
-                    <line x1="14" y1="2" x2="14" y2="4"/>
-                  </svg>
+                  <CoffeeIcon size="14" />
                 {:else if getReadingTimeIcon(readingTime) === 'short'}
-                  <!-- Clock for short reads (3-5 min) -->
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12,6 12,12 16,14"/>
-                  </svg>
+                  <ClockIcon size="14" />
                 {:else if getReadingTimeIcon(readingTime) === 'medium'}
-                  <!-- Single book for medium reads (6-10 min) -->
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                  </svg>
+                  <BookIcon size="14" />
                 {:else}
-                  <!-- Stack of books for long reads (>10 min) -->
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                  </svg>
+                  <BooksIcon size="14" />
                 {/if}
               </div>
               <span class="stat-number">{Math.ceil(post.wordCount / 200)}</span>
