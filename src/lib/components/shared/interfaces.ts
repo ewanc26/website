@@ -114,3 +114,14 @@ export interface RecentFMProps {
     nomoji?: boolean; // Optional flag to disable emojis.
     displayName?: string; // Optional display name.
   }
+
+/**
+ * Represents the result of the BlogService, containing posts, profile, and utility functions.
+ */
+export interface BlogServiceResult {
+  posts: Map<string, Post>;
+  profile: Profile;
+  sortedPosts: Post[];
+  getPost: (rkey: string) => Post | null;
+  getAdjacentPosts: (rkey: string) => { previous: Post | null; next: Post | null };
+}
