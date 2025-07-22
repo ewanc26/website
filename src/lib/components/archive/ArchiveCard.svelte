@@ -259,23 +259,6 @@
     transition: all 0.3s ease;
   }
 
-  .reading-time-icon.quick {
-    color: var(--link-color); /* Green for quick reads */
-  }
-
-  .reading-time-icon.medium {
-    color: var(--link-color); /* Amber for medium reads */
-  }
-
-  .reading-time-icon.long {
-    color: var(--link-color); /* Red for long reads */
-  }
-
-  .group:hover .reading-time-icon {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-
   .stat-number {
     font-weight: 600;
     color: var(--text-color);
