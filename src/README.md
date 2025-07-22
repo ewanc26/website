@@ -47,7 +47,7 @@ Contains all Svelte components used throughout the application, organised by the
   - `lib/components/layout/footer/`: Components specific to the website's footer.
     - `lib/components/layout/footer/LastCommit.svelte`: Displays information about the last commit.
     - `lib/components/layout/footer/Main.svelte`: The main footer component, which also displays the ActivityPub user if configured.
-    - `lib/components/layout/footer/TidClock.svelte`: Displays a "TID" clock (likely a custom time format).
+    - `lib/components/layout/footer/TidClock.svelte`: Displays a "TID" clock ([a custom time format](https://atproto.com/specs/tid)).
   - `lib/components/layout/main/`: Components for the main content area.
     - `lib/components/layout/main/DynamicLinks.svelte`: Displays dynamically loaded links.
     - `lib/components/layout/main/index.ts`: Export file for main layout components.
