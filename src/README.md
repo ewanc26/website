@@ -94,6 +94,7 @@ Contains various utility functions used across the application.
 
 - `lib/utils/cache.ts`: Utility functions for caching data.
 - `lib/utils/dateFormatter.ts`: Functions for formatting dates and times.
+- `lib/utils/numberFormatter.ts`: Functions for formatting numbers according to locale.
 - `lib/utils/tally.ts`: Utility functions for calculating statistics, such as read time and word count.
 - `lib/utils/textProcessor.ts`: Functions for processing text, such as extracting excerpts or counting words.
 
