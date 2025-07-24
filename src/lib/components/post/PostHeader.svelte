@@ -2,6 +2,7 @@
   import { fade } from "svelte/transition";
   import { formatRelativeTime, formatDate } from "$utils/dateFormatter";
   import { ShareIcons } from "$components/icons";
+  import { formatNumber } from "$utils/numberFormatter";
   import type { Post } from "$components/shared";
   import { onMount } from 'svelte';
 
@@ -87,7 +88,7 @@
   <!-- Reading time with subtle emphasis -->
   <div class="px-2 py-1 inline-block">
     <p class="text-sm opacity-70">
-      {Math.ceil(post.wordCount / 200)} min read • {post.wordCount}
+      {Math.ceil(post.wordCount / 200)} min read • {formatNumber(post.wordCount)}
       {wordLabel}
     </p>
   </div>
