@@ -2,6 +2,7 @@
   import { fly, fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { formatDate } from "$utils/dateFormatter";
+  import { formatNumber } from "$utils/numberFormatter";
   import DocumentIcon from "$components/icons/utility/DocumentIcon.svelte";
   import LinkExternalIcon from "$components/icons/utility/LinkExternalIcon.svelte";
   import CoffeeIcon from "$components/icons/utility/CoffeeIcon.svelte";
@@ -89,7 +90,7 @@
           <!-- Reading stats with visual emphasis -->
           <div class="reading-stats">
             <div class="stat-item words">
-              <span class="stat-number">{post.wordCount?.toLocaleString() || '0'}</span>
+              <span class="stat-number">{formatNumber(post.wordCount) || '0'}</span>
               <span class="stat-label">words</span>
             </div>
             <div class="stat-divider">•</div>

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { formatNumber } from "$utils/numberFormatter";
+
   export let totalReadTime: string;
   export let totalWordCount: number;
   export let postCount: number | undefined = undefined;
@@ -10,13 +12,13 @@
 
 {#if postCount !== undefined}
   <p class="text-sm opacity-50 mb-4 ml-2">
-    {totalReadTime} read time • {totalWordCount}
-    {wordLabel} • {postCount}
+    {totalReadTime} read time • {formatNumber(totalWordCount)}
+    {wordLabel} • {formatNumber(postCount)}
     {postLabel}
   </p>
 {:else}
   <div class="mb-6 ml-4 text-sm opacity-70">
     <p>Total Read Time: {totalReadTime}</p>
-    <p>Total Word Count: {totalWordCount} {wordLabel}</p>
+    <p>Total Word Count: {formatNumber(totalWordCount)} {wordLabel}</p>
   </div>
 {/if}
