@@ -1,7 +1,7 @@
 import type { RequestHandler } from "./$types";
 import { dev } from "$app/environment";
 import { getProfile } from "$components/profile/profile";
-import { formatDate } from "$utils/dateFormatter";
+import { formatDate } from "$utils/formatters";
 import type { StatusUpdate } from "$components/shared";
 
 export const GET: RequestHandler = async ({ url, fetch }: { url: URL, fetch: typeof globalThis.fetch }) => {
