@@ -91,7 +91,3 @@ docker compose up -d
 ## Licensing
 
 This project is a personal fork of WhiteBreeze. Please refer to the `LICENSE` file in the repository for licensing information.
-
-## Source Code Explanation
-
-You can find an explanation of the source code in the [`./src/README.md`](./src/README.md) file. It provides an overview of the source directory's structure and functionality.
