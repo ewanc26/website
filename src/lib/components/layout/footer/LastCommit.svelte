@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { formatRelativeTime } from '$utils/dateFormatter';
+  import { formatRelativeTime } from '$utils/formatters';
 
   let commitDate: Date | null = null;
   let commitUrl: string = '';

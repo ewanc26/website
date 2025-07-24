@@ -7,8 +7,6 @@ let profile: Profile;
 let allPosts: Map<string, Post>;
 let sortedPosts: Post[] = [];
 
-
-
 /**
  * Validates and processes a single blog record
  */
@@ -133,6 +131,13 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
         sortedPosts = Array.from(allPosts.values()).sort(
           (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
         );
+
+        // Assign postNumber based on chronological order (1 = latest, 2 = second latest, etc.)
+        // Assign postNumber based on reverse chronological order (total posts = latest, 1 = oldest)
+        const totalPosts = sortedPosts.length;
+        sortedPosts.forEach((post, index) => {
+          post.postNumber = totalPosts - index;
+        });
       }
     }
 

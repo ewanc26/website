@@ -65,7 +65,9 @@
       >
         more about this site
       </a>
+    </div>
 
+    <div>
       <span class="mx-1"></span>
       <LastCommit />
 

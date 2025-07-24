@@ -29,7 +29,7 @@
     class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr)_)] gap-x-6 gap-y-6 mx-4 my-8"
   >
     {#each postsInMonth as post, postIndex (post.rkey)}
-      <ArchiveCard type="post" {post} {monthIndex} {postIndex} {localeLoaded} />
+      <ArchiveCard type="post" {post} {monthIndex} {postIndex} {localeLoaded} postNumber={post.postNumber} />
     {/each}
   </div>
 </div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatNumber } from "$utils/numberFormatter";
+  import { formatNumber } from "$utils/formatters";
 
   export let totalReadTime: string;
   export let totalWordCount: number;

@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { env } from "$env/dynamic/public";
   import { safeFetch } from "./profile";
-  import { formatRelativeTime } from "$utils/dateFormatter";
+  import { formatRelativeTime } from "$utils/formatters";
   import { fade } from "svelte/transition";
 
   /**
