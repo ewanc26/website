@@ -20,6 +20,7 @@ export const THEMES: Theme[] = [
   { id: "coral", name: "Coral" },
   { id: "charcoal", name: "Charcoal" },
   { id: "wood", name: "Wood" },
+  { id: "werewolf", name: "Werewolf" },
   { id: "high-contrast", name: "High Contrast (Accessibility)" },
   { id: "low-contrast", name: "Low Contrast (Accessibility)" },
 ];

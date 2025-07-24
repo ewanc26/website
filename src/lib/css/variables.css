@@ -198,6 +198,42 @@
   --header-footer-bg: #382a28;
   --button-bg: #a34038;
   --button-hover-bg: #bf5048;
+}
+
+/* Sunset theme - light mode */
+:root.sunset.light {
+  --background-color: #f8e0e0;
+  --text-color: #481e1e;
+  --header-footer-bg: #efc8c8;
+  --button-bg: #bf5048;
+  --button-hover-bg: #d66a6a;
+  --link-color: #a34038;
+  --link-hover-color: #8a2e2e;
+  --card-bg: #efc8c8;
+}
+
+/* Werewolf theme - dark mode */
+:root.werewolf {
+  --background-color: #1a1a1a;
+  --text-color: #f0f0f0;
+  --header-footer-bg: #2a2a2a;
+  --button-bg: #8b0000;
+  --button-hover-bg: #a00000;
+  --link-color: #ff4500;
+  --link-hover-color: #ff6347;
+  --card-bg: #2a2a2a;
+}
+
+/* Werewolf theme - light mode */
+:root.werewolf.light {
+  --background-color: #f0f0f0;
+  --text-color: #1a1a1a;
+  --header-footer-bg: #e0e0e0;
+  --button-bg: #a00000;
+  --button-hover-bg: #b50000;
+  --link-color: #cc3300;
+  --link-hover-color: #e64d1a;
+  --card-bg: #e0e0e0;
   --link-color: #e68070;
   --link-hover-color: #f0a698;
   --card-bg: #382a28;
