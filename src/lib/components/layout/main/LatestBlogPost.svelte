@@ -16,6 +16,9 @@
     latestPost.createdAt instanceof Date && 
     !isNaN(latestPost.createdAt.getTime()) &&
     latestPost.content;
+
+  // Use the postNumber from the latestPost object
+  $: postNumber = latestPost ? latestPost.postNumber : null;
 </script>
 
 {#if isValidPost}
@@ -33,6 +36,7 @@
         post={latestPost} 
         monthIndex={0}
         postIndex={0}
+        postNumber={postNumber}
         {localeLoaded} 
       />
     </div>

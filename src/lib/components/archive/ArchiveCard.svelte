@@ -1,8 +1,8 @@
 <script lang="ts">
   import { fly, fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
-  import { formatDate } from "$utils/dateFormatter";
-  import { formatNumber } from "$utils/numberFormatter";
+  import { formatDate, formatNumber } from "$utils/formatters";
+  import { getMilestone } from "$utils/milestones";
   import DocumentIcon from "$components/icons/utility/DocumentIcon.svelte";
   import LinkExternalIcon from "$components/icons/utility/LinkExternalIcon.svelte";
   import CoffeeIcon from "$components/icons/utility/CoffeeIcon.svelte";
@@ -18,6 +18,7 @@
   export let monthIndex: number = 0;
   export let postIndex: number = 0;
   export let localeLoaded: boolean = false;
+  export let postNumber: number | null = null; // New prop for milestone calculation
 
   // Reactive variable to store the display date string for posts
   let displayDate: string;
@@ -31,6 +32,9 @@
       displayDate = "Loading...";
     }
   }
+
+  // Calculate milestone information
+  $: milestone = type === 'post' && postNumber ? getMilestone(postNumber) : null;
 
   // Determine the title to display based on type
   $: displayTitle = type === 'post' ? post?.title : title;
@@ -55,6 +59,7 @@
   class="archive-card group"
   class:long-read={type === 'post' && isLongRead}
   class:medium-read={type === 'post' && isMediumRead}
+  class:has-milestone={milestone}
   in:fly={{
     y: 15,
     x: 0,
@@ -65,6 +70,20 @@
 >
   <a {href} class="card-link">
     <article class="card-content">
+      <!-- Milestone banner (appears at top if present) -->
+      {#if milestone}
+        <div 
+          class="milestone-banner" 
+          class:special={milestone.type === 'special'}
+          class:major={milestone.type === 'major'}
+          class:minor={milestone.type === 'minor'}
+          in:fade={{ delay: 300, duration: 400 }}
+        >
+          <span class="milestone-emoji" role="img" aria-label="milestone">{milestone.emoji}</span>
+          <span class="milestone-text">{milestone.text}</span>
+        </div>
+      {/if}
+
       <!-- Header section with title and type indicator -->
       <header class="card-header">
         {#if type === 'post'}
@@ -185,6 +204,77 @@
 
   .group:hover .card-content::before {
     transform: scaleX(1);
+  }
+
+  /* Disable line animation for milestone cards */
+  .has-milestone .card-content::before {
+    display: none;
+  }
+
+  /* Milestone Banner Styles */
+  .milestone-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 12px;
+    margin: -20px -20px 16px -20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .milestone-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  .milestone-banner.special {
+    background: linear-gradient(135deg, var(--button-bg), var(--button-hover-bg));
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .milestone-banner.major {
+    background: linear-gradient(135deg, var(--button-bg), var(--text-color));
+    color: var(--header-footer-bg);
+  }
+
+  .milestone-banner.minor {
+    background: var(--button-bg);
+    color: var(--text-color);
+    opacity: 0.9;
+  }
+
+  .milestone-emoji {
+    font-size: 1rem;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  }
+
+  .milestone-text {
+    letter-spacing: 0.02em;
+  }
+
+  /* Adjust card content when milestone is present */
+  .has-milestone .card-header {
+    margin-bottom: 12px;
+  }
+
+  .has-milestone .card-content {
+    min-height: 160px;
   }
 
   /* Header Styles */
@@ -373,6 +463,11 @@
     
     .reading-stats {
       font-size: 0.85rem;
+    }
+
+    .milestone-banner {
+      margin: -16px -16px 12px -16px;
+      font-size: 0.8rem;
     }
   }
 </style>

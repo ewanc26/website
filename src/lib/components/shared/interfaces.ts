@@ -2,6 +2,7 @@
  * Represents a blog post with its content and metadata.
  */
 export interface Post {
+  postNumber: number;
   title: string; // The title of the post.
   rkey: string; // A unique key for the post.
   createdAt: Date; // The date and time the post was created.
