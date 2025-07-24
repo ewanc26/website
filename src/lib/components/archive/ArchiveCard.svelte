@@ -425,7 +425,6 @@
   /* Adaptive sizing based on content */
   .long-read .card-content {
     min-height: 160px;
-    background: linear-gradient(135deg, var(--header-footer-bg) 0%, rgba(var(--link-color-rgb, 59, 130, 246), 0.02) 100%);
   }
 
   .medium-read .card-content {
