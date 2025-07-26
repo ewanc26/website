@@ -6,37 +6,42 @@
 
 <!-- Profile Banner: Displays the user's banner image. -->
 <div
-  class="profile-banner p-4 relative rounded-[1em] m-2 mb-6"
+  class="profile-banner p-4 relative rounded-[1em] mx-2 mb-2"
   style="background-image: url({profile?.banner}); background-size: cover; background-position: center; min-height: 150px;"
 ></div>
 
 {#if profile}
   <!-- Profile Content: Main container for avatar, user info, and status. -->
-  <div
-    class="profile-content flex flex-col items-center justify-center text-center m-2 p-4 -mt-20 ml-4 mr-4 relative rounded-[1em]"
-  >
-    <!-- Profile Avatar -->
+  <div class="profile-content flex flex-row items-start text-left mx-2 mb-8 relative gap-6">
+    <!-- Profile Avatar (overlapping the banner) -->
     <img
       src={profile?.avatar}
       alt="{profile?.displayName || 'User'}'s avatar"
-      class="rounded-full w-32 h-32 -mt-2 shadow-lg hover:transform-none"
+      class="rounded-full w-32 h-32 shadow-lg hover:transform-none flex-shrink-0 -mt-16 relative z-10"
     />
-    <!-- User Information: Display name, handle, DID. -->
-    <div class="text-center p-2">
-      <h4 class="text-center text-lg font-semibold mb-1">{profile?.displayName}</h4>
-      <h6 class="text-center mb-1">
-        <a
-          href="https://bsky.app/profile/{profile?.did}"
-          class="text-link hover:text-link-hover text-sm">@{profile?.handle}</a
-        >
-      </h6>
-      <h6 class="text-center opacity-40 mb-2">
-        <span class="text-xs">{profile?.did}</span>
-      </h6>
-      <!-- Profile Description -->
-      <div class="p-1 w-full text-center mb-2">
-        <p class="text-sm">{profile?.description}</p>
+    
+    <!-- User Information: Display name, handle, DID, description, status -->
+    <div class="flex-1 min-w-0 p-4 rounded-[1em] overflow-hidden" style="background: var(--card-bg);">
+      <div class="mb-3">
+        <h4 class="text-lg font-semibold mb-1 leading-tight truncate">{profile?.displayName}</h4>
+        <h6 class="mb-2">
+          <a
+            href="https://bsky.app/profile/{profile?.handle}"
+            class="text-link hover:text-link-hover text-sm truncate block">@{profile?.handle}</a
+          >
+        </h6>
+        <h6 class="opacity-40 mb-3">
+          <span class="text-xs font-mono overflow-hidden text-ellipsis whitespace-nowrap block">{profile?.did}</span>
+        </h6>
       </div>
+      
+      <!-- Profile Description -->
+      {#if profile?.description}
+        <div class="mb-3">
+          <p class="text-sm leading-relaxed">{profile?.description}</p>
+        </div>
+      {/if}
+      
       <!-- Display consolidated status/music using the updated Status component -->
       <Status {profile} />
     </div>
@@ -44,7 +49,8 @@
 {:else}
   <!-- Placeholder for app.bsky.actor.profile -->
   <div
-    class="profile-content flex flex-col items-center justify-center text-center m-2 p-4 -mt-20 ml-4 mr-4 relative rounded-[1em]"
+    class="profile-content flex flex-col items-center justify-center text-center mx-2 p-4 relative rounded-[1em]"
+    style="background: var(--card-bg);"
   >
     <p class="text-center text-sm italic opacity-75">
       create a `app.bsky.actor.profile` record at <a
