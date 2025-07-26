@@ -31,7 +31,7 @@
           >
         </h6>
         <h6 class="opacity-40 mb-3">
-          <span class="text-xs font-mono overflow-hidden text-ellipsis whitespace-nowrap block">{profile?.did}</span>
+          <span class="text-xs font-mono overflow-hidden text-ellipsis whitespace-nowrap hidden sm:block">{profile?.did}</span>
         </h6>
       </div>
       
