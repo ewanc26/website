@@ -10,6 +10,8 @@ This fork serves as both my personal website and blog, modified for personal usa
 
 This project provides a personal website and blog frontend, built upon the WhiteBreeze framework, allowing for self-hosted blog posts using the AT Protocol.
 
+It also serves as a template for others to create their own WhiteBreeze-based websites, available at [https://github.com/ewanc26/website-template](https://github.com/ewanc26/website-template).
+
 ## Installation
 
 To get started with this project, ensure you have Node.js and npm installed.
