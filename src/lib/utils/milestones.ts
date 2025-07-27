@@ -1,4 +1,5 @@
-import { formatNumber, getOrdinalSuffix } from "$utils/formatters";
+import { formatNumber, getOrdinalSuffix } from './formatters';
+
 
 export interface Milestone {
   text: string;
@@ -96,7 +97,6 @@ export function getMilestone(postNumber: number): Milestone | null {
 /**
  * Converts a number to its ordinal form (1st, 2nd, 3rd, etc.)
  */
-
 function getOrdinal(num: number): string {
   const formatted = formatNumber(num);
   return formatted + getOrdinalSuffix(num);
