@@ -31,7 +31,7 @@ PUBLIC_ATPROTOCOL_USER="myhandle.bsky.social" # Your handle, or DID
 #### Optional Environment Variables
 
 - `PUBLIC_LASTFM_USERNAME`: Required for the Now Playing (Last.fm) feature in `src/lib/components/profile/Status.svelte`.
-- `PUBLIC_ACTIVITYPUB_USER=@user@server.tld`: Enables ActivityPub compatibility for improved content sharing and discoverability. This variable is used in `src/lib/components/post/PostHead.svelte`, `src/lib/components/icons/ShareIcon.svelte`, and `src/lib/components/layout/Footer.svelte`.
+- `PUBLIC_ACTIVITYPUB_USER=@user@server.tld`: Enables ActivityPub compatibility for improved content sharing and discoverability.
 
 ## Usage
 
