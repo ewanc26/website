@@ -81,7 +81,15 @@ import { extractTextFromMarkdown, calculateWordCount } from "$utils/textProcesso
 
 export async function parse(mdposts: Map<string, MarkdownPost>) {
   const posts: Map<string, Post> = new Map();
-  for (const [rkey, post] of mdposts) {
+  
+  // Convert to array and sort by creation date to assign sequential post numbers
+  const sortedPosts = Array.from(mdposts.entries()).sort((a, b) => 
+    a[1].createdAt.getTime() - b[1].createdAt.getTime()
+  );
+  
+  for (let i = 0; i < sortedPosts.length; i++) {
+    const [rkey, post] = sortedPosts[i];
+    const postNumber = i + 1; // Sequential numbering starting from 1
     const parsedHtml = String(
       await unified()
         .use(remarkParse, { fragment: true }) // Parse the MD
@@ -104,6 +112,7 @@ export async function parse(mdposts: Map<string, MarkdownPost>) {
     const wordCount = calculateWordCount(markdownContent);
 
     posts.set(rkey, {
+      postNumber,
       title: post.title,
       rkey: post.rkey,
       createdAt: post.createdAt,
