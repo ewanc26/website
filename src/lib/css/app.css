@@ -15,6 +15,7 @@
 }
 
 @layer base {
+
   /* Scrollbar styling */
   ::-webkit-scrollbar {
     width: 10px;
@@ -51,26 +52,31 @@
     font-variation-settings: "MONO" 0, "CASL" 0.8, "wght" 700, "slnt" 0,
       "CRSV" 0.9;
   }
+
   h2 {
     @apply text-3xl font-bold;
     font-variation-settings: "MONO" 0, "CASL" 0.7, "wght" 650, "slnt" 0,
       "CRSV" 0.85;
   }
+
   h3 {
     @apply text-2xl font-bold;
     font-variation-settings: "MONO" 0, "CASL" 0.6, "wght" 600, "slnt" 0,
       "CRSV" 0.8;
   }
+
   h4 {
     @apply text-xl font-semibold;
     font-variation-settings: "MONO" 0, "CASL" 0.5, "wght" 550, "slnt" 0,
       "CRSV" 0.75;
   }
+
   h5 {
     @apply text-lg font-semibold;
     font-variation-settings: "MONO" 0, "CASL" 0.4, "wght" 500, "slnt" 0,
       "CRSV" 0.7;
   }
+
   h6 {
     @apply text-sm font-semibold;
     font-variation-settings: "MONO" 0, "CASL" 0.3, "wght" 450, "slnt" 0,
@@ -90,11 +96,19 @@
       "CRSV" 0.5;
   }
 
+  a,
+  a:visited,
+  a:hover,
+  a:active,
+  a:focus {
+    text-decoration: none !important;
+  }
+
   /* Last.FM info styles */
   .recent-played {
     @apply text-center;
   }
-  
+
   .recent-track-info {
     @apply space-y-0.5;
   }
@@ -270,19 +284,19 @@
   }
 }
 
-.prose + .flex.justify-between {
+.prose+.flex.justify-between {
   @apply mt-12 mb-8;
 }
 
-.prose + .flex.justify-between a {
+.prose+.flex.justify-between a {
   @apply max-w-[45%] truncate;
 }
 
-.prose + .flex.justify-between a:first-child {
+.prose+.flex.justify-between a:first-child {
   @apply text-left;
 }
 
-.prose + .flex.justify-between a:last-child {
+.prose+.flex.justify-between a:last-child {
   @apply text-right;
 }
 
