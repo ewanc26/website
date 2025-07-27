@@ -514,6 +514,3 @@
   --link-hover-color: #4d3520;
   --card-bg: #e6d7c3;
 }
-a, a:visited, a:hover, a:active, a:focus {
-  text-decoration: none !important;
-}
