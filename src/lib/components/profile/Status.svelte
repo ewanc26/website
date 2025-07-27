@@ -186,7 +186,7 @@
     <div class="py-2">
       {#if displayMode === "status" && latestNowText}
         <!-- Status Display -->
-        <p class="text-left text-xs">
+        <p class="text-center sm:text-left text-xs">
           {#key latestNowText}
             <span transition:fade={{ duration: 200 }}>
               <span class="font-medium"
@@ -216,11 +216,11 @@
       {:else if displayMode === "music" && trackData}
         <!-- Music Display -->
         <div class="recent-track-info">
-          <p class="text-xs opacity-60 text-left">
+          <p class="text-xs opacity-60 text-center sm:text-left">
             {profile.displayName || profile.handle || profile.did} was last listening
             to
           </p>
-          <p class="text-xs font-medium text-left mt-0.5">
+          <p class="text-xs font-medium text-center sm:text-left mt-0.5">
             <a
               href={trackData.url}
               class="text-link hover:text-link-hover"
@@ -234,7 +234,7 @@
       {/if}
 
       {#if musicLoading}
-        <p class="text-xs opacity-60 italic text-left">
+        <p class="text-xs opacity-60 italic text-center sm:text-left">
           Loading recent tracks...
         </p>
       {/if}
