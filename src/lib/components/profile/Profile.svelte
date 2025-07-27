@@ -12,38 +12,45 @@
 
 {#if profile}
   <!-- Profile Content: Main container for avatar, user info, and status. -->
-  <div class="profile-content flex flex-row items-start text-left mx-2 mb-8 relative gap-6">
-    <!-- Profile Avatar (overlapping the banner) -->
-    <img
-      src={profile?.avatar}
-      alt="{profile?.displayName || 'User'}'s avatar"
-      class="rounded-full w-32 h-32 shadow-lg hover:transform-none flex-shrink-0 -mt-16 relative z-10"
-    />
-    
-    <!-- User Information: Display name, handle, DID, description, status -->
-    <div class="flex-1 min-w-0 p-4 rounded-[1em] overflow-hidden" style="background: var(--card-bg);">
-      <div class="mb-3">
-        <h4 class="text-lg font-semibold mb-1 leading-tight truncate">{profile?.displayName}</h4>
-        <h6 class="mb-2">
-          <a
-            href="https://bsky.app/profile/{profile?.handle}"
-            class="text-link hover:text-link-hover text-sm truncate block">@{profile?.handle}</a
-          >
-        </h6>
-        <h6 class="opacity-40 mb-3">
-          <span class="text-xs font-mono overflow-hidden text-ellipsis whitespace-nowrap hidden sm:block">{profile?.did}</span>
-        </h6>
-      </div>
+  <div class="profile-content mx-2 mb-8 relative">
+    <!-- Mobile: Stack vertically, Desktop: Side by side -->
+    <div class="flex flex-col sm:flex-row sm:items-start text-left sm:gap-6">
+      <!-- Profile Avatar -->
+      <img
+        src={profile?.avatar}
+        alt="{profile?.displayName || 'User'}'s avatar"
+        class="rounded-full shadow-lg hover:transform-none flex-shrink-0 relative z-10
+               w-24 h-24 -mt-12 mx-auto mb-4
+               sm:w-32 sm:h-32 sm:-mt-16 sm:mx-0 sm:mb-0"
+      />
       
-      <!-- Profile Description -->
-      {#if profile?.description}
+      <!-- User Information: Display name, handle, DID, description, status -->
+      <div class="flex-1 min-w-0 p-4 rounded-[1em] overflow-hidden" style="background: var(--card-bg);">
         <div class="mb-3">
-          <p class="text-sm leading-relaxed">{profile?.description}</p>
+          <h4 class="text-lg font-semibold mb-1 leading-tight truncate text-center sm:text-left">{profile?.displayName}</h4>
+          <h6 class="mb-2 text-center sm:text-left">
+            <a
+              href="https://bsky.app/profile/{profile?.handle}"
+              class="text-link hover:text-link-hover text-sm truncate block">@{profile?.handle}</a
+            >
+          </h6>
+          <h6 class="opacity-40 mb-3 text-center sm:text-left">
+            <span class="text-xs font-mono overflow-hidden text-ellipsis whitespace-nowrap hidden sm:block">{profile?.did}</span>
+          </h6>
         </div>
-      {/if}
-      
-      <!-- Display consolidated status/music using the updated Status component -->
-      <Status {profile} />
+        
+        <!-- Profile Description -->
+        {#if profile?.description}
+          <div class="mb-3">
+            <p class="text-sm leading-relaxed text-center sm:text-left">{profile?.description}</p>
+          </div>
+        {/if}
+        
+        <!-- Display consolidated status/music using the updated Status component -->
+        <div class="text-center sm:text-left">
+          <Status {profile} />
+        </div>
+      </div>
     </div>
   </div>
 {:else}
