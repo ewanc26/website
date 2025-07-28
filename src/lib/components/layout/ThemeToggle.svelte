@@ -140,6 +140,7 @@
 
   .theme-dropdown {
     max-height: 80vh;
+    z-index: 100;
   }
 
   /* Responsive adjustments */
