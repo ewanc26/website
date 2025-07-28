@@ -198,18 +198,21 @@
   --header-footer-bg: #382a28;
   --button-bg: #a34038;
   --button-hover-bg: #bf5048;
+  --link-color: #f07050;
+  --link-hover-color: #f89070;
+  --card-bg: #382a28;
 }
 
 /* Sunset theme - light mode */
 :root.sunset.light {
-  --background-color: #f8e0e0;
-  --text-color: #481e1e;
-  --header-footer-bg: #efc8c8;
-  --button-bg: #bf5048;
-  --button-hover-bg: #d66a6a;
+  --background-color: #f8e8e4;
+  --text-color: #482824;
+  --header-footer-bg: #efd4cc;
+  --button-bg: #c65a48;
+  --button-hover-bg: #d87a68;
   --link-color: #a34038;
-  --link-hover-color: #8a2e2e;
-  --card-bg: #efc8c8;
+  --link-hover-color: #7d2820;
+  --card-bg: #efd4cc;
 }
 
 /* Werewolf theme - dark mode */
@@ -234,9 +237,6 @@
   --link-color: #cc3300;
   --link-hover-color: #e64d1a;
   --card-bg: #e0e0e0;
-  --link-color: #e68070;
-  --link-hover-color: #f0a698;
-  --card-bg: #382a28;
 }
 
 /* Sunset theme - light mode */
