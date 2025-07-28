@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getStores } from "$app/stores";
   const { page } = getStores();
-  import ThemeToggle from "./ThemeToggle.svelte";
+
   import { HomeIcon, RssIcon, BookOpenIcon } from "$components/icons";
 
   export const isHomePage: boolean = false;
@@ -44,5 +44,5 @@
     {/if}
   </div>
   <div class="ml-auto"></div>
-  <ThemeToggle />
+
 </nav>
