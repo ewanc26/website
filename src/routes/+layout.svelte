@@ -3,7 +3,8 @@
   import { getStores } from "$app/stores";
   const { page } = getStores();
   import Profile from "$components/profile/Profile.svelte";
-  import { Navigation, Footer } from "$components/layout";
+  import { Footer } from "$components/layout";
+  import HeaderMain from "$components/layout/header/Main.svelte";
 
   let { data, children } = $props();
 
@@ -16,7 +17,7 @@
 </script>
 
 <div class="box-border mx-auto px-4 sm:px-8 max-w-[1000px] pb-8">
-  <Navigation {isHomePage} {isBlogIndex} />
+  <HeaderMain {isHomePage} {isBlogIndex} />
 
   {#if showProfile}
     <Profile profile={data.profile} />
