@@ -126,3 +126,12 @@ export interface BlogServiceResult {
   getPost: (rkey: string) => Post | null;
   getAdjacentPosts: (rkey: string) => { previous: Post | null; next: Post | null };
 }
+
+/**
+ * Represents a milestone with text, emoji, and type.
+ */
+export interface Milestone {
+  text: string;
+  emoji: string;
+  type: 'special' | 'major' | 'minor';
+}
