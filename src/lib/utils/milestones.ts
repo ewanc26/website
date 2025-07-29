@@ -1,6 +1,5 @@
 import { formatNumber, getOrdinalSuffix } from './formatters';
 
-
 export interface Milestone {
   text: string;
   emoji: string;
@@ -34,8 +33,8 @@ export function getMilestone(postNumber: number): Milestone | null {
     }
   }
   
-  // Major milestones (every 50 posts after 100)
-  if (postNumber > 100 && postNumber % 250 === 0) {
+  // Major milestones (every 250 posts)
+  if (postNumber % 250 === 0) {
     return {
       text: `${formatNumber(postNumber)} Posts!`,
       emoji: "🎉",
@@ -43,7 +42,8 @@ export function getMilestone(postNumber: number): Milestone | null {
     };
   }
 
-  if (postNumber > 100 && postNumber % 50 === 0) {
+  // Major milestones (every 50 posts)
+  if (postNumber % 50 === 0) {
     return {
       text: `${formatNumber(postNumber)} Posts!`,
       emoji: "🎯",
