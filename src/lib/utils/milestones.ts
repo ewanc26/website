@@ -1,10 +1,5 @@
 import { formatNumber, getOrdinalSuffix } from './formatters';
-
-export interface Milestone {
-  text: string;
-  emoji: string;
-  type: 'special' | 'major' | 'minor';
-}
+import type { Milestone } from '$components/shared/interfaces';
 
 /**
  * Determines if a post number represents a milestone and returns milestone info
