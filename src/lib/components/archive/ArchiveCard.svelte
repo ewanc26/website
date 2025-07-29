@@ -242,15 +242,11 @@
     100% { left: 100%; }
   }
 
-  .milestone-banner.special {
+  .milestone-banner.special,
+  .milestone-banner.major {
     background: linear-gradient(135deg, var(--button-bg), var(--button-hover-bg));
     color: white;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  }
-
-  .milestone-banner.major {
-    background: linear-gradient(135deg, var(--button-bg), var(--text-color));
-    color: var(--header-footer-bg);
   }
 
   .milestone-banner.minor {
@@ -447,6 +443,14 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+  }
+
+  /* Minor milestones */
+  .milestone-banner.minor::before {
+    content: none;
+    animation: none;
+    background: none;
+    display: none;
   }
 
   /* Responsive adjustments */

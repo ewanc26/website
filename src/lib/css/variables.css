@@ -514,3 +514,255 @@
   --link-hover-color: #4d3520;
   --card-bg: #e6d7c3;
 }
+
+/* Default green theme - dark mode */
+:root {
+  --milestone-color-left: #2d4839;
+  --milestone-color-right: #6db880;
+}
+
+/* Default green theme - light mode */
+:root.light {
+  --milestone-color-left: #5aaa76;
+  --milestone-color-right: #2a7d4b;
+}
+
+/* Blue theme - dark mode */
+:root.blue {
+  --milestone-color-left: #2d4865;
+  --milestone-color-right: #6d9fd8;
+}
+
+/* Blue theme - light mode */
+:root.blue.light {
+  --milestone-color-left: #5a8cc6;
+  --milestone-color-right: #2a5d7d;
+}
+
+/* Purple theme - dark mode */
+:root.purple {
+  --milestone-color-left: #482d65;
+  --milestone-color-right: #a06dd8;
+}
+
+/* Purple theme - light mode */
+:root.purple.light {
+  --milestone-color-left: #8c5ac6;
+  --milestone-color-right: #5d2a7d;
+}
+
+/* High contrast theme - dark mode */
+:root.high-contrast {
+  --milestone-color-left: #0066cc;
+  --milestone-color-right: #00ccff;
+}
+
+/* High contrast theme - light mode */
+:root.high-contrast.light {
+  --milestone-color-left: #0066cc;
+  --milestone-color-right: #0000cc;
+}
+
+/* Bubblegum theme - dark mode */
+:root.bubblegum {
+  --milestone-color-left: #c13d7a;
+  --milestone-color-right: #f07ab6;
+}
+
+/* Bubblegum theme - light mode */
+:root.bubblegum.light {
+  --milestone-color-left: #d65a93;
+  --milestone-color-right: #c13d7a;
+}
+
+/* Slate theme - dark mode */
+:root.slate {
+  --milestone-color-left: #455060;
+  --milestone-color-right: #7da1c6;
+}
+
+/* Slate theme - light mode */
+:root.slate.light {
+  --milestone-color-left: #5a6c87;
+  --milestone-color-right: #3a4a5e;
+}
+
+/* Sand theme - dark mode */
+:root.sand {
+  --milestone-color-left: #7d6a4d;
+  --milestone-color-right: #c9a96c;
+}
+
+/* Sand theme - light mode */
+:root.sand.light {
+  --milestone-color-left: #b09060;
+  --milestone-color-right: #7d6a4d;
+}
+
+/* Ocean theme - dark mode */
+:root.ocean {
+  --milestone-color-left: #1e6080;
+  --milestone-color-right: #4da6c9;
+}
+
+/* Ocean theme - light mode */
+:root.ocean.light {
+  --milestone-color-left: #2a7a9c;
+  --milestone-color-right: #1e6080;
+}
+
+/* Sunset theme - dark mode */
+:root.sunset {
+  --milestone-color-left: #a34038;
+  --milestone-color-right: #f07050;
+}
+
+/* Sunset theme - light mode */
+:root.sunset.light {
+  --milestone-color-left: #c65a48;
+  --milestone-color-right: #a34038;
+}
+
+/* Werewolf theme - dark mode */
+:root.werewolf {
+  --milestone-color-left: #8b0000;
+  --milestone-color-right: #ff4500;
+}
+
+/* Werewolf theme - light mode */
+:root.werewolf.light {
+  --milestone-color-left: #a00000;
+  --milestone-color-right: #cc3300;
+}
+
+/* Mint theme - dark mode */
+:root.mint {
+  --milestone-color-left: #2a9c80;
+  --milestone-color-right: #60d0b0;
+}
+
+/* Mint theme - light mode */
+:root.mint.light {
+  --milestone-color-left: #38bf9c;
+  --milestone-color-right: #0a8c73;
+}
+
+/* Lavender theme - dark mode */
+:root.lavender {
+  --milestone-color-left: #604d9c;
+  --milestone-color-right: #a890e0;
+}
+
+/* Lavender theme - light mode */
+:root.lavender.light {
+  --milestone-color-left: #7660bf;
+  --milestone-color-right: #604d9c;
+}
+
+/* Low contrast theme - dark mode */
+:root.low-contrast {
+  --milestone-color-left: #606060;
+  --milestone-color-right: #909090;
+}
+
+/* Low contrast theme - light mode */
+:root.low-contrast.light {
+  --milestone-color-left: #909090;
+  --milestone-color-right: #606060;
+}
+
+/* Amber theme - dark mode */
+:root.amber {
+  --milestone-color-left: #9c7830;
+  --milestone-color-right: #e0b050;
+}
+
+/* Amber theme - light mode */
+:root.amber.light {
+  --milestone-color-left: #c09030;
+  --milestone-color-right: #8c6824;
+}
+
+/* Teal theme - dark mode */
+:root.teal {
+  --milestone-color-left: #1e7d78;
+  --milestone-color-right: #4cc5c0;
+}
+
+/* Teal theme - light mode */
+:root.teal.light {
+  --milestone-color-left: #289994;
+  --milestone-color-right: #1e7d78;
+}
+
+/* Olive theme - dark mode */
+:root.olive {
+  --milestone-color-left: #5a7d30;
+  --milestone-color-right: #a0cc60;
+}
+
+/* Olive theme - light mode */
+:root.olive.light {
+  --milestone-color-left: #6c9438;
+  --milestone-color-right: #5a7d30;
+}
+
+/* Indigo theme - dark mode */
+:root.indigo {
+  --milestone-color-left: #3a3d80;
+  --milestone-color-right: #7a80e0;
+}
+
+/* Indigo theme - light mode */
+:root.indigo.light {
+  --milestone-color-left: #484c9c;
+  --milestone-color-right: #3a3d80;
+}
+
+/* Coral theme - dark mode */
+:root.coral {
+  --milestone-color-left: #c05a48;
+  --milestone-color-right: #ff9e80;
+}
+
+/* Coral theme - light mode */
+:root.coral.light {
+  --milestone-color-left: #e07860;
+  --milestone-color-right: #c05a48;
+}
+
+/* Charcoal theme - dark mode */
+:root.charcoal {
+  --milestone-color-left: #485058;
+  --milestone-color-right: #90a0b0;
+}
+
+/* Charcoal theme - light mode */
+:root.charcoal.light {
+  --milestone-color-left: #586068;
+  --milestone-color-right: #384048;
+}
+
+/* Rose/Crimson theme - dark mode */
+:root.rose {
+  --milestone-color-left: #9c2838;
+  --milestone-color-right: #d86070;
+}
+
+/* Rose/Crimson theme - light mode */
+:root.rose.light {
+  --milestone-color-left: #b83848;
+  --milestone-color-right: #9c2838;
+}
+
+/* Wood theme - dark mode */
+:root.wood {
+  --milestone-color-left: #6b4c33;
+  --milestone-color-right: #c49a6c;
+}
+
+/* Wood theme - light mode */
+:root.wood.light {
+  --milestone-color-left: #8c6240;
+  --milestone-color-right: #6b4c33;
+}
