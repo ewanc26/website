@@ -62,7 +62,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
   <link>${baseUrl}/blog</link>
   <atom:link href="${baseUrl}/blog/rss" rel="self" type="application/rss+xml" />
   <image>
-    <url>${baseUrl}/api/og/blog</url>
+    <url>${baseUrl}/api/og/blog.png</url>
     <title>Blog - Ewan's Corner</title>
     <link>${baseUrl}/blog</link>
   </image>
@@ -80,7 +80,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     <author>${profileData.displayName || profileData.handle} (${
         profileData.handle
       })</author>
-    <media:content url="${baseUrl}/api/og/" medium="image" />
+   <media:content url="${baseUrl}/api/og/blog/${post.rkey}.png" medium="image" />
   </item>`
     )
     .join("")}
