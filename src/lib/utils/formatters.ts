@@ -77,28 +77,47 @@ export function formatRelativeTime(
 ): string {
   const dateObj = new Date(date);
   const now = new Date();
-  const diffInSeconds = Math.round((now.getTime() - dateObj.getTime()) / 1000);
+  const diffInSeconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
 
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+
+  // Granular cases
+  if (diffInSeconds < 0) {
+    // Future date
+    if (Math.abs(diffInSeconds) < 10) return locale.startsWith('en') ? 'just now' : rtf.format(0, 'second');
+    if (Math.abs(diffInSeconds) < 60) return rtf.format(Math.abs(diffInSeconds), 'second');
+    if (Math.abs(diffInSeconds) < 3600) return rtf.format(Math.round(Math.abs(diffInSeconds) / 60), 'minute');
+    if (Math.abs(diffInSeconds) < 86400) return rtf.format(Math.round(Math.abs(diffInSeconds) / 3600), 'hour');
+    // Fallback to default units for larger future times
+  } else {
+    // Past date
+    if (diffInSeconds < 10) return locale.startsWith('en') ? 'just now' : rtf.format(0, 'second');
+    if (diffInSeconds < 60) return rtf.format(-diffInSeconds, 'second');
+    if (diffInSeconds < 3600) return rtf.format(-Math.floor(diffInSeconds / 60), 'minute');
+    if (diffInSeconds < 86400) return rtf.format(-Math.floor(diffInSeconds / 3600), 'hour');
+    // Fallback to default units for larger past times
+  }
 
   const units: { unit: Intl.RelativeTimeFormatUnit; seconds: number }[] = [
     { unit: "year", seconds: 31536000 },
     { unit: "month", seconds: 2592000 },
     { unit: "week", seconds: 604800 },
     { unit: "day", seconds: 86400 },
-    { unit: "hour", seconds: 3600 },
-    { unit: "minute", seconds: 60 },
-    { unit: "second", seconds: 1 },
   ];
 
   for (const { unit, seconds } of units) {
     if (Math.abs(diffInSeconds) >= seconds) {
-      const value = Math.round(diffInSeconds / seconds);
+      let value;
+      if (unit === "year" || unit === "month") {
+        value = Math.floor(diffInSeconds / seconds);
+      } else {
+        value = Math.round(diffInSeconds / seconds);
+      }
       return rtf.format(-value, unit);
     }
   }
 
-  return rtf.format(0, "second"); // Should ideally not happen if date is in the past
+  return rtf.format(0, "second"); // Fallback, should not happen
 }
 
 /**
