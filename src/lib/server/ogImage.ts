@@ -1,24 +1,69 @@
-import fs from 'fs/promises';
-import path from 'path';
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
+import { dev } from '$app/environment';
 
-// Font paths (adjust if needed)
-const fontRegularPath = path.resolve('static/fonts/ArrowType-Recursive-1.085/Recursive_Desktop/separate_statics/TTF/RecursiveSansCslSt-Regular.ttf');
-const fontBoldPath = path.resolve('static/fonts/ArrowType-Recursive-1.085/Recursive_Desktop/separate_statics/TTF/RecursiveSansCslSt-Bold.ttf');
-const fontItalicPath = path.resolve('static/fonts/ArrowType-Recursive-1.085/Recursive_Desktop/separate_statics/TTF/RecursiveSansCslSt-Italic.ttf');
+// Font URLs for production (served from static folder)
+const FONT_BASE_URL = '/fonts/ArrowType-Recursive-1.085/Recursive_Desktop/separate_statics/TTF';
+const FONT_FILES = {
+  regular: 'RecursiveSansCslSt-Regular.ttf',
+  bold: 'RecursiveSansCslSt-Bold.ttf',
+  italic: 'RecursiveSansCslSt-Italic.ttf'
+};
 
 // Preload fonts (cache in memory for performance)
 let fontCache: { regular?: Buffer; bold?: Buffer; italic?: Buffer } = {};
-async function loadFonts() {
-  if (!fontCache.regular) fontCache.regular = await fs.readFile(fontRegularPath);
-  if (!fontCache.bold) fontCache.bold = await fs.readFile(fontBoldPath);
-  if (!fontCache.italic) fontCache.italic = await fs.readFile(fontItalicPath);
-  // Defensive: throw if any font is missing
-  if (!fontCache.regular || !fontCache.bold || !fontCache.italic) {
-    throw new Error('Failed to load all required font files for OG image');
+
+async function loadSingleFont(fileName: string, baseUrl?: string): Promise<Buffer> {
+  try {
+    if (dev) {
+      // In development, try to load from filesystem first
+      const fs = await import('fs/promises');
+      const path = await import('path');
+      const fontPath = path.resolve(`static${FONT_BASE_URL}/${fileName}`);
+      console.log(`Loading font from filesystem: ${fontPath}`);
+      return await fs.readFile(fontPath);
+    } else {
+      // In production, fetch from the served static files
+      const fontUrl = `${baseUrl || ''}${FONT_BASE_URL}/${fileName}`;
+      console.log(`Fetching font from URL: ${fontUrl}`);
+      
+      const response = await fetch(fontUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch font: ${response.status} ${response.statusText}`);
+      }
+      
+      const arrayBuffer = await response.arrayBuffer();
+      return Buffer.from(arrayBuffer);
+    }
+  } catch (error) {
+    console.error(`Failed to load font ${fileName}:`, error);
+    throw error;
   }
-  return fontCache as { regular: Buffer; bold: Buffer; italic: Buffer };
+}
+
+async function loadFonts(baseUrl?: string) {
+  try {
+    // Load fonts if not already cached
+    if (!fontCache.regular) {
+      fontCache.regular = await loadSingleFont(FONT_FILES.regular, baseUrl);
+    }
+    if (!fontCache.bold) {
+      fontCache.bold = await loadSingleFont(FONT_FILES.bold, baseUrl);
+    }
+    if (!fontCache.italic) {
+      fontCache.italic = await loadSingleFont(FONT_FILES.italic, baseUrl);
+    }
+
+    // Defensive: throw if any font is missing
+    if (!fontCache.regular || !fontCache.bold || !fontCache.italic) {
+      throw new Error('Failed to load all required font files for OG image');
+    }
+    
+    return fontCache as { regular: Buffer; bold: Buffer; italic: Buffer };
+  } catch (error) {
+    console.error('Font loading error:', error);
+    throw error;
+  }
 }
 
 export interface OgImageOptions {
@@ -40,15 +85,14 @@ export interface OgImageOptions {
  * Calculate optimal font size based on text length and available space
  */
 function calculateTitleFontSize(title: string, maxWidth: number = 1000): number {
-  const baseSize = 64; // Increased from 56px
-  const charThreshold = 45; // Slightly lower threshold
-  const minSize = 36; // Increased minimum size
+  const baseSize = 64;
+  const charThreshold = 45;
+  const minSize = 36;
   
   if (title.length <= charThreshold) {
     return baseSize;
   }
   
-  // Scale down based on length
   const scaleFactor = Math.max(0.5, 1 - ((title.length - charThreshold) * 0.012));
   return Math.max(minSize, Math.floor(baseSize * scaleFactor));
 }
@@ -57,7 +101,7 @@ function calculateTitleFontSize(title: string, maxWidth: number = 1000): number 
  * Calculate optimal subtitle font size
  */
 function calculateSubtitleFontSize(subtitle: string, titleSize: number): number {
-  const baseRatio = 0.57; // subtitle is ~57% of title size
+  const baseRatio = 0.57;
   const charThreshold = 80;
   const minSize = 20;
   
@@ -82,8 +126,8 @@ function estimateContentHeight(options: OgImageOptions): {
   totalContentHeight: number;
 } {
   const titleFontSize = calculateTitleFontSize(options.title);
-  const titleLines = Math.ceil(options.title.length / 40); // Adjusted for larger font
-  const titleHeight = titleLines * titleFontSize * 1.25 + 32; // line-height + margin
+  const titleLines = Math.ceil(options.title.length / 40);
+  const titleHeight = titleLines * titleFontSize * 1.25 + 32;
   
   let subtitleHeight = 0;
   if (options.subtitle) {
@@ -94,10 +138,10 @@ function estimateContentHeight(options: OgImageOptions): {
   
   let metaHeight = 0;
   if (options.metaLine || (options.extraMeta && options.extraMeta.length > 0)) {
-    metaHeight = 32 + 24; // Adjusted for larger meta text
+    metaHeight = 32 + 24;
   }
   
-  let authorHeight = options.author ? 120 : 28; // author section or decorative line
+  let authorHeight = options.author ? 120 : 28;
   
   return {
     titleHeight,
@@ -111,10 +155,11 @@ function estimateContentHeight(options: OgImageOptions): {
 /**
  * Generates a PNG buffer for an OG image with unified styling.
  * @param options OgImageOptions
+ * @param baseUrl Base URL for fetching fonts in production (e.g., 'https://ewancroft.uk')
  * @returns Buffer (PNG)
  */
-export async function generateOgImage(options: OgImageOptions): Promise<Buffer> {
-  const fonts = await loadFonts();
+export async function generateOgImage(options: OgImageOptions, baseUrl?: string): Promise<Buffer> {
+  const fonts = await loadFonts(baseUrl);
   
   // Calculate optimal sizing
   const titleFontSize = calculateTitleFontSize(options.title);
@@ -122,13 +167,12 @@ export async function generateOgImage(options: OgImageOptions): Promise<Buffer> 
   
   // Estimate if content will fit and adjust if needed
   const contentEstimate = estimateContentHeight(options);
-  const availableHeight = 630 - 96; // Total height minus padding
+  const availableHeight = 630 - 96;
   
   let titleMarginBottom = 32;
   let subtitleMarginBottom = 24;
   let metaMarginBottom = 24;
   
-  // If content is too tall, reduce margins more aggressively
   if (contentEstimate.totalContentHeight > availableHeight) {
     const compressionRatio = availableHeight / contentEstimate.totalContentHeight;
     titleMarginBottom = Math.max(8, Math.floor(titleMarginBottom * compressionRatio));
@@ -155,7 +199,7 @@ export async function generateOgImage(options: OgImageOptions): Promise<Buffer> 
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        textWrap: 'balance', // Better text wrapping
+        textWrap: 'balance',
         hyphens: 'auto',
         paddingLeft: '48px',
         paddingRight: '48px',
@@ -192,8 +236,8 @@ export async function generateOgImage(options: OgImageOptions): Promise<Buffer> 
       type: 'div',
       props: {
         style: {
-          fontSize: '24px', // Increased from 20px
-          opacity: 0.75, // Slightly more visible
+          fontSize: '24px',
+          opacity: 0.75,
           margin: `0 0 ${metaMarginBottom}px 0`,
           display: 'flex',
           flexDirection: 'row',
