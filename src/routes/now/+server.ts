@@ -53,7 +53,7 @@ export const GET: RequestHandler = async ({ url, fetch }: { url: URL, fetch: typ
   <link>${baseUrl}/now</link>
   <atom:link href="${baseUrl}/now/rss" rel="self" type="application/rss+xml" />
   <image>
-    <url>${baseUrl}/api/og/now</url>
+    <url>${baseUrl}/api/og/now.png</url>
     <title>Now - ${profileData.displayName || profileData.handle}'s Status Updates</title>
     <link>${baseUrl}/now</link>
   </image>
