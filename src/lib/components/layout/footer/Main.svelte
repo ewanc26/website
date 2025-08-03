@@ -63,13 +63,23 @@
         class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
         href="/site/meta"
       >
-        more about this site
+        about this site & privacy policy
       </a>
     </div>
 
     <div>
       <span class="mx-1"></span>
       <LastCommit />
+
+      <span class="mx-1"></span>
+      <a
+        class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
+        href="https://github.com/ewanc26/website"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+      code
+      </a>     
 
       <span class="mx-1"></span>
       <TidClock />
