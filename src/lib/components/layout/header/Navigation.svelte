@@ -2,7 +2,7 @@
   import { getStores } from "$app/stores";
   const { page } = getStores();
 
-  import { HomeIcon, RssIcon, BookOpenIcon } from "$components/icons";
+  import { HomeIcon, RssIcon, BookOpenIcon, AtomIcon } from "$components/icons";
 
   export const isHomePage: boolean = false;
   export let isBlogIndex: boolean = false;
@@ -31,6 +31,15 @@
         download="{cleanOrigin}_Blog.rss"
       >
         <RssIcon />
+      </a>
+      <!-- Atom Feed Link -->
+      <a
+        href="{$page.url.origin}/blog/atom"
+        class="font-medium text-[large] hover:text-[var(--link-hover-color)]"
+        aria-label="Atom Feed"
+        download="{cleanOrigin}_Blog.atom"
+      >
+        <AtomIcon />
       </a>
     {/if}
     {#if $page.url.pathname.startsWith("/blog/") && $page.url.pathname !== "/blog/"}

@@ -3,6 +3,7 @@ export { default as FacebookIcon } from "./social/FacebookIcon.svelte";
 export { default as MastodonIcon } from './social/MastodonIcon.svelte';
 export { default as RedditIcon } from './social/RedditIcon.svelte';
 export { default as RssIcon } from './social/RssIcon.svelte';
+export { default as AtomIcon } from "./social/AtomIcon.svelte";
 export { default as ShareIcons } from './social/ShareIcons.svelte';
 export { default as BookOpenIcon } from './utility/BookOpenIcon.svelte';
 export { default as CopyLinkIcon } from './utility/CopyLinkIcon.svelte';
