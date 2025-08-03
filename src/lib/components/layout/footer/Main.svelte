@@ -63,7 +63,7 @@
         class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
         href="/site/meta"
       >
-        about this site & privacy policy
+        about site & privacy
       </a>
     </div>
 
