@@ -4,45 +4,54 @@ import { dev } from "$app/environment";
 import { getProfile } from "$components/profile/profile";
 import { formatDate } from "$utils/formatters";
 import type { StatusUpdate } from "$components/shared";
+import { escapeXml } from "$lib/utils/xml";
+import { TTLCache } from "$utils/cache";
+
+// TTL cache for status updates (5 min)
+const STATUS_CACHE_TTL = 5 * 60 * 1000;
+const statusCache = new TTLCache<{ profileData: any; sortedUpdates: StatusUpdate[] }>(STATUS_CACHE_TTL);
+
 
 export const GET: RequestHandler = async ({ url, fetch }: { url: URL, fetch: typeof globalThis.fetch }) => {
   const baseUrl = dev ? url.origin : "https://ewancroft.uk";
-  
   try {
-    const profileData = await getProfile(fetch);
-    const did = profileData.did;
-    const pdsUrl = profileData.pds;
-    
-    if (!pdsUrl) throw new Error("Could not find PDS URL");
-    
-    const statusResponse = await fetch(
-      `${pdsUrl}/xrpc/com.atproto.repo.listRecords?repo=${did}&collection=uk.ewancroft.now`
-    );
-    
-    if (!statusResponse.ok)
-      throw new Error(`Status fetch failed: ${statusResponse.status}`);
-      
-    const statusData = await statusResponse.json();
-    const statusUpdates: StatusUpdate[] = [];
-    
-    for (const data of statusData.records) {
-      const matches = data.uri.split("/");
-      const tid = matches[matches.length - 1];
-      const record = data.value;
-      
-      if (matches && matches.length === 5 && record) {
-        statusUpdates.push({
-          text: record.text,
-          createdAt: new Date(record.createdAt),
-          tid,
-        });
+    let cached = statusCache.get();
+    let profileData: any;
+    let sortedUpdates: StatusUpdate[];
+
+    if (cached) {
+      profileData = cached.profileData;
+      sortedUpdates = cached.sortedUpdates;
+    } else {
+      profileData = await getProfile(fetch);
+      const did = profileData.did;
+      const pdsUrl = profileData.pds;
+      if (!pdsUrl) throw new Error("Could not find PDS URL");
+      const statusResponse = await fetch(
+        `${pdsUrl}/xrpc/com.atproto.repo.listRecords?repo=${did}&collection=uk.ewancroft.now`
+      );
+      if (!statusResponse.ok)
+        throw new Error(`Status fetch failed: ${statusResponse.status}`);
+      const statusData = await statusResponse.json();
+      const statusUpdates: StatusUpdate[] = [];
+      for (const data of statusData.records) {
+        const matches = data.uri.split("/");
+        const tid = matches[matches.length - 1];
+        const record = data.value;
+        if (matches && matches.length === 5 && record) {
+          statusUpdates.push({
+            text: record.text,
+            createdAt: new Date(record.createdAt),
+            tid,
+          });
+        }
       }
+      sortedUpdates = statusUpdates.sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+      );
+      statusCache.set({ profileData, sortedUpdates });
     }
-    
-    const sortedUpdates = statusUpdates.sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-    );
-    
+
     const atomXml = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Now - ${profileData.displayName || profileData.handle}'s Status Updates</title>
@@ -85,7 +94,6 @@ export const GET: RequestHandler = async ({ url, fetch }: { url: URL, fetch: typ
     });
   } catch (error) {
     console.error("Error generating Atom feed:", error);
-    
     return new Response(
       `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
@@ -110,13 +118,3 @@ export const GET: RequestHandler = async ({ url, fetch }: { url: URL, fetch: typ
     );
   }
 };
-
-function escapeXml(unsafe: string): string {
-  if (!unsafe) return "";
-  return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
