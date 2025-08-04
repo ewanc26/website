@@ -1,3 +1,30 @@
+// Server-side in-memory TTL cache (for server endpoints)
+export interface CacheEntry<T> {
+  value: T | undefined;
+  timestamp: number;
+}
+
+export class TTLCache<T> {
+  private entry: CacheEntry<T> = { value: undefined, timestamp: 0 };
+  constructor(private ttlMs: number) {}
+
+  get(): T | undefined {
+    if (Date.now() - this.entry.timestamp > this.ttlMs) {
+      this.entry.value = undefined;
+    }
+    return this.entry.value;
+  }
+
+  set(value: T) {
+    this.entry.value = value;
+    this.entry.timestamp = Date.now();
+  }
+
+  clear() {
+    this.entry.value = undefined;
+    this.entry.timestamp = 0;
+  }
+}
 /**
  * Caches data in localStorage with a specified expiry time.
  * @param key The key to store the data under.
