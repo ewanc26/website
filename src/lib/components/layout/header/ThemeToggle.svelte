@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { SunIcon, MoonIcon } from "$components/icons";
-  import EditIcon from "$components/icons/utility/EditIcon.svelte";
+  import { SunIcon, MoonIcon, EditIcon } from "$components/icons";
   import { 
     THEMES,
     applyTheme, 
@@ -10,7 +9,7 @@
     updateThemeColorMeta,
     dispatchThemeChangeEvent,
     setupSystemThemeListener
-  } from "../../../themeLoader";
+  } from "$lib/themeLoader";
 
   let isDarkMode: boolean = true;
   let currentTheme: string = "default";
