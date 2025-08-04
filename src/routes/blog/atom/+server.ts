@@ -1,13 +1,28 @@
+import { TTLCache } from "$utils/cache";
+import { escapeXml } from "$lib/utils/xml";
+
+// TTL cache for Atom feed XML (5 min)
+const FEED_CACHE_TTL = 5 * 60 * 1000;
+const atomFeedCache = new TTLCache<string>(FEED_CACHE_TTL);
+
 import type { RequestHandler } from "../rss/$types";
 import { dev } from "$app/environment";
 import { loadAllPosts } from "$services/blogService";
 
 export const GET: RequestHandler = async ({ url, fetch }) => {
+  // Check cache first
+  const cached = atomFeedCache.get();
+  if (cached) {
+    return new Response(cached, {
+      headers: {
+        "Content-Type": "application/atom+xml; charset=utf-8",
+        "Cache-Control": "max-age=0, s-maxage=3600",
+      },
+    });
+  }
   try {
     const { profile, sortedPosts } = await loadAllPosts(fetch);
-    
     const baseUrl = dev ? url.origin : "https://ewancroft.uk";
-    
     const atomXml = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Blog - Ewan's Corner</title>
@@ -42,7 +57,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     )
     .join("")}
 </feed>`;
-
+    atomFeedCache.set(atomXml);
     return new Response(atomXml, {
       headers: {
         "Content-Type": "application/atom+xml; charset=utf-8",
@@ -51,9 +66,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     });
   } catch (error) {
     console.error("Error generating Atom feed:", error);
-    
     const baseUrl = dev ? url.origin : "https://ewancroft.uk";
-    
     return new Response(
       `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
@@ -78,13 +91,3 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     );
   }
 };
-
-function escapeXml(unsafe: string): string {
-  if (!unsafe) return "";
-  return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}

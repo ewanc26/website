@@ -2,7 +2,13 @@ import type { RequestHandler } from "./$types";
 import { dev } from "$app/environment";
 import { parse } from "$lib/parser";
 import type { MarkdownPost } from "$components/shared";
-import { getProfile } from "$components/profile/profile"; // Import getProfile
+import { getProfile } from "$components/profile/profile";
+import { escapeXml } from "$lib/utils/xml";
+import { TTLCache } from "$utils/cache";
+
+// TTL cache for RSS feed XML (5 min)
+const FEED_CACHE_TTL = 5 * 60 * 1000;
+const rssFeedCache = new TTLCache<string>(FEED_CACHE_TTL);
 
 export const GET: RequestHandler = async ({ url, fetch }) => {
   try {
@@ -112,22 +118,11 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
 </channel>
 </rss>`,
       {
-        headers: {
-          "Content-Type": "application/xml",
-          "Cache-Control": "no-cache",
-        },
+    headers: {
+      "Content-Type": "application/xml",
+      "Cache-Control": "no-cache",
+    },
       }
     );
   }
 };
-
-// Helper function to escape XML special characters
-function escapeXml(unsafe: string): string {
-  if (!unsafe) return "";
-  return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}

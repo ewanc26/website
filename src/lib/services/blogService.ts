@@ -3,9 +3,11 @@ import type { Profile, MarkdownPost, Post, BlogServiceResult } from "$components
 import { parse } from "$lib/parser";
 
 // Caching profile and post data
+
 let profile: Profile;
-let allPosts: Map<string, Post>;
+let allPosts: Map<string, Post> | undefined;
 let sortedPosts: Post[] = [];
+
 
 /**
  * Validates and processes a single blog record
@@ -123,40 +125,36 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
       profile = await getProfile(fetch);
     }
 
-    // Load and process posts if cache is empty
-    if (allPosts === undefined) {
-      const records = await loadAllPages(fetch);
+    // Always fetch fresh data for blog posts
+    const records = await loadAllPages(fetch);
 
-      const mdposts: Map<string, MarkdownPost> = new Map();
-      for (const data of records) {
-        const processed = processRecord(data);
-        if (processed) {
-          mdposts.set(processed.rkey, processed);
-        }
+    const mdposts: Map<string, MarkdownPost> = new Map();
+    for (const data of records) {
+      const processed = processRecord(data);
+      if (processed) {
+        mdposts.set(processed.rkey, processed);
       }
-
-      console.log(`Processed ${mdposts.size} posts from ${records.length} total records`);
-
-      // Convert markdown posts to full post format
-      allPosts = await parse(mdposts);
-
-      // Sort posts chronologically (newest first)
-      sortedPosts = Array.from(allPosts.values()).sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-      );
-
-      // Assign reverse post numbers
-      const total = sortedPosts.length;
-      sortedPosts.forEach((post, index) => {
-        post.postNumber = total - index;
-      });
     }
+
+    // Convert markdown posts to full post format
+    allPosts = await parse(mdposts);
+
+    // Sort posts chronologically (newest first)
+    sortedPosts = Array.from(allPosts.values()).sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+    );
+
+    // Assign reverse post numbers
+    const total = sortedPosts.length;
+    sortedPosts.forEach((post, index) => {
+      post.postNumber = total - index;
+    });
 
     return {
       posts: allPosts,
       profile,
       sortedPosts,
-      getPost: (rkey: string) => allPosts.get(rkey) ?? null,
+      getPost: (rkey: string) => allPosts?.get(rkey) ?? null,
       getAdjacentPosts: (rkey: string) => {
         const idx = sortedPosts.findIndex(p => p.rkey === rkey);
         return {
