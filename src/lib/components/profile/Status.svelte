@@ -219,8 +219,6 @@
           <p class="text-xs opacity-60 text-center sm:text-left">
             {profile.displayName || profile.handle || profile.did} was last listening
             to
-          </p>
-          <p class="text-xs font-medium text-center sm:text-left mt-0.5">
             <a
               href={trackData.url}
               class="text-link hover:text-link-hover"
@@ -232,7 +230,6 @@
           </p>
         </div>
       {/if}
-
       {#if musicLoading}
         <p class="text-xs opacity-60 italic text-center sm:text-left">
           Loading recent tracks...
