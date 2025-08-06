@@ -4,7 +4,7 @@
   import { env } from '$env/dynamic/public';
 
   // Icons
-  import { BlueskyIcon, FacebookIcon, RedditIcon, MastodonIcon, CopyLinkIcon } from "$components/icons";
+  import { BlueskyIcon, MastodonIcon, CopyLinkIcon } from "$components/icons";
 
   // Props
   export let title: string;
@@ -32,8 +32,6 @@
         ? `${title} by ${mastodonUserTag} - ${$page.url.href}`
         : `${title} by ${mastodonUserTag} - ${$page.url.href}`
       : `${title} - ${$page.url.href}`;
-  $: facebookShareText = `${title} - ${$page.url.href}`;
-  $: redditShareText = `${title} - ${$page.url.href}`;
 
   // Truncate for character limits
   $: truncatedBlueskyText =
@@ -45,30 +43,15 @@
     (mastodonShareText.length > 500
       ? mastodonShareText.substring(0, 497) + "..."
       : mastodonShareText);
-  $: truncatedFacebookText =
-    facebookShareText.length > 280
-      ? facebookShareText.substring(0, 277) + "..."
-      : facebookShareText;
-  $: truncatedRedditText =
-    redditShareText.length > 300
-      ? redditShareText.substring(0, 297) + "..."
-      : redditShareText;
+
 
   // Encode the share texts for use in URLs
   $: encodedBlueskyText = encodeURIComponent(truncatedBlueskyText);
   $: encodedMastodonText =
     mastodonShareText && encodeURIComponent(truncatedMastodonText);
-  $: encodedFacebookText = encodeURIComponent(truncatedFacebookText);
-  $: encodedRedditText = encodeURIComponent(truncatedRedditText);
 
   // Construct the Bluesky share URL
   $: blueskyShareUrl = `https://bsky.app/intent/compose?text=${encodedBlueskyText}`;
-
-  // Construct the Reddit share URL
-  $: redditShareUrl = `https://www.reddit.com/submit?url=${encodeURIComponent($page.url.href)}&title=${encodedRedditText}`;
-
-  // Construct the Facebook share URL
-  $: facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent($page.url.href)}&quote=${encodedFacebookText}`;
 
   // Construct the Mastodon share URL
   $: mastodonShareUrl =
@@ -121,32 +104,6 @@
     title="Share on Bluesky"
   >
     <BlueskyIcon />
-  </a>
-
-  <!-- Facebook Share Button -->
-  <a
-    href={facebookShareUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
-    style="background-color: var(--card-bg);"
-    aria-label="Share on Facebook"
-    title="Share on Facebook"
-  >
-    <FacebookIcon />
-  </a>
-
-  <!-- Reddit Share Button -->
-  <a
-    href={redditShareUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
-    style="background-color: var(--card-bg);"
-    aria-label="Share on Reddit"
-    title="Share on Reddit"
-  >
-    <RedditIcon />
   </a>
 
   {#if env.PUBLIC_ACTIVITYPUB_USER && env.PUBLIC_ACTIVITYPUB_USER.length > 0}
