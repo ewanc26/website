@@ -3,7 +3,6 @@
   import { quintOut } from "svelte/easing";
   import MonthSection from "./MonthSection.svelte";
   import { calculateTotalReadTime, calculateTotalWordCount, formatReadTime } from "$utils/tally";
-  import StatsDisplay from "./StatsDisplay.svelte";
 
   export const year: number = 0;
   export let months: Record<string, any[]>;
@@ -25,7 +24,6 @@
   out:fade={{ duration: 200 }}
   class="year-content"
 >
-  <StatsDisplay totalReadTime={yearlyTotalReadTime} totalWordCount={yearlyTotalWordCount} />
 
   {#each Object.entries(months) as [monthName, postsInMonth], monthIndex}
     <MonthSection
