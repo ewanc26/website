@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import YearTabs from "$components/archive/YearTabs.svelte";
-  import YearContent from "$components/archive/YearContent.svelte";
+  import { YearContent, YearTabs, ArchiveHeader } from "$components/archive";
   import { getStores } from "$app/stores";
   const { page } = getStores();
   const { data } = $props();
@@ -184,6 +183,10 @@
     <p class="mt-2 text-sm">Posts were found but none have valid content, titles, and dates.</p>
   </div>
 {:else}
+  
+  <!-- Archive header with stats -->
+  <ArchiveHeader {groupedByYear} />
+
   <!-- Year tabs with animated indicator -->
   <YearTabs {groupedByYear} bind:activeYear />
 
