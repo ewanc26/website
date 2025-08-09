@@ -3,12 +3,9 @@
   import { quintOut } from "svelte/easing";
   import { formatDate, formatNumber } from "$utils/formatters";
   import { getMilestone } from "$utils/milestones";
-  import DocumentIcon from "$components/icons/utility/DocumentIcon.svelte";
-  import LinkExternalIcon from "$components/icons/utility/LinkExternalIcon.svelte";
-  import CoffeeIcon from "$components/icons/utility/CoffeeIcon.svelte";
-  import ClockIcon from "$components/icons/utility/ClockIcon.svelte";
-  import BookIcon from "$components/icons/utility/BookIcon.svelte";
-  import BooksIcon from "$components/icons/utility/BooksIcon.svelte";
+
+  // Import necessary icons
+  import { DocumentIcon, LinkExternalIcon, CoffeeIcon, ClockIcon, BookIcon, BooksIcon } from "$components/icons";
 
   export let type: 'post' | 'link';
   export let post: any = {}; // For post type
@@ -87,13 +84,13 @@
       <!-- Header section with title and type indicator -->
       <header class="card-header">
         {#if type === 'post'}
-          <div class="type-indicator post-indicator">
-            <DocumentIcon size="14" />
+          <div class="post-indicator">
+            <DocumentIcon size="20" />
             <span class="sr-only">Blog post</span>
           </div>
         {:else}
-          <div class="type-indicator link-indicator">
-            <LinkExternalIcon size="14" />
+          <div class="link-indicator">
+            <LinkExternalIcon size="20" />
             <span class="sr-only">External link</span>
           </div>
         {/if}
@@ -281,22 +278,14 @@
     margin-bottom: 16px;
   }
 
-  .type-indicator {
-    flex-shrink: 0;
-    padding: 6px;
-    border-radius: 6px;
-    margin-top: 2px;
-    transition: all 0.3s ease;
-  }
-
   .post-indicator, .link-indicator {
-    background: var(--button-bg);
+    background: var(--card-bg);
     color: var(--text-color);
     opacity: 0.8;
-  }
-
-  .group:hover .type-indicator {
-    transform: scale(1.1);
+    flex-shrink: 0;
+    padding: 6px;
+    margin-top: 2px;
+    transition: all 0.3s ease;
   }
 
   .card-title {
