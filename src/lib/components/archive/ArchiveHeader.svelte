@@ -23,39 +23,58 @@
   $: wordLabel = totalWordCount === 1 ? "word" : "words";
 </script>
 
-<header 
-  class="mb-2 pl-4"
->
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-4">
-    
-    <!-- Left: Title & Subtitle -->
-    <div class="flex items-start gap-4">
-      <div class="flex items-center justify-center w-14 h-14 bg-button text-text rounded-2xl shadow-sm">
-        <DocumentIcon size="28" />
-      </div>
-      <div>
-        <h1 class="text-3xl font-extrabold text-primary leading-tight tracking-tight">Blog Archive</h1>
-        <p class="text-sm text-text/80 mt-1">Unapologetically me</p>
-      </div>
-    </div>
-
-    <!-- Right: Stats -->
-    <div class="flex items-center gap-8">
-      <div class="flex flex-col items-center">
-        <span class="text-2xl font-bold text-primary">{formatNumber(totalPosts)}</span>
-        <span class="text-xs text-text/70 uppercase tracking-wide">{postLabel}</span>
-      </div>
-
-      <div class="w-px h-8 bg-text/20"></div>
-
-      <div class="flex gap-6">
-        <div class="flex flex-col items-center">
-          <span class="text-lg font-semibold text-text">{totalReadTime}</span>
-          <span class="text-xs text-text/70 uppercase tracking-wide">Read Time</span>
+<header class="mb-2 px-4 sm:px-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Main content container with better responsive flow -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-1 sm:gap-4 lg:gap-8 pb-3 sm:pb-4 lg:pb-6">
+      
+      <!-- Left: Title & Subtitle -->
+      <div class="flex items-center gap-4 sm:gap-5">
+        <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-card rounded-xl shadow-sm">
+          <DocumentIcon size="24"/>
         </div>
-        <div class="flex flex-col items-center">
-          <span class="text-lg font-semibold text-text">{formatNumber(totalWordCount)}</span>
-          <span class="text-xs text-text/70 uppercase tracking-wide">{wordLabel}</span>
+        <div class="min-w-0 flex-1">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-primary leading-tight tracking-tight">
+            Blog Archive
+          </h1>
+          <p class="text-xs sm:text-sm text-text/80 mt-1">Unapologetically me</p>
+        </div>
+      </div>
+
+      <!-- Right: Stats with improved responsive layout -->
+      <div class="flex items-center justify-center lg:justify-end">
+        <div class="flex items-center gap-6 sm:gap-8">
+          
+          <!-- Posts stat -->
+          <div class="flex flex-col items-center">
+            <span class="text-xl sm:text-2xl font-bold text-primary tabular-nums">
+              {formatNumber(totalPosts)}
+            </span>
+            <span class="text-xs text-text/70 uppercase tracking-wide font-medium">
+              {postLabel}
+            </span>
+          </div>
+
+          <!-- Read time stat -->
+          <div class="flex flex-col items-center">
+            <span class="text-base sm:text-lg font-semibold text-text tabular-nums">
+              {totalReadTime}
+            </span>
+            <span class="text-xs text-text/70 uppercase tracking-wide font-medium">
+              Read Time
+            </span>
+          </div>
+
+          <!-- Word count stat -->
+          <div class="flex flex-col items-center">
+            <span class="text-base sm:text-lg font-semibold text-text tabular-nums">
+              {formatNumber(totalWordCount)}
+            </span>
+            <span class="text-xs text-text/70 uppercase tracking-wide font-medium">
+              {wordLabel}
+            </span>
+          </div>
+          
         </div>
       </div>
     </div>
