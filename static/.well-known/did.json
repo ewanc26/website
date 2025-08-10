@@ -13,7 +13,7 @@
 			"id": "did:web:ewancroft.uk#atproto",
 			"type": "Multikey",
 			"controller": "did:web:ewancroft.uk",
-			"publicKeyMultibase": "zQ3shUksTHAV6NqU2xpbnxyGgbxCiLXGmXS95zGR562HyLczf"
+			"publicKeyMultibase": "zQ3shjiybs2tACMnNniVMiy4DvRiaBiBWwUNTWtgD3fFW5pbn"
 		}
 	],
 	"service": [
