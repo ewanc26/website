@@ -1,6 +1,9 @@
 @import "$css/variables.css";
 @import "$css/animations.css";
 
+/* KaTeX CSS for rendering mathematical expressions */
+@import url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css');
+
 /* Minimalist flat styles with gentle dark pastel green theme */
 @tailwind base;
 @tailwind components;
@@ -45,6 +48,13 @@
     font-family: "Recursive", sans-serif;
     font-variation-settings: "MONO" 0, "CASL" 0, "wght" 300, "slnt" 0,
       "CRSV" 0.5;
+  }
+
+  /* This is to ensure KaTeX renders correctly.
+    It overrides the 'Recursive' font and forces the use of KaTeX's specific fonts for math elements.
+  */
+  .katex {
+    font-family: 'KaTeX_Main', 'KaTeX_Math', 'KaTeX_AMS', 'KaTeX_Typewriter', 'KaTeX_Caligraphic', 'KaTeX_Fraktur', 'KaTeX_SansSerif', 'KaTeX_Script', 'KaTeX_Size1', 'KaTeX_Size2', 'KaTeX_Size3', 'KaTeX_Size4', 'KaTeX_Varepsilon';
   }
 
   h1 {
