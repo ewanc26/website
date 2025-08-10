@@ -3,8 +3,8 @@
   import { getStores } from "$app/stores";
   const { page } = getStores();
   import Profile from "$components/profile/Profile.svelte";
-  import { Footer } from "$components/layout";
-  import HeaderMain from "$components/layout/header/Main.svelte";
+  import { Footer, HeaderMain } from "$components/layout";
+  import { NoScriptMessage } from "$components/shared";
 
   let { data, children } = $props();
 
@@ -16,6 +16,10 @@
   const isBlogIndex = $derived($page.route.id === "/blog");
 </script>
 
+<!-- NoScript fallback -->
+<NoScriptMessage />
+
+<!-- Main layout structure -->
 <div class="box-border mx-auto px-4 sm:px-8 max-w-[1000px] pb-8">
   <HeaderMain {isHomePage} {isBlogIndex} />
 
