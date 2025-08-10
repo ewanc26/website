@@ -9,9 +9,8 @@
   // Props
   export let title: string;
   export let showInHeader: boolean = false;
-  export let profile: { handle: string; displayName?: string };
+  export let profile: { handle: string; displayName?: string; did?: string };
   export let mastodonInstance: string = "mastodon.social";
-  // Add fediverseCreator prop for Mastodon tagging
   let fediverseCreator: string | undefined = env.PUBLIC_ACTIVITYPUB_USER;
 
   $: mastodonUserTag =
@@ -23,7 +22,7 @@
         ? fediverseCreator
         : `@${fediverseCreator}`;
 
-  // Define specific share texts for each platform
+  // Share texts
   $: blueskyShareText = `${title} by @${profile?.handle} - ${$page.url.href}`;
   $: mastodonShareText =
     mastodonUserTag
@@ -32,6 +31,9 @@
         ? `${title} by ${mastodonUserTag} - ${$page.url.href}`
         : `${title} by ${mastodonUserTag} - ${$page.url.href}`
       : `${title} - ${$page.url.href}`;
+
+  // Clipboard copy text with DID fallback to handle
+  $: clipboardShareText = `${title} by https://bsky.app/profile/${profile?.did || profile?.handle} - ${$page.url.href}`;
 
   // Truncate for character limits
   $: truncatedBlueskyText =
@@ -44,47 +46,44 @@
       ? mastodonShareText.substring(0, 497) + "..."
       : mastodonShareText);
 
-
-  // Encode the share texts for use in URLs
+  // Encode share texts
   $: encodedBlueskyText = encodeURIComponent(truncatedBlueskyText);
   $: encodedMastodonText =
     mastodonShareText && encodeURIComponent(truncatedMastodonText);
 
-  // Construct the Bluesky share URL
+  // Share URLs
   $: blueskyShareUrl = `https://bsky.app/intent/compose?text=${encodedBlueskyText}`;
-
-  // Construct the Mastodon share URL
   $: mastodonShareUrl =
     mastodonShareText &&
     `https://${mastodonInstance}/share?text=${encodedMastodonText}`;
 
-  // Reactive statement to open Mastodon share URL when mastodonInstance changes
+  // Trigger Mastodon share
   let mastodonShareTrigger = false;
   $: if (mastodonShareTrigger && mastodonInstance && mastodonShareUrl) {
     window.open(mastodonShareUrl, "_blank", "noopener,noreferrer");
-    mastodonShareTrigger = false; // Reset trigger
+    mastodonShareTrigger = false;
   }
 
-  // Copy Link
-  let copyLinkText = "Copy Link";
+  // Copy Link button logic
+  let copyLinkText = "Get Link";
   let showCopyFeedback = false;
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText($page.url.href);
-      copyLinkText = "Copied!";
+      await navigator.clipboard.writeText(clipboardShareText);
+      copyLinkText = "Sorted!";
       showCopyFeedback = true;
       setTimeout(() => {
         showCopyFeedback = false;
-        copyLinkText = "Copy Link";
+        copyLinkText = "Get Link";
       }, 2000);
     } catch (err) {
       console.error("Failed to copy: ", err);
-      copyLinkText = "Failed!";
+      copyLinkText = "Couldn’t Copy";
       showCopyFeedback = true;
       setTimeout(() => {
         showCopyFeedback = false;
-        copyLinkText = "Copy Link";
+        copyLinkText = "Get Link";
       }, 2000);
     }
   };
@@ -146,16 +145,16 @@
       on:click={copyLink}
       class="icon-button p-2 rounded-full transition-all duration-300 hover:scale-110"
       style="background-color: var(--card-bg);"
-      aria-label="Copy Link"
-      title="Copy Link"
+      aria-label="Get Link"
+      title="Get Link"
     >
       <CopyLinkIcon />
     </button>
     {#if showCopyFeedback}
       <span
         class="copy-feedback absolute left-full ml-2 text-sm font-medium"
-        class:copied={copyLinkText === 'Copied!'}
-        class:failed={copyLinkText === 'Failed!'}
+        class:copied={copyLinkText === 'Sorted!'}
+        class:failed={copyLinkText === 'Couldn’t Copy'}
       >
         {copyLinkText}
       </span>
@@ -164,7 +163,6 @@
 </div>
 
 <style>
-  /* Common icon styling - this will match ThemeToggle.svelte */
   .icon-button {
     color: var(--text-color);
   }
@@ -173,13 +171,10 @@
     background-color: var(--button-hover-bg) !important;
   }
 
-  /* Responsive adjustments */
   @media (max-width: 640px) {
     .share-icons {
       gap: 0.5rem;
     }
-    
-    /* Hide copy feedback text on mobile */
     .copy-feedback {
       display: none;
     }
