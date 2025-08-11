@@ -33,26 +33,34 @@
     COLOR: "color-theme",
   };
 
+  // Cache DOM element for better performance
+  const docElement = document.documentElement;
+  const themeClassList = docElement.classList;
+
   /**
    * Applies theme classes to the document element
    */
   function applyTheme(isDarkMode, themeId) {
-    // Remove all existing theme classes
-    document.documentElement.classList.remove("light");
-    THEMES.forEach((theme) => {
-      if (theme.id !== "default") {
-        document.documentElement.classList.remove(theme.id);
-      }
-    });
+    // Remove all existing theme classes efficiently
+    themeClassList.remove("light");
+    
+    // Only remove non-default themes to reduce DOM operations
+    if (themeId !== "default") {
+      THEMES.forEach((theme) => {
+        if (theme.id !== "default") {
+          themeClassList.remove(theme.id);
+        }
+      });
+    }
 
     // Apply light mode class if needed
     if (!isDarkMode) {
-      document.documentElement.classList.add("light");
+      themeClassList.add("light");
     }
 
     // Apply color theme class if not default
     if (themeId !== "default") {
-      document.documentElement.classList.add(themeId);
+      themeClassList.add(themeId);
     }
   }
 
