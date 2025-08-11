@@ -4,10 +4,30 @@ import type { Profile, SiteInfo } from "$components/shared";
 
 export async function safeFetch(url: string, fetch: typeof globalThis.fetch) {
   try {
-    const response = await fetch(url);
-    if (!response.ok)
-      throw new Error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
-    return await response.json();
+    // Add timeout to prevent hanging requests
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+    try {
+      const response = await fetch(url, { 
+        signal: controller.signal,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
+      return await response.json();
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error.name === 'AbortError') {
+        throw new Error(`Request timed out for ${url}`);
+      }
+      throw error;
+    }
   } catch (error: unknown) {
     // Catch network errors (e.g., connection refused, timeout)
     console.error(`Network error fetching ${url}:`, error);

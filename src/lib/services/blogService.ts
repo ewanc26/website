@@ -89,6 +89,8 @@ function processRecord(data: any): MarkdownPost | null {
 async function loadAllPages(fetch: typeof window.fetch): Promise<any[]> {
   let allRecords: any[] = [];
   let cursor: string | undefined | null = undefined;
+  let pageCount = 0;
+  const MAX_PAGES = 10; // Prevent infinite loops
 
   do {
     // Construct request URL with optional cursor
@@ -99,17 +101,45 @@ async function loadAllPages(fetch: typeof window.fetch): Promise<any[]> {
       url.searchParams.set("cursor", cursor);
     }
 
-    const res = await fetch(url.toString());
-    if (!res.ok) throw new Error(`Failed to fetch page: ${res.status}`);
-    const body = await res.json();
+    // Add timeout to fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
 
-    // Append new records
-    if (body.records && Array.isArray(body.records)) {
-      allRecords = allRecords.concat(body.records);
+    try {
+      const res = await fetch(url.toString(), { 
+        signal: controller.signal,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!res.ok) throw new Error(`Failed to fetch page: ${res.status}`);
+      const body = await res.json();
+
+      // Append new records
+      if (body.records && Array.isArray(body.records)) {
+        allRecords = allRecords.concat(body.records);
+      }
+
+      // Update cursor for next page
+      cursor = body.cursor ?? null;
+      pageCount++;
+      
+      // Safety check to prevent infinite loops
+      if (pageCount >= MAX_PAGES) {
+        console.warn(`Reached maximum page limit (${MAX_PAGES}), stopping pagination`);
+        break;
+      }
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.warn('Request timed out, returning partial results');
+        break;
+      }
+      throw error;
     }
-
-    // Update cursor for next page
-    cursor = body.cursor ?? null;
   } while (cursor);
 
   return allRecords;
@@ -120,49 +150,79 @@ async function loadAllPages(fetch: typeof window.fetch): Promise<any[]> {
  */
 export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServiceResult> {
   try {
-    // Load profile once
-    if (profile === undefined) {
-      profile = await getProfile(fetch);
-    }
+    // Add overall timeout for the entire operation
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000); // 25 second total timeout
 
-    // Always fetch fresh data for blog posts
-    const records = await loadAllPages(fetch);
-
-    const mdposts: Map<string, MarkdownPost> = new Map();
-    for (const data of records) {
-      const processed = processRecord(data);
-      if (processed) {
-        mdposts.set(processed.rkey, processed);
+    try {
+      // Load profile once
+      if (profile === undefined) {
+        profile = await getProfile(fetch);
       }
+
+      // Always fetch fresh data for blog posts
+      const records = await loadAllPages(fetch);
+
+      const mdposts: Map<string, MarkdownPost> = new Map();
+      for (const data of records) {
+        const processed = processRecord(data);
+        if (processed) {
+          mdposts.set(processed.rkey, processed);
+        }
+      }
+
+      // Convert markdown posts to full post format
+      allPosts = await parse(mdposts);
+
+      // Sort posts chronologically (newest first)
+      sortedPosts = Array.from(allPosts.values()).sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+      );
+
+      // Assign reverse post numbers
+      const total = sortedPosts.length;
+      sortedPosts.forEach((post, index) => {
+        post.postNumber = total - index;
+      });
+
+      clearTimeout(timeoutId);
+      
+      return {
+        posts: allPosts,
+        profile,
+        sortedPosts,
+        getPost: (rkey: string) => allPosts?.get(rkey) ?? null,
+        getAdjacentPosts: (rkey: string) => {
+          const idx = sortedPosts.findIndex(p => p.rkey === rkey);
+          return {
+            previous: idx > 0 ? sortedPosts[idx - 1] : null,
+            next: idx < sortedPosts.length - 1 ? sortedPosts[idx + 1] : null,
+          };
+        },
+      };
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.warn('Blog loading timed out, returning cached data if available');
+        // Return cached data if available, otherwise empty result
+        if (allPosts && sortedPosts.length > 0) {
+          return {
+            posts: allPosts,
+            profile: profile || ({} as Profile),
+            sortedPosts,
+            getPost: (rkey: string) => allPosts!.get(rkey) ?? null,
+            getAdjacentPosts: (rkey: string) => {
+              const idx = sortedPosts.findIndex(p => p.rkey === rkey);
+              return {
+                previous: idx > 0 ? sortedPosts[idx - 1] : null,
+                next: idx < sortedPosts.length - 1 ? sortedPosts[idx + 1] : null,
+              };
+            },
+          };
+        }
+      }
+      throw error;
     }
-
-    // Convert markdown posts to full post format
-    allPosts = await parse(mdposts);
-
-    // Sort posts chronologically (newest first)
-    sortedPosts = Array.from(allPosts.values()).sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-    );
-
-    // Assign reverse post numbers
-    const total = sortedPosts.length;
-    sortedPosts.forEach((post, index) => {
-      post.postNumber = total - index;
-    });
-
-    return {
-      posts: allPosts,
-      profile,
-      sortedPosts,
-      getPost: (rkey: string) => allPosts?.get(rkey) ?? null,
-      getAdjacentPosts: (rkey: string) => {
-        const idx = sortedPosts.findIndex(p => p.rkey === rkey);
-        return {
-          previous: idx > 0 ? sortedPosts[idx - 1] : null,
-          next: idx < sortedPosts.length - 1 ? sortedPosts[idx + 1] : null,
-        };
-      },
-    };
   } catch (err) {
     console.error("Error in loadAllPosts:", err);
     return {
