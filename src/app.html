@@ -15,8 +15,95 @@
       content="%sveltekit.assets%/favicon/ms-icon-144x144.png"
     />
 
+    <!-- Preload critical fonts -->
+    <link 
+      rel="preload" 
+      href="%sveltekit.assets%/fonts/ArrowType-Recursive-1.085/Recursive_Web/woff2_variable/Recursive_VF_1.085.woff2" 
+      as="font" 
+      type="font/woff2" 
+      crossorigin
+    />
+
     <!-- THEME LOADER - MUST BE FIRST SCRIPT -->
     <script src="%sveltekit.assets%/scripts/themeLoader.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      // Enhanced debugging for service worker registration
+      console.log('🔍 Service Worker registration script loaded');
+      console.log('📍 Current location:', window.location.href);
+      console.log('🌐 Protocol:', window.location.protocol);
+      console.log('🏠 Hostname:', window.location.hostname);
+      
+      if ('serviceWorker' in navigator) {
+        console.log('✅ Service Worker API supported');
+        
+        // Check for existing service workers
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          console.log('📋 Existing service worker registrations:', registrations.length);
+          registrations.forEach((registration, index) => {
+            console.log(`  ${index + 1}. Scope: ${registration.scope}, Active: ${!!registration.active}`);
+          });
+        });
+        
+        window.addEventListener('load', () => {
+          console.log('🚀 Page loaded, attempting to register service worker at /scripts/sw.js');
+          
+          // Test if the service worker file is accessible
+          fetch('/scripts/sw.js')
+            .then(response => {
+              console.log('✅ Service worker file accessible:', {
+                status: response.status,
+                statusText: response.statusText,
+                url: response.url
+              });
+            })
+            .catch(error => {
+              console.error('❌ Service worker file not accessible:', error);
+            });
+          
+          navigator.serviceWorker.register('/scripts/sw.js')
+            .then((registration) => {
+              console.log('✅ Service Worker registered successfully:', {
+                scope: registration.scope,
+                active: !!registration.active,
+                waiting: !!registration.waiting,
+                installing: !!registration.installing
+              });
+              
+              // Listen for updates
+              registration.addEventListener('updatefound', () => {
+                console.log('🔄 Service Worker update found');
+                const newWorker = registration.installing;
+                
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    console.log('🆕 New Service Worker installed and ready');
+                  }
+                });
+              });
+            })
+            .catch((registrationError) => {
+              console.error('❌ Service Worker registration failed:', {
+                error: registrationError.message,
+                name: registrationError.name,
+                stack: registrationError.stack
+              });
+              
+              // Log additional debugging info
+              console.log('🔍 Debug info:', {
+                location: window.location.href,
+                userAgent: navigator.userAgent,
+                serviceWorkerSupported: 'serviceWorker' in navigator,
+                https: window.location.protocol === 'https:',
+                localhost: window.location.hostname === 'localhost'
+              });
+            });
+        });
+      } else {
+        console.warn('⚠️ Service Worker not supported in this browser');
+      }
+    </script>
 
     <!-- Favicon and Icons -->
     <link rel="icon" href="%sveltekit.assets%/favicon/favicon-32x32.png" />

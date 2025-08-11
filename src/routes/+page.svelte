@@ -1,8 +1,13 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getStores } from "$app/stores";
+  import { createComponentDebugger } from "$lib/utils/debug.js";
+  
   const { page } = getStores();
   import { DynamicLinks, LatestBlogPost } from "$components/layout/main";
+
+  // Create debugger for this component
+  const debug = createComponentDebugger('MainPage');
 
   let { data } = $props();
 
@@ -10,10 +15,35 @@
   let localeLoaded = $state(false);
 
   onMount(() => {
+    debug.lifecycle('MainPage', 'mounted', {
+      hasData: !!data,
+      dataKeys: data ? Object.keys(data) : [],
+      latestPostsCount: data?.latestPosts?.length || 0,
+      dynamicLinksCount: data?.dynamicLinks ? 'hasData' : 'noData'
+    });
+    
     // Set a brief timeout to ensure the browser has time to determine locale
     setTimeout(() => {
       localeLoaded = true;
+      debug.debug('Locale loaded state updated', { localeLoaded: true });
     }, 10);
+  });
+
+  // Debug data changes
+  $effect(() => {
+    if (data) {
+      debug.state('MainPage', 'data', {
+        latestPostsCount: data.latestPosts?.length || 0,
+        dynamicLinksType: typeof data.dynamicLinks,
+        hasLatestPosts: !!data.latestPosts?.length,
+        hasDynamicLinks: !!data.dynamicLinks
+      });
+    }
+  });
+
+  // Debug locale changes
+  $effect(() => {
+    debug.state('MainPage', 'localeLoaded', { localeLoaded });
   });
 </script>
 
@@ -55,6 +85,12 @@
 <!-- Latest Blog Post section (only show if we have posts) -->
 {#if data.latestPosts && data.latestPosts.length > 0}
   <LatestBlogPost posts={data.latestPosts} {localeLoaded} />
+{:else}
+  {#if data.latestPosts !== undefined}
+    <div class="text-center py-8 text-gray-500">
+      No blog posts available
+    </div>
+  {/if}
 {/if}
 
 <DynamicLinks data={data.dynamicLinks} />

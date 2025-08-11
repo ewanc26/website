@@ -1,9 +1,6 @@
 @import "$css/variables.css";
 @import "$css/animations.css";
 
-/* KaTeX CSS for rendering mathematical expressions */
-@import url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css');
-
 /* Minimalist flat styles with gentle dark pastel green theme */
 @tailwind base;
 @tailwind components;
@@ -15,7 +12,11 @@
   font-weight: 300 800;
   font-stretch: 100%;
   font-display: swap;
+  font-preload: true;
 }
+
+/* KaTeX CSS - will be loaded dynamically when needed */
+/* @import url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css'); */
 
 @layer base {
 
@@ -48,6 +49,10 @@
     font-family: "Recursive", sans-serif;
     font-variation-settings: "MONO" 0, "CASL" 0, "wght" 300, "slnt" 0,
       "CRSV" 0.5;
+    /* Optimize font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   /* This is to ensure KaTeX renders correctly.

@@ -1,0 +1,24 @@
+{
+  "routes": [
+    {
+      "src": "/favicon.ico",
+      "dest": "/static/favicon/favicon-32x32.png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "dest": "/static/favicon/apple-touch-icon.png"
+    },
+    {
+      "src": "/apple-touch-icon-precomposed.png",
+      "dest": "/static/favicon/apple-touch-icon.png"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/static/robots.txt"
+    },
+    {
+      "src": "/sitemap.xml",
+      "dest": "/static/sitemap.xml"
+    }
+  ]
+}

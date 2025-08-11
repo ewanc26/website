@@ -1,70 +1,7 @@
-import satori from 'satori';
-import { Resvg } from '@resvg/resvg-js';
 import { dev } from '$app/environment';
+import { createFileDebugger } from '../utils/debug.js';
 
-// Font URLs for production (served from static folder)
-const FONT_BASE_URL = '/fonts/ArrowType-Recursive-1.085/Recursive_Desktop/separate_statics/TTF';
-const FONT_FILES = {
-  regular: 'RecursiveSansCslSt-Regular.ttf',
-  bold: 'RecursiveSansCslSt-Bold.ttf',
-  italic: 'RecursiveSansCslSt-Italic.ttf'
-};
-
-// Preload fonts (cache in memory for performance)
-let fontCache: { regular?: Buffer; bold?: Buffer; italic?: Buffer } = {};
-
-async function loadSingleFont(fileName: string, baseUrl?: string): Promise<Buffer> {
-  try {
-    if (dev) {
-      // In development, try to load from filesystem first
-      const fs = await import('fs/promises');
-      const path = await import('path');
-      const fontPath = path.resolve(`static${FONT_BASE_URL}/${fileName}`);
-      console.log(`Loading font from filesystem: ${fontPath}`);
-      return await fs.readFile(fontPath);
-    } else {
-      // In production, fetch from the served static files
-      const fontUrl = `${baseUrl || ''}${FONT_BASE_URL}/${fileName}`;
-      console.log(`Fetching font from URL: ${fontUrl}`);
-      
-      const response = await fetch(fontUrl);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch font: ${response.status} ${response.statusText}`);
-      }
-      
-      const arrayBuffer = await response.arrayBuffer();
-      return Buffer.from(arrayBuffer);
-    }
-  } catch (error) {
-    console.error(`Failed to load font ${fileName}:`, error);
-    throw error;
-  }
-}
-
-async function loadFonts(baseUrl?: string) {
-  try {
-    // Load fonts if not already cached
-    if (!fontCache.regular) {
-      fontCache.regular = await loadSingleFont(FONT_FILES.regular, baseUrl);
-    }
-    if (!fontCache.bold) {
-      fontCache.bold = await loadSingleFont(FONT_FILES.bold, baseUrl);
-    }
-    if (!fontCache.italic) {
-      fontCache.italic = await loadSingleFont(FONT_FILES.italic, baseUrl);
-    }
-
-    // Defensive: throw if any font is missing
-    if (!fontCache.regular || !fontCache.bold || !fontCache.italic) {
-      throw new Error('Failed to load all required font files for OG image');
-    }
-    
-    return fontCache as { regular: Buffer; bold: Buffer; italic: Buffer };
-  } catch (error) {
-    console.error('Font loading error:', error);
-    throw error;
-  }
-}
+const debug = createFileDebugger('ogImage.ts');
 
 export interface OgImageOptions {
   title: string;
@@ -82,334 +19,162 @@ export interface OgImageOptions {
 }
 
 /**
- * Calculate optimal font size based on text length and available space
- */
-function calculateTitleFontSize(title: string, maxWidth: number = 1000): number {
-  const baseSize = 64;
-  const charThreshold = 45;
-  const minSize = 36;
-  
-  if (title.length <= charThreshold) {
-    return baseSize;
-  }
-  
-  const scaleFactor = Math.max(0.5, 1 - ((title.length - charThreshold) * 0.012));
-  return Math.max(minSize, Math.floor(baseSize * scaleFactor));
-}
-
-/**
- * Calculate optimal subtitle font size
- */
-function calculateSubtitleFontSize(subtitle: string, titleSize: number): number {
-  const baseRatio = 0.57;
-  const charThreshold = 80;
-  const minSize = 20;
-  
-  let size = Math.floor(titleSize * baseRatio);
-  
-  if (subtitle.length > charThreshold) {
-    const scaleFactor = Math.max(0.7, 1 - ((subtitle.length - charThreshold) * 0.01));
-    size = Math.floor(size * scaleFactor);
-  }
-  
-  return Math.max(minSize, size);
-}
-
-/**
- * Estimate content height to ensure it fits
- */
-function estimateContentHeight(options: OgImageOptions): {
-  titleHeight: number;
-  subtitleHeight: number;
-  metaHeight: number;
-  authorHeight: number;
-  totalContentHeight: number;
-} {
-  const titleFontSize = calculateTitleFontSize(options.title);
-  const titleLines = Math.ceil(options.title.length / 40);
-  const titleHeight = titleLines * titleFontSize * 1.25 + 32;
-  
-  let subtitleHeight = 0;
-  if (options.subtitle) {
-    const subtitleFontSize = calculateSubtitleFontSize(options.subtitle, titleFontSize);
-    const subtitleLines = Math.ceil(options.subtitle.length / 60);
-    subtitleHeight = subtitleLines * subtitleFontSize * 1.2 + 24;
-  }
-  
-  let metaHeight = 0;
-  if (options.metaLine || (options.extraMeta && options.extraMeta.length > 0)) {
-    metaHeight = 32 + 24;
-  }
-  
-  let authorHeight = options.author ? 120 : 28;
-  
-  return {
-    titleHeight,
-    subtitleHeight,
-    metaHeight,
-    authorHeight,
-    totalContentHeight: titleHeight + subtitleHeight + metaHeight + authorHeight
-  };
-}
-
-/**
- * Generates a PNG buffer for an OG image with unified styling.
+ * Generate OG image with dynamic sizing and layout
  * @param options OgImageOptions
- * @param baseUrl Base URL for fetching fonts in production (e.g., 'https://ewancroft.uk')
- * @returns Buffer (PNG)
+ * @param baseUrl Optional base URL for font loading
+ * @returns Promise<Buffer> PNG image buffer
  */
 export async function generateOgImage(options: OgImageOptions, baseUrl?: string): Promise<Buffer> {
-  const fonts = await loadFonts(baseUrl);
-  
-  // Calculate optimal sizing
-  const titleFontSize = calculateTitleFontSize(options.title);
-  const subtitleFontSize = options.subtitle ? calculateSubtitleFontSize(options.subtitle, titleFontSize) : 0;
-  
-  // Estimate if content will fit and adjust if needed
-  const contentEstimate = estimateContentHeight(options);
-  const availableHeight = 630 - 96;
-  
-  let titleMarginBottom = 32;
-  let subtitleMarginBottom = 24;
-  let metaMarginBottom = 24;
-  
-  if (contentEstimate.totalContentHeight > availableHeight) {
-    const compressionRatio = availableHeight / contentEstimate.totalContentHeight;
-    titleMarginBottom = Math.max(8, Math.floor(titleMarginBottom * compressionRatio));
-    subtitleMarginBottom = Math.max(6, Math.floor(subtitleMarginBottom * compressionRatio));
-    metaMarginBottom = Math.max(8, Math.floor(metaMarginBottom * compressionRatio));
-  }
-
-  // Layout children
-  let children: any[] = [];
-
-  // Title with dynamic sizing
-  children.push({
-    type: 'h1',
-    props: {
-      style: {
-        fontSize: `${titleFontSize}px`,
-        fontWeight: 700,
-        fontStyle: 'normal',
-        margin: `0 0 ${titleMarginBottom}px 0`,
-        textAlign: 'center',
-        lineHeight: 1.25,
-        maxWidth: '1000px',
-        overflow: 'hidden',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textWrap: 'balance',
-        hyphens: 'auto',
-        paddingLeft: '48px',
-        paddingRight: '48px',
-      },
-      children: options.title,
-    },
+  debug.enter('generateOgImage', { 
+    title: options.title?.substring(0, 50) + (options.title?.length > 50 ? '...' : ''),
+    hasSubtitle: !!options.subtitle,
+    hasAuthor: !!options.author,
+    hasExtraMeta: !!options.extraMeta?.length,
+    baseUrl: baseUrl || 'none'
   });
-
-  // Subtitle/description with dynamic sizing
-  if (options.subtitle) {
-    children.push({
-      type: 'div',
-      props: {
-        style: {
-          fontSize: `${subtitleFontSize}px`,
-          fontWeight: 400,
-          margin: `0 0 ${subtitleMarginBottom}px 0`,
-          textAlign: 'center',
-          opacity: 0.8,
-          maxWidth: '900px',
-          lineHeight: 1.3,
-          textWrap: 'balance',
-          paddingLeft: '48px',
-          paddingRight: '48px',
-        },
-        children: options.subtitle,
-      },
+  
+  const timer = debug.time('generateOgImage');
+  
+  try {
+    debug.info('Starting OG image generation', {
+      titleLength: options.title?.length,
+      subtitleLength: options.subtitle?.length,
+      authorName: options.author?.name,
+      extraMetaCount: options.extraMeta?.length || 0
     });
-  }
 
-  // Meta line (e.g., reading time, word count)
-  if (options.metaLine || (options.extraMeta && options.extraMeta.length > 0)) {
-    children.push({
-      type: 'div',
-      props: {
-        style: {
-          fontSize: '24px',
-          opacity: 0.75,
-          margin: `0 0 ${metaMarginBottom}px 0`,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          gap: '8px',
-        },
-        children: options.metaLine || options.extraMeta?.join(' • '),
-      },
+    // Dynamically import the actual implementation to avoid build-time analysis
+    debug.debug('Attempting to import OG image implementation');
+    const { generateOgImageImpl } = await import('./ogImageImpl');
+    
+    debug.info('Successfully imported OG image implementation, calling main function');
+    const result = await generateOgImageImpl(options, baseUrl);
+    
+    debug.info('OG image generation completed successfully', {
+      resultType: typeof result,
+      resultLength: result?.length,
+      resultIsBuffer: Buffer.isBuffer(result)
     });
-  }
-
-  // Custom children (for advanced layouts)
-  if (options.customChildren) {
-    children.push(options.customChildren);
-  }
-
-  // Decorative line (optional, for index pages) - only if no author
-  if (!options.author && !options.customChildren) {
-    children.push({
-      type: 'div',
-      props: {
-        style: {
-          width: '120px',
-          height: '4px',
-          background: '#2d4839',
-          borderRadius: '2px',
-          margin: '0 auto',
-          flexShrink: 0,
-        },
-      },
+    
+    timer();
+    debug.exit('generateOgImage', { 
+      success: true, 
+      resultType: typeof result,
+      resultLength: result?.length 
     });
+    
+    return result;
+  } catch (error) {
+    debug.errorWithContext('Failed to generate OG image with main implementation', error as Error, {
+      function: 'generateOgImage',
+      options: {
+        title: options.title?.substring(0, 100),
+        hasSubtitle: !!options.subtitle,
+        hasAuthor: !!options.author
+      }
+    });
+    
+    debug.info('Falling back to SVG-based OG image generation');
+    
+    try {
+      // Fallback: create a simple SVG-based OG image without external dependencies
+      const fallbackSvg = createFallbackSvg(options);
+      const svgBuffer = Buffer.from(fallbackSvg, 'utf-8');
+      
+      debug.info('Fallback SVG generation successful', {
+        svgLength: fallbackSvg.length,
+        bufferLength: svgBuffer.length,
+        fallbackType: 'svg'
+      });
+      
+      timer();
+      debug.exit('generateOgImage', { 
+        success: true, 
+        fallback: true,
+        resultType: 'svg',
+        resultLength: svgBuffer.length 
+      });
+      
+      // For now, return SVG as-is. In production, you might want to convert this to PNG
+      // or handle the error differently
+      return svgBuffer;
+    } catch (fallbackError) {
+      debug.errorWithContext('Fallback SVG generation also failed', fallbackError as Error, {
+        function: 'generateOgImage',
+        fallback: true
+      });
+      
+      timer();
+      debug.exit('generateOgImage', { 
+        success: false, 
+        fallback: true,
+        error: fallbackError 
+      });
+      
+      throw fallbackError;
+    }
   }
+}
 
-  // Create main container with efficient spacing
-  const mainContainer = {
-    type: 'div',
-    props: {
-      style: {
-        width: '1200px',
-        height: '630px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        background: '#121c17',
-        color: '#d8e8d8',
-        fontFamily: 'Recursive',
-        position: 'relative',
-        padding: options.author ? '60px 0 48px 0' : '48px 0',
-        boxSizing: 'border-box',
-      },
-      children: [
-        // Main content container - takes up most space
-        {
-          type: 'div',
-          props: {
-            style: {
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '100%',
-              flex: '1',
-            },
-            children,
-          },
-        },
-        // Author info at bottom
-        options.author && {
-          type: 'div',
-          props: {
-            style: {
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '18px',
-              textAlign: 'center',
-              opacity: 0.85,
-              flexShrink: 0,
-            },
-            children: [
-              options.author.avatar && {
-                type: 'img',
-                props: {
-                  src: options.author.avatar,
-                  width: 64,
-                  height: 64,
-                  style: {
-                    borderRadius: '50%',
-                    border: '3px solid #2d4839',
-                    boxShadow: '0 2px 12px rgba(0,0,0,0.18)',
-                    background: '#1e2c23',
-                    flexShrink: 0,
-                  },
-                },
-              },
-              {
-                type: 'div',
-                props: {
-                  style: {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    gap: '2px',
-                  },
-                  children: [
-                    {
-                      type: 'span',
-                      props: {
-                        style: {
-                          fontSize: '22px',
-                          fontWeight: 700,
-                          fontStyle: 'normal',
-                          lineHeight: 1.1,
-                        },
-                        children: options.author.name,
-                      },
-                    },
-                    options.author.handle && {
-                      type: 'span',
-                      props: {
-                        style: {
-                          fontSize: '16px',
-                          color: '#8fd0a0',
-                          fontWeight: 400,
-                          fontStyle: 'italic',
-                        },
-                        children: '@' + options.author.handle,
-                      },
-                    },
-                  ].filter(Boolean),
-                },
-              },
-            ].filter(Boolean),
-          },
-        },
-      ].filter(Boolean),
-    },
-  };
-
-  // Compose SVG
-  const svg = await satori(mainContainer, {
-    width: 1200,
-    height: 630,
-    fonts: [
-      {
-        name: 'Recursive',
-        data: fonts.regular,
-        weight: 400,
-        style: 'normal',
-      },
-      {
-        name: 'Recursive',
-        data: fonts.bold,
-        weight: 700,
-        style: 'normal',
-      },
-      {
-        name: 'Recursive',
-        data: fonts.italic,
-        weight: 400,
-        style: 'italic',
-      },
-    ],
+/**
+ * Create a fallback SVG-based OG image when the main generator fails
+ */
+function createFallbackSvg(options: OgImageOptions): string {
+  debug.enter('createFallbackSvg', { 
+    title: options.title?.substring(0, 30),
+    hasSubtitle: !!options.subtitle 
   });
-
-  // Convert SVG to PNG
-  const resvg = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } });
-  const png = resvg.render();
-  return png.asPng();
+  
+  try {
+    const title = options.title || 'OG Image';
+    const subtitle = options.subtitle || '';
+    
+    debug.debug('Creating fallback SVG', {
+      title,
+      subtitle,
+      titleLength: title.length,
+      subtitleLength: subtitle.length
+    });
+    
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 48px; font-weight: bold; fill: #ffffff; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 24px; fill: #8fd0a0; }
+    </style>
+  </defs>
+  <rect width="1200" height="630" fill="#0f1a0f"/>
+  <text x="600" y="300" text-anchor="middle" class="title">${title}</text>
+  ${subtitle ? `<text x="600" y="350" text-anchor="middle" class="subtitle">${subtitle}</text>` : ''}
+</svg>`;
+    
+    debug.debug('Fallback SVG created successfully', {
+      svgLength: svg.length,
+      hasSubtitle: !!subtitle
+    });
+    
+    debug.exit('createFallbackSvg', { 
+      success: true, 
+      svgLength: svg.length 
+    });
+    
+    return svg;
+  } catch (error) {
+    debug.errorWithContext('Failed to create fallback SVG', error as Error, {
+      function: 'createFallbackSvg'
+    });
+    
+    debug.exit('createFallbackSvg', { 
+      success: false, 
+      error: error 
+    });
+    
+    // Return a minimal error SVG if even the fallback fails
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#ff0000"/>
+  <text x="600" y="315" text-anchor="middle" font-family="Arial" font-size="24" fill="white">OG Image Generation Failed</text>
+</svg>`;
+  }
 }
