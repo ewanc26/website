@@ -21,9 +21,9 @@ export async function safeFetch(url: string, fetch: typeof globalThis.fetch) {
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
       return await response.json();
-    } catch (error) {
+    } catch (error: unknown) {
       clearTimeout(timeoutId);
-      if (error.name === 'AbortError') {
+      if (error instanceof Error && error.name === 'AbortError') {
         throw new Error(`Request timed out for ${url}`);
       }
       throw error;

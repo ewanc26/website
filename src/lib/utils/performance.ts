@@ -2,6 +2,11 @@
  * Performance monitoring utilities for tracking Core Web Vitals and performance metrics
  */
 
+interface LayoutShift extends PerformanceEntry {
+  value: number;
+  hadRecentInput: boolean;
+}
+
 export interface PerformanceMetrics {
   fcp: number | null;
   lcp: number | null;
@@ -69,15 +74,15 @@ export function measurePerformance(): Promise<PerformanceMetrics> {
     };
 
     // Measure TTFB (Time to First Byte)
-    const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+    const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
     if (navigationEntry) {
       metrics.ttfb = navigationEntry.responseStart - navigationEntry.requestStart;
     }
 
     // Measure FCP (First Contentful Paint)
     const fcpObserver = new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      const fcpEntry = entries.find(entry => entry.name === 'first-contentful-paint') as PerformanceEntry;
+      const entries = list.getEntries() as PerformancePaintTiming[];
+      const fcpEntry = entries.find(entry => entry.name === 'first-contentful-paint');
       if (fcpEntry) {
         metrics.fcp = fcpEntry.startTime;
         metrics.fcpScore = getFCPScore(metrics.fcp);
@@ -87,8 +92,8 @@ export function measurePerformance(): Promise<PerformanceMetrics> {
 
     // Measure LCP (Largest Contentful Paint)
     const lcpObserver = new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      const lastEntry = entries[entries.length - 1] as PerformanceEntry;
+      const entries = list.getEntries() as PerformanceEntry[];
+      const lastEntry = entries[entries.length - 1];
       if (lastEntry) {
         metrics.lcp = lastEntry.startTime;
         metrics.lcpScore = getLCPScore(metrics.lcp);
@@ -98,9 +103,9 @@ export function measurePerformance(): Promise<PerformanceMetrics> {
 
     // Measure FID (First Input Delay)
     const fidObserver = new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      const fidEntry = entries[0] as PerformanceEntry;
-      if (fidEntry) {
+      const entries = list.getEntries() as PerformanceEventTiming[];
+      const fidEntry = entries[0];
+      if (fidEntry && typeof fidEntry.processingStart === 'number') {
         metrics.fid = fidEntry.processingStart - fidEntry.startTime;
         metrics.fidScore = getFIDScore(metrics.fid);
       }
@@ -110,9 +115,10 @@ export function measurePerformance(): Promise<PerformanceMetrics> {
     // Measure CLS (Cumulative Layout Shift)
     let clsValue = 0;
     const clsObserver = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) {
-        if (!(entry as any).hadRecentInput) {
-          clsValue += (entry as any).value;
+      const entries = list.getEntries() as LayoutShift[];
+      for (const entry of entries) {
+        if (!entry.hadRecentInput) {
+          clsValue += entry.value;
         }
       }
       metrics.cls = clsValue;
