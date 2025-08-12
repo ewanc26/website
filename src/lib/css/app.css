@@ -15,9 +15,6 @@
   font-preload: true;
 }
 
-/* KaTeX CSS - will be loaded dynamically when needed */
-/* @import url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css'); */
-
 @layer base {
 
   /* Scrollbar styling */
@@ -53,13 +50,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-  }
-
-  /* This is to ensure KaTeX renders correctly.
-    It overrides the 'Recursive' font and forces the use of KaTeX's specific fonts for math elements.
-  */
-  .katex {
-    font-family: 'KaTeX_Main', 'KaTeX_Math', 'KaTeX_AMS', 'KaTeX_Typewriter', 'KaTeX_Caligraphic', 'KaTeX_Fraktur', 'KaTeX_SansSerif', 'KaTeX_Script', 'KaTeX_Size1', 'KaTeX_Size2', 'KaTeX_Size3', 'KaTeX_Size4', 'KaTeX_Varepsilon';
   }
 
   h1 {
