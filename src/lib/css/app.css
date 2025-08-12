@@ -52,6 +52,13 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* This is to ensure KaTeX renders correctly.
+    It overrides the 'Recursive' font and forces the use of KaTeX's specific fonts for math elements.
+  */
+  .katex {
+    font-family: 'KaTeX_Main', 'KaTeX_Math', 'KaTeX_AMS', 'KaTeX_Typewriter', 'KaTeX_Caligraphic', 'KaTeX_Fraktur', 'KaTeX_SansSerif', 'KaTeX_Script', 'KaTeX_Size1', 'KaTeX_Size2', 'KaTeX_Size3', 'KaTeX_Size4', 'KaTeX_Varepsilon';
+  }
+
   h1 {
     @apply text-4xl font-bold;
     font-variation-settings: "MONO" 0, "CASL" 0.8, "wght" 700, "slnt" 0,
