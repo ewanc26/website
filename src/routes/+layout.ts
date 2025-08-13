@@ -1,40 +1,50 @@
 import { getProfile } from "$components/profile/profile";
-import { getLatestPosts } from "$services/blogService";
+import { preloadEssentialData } from "$services/blogService";
 import type { Profile, LinkBoard } from "$components/shared";
 
 // Profile data cache
 let profile: Profile;
-let dynamicLinks: LinkBoard | undefined;
 
 export async function load({ fetch }) {
-  if (profile === undefined) {
-    profile = await getProfile(fetch);
-  }
-
-  // Fetch dynamic links only if not already cached
-  if (dynamicLinks === undefined) {
-    try {
-      const rawResponse = await fetch(
-        `${profile.pds}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=blue.linkat.board&rkey=self`
-      );
-      const response = await rawResponse.json();
-      if (response && response.records && response.records.length > 0) {
-        dynamicLinks = response.records[0].value as LinkBoard;
-      }
-    } catch (error) {
-      console.error("Error fetching dynamic links:", error);
+  try {
+    // Critical path: Load only essential profile data
+    console.log('Layout load: Starting critical path');
+    
+    if (profile === undefined) {
+      profile = await getProfile(fetch);
     }
+
+    console.log('Layout load: Profile loaded, returning minimal data');
+
+    // Return immediately with only critical data
+    return {
+      profile,
+      pdsUrl: profile.pds,
+      did: profile.did,
+      posts: new Map(), // Keep this for compatibility
+      dynamicLinks: undefined, // Will be loaded client-side
+      latestPosts: [], // Will be loaded client-side
+    };
+
+  } catch (error) {
+    console.error("Critical error in layout load:", error);
+    
+    // Return minimal fallback data structure
+    return {
+      profile: {
+        avatar: '',
+        banner: '',
+        displayName: 'Loading...',
+        did: '',
+        handle: 'loading',
+        description: '',
+        pds: '',
+      } as Profile,
+      pdsUrl: '',
+      did: '',
+      posts: new Map(),
+      dynamicLinks: undefined,
+      latestPosts: [],
+    };
   }
-
-  // Fetch latest blog posts using the consolidated service
-  const latestPosts = await getLatestPosts(fetch, 3);
-
-  return {
-    profile,
-    pdsUrl: profile.pds,
-    did: profile.did,
-    posts: new Map(), // Keep this for compatibility with existing Footer component
-    dynamicLinks,
-    latestPosts,
-  };
 }
