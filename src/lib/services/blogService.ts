@@ -3,11 +3,14 @@ import type { Profile, MarkdownPost, Post, BlogServiceResult } from "$components
 import { parse } from "$lib/parser";
 
 // Caching profile and post data
-
-let profile: Profile;
+let profile: Profile | undefined;
 let allPosts: Map<string, Post> | undefined;
 let sortedPosts: Post[] = [];
 
+// Loading state management
+let isLoading = false;
+let lastLoadTime = 0;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
 
 /**
  * Validates and processes a single blog record
@@ -87,6 +90,10 @@ function processRecord(data: any): MarkdownPost | null {
  * Fetches all blog records using pagination (cursor-based)
  */
 async function loadAllPages(fetch: typeof window.fetch): Promise<any[]> {
+  if (!profile) {
+    throw new Error("Profile not loaded");
+  }
+
   let allRecords: any[] = [];
   let cursor: string | undefined | null = undefined;
   let pageCount = 0;
@@ -101,9 +108,9 @@ async function loadAllPages(fetch: typeof window.fetch): Promise<any[]> {
       url.searchParams.set("cursor", cursor);
     }
 
-    // Add timeout to fetch request
+    // Add timeout to fetch request with shorter timeout
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // Reduced to 5 second timeout
 
     try {
       const res = await fetch(url.toString(), { 
@@ -149,10 +156,52 @@ async function loadAllPages(fetch: typeof window.fetch): Promise<any[]> {
  * Loads and processes all blog posts, with pagination support
  */
 export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServiceResult> {
+  // Check if we have fresh cached data
+  const now = Date.now();
+  if (allPosts && sortedPosts.length > 0 && (now - lastLoadTime) < CACHE_DURATION && profile) {
+    console.log('Returning cached blog posts');
+    return {
+      posts: allPosts,
+      profile: profile,
+      sortedPosts,
+      getPost: (rkey: string) => allPosts!.get(rkey) ?? null,
+      getAdjacentPosts: (rkey: string) => {
+        const idx = sortedPosts.findIndex(p => p.rkey === rkey);
+        return {
+          previous: idx > 0 ? sortedPosts[idx - 1] : null,
+          next: idx < sortedPosts.length - 1 ? sortedPosts[idx + 1] : null,
+        };
+      },
+    };
+  }
+
+  // Prevent concurrent loading
+  if (isLoading) {
+    console.log('Blog loading already in progress, waiting...');
+    // Return cached data if available, otherwise empty result
+    if (allPosts && sortedPosts.length > 0 && profile) {
+      return {
+        posts: allPosts,
+        profile: profile,
+        sortedPosts,
+        getPost: (rkey: string) => allPosts!.get(rkey) ?? null,
+        getAdjacentPosts: (rkey: string) => {
+          const idx = sortedPosts.findIndex(p => p.rkey === rkey);
+          return {
+            previous: idx > 0 ? sortedPosts[idx - 1] : null,
+            next: idx < sortedPosts.length - 1 ? sortedPosts[idx + 1] : null,
+          };
+        },
+      };
+    }
+  }
+
+  isLoading = true;
+
   try {
     // Add overall timeout for the entire operation
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 25000); // 25 second total timeout
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // Reduced to 15 second total timeout
 
     try {
       // Load profile once
@@ -185,6 +234,7 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
         post.postNumber = total - index;
       });
 
+      lastLoadTime = now;
       clearTimeout(timeoutId);
       
       return {
@@ -205,10 +255,10 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
       if (error instanceof Error && error.name === 'AbortError') {
         console.warn('Blog loading timed out, returning cached data if available');
         // Return cached data if available, otherwise empty result
-        if (allPosts && sortedPosts.length > 0) {
+        if (allPosts && sortedPosts.length > 0 && profile) {
           return {
             posts: allPosts,
-            profile: profile || ({} as Profile),
+            profile: profile,
             sortedPosts,
             getPost: (rkey: string) => allPosts!.get(rkey) ?? null,
             getAdjacentPosts: (rkey: string) => {
@@ -225,25 +275,112 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
     }
   } catch (err) {
     console.error("Error in loadAllPosts:", err);
+    const fallbackProfile: Profile = profile || {
+      avatar: '',
+      banner: '',
+      displayName: 'Error',
+      did: '',
+      handle: 'error',
+      description: '',
+      pds: '',
+    };
+
     return {
-      posts: new Map(),
-      profile: profile || ({} as Profile),
-      sortedPosts: [],
-      getPost: () => null,
+      posts: allPosts || new Map(),
+      profile: fallbackProfile,
+      sortedPosts: sortedPosts || [],
+      getPost: (rkey: string) => allPosts?.get(rkey) ?? null,
       getAdjacentPosts: () => ({ previous: null, next: null }),
     };
+  } finally {
+    isLoading = false;
   }
 }
 
 /**
  * Returns the most recent blog posts (for home page, etc.)
+ * This function now uses a lighter approach for the homepage
  */
 export async function getLatestPosts(fetch: typeof window.fetch, limit: number = 3): Promise<Post[]> {
   try {
-    const { sortedPosts } = await loadAllPosts(fetch);
-    return sortedPosts.slice(0, limit);
+    // If we have cached data that's recent enough, use it
+    const now = Date.now();
+    if (sortedPosts.length > 0 && (now - lastLoadTime) < CACHE_DURATION) {
+      return sortedPosts.slice(0, limit);
+    }
+
+    // For latest posts, we can use a lighter approach
+    // Load profile if not already loaded
+    if (profile === undefined) {
+      profile = await getProfile(fetch);
+    }
+
+    // Fetch only the first page of records for latest posts
+    const url = new URL(`${profile.pds}/xrpc/com.atproto.repo.listRecords`);
+    url.searchParams.set("repo", profile.did);
+    url.searchParams.set("collection", "com.whtwnd.blog.entry");
+    url.searchParams.set("limit", String(Math.min(limit * 2, 10))); // Get a bit more than needed
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout for latest posts
+
+    try {
+      const res = await fetch(url.toString(), { 
+        signal: controller.signal,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!res.ok) {
+        throw new Error(`Failed to fetch latest posts: ${res.status}`);
+      }
+      
+      const body = await res.json();
+
+      const mdposts: Map<string, MarkdownPost> = new Map();
+      
+      if (body.records && Array.isArray(body.records)) {
+        // Process and sort records by date first
+        const validRecords = body.records
+          .map((record: any) => processRecord(record))
+          .filter((record: MarkdownPost | null): record is MarkdownPost => record !== null)
+          .sort((a: MarkdownPost, b: MarkdownPost) => b.createdAt.getTime() - a.createdAt.getTime())
+          .slice(0, limit); // Take only what we need
+
+        validRecords.forEach((record: MarkdownPost) => {
+          mdposts.set(record.rkey, record);
+        });
+      }
+
+      // Convert to full post format
+      const posts = await parse(mdposts);
+      const latestPosts = Array.from(posts.values())
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .slice(0, limit);
+
+      return latestPosts;
+
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.warn('Latest posts request timed out');
+        // Return cached data if available
+        if (sortedPosts.length > 0) {
+          return sortedPosts.slice(0, limit);
+        }
+      }
+      throw error;
+    }
+
   } catch (error) {
     console.error("Error fetching latest posts:", error);
+    // Return cached data if available, otherwise empty array
+    if (sortedPosts.length > 0) {
+      return sortedPosts.slice(0, limit);
+    }
     return [];
   }
 }
@@ -252,7 +389,24 @@ export async function getLatestPosts(fetch: typeof window.fetch, limit: number =
  * Clears cached profile and posts
  */
 export function clearCache(): void {
-  profile = undefined as any;
-  allPosts = undefined as any;
+  profile = undefined;
+  allPosts = undefined;
   sortedPosts = [];
+  lastLoadTime = 0;
+  isLoading = false;
+}
+
+/**
+ * Preload essential data only (for critical path)
+ */
+export async function preloadEssentialData(fetch: typeof window.fetch): Promise<Profile | null> {
+  try {
+    if (profile === undefined) {
+      profile = await getProfile(fetch);
+    }
+    return profile;
+  } catch (error) {
+    console.error("Error preloading essential data:", error);
+    return null;
+  }
 }
