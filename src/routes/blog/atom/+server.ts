@@ -20,9 +20,11 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
       },
     });
   }
+  
   try {
     const { profile, sortedPosts } = await loadAllPosts(fetch);
     const baseUrl = dev ? url.origin : "https://ewancroft.uk";
+    
     const atomXml = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Blog - Ewan's Corner</title>
@@ -57,7 +59,9 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     )
     .join("")}
 </feed>`;
+    
     atomFeedCache.set(atomXml);
+    
     return new Response(atomXml, {
       headers: {
         "Content-Type": "application/atom+xml; charset=utf-8",

@@ -172,8 +172,8 @@
     class="flex flex-col items-center justify-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70 text-center"
   >
     <p>No blog data available.</p>
-    <p class="mt-2 text-sm">This blog uses the <a href="https://whtwnd.com">WhiteWind</a> blogging lexicon, 
-      <code>com.whtwnd.blog.entry</code>, but there seem to be no records available.</p>
+    <p class="mt-2 text-sm">This blog uses the <a href="https://leaflet.pub">Leaflet</a> document format, 
+      <code>pub.leaflet.document</code>, but there seem to be no records available.</p>
   </div>
 {:else if !hasValidPosts}
   <div
