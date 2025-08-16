@@ -1,5 +1,9 @@
 import { getProfile } from "$components/profile/profile";
 import type { Profile, Post, BlogServiceResult } from "$components/shared";
+import { env } from "$env/dynamic/public";
+
+// Configuration for your blog publication
+const BLOG_PUBLICATION_RKEY = env.PUBLIC_BLOG_PUBLICATION_RKEY;
 
 // Leaflet document structure based on the lexicons
 interface LeafletDocument {
@@ -31,11 +35,61 @@ interface LeafletDocument {
 let profile: Profile | undefined;
 let allPosts: Map<string, Post> | undefined;
 let sortedPosts: Post[] = [];
+let blogPublicationUri: string | undefined;
 
 // Loading state management
 let isLoading = false;
 let lastLoadTime = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
+
+/**
+ * Get or create the blog publication AT-URI
+ */
+async function getBlogPublicationUri(fetch: typeof window.fetch): Promise<string> {
+  if (blogPublicationUri) {
+    return blogPublicationUri;
+  }
+
+  if (!profile) {
+    throw new Error("Profile not loaded");
+  }
+
+  // Try to find existing publication
+  const url = new URL(`${profile.pds}/xrpc/com.atproto.repo.listRecords`);
+  url.searchParams.set("repo", profile.did);
+  url.searchParams.set("collection", "pub.leaflet.publication");
+  url.searchParams.set("limit", "10"); // Should be enough for most cases
+
+  try {
+    const res = await fetch(url.toString());
+    if (res.ok) {
+      const body = await res.json();
+      
+      if (body.records && body.records.length > 0) {
+        // Look for a publication with the expected rkey
+        const targetPub = body.records.find((record: any) => {
+          const rkey = record.uri.split('/').pop();
+          const pubName = record.value?.name;
+          return rkey === BLOG_PUBLICATION_RKEY
+        });
+
+        if (targetPub) {
+          blogPublicationUri = targetPub.uri;
+          console.log(`Found blog publication: ${blogPublicationUri}`);
+          return blogPublicationUri as string;
+        }
+      }
+    }
+  } catch (error) {
+    console.warn("Could not fetch publications:", error);
+  }
+
+  // If no publication found, construct the expected URI
+  blogPublicationUri = `at://${profile.did}/pub.leaflet.publication/${BLOG_PUBLICATION_RKEY}`;
+  console.log(`Using expected blog publication URI: ${blogPublicationUri}`);
+  
+  return blogPublicationUri;
+}
 
 /**
  * Converts Leaflet document blocks to HTML content
@@ -58,7 +112,7 @@ function convertLeafletToHtml(pages: LeafletDocument['pages']): { content: strin
             break;
             
           case 'pub.leaflet.blocks.header':
-            const level = (block as any).level || 1;
+            const level = Math.max(1, Math.min(6, (block as any).level || 1));
             if (block.plaintext) {
               htmlContent += `<h${level}>${escapeHtml(block.plaintext)}</h${level}>\n`;
               plainTextContent += block.plaintext + ' ';
@@ -75,7 +129,7 @@ function convertLeafletToHtml(pages: LeafletDocument['pages']): { content: strin
           case 'pub.leaflet.blocks.code':
             const language = (block as any).language || '';
             if (block.plaintext) {
-              htmlContent += `<pre><code${language ? ` class="language-${language}"` : ''}>${escapeHtml(block.plaintext)}</code></pre>\n`;
+              htmlContent += `<pre><code${language ? ` class="language-${escapeHtml(language)}"` : ''}>${escapeHtml(block.plaintext)}</code></pre>\n`;
               plainTextContent += block.plaintext + ' ';
             }
             break;
@@ -97,8 +151,8 @@ function convertLeafletToHtml(pages: LeafletDocument['pages']): { content: strin
           case 'pub.leaflet.blocks.image':
             const alt = (block as any).alt || '';
             const aspectRatio = (block as any).aspectRatio;
-            // For now, we'll create a placeholder for images
-            htmlContent += `<figure><img src="#" alt="${escapeHtml(alt)}" /><figcaption>${escapeHtml(alt)}</figcaption></figure>\n`;
+            // For images, we'd need to handle the blob reference properly
+            htmlContent += `<figure><img src="#" alt="${escapeHtml(alt)}" />${alt ? `<figcaption>${escapeHtml(alt)}</figcaption>` : ''}</figure>\n`;
             plainTextContent += alt + ' ';
             break;
             
@@ -121,10 +175,9 @@ function convertLeafletToHtml(pages: LeafletDocument['pages']): { content: strin
             break;
             
           case 'pub.leaflet.blocks.bskyPost':
-            // Handle Bluesky post embeds
             const postRef = (block as any).postRef;
             if (postRef?.uri) {
-              htmlContent += `<div class="bsky-post-embed"><a href="${escapeHtml(postRef.uri)}" target="_blank" rel="noopener noreferrer">Bluesky Post</a></div>\n`;
+              htmlContent += `<div class="bsky-post-embed"><a href="https://bsky.app/profile/${postRef.uri.split('/')[2]}/post/${postRef.uri.split('/').pop()}" target="_blank" rel="noopener noreferrer">Bluesky Post</a></div>\n`;
               plainTextContent += 'Bluesky Post ';
             }
             break;
@@ -156,36 +209,53 @@ function convertLeafletToHtml(pages: LeafletDocument['pages']): { content: strin
  * Simple HTML escape function
  */
 function escapeHtml(text: string): string {
-  const div = document?.createElement('div') || { textContent: '', innerHTML: '' };
-  div.textContent = text;
-  return div.innerHTML;
+  if (typeof window !== 'undefined' && document?.createElement) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+  // Fallback for server-side
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 /**
  * Validates and processes a single Leaflet document record
  */
-function processLeafletRecord(data: any): Post | null {
+function processLeafletRecord(data: any, expectedPublicationUri: string): Post | null {
   const matches = data["uri"].split("/");
   const rkey = matches[matches.length - 1];
 
   if (process.env.NODE_ENV === 'development') {
     console.log('=== Leaflet Record Debug Info ===');
     console.log('URI:', data["uri"]);
-    console.log('Data structure keys:', Object.keys(data));
+    console.log('Expected Publication:', expectedPublicationUri);
   }
 
   const record = data["value"] || data.value;
 
   if (!record) {
-    console.warn(`No record value found for ${rkey}`, {
-      dataKeys: Object.keys(data),
-    });
+    console.warn(`No record value found for ${rkey}`);
     return null;
   }
 
   // Validate Leaflet document structure
   if (record.$type !== 'pub.leaflet.document') {
-    console.warn(`Invalid document type for ${rkey}: ${record.$type}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Skipping non-document record: ${record.$type}`);
+    }
+    return null;
+  }
+
+  // Filter by publication - this is the key change!
+  if (record.publication !== expectedPublicationUri) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Skipping document from different publication: ${record.publication}`);
+    }
     return null;
   }
 
@@ -244,13 +314,14 @@ function processLeafletRecord(data: any): Post | null {
 }
 
 /**
- * Fetches all Leaflet document records using pagination (cursor-based)
+ * Fetches all Leaflet document records for the blog publication using pagination
  */
 async function loadAllLeafletPages(fetch: typeof window.fetch): Promise<any[]> {
   if (!profile) {
     throw new Error("Profile not loaded");
   }
 
+  const expectedPublicationUri = await getBlogPublicationUri(fetch);
   let allRecords: any[] = [];
   let cursor: string | undefined | null = undefined;
   let pageCount = 0;
@@ -282,9 +353,17 @@ async function loadAllLeafletPages(fetch: typeof window.fetch): Promise<any[]> {
       if (!res.ok) throw new Error(`Failed to fetch page: ${res.status}`);
       const body = await res.json();
 
-      // Append new records
+      // Filter records by publication before adding
       if (body.records && Array.isArray(body.records)) {
-        allRecords = allRecords.concat(body.records);
+        const blogRecords = body.records.filter((record: any) => {
+          const recordData = record.value || record;
+          return recordData.publication === expectedPublicationUri;
+        });
+        allRecords = allRecords.concat(blogRecords);
+        
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`Page ${pageCount + 1}: Found ${blogRecords.length}/${body.records.length} blog documents`);
+        }
       }
 
       // Update cursor for next page
@@ -306,11 +385,12 @@ async function loadAllLeafletPages(fetch: typeof window.fetch): Promise<any[]> {
     }
   } while (cursor);
 
+  console.log(`Total blog documents found: ${allRecords.length}`);
   return allRecords;
 }
 
 /**
- * Loads and processes all Leaflet documents, with pagination support
+ * Loads and processes all Leaflet documents for the blog publication
  */
 export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServiceResult> {
   // Check if we have fresh cached data
@@ -364,12 +444,15 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
         profile = await getProfile(fetch);
       }
 
-      // Fetch fresh Leaflet documents
+      // Get the expected publication URI
+      const expectedPublicationUri = await getBlogPublicationUri(fetch);
+
+      // Fetch fresh Leaflet documents (already filtered by publication)
       const records = await loadAllLeafletPages(fetch);
 
       allPosts = new Map();
       for (const data of records) {
-        const processed = processLeafletRecord(data);
+        const processed = processLeafletRecord(data, expectedPublicationUri);
         if (processed) {
           allPosts.set(processed.rkey, processed);
         }
@@ -388,6 +471,8 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
 
       lastLoadTime = now;
       clearTimeout(timeoutId);
+      
+      console.log(`Loaded ${sortedPosts.length} blog posts from publication: ${expectedPublicationUri}`);
       
       return {
         posts: allPosts,
@@ -449,7 +534,7 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
 }
 
 /**
- * Returns the most recent Leaflet documents (for home page, etc.)
+ * Returns the most recent Leaflet documents from the blog publication
  */
 export async function getLatestPosts(fetch: typeof window.fetch, limit: number = 3): Promise<Post[]> {
   try {
@@ -459,16 +544,18 @@ export async function getLatestPosts(fetch: typeof window.fetch, limit: number =
       return sortedPosts.slice(0, limit);
     }
 
-    // For latest posts, we can use a lighter approach
+    // Load profile and get publication URI if not already loaded
     if (profile === undefined) {
       profile = await getProfile(fetch);
     }
+    
+    const expectedPublicationUri = await getBlogPublicationUri(fetch);
 
     // Fetch only the first page of records for latest posts
     const url = new URL(`${profile.pds}/xrpc/com.atproto.repo.listRecords`);
     url.searchParams.set("repo", profile.did);
     url.searchParams.set("collection", "pub.leaflet.document");
-    url.searchParams.set("limit", String(Math.min(limit * 2, 10))); // Get a bit more than needed
+    url.searchParams.set("limit", String(Math.min(limit * 3, 15))); // Get more than needed to account for filtering
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 8000);
@@ -492,9 +579,13 @@ export async function getLatestPosts(fetch: typeof window.fetch, limit: number =
       const posts: Post[] = [];
       
       if (body.records && Array.isArray(body.records)) {
-        // Process and sort records by date first
+        // Process and sort records by date first, filtering by publication
         const validRecords = body.records
-          .map((record: any) => processLeafletRecord(record))
+          .filter((record: any) => {
+            const recordData = record.value || record;
+            return recordData.publication === expectedPublicationUri;
+          })
+          .map((record: any) => processLeafletRecord(record, expectedPublicationUri))
           .filter((record: Post | null): record is Post => record !== null)
           .sort((a: Post, b: Post) => b.createdAt.getTime() - a.createdAt.getTime())
           .slice(0, limit); // Take only what we need
@@ -533,6 +624,7 @@ export function clearCache(): void {
   profile = undefined;
   allPosts = undefined;
   sortedPosts = [];
+  blogPublicationUri = undefined;
   lastLoadTime = 0;
   isLoading = false;
 }
