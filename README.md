@@ -1,6 +1,6 @@
 # WhiteBreeze (Personal Fork)
 
-A customised version of [WhiteBreeze](https://github.com/hugeblank/whitebreeze), a small frontend for [WhiteWind](https://whtwnd.com/) - a Markdown blog service using [ATProto](https://atproto.com/).
+A customised version of [WhiteBreeze](https://github.com/hugeblank/whitebreeze), a small frontend for [WhiteWind](https://whtwnd.com) - a Markdown blog service using [ATProto](https://atproto.com/). This fork has since migrated to using [Leaflet](https://leaflet.pub) for the publications.
 
 This fork serves as both my personal website and blog, modified for personal usage while maintaining the original functionality of allowing self-hosting WhiteWind blog posts.
 
@@ -10,7 +10,7 @@ This fork serves as both my personal website and blog, modified for personal usa
 
 This project provides a personal website and blog frontend, built upon the WhiteBreeze framework, allowing for self-hosted blog posts using the AT Protocol.
 
-It also serves as a template for others to create their own WhiteBreeze-based websites, available at [https://github.com/ewanc26/website-template](https://github.com/ewanc26/website-template).
+It also serves as a template for others to create their own WhiteBreeze-based websites, available at [https://github.com/ewanc26/website-template](https://github.com/ewanc26/website-template). It uses WhiteWind instead of Leaflet.
 
 ## Installation
 
@@ -28,6 +28,7 @@ Before running the application, configure the following environment variables in
 
 ```ini
 PUBLIC_ATPROTOCOL_USER="myhandle.bsky.social" # Your handle, or DID
+PUBLIC_BLOG_PUBLICATION_RKEY="3lwjraaqnnt24" # Your blog record key from Leaflet (for example: `https://leaflet.pub/lish/did:plc:ofrbh253gwicbkc5nktqepol/3lwjraaqnnt24`)
 ```
 
 #### Optional Environment Variables
@@ -53,7 +54,7 @@ For optimal usage in production, you need the following record types in your [AT
 #### Required Records
 
 - `app.bsky.actor.profile`: Your profile.
-- `com.whtwnd.blog.entry`: Your blog posts.
+- `pub.leaflet.document`: Your Leaflet documents.
 - `blue.linkat.board`: Your links.
 
 #### Optional Features
