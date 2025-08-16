@@ -172,15 +172,15 @@
     class="flex flex-col items-center justify-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70 text-center"
   >
     <p>No blog data available.</p>
-    <p class="mt-2 text-sm">This blog uses the <a href="https://leaflet.pub">Leaflet</a> document format, 
-      <code>pub.leaflet.document</code>, but there seem to be no records available.</p>
+    <p class="mt-2 text-sm">This blog uses the <a href="https://leaflet.pub" class="text-[var(--link-color)] hover:text-[var(--link-hover-color)] underline">Leaflet</a> document format, 
+      <code class="px-1 py-0.5 bg-[var(--button-bg)] rounded text-sm">pub.leaflet.document</code>, but there seem to be no records available.</p>
   </div>
 {:else if !hasValidPosts}
   <div
     class="flex flex-col items-center justify-center min-h-[200px] text-lg text-[var(--text-color)] opacity-70 text-center"
   >
     <p>No valid blog posts found.</p>
-    <p class="mt-2 text-sm">Posts were found but none have valid content, titles, and dates.</p>
+    <p class="mt-2 text-sm">Documents were found but none have valid content, titles, and dates.</p>
   </div>
 {:else}
   

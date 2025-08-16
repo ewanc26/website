@@ -92,25 +92,13 @@
     {#if profileDid && rkey}
       <div class="pt-3 mt-1">
         <p class="text-sm opacity-75">
-          View on <a
-            href={`https://whtwnd.nat.vg/${profileDid}/${rkey}`}
-            onerror={(e) => {
-              e.preventDefault();
-              if (e.target instanceof HTMLAnchorElement) {
-                e.target.href = `https://whtwnd.com/${profileDid}/${rkey}`;
-              }
-            }}
-            class="hover:text-[var(--link-hover-color)] underline decoration-dotted"
-          >
-            WhiteWind
-          </a>
-          or see the record at
+          View the record at
           <a
-            href={`https://atproto.at/viewer?uri=${profileDid}/com.whtwnd.blog.entry/${rkey}`}
+            href={`https://atproto.at/viewer?uri=${profileDid}/pub.leaflet.document/${rkey}`}
             onerror={(e) => {
               e.preventDefault();
               if (e.target instanceof HTMLAnchorElement) {
-                e.target.href = `https://pdsls.dev/at://${profileDid}/com.whtwnd.blog.entry/${rkey}`;
+                e.target.href = `https://pdsls.dev/at://${profileDid}/pub.leaflet.document/${rkey}`;
                 e.target.textContent = 'PDSls';
               }
             }}
