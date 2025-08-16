@@ -1,6 +1,31 @@
 import { getProfile } from "$components/profile/profile";
-import type { Profile, MarkdownPost, Post, BlogServiceResult } from "$components/shared";
-import { parse } from "$lib/parser";
+import type { Profile, Post, BlogServiceResult } from "$components/shared";
+
+// Leaflet document structure based on the lexicons
+interface LeafletDocument {
+  $type: "pub.leaflet.document";
+  title: string;
+  description?: string;
+  publishedAt?: string;
+  publication: string; // at-uri
+  author: string; // at-identifier
+  pages: Array<{
+    $type: "pub.leaflet.pages.linearDocument";
+    blocks?: Array<{
+      block: {
+        $type: string;
+        plaintext?: string;
+        facets?: Array<any>;
+        [key: string]: any;
+      };
+      alignment?: string;
+    }>;
+  }>;
+  postRef?: {
+    uri: string;
+    cid: string;
+  };
+}
 
 // Caching profile and post data
 let profile: Profile | undefined;
@@ -13,20 +38,142 @@ let lastLoadTime = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
 
 /**
- * Validates and processes a single blog record
+ * Converts Leaflet document blocks to HTML content
  */
-function processRecord(data: any): MarkdownPost | null {
+function convertLeafletToHtml(pages: LeafletDocument['pages']): { content: string; excerpt: string; wordCount: number } {
+  let htmlContent = '';
+  let plainTextContent = '';
+  
+  for (const page of pages) {
+    if (page.blocks) {
+      for (const blockWrapper of page.blocks) {
+        const block = blockWrapper.block;
+        
+        switch (block.$type) {
+          case 'pub.leaflet.blocks.text':
+            if (block.plaintext) {
+              htmlContent += `<p>${escapeHtml(block.plaintext)}</p>\n`;
+              plainTextContent += block.plaintext + ' ';
+            }
+            break;
+            
+          case 'pub.leaflet.blocks.header':
+            const level = (block as any).level || 1;
+            if (block.plaintext) {
+              htmlContent += `<h${level}>${escapeHtml(block.plaintext)}</h${level}>\n`;
+              plainTextContent += block.plaintext + ' ';
+            }
+            break;
+            
+          case 'pub.leaflet.blocks.blockquote':
+            if (block.plaintext) {
+              htmlContent += `<blockquote>${escapeHtml(block.plaintext)}</blockquote>\n`;
+              plainTextContent += block.plaintext + ' ';
+            }
+            break;
+            
+          case 'pub.leaflet.blocks.code':
+            const language = (block as any).language || '';
+            if (block.plaintext) {
+              htmlContent += `<pre><code${language ? ` class="language-${language}"` : ''}>${escapeHtml(block.plaintext)}</code></pre>\n`;
+              plainTextContent += block.plaintext + ' ';
+            }
+            break;
+            
+          case 'pub.leaflet.blocks.unorderedList':
+            const children = (block as any).children || [];
+            if (children.length > 0) {
+              htmlContent += '<ul>\n';
+              for (const item of children) {
+                if (item.content?.plaintext) {
+                  htmlContent += `<li>${escapeHtml(item.content.plaintext)}</li>\n`;
+                  plainTextContent += item.content.plaintext + ' ';
+                }
+              }
+              htmlContent += '</ul>\n';
+            }
+            break;
+            
+          case 'pub.leaflet.blocks.image':
+            const alt = (block as any).alt || '';
+            const aspectRatio = (block as any).aspectRatio;
+            // For now, we'll create a placeholder for images
+            htmlContent += `<figure><img src="#" alt="${escapeHtml(alt)}" /><figcaption>${escapeHtml(alt)}</figcaption></figure>\n`;
+            plainTextContent += alt + ' ';
+            break;
+            
+          case 'pub.leaflet.blocks.horizontalRule':
+            htmlContent += '<hr>\n';
+            break;
+            
+          case 'pub.leaflet.blocks.math':
+            const tex = (block as any).tex || '';
+            htmlContent += `<div class="math">${escapeHtml(tex)}</div>\n`;
+            plainTextContent += tex + ' ';
+            break;
+            
+          case 'pub.leaflet.blocks.website':
+            const src = (block as any).src || '';
+            const title = (block as any).title || '';
+            const description = (block as any).description || '';
+            htmlContent += `<div class="website-embed"><a href="${escapeHtml(src)}" target="_blank" rel="noopener noreferrer">${escapeHtml(title || src)}</a>${description ? `<p>${escapeHtml(description)}</p>` : ''}</div>\n`;
+            plainTextContent += `${title || src} ${description} `;
+            break;
+            
+          case 'pub.leaflet.blocks.bskyPost':
+            // Handle Bluesky post embeds
+            const postRef = (block as any).postRef;
+            if (postRef?.uri) {
+              htmlContent += `<div class="bsky-post-embed"><a href="${escapeHtml(postRef.uri)}" target="_blank" rel="noopener noreferrer">Bluesky Post</a></div>\n`;
+              plainTextContent += 'Bluesky Post ';
+            }
+            break;
+            
+          default:
+            // Fallback for unknown block types
+            if (block.plaintext) {
+              htmlContent += `<div>${escapeHtml(block.plaintext)}</div>\n`;
+              plainTextContent += block.plaintext + ' ';
+            }
+        }
+      }
+    }
+  }
+  
+  // Calculate word count and create excerpt
+  const words = plainTextContent.trim().split(/\s+/).filter(word => word.length > 0);
+  const wordCount = words.length;
+  const excerpt = words.slice(0, 50).join(' ') + (words.length > 50 ? '...' : '');
+  
+  return {
+    content: htmlContent.trim(),
+    excerpt,
+    wordCount
+  };
+}
+
+/**
+ * Simple HTML escape function
+ */
+function escapeHtml(text: string): string {
+  const div = document?.createElement('div') || { textContent: '', innerHTML: '' };
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+/**
+ * Validates and processes a single Leaflet document record
+ */
+function processLeafletRecord(data: any): Post | null {
   const matches = data["uri"].split("/");
   const rkey = matches[matches.length - 1];
 
-  // Debugging output for development
   if (process.env.NODE_ENV === 'development') {
-    console.log('=== Record Debug Info ===');
+    console.log('=== Leaflet Record Debug Info ===');
     console.log('URI:', data["uri"]);
     console.log('Data structure keys:', Object.keys(data));
   }
 
-  // Safely access record object
   const record = data["value"] || data.value;
 
   if (!record) {
@@ -36,60 +183,70 @@ function processRecord(data: any): MarkdownPost | null {
     return null;
   }
 
-  // Validate structure and public visibility
-  if (!matches || matches.length !== 5 || !record || (record["visibility"] && record["visibility"] !== "public")) {
+  // Validate Leaflet document structure
+  if (record.$type !== 'pub.leaflet.document') {
+    console.warn(`Invalid document type for ${rkey}: ${record.$type}`);
+    return null;
+  }
+
+  if (!matches || matches.length !== 5 || !record) {
     if (process.env.NODE_ENV === 'development') {
-      console.warn('Post skipped due to validation failure:', {
+      console.warn('Document skipped due to validation failure:', {
         rkey,
         matchesLength: matches?.length,
         hasRecord: !!record,
-        visibility: record?.["visibility"],
+        type: record?.$type,
       });
     }
     return null;
   }
 
-  // Fallback access patterns for fields
-  const content = record["content"] || record.content || (record.value && record.value.content);
-  const title = record["title"] || record.title || (record.value && record.value.title);
-  const createdAt = record["createdAt"] || record.createdAt || (record.value && record.value.createdAt);
+  const title = record.title;
+  const publishedAt = record.publishedAt;
+  const pages = record.pages || [];
 
-  // Skip record if content is missing
-  if (!content) {
-    console.warn(`Skipping post with missing content: ${rkey}`);
+  if (!title) {
+    console.warn(`Skipping document with missing title: ${rkey}`);
     return null;
   }
 
-  // Parse or fallback for createdAt date
+  if (!pages || pages.length === 0) {
+    console.warn(`Skipping document with no pages: ${rkey}`);
+    return null;
+  }
+
+  // Parse or fallback for publishedAt date
   let createdAtDate: Date;
-  if (!createdAt) {
-    console.warn(`Post missing createdAt, using current time: ${rkey}`);
+  if (!publishedAt) {
+    console.warn(`Document missing publishedAt, using current time: ${rkey}`);
     createdAtDate = new Date();
   } else {
-    createdAtDate = new Date(createdAt);
+    createdAtDate = new Date(publishedAt);
     if (isNaN(createdAtDate.getTime())) {
-      console.warn(`Skipping post with invalid date: ${rkey}`, {
-        rawCreatedAt: createdAt,
+      console.warn(`Skipping document with invalid date: ${rkey}`, {
+        rawPublishedAt: publishedAt,
       });
       return null;
     }
   }
 
-  // Generate fallback title if none present
-  const finalTitle = title || `Untitled Post (${rkey})`;
+  // Convert Leaflet blocks to HTML
+  const { content, excerpt, wordCount } = convertLeafletToHtml(pages);
 
   return {
-    title: finalTitle,
+    title,
     createdAt: createdAtDate,
-    mdcontent: content,
+    content,
+    excerpt,
+    wordCount,
     rkey,
   };
 }
 
 /**
- * Fetches all blog records using pagination (cursor-based)
+ * Fetches all Leaflet document records using pagination (cursor-based)
  */
-async function loadAllPages(fetch: typeof window.fetch): Promise<any[]> {
+async function loadAllLeafletPages(fetch: typeof window.fetch): Promise<any[]> {
   if (!profile) {
     throw new Error("Profile not loaded");
   }
@@ -103,14 +260,14 @@ async function loadAllPages(fetch: typeof window.fetch): Promise<any[]> {
     // Construct request URL with optional cursor
     const url = new URL(`${profile.pds}/xrpc/com.atproto.repo.listRecords`);
     url.searchParams.set("repo", profile.did);
-    url.searchParams.set("collection", "com.whtwnd.blog.entry");
+    url.searchParams.set("collection", "pub.leaflet.document");
     if (cursor) {
       url.searchParams.set("cursor", cursor);
     }
 
-    // Add timeout to fetch request with shorter timeout
+    // Add timeout to fetch request
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // Reduced to 5 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
 
     try {
       const res = await fetch(url.toString(), { 
@@ -153,13 +310,13 @@ async function loadAllPages(fetch: typeof window.fetch): Promise<any[]> {
 }
 
 /**
- * Loads and processes all blog posts, with pagination support
+ * Loads and processes all Leaflet documents, with pagination support
  */
 export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServiceResult> {
   // Check if we have fresh cached data
   const now = Date.now();
   if (allPosts && sortedPosts.length > 0 && (now - lastLoadTime) < CACHE_DURATION && profile) {
-    console.log('Returning cached blog posts');
+    console.log('Returning cached Leaflet documents');
     return {
       posts: allPosts,
       profile: profile,
@@ -177,8 +334,7 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
 
   // Prevent concurrent loading
   if (isLoading) {
-    console.log('Blog loading already in progress, waiting...');
-    // Return cached data if available, otherwise empty result
+    console.log('Leaflet loading already in progress, waiting...');
     if (allPosts && sortedPosts.length > 0 && profile) {
       return {
         posts: allPosts,
@@ -199,9 +355,8 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
   isLoading = true;
 
   try {
-    // Add overall timeout for the entire operation
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // Reduced to 15 second total timeout
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
 
     try {
       // Load profile once
@@ -209,19 +364,16 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
         profile = await getProfile(fetch);
       }
 
-      // Always fetch fresh data for blog posts
-      const records = await loadAllPages(fetch);
+      // Fetch fresh Leaflet documents
+      const records = await loadAllLeafletPages(fetch);
 
-      const mdposts: Map<string, MarkdownPost> = new Map();
+      allPosts = new Map();
       for (const data of records) {
-        const processed = processRecord(data);
+        const processed = processLeafletRecord(data);
         if (processed) {
-          mdposts.set(processed.rkey, processed);
+          allPosts.set(processed.rkey, processed);
         }
       }
-
-      // Convert markdown posts to full post format
-      allPosts = await parse(mdposts);
 
       // Sort posts chronologically (newest first)
       sortedPosts = Array.from(allPosts.values()).sort(
@@ -253,8 +405,7 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
     } catch (error) {
       clearTimeout(timeoutId);
       if (error instanceof Error && error.name === 'AbortError') {
-        console.warn('Blog loading timed out, returning cached data if available');
-        // Return cached data if available, otherwise empty result
+        console.warn('Leaflet loading timed out, returning cached data if available');
         if (allPosts && sortedPosts.length > 0 && profile) {
           return {
             posts: allPosts,
@@ -298,8 +449,7 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
 }
 
 /**
- * Returns the most recent blog posts (for home page, etc.)
- * This function now uses a lighter approach for the homepage
+ * Returns the most recent Leaflet documents (for home page, etc.)
  */
 export async function getLatestPosts(fetch: typeof window.fetch, limit: number = 3): Promise<Post[]> {
   try {
@@ -310,7 +460,6 @@ export async function getLatestPosts(fetch: typeof window.fetch, limit: number =
     }
 
     // For latest posts, we can use a lighter approach
-    // Load profile if not already loaded
     if (profile === undefined) {
       profile = await getProfile(fetch);
     }
@@ -318,11 +467,11 @@ export async function getLatestPosts(fetch: typeof window.fetch, limit: number =
     // Fetch only the first page of records for latest posts
     const url = new URL(`${profile.pds}/xrpc/com.atproto.repo.listRecords`);
     url.searchParams.set("repo", profile.did);
-    url.searchParams.set("collection", "com.whtwnd.blog.entry");
+    url.searchParams.set("collection", "pub.leaflet.document");
     url.searchParams.set("limit", String(Math.min(limit * 2, 10))); // Get a bit more than needed
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout for latest posts
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
 
     try {
       const res = await fetch(url.toString(), { 
@@ -340,28 +489,20 @@ export async function getLatestPosts(fetch: typeof window.fetch, limit: number =
       
       const body = await res.json();
 
-      const mdposts: Map<string, MarkdownPost> = new Map();
+      const posts: Post[] = [];
       
       if (body.records && Array.isArray(body.records)) {
         // Process and sort records by date first
         const validRecords = body.records
-          .map((record: any) => processRecord(record))
-          .filter((record: MarkdownPost | null): record is MarkdownPost => record !== null)
-          .sort((a: MarkdownPost, b: MarkdownPost) => b.createdAt.getTime() - a.createdAt.getTime())
+          .map((record: any) => processLeafletRecord(record))
+          .filter((record: Post | null): record is Post => record !== null)
+          .sort((a: Post, b: Post) => b.createdAt.getTime() - a.createdAt.getTime())
           .slice(0, limit); // Take only what we need
 
-        validRecords.forEach((record: MarkdownPost) => {
-          mdposts.set(record.rkey, record);
-        });
+        posts.push(...validRecords);
       }
 
-      // Convert to full post format
-      const posts = await parse(mdposts);
-      const latestPosts = Array.from(posts.values())
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-        .slice(0, limit);
-
-      return latestPosts;
+      return posts;
 
     } catch (error) {
       clearTimeout(timeoutId);
