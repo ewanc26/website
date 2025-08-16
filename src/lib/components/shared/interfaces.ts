@@ -135,3 +135,31 @@ export interface Milestone {
   emoji: string;
   type: 'special' | 'major' | 'minor';
 }
+
+/**
+ * Represents a Leaflet document with its structure and metadata.
+ */
+export interface LeafletDocument {
+  $type: "pub.leaflet.document";
+  title: string;
+  description?: string;
+  publishedAt?: string;
+  publication: string; // at-uri
+  author: string; // at-identifier
+  pages: Array<{
+    $type: "pub.leaflet.pages.linearDocument";
+    blocks?: Array<{
+      block: {
+        $type: string;
+        plaintext?: string;
+        facets?: Array<any>;
+        [key: string]: any;
+      };
+      alignment?: string;
+    }>;
+  }>;
+  postRef?: {
+    uri: string;
+    cid: string;
+  };
+}

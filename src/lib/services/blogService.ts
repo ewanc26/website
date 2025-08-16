@@ -1,35 +1,9 @@
 import { getProfile } from "$components/profile/profile";
-import type { Profile, Post, BlogServiceResult } from "$components/shared";
+import type { Profile, Post, BlogServiceResult, LeafletDocument } from "$components/shared";
 import { env } from "$env/dynamic/public";
 
 // Configuration for your blog publication
 const BLOG_PUBLICATION_RKEY = env.PUBLIC_BLOG_PUBLICATION_RKEY;
-
-// Leaflet document structure based on the lexicons
-interface LeafletDocument {
-  $type: "pub.leaflet.document";
-  title: string;
-  description?: string;
-  publishedAt?: string;
-  publication: string; // at-uri
-  author: string; // at-identifier
-  pages: Array<{
-    $type: "pub.leaflet.pages.linearDocument";
-    blocks?: Array<{
-      block: {
-        $type: string;
-        plaintext?: string;
-        facets?: Array<any>;
-        [key: string]: any;
-      };
-      alignment?: string;
-    }>;
-  }>;
-  postRef?: {
-    uri: string;
-    cid: string;
-  };
-}
 
 // Caching profile and post data
 let profile: Profile | undefined;

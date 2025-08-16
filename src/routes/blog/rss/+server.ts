@@ -3,30 +3,11 @@ import { dev } from "$app/environment";
 import { getProfile } from "$components/profile/profile";
 import { escapeXml } from "$lib/utils/xml";
 import { TTLCache } from "$utils/cache";
+import type { LeafletDocument } from "$components/shared";
 
 // TTL cache for RSS feed XML (5 min)
 const FEED_CACHE_TTL = 5 * 60 * 1000;
 const rssFeedCache = new TTLCache<string>(FEED_CACHE_TTL);
-
-// Leaflet document structure
-interface LeafletDocument {
-  $type: "pub.leaflet.document";
-  title: string;
-  description?: string;
-  publishedAt?: string;
-  publication: string;
-  author: string;
-  pages: Array<{
-    $type: "pub.leaflet.pages.linearDocument";
-    blocks?: Array<{
-      block: {
-        $type: string;
-        plaintext?: string;
-        [key: string]: any;
-      };
-    }>;
-  }>;
-}
 
 /**
  * Converts Leaflet document to plain text for RSS
