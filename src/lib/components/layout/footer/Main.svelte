@@ -1,24 +1,75 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { browser } from "$app/environment";
   import { env } from "$env/dynamic/public";
   import LastCommit from "./LastCommit.svelte";
   import TidClock from "./TidClock.svelte";
+  import type { SiteInfo } from "$components/shared";
 
   export let profile: any;
+  export let siteInfo: SiteInfo | null = null;
   export const posts: any = undefined;
 
-  onMount(() => {
-    const copyrightYearElement = document.getElementById("copyright-year");
-    if (copyrightYearElement) {
-      copyrightYearElement.textContent = new Date().getFullYear().toString();
+  let copyrightText = "";
+
+  // Calculate copyright text (works on both server and client)
+  function calculateCopyrightText(): string {
+    const currentYear = new Date().getFullYear();
+    
+    // Get birth year from siteInfo with fallbacks and validation
+    let birthYear: number | null = null;
+    
+    if (siteInfo?.additionalInfo?.websiteBirthYear) {
+      const year = siteInfo.additionalInfo.websiteBirthYear;
+      // Validate year is reasonable (between 1990 and current year)
+      if (year >= 1990 && year <= currentYear) {
+        birthYear = year;
+      }
     }
+    
+    // Fallback to current year if no valid birth year
+    if (!birthYear) {
+      birthYear = currentYear;
+    }
+    
+    // Format copyright text
+    if (birthYear === currentYear) {
+      return currentYear.toString();
+    } else {
+      return `${birthYear} - ${currentYear}`;
+    }
+  }
+
+  // Update copyright text and DOM element (browser only)
+  function updateCopyrightText() {
+    copyrightText = calculateCopyrightText();
+    
+    // Only update DOM if we're in the browser
+    if (browser) {
+      const copyrightYearElement = document.getElementById("copyright-year");
+      if (copyrightYearElement) {
+        copyrightYearElement.textContent = copyrightText;
+      }
+    }
+  }
+
+  // Initialize copyright text immediately (for SSR)
+  copyrightText = calculateCopyrightText();
+
+  onMount(() => {
+    updateCopyrightText();
   });
+
+  // Reactive statement to update when siteInfo changes
+  $: if (siteInfo !== undefined) {
+    updateCopyrightText();
+  }
 </script>
 
 <footer class="text-center py-4 text-primary text-sm opacity-60">
   <div class="flex flex-col justify-center items-center gap-2">
     <div>
-      <span>&copy; <span id="copyright-year"></span></span>
+      <span>&copy; <span id="copyright-year">{copyrightText}</span></span>
 
       <span class="mx-1"></span>
 

@@ -1,9 +1,9 @@
-import { getProfile } from "$components/profile/profile";
-import { preloadEssentialData } from "$services/blogService";
-import type { Profile, LinkBoard } from "$components/shared";
+import { getProfile, getSiteInfo } from "$components/profile/profile";
+import type { Profile, LinkBoard, SiteInfo } from "$components/shared";
 
-// Profile data cache
+// Profile and site data cache
 let profile: Profile;
+let siteInfo: SiteInfo | null = null;
 
 export async function load({ fetch }) {
   try {
@@ -14,11 +14,22 @@ export async function load({ fetch }) {
       profile = await getProfile(fetch);
     }
 
-    console.log('Layout load: Profile loaded, returning minimal data');
+    // Load site info if not already cached
+    if (siteInfo === null) {
+      try {
+        siteInfo = await getSiteInfo(fetch);
+      } catch (error) {
+        console.warn('Failed to load site info, continuing without it:', error);
+        siteInfo = null;
+      }
+    }
+
+    console.log('Layout load: Profile and site info loaded, returning minimal data');
 
     // Return immediately with only critical data
     return {
       profile,
+      siteInfo,
       pdsUrl: profile.pds,
       did: profile.did,
       posts: new Map(), // Keep this for compatibility
@@ -40,6 +51,7 @@ export async function load({ fetch }) {
         description: '',
         pds: '',
       } as Profile,
+      siteInfo: null,
       pdsUrl: '',
       did: '',
       posts: new Map(),
