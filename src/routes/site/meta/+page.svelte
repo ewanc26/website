@@ -135,14 +135,14 @@
         {/if}
         {#if siteInfo.openSourceInfo.license}
           <p>
-            License: {#if siteInfo.openSourceInfo.license.url}
+            Licence: {#if siteInfo.openSourceInfo.license.url}
               <a
                 href="{siteInfo.openSourceInfo.license.url}"
                 class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-                >{siteInfo.openSourceInfo.license.name || 'License'}</a
+                >{siteInfo.openSourceInfo.license.name || 'Licence'}</a
               >
             {:else}
-              {siteInfo.openSourceInfo.license.name || 'License'}
+              {siteInfo.openSourceInfo.license.name || 'Licence'}
             {/if}
           </p>
         {/if}
@@ -197,10 +197,10 @@
                   <a
                     href="{credit.license.url}"
                     class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-                    >{credit.license.name || 'License'}</a
+                    >{credit.license.name || 'Licence'}</a
                   >
                 {:else}
-                  {credit.license.name || 'License'}
+                  {credit.license.name || 'Licence'}
                 {/if}
               {/if}
               {#if credit.description}
@@ -269,7 +269,7 @@
           {/if}
 
           {#if siteInfo.additionalInfo.sectionLicense && siteInfo.additionalInfo.sectionLicense.length > 0}
-            <h2 class="text-xl font-semibold mt-6 mb-2">Section Licenses</h2>
+            <h2 class="text-xl font-semibold mt-6 mb-2">Section Licences</h2>
             <ul>
               {#each siteInfo.additionalInfo.sectionLicense as license}
                 <li>
@@ -277,10 +277,10 @@
                     <a
                       href="{license.url}"
                       class="text-[var(--link-color)] hover:text-[var(--link-hover-color)]"
-                      >{license.name || 'License'}</a
+                      >{license.name || 'Licence'}</a
                     >
                   {:else}
-                    {license.name || 'License'}
+                    {license.name || 'Licence'}
                   {/if}
                   {#if license.section}
                     ({license.section})
