@@ -47,5 +47,5 @@
 
   {@render children()}
 
-  <Footer profile={data.profile} posts={data.posts} />
+  <Footer profile={data.profile} siteInfo={data.siteInfo} posts={data.posts} />
 </div>
