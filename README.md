@@ -58,6 +58,10 @@ For optimal usage in production, you need the following record types in your [AT
 
 #### Optional Features
 
+##### Tangled repository display
+
+- `sh.tangled.repo`: Displays your Git repositories from [Tangled](https://tangled.sh).
+
 ##### Custom Lexicons
 
 This fork includes custom lexicons for specific functionalities:

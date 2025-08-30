@@ -135,3 +135,22 @@ export interface Milestone {
   emoji: string;
   type: 'special' | 'major' | 'minor';
 }
+
+/**
+ * Represents a Tangled repository record with its details.
+ */
+export interface RepoRecord {
+  knot: string;
+  name: string;
+  $type: "sh.tangled.repo";
+  owner: string;
+  createdAt: string;
+}
+
+/**
+ * Extends RepoRecord to include additional fields for rkey and url.
+ */
+export interface RepoRecordWithRkey extends RepoRecord {
+    rkey: string;
+    url: string;
+}

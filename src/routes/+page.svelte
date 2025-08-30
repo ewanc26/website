@@ -2,10 +2,10 @@
   import { onMount } from "svelte";
   import { getStores } from "$app/stores";
   import { createComponentDebugger } from "$lib/utils/debug.js";
-  import type { Post, LinkBoard } from "$components/shared";
+  import type { Post, LinkBoard, RepoRecordWithRkey, RepoRecord } from "$components/shared";
   
   const { page } = getStores();
-  import { DynamicLinks, LatestBlogPost } from "$components/layout/main";
+  import { DynamicLinks, LatestBlogPost, DynamicRepos } from "$components/layout/main";
   import { getLatestPosts } from "$services/blogService";
 
   // Create debugger for this component
@@ -181,3 +181,9 @@
     Loading links...
   </div>
 {/if}
+
+<!-- Dynamic Repos section -->
+<DynamicRepos 
+  profilePds={data?.profile?.pds} 
+  profileDid={data?.profile?.did} 
+/>
