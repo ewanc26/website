@@ -19,7 +19,7 @@
   <div class="flex justify-between mt-8 mb-8 gap-4" transition:fade={{ duration: 300 }}>
     {#if hasPrevious && adjacentPosts.previous}
     <div class="flex flex-col max-w-[45%]">
-      <div class="text-sm text-mono mb-1 lowercase">Previous</div>
+      <div class="text-sm text-mono mb-1 lowercase">Next</div>
       <a
         href="/blog/{adjacentPosts.previous.rkey}"
         class="text-[var(--link-color)] hover:text-[var(--link-hover-color)] truncate group transition-all duration-200"
@@ -34,7 +34,7 @@
 
     {#if hasNext && adjacentPosts.next}
     <div class="flex flex-col max-w-[45%] text-right">
-      <div class="text-sm text-mono mb-1 lowercase">Next</div>
+      <div class="text-sm text-mono mb-1 lowercase">Previous</div>
       <a
         href="/blog/{adjacentPosts.next.rkey}"
         class="text-[var(--link-color)] hover:text-[var(--link-hover-color)] truncate group transition-all duration-200"
