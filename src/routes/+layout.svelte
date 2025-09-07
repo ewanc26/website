@@ -5,6 +5,7 @@
   const { page } = getStores();
   import Profile from "$components/profile/Profile.svelte";
   import { Footer, HeaderMain } from "$components/layout";
+  import { ScrollToTop } from "$components/layout/main";
   import { NoScriptMessage } from "$components/shared";
   import { measurePerformance, logPerformanceMetrics } from "$utils/performance";
 
@@ -49,3 +50,6 @@
 
   <Footer profile={data.profile} siteInfo={data.siteInfo} posts={data.posts} />
 </div>
+
+<!-- Scroll to top button -->
+<ScrollToTop />
