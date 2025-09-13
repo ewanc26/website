@@ -1,19 +1,11 @@
 @import "$css/variables.css";
 @import "$css/animations.css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-/* Minimalist flat styles with gentle dark pastel green theme */
+/* Minimalist flat styles with Inter font */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@font-face {
-  font-family: 'Recursive';
-  src: url('/fonts/ArrowType-Recursive-1.085/Recursive_Web/woff2_variable/Recursive_VF_1.085.woff2') format('woff2');
-  font-weight: 300 800;
-  font-stretch: 100%;
-  font-display: swap;
-  font-preload: true;
-}
 
 @layer base {
 
@@ -43,9 +35,8 @@
   body {
     background-color: var(--background-color);
     color: var(--text-color);
-    font-family: "Recursive", sans-serif;
-    font-variation-settings: "MONO" 0, "CASL" 0, "wght" 300, "slnt" 0,
-      "CRSV" 0.5;
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
     /* Optimize font rendering */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -53,7 +44,7 @@
   }
 
   /* This is to ensure KaTeX renders correctly.
-    It overrides the 'Recursive' font and forces the use of KaTeX's specific fonts for math elements.
+    It overrides the 'Inter' font and forces the use of KaTeX's specific fonts for math elements.
   */
   .katex {
     font-family: 'KaTeX_Main', 'KaTeX_Math', 'KaTeX_AMS', 'KaTeX_Typewriter', 'KaTeX_Caligraphic', 'KaTeX_Fraktur', 'KaTeX_SansSerif', 'KaTeX_Script', 'KaTeX_Size1', 'KaTeX_Size2', 'KaTeX_Size3', 'KaTeX_Size4', 'KaTeX_Varepsilon';
@@ -61,51 +52,43 @@
 
   h1 {
     @apply text-4xl font-bold;
-    font-variation-settings: "MONO" 0, "CASL" 0.8, "wght" 700, "slnt" 0,
-      "CRSV" 0.9;
+    font-weight: 700;
   }
 
   h2 {
     @apply text-3xl font-bold;
-    font-variation-settings: "MONO" 0, "CASL" 0.7, "wght" 650, "slnt" 0,
-      "CRSV" 0.85;
+    font-weight: 650;
   }
 
   h3 {
     @apply text-2xl font-bold;
-    font-variation-settings: "MONO" 0, "CASL" 0.6, "wght" 600, "slnt" 0,
-      "CRSV" 0.8;
+    font-weight: 600;
   }
 
   h4 {
     @apply text-xl font-semibold;
-    font-variation-settings: "MONO" 0, "CASL" 0.5, "wght" 550, "slnt" 0,
-      "CRSV" 0.75;
+    font-weight: 550;
   }
 
   h5 {
     @apply text-lg font-semibold;
-    font-variation-settings: "MONO" 0, "CASL" 0.4, "wght" 500, "slnt" 0,
-      "CRSV" 0.7;
+    font-weight: 500;
   }
 
   h6 {
     @apply text-sm font-semibold;
-    font-variation-settings: "MONO" 0, "CASL" 0.3, "wght" 450, "slnt" 0,
-      "CRSV" 0.6;
+    font-weight: 450;
   }
 
   a {
     @apply text-[var(--link-color)] hover:text-[var(--link-hover-color)] no-underline;
-    font-variation-settings: "MONO" 0, "CASL" 0, "wght" 450, "slnt" 0,
-      "CRSV" 0.5;
+    font-weight: 450;
     /* Reduced transition complexity */
     transition: color 0.2s ease;
   }
 
   a:hover {
-    font-variation-settings: "MONO" 0, "CASL" 0, "wght" 600, "slnt" 0,
-      "CRSV" 0.5;
+    font-weight: 600;
   }
 
   a,
