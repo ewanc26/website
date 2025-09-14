@@ -180,6 +180,9 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
     metaMarginBottom = Math.max(8, Math.floor(metaMarginBottom * compressionRatio));
   }
 
+  // Extract date from extraMeta if available
+  const dateString = options.extraMeta && options.extraMeta.length > 0 ? options.extraMeta[0] : null;
+
   // Layout children
   let children: any[] = [];
 
@@ -230,8 +233,8 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
     });
   }
 
-  // Meta line (e.g., reading time, word count)
-  if (options.metaLine || (options.extraMeta && options.extraMeta.length > 0)) {
+  // Meta line (e.g., reading time, word count) - exclude date from this
+  if (options.metaLine) {
     children.push({
       type: 'div',
       props: {
@@ -246,7 +249,7 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
           flexWrap: 'wrap',
           gap: '8px',
         },
-        children: options.metaLine || options.extraMeta?.join(' • '),
+        children: options.metaLine,
       },
     });
   }
@@ -256,8 +259,8 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
     children.push(options.customChildren);
   }
 
-  // Decorative line (optional, for index pages) - only if no author
-  if (!options.author && !options.customChildren) {
+  // Decorative line (optional, for index pages) - only if no author and no date
+  if (!options.author && !dateString && !options.customChildren) {
     children.push({
       type: 'div',
       props: {
@@ -271,6 +274,144 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
         },
       },
     });
+  }
+
+  // Create footer with split layout (author left, date right)
+  let footerContent = null;
+  if (options.author || dateString) {
+    footerContent = {
+      type: 'div',
+      props: {
+        style: {
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingLeft: '48px',
+          paddingRight: '48px',
+          opacity: 0.85,
+          flexShrink: 0,
+        },
+        children: [
+          // Author info - left side
+          options.author ? {
+            type: 'div',
+            props: {
+              style: {
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: '18px',
+                textAlign: 'left',
+              },
+              children: [
+                options.author.avatar && {
+                  type: 'img',
+                  props: {
+                    src: options.author.avatar,
+                    width: 64,
+                    height: 64,
+                    style: {
+                      borderRadius: '50%',
+                      border: '3px solid #2d4839',
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.18)',
+                      background: '#1e2c23',
+                      flexShrink: 0,
+                    },
+                  },
+                },
+                {
+                  type: 'div',
+                  props: {
+                    style: {
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      gap: '2px',
+                    },
+                    children: [
+                      {
+                        type: 'span',
+                        props: {
+                          style: {
+                            fontSize: '22px',
+                            fontWeight: 700,
+                            fontStyle: 'normal',
+                            lineHeight: 1.1,
+                          },
+                          children: options.author.name,
+                        },
+                      },
+                      options.author.handle && {
+                        type: 'span',
+                        props: {
+                          style: {
+                            fontSize: '16px',
+                            color: '#8fd0a0',
+                            fontWeight: 400,
+                            fontStyle: 'italic',
+                          },
+                          children: '@' + options.author.handle,
+                        },
+                      },
+                    ].filter(Boolean),
+                  },
+                },
+              ].filter(Boolean),
+            },
+          } : {
+            type: 'div', // Empty placeholder for left side
+            props: { style: {} },
+          },
+          
+          // Date info - right side
+          dateString ? {
+            type: 'div',
+            props: {
+              style: {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+                textAlign: 'right',
+                gap: '4px',
+              },
+              children: [
+                {
+                  type: 'span',
+                  props: {
+                    style: {
+                      fontSize: '18px',
+                      fontWeight: 600,
+                      fontStyle: 'normal',
+                      color: '#d8e8d8',
+                      lineHeight: 1.2,
+                    },
+                    children: dateString,
+                  },
+                },
+                {
+                  type: 'span',
+                  props: {
+                    style: {
+                      fontSize: '14px',
+                      color: '#8fd0a0',
+                      fontWeight: 400,
+                      fontStyle: 'italic',
+                      opacity: 0.8,
+                    },
+                    children: 'Published',
+                  },
+                },
+              ],
+            },
+          } : {
+            type: 'div', // Empty placeholder for right side
+            props: { style: {} },
+          },
+        ],
+      },
+    };
   }
 
   // Create main container with efficient spacing
@@ -288,7 +429,7 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
         color: '#d8e8d8',
         fontFamily: 'Recursive',
         position: 'relative',
-        padding: options.author ? '60px 0 48px 0' : '48px 0',
+        padding: footerContent ? '60px 0 48px 0' : '48px 0',
         boxSizing: 'border-box',
       },
       children: [
@@ -307,77 +448,9 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
             children,
           },
         },
-        // Author info at bottom
-        options.author && {
-          type: 'div',
-          props: {
-            style: {
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '18px',
-              textAlign: 'center',
-              opacity: 0.85,
-              flexShrink: 0,
-            },
-            children: [
-              options.author.avatar && {
-                type: 'img',
-                props: {
-                  src: options.author.avatar,
-                  width: 64,
-                  height: 64,
-                  style: {
-                    borderRadius: '50%',
-                    border: '3px solid #2d4839',
-                    boxShadow: '0 2px 12px rgba(0,0,0,0.18)',
-                    background: '#1e2c23',
-                    flexShrink: 0,
-                  },
-                },
-              },
-              {
-                type: 'div',
-                props: {
-                  style: {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    gap: '2px',
-                  },
-                  children: [
-                    {
-                      type: 'span',
-                      props: {
-                        style: {
-                          fontSize: '22px',
-                          fontWeight: 700,
-                          fontStyle: 'normal',
-                          lineHeight: 1.1,
-                        },
-                        children: options.author.name,
-                      },
-                    },
-                    options.author.handle && {
-                      type: 'span',
-                      props: {
-                        style: {
-                          fontSize: '16px',
-                          color: '#8fd0a0',
-                          fontWeight: 400,
-                          fontStyle: 'italic',
-                        },
-                        children: '@' + options.author.handle,
-                      },
-                    },
-                  ].filter(Boolean),
-                },
-              },
-            ].filter(Boolean),
-          },
-        },
+        
+        // Footer with split layout
+        footerContent,
       ].filter(Boolean),
     },
   };
