@@ -127,14 +127,83 @@
     @apply max-w-none;
   }
 
-  /* Left-align headings in blog posts */
+  /* Left-align headings in blog posts with underlines */
   .prose h1,
   .prose h2,
   .prose h3,
   .prose h4,
   .prose h5,
   .prose h6 {
-    @apply text-left;
+    @apply text-left relative;
+    padding-bottom: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Heading underlines - length based on heading level */
+  .prose h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 5rem;
+    height: 4px;
+    background: var(--link-color);
+    border-radius: 2px;
+  }
+
+  .prose h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 4rem;
+    height: 3px;
+    background: var(--link-color);
+    border-radius: 2px;
+  }
+
+  .prose h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 3rem;
+    height: 3px;
+    background: var(--link-color);
+    border-radius: 2px;
+  }
+
+  .prose h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 2.5rem;
+    height: 2px;
+    background: var(--link-color);
+    border-radius: 2px;
+  }
+
+  .prose h5::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 2rem;
+    height: 2px;
+    background: var(--link-color);
+    border-radius: 2px;
+  }
+
+  .prose h6::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 1.5rem;
+    height: 2px;
+    background: var(--link-color);
+    border-radius: 2px;
   }
 
   /* Left-align paragraphs and lists */
@@ -185,19 +254,36 @@
   .prose code {
     background-color: var(--card-bg);
     color: var(--text-color);
-    @apply rounded px-1 font-mono;
+    @apply rounded px-2 py-1 font-mono text-sm;
+    border: 1px solid var(--button-bg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
   .prose pre {
     background-color: var(--card-bg);
     color: var(--text-color);
-    @apply rounded-md mx-auto text-left font-mono p-4 overflow-x-auto;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
-    line-height: 1.5;
+    @apply rounded-lg mx-auto text-left font-mono p-6 overflow-x-auto my-6;
+    border: 2px solid var(--button-bg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .prose pre::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--link-color), var(--link-hover-color));
+    border-radius: 6px 6px 0 0;
   }
 
   .prose pre code {
-    @apply bg-transparent p-0;
+    @apply bg-transparent p-0 border-0;
+    box-shadow: none;
+    font-size: 0.9rem;
   }
 
   /* Post grid and cards - simplified animations */
