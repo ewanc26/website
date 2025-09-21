@@ -180,8 +180,26 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
     metaMarginBottom = Math.max(8, Math.floor(metaMarginBottom * compressionRatio));
   }
 
-  // Extract date from extraMeta if available
-  const dateString = options.extraMeta && options.extraMeta.length > 0 ? options.extraMeta[0] : null;
+  // Extract and format date for UK timezone
+  let dateString: string | null = null;
+  if (options.extraMeta && options.extraMeta.length > 0) {
+    try {
+      const utcDate = new Date(options.extraMeta[0]); // parse UTC string
+      // Format in UK timezone
+      dateString = new Intl.DateTimeFormat('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Europe/London',
+        hour12: false
+      }).format(utcDate);
+    } catch (err) {
+      console.warn('Failed to parse date for OG image:', err);
+      dateString = options.extraMeta[0]; // fallback
+    }
+  }
 
   // Layout children
   let children: any[] = [];
