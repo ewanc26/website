@@ -398,10 +398,10 @@
 
   .link-domain {
     font-size: 0.8rem;
-    color: var(--text-color);
+    color: var(--background-color);
     opacity: 0.7;
     font-family: monospace;
-    background: var(--button-bg);
+    background-color: var(--link-color);
     padding: 4px 8px;
     border-radius: 4px;
     display: inline-block;
