@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="500" viewBox="0 0 1500 500">
+  <rect width="1500" height="500" fill="#121c17"/>
+  <rect x="0" y="0" width="1500" height="500" fill="url(#grid)" opacity="0.08"/>
+  
+  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+        font-family="Recursive, monospace"
+        font-size="64"
+        fill="#2d4839"
+        font-weight="700"
+        opacity="0.85">
+    No Banner
+  </text>
+  
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2d4839" stroke-width="1"/>
+    </pattern>
+  </defs>
+</svg>
