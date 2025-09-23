@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { getStores } from "$app/stores";
   import { createComponentDebugger } from "$lib/utils/debug.js";
+  import { getCache } from "$utils/cache";
   import type { Post, LinkBoard } from "$components/shared";
   
   const { page } = getStores();
@@ -24,6 +25,9 @@
   let isLoadingPosts = $state(false);
   let isLoadingLinks = $state(false);
 
+  // Check if we have cached data for links
+  let hasCachedLinks = $state(false);
+
   onMount(() => {
     debug.lifecycle('MainPage', 'mounted', {
       hasData: !!data,
@@ -31,6 +35,13 @@
       initialLatestPostsCount: data?.latestPosts?.length || 0,
       initialDynamicLinksCount: data?.dynamicLinks ? 'hasData' : 'noData'
     });
+    
+    // Check for cached links data immediately
+    const cachedLinks = getCache<LinkBoard>('dynamic_links_data');
+    if (cachedLinks && cachedLinks.cards && cachedLinks.cards.length > 0) {
+      hasCachedLinks = true;
+      debug.debug('Found cached links data');
+    }
     
     // Set a brief timeout to ensure the browser has time to determine locale
     setTimeout(() => {
@@ -76,8 +87,8 @@
         }, 2500); // Wait 2.5 seconds before loading posts
       }
 
-      // Phase 3: Load dynamic links if not already loaded (with longer delay)
-      if (!dynamicLinksLoaded && data?.profile?.pds && data?.profile?.did) {
+      // Phase 3: Load dynamic links if not already loaded and no cached data
+      if (!dynamicLinksLoaded && !hasCachedLinks && data?.profile?.pds && data?.profile?.did) {
         setTimeout(async () => {
           try {
             isLoadingLinks = true;
@@ -100,8 +111,8 @@
             isLoadingLinks = false;
           }
         }, 5000); // Wait 5 seconds before loading links
-      } else if (!data?.profile?.pds || !data?.profile?.did) {
-        // If we don't have the necessary profile data, mark as loaded to prevent loading state
+      } else if (!data?.profile?.pds || !data?.profile?.did || hasCachedLinks) {
+        // If we don't have the necessary profile data or we have cached data, mark as loaded
         dynamicLinksLoaded = true;
       }
 
@@ -118,6 +129,7 @@
         dynamicLinksType: typeof dynamicLinksData,
         hasLatestPosts: !!latestPosts?.length,
         hasDynamicLinks: !!dynamicLinksData,
+        hasCachedLinks,
         blogPostsLoaded,
         dynamicLinksLoaded
       });
@@ -173,10 +185,11 @@
   </div>
 {/if}
 
-<!-- Dynamic Links section -->
-{#if dynamicLinksLoaded}
-  <DynamicLinks data={dynamicLinksData} />
-{:else if isLoadingLinks}
+<!-- Dynamic Links section - Always show component, let it handle caching internally -->
+<DynamicLinks data={dynamicLinksData} />
+
+<!-- Only show loading message if we don't have cached data and are actively loading -->
+{#if !hasCachedLinks && isLoadingLinks && !dynamicLinksLoaded}
   <div class="text-center py-4 animate-pulse">
     Loading links...
   </div>
