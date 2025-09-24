@@ -1,5 +1,4 @@
 import { loadAllPosts } from '$lib/services/blogService';
-import { formatDate } from '$lib/utils/formatters';
 import { generateOgImage } from '$lib/server/ogImage';
 import { dev } from '$app/environment';
 
@@ -20,15 +19,17 @@ export const GET = async (event) => {
   
   const wordCount = post.wordCount || 0;
   const readingTime = Math.ceil(wordCount / 200);
-  const date = post.createdAt ? new Date(post.createdAt) : new Date();
-  const dateString = formatDate ? formatDate(date) : date.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+
+  // just pass the raw createdAt as a Date or ISO string
+  const createdAt = post.createdAt ? new Date(post.createdAt) : new Date();
+
   const metaLine = `${readingTime} min read • ${wordCount} words`;
   
   const pngBuffer = await generateOgImage({
     title: post.title,
     subtitle: undefined,
     metaLine,
-    extraMeta: [dateString],
+    extraMeta: [createdAt.toDateString()],
     author: {
       name: profile.displayName,
       handle: profile.handle,
