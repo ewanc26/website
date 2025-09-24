@@ -1,5 +1,5 @@
 import { loadAllPosts } from '$lib/services/blogService';
-import { generateOgImage } from '$lib/server/ogImage';
+import { generateOgImage, OgImageOptions } from '$lib/server/og';
 import { dev } from '$app/environment';
 
 export const GET = async (event) => {
