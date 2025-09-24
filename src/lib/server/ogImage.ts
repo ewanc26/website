@@ -518,7 +518,7 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
       }
       : null;
 
-  // Main container (use bannerDataUrl in backgroundImage)
+  // Main container (plain green background)
   const mainContainer = {
     type: 'div',
     props: {
@@ -529,10 +529,7 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: '#121c17',
-        backgroundImage: `url(${bannerDataUrl})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        background: '#121c17', // dark green
         color: '#d8e8d8',
         fontFamily: 'Recursive',
         position: 'relative',
