@@ -110,7 +110,7 @@ export interface OgImageOptions {
     did?: string;
     avatar?: string;
   };
-  extraMeta?: string[]; // first element can be the date string/ISO
+  extraMeta?: (string | Date)[];
   banner?: string;
   customChildren?: any;
 }
@@ -206,8 +206,24 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
   // Date
   let dateString: string | null = null;
   if (options.extraMeta && options.extraMeta.length > 0) {
-    try {
-      const utcDate = new Date(options.extraMeta[0]);
+    const raw = options.extraMeta[0];
+
+    if (typeof raw === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(raw)) {
+      // ISO-like string
+      const dateObj = new Date(raw);
+      if (!isNaN(dateObj.getTime())) {
+        dateString = new Intl.DateTimeFormat('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: 'Europe/London',
+          hour12: false,
+        }).format(dateObj);
+      }
+    } else if (raw instanceof Date) {
+      // Direct Date object
       dateString = new Intl.DateTimeFormat('en-GB', {
         day: '2-digit',
         month: 'short',
@@ -216,9 +232,12 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
         minute: '2-digit',
         timeZone: 'Europe/London',
         hour12: false,
-      }).format(utcDate);
-    } catch {
-      dateString = options.extraMeta[0];
+      }).format(raw);
+    }
+
+    // If not a valid Date/ISO, treat as preformatted string
+    if (!dateString) {
+      dateString = String(raw);
     }
   }
 
@@ -385,118 +404,118 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
   const footerContent =
     options.author || dateString
       ? {
-          type: 'div',
-          props: {
-            style: {
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingLeft: '48px',
-              paddingRight: '48px',
-              opacity: 0.85,
-              flexShrink: 0,
-            },
-            children: [
-              {
-                type: 'div',
-                props: {
-                  style: {
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: '18px',
-                    textAlign: 'left',
-                  },
-                  children: [
-                    {
-                      type: 'img',
-                      props: {
-                        src: avatarSrc,
-                        width: 64,
-                        height: 64,
-                        style: {
-                          borderRadius: '50%',
-                          border: '3px solid #2d4839',
-                          boxShadow: '0 2px 12px rgba(0,0,0,0.18)',
-                          background: '#1e2c23',
-                          flexShrink: 0,
-                        },
-                      },
-                    },
-                    {
-                      type: 'div',
-                      props: {
-                        style: {
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'flex-start',
-                          gap: '2px',
-                        },
-                        children: [
-                          {
-                            type: 'span',
-                            props: {
-                              style: {
-                                fontSize: '22px',
-                                fontWeight: 700,
-                                lineHeight: 1.1,
-                              },
-                              children: safeAuthor.name || 'Anonymous',
-                            },
-                          },
-                          identifierNode,
-                        ].filter(Boolean),
-                      },
-                    },
-                  ],
+        type: 'div',
+        props: {
+          style: {
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingLeft: '48px',
+            paddingRight: '48px',
+            opacity: 0.85,
+            flexShrink: 0,
+          },
+          children: [
+            {
+              type: 'div',
+              props: {
+                style: {
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: '18px',
+                  textAlign: 'left',
                 },
-              },
-              dateString
-                ? {
+                children: [
+                  {
+                    type: 'img',
+                    props: {
+                      src: avatarSrc,
+                      width: 64,
+                      height: 64,
+                      style: {
+                        borderRadius: '50%',
+                        border: '3px solid #2d4839',
+                        boxShadow: '0 2px 12px rgba(0,0,0,0.18)',
+                        background: '#1e2c23',
+                        flexShrink: 0,
+                      },
+                    },
+                  },
+                  {
                     type: 'div',
                     props: {
                       style: {
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'flex-end',
-                        textAlign: 'right',
-                        gap: '4px',
+                        alignItems: 'flex-start',
+                        gap: '2px',
                       },
                       children: [
                         {
                           type: 'span',
                           props: {
                             style: {
-                              fontSize: '18px',
-                              fontWeight: 600,
-                              color: '#d8e8d8',
-                              lineHeight: 1.2,
+                              fontSize: '22px',
+                              fontWeight: 700,
+                              lineHeight: 1.1,
                             },
-                            children: dateString,
+                            children: safeAuthor.name || 'Anonymous',
                           },
                         },
-                        {
-                          type: 'span',
-                          props: {
-                            style: {
-                              fontSize: '14px',
-                              color: '#8fd0a0',
-                              fontWeight: 400,
-                              fontStyle: 'italic',
-                              opacity: 0.8,
-                            },
-                            children: 'Published',
-                          },
-                        },
-                      ],
+                        identifierNode,
+                      ].filter(Boolean),
                     },
-                  }
-                : { type: 'div', props: {} },
-            ],
-          },
-        }
+                  },
+                ],
+              },
+            },
+            dateString
+              ? {
+                type: 'div',
+                props: {
+                  style: {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-end',
+                    textAlign: 'right',
+                    gap: '4px',
+                  },
+                  children: [
+                    {
+                      type: 'span',
+                      props: {
+                        style: {
+                          fontSize: '18px',
+                          fontWeight: 600,
+                          color: '#d8e8d8',
+                          lineHeight: 1.2,
+                        },
+                        children: dateString,
+                      },
+                    },
+                    {
+                      type: 'span',
+                      props: {
+                        style: {
+                          fontSize: '14px',
+                          color: '#8fd0a0',
+                          fontWeight: 400,
+                          fontStyle: 'italic',
+                          opacity: 0.8,
+                        },
+                        children: 'Published',
+                      },
+                    },
+                  ],
+                },
+              }
+              : { type: 'div', props: {} },
+          ],
+        },
+      }
       : null;
 
   // Main container (use bannerDataUrl in backgroundImage)
