@@ -25,7 +25,10 @@
     />
     <meta property="og:description" content={post.excerpt} />
     <meta property="og:site_name" content="Blog - Ewan's Corner" />
-    <meta property="og:image" content={`${$page.url.origin}/api/og/blog/${post.rkey}.png`} />
+    <meta
+      property="og:image"
+      content={`${$page.url.origin}/api/og/blog/${post.rkey}.png`}
+    />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
@@ -36,7 +39,7 @@
 
     <!-- Fediverse -->
     {#if env.PUBLIC_ACTIVITYPUB_USER && env.PUBLIC_ACTIVITYPUB_USER.length > 0}
-      <meta name="fediverse:creator" content={env.PUBLIC_ACTIVITYPUB_USER}>
+      <meta name="fediverse:creator" content={env.PUBLIC_ACTIVITYPUB_USER} />
     {/if}
 
     <!-- Twitter -->
@@ -47,7 +50,10 @@
       content={`${post.title} - Blog - Ewan's Corner`}
     />
     <meta name="twitter:description" content={post.excerpt} />
-    <meta name="twitter:image" content={`${$page.url.origin}/api/og/blog/${post.rkey}.png`} />
+    <meta
+      name="twitter:image"
+      content={`${$page.url.origin}/api/og/blog/${post.rkey}.png`}
+    />
   {:else}
     <title>Post Not Found - Blog - Ewan's Corner</title>
     <meta
