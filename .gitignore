@@ -185,3 +185,5 @@ package
 .vercel
 
 # End of https://www.toptal.com/developers/gitignore/api/node,macos,svelte,vercel
+
+git-diff*.txt
