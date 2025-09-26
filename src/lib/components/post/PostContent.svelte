@@ -1,22 +1,81 @@
 <script lang="ts">
   import type { Post } from "$components/shared";
+  import type { TOCNode } from "$lib/components/shared";
+  import { onMount, afterUpdate } from "svelte";
+  import PostTOC from "./ToCUI.svelte";
 
   export let post: Post;
 
-  // Validate that post content exists and is safe to render
-  $: hasValidContent = post && post.content && typeof post.content === 'string' && post.content.trim().length > 0;
+  let tocNodes: TOCNode[] = [];
+  let activeId: string | null = null;
+
+  $: hasValidContent =
+    post &&
+    post.content &&
+    typeof post.content === "string" &&
+    post.content.trim().length > 0;
+
+  const generateTOC = () => {
+    if (!hasValidContent) return [];
+    const container = document.createElement("div");
+    container.innerHTML = post.content;
+    const headings = container.querySelectorAll("h1, h2, h3, h4, h5, h6");
+    return Array.from(headings).map((h) => ({
+      id: h.id,
+      name: h.textContent ?? "",
+      level: parseInt(h.tagName[1]),
+      children: [],
+    }));
+  };
+
+  const resetTOC = () => {
+    tocNodes = generateTOC();
+    activeId = null; // reset highlighted heading
+  };
+
+  // Regenerate TOC whenever post changes
+  $: if (post) resetTOC();
+
+  const handleScroll = () => {
+    for (const node of tocNodes) {
+      const el = document.getElementById(node.id);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top >= 0 && rect.top < window.innerHeight / 3) {
+          activeId = node.id;
+          break;
+        }
+      }
+    }
+  };
+
+  onMount(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  });
 </script>
 
 {#if hasValidContent}
   <hr class="my-6 border-[var(--button-bg)]" />
-  <article class="prose dark:prose-invert mx-auto text-center">
-    {@html post.content}
-  </article>
+
+  <div class="w-full grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8">
+    <!-- Post Content -->
+    <article class="prose dark:prose-invert w-full lg:mx-auto lg:text-left">
+      {@html post.content}
+    </article>
+
+    <!-- TOC (desktop + mobile handled in PostTOC) -->
+    {#if tocNodes.length > 0}
+      <PostTOC {tocNodes} {activeId} />
+    {/if}
+  </div>
+
   <hr class="my-6 border-[var(--button-bg)]" />
 {:else}
-  <!-- Loading state for content -->
+  <!-- Loading state -->
   <hr class="my-6 border-[var(--button-bg)]" />
-  <article class="prose dark:prose-invert mx-auto text-center">
+  <article class="prose dark:prose-invert w-full text-center">
     <div class="flex justify-center items-center min-h-[200px]">
       <div class="text-center">
         <div class="animate-pulse space-y-4">
@@ -34,18 +93,17 @@
 
 <style>
   @keyframes pulse {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
     }
     50% {
       opacity: 0.3;
     }
   }
-
   .animate-pulse {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
-
   .animate-pulse .h-4 {
     height: 1rem;
     background-color: var(--button-bg);
