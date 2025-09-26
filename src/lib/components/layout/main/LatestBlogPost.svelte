@@ -6,64 +6,74 @@
 
   export let posts: Post[] = [];
   export let localeLoaded: boolean = false;
-  
-  // Add loading state
+
   let isVisible = false;
 
-  // Get the latest post with proper validation
-  $: latestPost = posts && posts.length > 0 ? posts[0] : null;
-  
-  // Additional validation to ensure the post has valid data
-  $: isValidPost = latestPost && 
-    latestPost.title && 
-    latestPost.createdAt instanceof Date && 
-    !isNaN(latestPost.createdAt.getTime()) &&
-    latestPost.content;
+  // Get the first three latest posts with proper validation
+  $: latestPosts = posts
+    ? posts
+        .filter(post =>
+          post.title &&
+          post.createdAt instanceof Date &&
+          !isNaN(post.createdAt.getTime()) &&
+          post.content
+        )
+        .slice(0, 3)
+    : [];
 
-  // Use the postNumber from the latestPost object
-  $: postNumber = latestPost ? latestPost.postNumber : null;
-  
+  $: isValidPosts = latestPosts.length > 0;
+
   // Control visibility with a small delay for smoother loading
-  $: if (isValidPost && localeLoaded) {
+  $: if (isValidPosts && localeLoaded) {
     setTimeout(() => {
       isVisible = true;
     }, 200);
   }
 </script>
 
-{#if isValidPost && isVisible}
+{#if isValidPosts && isVisible}
   <section 
     class="latest-blog-post"
     in:slide={{ delay: 200, duration: 400, easing: quintOut }}
   >
-    <div class="section-header" transition:fade={{ delay: 100, duration: 300 }}>
-      <h2 class="section-title">Latest Blog Post</h2>
+    <div class="section-header" in:fade={{ delay: 100, duration: 300 }}>
+      <h2 class="section-title">Latest Blog Posts</h2>
     </div>
-    
-    <div class="latest-post-container" transition:fade={{ delay: 300, duration: 400 }}>
-      <ArchiveCard 
-        type="post" 
-        post={latestPost} 
-        monthIndex={0}
-        postIndex={0}
-        postNumber={postNumber}
-        {localeLoaded} 
-      />
+
+    <div class="latest-post-container grid grid-cols-[repeat(auto-fill,minmax(260px,1fr)_)] gap-x-6 gap-y-6 my-6">
+      {#each latestPosts as post, index}
+        <!-- Outer div handles slide -->
+        <div in:slide={{ delay: 200 + index * 150, duration: 400, easing: quintOut }}>
+          <!-- Inner div handles fade -->
+          <div in:fade={{ delay: 200 + index * 150, duration: 400 }}>
+            <ArchiveCard 
+              type="post" 
+              post={post} 
+              monthIndex={0} 
+              postIndex={index} 
+              postNumber={post.postNumber} 
+              {localeLoaded} 
+            />
+          </div>
+        </div>
+      {/each}
     </div>
   </section>
 {:else if posts.length === 0 && localeLoaded}
-  <!-- Show loading state while posts are being fetched -->
+  <!-- Loading state while posts are being fetched -->
   <section class="latest-blog-post">
     <div class="section-header">
-      <h2 class="section-title">Latest Blog Post</h2>
+      <h2 class="section-title">Latest Blog Posts</h2>
     </div>
-    <div class="loading-container">
-      <div class="loading-placeholder">
-        <div class="animate-pulse">
-          <div class="h-4 bg-card rounded w-3/4 mb-2"></div>
-          <div class="h-3 bg-card rounded w-1/2"></div>
+    <div class="latest-post-container grid grid-cols-[repeat(auto-fill,minmax(260px,1fr)_)] gap-x-6 gap-y-6 my-6">
+      {#each Array(3) as _, index}
+        <div class="loading-placeholder">
+          <div class="animate-pulse">
+            <div class="h-4 bg-card rounded w-3/4 mb-2"></div>
+            <div class="h-3 bg-card rounded w-1/2"></div>
+          </div>
         </div>
-      </div>
+      {/each}
     </div>
   </section>
 {/if}
@@ -101,13 +111,7 @@
   }
 
   .latest-post-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    max-width: 400px;
-  }
-
-  .loading-container {
-    max-width: 400px;
+    max-width: 100%;
   }
 
   .loading-placeholder {
@@ -117,7 +121,6 @@
     background-color: var(--card-bg);
   }
 
-  /* Responsive adjustments */
   @media (max-width: 640px) {
     .section-header {
       flex-direction: column;
@@ -130,20 +133,9 @@
     }
   }
 
-  @media (min-width: 768px) {
-    .latest-post-container, .loading-container {
-      max-width: 420px;
-    }
-  }
-
-  /* Animation for loading states */
   @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
   }
 
   .animate-pulse {
