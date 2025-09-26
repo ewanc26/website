@@ -3,7 +3,6 @@
   import { browser } from "$app/environment";
   import { env } from "$env/dynamic/public";
   import LastCommit from "./LastCommit.svelte";
-  import TidClock from "./TidClock.svelte";
   import type { SiteInfo } from "$components/shared";
 
   export let profile: any;
@@ -15,10 +14,10 @@
   // Calculate copyright text (works on both server and client)
   function calculateCopyrightText(): string {
     const currentYear = new Date().getFullYear();
-    
+
     // Get birth year from siteInfo with fallbacks and validation
     let birthYear: number | null = null;
-    
+
     if (siteInfo?.additionalInfo?.websiteBirthYear) {
       const year = siteInfo.additionalInfo.websiteBirthYear;
       // Validate year is reasonable (between 1990 and current year)
@@ -26,12 +25,12 @@
         birthYear = year;
       }
     }
-    
+
     // Fallback to current year if no valid birth year
     if (!birthYear) {
       birthYear = currentYear;
     }
-    
+
     // Format copyright text
     if (birthYear === currentYear) {
       return currentYear.toString();
@@ -43,7 +42,7 @@
   // Update copyright text and DOM element (browser only)
   function updateCopyrightText() {
     copyrightText = calculateCopyrightText();
-    
+
     // Only update DOM if we're in the browser
     if (browser) {
       const copyrightYearElement = document.getElementById("copyright-year");
@@ -129,11 +128,8 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-      code
-      </a>     
-
-      <span class="mx-1"></span>
-      <TidClock />
+        code
+      </a>
     </div>
   </div>
 </footer>
