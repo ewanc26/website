@@ -135,3 +135,14 @@ export interface Milestone {
   emoji: string;
   type: 'special' | 'major' | 'minor';
 }
+
+/**
+ * Represents a node in the Table of Contents (TOC).
+ * Each node corresponds to a heading in the document.
+ */
+export interface TOCNode {
+  id: string;
+  name: string;
+  level: number;
+  children: TOCNode[]; // never undefined, just an empty array if no children
+}
