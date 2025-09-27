@@ -7,7 +7,15 @@
 
   // scrollToHeading prop
   export let scrollToHeading: (id: string) => void = (id: string) => {
-    const el = document.getElementById(id);
+    let el;
+    
+    // Special handling for footnotes - scroll to the section instead of hidden heading
+    if (id === 'footnotes-section') {
+      el = document.querySelector('section[data-footnotes]');
+    } else {
+      el = document.getElementById(id);
+    }
+    
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 </script>
