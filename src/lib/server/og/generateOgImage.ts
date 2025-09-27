@@ -46,14 +46,7 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
         day: '2-digit',
         month: 'short',
         year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZone: 'Europe/London',
-        hour12: false,
       }).format(dateObj);
-
-      // Remove comma for OG image style
-      dateString = dateString.replace(',', '');
     } else {
       dateString = String(raw);
     }
