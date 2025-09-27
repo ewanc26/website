@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { fly } from "svelte/transition";
 
   let isVisible = false;
   let scrollY = 0;
@@ -40,6 +41,7 @@
     on:keydown={handleKeydown}
     aria-label="Scroll to top"
     title="Scroll to top"
+    transition:fly={{ y: 10, duration: 300, opacity: 0 }}
   >
     <!-- Chevron Up SVG icon -->
     <svg 
