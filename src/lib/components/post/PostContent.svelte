@@ -59,15 +59,25 @@
 {#if hasValidContent}
   <hr class="my-6 border-[var(--button-bg)]" />
 
-  <div class="w-full grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8">
-    <!-- Post Content -->
-    <article class="prose dark:prose-invert w-full lg:mx-auto lg:text-left">
-      {@html post.content}
-    </article>
-
-    <!-- TOC (desktop + mobile handled in PostTOC) -->
+  <div class="w-full">
     {#if tocNodes.length > 0}
-      <PostTOC {tocNodes} {activeId} />
+      <!-- Layout with TOC: Grid with content and sidebar -->
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8">
+        <!-- Post Content -->
+        <article class="prose dark:prose-invert w-full max-w-none">
+          {@html post.content}
+        </article>
+
+        <!-- TOC (desktop + mobile handled in PostTOC) -->
+        <PostTOC {tocNodes} {activeId} />
+      </div>
+    {:else}
+      <!-- Layout without TOC: 10vw margins on desktop, centered on mobile -->
+      <div class="lg:mx-[10vw] mx-auto max-w-4xl lg:max-w-none">
+        <article class="prose dark:prose-invert w-full">
+          {@html post.content}
+        </article>
+      </div>
     {/if}
   </div>
 
@@ -75,19 +85,21 @@
 {:else}
   <!-- Loading state -->
   <hr class="my-6 border-[var(--button-bg)]" />
-  <article class="prose dark:prose-invert w-full text-center">
-    <div class="flex justify-center items-center min-h-[200px]">
-      <div class="text-center">
-        <div class="animate-pulse space-y-4">
-          <div class="h-4 bg-card rounded w-3/4 mx-auto"></div>
-          <div class="h-4 bg-card rounded w-1/2 mx-auto"></div>
-          <div class="h-4 bg-card rounded w-5/6 mx-auto"></div>
-          <div class="h-4 bg-card rounded w-2/3 mx-auto"></div>
+  <div class="lg:mx-[10vw] mx-auto max-w-4xl lg:max-w-none">
+    <article class="prose dark:prose-invert w-full text-center">
+      <div class="flex justify-center items-center min-h-[200px]">
+        <div class="text-center">
+          <div class="animate-pulse space-y-4">
+            <div class="h-4 bg-card rounded w-3/4 mx-auto"></div>
+            <div class="h-4 bg-card rounded w-1/2 mx-auto"></div>
+            <div class="h-4 bg-card rounded w-5/6 mx-auto"></div>
+            <div class="h-4 bg-card rounded w-2/3 mx-auto"></div>
+          </div>
+          <p class="mt-6 text-sm opacity-60">Loading post content...</p>
         </div>
-        <p class="mt-6 text-sm opacity-60">Loading post content...</p>
       </div>
-    </div>
-  </article>
+    </article>
+  </div>
   <hr class="my-6 border-[var(--button-bg)]" />
 {/if}
 

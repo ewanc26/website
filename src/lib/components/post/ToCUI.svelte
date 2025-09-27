@@ -11,7 +11,7 @@
   let tocOpen = false;
   const closeDrawer = () => (tocOpen = false);
 
-  // Scroll progress for desktop
+  // Scroll progress for desktop and mobile
   let scrollProgress = 0;
   const updateScrollProgress = () => {
     const scrollTop = window.scrollY;
@@ -57,7 +57,7 @@
   });
 </script>
 
-<!-- Desktop Sticky Sidebar -->
+<!-- Desktop Sticky Sidebar - Only render if there are headings -->
 {#if tocNodes.length > 0}
   <aside class="hidden lg:block">
     <div class="sticky top-8">
@@ -72,7 +72,7 @@
         }}
       />
 
-      <!-- Scroll Progress Bar -->
+      <!-- Desktop Scroll Progress Bar -->
       <div class="w-full h-1 bg-button mt-2 rounded overflow-hidden">
         <div
           class="h-full bg-primary transition-all duration-100 ease-linear"
@@ -81,9 +81,19 @@
       </div>
     </div>
   </aside>
+{:else}
+  <!-- Render nothing for desktop when no headings - allows content to take full width -->
 {/if}
 
-<!-- Mobile TOC Drawer -->
+<!-- Mobile Vertical Progress Bar - Always show -->
+<div class="fixed left-1 top-16 bottom-16 w-1 bg-button rounded z-30 lg:hidden">
+  <div
+    class="w-full bg-primary transition-all duration-100 ease-linear rounded"
+    style="height: {scrollProgress}%"
+  ></div>
+</div>
+
+<!-- Mobile TOC Elements - Only show if there are headings -->
 {#if tocNodes.length > 0}
   <!-- Floating TOC Button -->
   {#if showTOCButton}
