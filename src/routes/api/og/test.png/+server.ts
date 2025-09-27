@@ -3,7 +3,7 @@
 // This is primarily for testing the OG image generation locally and in production. 
 // Particularly since this is entirely dynamic and not based on any content.
 
-import { generateOgImage, OgImageOptions } from '$lib/server/og';
+import { generateOgImage } from '$lib/server/og';
 import { dev } from '$app/environment';
 
 // simple counter (module-level, persists across dev requests)
