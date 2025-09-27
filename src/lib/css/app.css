@@ -139,6 +139,16 @@
     margin-bottom: 1.5rem;
   }
 
+  /* Hide screen-reader-only headings completely */
+  .prose h1.sr-only,
+  .prose h2.sr-only,
+  .prose h3.sr-only,
+  .prose h4.sr-only,
+  .prose h5.sr-only,
+  .prose h6.sr-only {
+    display: none;
+  }
+
   /* Heading underlines - length based on heading level */
   .prose h1::after {
     content: '';

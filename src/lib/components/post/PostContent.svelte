@@ -20,12 +20,43 @@
     const container = document.createElement("div");
     container.innerHTML = post.content;
     const headings = container.querySelectorAll("h1, h2, h3, h4, h5, h6");
-    return Array.from(headings).map((h) => ({
-      id: h.id,
-      name: h.textContent ?? "",
-      level: parseInt(h.tagName[1]),
-      children: [],
-    }));
+    const tocNodes = [];
+    
+    // Process regular headings
+    Array.from(headings).forEach((h) => {
+      // Skip screen reader only headings (footnotes heading)
+      if (h.classList.contains('sr-only')) {
+        return;
+      }
+      
+      const textContent = h.textContent?.trim() ?? "";
+      
+      // Skip empty headings
+      if (textContent.length === 0) {
+        return;
+      }
+      
+      tocNodes.push({
+        id: h.id,
+        name: textContent,
+        level: parseInt(h.tagName[1]),
+        children: [],
+      });
+    });
+    
+    // Check for footnotes section and add it if it exists
+    const footnotesSection = container.querySelector('section[data-footnotes]');
+    if (footnotesSection) {
+      // Use a special ID for footnotes that we can handle differently
+      tocNodes.push({
+        id: 'footnotes-section',
+        name: 'Footnotes',
+        level: 2,
+        children: [],
+      });
+    }
+    
+    return tocNodes;
   };
 
   const resetTOC = () => {
@@ -38,7 +69,15 @@
 
   const handleScroll = () => {
     for (const node of tocNodes) {
-      const el = document.getElementById(node.id);
+      let el;
+      
+      // Special handling for footnotes - look for the section instead of hidden heading
+      if (node.id === 'footnotes-section') {
+        el = document.querySelector('section[data-footnotes]');
+      } else {
+        el = document.getElementById(node.id);
+      }
+      
       if (el) {
         const rect = el.getBoundingClientRect();
         if (rect.top >= 0 && rect.top < window.innerHeight / 3) {
