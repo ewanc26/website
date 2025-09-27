@@ -52,16 +52,17 @@
 
         <button
           type="button"
-          class={`flex-1 text-left px-1 py-0.5 rounded cursor-pointer text-sm
+          class={`flex-1 text-left px-1 py-0.5 rounded cursor-pointer text-sm toc-link
                   hover:bg-button-hover
                   ${
                     node.id === activeId
-                      ? "bg-primary text-[var(--background-color)] font-semibold"
+                      ? "bg-primary text-[var(--background-color)] active-link"
                       : "text-text"
                   }`}
           on:click={() => scrollToHeading(node.id)}
           aria-controls={node.id}
           aria-current={node.id === activeId ? "true" : "false"}
+          data-content={node.name}
         >
           {node.name}
         </button>
@@ -73,3 +74,25 @@
     </li>
   {/each}
 </ul>
+
+<style>
+  .toc-link {
+    position: relative;
+  }
+
+  /* Reserve space for bold font weight to prevent layout shift */
+  .toc-link::after {
+    display: block;
+    content: attr(data-content);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    font-weight: 600; /* semibold equivalent */
+    pointer-events: none;
+  }
+
+  /* Apply bold font weight when active */
+  .toc-link.active-link {
+    font-weight: 600; /* semibold equivalent */
+  }
+</style>
