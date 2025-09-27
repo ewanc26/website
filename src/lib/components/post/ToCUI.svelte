@@ -26,10 +26,22 @@
   const updateTOCButtonVisibility = () => {
     if (!tocNodes.length) return;
 
-    const firstHeading = document.getElementById(tocNodes[0].id);
-    const lastHeading = document.getElementById(
-      tocNodes[tocNodes.length - 1].id,
-    );
+    let firstHeading: HTMLElement | null, lastHeading: HTMLElement | null;
+    
+    // Handle first heading
+    if (tocNodes[0].id === 'footnotes-section') {
+      firstHeading = document.querySelector('section[data-footnotes]') as HTMLElement;
+    } else {
+      firstHeading = document.getElementById(tocNodes[0].id) as HTMLElement;
+    }
+    
+    // Handle last heading
+    const lastNode = tocNodes[tocNodes.length - 1];
+    if (lastNode.id === 'footnotes-section') {
+      lastHeading = document.querySelector('section[data-footnotes]') as HTMLElement;
+    } else {
+      lastHeading = document.getElementById(lastNode.id) as HTMLElement;
+    }
 
     if (!firstHeading || !lastHeading) return;
 
@@ -67,7 +79,14 @@
         {tocNodes}
         {activeId}
         scrollToHeading={(id: string) => {
-          const el = document.getElementById(id);
+          let el;
+          
+          if (id === 'footnotes-section') {
+            el = document.querySelector('section[data-footnotes]');
+          } else {
+            el = document.getElementById(id);
+          }
+          
           if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
         }}
       />
@@ -168,7 +187,14 @@
           {tocNodes}
           {activeId}
           scrollToHeading={(id: string) => {
-            const el = document.getElementById(id);
+            let el;
+            
+            if (id === 'footnotes-section') {
+              el = document.querySelector('section[data-footnotes]');
+            } else {
+              el = document.getElementById(id);
+            }
+            
             if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
             closeDrawer();
           }}
