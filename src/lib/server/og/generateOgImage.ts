@@ -34,20 +34,14 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
   let dateString: string | null = null;
   if (options.extraMeta && options.extraMeta.length > 0) {
     const raw = options.extraMeta[0];
-    if (typeof raw === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(raw)) {
-      const dateObj = new Date(raw);
-      if (!isNaN(dateObj.getTime())) {
-        dateString = new Intl.DateTimeFormat('en-GB', {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          timeZone: 'Europe/London',
-          hour12: false,
-        }).format(dateObj);
-      }
-    } else if (raw instanceof Date) {
+
+    let dateObj: Date | null = null;
+
+    if (typeof raw === 'string' || raw instanceof Date) {
+      dateObj = new Date(raw);
+    }
+
+    if (dateObj && !isNaN(dateObj.getTime())) {
       dateString = new Intl.DateTimeFormat('en-GB', {
         day: '2-digit',
         month: 'short',
@@ -56,9 +50,11 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
         minute: '2-digit',
         timeZone: 'Europe/London',
         hour12: false,
-      }).format(raw);
-    }
-    if (!dateString) {
+      }).format(dateObj);
+
+      // Remove comma for OG image style
+      dateString = dateString.replace(',', '');
+    } else {
       dateString = String(raw);
     }
   }
