@@ -2,7 +2,7 @@
 
 A personal website and data aggregation platform built with SvelteKit, originally forked from [WhiteBreeze](https://github.com/hugeblank/whitebreeze). This project serves as a creative outlet, link aggregate, and digital presence on the decentralised web, demonstrating the potential of AT Protocol for personal publishing whilst maintaining full control over content and presentation.
 
-**_This repository is available on [GitHub](https://github.com/ewanc26/website) and [Tangled](https://tangled.sh/did:plc:ofrbh253gwicbkc5nktqepol/website). GitHub is the primary version, and the Tangled version is a mirror._**
+**_This repository is available on [GitHub](https://github.com/ewanc26/website) and [Tangled](https://tangled.org/did:plc:ofrbh253gwicbkc5nktqepol/website). GitHub is the primary version, and the Tangled version is a mirror._**
 
 ## Purpose
 
