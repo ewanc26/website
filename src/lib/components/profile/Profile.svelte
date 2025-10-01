@@ -29,7 +29,8 @@
         class="rounded-full flex-shrink-0 relative z-10
                w-24 h-24 -mt-12 mx-auto mb-4
                sm:w-32 sm:h-32 sm:-mt-16 sm:mx-0 sm:mb-0
-               bg-transparent border-none"
+               bg-transparent border-none
+               transition-transform duration-500 hover:rotate-[360deg] cursor-pointer"
       />
 
       <!-- User Information -->
