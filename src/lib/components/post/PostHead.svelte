@@ -3,14 +3,20 @@
   const { page } = getStores();
   import type { Post } from "$components/shared";
   import { env } from "$env/dynamic/public";
+  import { extractTextFromHTML } from "$utils/textExtractor";
 
   export let post: Post | undefined;
+
+  // Generate a clean excerpt from HTML content for meta tags
+  $: metaExcerpt = post?.content 
+    ? extractTextFromHTML(post.content, 50) // Shorter excerpt for meta tags
+    : post?.excerpt || '';
 </script>
 
 <svelte:head>
   {#if post !== undefined}
     <title>{post?.title} - Blog - Ewan's Corner</title>
-    <meta name="description" content={post.excerpt} />
+    <meta name="description" content={metaExcerpt} />
     <meta
       name="keywords"
       content="Ewan, personal blog, coding, technology, programming, tech blog, Blog - Ewan's Corner"
@@ -23,7 +29,7 @@
       property="og:title"
       content={`${post.title} - Blog - Ewan's Corner`}
     />
-    <meta property="og:description" content={post.excerpt} />
+    <meta property="og:description" content={metaExcerpt} />
     <meta property="og:site_name" content="Blog - Ewan's Corner" />
     <meta
       property="og:image"
@@ -49,7 +55,7 @@
       name="twitter:title"
       content={`${post.title} - Blog - Ewan's Corner`}
     />
-    <meta name="twitter:description" content={post.excerpt} />
+    <meta name="twitter:description" content={metaExcerpt} />
     <meta
       name="twitter:image"
       content={`${$page.url.origin}/api/og/blog/${post.rkey}.png`}
