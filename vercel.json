@@ -23,11 +23,6 @@
       "destination": "/static/sitemap.xml"
     }
   ],
-  "functions": {
-    "src/routes/api/og/**/*.ts": {
-      "maxDuration": 10
-    }
-  },
   "crons": [
     {
       "path": "/api/cron/warmup",
