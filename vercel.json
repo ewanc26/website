@@ -20,7 +20,7 @@
   "redirects": [
     {
       "source": "/sitemap.xml",
-      "dest": "/static/sitemap.xml"
+      "destination": "/static/sitemap.xml"
     }
   ],
   "functions": {
