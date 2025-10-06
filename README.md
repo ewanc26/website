@@ -121,7 +121,7 @@ docker compose up -d
 **Important**: This is a data aggregation and display platform, not a content management system. You cannot create or edit content directly through this website. Instead, content is created through the respective AT Protocol applications:
 
 - **Blog Posts**: Create via [WhiteWind](https://whtwnd.com/)
-- **Social Posts**: Create via [Bluesky](https://bsky.app/) 
+- **Social Posts**: Create via [Bluesky](https://bsky.app/)
 - **Links**: Manage via [Linkat](https://linkat.blue/)
 - **Profile**: Update via [Bluesky](https://bsky.app/) or other AT Protocol clients
 
