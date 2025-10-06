@@ -20,5 +20,16 @@
       "src": "/sitemap.xml",
       "dest": "/static/sitemap.xml"
     }
+  ],
+  "functions": {
+    "api/og/**/*.ts": {
+      "maxDuration": 10
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/warmup",
+      "schedule": "0 */6 * * *"
+    }
   ]
 }
