@@ -24,7 +24,7 @@
     }
   ],
   "functions": {
-    "api/og/**/*.ts": {
+    "src/routes/api/og/**/*.ts": {
       "maxDuration": 10
     }
   },
