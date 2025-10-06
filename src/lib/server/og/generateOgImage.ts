@@ -10,11 +10,87 @@ import {
 } from './text';
 import type { OgImageOptions } from './types';
 
-export async function generateOgImage(options: OgImageOptions, baseUrl?: string): Promise<Uint8Array> {
-  const fonts = await loadFonts(baseUrl);
+// In-memory cache for generated OG images
+const imageCache = new Map<string, { data: Uint8Array; timestamp: number }>();
+const CACHE_TTL = 1000 * 60 * 60; // 1 hour cache
 
-  const avatarDataUrl = await resolveImageSrc(options.author?.avatar || null, 'profile.svg', baseUrl);
-  const bannerDataUrl = await resolveImageSrc(options.banner || null, 'banner.svg', baseUrl);
+function getCacheKey(options: OgImageOptions): string {
+  return JSON.stringify({
+    title: options.title,
+    subtitle: options.subtitle,
+    metaLine: options.metaLine,
+    author: options.author,
+    extraMeta: options.extraMeta,
+  });
+}
+
+export async function generateOgImage(options: OgImageOptions, baseUrl?: string): Promise<Uint8Array> {
+  const startTime = Date.now();
+  
+  // Check cache first
+  const cacheKey = getCacheKey(options);
+  const cached = imageCache.get(cacheKey);
+  
+  if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
+    console.log('Returning cached OG image');
+    return cached.data;
+  }
+
+  // Set overall timeout for the entire generation process
+  const timeoutDuration = 8000; // 8 seconds total timeout
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    setTimeout(() => reject(new Error('OG image generation timeout')), timeoutDuration);
+  });
+
+  try {
+    const result = await Promise.race([
+      generateImageInternal(options, baseUrl),
+      timeoutPromise
+    ]);
+
+    const elapsedTime = Date.now() - startTime;
+    console.log(`OG image generated in ${elapsedTime}ms`);
+
+    // Cache the result
+    imageCache.set(cacheKey, {
+      data: result,
+      timestamp: Date.now()
+    });
+
+    // Clean up old cache entries (keep cache size manageable)
+    if (imageCache.size > 100) {
+      const now = Date.now();
+      for (const [key, value] of imageCache.entries()) {
+        if (now - value.timestamp > CACHE_TTL) {
+          imageCache.delete(key);
+        }
+      }
+    }
+
+    return result;
+  } catch (error) {
+    const elapsedTime = Date.now() - startTime;
+    console.error(`OG image generation failed after ${elapsedTime}ms:`, error);
+    throw error;
+  }
+}
+
+async function generateImageInternal(options: OgImageOptions, baseUrl?: string): Promise<Uint8Array> {
+  // Load fonts and images in parallel with timeouts
+  const [fonts, avatarDataUrl, bannerDataUrl] = await Promise.all([
+    loadFonts(baseUrl).catch(err => {
+      console.error('Font loading failed:', err);
+      throw new Error('Failed to load fonts');
+    }),
+    resolveImageSrc(options.author?.avatar || null, 'profile.svg', baseUrl).catch(err => {
+      console.warn('Avatar loading failed, using fallback:', err);
+      return `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><circle cx="32" cy="32" r="32" fill="#2d4839"/></svg>').toString('base64')}`;
+    }),
+    resolveImageSrc(options.banner || null, 'banner.svg', baseUrl).catch(err => {
+      console.warn('Banner loading failed, using fallback:', err);
+      return `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><rect width="1200" height="630" fill="#121c17"/></svg>').toString('base64')}`;
+    })
+  ]);
 
   const titleFontSize = calculateTitleFontSize(options.title);
   const subtitleFontSize = options.subtitle ? calculateSubtitleFontSize(options.subtitle, titleFontSize) : 0;
@@ -24,6 +100,7 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
   let titleMarginBottom = 32;
   let subtitleMarginBottom = 24;
   let metaMarginBottom = 24;
+  
   if (contentEstimate.totalContentHeight > availableHeight) {
     const compressionRatio = availableHeight / contentEstimate.totalContentHeight;
     titleMarginBottom = Math.max(8, Math.floor(titleMarginBottom * compressionRatio));
@@ -34,7 +111,6 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
   let dateString: string | null = null;
   if (options.extraMeta && options.extraMeta.length > 0) {
     const raw = options.extraMeta[0];
-
     let dateObj: Date | null = null;
 
     if (typeof raw === 'string' || raw instanceof Date) {
@@ -355,6 +431,7 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
     },
   };
 
+  // Generate SVG with Satori
   const svg = await satori(mainContainer, {
     width: 1200,
     height: 630,
@@ -365,10 +442,17 @@ export async function generateOgImage(options: OgImageOptions, baseUrl?: string)
     ],
   });
 
+  // Convert SVG to PNG with Resvg
   const resvg = new Resvg(svg, {
     fitTo: { mode: 'width', value: 1200 },
     background: '#121c17',
   });
+  
   const pngData = resvg.render();
   return pngData.asPng();
+}
+
+// Clear cache (useful for testing)
+export function clearOgImageCache() {
+  imageCache.clear();
 }

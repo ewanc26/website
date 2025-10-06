@@ -1,0 +1,23 @@
+name: Warmup OG Cache
+
+on:
+  deployment_status:
+
+jobs:
+  warmup:
+    runs-on: ubuntu-latest
+    if: github.event.deployment_status.state == 'success'
+    steps:
+      - name: Wait for deployment
+        run: sleep 10
+        
+      - name: Warmup OG cache
+        run: |
+          echo "Warming up OG cache..."
+          curl -f https://ewancroft.uk/api/og/warmup || echo "⚠️  Warmup failed but continuing"
+          
+      - name: Test OG generation
+        run: |
+          echo "Testing OG image generation..."
+          curl -f -o /dev/null https://ewancroft.uk/api/og/main.png || echo "⚠️  OG test failed"
+          echo "✅ Warmup complete"
