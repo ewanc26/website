@@ -376,36 +376,37 @@
     @apply border-0;
   }
 
-.prose+.flex.justify-between {
-  @apply mt-12 mb-8;
-}
+  .prose+.flex.justify-between {
+    @apply mt-12 mb-8;
+  }
 
-.prose+.flex.justify-between a {
-  @apply max-w-[45%] truncate;
-}
+  .prose+.flex.justify-between a {
+    @apply max-w-[45%] truncate;
+  }
 
-.prose+.flex.justify-between a:first-child {
-  @apply text-left;
-}
+  .prose+.flex.justify-between a:first-child {
+    @apply text-left;
+  }
 
-.prose+.flex.justify-between a:last-child {
-  @apply text-right;
-}
+  .prose+.flex.justify-between a:last-child {
+    @apply text-right;
+  }
 
-.text-link {
-  color: var(--link-color);
-}
+  .text-link {
+    color: var(--link-color);
+  }
 
-.text-link-hover,
-.text-link:hover {
-  color: var(--link-hover-color);
-}
+  .text-link-hover,
+  .text-link:hover {
+    color: var(--link-hover-color);
+  }
 
-.text-primary {
-  color: var(--text-color);
-}
+  .text-primary {
+    color: var(--text-color);
+  }
 
-.text-muted {
-  color: var(--link-color);
-  opacity: 0.8;
+  .text-muted {
+    color: var(--link-color);
+    opacity: 0.8;
+  }
 }
