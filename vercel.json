@@ -1,23 +1,25 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/favicon.ico",
-      "dest": "/static/favicon/favicon-32x32.png"
+      "source": "/rss",
+      "destination": "/blog/rss"
     },
     {
-      "src": "/apple-touch-icon.png",
-      "dest": "/static/favicon/apple-touch-icon.png"
+      "source": "/rss.xml",
+      "destination": "/blog/rss"
     },
     {
-      "src": "/apple-touch-icon-precomposed.png",
-      "dest": "/static/favicon/apple-touch-icon.png"
+      "source": "/feed",
+      "destination": "/blog/rss"
     },
     {
-      "src": "/robots.txt",
-      "dest": "/static/robots.txt"
-    },
+      "source": "/feed.xml",
+      "destination": "/blog/rss"
+    }
+  ],
+  "redirects": [
     {
-      "src": "/sitemap.xml",
+      "source": "/sitemap.xml",
       "dest": "/static/sitemap.xml"
     }
   ],
@@ -29,7 +31,7 @@
   "crons": [
     {
       "path": "/api/cron/warmup",
-      "schedule": "0 */6 * * *"
+      "schedule": "0 3 * * *"
     }
   ]
 }
