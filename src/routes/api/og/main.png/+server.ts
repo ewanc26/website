@@ -1,4 +1,5 @@
-import { generateOgImage, OgImageOptions } from '$lib/server/og';
+import { generateOgImage } from '$lib/server/og';
+import type { OgImageOptions } from '$lib/server/og';
 import { dev } from '$app/environment';
 import { createFileDebugger } from '$lib/utils/debug.js';
 
