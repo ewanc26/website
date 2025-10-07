@@ -64,8 +64,8 @@ export const GET: RequestHandler = async ({ url, fetch }: { url: URL, fetch: typ
     <n>${profileData.displayName || profileData.handle}</n>
     <uri>${baseUrl}/now</uri>
   </author>
-  <icon>${baseUrl}/api/og/now.png</icon>
-  <logo>${baseUrl}/api/og/now.png</logo>
+  <icon>${baseUrl}/og/now.png</icon>
+  <logo>${baseUrl}/og/now.png</logo>
   ${sortedUpdates
     .map(
       (status) => `

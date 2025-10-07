@@ -27,7 +27,7 @@
     content="Learn about Ewan's Corner - including technology stack, website purpose, and privacy information."
   />
   <meta property="og:site_name" content="Ewan's Corner" />
-  <meta property="og:image" content={`${$page.url.origin}/api/og/site/meta.png`} />
+  <meta property="og:image" content={`${$page.url.origin}/og/site-meta.png`} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
@@ -39,7 +39,7 @@
     name="twitter:description"
     content="Learn about Ewan's Corner - including technology stack, website purpose, and privacy information."
   />
-  <meta name="twitter:image" content={`${$page.url.origin}/api/og/site/meta.png`} />
+  <meta name="twitter:image" content={`${$page.url.origin}/og/site-meta.png`} />
 </svelte:head>
 
 <div class="max-w-2xl mx-auto px-4 py-8">

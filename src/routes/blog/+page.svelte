@@ -139,7 +139,7 @@
     content="Welcome to Blog - Ewan's Corner - A personal blog where I share my thoughts on coding, technology, and life."
   />
   <meta property="og:site_name" content="Blog - Ewan's Corner" />
-  <meta property="og:image" content={`${$page.url.origin}/api/og/blog.png`} />
+  <meta property="og:image" content={`${$page.url.origin}/og/blog.png`} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
@@ -151,7 +151,7 @@
     name="twitter:description"
     content="Welcome to Blog - Ewan's Corner - A personal blog where I share my thoughts on coding, technology, and life."
   />
-  <meta name="twitter:image" content={`${$page.url.origin}/api/og/blog.png`} />
+  <meta name="twitter:image" content={`${$page.url.origin}/og/blog.png`} />
 </svelte:head>
 
 {#if isLoading}
