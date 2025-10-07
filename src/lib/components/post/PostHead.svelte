@@ -3,14 +3,25 @@
   const { page } = getStores();
   import type { Post } from "$components/shared";
   import { env } from "$env/dynamic/public";
-  import { extractTextFromHTML } from "$utils/textExtractor";
 
   export let post: Post | undefined;
 
   // Generate a clean excerpt from HTML content for meta tags
-  $: metaExcerpt = post?.content 
-    ? extractTextFromHTML(post.content, 50) // Shorter excerpt for meta tags
-    : post?.excerpt || '';
+  $: metaExcerpt = post?.content
+    ? (() => {
+        const clean = post.content
+          .replace(/<[^>]+>/g, '') // Remove HTML tags
+          .replace(/\s+/g, ' ') // Collapse whitespace
+          .trim();
+
+        if (clean.length <= 160) return clean;
+
+        // Cut at nearest word boundary before 160 chars
+        const truncated = clean.slice(0, 160);
+        const lastSpace = truncated.lastIndexOf(' ');
+        return truncated.slice(0, lastSpace) + '…';
+      })()
+    : "Read this blog post on Ewan's Corner.";
 </script>
 
 <svelte:head>
@@ -33,7 +44,7 @@
     <meta property="og:site_name" content="Blog - Ewan's Corner" />
     <meta
       property="og:image"
-      content={`${$page.url.origin}/api/og/blog/${post.rkey}.png`}
+      content={`${$page.url.origin}/og/blog.png`}
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -58,7 +69,7 @@
     <meta name="twitter:description" content={metaExcerpt} />
     <meta
       name="twitter:image"
-      content={`${$page.url.origin}/api/og/blog/${post.rkey}.png`}
+      content={`${$page.url.origin}/og/blog.png`}
     />
   {:else}
     <title>Post Not Found - Blog - Ewan's Corner</title>

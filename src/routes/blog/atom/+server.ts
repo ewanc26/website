@@ -35,8 +35,8 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     <name>${profile.displayName || profile.handle}</name>
     <uri>${baseUrl}/blog</uri>
   </author>
-  <icon>${baseUrl}/api/og/blog.png</icon>
-  <logo>${baseUrl}/api/og/blog.png</logo>
+  <icon>${baseUrl}/og/blog.png</icon>
+  <logo>${baseUrl}/og/blog.png</logo>
   ${sortedPosts
     .map(
       (post) => `
@@ -52,7 +52,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
       <name>${profile.displayName || profile.handle}</name>
       <uri>https://bsky.app/profile/${profile.handle}</uri>
     </author>
-    <link href="${baseUrl}/api/og/blog/${post.rkey}.png" rel="enclosure" type="image/png" />
+    <link href="${baseUrl}/og/blog.png" rel="enclosure" type="image/png" />
   </entry>`
     )
     .join("")}
