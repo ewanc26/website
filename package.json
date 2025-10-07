@@ -32,7 +32,6 @@
     "vite": "^5.0.3"
   },
   "dependencies": {
-    "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
     "postcss-import": "^16.1.1",
     "rehype-autolink-headings": "^7.1.0",
@@ -49,7 +48,6 @@
     "remark-math": "^6.0.0",
     "remark-rehype": "^11.1.1",
     "sanitize-html": "^2.13.1",
-    "satori": "^0.12.2",
     "unified": "^11.0.5"
   }
 }
