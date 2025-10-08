@@ -131,7 +131,7 @@
 
 /* Default green theme */
 :root {
-  font-family: "Recursive", sans-serif;
+  font-family: "Inter", sans-serif;
   --background-color: #121c17;
   --text-color: #d8e8d8;
   --header-footer-bg: #1e2c23;
