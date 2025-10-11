@@ -1,13 +1,9 @@
 <script lang="ts">
   import { browser } from "$app/environment";
   import { onMount } from "svelte";
-  import { env } from "$env/dynamic/public";
-  import { safeFetch } from "./profile";
   import { formatRelativeTime } from "$utils/formatters";
   import { fade } from "svelte/transition";
-  import { getCache, setCache } from "$utils/cache";
 
-  // Props
   export let profile: {
     pds?: string;
     did?: string;
@@ -15,20 +11,13 @@
     displayName?: string;
   } | null = null;
 
-  // State
   let latestNowText: string | null = null;
   let latestNowDate: Date | null = null;
   let latestNowExpiry: number | null = null;
-  let statusError: string | null = null;
-
-  let musicLoading = false;
-  let musicError: string | null = null;
   let trackData: { name: string; artist: string; url: string } | null = null;
-
   let showContent = false;
   let contentLoaded = false;
 
-  // Derived: auto-decides what to show based on state
   $: displayMode = (() => {
     const now = Date.now();
     const statusFresh = latestNowText && latestNowDate && latestNowExpiry && now < latestNowExpiry;
@@ -38,114 +27,43 @@
     return "none";
   })();
 
-  async function fetchLatestNow() {
-    if (!profile?.pds || !profile?.did) {
-      latestNowText = null;
-      latestNowDate = null;
-      latestNowExpiry = null;
-      return;
-    }
-
-    const cacheKey = `status_${profile.did}`;
-    const cached = getCache<{ text: string; date: string }>(cacheKey);
-    if (cached) {
-      latestNowText = cached.text;
-      latestNowDate = new Date(cached.date);
-      latestNowExpiry = Date.now() + 5 * 60 * 1000; // 5 minutes
-      return;
-    }
-
-    try {
-      const pdsUrl = profile.pds;
-      const timestamp = Date.now();
-      const listRecordsUrl = `${pdsUrl}/xrpc/com.atproto.repo.listRecords?repo=${profile.did}&collection=uk.ewancroft.now&_=${timestamp}`;
-      const data = await safeFetch(listRecordsUrl, window.fetch);
-
-      if (data?.records?.length > 0) {
-        const sorted = data.records.sort(
-          (a: any, b: any) =>
-            new Date(b.value.createdAt).getTime() -
-            new Date(a.value.createdAt).getTime()
-        );
-        const latest = sorted[0].value;
-        latestNowText = latest.text.replace(/<[^>]*>?/gm, "").trim();
-        latestNowDate = new Date(latest.createdAt);
-        latestNowExpiry = Date.now() + 5 * 60 * 1000; // 5 min TTL
-
-        setCache(cacheKey, { text: latestNowText, date: latestNowDate.toISOString() }, 5 * 60 * 1000);
-        statusError = null;
-      } else {
-        latestNowText = null;
-        latestNowDate = null;
-        latestNowExpiry = null;
-      }
-    } catch (err) {
-      console.error("[Status] Error fetching status:", err);
-      statusError = err instanceof Error ? err.message : "Failed to load current status.";
-      latestNowText = null;
-      latestNowDate = null;
-      latestNowExpiry = null;
-    }
-  }
-
-  async function fetchRecentMusic() {
-    const lastfmUsername = env.PUBLIC_LASTFM_USERNAME;
-    if (!lastfmUsername) return;
-
-    musicLoading = true;
+  async function loadStatusAndMusic() {
+    if (!profile?.pds || !profile?.did) return;
+    
     try {
       const params = new URLSearchParams({
-        username: lastfmUsername,
-        emoji: "🎧",
-        nomoji: "false"
+        did: profile.did,
+        pds: profile.pds
       });
-      const url = `https://recentfm.rknight.me/now.php?${params.toString()}`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
+      
+      const response = await fetch(`/api/status?${params.toString()}`);
+      if (!response.ok) throw new Error('Failed to fetch status');
+      
       const data = await response.json();
-      if (data.content) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data.content, "text/html");
-        const link = doc.querySelector("a");
-        if (link) {
-          const fullText = link.textContent || "";
-          const match = fullText.match(/^(.+?) by (.+)$/);
-          if (match) {
-            trackData = {
-              name: match[1].trim(),
-              artist: match[2].trim(),
-              url: link.href
-            };
-          }
-        }
+      
+      if (data.status) {
+        latestNowText = data.status.text;
+        latestNowDate = new Date(data.status.date);
+        latestNowExpiry = Date.now() + 5 * 60 * 1000;
       }
-    } catch (err) {
-      console.error("[RecentFM] Error fetching RecentFM data:", err);
-      musicError = "Failed to load recent tracks";
-    } finally {
-      musicLoading = false;
-    }
-  }
-
-  async function loadContentStaggered() {
-    if (contentLoaded || !browser || !profile) return;
-    contentLoaded = true;
-
-    try {
-      await fetchLatestNow();
+      
+      if (data.music) {
+        trackData = data.music;
+      }
+      
       setTimeout(() => (showContent = true), 300);
-      await new Promise((r) => setTimeout(r, 2000));
-      await fetchRecentMusic();
-    } catch (err) {
-      console.error("[Status] Error in staggered loading:", err);
+    } catch (error) {
+      console.error('Error fetching status/music:', error);
       setTimeout(() => (showContent = true), 300);
     }
   }
 
   onMount(() => {
+    if (contentLoaded || !browser || !profile) return;
+    contentLoaded = true;
+    
     setTimeout(() => {
-      loadContentStaggered();
+      loadStatusAndMusic();
     }, 1500);
   });
 </script>
@@ -181,11 +99,6 @@
             </a>
           </p>
         </div>
-      {/if}
-      {#if musicLoading}
-        <p class="text-xs opacity-60 italic text-center sm:text-left">
-          Loading recent tracks...
-        </p>
       {/if}
     </div>
   </div>

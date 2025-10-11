@@ -19,33 +19,16 @@ function processRecord(data: any): MarkdownPost | null {
   const matches = data["uri"].split("/");
   const rkey = matches[matches.length - 1];
 
-  // Debugging output for development
-  if (process.env.NODE_ENV === 'development') {
-    console.log('=== Record Debug Info ===');
-    console.log('URI:', data["uri"]);
-    console.log('Data structure keys:', Object.keys(data));
-  }
-
   // Safely access record object
   const record = data["value"] || data.value;
 
   if (!record) {
-    console.warn(`No record value found for ${rkey}`, {
-      dataKeys: Object.keys(data),
-    });
+    console.warn(`No record value found for ${rkey}`);
     return null;
   }
 
   // Validate structure and public visibility
   if (!matches || matches.length !== 5 || !record || (record["visibility"] && record["visibility"] !== "public")) {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('Post skipped due to validation failure:', {
-        rkey,
-        matchesLength: matches?.length,
-        hasRecord: !!record,
-        visibility: record?.["visibility"],
-      });
-    }
     return null;
   }
 
@@ -68,9 +51,7 @@ function processRecord(data: any): MarkdownPost | null {
   } else {
     createdAtDate = new Date(createdAt);
     if (isNaN(createdAtDate.getTime())) {
-      console.warn(`Skipping post with invalid date: ${rkey}`, {
-        rawCreatedAt: createdAt,
-      });
+      console.warn(`Skipping post with invalid date: ${rkey}`);
       return null;
     }
   }
@@ -299,7 +280,6 @@ export async function loadAllPosts(fetch: typeof window.fetch): Promise<BlogServ
 
 /**
  * Returns the most recent blog posts (for home page, etc.)
- * This function now uses a lighter approach for the homepage
  */
 export async function getLatestPosts(fetch: typeof window.fetch, limit: number = 3): Promise<Post[]> {
   try {

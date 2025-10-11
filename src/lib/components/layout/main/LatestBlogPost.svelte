@@ -50,8 +50,7 @@
               type="post" 
               post={post} 
               monthIndex={0} 
-              postIndex={index} 
-              postNumber={post.postNumber} 
+              postIndex={index}
               {localeLoaded} 
             />
           </div>
