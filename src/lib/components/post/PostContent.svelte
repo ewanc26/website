@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Post } from "$components/shared";
   import type { TOCNode } from "$lib/components/shared";
-  import { onMount, afterUpdate } from "svelte";
+  import { onMount } from "svelte";
   import PostTOC from "./ToCUI.svelte";
 
   export let post: Post;
@@ -101,9 +101,9 @@
   <div class="w-full">
     {#if tocNodes.length > 0}
       <!-- Layout with TOC: Grid with content and sidebar -->
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8 min-w-0">
         <!-- Post Content -->
-        <article class="prose dark:prose-invert w-full max-w-none">
+        <article class="prose dark:prose-invert w-full max-w-none min-w-0">
           {@html post.content}
         </article>
 
@@ -111,8 +111,8 @@
         <PostTOC {tocNodes} {activeId} />
       </div>
     {:else}
-      <!-- Layout without TOC: 10vw margins on desktop, centered on mobile -->
-      <div class="lg:mx-[10vw] mx-auto max-w-4xl lg:max-w-none">
+      <!-- Layout without TOC: centered -->
+      <div class="mx-auto">
         <article class="prose dark:prose-invert w-full">
           {@html post.content}
         </article>
@@ -124,7 +124,7 @@
 {:else}
   <!-- Loading state -->
   <hr class="my-6 border-[var(--button-bg)]" />
-  <div class="lg:mx-[10vw] mx-auto max-w-4xl lg:max-w-none">
+  <div class="mx-auto">
     <article class="prose dark:prose-invert w-full text-center">
       <div class="flex justify-center items-center min-h-[200px]">
         <div class="text-center">
