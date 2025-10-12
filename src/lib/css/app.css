@@ -124,7 +124,10 @@
 
   /* Typography styles for blog content */
   .prose {
-    @apply max-w-none;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 
   /* Left-align headings in blog posts with underlines */
@@ -233,6 +236,8 @@
 
   .prose img {
     @apply border-0 rounded-lg mx-auto;
+    max-width: 100%;
+    height: auto;
   }
 
   a {
@@ -259,6 +264,7 @@
     @apply border-l-2 pl-4 rounded-none mx-auto;
     border-color: var(--button-bg);
     background-color: var(--card-bg);
+    max-width: 100%;
   }
 
   .prose code {
@@ -267,6 +273,7 @@
     @apply rounded px-2 py-1 font-mono text-sm;
     border: 1px solid var(--button-bg);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    word-break: break-word;
   }
 
   .prose pre {
@@ -277,6 +284,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
     line-height: 1.6;
     position: relative;
+    max-width: 100%;
   }
 
   .prose pre::before {
@@ -294,6 +302,13 @@
     @apply bg-transparent p-0 border-0;
     box-shadow: none;
     font-size: 0.9rem;
+    word-break: normal;
+  }
+
+  .prose table {
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
   }
 
   /* Post grid and cards - simplified animations */
