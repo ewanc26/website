@@ -122,40 +122,6 @@ export const loadMarkdownProcessor = async () => {
   }
 };
 
-// Lazy load OG image generation libraries
-export const loadOGImageGenerator = async () => {
-  debug.enter('loadOGImageGenerator');
-  const timer = debug.time('loadOGImageGenerator');
-  
-  try {
-    debug.info('Loading OG image generation libraries...');
-    
-    const [satori] = await Promise.all([
-      import('satori').then(module => {
-        debug.debug('Loaded satori module', { hasDefault: !!module.default });
-        return module.default;
-      })
-    ]);
-
-    const result = { satori };
-    
-    debug.info('Successfully loaded OG image generation libraries', {
-      loadedModules: Object.keys(result)
-    });
-
-    timer();
-    debug.exit('loadOGImageGenerator', { success: true, moduleCount: Object.keys(result).length });
-    return result;
-  } catch (error) {
-    debug.errorWithContext('Failed to load OG image generation libraries', error as Error, {
-      function: 'loadOGImageGenerator'
-    });
-    timer();
-    debug.exit('loadOGImageGenerator', { success: false, error: error });
-    throw error;
-  }
-};
-
 // Lazy load utility libraries
 export const loadUtilities = async () => {
   debug.enter('loadUtilities');
@@ -202,9 +168,6 @@ export const preloadDependencies = async (type: 'markdown' | 'og' | 'utilities')
     switch (type) {
       case 'markdown':
         result = await loadMarkdownProcessor();
-        break;
-      case 'og':
-        result = await loadOGImageGenerator();
         break;
       case 'utilities':
         result = await loadUtilities();
