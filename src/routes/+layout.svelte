@@ -3,6 +3,8 @@
 	import favicon from '$lib/assets/fallback/profile.svg';
 	import { getStores } from '$app/stores';
 	import { siteMeta } from '$lib/helper/siteMeta';
+	import Header from '$lib/components/Header.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 
 	const { page } = getStores();
 
@@ -46,4 +48,12 @@
 	{/each}
 </svelte:head>
 
-{@render children?.()}
+<div class="min-h-screen bg-background-100 dark:bg-background-950 text-text-900 dark:text-text-50">
+	<Header />
+	
+	<main class="container mx-auto px-4 py-8">
+		{@render children?.()}
+	</main>
+
+	<Footer />
+</div>

@@ -12,7 +12,7 @@ export interface SiteMetadata {
 
 export const siteMeta: SiteMetadata = {
   title: "Ewan's Corner",
-  description: "Welcome to Ewan's Corner - A personal space where I share my thoughts on coding, technology, and life.",
+  description: "A personal space where I share my thoughts on coding, technology, and life.",
   keywords: "Ewan, personal website, coding, technology, programming, tech blog, Ewan's Corner",
   url: '', // set dynamically
   image: ogImages.main,
