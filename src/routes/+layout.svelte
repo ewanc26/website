@@ -48,10 +48,10 @@
 	{/each}
 </svelte:head>
 
-<div class="min-h-screen bg-background-100 dark:bg-background-950 text-text-900 dark:text-text-50">
+<div class="flex min-h-screen flex-col bg-canvas-50 dark:bg-canvas-950 text-ink-900 dark:text-ink-50">
 	<Header />
-	
-	<main class="container mx-auto px-4 py-8">
+
+	<main class="flex-grow container mx-auto px-4 py-8">
 		{@render children?.()}
 	</main>
 
