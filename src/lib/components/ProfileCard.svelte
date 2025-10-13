@@ -1,141 +1,146 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { fetchProfile, type ProfileData } from '$lib/services/atproto';
-  
-  let profile = $state<ProfileData | null>(null);
-  let loading = $state(true);
-  let error = $state<string | null>(null);
-  let imageLoaded = $state(false);
-  let bannerLoaded = $state(false);
+	import { onMount } from 'svelte';
+	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
 
-  onMount(async () => {
-    try {
-      profile = await fetchProfile();
-    } catch (err) {
-      error = err instanceof Error ? err.message : 'Failed to load profile';
-    } finally {
-      loading = false;
-    }
-  });
+	let profile: ProfileData | null = null;
+	let loading = true;
+	let error: string | null = null;
+	let imageLoaded = false;
+	let bannerLoaded = false;
 
-  function formatNumber(num?: number): string {
-    if (!num) return '0';
-    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
-    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
-    return num.toString();
-  }
+	onMount(async () => {
+		try {
+			profile = await fetchProfile();
+		} catch (err) {
+			error = err instanceof Error ? err.message : 'Failed to load profile';
+		} finally {
+			loading = false;
+		}
+	});
+
+	function formatNumber(num?: number): string {
+		if (!num) return '0';
+		if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`;
+		if (num >= 1_000) return `${(num / 1_000).toFixed(1)}K`;
+		return num.toString();
+	}
 </script>
 
-<div class="w-full max-w-2xl mx-auto bg-background-50 dark:bg-background-900 rounded-xl shadow-lg overflow-hidden transition-all duration-300">
-  {#if loading}
-    <div class="animate-pulse">
-      <div class="h-32 bg-background-200 dark:bg-background-800"></div>
-      <div class="p-6 space-y-4">
-        <div class="flex items-start gap-4">
-          <div class="w-20 h-20 rounded-full bg-background-200 dark:bg-background-800"></div>
-          <div class="flex-1 space-y-2">
-            <div class="h-6 bg-background-200 dark:bg-background-800 rounded w-1/2"></div>
-            <div class="h-4 bg-background-200 dark:bg-background-800 rounded w-1/3"></div>
-          </div>
-        </div>
-        <div class="space-y-2">
-          <div class="h-4 bg-background-200 dark:bg-background-800 rounded"></div>
-          <div class="h-4 bg-background-200 dark:bg-background-800 rounded w-5/6"></div>
-        </div>
-      </div>
-    </div>
-  {:else if error}
-    <div class="p-6 text-center">
-      <p class="text-red-600 dark:text-red-400">{error}</p>
-    </div>
-  {:else if profile}
-    <!-- Banner -->
-    <div class="relative h-32 bg-gradient-to-r from-primary-400 to-secondary-400 overflow-hidden">
-      {#if profile.banner}
-        <img
-          src={profile.banner}
-          alt="Profile banner"
-          class="w-full h-full object-cover transition-opacity duration-300"
-          class:opacity-0={!bannerLoaded}
-          class:opacity-100={bannerLoaded}
-          onload={() => bannerLoaded = true}
-          loading="lazy"
-        />
-      {/if}
-    </div>
+<div
+	class="mx-auto w-full max-w-2xl overflow-hidden rounded-xl bg-canvas-100 shadow-lg transition-all duration-300 dark:bg-canvas-900"
+>
+	<!-- Banner Section -->
+	<div class="relative h-32 w-full overflow-hidden rounded-t-xl">
+		{#if loading}
+			<div class="h-full w-full animate-pulse bg-canvas-200 dark:bg-canvas-800"></div>
+		{:else if profile?.banner}
+			<img
+				src={profile!.banner}
+				alt="Profile banner"
+				class="h-full w-full object-cover opacity-0 transition-opacity duration-300"
+				class:opacity-100={bannerLoaded}
+				onload={() => (bannerLoaded = true)}
+				loading="lazy"
+			/>
+		{:else}
+			<div class="h-full w-full bg-gradient-to-r from-sage-400 to-mint-400"></div>
+		{/if}
+	</div>
 
-    <div class="p-6">
-      <!-- Avatar and Name -->
-      <div class="flex items-start gap-4 -mt-16 mb-4">
-        <div class="relative">
-          <div class="w-20 h-20 rounded-full border-4 border-background-50 dark:border-background-900 bg-background-200 dark:bg-background-800 overflow-hidden">
-            {#if profile.avatar}
-              <img
-                src={profile.avatar}
-                alt={profile.displayName || profile.handle}
-                class="w-full h-full object-cover transition-opacity duration-300"
-                class:opacity-0={!imageLoaded}
-                class:opacity-100={imageLoaded}
-                onload={() => imageLoaded = true}
-                loading="lazy"
-              />
-            {:else}
-              <div class="w-full h-full flex items-center justify-center bg-primary-200 dark:bg-primary-800 text-primary-800 dark:text-primary-200 text-2xl font-bold">
-                {(profile.displayName || profile.handle).charAt(0).toUpperCase()}
-              </div>
-            {/if}
-          </div>
-        </div>
-        
-        <div class="flex-1 mt-12">
-          <h2 class="text-2xl font-bold text-text-900 dark:text-text-50">
-            {profile.displayName || profile.handle}
-          </h2>
-          <p class="text-text-600 dark:text-text-400">@{profile.handle}</p>
-        </div>
-      </div>
+	<!-- Avatar Section -->
+	<div class="relative -mt-16 flex justify-center sm:ml-6 sm:justify-start">
+		<div
+			class="h-32 w-32 overflow-hidden rounded-full border-4 border-white bg-canvas-200 dark:border-canvas-900"
+		>
+			{#if loading}
+				<div class="h-full w-full animate-pulse bg-canvas-200 dark:bg-canvas-800"></div>
+			{:else if profile?.avatar}
+				<img
+					src={profile!.avatar}
+					alt={profile!.displayName || profile!.handle}
+					class="h-full w-full object-cover opacity-0 transition-opacity duration-300"
+					class:opacity-100={imageLoaded}
+					onload={() => (imageLoaded = true)}
+					loading="lazy"
+				/>
+			{:else}
+				<div
+					class="flex h-full w-full items-center justify-center bg-sage-200 text-3xl font-bold text-sage-800 dark:bg-sage-800 dark:text-sage-200"
+				>
+					{(profile!.displayName || profile!.handle).charAt(0).toUpperCase()}
+				</div>
+			{/if}
+		</div>
+	</div>
 
-      <!-- Description -->
-      {#if profile.description}
-        <p class="text-text-800 dark:text-text-200 mb-4 whitespace-pre-wrap">
-          {profile.description}
-        </p>
-      {/if}
+	<!-- Content Section -->
+	<div class="p-6 pt-2 sm:pt-4">
+		{#if loading}
+			<div class="space-y-2">
+				<div class="h-6 w-1/2 rounded bg-canvas-200 dark:bg-canvas-800"></div>
+				<div class="h-4 w-1/3 rounded bg-canvas-200 dark:bg-canvas-800"></div>
+				<div class="h-4 rounded bg-canvas-200 dark:bg-canvas-800"></div>
+				<div class="h-4 w-5/6 rounded bg-canvas-200 dark:bg-canvas-800"></div>
+				<div class="mt-4 flex gap-6">
+					<div class="h-4 w-12 rounded bg-canvas-200 dark:bg-canvas-800"></div>
+					<div class="h-4 w-12 rounded bg-canvas-200 dark:bg-canvas-800"></div>
+					<div class="h-4 w-12 rounded bg-canvas-200 dark:bg-canvas-800"></div>
+				</div>
+				<div class="mt-4 h-10 w-36 rounded bg-canvas-200 dark:bg-canvas-800"></div>
+			</div>
+		{:else if profile}
+			<h2 class="text-2xl font-bold text-ink-900 dark:text-ink-50">
+				{profile!.displayName || profile!.handle}
+			</h2>
+			<p class="text-ink-600 dark:text-ink-400">@{profile!.handle}</p>
 
-      <!-- Stats -->
-      <div class="flex gap-6 text-sm">
-        <div class="flex items-center gap-1">
-          <span class="font-bold text-text-900 dark:text-text-50">
-            {formatNumber(profile.postsCount)}
-          </span>
-          <span class="text-text-600 dark:text-text-400">Posts</span>
-        </div>
-        <div class="flex items-center gap-1">
-          <span class="font-bold text-text-900 dark:text-text-50">
-            {formatNumber(profile.followersCount)}
-          </span>
-          <span class="text-text-600 dark:text-text-400">Followers</span>
-        </div>
-        <div class="flex items-center gap-1">
-          <span class="font-bold text-text-900 dark:text-text-50">
-            {formatNumber(profile.followsCount)}
-          </span>
-          <span class="text-text-600 dark:text-text-400">Following</span>
-        </div>
-      </div>
+			{#if profile!.description}
+				<p class="mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-300">
+					{profile!.description}
+				</p>
+			{/if}
 
-      <!-- View Profile Link -->
-      <a
-        href="https://bsky.app/profile/{profile.handle}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-primary-300 rounded-lg transition-colors duration-200"
-      >
-        View on Bluesky
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-        </svg>
-      </a>
-    </div>
-  {/if}
+			<!-- Stats -->
+			<div class="flex gap-6 text-sm">
+				<div class="flex items-center gap-1">
+					<span class="font-bold text-ink-900 dark:text-ink-50"
+						>{formatNumber(profile!.postsCount)}</span
+					>
+					<span class="text-ink-600 dark:text-ink-400">Posts</span>
+				</div>
+				<div class="flex items-center gap-1">
+					<span class="font-bold text-ink-900 dark:text-ink-50"
+						>{formatNumber(profile!.followersCount)}</span
+					>
+					<span class="text-ink-600 dark:text-ink-400">Followers</span>
+				</div>
+				<div class="flex items-center gap-1">
+					<span class="font-bold text-ink-900 dark:text-ink-50"
+						>{formatNumber(profile!.followsCount)}</span
+					>
+					<span class="text-ink-600 dark:text-ink-400">Following</span>
+				</div>
+			</div>
+
+			<!-- View Profile Button -->
+			<a
+				href="https://bsky.app/profile/{profile!.handle}"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="mt-4 inline-flex items-center gap-2 rounded-lg bg-sage-500 px-4 py-2 text-ink-50 transition-colors duration-200 hover:bg-sage-600 dark:bg-sage-600 dark:hover:bg-sage-500"
+			>
+				View on Bluesky
+				<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+					/>
+				</svg>
+			</a>
+		{:else if error}
+			<p class="text-red-600 dark:text-red-400">{error}</p>
+		{/if}
+	</div>
 </div>
