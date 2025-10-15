@@ -1,11 +1,6 @@
 /**
- * Formats a date string into a relative human-readable time.
- * Examples:
- * - "just now"
- * - "5m ago"
- * - "2h ago"
- * - "3d ago"
- * - "14 Oct" or "14 Oct 2024" (if year differs)
+ * Formats a date string into a relative, human-readable time.
+ * Uses the user's system locale where possible, with a fallback to en-GB.
  */
 export function formatRelativeTime(dateString: string): string {
 	const date = new Date(dateString);
@@ -20,7 +15,10 @@ export function formatRelativeTime(dateString: string): string {
 	if (diffHours < 24) return `${diffHours}h ago`;
 	if (diffDays < 7) return `${diffDays}d ago`;
 
-	return date.toLocaleDateString('en-GB', {
+	// Prefer system locale, fallback to en-GB
+	const userLocale = typeof navigator !== 'undefined' ? navigator.language : 'en-GB';
+
+	return date.toLocaleDateString(userLocale, {
 		day: 'numeric',
 		month: 'short',
 		year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
