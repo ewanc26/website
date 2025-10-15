@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { DynamicLinks } from '$lib/components/layout';
-	import { ProfileCard, StatusCard } from '$lib/components/layout/main/card';
+	import { ProfileCard, StatusCard, PostCard } from '$lib/components/layout/main/card';
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 
 	// The `data` object includes merged layout/page load data.
@@ -32,6 +32,7 @@
 		</div>
 		<div class="space-y-6">
 			<DynamicLinks />
+			<PostCard />
 		</div>
 	</div>
 </div>
