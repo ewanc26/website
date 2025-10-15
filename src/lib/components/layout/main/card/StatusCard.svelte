@@ -30,8 +30,8 @@
 	{:else if status}
 		<div class="rounded-xl bg-canvas-100 p-4 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
 			<div class="mb-2 flex items-center gap-2">
-				<Rss class="h-4 w-4 text-sage-500" />
-				<span class="text-xs font-semibold tracking-wide text-ink-600 uppercase dark:text-ink-400">
+				<Rss class="h-4 w-4 text-sage-500" aria-hidden="true" />
+				<span class="text-xs font-semibold tracking-wide text-ink-700 uppercase dark:text-ink-300">
 					Current Status
 				</span>
 			</div>
@@ -40,7 +40,7 @@
 				{status.text}
 			</p>
 
-			<time datetime={status.createdAt} class="text-xs text-ink-600 dark:text-ink-400">
+			<time datetime={status.createdAt} class="text-xs text-ink-700 dark:text-ink-300">
 				{formatRelativeTime(status.createdAt)}
 			</time>
 		</div>

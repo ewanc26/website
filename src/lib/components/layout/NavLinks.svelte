@@ -24,17 +24,19 @@
         class="group flex items-center gap-2 font-medium transition-colors
           {$page.url.pathname === item.href
             ? 'text-sage-600 dark:text-sage-400'
-            : 'text-ink-700 dark:text-ink-400'}
+            : 'text-ink-700 dark:text-ink-300'}
           hover:text-sage-500"
+        aria-current={$page.url.pathname === item.href ? 'page' : undefined}
         title={item.label}
       >
         {#if iconComponents[item.href]}
           <svelte:component
             this={iconComponents[item.href]}
             class="h-5 w-5 transition-transform group-hover:scale-110"
+            aria-hidden="true"
           />
         {:else}
-          <div class="h-5 w-5 flex items-center justify-center">
+          <div class="h-5 w-5 flex items-center justify-center" aria-hidden="true">
             <div class="h-3 w-3 animate-pulse rounded-full bg-sage-500"></div>
           </div>
         {/if}
