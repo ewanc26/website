@@ -2,57 +2,57 @@
 	import '../app.css';
 	import favicon from '$lib/assets/fallback/profile.svg';
 	import { getStores } from '$app/stores';
-	import { siteMeta } from '$lib/helper';
 	import { Header, Footer, ScrollToTop } from '$lib/components/layout';
+	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 
 	const { page } = getStores();
 
-	let { children } = $props();
+	// Pages can return `meta` from their +page.ts
+	export let data: { siteMeta: SiteMetadata; meta?: Partial<SiteMetadata> };
 
-	// Clone siteMeta and set dynamic properties
-	const meta = {
-		...siteMeta,
-		url: $page.url.origin + $page.url.pathname
-	};
-
-	const metaTags = [
-		{ name: 'description', content: meta.description },
-		{ name: 'keywords', content: meta.keywords },
-		{ property: 'og:type', content: 'website' },
-		{ property: 'og:url', content: meta.url },
-		{ property: 'og:title', content: meta.title },
-		{ property: 'og:description', content: meta.description },
-		{ property: 'og:site_name', content: meta.title },
-		{ property: 'og:image', content: meta.image },
-		{ property: 'og:image:width', content: meta.imageWidth?.toString() },
-		{ property: 'og:image:height', content: meta.imageHeight?.toString() },
-		{ name: 'twitter:card', content: 'summary_large_image' },
-		{ name: 'twitter:url', content: meta.url },
-		{ name: 'twitter:title', content: meta.title },
-		{ name: 'twitter:description', content: meta.description },
-		{ name: 'twitter:image', content: meta.image }
-	];
+	// reactive meta for <svelte:head>, includes page-specific overrides
+	$: headMeta = createSiteMeta({
+		...data.siteMeta,
+		...data.meta,
+		...$page.data.meta,
+		url: $page.url?.href ?? data.siteMeta.url ?? ''
+	});
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<title>{meta.title}</title>
+	<title>{headMeta.title}</title>
 
-	{#each metaTags as tag}
-		{#if tag.name}
-			<meta name={tag.name} content={tag.content} />
-		{:else if tag.property}
-			<meta property={tag.property} content={tag.content} />
-		{/if}
-	{/each}
+	<meta name="description" content={headMeta.description} />
+	<meta name="keywords" content={headMeta.keywords} />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content={headMeta.url} />
+	<meta property="og:title" content={headMeta.title} />
+	<meta property="og:description" content={headMeta.description} />
+	<meta property="og:site_name" content={headMeta.title} />
+	<meta property="og:image" content={headMeta.image} />
+	{#if headMeta.imageWidth}
+		<meta property="og:image:width" content={headMeta.imageWidth.toString()} />
+	{/if}
+	{#if headMeta.imageHeight}
+		<meta property="og:image:height" content={headMeta.imageHeight.toString()} />
+	{/if}
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:url" content={headMeta.url} />
+	<meta name="twitter:title" content={headMeta.title} />
+	<meta name="twitter:description" content={headMeta.description} />
+	<meta name="twitter:image" content={headMeta.image} />
 </svelte:head>
 
 <div class="flex min-h-screen flex-col bg-canvas-50 dark:bg-canvas-950 text-ink-900 dark:text-ink-50">
-	<Header />
+	<!-- Pass only the default site meta to the header -->
+	<Header meta={data.siteMeta} />
 
 	<main class="flex-grow container mx-auto px-4 py-8">
 		<ScrollToTop />
-		{@render children?.()}
+		<slot />
 	</main>
 
 	<Footer />
