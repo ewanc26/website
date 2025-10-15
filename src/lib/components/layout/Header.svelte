@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { getStores } from '$app/stores';
-	import type { SiteMetadata } from '$lib/helper/siteMeta';
+	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
+	import { defaultSiteMeta } from '$lib/helper/siteMeta'; // import default siteMeta
+
 	const { page } = getStores();
 
-	export let meta: SiteMetadata;
+	// compute default site meta
+	const siteMeta: SiteMetadata = createSiteMeta(defaultSiteMeta);
 
 	const navItems = [
 		{
@@ -34,9 +37,9 @@
 			>
 				E
 			</div>
-			<span class="max-w-[200px] truncate text-xl font-bold text-ink-900 dark:text-ink-50"
-				>{meta.title}</span
-			>
+			<span class="max-w-[200px] truncate text-xl font-bold text-ink-900 dark:text-ink-50">
+				{siteMeta.title}
+			</span>
 		</a>
 
 		<ul class="flex items-center gap-6">
@@ -45,7 +48,7 @@
 					<a
 						href={item.href}
 						class="group flex items-center gap-2 font-medium transition-colors
-							{$page.url.pathname === item.href
+						{$page.url.pathname === item.href
 							? 'text-sage-600 dark:text-sage-400'
 							: 'text-ink-700 dark:text-ink-400'}
 							hover:text-sage-500"
