@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { ChevronUp } from "@lucide/svelte";
 
   let isVisible = false;
   let scrollY = 0;
@@ -40,18 +41,7 @@
     aria-label="Scroll to top"
     title="Scroll to top"
   >
-    <svg 
-      width="20" 
-      height="20" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      stroke-width="2" 
-      stroke-linecap="round" 
-      stroke-linejoin="round"
-    >
-      <path d="m18 15-6-6-6 6"/>
-    </svg>
+    <ChevronUp width="20" height="20" />
   </button>
 {/if}
 
