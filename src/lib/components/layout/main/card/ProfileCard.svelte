@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
+	// Import the Lucide icon component
+	import { ExternalLink } from '@lucide/svelte';
 
 	let profile: ProfileData | null = null;
 	let loading = true;
@@ -29,7 +31,6 @@
 <div
 	class="mx-auto w-full max-w-2xl overflow-hidden rounded-xl bg-canvas-100 shadow-lg transition-all duration-300 dark:bg-canvas-900"
 >
-	<!-- Banner Section -->
 	<div class="relative h-32 w-full overflow-hidden rounded-t-xl">
 		{#if loading}
 			<div class="h-full w-full animate-pulse bg-canvas-200 dark:bg-canvas-800"></div>
@@ -47,7 +48,6 @@
 		{/if}
 	</div>
 
-	<!-- Avatar Section -->
 	<div class="relative -mt-16 flex justify-center sm:ml-6 sm:justify-start">
 		<div
 			class="h-32 w-32 overflow-hidden rounded-full border-4 border-white bg-canvas-200 dark:border-canvas-900"
@@ -73,7 +73,6 @@
 		</div>
 	</div>
 
-	<!-- Content Section -->
 	<div class="p-6 pt-2 sm:pt-4">
 		{#if loading}
 			<div class="space-y-2">
@@ -100,7 +99,6 @@
 				</p>
 			{/if}
 
-			<!-- Stats -->
 			<div class="flex gap-6 text-sm">
 				<div class="flex items-center gap-1">
 					<span class="font-bold text-ink-900 dark:text-ink-50"
@@ -122,7 +120,6 @@
 				</div>
 			</div>
 
-			<!-- View Profile Button -->
 			<a
 				href="https://bsky.app/profile/{profile!.handle}"
 				target="_blank"
@@ -130,14 +127,7 @@
 				class="mt-4 inline-flex items-center gap-2 rounded-lg bg-sage-500 px-4 py-2 text-ink-50 transition-colors duration-200 hover:bg-sage-600 dark:bg-sage-600 dark:hover:bg-sage-500"
 			>
 				View on Bluesky
-				<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-					/>
-				</svg>
+				<ExternalLink class="h-4 w-4" />
 			</a>
 		{:else if error}
 			<p class="text-red-600 dark:text-red-400">{error}</p>
