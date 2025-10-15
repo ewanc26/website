@@ -1,0 +1,45 @@
+<script lang="ts">
+  import { getStores } from '$app/stores';
+  import type { NavItem } from '$lib/data/navItems';
+  import * as LucideIcons from '@lucide/svelte';
+
+  const { page } = getStores();
+  export let navItems: NavItem[] = [];
+
+  // Map of icon names to Lucide components
+  let iconComponents: Record<string, typeof import('svelte').SvelteComponent> = {};
+  navItems.forEach((item) => {
+    const iconName = item.iconPath;
+    if (iconName && (LucideIcons as any)[iconName]) {
+      iconComponents[item.href] = (LucideIcons as any)[iconName];
+    }
+  });
+</script>
+
+<ul class="flex items-center gap-6">
+  {#each navItems as item}
+    <li>
+      <a
+        href={item.href}
+        class="group flex items-center gap-2 font-medium transition-colors
+          {$page.url.pathname === item.href
+            ? 'text-sage-600 dark:text-sage-400'
+            : 'text-ink-700 dark:text-ink-400'}
+          hover:text-sage-500"
+        title={item.label}
+      >
+        {#if iconComponents[item.href]}
+          <svelte:component
+            this={iconComponents[item.href]}
+            class="h-5 w-5 transition-transform group-hover:scale-110"
+          />
+        {:else}
+          <div class="h-5 w-5 flex items-center justify-center">
+            <div class="h-3 w-3 animate-pulse rounded-full bg-sage-500"></div>
+          </div>
+        {/if}
+        <span class="hidden sm:inline">{item.label}</span>
+      </a>
+    </li>
+  {/each}
+</ul>
