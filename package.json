@@ -29,6 +29,7 @@
 		"vite": "^7.1.7"
 	},
 	"dependencies": {
-		"@atproto/api": "^0.17.2"
+		"@atproto/api": "^0.17.2",
+		"@lucide/svelte": "^0.545.0"
 	}
 }
