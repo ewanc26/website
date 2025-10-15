@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fetchSiteInfo, type SiteInfoData } from '$lib/services/atproto';
+	import { LinkCard } from '$lib/components/layout/main/card';
 
 	let siteInfo = $state<SiteInfoData | null>(null);
 	let loading = $state(true);
@@ -15,22 +16,6 @@
 			loading = false;
 		}
 	});
-
-	function groupBy<T extends { section?: string }>(items: T[] | undefined): Map<string, T[]> {
-		if (!items) return new Map();
-
-		const grouped = new Map<string, T[]>();
-
-		for (const item of items) {
-			const section = item.section || 'General';
-			if (!grouped.has(section)) {
-				grouped.set(section, []);
-			}
-			grouped.get(section)!.push(item);
-		}
-
-		return grouped;
-	}
 </script>
 
 <svelte:head>
@@ -83,27 +68,13 @@
 					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
 				>
 					<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Technology Stack</h2>
-					<div class="grid gap-4 md:grid-cols-2">
+					<div class="space-y-2">
 						{#each siteInfo.technologyStack as tech}
-							<div
-								class="rounded-lg bg-canvas-200 p-4 transition-colors hover:bg-canvas-300 dark:bg-canvas-800 dark:hover:bg-canvas-700"
-							>
-								{#if tech.url}
-									<a
-										href={tech.url}
-										target="_blank"
-										rel="noopener noreferrer"
-										class="font-semibold text-sage-500 hover:underline dark:text-sage-400"
-									>
-										{tech.name}
-									</a>
-								{:else}
-									<h3 class="font-semibold text-ink-900 dark:text-ink-50">{tech.name}</h3>
-								{/if}
-								{#if tech.description}
-									<p class="mt-1 text-sm text-ink-700 dark:text-ink-300">{tech.description}</p>
-								{/if}
-							</div>
+							<LinkCard
+								url={tech.url || '#'}
+								title={tech.name}
+								description={tech.description}
+							/>
 						{/each}
 					</div>
 				</section>
@@ -123,44 +94,15 @@
 					{#if siteInfo.openSourceInfo.repositories && siteInfo.openSourceInfo.repositories.length > 0}
 						<div class="space-y-2">
 							{#each siteInfo.openSourceInfo.repositories as repo}
-								<a
-									href={repo.url}
-									target="_blank"
-									rel="noopener noreferrer"
-									class="flex items-center gap-2 rounded-lg bg-canvas-200 p-3 transition-colors hover:bg-canvas-300 dark:bg-canvas-800 dark:hover:bg-canvas-700"
-								>
-									<div class="flex-1">
-										<div class="flex items-center gap-2">
-											{#if repo.platform}
-												<span class="text-xs font-medium text-ink-600 uppercase dark:text-ink-400"
-													>{repo.platform}</span
-												>
-											{/if}
-											{#if repo.type}
-												<span
-													class="rounded bg-mint-100 px-2 py-0.5 text-xs text-mint-700 dark:bg-mint-900 dark:text-mint-300"
-													>{repo.type}</span
-												>
-											{/if}
-										</div>
-										{#if repo.description}
-											<p class="text-sm text-ink-700 dark:text-ink-300">{repo.description}</p>
-										{/if}
-									</div>
-									<svg
-										class="h-4 w-4 text-ink-600 dark:text-ink-400"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-										/>
-									</svg>
-								</a>
+								<LinkCard
+									url={repo.url}
+									title={repo.description || repo.url}
+									description=""
+									badges={[
+										...(repo.platform ? [{ text: repo.platform }] : []),
+										...(repo.type ? [{ text: repo.type, color: 'mint' as const }] : [])
+									]}
+								/>
 							{/each}
 						</div>
 					{/if}
