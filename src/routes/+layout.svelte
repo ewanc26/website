@@ -2,9 +2,8 @@
 	import '../app.css';
 	import favicon from '$lib/assets/fallback/profile.svg';
 	import { getStores } from '$app/stores';
-	import { siteMeta } from '$lib/helper/siteMeta';
-	import Header from '$lib/components/Header.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import { siteMeta } from '$lib/helper';
+	import { Header, Footer, ScrollToTop } from '$lib/components/layout';
 
 	const { page } = getStores();
 
@@ -52,6 +51,7 @@
 	<Header />
 
 	<main class="flex-grow container mx-auto px-4 py-8">
+		<ScrollToTop />
 		{@render children?.()}
 	</main>
 
