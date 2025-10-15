@@ -6,16 +6,8 @@
 	let loading = true;
 	let error: string | null = null;
 
-	let siteInfo: any = null;
-
-	let copyrightText = '';
 	const currentYear = new Date().getFullYear();
-
-	function calculateCopyrightText(): string {
-		let birthYear: number | null = siteInfo?.additionalInfo?.websiteBirthYear || null;
-		if (!birthYear || birthYear < 1990 || birthYear > currentYear) birthYear = currentYear;
-		return birthYear === currentYear ? `${currentYear}` : `${birthYear} - ${currentYear}`;
-	}
+	const copyrightText = `${currentYear}`;
 
 	onMount(async () => {
 		try {
@@ -23,7 +15,6 @@
 		} catch (err) {
 			error = err instanceof Error ? err.message : 'Failed to load profile';
 		} finally {
-			copyrightText = calculateCopyrightText();
 			loading = false;
 		}
 	});
