@@ -1,29 +1,20 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { fetchSiteInfo, type SiteInfoData } from '$lib/services/atproto';
 	import { LinkCard } from '$lib/components/layout/main/card';
+	import type { SiteInfoData } from '$lib/services/atproto';
+	import type { SiteMetadata } from '$lib/helper/siteMeta';
 
-	let siteInfo = $state<SiteInfoData | null>(null);
-	let loading = $state(true);
-	let error = $state<string | null>(null);
+	export let data: {
+		siteInfo: SiteInfoData | null;
+		error: string | null;
+		meta: SiteMetadata;
+	};
 
-	onMount(async () => {
-		try {
-			siteInfo = await fetchSiteInfo();
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to load site information';
-		} finally {
-			loading = false;
-		}
-	});
+	const { siteInfo, error, meta } = data;
 </script>
 
 <svelte:head>
-	<title>Site Meta - Ewan's Corner</title>
-	<meta
-		name="description"
-		content="Information about this website, its technology stack, and credits."
-	/>
+	<title>{meta.title}</title>
+	<meta name="description" content={meta.description} />
 </svelte:head>
 
 <div class="mx-auto max-w-5xl space-y-8">
@@ -34,64 +25,43 @@
 		</p>
 	</div>
 
-	{#if loading}
-		<div class="space-y-6">
-			{#each Array(3) as _}
-				<div class="animate-pulse rounded-xl bg-canvas-200 p-6 shadow-md dark:bg-canvas-800">
-					<div class="mb-4 h-6 w-1/4 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-					<div class="space-y-2">
-						<div class="h-4 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-						<div class="h-4 w-5/6 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-					</div>
-				</div>
-			{/each}
-		</div>
-	{:else if error}
+	{#if error}
 		<div class="rounded-xl bg-red-50 p-6 text-center shadow-md dark:bg-red-900/20">
 			<p class="text-red-600 dark:text-red-400">{error}</p>
 		</div>
 	{:else if siteInfo}
 		<div class="space-y-8">
-			{#each [{ title: 'Purpose', content: siteInfo.additionalInfo?.purpose }, { title: 'History', content: siteInfo.additionalInfo?.websiteBirthYear ? `This website was first launched in ${siteInfo.additionalInfo.websiteBirthYear}.` : null }, { title: 'Privacy', content: siteInfo.privacyStatement }] as section}
+			{#each [
+				{ title: 'Purpose', content: siteInfo.additionalInfo?.purpose },
+				{ title: 'History', content: siteInfo.additionalInfo?.websiteBirthYear ? `This website was first launched in ${siteInfo.additionalInfo.websiteBirthYear}.` : null },
+				{ title: 'Privacy', content: siteInfo.privacyStatement }
+			] as section}
 				{#if section.content}
-					<section
-						class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
-					>
+					<section class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
 						<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">{section.title}</h2>
 						<p class="whitespace-pre-wrap text-ink-700 dark:text-ink-300">{section.content}</p>
 					</section>
 				{/if}
 			{/each}
 
-			{#if siteInfo.technologyStack && siteInfo.technologyStack.length > 0}
-				<section
-					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
-				>
+			{#if siteInfo.technologyStack?.length}
+				<section class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
 					<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Technology Stack</h2>
 					<div class="space-y-2">
 						{#each siteInfo.technologyStack as tech}
-							<LinkCard
-								url={tech.url || '#'}
-								title={tech.name}
-								description={tech.description}
-							/>
+							<LinkCard url={tech.url || '#'} title={tech.name} description={tech.description} />
 						{/each}
 					</div>
 				</section>
 			{/if}
 
 			{#if siteInfo.openSourceInfo}
-				<section
-					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
-				>
+				<section class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
 					<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Open Source</h2>
 					{#if siteInfo.openSourceInfo.description}
-						<p class="mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-300">
-							{siteInfo.openSourceInfo.description}
-						</p>
+						<p class="mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-300">{siteInfo.openSourceInfo.description}</p>
 					{/if}
-
-					{#if siteInfo.openSourceInfo.repositories && siteInfo.openSourceInfo.repositories.length > 0}
+					{#if siteInfo.openSourceInfo.repositories?.length}
 						<div class="space-y-2">
 							{#each siteInfo.openSourceInfo.repositories as repo}
 								<LinkCard
@@ -109,21 +79,15 @@
 				</section>
 			{/if}
 
-			{#if siteInfo.credits && siteInfo.credits.length > 0}
-				<section
-					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
-				>
+			{#if siteInfo.credits?.length}
+				<section class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
 					<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Credits</h2>
 					<div class="grid gap-4 md:grid-cols-2">
 						{#each siteInfo.credits as credit}
 							<div class="rounded-lg bg-canvas-200 p-4 dark:bg-canvas-800">
 								<h4 class="font-medium text-ink-900 dark:text-ink-50">{credit.name}</h4>
-								{#if credit.author}
-									<p class="text-sm text-ink-600 dark:text-ink-400">by {credit.author}</p>
-								{/if}
-								{#if credit.description}
-									<p class="mt-1 text-sm text-ink-700 dark:text-ink-300">{credit.description}</p>
-								{/if}
+								{#if credit.author}<p class="text-sm text-ink-600 dark:text-ink-400">by {credit.author}</p>{/if}
+								{#if credit.description}<p class="mt-1 text-sm text-ink-700 dark:text-ink-300">{credit.description}</p>{/if}
 							</div>
 						{/each}
 					</div>
