@@ -40,8 +40,9 @@
     on:keydown={handleKeydown}
     aria-label="Scroll to top"
     title="Scroll to top"
+    type="button"
   >
-    <ChevronUp width="20" height="20" />
+    <ChevronUp width="20" height="20" aria-hidden="true" />
   </button>
 {/if}
 
