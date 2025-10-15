@@ -46,7 +46,7 @@
               {badge.text}
             </span>
           {:else}
-            <span class="text-xs font-medium uppercase text-ink-700 dark:text-ink-300">
+            <span class="text-xs font-medium uppercase text-ink-700 dark:text-ink-200">
               {badge.text}
             </span>
           {/if}
@@ -55,8 +55,8 @@
       <span class="font-medium text-ink-900 dark:text-ink-50">{title}</span>
     </div>
     {#if displayDescription}
-      <p class="mt-1 text-sm text-ink-700 dark:text-ink-300">{displayDescription}</p>
+      <p class="mt-1 text-sm text-ink-700 dark:text-ink-200">{displayDescription}</p>
     {/if}
   </div>
-  <ExternalLink class="h-4 w-4 flex-shrink-0 text-ink-700 dark:text-ink-300" aria-hidden="true" />
+  <ExternalLink class="h-4 w-4 flex-shrink-0 text-ink-700 dark:text-ink-200" aria-hidden="true" />
 </a>

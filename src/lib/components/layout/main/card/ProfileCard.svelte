@@ -91,10 +91,10 @@
 			<h2 class="text-2xl font-bold text-ink-900 dark:text-ink-50">
 				{profile!.displayName || profile!.handle}
 			</h2>
-			<p class="text-ink-700 dark:text-ink-300">@{profile!.handle}</p>
+			<p class="text-ink-700 dark:text-ink-200">@{profile!.handle}</p>
 
 			{#if profile!.description}
-				<p class="mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-300">
+				<p class="mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-200">
 					{profile!.description}
 				</p>
 			{/if}
@@ -104,19 +104,19 @@
 					<span class="font-bold text-ink-900 dark:text-ink-50"
 						>{formatNumber(profile!.postsCount)}</span
 					>
-					<span class="text-ink-700 dark:text-ink-300">Posts</span>
+					<span class="text-ink-700 dark:text-ink-200">Posts</span>
 				</div>
 				<div class="flex items-center gap-1">
 					<span class="font-bold text-ink-900 dark:text-ink-50"
 						>{formatNumber(profile!.followersCount)}</span
 					>
-					<span class="text-ink-700 dark:text-ink-300">Followers</span>
+					<span class="text-ink-700 dark:text-ink-200">Followers</span>
 				</div>
 				<div class="flex items-center gap-1">
 					<span class="font-bold text-ink-900 dark:text-ink-50"
 						>{formatNumber(profile!.followsCount)}</span
 					>
-					<span class="text-ink-700 dark:text-ink-300">Following</span>
+					<span class="text-ink-700 dark:text-ink-200">Following</span>
 				</div>
 			</div>
 
