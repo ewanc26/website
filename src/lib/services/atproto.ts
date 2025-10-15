@@ -248,3 +248,45 @@ export async function fetchSiteInfo(): Promise<SiteInfoData | null> {
     return null;
   }
 }
+
+export interface LinkCard {
+  url: string;
+  text: string;
+  emoji: string;
+}
+
+export interface LinkData {
+  cards: LinkCard[];
+}
+
+export async function fetchLinks(): Promise<LinkData | null> {
+  const cacheKey = `links:${PUBLIC_ATPROTO_DID}`;
+  const cached = cache.get<LinkData>(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const agent = await getPublicAgent();
+    const response = await agent.com.atproto.repo.getRecord({
+      repo: PUBLIC_ATPROTO_DID,
+      collection: 'blue.linkat.board',
+      rkey: 'self'
+    });
+
+    const value = response.data.value as any;
+    
+    // Validate the response has the expected structure
+    if (!value || !Array.isArray(value.cards)) {
+      return null;
+    }
+
+    const data: LinkData = {
+      cards: value.cards
+    };
+    
+    cache.set(cacheKey, data);
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch links:', error);
+    return null;
+  }
+}
