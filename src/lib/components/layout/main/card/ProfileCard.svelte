@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
-	// Import the Lucide icon component
-	import { ExternalLink } from '@lucide/svelte';
+	import LinkCard from './LinkCard.svelte';
 
 	let profile: ProfileData | null = null;
 	let loading = true;
@@ -91,7 +90,7 @@
 			<h2 class="text-2xl font-bold text-ink-900 dark:text-ink-50">
 				{profile!.displayName || profile!.handle}
 			</h2>
-			<p class="text-ink-700 dark:text-ink-200">@{profile!.handle}</p>
+			<p class="font-medium text-ink-700 dark:text-ink-200">@{profile!.handle}</p>
 
 			{#if profile!.description}
 				<p class="mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-200">
@@ -99,7 +98,7 @@
 				</p>
 			{/if}
 
-			<div class="flex gap-6 text-sm">
+			<div class="flex gap-6 text-sm font-medium">
 				<div class="flex items-center gap-1">
 					<span class="font-bold text-ink-900 dark:text-ink-50"
 						>{formatNumber(profile!.postsCount)}</span
@@ -120,15 +119,13 @@
 				</div>
 			</div>
 
-			<a
-				href="https://bsky.app/profile/{profile!.handle}"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="mt-4 inline-flex items-center gap-2 rounded-lg bg-sage-500 px-4 py-2 text-ink-50 transition-colors duration-200 hover:bg-sage-600 dark:bg-sage-600 dark:hover:bg-sage-500"
-			>
-				View on Bluesky
-				<ExternalLink class="h-4 w-4" aria-hidden="true" />
-			</a>
+			<div class="mt-4">
+				<LinkCard
+					url="https://bsky.app/profile/{profile!.did}"
+					title="View on Bluesky"
+					variant="button"
+				/>
+			</div>
 		{:else if error}
 			<p class="text-red-600 dark:text-red-400">{error}</p>
 		{/if}
