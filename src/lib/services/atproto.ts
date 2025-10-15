@@ -290,3 +290,110 @@ export async function fetchLinks(): Promise<LinkData | null> {
     return null;
   }
 }
+
+export interface BlogPost {
+  title: string;
+  url: string;
+  createdAt: string;
+  platform: 'whitewind' | 'leaflet';
+  description?: string;
+  rkey: string;
+}
+
+export interface BlogPostsData {
+  posts: BlogPost[];
+}
+
+export async function fetchBlogPosts(): Promise<BlogPostsData> {
+  const cacheKey = `blogposts:${PUBLIC_ATPROTO_DID}`;
+  const cached = cache.get<BlogPostsData>(cacheKey);
+  if (cached) return cached;
+
+  const posts: BlogPost[] = [];
+
+  try {
+    const agent = await getPublicAgent();
+
+    // Fetch Whitewind posts
+    try {
+      const whitewindResponse = await agent.com.atproto.repo.listRecords({
+        repo: PUBLIC_ATPROTO_DID,
+        collection: 'com.whtwnd.blog.entry',
+        limit: 100
+      });
+
+      for (const record of whitewindResponse.data.records) {
+        const value = record.value as any;
+        // Skip drafts and non-public posts
+        if (value.isDraft || (value.visibility && value.visibility !== 'public')) {
+          continue;
+        }
+        
+        posts.push({
+          title: value.title || 'Untitled Post',
+          url: `https://whtwnd.com/${PUBLIC_ATPROTO_DID}/${record.uri.split('/').pop()}`,
+          createdAt: value.createdAt || record.value.createdAt || new Date().toISOString(),
+          platform: 'whitewind',
+          description: value.subtitle,
+          rkey: record.uri.split('/').pop() || ''
+        });
+      }
+    } catch (error) {
+      console.warn('Failed to fetch Whitewind posts:', error);
+    }
+
+    // Fetch Leaflet documents
+    try {
+      const leafletDocsResponse = await agent.com.atproto.repo.listRecords({
+        repo: PUBLIC_ATPROTO_DID,
+        collection: 'pub.leaflet.document',
+        limit: 100
+      });
+
+      // First, get all publications to resolve base paths
+      const publicationsMap = new Map<string, string>();
+      try {
+        const publicationsResponse = await agent.com.atproto.repo.listRecords({
+          repo: PUBLIC_ATPROTO_DID,
+          collection: 'pub.leaflet.publication',
+          limit: 100
+        });
+
+        for (const pubRecord of publicationsResponse.data.records) {
+          const pubValue = pubRecord.value as any;
+          publicationsMap.set(pubRecord.uri, pubValue.base_path || '');
+        }
+      } catch (error) {
+        console.warn('Failed to fetch Leaflet publications:', error);
+      }
+
+      for (const record of leafletDocsResponse.data.records) {
+        const value = record.value as any;
+        const rkey = record.uri.split('/').pop() || '';
+        const basePath = publicationsMap.get(value.publication) || '';
+        
+        posts.push({
+          title: value.title || 'Untitled Document',
+          url: basePath ? `${basePath}/${rkey}` : `https://leaflet.pub/${PUBLIC_ATPROTO_DID}/${rkey}`,
+          createdAt: value.publishedAt || new Date().toISOString(),
+          platform: 'leaflet',
+          description: value.description,
+          rkey
+        });
+      }
+    } catch (error) {
+      console.warn('Failed to fetch Leaflet documents:', error);
+    }
+
+    // Sort by date (newest first) and take top 5
+    posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const topPosts = posts.slice(0, 5);
+
+    const data: BlogPostsData = { posts: topPosts };
+    cache.set(cacheKey, data);
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch blog posts:', error);
+    return { posts: [] };
+  }
+}
