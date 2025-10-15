@@ -91,7 +91,7 @@
 			<h2 class="text-2xl font-bold text-ink-900 dark:text-ink-50">
 				{profile!.displayName || profile!.handle}
 			</h2>
-			<p class="text-ink-600 dark:text-ink-400">@{profile!.handle}</p>
+			<p class="text-ink-700 dark:text-ink-300">@{profile!.handle}</p>
 
 			{#if profile!.description}
 				<p class="mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-300">
@@ -104,19 +104,19 @@
 					<span class="font-bold text-ink-900 dark:text-ink-50"
 						>{formatNumber(profile!.postsCount)}</span
 					>
-					<span class="text-ink-600 dark:text-ink-400">Posts</span>
+					<span class="text-ink-700 dark:text-ink-300">Posts</span>
 				</div>
 				<div class="flex items-center gap-1">
 					<span class="font-bold text-ink-900 dark:text-ink-50"
 						>{formatNumber(profile!.followersCount)}</span
 					>
-					<span class="text-ink-600 dark:text-ink-400">Followers</span>
+					<span class="text-ink-700 dark:text-ink-300">Followers</span>
 				</div>
 				<div class="flex items-center gap-1">
 					<span class="font-bold text-ink-900 dark:text-ink-50"
 						>{formatNumber(profile!.followsCount)}</span
 					>
-					<span class="text-ink-600 dark:text-ink-400">Following</span>
+					<span class="text-ink-700 dark:text-ink-300">Following</span>
 				</div>
 			</div>
 
@@ -127,7 +127,7 @@
 				class="mt-4 inline-flex items-center gap-2 rounded-lg bg-sage-500 px-4 py-2 text-ink-50 transition-colors duration-200 hover:bg-sage-600 dark:bg-sage-600 dark:hover:bg-sage-500"
 			>
 				View on Bluesky
-				<ExternalLink class="h-4 w-4" />
+				<ExternalLink class="h-4 w-4" aria-hidden="true" />
 			</a>
 		{:else if error}
 			<p class="text-red-600 dark:text-red-400">{error}</p>

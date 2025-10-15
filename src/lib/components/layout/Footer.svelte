@@ -23,7 +23,7 @@
 <footer
 	class="mt-auto w-full border-t border-canvas-200 bg-canvas-50 py-6 dark:border-canvas-800 dark:bg-canvas-950"
 >
-	<div class="container mx-auto space-y-2 px-4 text-center text-sm text-ink-600 dark:text-ink-400">
+	<div class="container mx-auto space-y-2 px-4 text-center text-sm text-ink-700 dark:text-ink-300">
 		<!-- Line 1: Copyright & Profile -->
 		<div class="flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-2">
 			<span>&copy; <span>{copyrightText}</span></span>
