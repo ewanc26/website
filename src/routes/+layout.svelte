@@ -1,24 +1,25 @@
 <script lang="ts">
 	import '../app.css';
-	import favicon from '$lib/assets/fallback/profile.svg';
 	import { Header, Footer, ScrollToTop } from '$lib/components/layout';
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 	import { generateMetaTags } from '$lib/helper/metaTags';
 
 	export let data: { siteMeta: SiteMetadata; meta?: Partial<SiteMetadata> };
-
 	// meta for <svelte:head> (page-specific overrides included)
 	const headMeta = createSiteMeta({
 		...data.siteMeta,
 		...data.meta
 	});
-
 	// generate meta tags for SEO / OG / Twitter
 	const metaTags = generateMetaTags(headMeta, data.siteMeta);
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+	<link rel="icon" href="/favicon/favicon.ico" sizes="any" />
+	<link rel="manifest" href="/favicon/site.webmanifest" />
 	<title>{headMeta.title}</title>
 
 	{#each metaTags as tag}
