@@ -24,7 +24,7 @@
         class="group flex items-center gap-2 font-medium transition-colors
           {$page.url.pathname === item.href
             ? 'text-sage-600 dark:text-sage-400'
-            : 'text-ink-700 dark:text-ink-300'}
+            : 'text-ink-700 dark:text-ink-200'}
           hover:text-sage-500"
         aria-current={$page.url.pathname === item.href ? 'page' : undefined}
         title={item.label}
