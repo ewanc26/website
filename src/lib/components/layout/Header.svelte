@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { getStores } from '$app/stores';
+	import type { SiteMetadata } from '$lib/helper/siteMeta';
 	const { page } = getStores();
+
+	export let meta: SiteMetadata;
 
 	const navItems = [
 		{
@@ -25,38 +28,38 @@
 	class="sticky top-0 z-50 border-b border-canvas-200 bg-canvas-50/90 backdrop-blur-md dark:border-canvas-800 dark:bg-canvas-950/90"
 >
 	<nav class="container mx-auto flex items-center justify-between px-4 py-4">
-		<!-- Logo/Brand -->
 		<a href="/" class="group flex items-center gap-2">
 			<div
-				class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-sage-500 to-mint-500 font-bold text-ink-50 transition-transform duration-200 group-hover:scale-110"
+				class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-sage-500 to-mint-500 font-bold text-ink-50 transition-transform group-hover:scale-110"
 			>
 				E
 			</div>
-			<span class="text-xl font-bold text-ink-900 dark:text-ink-50">
-				{siteMeta.title}
-			</span>
+			<span class="max-w-[200px] truncate text-xl font-bold text-ink-900 dark:text-ink-50"
+				>{meta.title}</span
+			>
 		</a>
 
-		<!-- Navigation -->
 		<ul class="flex items-center gap-6">
 			{#each navItems as item}
 				<li>
 					<a
 						href={item.href}
-						class="group flex items-center gap-2 font-medium transition-colors duration-200
-				       {$page.url.pathname === item.href ? 'text-sage-600' : 'text-ink-700 dark:text-ink-400'} 
-					   hover:text-sage-500"
+						class="group flex items-center gap-2 font-medium transition-colors
+							{$page.url.pathname === item.href
+							? 'text-sage-600 dark:text-sage-400'
+							: 'text-ink-700 dark:text-ink-400'}
+							hover:text-sage-500"
 						title={item.label}
 					>
 						<svg
-							class="h-5 w-5 transition-transform duration-200 group-hover:scale-110"
+							class="h-5 w-5 transition-transform group-hover:scale-110"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
-							xmlns="http://www.w3.org/2000/svg"
 						>
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={item.icon} />
 						</svg>
+						<span class="hidden sm:inline">{item.label}</span>
 					</a>
 				</li>
 			{/each}
