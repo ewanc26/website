@@ -10,14 +10,27 @@ export interface SiteMetadata {
   imageHeight?: number;
 }
 
-export const siteMeta: SiteMetadata = {
+/**
+ * Default metadata that applies site-wide.
+ * Can be overridden dynamically for each page or component.
+ */
+export const defaultSiteMeta: SiteMetadata = {
   title: "Ewan's Corner",
   description: "A personal space where I share my thoughts on coding, technology, and life.",
   keywords: "Ewan, personal website, coding, technology, programming, tech blog, Ewan's Corner",
-  url: '', // set dynamically
+  url: '',
   image: ogImages.main,
   imageWidth: 1200,
   imageHeight: 630
 };
 
-// Note: The `url` field will be set dynamically in the layout file based on the current page URL.
+/**
+ * Utility function to generate flexible metadata objects.
+ * Merges defaults with any overrides provided.
+ */
+export function createSiteMeta(overrides: Partial<SiteMetadata> = {}): SiteMetadata {
+  return {
+    ...defaultSiteMeta,
+    ...overrides
+  };
+}
