@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { DynamicLinks } from '$lib/components/layout';
 	import { ProfileCard, StatusCard, PostCard } from '$lib/components/layout/main/card';
+	import BlueskyPostCard from '$lib/components/layout/main/card/BlueskyPostCard.svelte';
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 
 	// The `data` object includes merged layout/page load data.
@@ -29,6 +30,7 @@
 		<div class="space-y-6">
 			<ProfileCard />
 			<StatusCard />
+			<BlueskyPostCard />
 		</div>
 		<div class="space-y-6">
 			<DynamicLinks />
