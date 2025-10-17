@@ -15,6 +15,23 @@
 </script>
 
 <svelte:head>
+	<script>
+		// Prevent flash of unstyled content (FOUC) by applying theme before page renders
+		(function() {
+			const stored = localStorage.getItem('theme');
+			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			const isDark = stored === 'dark' || (!stored && prefersDark);
+			const htmlElement = document.documentElement;
+			
+			if (isDark) {
+				htmlElement.classList.add('dark');
+				htmlElement.style.colorScheme = 'dark';
+			} else {
+				htmlElement.classList.remove('dark');
+				htmlElement.style.colorScheme = 'light';
+			}
+		})();
+	</script>
 	<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
 	<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />

@@ -2,6 +2,7 @@
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 	import { defaultSiteMeta } from '$lib/helper/siteMeta';
 	import NavLinks from './NavLinks.svelte';
+	import ThemeToggle from './ThemeToggle.svelte';
 	import { navItems } from '$lib/data/navItems';
 
 	const siteMeta: SiteMetadata = createSiteMeta(defaultSiteMeta);
@@ -15,6 +16,9 @@
 			</span>
 		</a>
 
-		<NavLinks {navItems} />
+		<div class="flex items-center gap-4">
+			<NavLinks {navItems} />
+			<ThemeToggle />
+		</div>
 	</nav>
 </header>
