@@ -21,3 +21,14 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# ephemeral files
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+*.old
+
+# temporary files that i plan to delete later but defined here for posterity
+static/lexicons/bluesky lexicons.json
