@@ -1,5 +1,6 @@
+// Fallback images for profile and banner
 export { default as profileFallback } from './fallback/profile.svg';
 export { default as bannerFallback } from './fallback/banner.svg';
-export { default as mainOG } from './og/main.png';
-export { default as nowOG } from './og/now.png';
-export { default as siteMetaOG } from './og/site-meta.png';
+
+// Note: OG images are now served from ./static/og/
+// Use the ogImages object from $lib/helper/ogImages for OG image paths
