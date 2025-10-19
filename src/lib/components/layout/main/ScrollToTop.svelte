@@ -8,109 +8,39 @@
   $: isVisible = scrollY > 300;
 
   function scrollToTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function handleKeydown(event: KeyboardEvent) {
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       scrollToTop();
     }
   }
 
   onMount(() => {
-    const updateScrollY = () => scrollY = window.scrollY;
-    window.addEventListener('scroll', updateScrollY, { passive: true });
-    
-    return () => {
-      window.removeEventListener('scroll', updateScrollY);
-    };
+    const updateScrollY = () => (scrollY = window.scrollY);
+    window.addEventListener("scroll", updateScrollY, { passive: true });
+    return () => window.removeEventListener("scroll", updateScrollY);
   });
 </script>
 
 <svelte:window bind:scrollY />
 
-{#if isVisible}
+<!-- just Tailwind fade via opacity -->
+<div
+  class="fixed bottom-8 left-8 z-50 sm:bottom-6 sm:left-6 transition-opacity duration-300 motion-reduce:transition-none"
+  class:opacity-100={isVisible}
+  class:opacity-0={!isVisible}
+>
   <button
-    class="scroll-to-top"
     on:click={scrollToTop}
     on:keydown={handleKeydown}
     aria-label="Scroll to top"
     title="Scroll to top"
     type="button"
+    class="flex h-12 w-12 items-center justify-center rounded-full border bg-canvas-100 text-ink-900 border-sage-200 shadow-lg transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-sage-500 hover:text-ink-50 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 dark:bg-canvas-900 dark:text-ink-50 dark:border-sage-800 dark:hover:bg-sage-600 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:h-11 sm:w-11"
   >
     <ChevronUp width="20" height="20" aria-hidden="true" />
   </button>
-{/if}
-
-<style>
-  .scroll-to-top {
-    position: fixed;
-    bottom: 2rem;
-    left: 2rem;
-    z-index: 50;
-    width: 3rem;
-    height: 3rem;
-    border: none;
-    border-radius: 9999px;
-    background-color: rgb(var(--canvas-100));
-    color: rgb(var(--ink-900));
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    border: 1px solid rgb(var(--sage-200));
-  }
-
-  :global(.dark) .scroll-to-top {
-    background-color: rgb(var(--canvas-900));
-    color: rgb(var(--ink-50));
-    border-color: rgb(var(--sage-800));
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-
-  .scroll-to-top:hover {
-    background-color: rgb(var(--sage-500));
-    color: rgb(var(--ink-50));
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  }
-
-  :global(.dark) .scroll-to-top:hover {
-    background-color: rgb(var(--sage-600));
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-  }
-
-  .scroll-to-top:active {
-    transform: translateY(0);
-  }
-
-  .scroll-to-top:focus {
-    outline: 2px solid rgb(var(--sage-500));
-    outline-offset: 2px;
-  }
-
-  @media (max-width: 640px) {
-    .scroll-to-top {
-      bottom: 1.5rem;
-      left: 1.5rem;
-      width: 2.75rem;
-      height: 2.75rem;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .scroll-to-top {
-      transition: none;
-    }
-    
-    .scroll-to-top:hover {
-      transform: none;
-    }
-  }
-</style>
+</div>
