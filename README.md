@@ -47,7 +47,7 @@ cp .env .env.local
 
 Edit `.env.local` with your settings:
 
-```env
+```ini
 # Required: Your AT Protocol DID
 PUBLIC_ATPROTO_DID=did:plc:your-did-here
 
@@ -163,7 +163,7 @@ When a user visits `/blog/{rkey}`:
 
 Control blog behavior with environment variables:
 
-```env
+```ini
 # Use a custom domain for Leaflet posts
 PUBLIC_LEAFLET_BASE_PATH=https://blog.example.com
 
