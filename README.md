@@ -97,8 +97,6 @@ website-redesign/
 │   ├── app.css              # Global styles
 │   └── app.html             # HTML template
 ├── static/                  # Static files (favicon, etc.)
-├── other/                   # Reference implementations
-│   └── leaflet-main/        # Leaflet reference code
 └── package.json
 ```
 
