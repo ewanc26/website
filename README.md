@@ -1,309 +1,335 @@
-# Personal Website & AT Protocol Showcase
+# Ewan's Corner
 
-A modern, accessible personal website built with SvelteKit 2 and Tailwind CSS 4, showcasing the power of the AT Protocol ecosystem. This platform pulls content from your AT Protocol repository and displays it in a clean, privacy-respecting interface with excellent performance and accessibility.
+A modern, AT Protocol-powered personal website built with SvelteKit 2 and Tailwind CSS 4.
 
-**_This repository is available on [GitHub](https://github.com/ewanc26/website) and mirrored on [Tangled](https://tangled.org/did:plc:ofrbh253gwicbkc5nktqepol/website)._**
+## 🌟 Features
 
-## Purpose
+- **AT Protocol Integration**: Fetch and display content from your AT Protocol repository
+- **Multi-Platform Blog**: Seamlessly aggregate blog posts from WhiteWind and Leaflet
+- **Dynamic Profile**: Automatically display your Bluesky profile information
+- **Custom Status**: Show real-time status updates using custom AT Protocol lexicons
+- **Link Board**: Display a Linkat board with emoji-styled link cards
+- **Bluesky Posts**: Showcase your latest non-reply Bluesky posts with rich media support
+- **Smart Blog Redirects**: Intelligent redirection system for blog post URLs
+- **Responsive Design**: Mobile-first design with dark mode support
+- **RSS Feed**: Intelligent RSS feed handling WhiteWind and Leaflet posts
+- **Type-Safe**: Full TypeScript support throughout the application
 
-This website serves as a unified digital presence that aggregates and displays content from the decentralized AT Protocol network. Unlike traditional content management systems, it acts as a display layer for your distributed content, demonstrating the potential of AT Protocol for personal publishing while maintaining full control over presentation and user experience.
-
-### Key Features
-
-- **Modern Design System**: Custom colour palette using OKLCH colour space for perceptually uniform colours across light and dark modes
-- **Accessibility First**: WCAG 2.1 AA compliant with proper contrast ratios and semantic HTML
-- **Performance Optimised**: Built with SvelteKit 5 and Tailwind CSS 4 for lightning-fast load times
-- **AT Protocol Integration**: Native integration with Bluesky, Linkat, and custom lexicons
-- **Responsive Design**: Fully responsive layout that works beautifully on all devices
-- **Privacy-Focused**: No tracking, no analytics, no data collection — only localStorage for theme preferences
-- **Dynamic Content**: Real-time profile, status updates, and curated links from AT Protocol
-- **Slingshot PDS Resolution**: Automatic PDS endpoint discovery for your AT Protocol identity
-
-## Technology Stack
-
-This project leverages modern web technologies and standards:
-
-- **[SvelteKit 2](https://kit.svelte.dev/)**: Full-stack web framework with excellent DX
-- **[Svelte 5](https://svelte.dev/)**: Next-generation reactive framework with runes
-- **[Tailwind CSS 4](https://tailwindcss.com/)**: Modern utility-first CSS with native cascade layers
-- **[TypeScript](https://www.typescriptlang.org/)**: Type-safe JavaScript for better development experience
-- **[Vite 7](https://vite.dev/)**: Lightning-fast build tool and development server
-- **[@atproto/api](https://github.com/bluesky-social/atproto)**: Official AT Protocol client library
-- **[Lucide Icons](https://lucide.dev/)**: Beautiful, consistent icon set
-
-## Installation
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- **Node.js** (v20 or later recommended)
-- **npm** (comes with Node.js)
+- Node.js 18+ and npm
+- An AT Protocol DID (Decentralized Identifier) from Bluesky
 
-### Quick Start
+### Installation
 
 1. Clone the repository:
 
-    ```bash
-    git clone git:github.com/ewanc26/website # or git:tangled.org/did:plc:ofrbh253gwicbkc5nktqepol/website
-    cd website
-    ```
+```bash
+git clone <repository-url>
+cd website-redesign
+```
 
 1. Install dependencies:
 
-    ```bash
-    npm install
-    ```
+```bash
+npm install
+```
 
-1. Configure environment variables by creating a `.env` file:
+1. Configure environment variables:
 
-    ```ini
-    # Your ATProto DID (Decentralized Identifier)
-    # Find this by searching your AT Protocol alias (aka your Bluesky handle) on https://PDSls.dev
-    PUBLIC_ATPROTO_DID=did:plc:your-did-here
-    ```
+Copy the example environment file and update it with your information:
+
+```bash
+cp .env .env.local
+```
+
+Edit `.env.local` with your settings:
+
+```env
+# Required: Your AT Protocol DID
+PUBLIC_ATPROTO_DID=did:plc:your-did-here
+
+# Optional: Custom Leaflet blog domain
+PUBLIC_LEAFLET_BASE_PATH=https://blog.example.com
+
+# Optional: Specific Leaflet publication rkey for blog posts
+PUBLIC_LEAFLET_BLOG_PUBLICATION=
+
+# Optional: Fallback URL for missing blog posts
+PUBLIC_BLOG_FALLBACK_URL=
+
+# Site metadata
+PUBLIC_SITE_TITLE="Your Site Title"
+PUBLIC_SITE_DESCRIPTION="Your site description"
+PUBLIC_SITE_KEYWORDS="keywords, here"
+PUBLIC_SITE_URL="https://example.com"
+```
 
 1. Start the development server:
 
-    ```bash
-    npm run dev
-    ```
+```bash
+npm run dev
+```
 
-Visit `http://localhost:5173` to see your website in action!
+Visit `http://localhost:5173` to see your site.
 
-## Development
+## 📁 Project Structure
+
+```text
+website-redesign/
+├── src/
+│   ├── lib/
+│   │   ├── assets/          # Static assets (images, icons)
+│   │   ├── components/      # Reusable Svelte components
+│   │   │   ├── layout/      # Header, Footer, Navigation
+│   │   │   └── ui/          # UI components (Card, etc.)
+│   │   ├── data/            # Static data (navigation items)
+│   │   ├── helper/          # Helper functions (meta tags, OG images)
+│   │   ├── services/        # External service integrations
+│   │   │   └── atproto/     # AT Protocol service layer
+│   │   └── utils/           # Utility functions
+│   ├── routes/              # SvelteKit routes
+│   │   ├── blog/            # Blog redirect handlers
+│   │   ├── now/             # Status feed endpoints
+│   │   └── site/            # Site metadata pages
+│   ├── app.css              # Global styles
+│   └── app.html             # HTML template
+├── static/                  # Static files (favicon, etc.)
+├── other/                   # Reference implementations
+│   └── leaflet-main/        # Leaflet reference code
+└── package.json
+```
+
+## 🔧 AT Protocol Services
+
+The application includes a comprehensive AT Protocol service layer in `src/lib/services/atproto/`:
+
+### Core Services
+
+- **agents.ts**: Agent management with automatic PDS resolution and fallback to Bluesky public API
+- **fetch.ts**: Profile, status, site info, and links fetching
+- **posts.ts**: Blog posts, Leaflet publications, and Bluesky posts
+- **media.ts**: Image and blob URL handling
+- **cache.ts**: In-memory caching with TTL support
+- **types.ts**: TypeScript definitions for all data structures
+
+### Usage Example
+
+```typescript
+import { fetchProfile, fetchBlogPosts, fetchLatestBlueskyPost } from '$lib/services/atproto';
+
+// Fetch profile data
+const profile = await fetchProfile();
+
+// Fetch blog posts from WhiteWind and Leaflet
+const { posts } = await fetchBlogPosts();
+
+// Fetch latest Bluesky post
+const post = await fetchLatestBlueskyPost();
+```
+
+## 📝 Blog System
+
+The blog system supports multiple platforms and provides intelligent URL redirects:
+
+### Supported Platforms
+
+1. **WhiteWind** (`com.whtwnd.blog.entry`)
+   - Format: `https://whtwnd.com/{did}/{rkey}`
+   - Automatically filters out drafts and non-public posts
+
+1. **Leaflet** (`pub.leaflet.document`)
+   - Format: Custom domain or `https://leaflet.pub/lish/{did}/{publication}/{rkey}`
+   - Supports multiple publications
+   - Respects `base_path` configuration
+
+### Blog Routes
+
+- `/blog/{rkey}` - Smart redirect to the correct platform
+- `/blog/rss` - Intelligent RSS feed (WhiteWind posts or redirect to Leaflet RSS)
+- `/blog/atom` - Deprecated (returns 410 Gone, use RSS instead)
+
+### How It Works
+
+When a user visits `/blog/{rkey}`:
+
+1. The system checks WhiteWind for the post
+2. If not found, checks all Leaflet publications
+3. Redirects to the appropriate platform URL
+4. Falls back to `PUBLIC_BLOG_FALLBACK_URL` if configured
+5. Returns 404 if post not found and no fallback
+
+### Configuration
+
+Control blog behavior with environment variables:
+
+```env
+# Use a custom domain for Leaflet posts
+PUBLIC_LEAFLET_BASE_PATH=https://blog.example.com
+
+# Only check a specific Leaflet publication
+PUBLIC_LEAFLET_BLOG_PUBLICATION=3kzcijpj2z2a
+
+# Fallback for missing posts
+PUBLIC_BLOG_FALLBACK_URL=https://archive.example.com/blog
+```
+
+## 🎨 Styling
+
+The project uses:
+
+- **Tailwind CSS 4**: Latest Tailwind with new features
+- **@tailwindcss/typography**: Beautiful prose styling
+- **@tailwindcss/vite**: Vite plugin for Tailwind
+- **Custom Components**: Pre-built UI components with consistent styling
+
+## 🏗️ Building for Production
+
+```bash
+# Build the application
+npm run build
+
+# Preview the production build
+npm run preview
+```
+
+The build output will be in the `.svelte-kit` directory, ready for deployment.
+
+## 📦 Deployment
+
+This project uses `@sveltejs/adapter-auto`, which automatically selects the best adapter for your deployment platform:
+
+- **Vercel**: Automatic detection and optimization
+- **Netlify**: Automatic detection and optimization
+- **Cloudflare Pages**: Automatic detection and optimization
+- **Node.js**: Fallback option
+
+For other platforms, see the [SvelteKit adapters documentation](https://kit.svelte.dev/docs/adapters).
+
+## 🔍 Custom Lexicons
+
+The site supports several custom AT Protocol lexicons:
+
+### Status Updates (`uk.ewancroft.now`)
+
+Display real-time status messages on your site.
+
+### Site Information (`uk.ewancroft.site.info`)
+
+Store detailed site metadata including:
+
+- Technology stack
+- Privacy statement
+- Open source information
+- Credits and licenses
+
+### Link Board (`blue.linkat.board`)
+
+Display a collection of links with emoji icons.
+
+## 🛠️ Development
 
 ### Available Scripts
 
-```bash
-npm run dev          # Start development server with hot reload
-npm run build        # Build for production
-npm run preview      # Preview production build locally
-npm run check        # Type-check your code
-npm run check:watch  # Type-check in watch mode
-npm run format       # Format code with Prettier
-npm run lint         # Check code formatting
-````
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run check` - Type-check the project
+- `npm run check:watch` - Type-check in watch mode
+- `npm run format` - Format code with Prettier
+- `npm run lint` - Check code formatting
 
-### Project Structure
+### Code Quality
 
-```plaintext
-website/
-├── src/
-│   ├── lib/
-│   │   ├── components/
-│   │   │   └── layout/
-│   │   │       ├── Header.svelte
-│   │   │       ├── Footer.svelte
-│   │   │       ├── NavLinks.svelte
-│   │   │       └── main/
-│   │   │           ├── DynamicLinks.svelte
-│   │   │           ├── ScrollToTop.svelte
-│   │   │           └── card/
-│   │   │               ├── LinkCard.svelte
-│   │   │               ├── ProfileCard.svelte
-│   │   │               └── StatusCard.svelte
-│   │   ├── services/
-│   │   │   └── atproto.ts          # AT Protocol integration
-│   │   ├── helper/
-│   │   │   ├── siteMeta.ts         # SEO metadata management
-│   │   │   └── metaTags.ts         # Meta tag generation
-│   │   ├── data/
-│   │   │   └── navItems.ts         # Navigation configuration
-│   │   └── utils/
-│   │       └── formatDate.ts       # Date formatting utilities
-│   ├── routes/
-│   │   ├── +layout.svelte          # Root layout
-│   │   ├── +page.svelte            # Home page
-│   │   └── site/
-│   │       └── meta/
-│   │           └── +page.svelte    # Site metadata page
-│   ├── app.css                     # Global styles & design tokens
-│   └── app.html                    # HTML template
-├── static/
-│   └── favicon/                    # Favicon assets
-├── .env                            # Environment variables
-├── package.json
-├── svelte.config.js
-├── tailwind.config.js
-├── tsconfig.json
-└── vite.config.ts
+The project uses:
+
+- **TypeScript**: Full type safety
+- **Prettier**: Consistent code formatting
+- **svelte-check**: Svelte-specific linting
+- **ESLint**: (can be added if needed)
+
+## 📚 Reference Implementation
+
+The `other/leaflet-main` directory contains the reference Leaflet implementation, which was used as inspiration for:
+
+- Feed generation
+- Publication handling
+- Document rendering
+- Bluesky integration
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is open source. See the site information section for details about the technology stack and licenses.
+
+## 🔗 Links
+
+- [AT Protocol Documentation](https://atproto.com/)
+- [SvelteKit Documentation](https://kit.svelte.dev/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/)
+- [Bluesky](https://bsky.app/)
+- [WhiteWind](https://whtwnd.com/)
+- [Leaflet](https://leaflet.pub/)
+
+## 💡 Tips
+
+### Finding Your DID
+
+1. Visit your Bluesky profile
+2. Click on "Settings" → "Advanced"
+3. Your DID will be displayed there
+4. Or visit `https://bsky.app/profile/{your-handle}` and check the page source
+
+### Cache Management
+
+The AT Protocol services use an in-memory cache with configurable TTL:
+
+```typescript
+import { cache } from '$lib/services/atproto';
+
+// Clear all cache
+cache.clear();
+
+// Clear specific entry
+cache.delete('profile:did:plc:...');
 ```
 
-## Content Sources
+### Custom Components
 
-This platform aggregates content from your AT Protocol repository. For full functionality, ensure you have the following in your [AT Protocol repository](https://atproto.com/specs/repository):
+All components are built with Svelte 5 runes for better reactivity and performance. See the components directory for examples.
 
-### Required Records
+## 🐛 Troubleshooting
 
-- **`app.bsky.actor.profile`**: Your profile information (display name, bio, avatar, banner)
+### Blog Posts Not Found
 
-### Optional Records
+1. Check your `PUBLIC_ATPROTO_DID` is correct
+2. Verify posts are not drafts (WhiteWind) or unpublished (Leaflet)
+3. Check the publication configuration if using `PUBLIC_LEAFLET_BLOG_PUBLICATION`
 
-#### Linkat Integration
+### Profile Data Not Loading
 
-- **`blue.linkat.board`**: Your curated links from [Linkat](https://linkat.blue/)
+1. Ensure your DID is publicly accessible
+2. Check browser console for errors
+3. Verify AT Protocol services are reachable
 
-  - Displays on the home page as a dynamic link collection
+### Build Errors
 
-#### Custom Lexicons
+1. Clear `.svelte-kit` directory: `rm -rf .svelte-kit`
+2. Remove node_modules: `rm -rf node_modules`
+3. Reinstall dependencies: `npm install`
+4. Try building again: `npm run build`
 
-This project uses custom AT Protocol lexicons for enhanced functionality:
+## 🙏 Acknowledgments
 
-- **`uk.ewancroft.now`**: Current status display
-
-  - Shows your current status on the home page
-  - Create/update via AT Protocol clients
-
-- **`uk.ewancroft.site.info`**: Website metadata
-
-  - Technology stack information
-  - Privacy statement
-  - Open source details and credits
-  - Displayed on `/site/meta` route
-
-**Note**: These are personal lexicons created for specific use cases. While you're welcome to use them, schema stability is not guaranteed — they may evolve without notice.
-
-## Design System
-
-The website uses a carefully crafted design system with custom colour palettes in OKLCH colour space for perceptually uniform colours:
-
-### Colour Palettes
-
-- **Ink**: Text colours optimised for readability
-- **Canvas**: Background colours with proper contrast
-- **Sage**: Primary accent colours
-- **Mint**: Secondary accent colours
-- **Jade**: Additional accent colours
-
-All colours are designed to:
-
-- Meet WCAG 2.1 AA contrast requirements
-- Work beautifully in both light and dark modes
-- Provide perceptually uniform colour transitions
-- Support the `light-dark()` CSS function for automatic theme switching
-
-### Accessibility Features
-
-- **Contrast Ratios**: All text meets WCAG AA standards (4.5:1 for normal text, 3:1 for large text)
-- **Semantic HTML**: Proper heading hierarchy and landmark regions
-- **Keyboard Navigation**: Full keyboard accessibility
-- **Screen Reader Support**: ARIA labels and descriptions where needed
-- **Focus Indicators**: Visible focus states for interactive elements
-- **Colour Independence**: Information is not conveyed by colour alone
-
-## Deployment
-
-### Production Build
-
-Build the project for production:
-
-```bash
-npm run build
-```
-
-The built files will be in the `build/` directory, ready to deploy to your preferred hosting platform.
-
-### Recommended Hosting Platforms
-
-- **[Vercel](https://vercel.com/)**: Zero-config deployment with automatic previews
-- **[Netlify](https://netlify.com/)**: Continuous deployment with serverless functions
-- **[Cloudflare Pages](https://pages.cloudflare.com/)**: Fast global CDN with edge functions
-- **[GitHub Pages](https://pages.github.com/)**: Free static hosting for GitHub repositories
-
-All platforms support SvelteKit out of the box with automatic adapter detection.
-
-## Content Management
-
-**Important**: This is a display platform, not a content management system. You create content through AT Protocol applications, and it automatically appears on your website.
-
-### Creating Content
-
-- **Profile Updates**: Edit via [Bluesky](https://bsky.app/) settings
-- **Status Updates**: Create `uk.ewancroft.now` records via AT Protocol clients
-- **Links**: Manage via [Linkat](https://linkat.blue/)
-- **Site Metadata**: Create `uk.ewancroft.site.info` records via AT Protocol clients
-
-The website automatically fetches and displays this content with a 5-minute cache for optimal performance.
-
-## Privacy & Security
-
-This website is built with privacy as a core principle:
-
-- **No Tracking**: Zero analytics, tracking pixels, or third-party cookies
-- **No Data Collection**: No personal data is collected, stored, or shared
-- **Local Storage Only**: Only uses localStorage for theme preferences
-- **Open Source**: Complete transparency — inspect the code yourself
-- **No External Dependencies**: All fonts and assets are self-hosted
-- **Content Security**: Proper CSP headers recommended for deployment
-
-## Customisation
-
-### Personalising Your Site
-
-1. **Update Environment Variables**: Set your `PUBLIC_ATPROTO_DID` in `.env`
-2. **Modify Navigation**: Edit `src/lib/data/navItems.ts` to change navigation links
-3. **Customise Colours**: Adjust colour palettes in `src/app.css`
-4. **Update Metadata**: Edit `src/lib/helper/siteMeta.ts` for default SEO values
-5. **Add/Remove Features**: Modify components in `src/lib/components/`
-
-### Extending Functionality
-
-The modular architecture makes it easy to:
-
-- Add new AT Protocol lexicons
-- Create additional pages and routes
-- Integrate new AT Protocol services
-- Customise the design system
-- Add additional data sources
-
-## Browser Support
-
-This website supports all modern browsers:
-
-- **Chrome/Edge**: 90+
-- **Firefox**: 88+
-- **Safari**: 14.1+
-- **Mobile browsers**: iOS Safari 14.5+, Chrome Android 90+
-
-Modern CSS features used:
-
-- `light-dark()` function for automatic theming
-- CSS custom properties (variables)
-- CSS Grid and Flexbox
-- Container queries (progressive enhancement)
-
-## Contributing
-
-While this is a personal website, contributions for bug fixes and improvements are welcome:
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/improvement`
-3. Make your changes with clear commit messages
-4. Test thoroughly across browsers
-5. Submit a pull request
-
-## License
-
-This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**. See the `LICENSE` file for complete details.
-
-This means:
-
-- You can use, modify, and distribute this code
-- You must disclose source code for any modifications
-- You must use the same AGPL-3.0 licence
-- If you run a modified version as a network service, you must make the source available
-
-## Related Projects
-
-This website integrates with the AT Protocol ecosystem:
-
-- **[Bluesky](https://bsky.app/)**: Social network for profile and content
-- **[Linkat](https://linkat.blue/)**: Link aggregation service using AT Protocol
-- **[AT Protocol](https://atproto.com/)**: The decentralised protocol powering it all
-
-## Acknowledgements
-
-This website focuses on modern web standards, accessibility, and streamlined functionality. Built with ❤️ using the latest web technologies and best practices.
+- Thanks to the AT Protocol team for creating an open protocol
+- Thanks to the Bluesky, WhiteWind, and Leaflet teams
+- Inspired by the personal web movement and IndieWeb principles
 
 ---
 
-**Questions or issues?** Open an issue on GitHub or reach out via Bluesky!
+Built with ❤️ using SvelteKit and AT Protocol
