@@ -32,3 +32,6 @@ vite.config.ts.timestamp-*
 
 # temporary files that i plan to delete later but defined here for posterity
 static/lexicons/bluesky lexicons.json
+# Other sources that I will delete later
+# They are used as references, so i will not commit them as my own files
+other
