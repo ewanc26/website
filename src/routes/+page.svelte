@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DynamicLinks } from '$lib/components/layout';
+	import { DynamicLinks, TangledRepos } from '$lib/components/layout';
 	import { ProfileCard, StatusCard, PostCard } from '$lib/components/layout/main/card';
 	import BlueskyPostCard from '$lib/components/layout/main/card/BlueskyPostCard.svelte';
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
@@ -35,6 +35,7 @@
 		<div class="space-y-6">
 			<DynamicLinks />
 			<PostCard />
+			<TangledRepos />
 		</div>
 	</div>
 </div>
