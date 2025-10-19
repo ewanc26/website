@@ -3,15 +3,36 @@
 	import { Header, Footer, ScrollToTop } from '$lib/components/layout';
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 	import { generateMetaTags } from '$lib/helper/metaTags';
+	import { afterNavigate } from '$app/navigation';
+	import type { Snippet } from 'svelte';
 
-	export let data: { siteMeta: SiteMetadata; meta?: Partial<SiteMetadata> };
-	// meta for <svelte:head> (page-specific overrides included)
-	const headMeta = createSiteMeta({
+	interface Props {
+		data: {
+			siteMeta: SiteMetadata;
+			meta?: Partial<SiteMetadata>;
+		};
+		children: Snippet;
+	}
+
+	// Use $props() instead of export let in Svelte 5 runes mode
+	let { data, children }: Props = $props();
+	
+	// Reactive meta updates on navigation
+	let headMeta = $derived(createSiteMeta({
 		...data.siteMeta,
 		...data.meta
+	}));
+	
+	// Generate meta tags for SEO / OG / Twitter
+	let metaTags = $derived(generateMetaTags(headMeta, data.siteMeta));
+
+	// Update document title and meta tags after navigation
+	afterNavigate(() => {
+		// Force update of document title
+		if (typeof document !== 'undefined') {
+			document.title = headMeta.title;
+		}
 	});
-	// generate meta tags for SEO / OG / Twitter
-	const metaTags = generateMetaTags(headMeta, data.siteMeta);
 </script>
 
 <svelte:head>
@@ -48,12 +69,12 @@
 	{/each}
 </svelte:head>
 
-<div class="flex min-h-screen flex-col bg-canvas-50 dark:bg-canvas-950 text-ink-900 dark:text-ink-50">
+<div class="flex min-h-screen flex-col bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50">
 	<Header />
 	
-	<main class="flex-grow container mx-auto px-4 py-8">
+	<main class="container mx-auto flex-grow px-4 py-8">
 		<ScrollToTop />
-		<slot />
+		{@render children()}
 	</main>
 
 	<Footer />
