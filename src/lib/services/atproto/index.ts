@@ -31,8 +31,12 @@ export type {
 	CacheEntry
 } from './types';
 
+export type { TangledRepo, TangledReposData } from './tangled';
+
 // Export fetch functions
 export { fetchProfile, fetchStatus, fetchSiteInfo, fetchLinks } from './fetch';
+
+export { fetchTangledRepos } from './tangled';
 
 export {
 	fetchBlogPosts,
