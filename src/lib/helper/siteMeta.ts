@@ -1,4 +1,10 @@
 import { ogImages } from '$lib/helper/ogImages';
+import {
+  PUBLIC_SITE_TITLE,
+  PUBLIC_SITE_DESCRIPTION,
+  PUBLIC_SITE_KEYWORDS,
+  PUBLIC_SITE_URL
+} from '$env/static/public';
 
 export interface SiteMetadata {
   title: string;
@@ -15,10 +21,10 @@ export interface SiteMetadata {
  * Can be overridden dynamically for each page or component.
  */
 export const defaultSiteMeta: SiteMetadata = {
-  title: "Ewan's Corner",
-  description: "A personal space where I share my thoughts on coding, technology, and life.",
-  keywords: "Ewan, personal website, coding, technology, programming, tech blog, Ewan's Corner",
-  url: '',
+  title: PUBLIC_SITE_TITLE,
+  description: PUBLIC_SITE_DESCRIPTION,
+  keywords: PUBLIC_SITE_KEYWORDS,
+  url: PUBLIC_SITE_URL,
   image: ogImages.main,
   imageWidth: 1200,
   imageHeight: 630
