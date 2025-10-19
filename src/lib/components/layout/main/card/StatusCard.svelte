@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { Card } from '$lib/components/ui';
 	import { fetchStatus, type StatusData } from '$lib/services/atproto';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
 	import { Rss } from '@lucide/svelte';
@@ -21,28 +22,39 @@
 
 <div class="mx-auto w-full max-w-2xl">
 	{#if loading}
-		<div class="animate-pulse rounded-xl bg-canvas-200 p-4 shadow-md dark:bg-canvas-800">
-			<div class="mb-2 h-4 w-3/4 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-			<div class="h-3 w-1/2 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-		</div>
+		<Card loading={true} variant="elevated" padding="md">
+			{#snippet skeleton()}
+				<div class="mb-2 flex items-center gap-2">
+					<div class="h-4 w-4 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+					<div class="h-3 w-24 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+				</div>
+				<div class="mb-2 h-5 w-3/4 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+				<div class="h-3 w-32 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+			{/snippet}
+		</Card>
 	{:else if error}
-		<p class="text-red-600 dark:text-red-400">{error}</p>
+		<Card error={true} errorMessage={error} />
 	{:else if status}
-		<div class="rounded-xl bg-canvas-100 p-4 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
-			<div class="mb-2 flex items-center gap-2">
-				<Rss class="h-4 w-4 text-sage-600 dark:text-sage-400" aria-hidden="true" />
-				<span class="text-xs font-semibold tracking-wide text-ink-800 uppercase dark:text-ink-100">
-					Current Status
-				</span>
-			</div>
+		{@const safeStatus = status}
+		<Card variant="elevated" padding="md">
+			{#snippet children()}
+				<div class="mb-2 flex items-center gap-2">
+					<Rss class="h-4 w-4 text-sage-600 dark:text-sage-400" aria-hidden="true" />
+					<span
+						class="text-xs font-semibold tracking-wide text-ink-800 uppercase dark:text-ink-100"
+					>
+						Current Status
+					</span>
+				</div>
 
-			<p class="mb-2 text-lg font-medium text-ink-900 dark:text-ink-50">
-				{status.text}
-			</p>
+				<p class="mb-2 text-lg font-medium text-ink-900 dark:text-ink-50">
+					{safeStatus.text}
+				</p>
 
-			<time datetime={status.createdAt} class="text-xs font-medium text-ink-800 dark:text-ink-100">
-				{formatRelativeTime(status.createdAt)}
-			</time>
-		</div>
+				<time datetime={safeStatus.createdAt} class="text-xs font-medium text-ink-800 dark:text-ink-100">
+					{formatRelativeTime(safeStatus.createdAt)}
+				</time>
+			{/snippet}
+		</Card>
 	{/if}
 </div>
