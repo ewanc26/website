@@ -113,7 +113,7 @@
 		{#if !isQuoted}
 			<div class="mb-4 flex items-center justify-between">
 				<span class="text-xs font-semibold tracking-wide text-ink-800 uppercase dark:text-ink-100">
-					Latest Post
+					Latest Bluesky Post
 				</span>
 				<a
 					href={getPostUrl(postData.uri)}
