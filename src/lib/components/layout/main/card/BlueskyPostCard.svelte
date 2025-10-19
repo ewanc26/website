@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { Card } from '$lib/components/ui';
 	import { fetchLatestBlueskyPost, type BlueskyPost } from '$lib/services/atproto';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
-	import { Heart, Repeat2, MessageCircle, ExternalLink } from '@lucide/svelte';
+	import { Heart, Repeat2, MessageCircle, ExternalLink, X } from '@lucide/svelte';
 
 	let post: BlueskyPost | null = null;
 	let loading = true;
 	let error: string | null = null;
+	let lightboxImage: { url: string; alt: string } | null = null;
 
 	onMount(async () => {
 		try {
@@ -38,6 +40,16 @@
 		return `https://bsky.app/profile/${handle}`;
 	}
 
+	function openLightbox(url: string, alt: string) {
+		lightboxImage = { url, alt };
+		document.body.style.overflow = 'hidden';
+	}
+
+	function closeLightbox() {
+		lightboxImage = null;
+		document.body.style.overflow = '';
+	}
+
 	// Render rich text with facets (links, mentions, hashtags)
 	function renderRichText(text: string, facets?: any[]): string {
 		if (!facets || facets.length === 0) {
@@ -46,16 +58,16 @@
 
 		// Sort facets by byteStart to process them in order
 		const sortedFacets = [...facets].sort((a, b) => a.index.byteStart - b.index.byteStart);
-		
+
 		let result = '';
 		let lastIndex = 0;
 
 		for (const facet of sortedFacets) {
 			const { byteStart, byteEnd } = facet.index;
-			
+
 			// Add text before this facet
 			result += escapeHtml(text.slice(lastIndex, byteStart));
-			
+
 			const facetText = text.slice(byteStart, byteEnd);
 			const feature = facet.features?.[0];
 
@@ -78,7 +90,7 @@
 
 		// Add remaining text after last facet
 		result += escapeHtml(text.slice(lastIndex));
-		
+
 		return result;
 	}
 
@@ -91,14 +103,16 @@
 
 {#snippet postContent(postData: BlueskyPost, depth: number = 0, isQuoted: boolean = false)}
 	<article
-		class="rounded-xl bg-canvas-{isQuoted ? '200' : '100'} p-{isQuoted ? '4' : '6'} {isQuoted ? 'border border-canvas-300 dark:border-canvas-700' : 'shadow-lg'} transition-all duration-300 {isQuoted ? '' : 'hover:shadow-xl'} dark:bg-canvas-{isQuoted ? '800' : '900'}"
+		class="rounded-xl bg-canvas-{isQuoted ? '200' : '100'} p-{isQuoted ? '4' : '6'} {isQuoted
+			? 'border border-canvas-300 dark:border-canvas-700'
+			: 'shadow-lg'} transition-all duration-300 {isQuoted
+			? ''
+			: 'hover:shadow-xl'} dark:bg-canvas-{isQuoted ? '800' : '900'}"
 	>
 		<!-- Header (only show on root post) -->
 		{#if !isQuoted}
 			<div class="mb-4 flex items-center justify-between">
-				<span
-					class="text-xs font-semibold uppercase tracking-wide text-ink-800 dark:text-ink-100"
-				>
+				<span class="text-xs font-semibold tracking-wide text-ink-800 uppercase dark:text-ink-100">
 					Latest Post
 				</span>
 				<a
@@ -118,7 +132,9 @@
 			href={getProfileUrl(postData.author.handle)}
 			target="_blank"
 			rel="noopener noreferrer"
-			class="mb-{isQuoted ? '3' : '4'} flex items-center gap-{isQuoted ? '2' : '3'} transition-opacity hover:opacity-80"
+			class="mb-{isQuoted ? '3' : '4'} flex items-center gap-{isQuoted
+				? '2'
+				: '3'} transition-opacity hover:opacity-80"
 		>
 			{#if postData.author.avatar}
 				<img
@@ -128,8 +144,14 @@
 					loading="lazy"
 				/>
 			{:else}
-				<div class="flex h-{isQuoted ? '10' : '12'} w-{isQuoted ? '10' : '12'} items-center justify-center rounded-full bg-sage-200 dark:bg-sage-800">
-					<span class="text-{isQuoted ? 'base' : 'lg'} font-semibold text-sage-700 dark:text-sage-300">
+				<div
+					class="flex h-{isQuoted ? '10' : '12'} w-{isQuoted
+						? '10'
+						: '12'} items-center justify-center rounded-full bg-sage-200 dark:bg-sage-800"
+				>
+					<span
+						class="text-{isQuoted ? 'base' : 'lg'} font-semibold text-sage-700 dark:text-sage-300"
+					>
 						{(postData.author.displayName || postData.author.handle).charAt(0).toUpperCase()}
 					</span>
 				</div>
@@ -151,7 +173,11 @@
 		</a>
 
 		<!-- Post Text with Rich Text Support -->
-		<div class="mb-{isQuoted ? '3' : '4'} whitespace-pre-wrap text-{isQuoted ? 'base' : 'lg'} leading-relaxed text-ink-900 dark:text-ink-50">
+		<div
+			class="mb-{isQuoted ? '3' : '4'} whitespace-pre-wrap text-{isQuoted
+				? 'base'
+				: 'lg'} leading-relaxed text-ink-900 dark:text-ink-50"
+		>
 			{@html renderRichText(postData.text, postData.facets)}
 		</div>
 
@@ -168,16 +194,39 @@
 					<track kind="captions" />
 				</video>
 			</div>
-		{:else if postData.hasImages && postData.imageUrls && postData.imageUrls.length > 0}
-			<!-- Images -->
-			<div class="mb-{isQuoted ? '3' : '4'} grid gap-2 {postData.imageUrls.length === 1 ? 'grid-cols-1' : postData.imageUrls.length === 2 ? 'grid-cols-2' : postData.imageUrls.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}">
+		{/if}
+
+		<!-- Images -->
+		{#if postData.hasImages && postData.imageUrls && postData.imageUrls.length > 0}
+			<div
+				class="mb-{isQuoted ? '3' : '4'} grid gap-2 {postData.imageUrls.length === 1
+					? 'grid-cols-1'
+					: postData.imageUrls.length === 2
+						? 'grid-cols-2'
+						: postData.imageUrls.length === 3
+							? 'grid-cols-3'
+							: 'grid-cols-2'}"
+			>
 				{#each postData.imageUrls as imageUrl, index}
-					<img
-						src={imageUrl}
-						alt={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
-						class="h-auto w-full rounded-lg object-cover {postData.imageUrls.length === 4 ? 'aspect-square' : postData.imageUrls.length > 1 ? 'aspect-video' : isQuoted ? 'max-h-64' : 'max-h-96'}"
-						loading="lazy"
-					/>
+					<button
+						type="button"
+						onclick={() =>
+							openLightbox(imageUrl, postData.imageAlts?.[index] || `Post attachment ${index + 1}`)}
+						class="h-auto w-full overflow-hidden rounded-lg transition-opacity hover:opacity-90 focus:ring-2 focus:ring-sage-500 focus:outline-none dark:focus:ring-sage-400"
+					>
+						<img
+							src={imageUrl}
+							alt={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
+							class="h-auto w-full object-cover {postData.imageUrls.length === 4
+								? 'aspect-square'
+								: postData.imageUrls.length > 1
+									? 'aspect-video'
+									: isQuoted
+										? 'max-h-64'
+										: 'max-h-96'}"
+							loading="lazy"
+						/>
+					</button>
 				{/each}
 			</div>
 		{/if}
@@ -188,7 +237,15 @@
 				href={postData.externalLink.uri}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="mb-{isQuoted ? '3' : '4'} flex flex-col gap-2 overflow-hidden rounded-lg border border-canvas-300 bg-canvas-{isQuoted ? '300' : '200'} transition-colors hover:bg-canvas-{isQuoted ? '400' : '300'} dark:border-canvas-700 dark:bg-canvas-{isQuoted ? '700' : '800'} dark:hover:bg-canvas-{isQuoted ? '600' : '700'}"
+				class="mb-{isQuoted
+					? '3'
+					: '4'} flex flex-col gap-2 overflow-hidden rounded-lg border border-canvas-300 bg-canvas-{isQuoted
+					? '300'
+					: '200'} transition-colors hover:bg-canvas-{isQuoted
+					? '400'
+					: '300'} dark:border-canvas-700 dark:bg-canvas-{isQuoted
+					? '700'
+					: '800'} dark:hover:bg-canvas-{isQuoted ? '600' : '700'}"
 			>
 				{#if postData.externalLink.thumb}
 					<img
@@ -199,11 +256,17 @@
 					/>
 				{/if}
 				<div class="p-{isQuoted ? '3' : '4'}">
-					<h3 class="mb-1 text-{isQuoted ? 'sm' : 'base'} font-semibold text-ink-900 line-clamp-2 dark:text-ink-50">
+					<h3
+						class="mb-1 text-{isQuoted
+							? 'sm'
+							: 'base'} line-clamp-2 font-semibold text-ink-900 dark:text-ink-50"
+					>
 						{postData.externalLink.title}
 					</h3>
 					{#if postData.externalLink.description}
-						<p class="mb-2 text-{isQuoted ? 'xs' : 'sm'} text-ink-700 line-clamp-2 dark:text-ink-200">
+						<p
+							class="mb-2 text-{isQuoted ? 'xs' : 'sm'} line-clamp-2 text-ink-700 dark:text-ink-200"
+						>
 							{postData.externalLink.description}
 						</p>
 					{/if}
@@ -221,62 +284,116 @@
 			</div>
 		{/if}
 
-		<!-- Engagement Stats -->
-		<div class="flex items-center gap-{isQuoted ? '4' : '6'} text-{isQuoted ? 'xs' : 'sm'}">
-			{#if postData.likeCount !== undefined}
-				<div class="flex items-center gap-1.5 text-ink-700 dark:text-ink-200">
-					<Heart class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}" aria-hidden="true" />
-					<span class="font-medium">{formatNumber(postData.likeCount)}</span>
-				</div>
-			{/if}
+		<!-- Engagement Stats (only show on root post and first-level quoted posts) -->
+		{#if depth === 0 || (depth === 1 && !postData.quotedPost)}
+			<div class="flex items-center gap-{isQuoted ? '4' : '6'} text-{isQuoted ? 'xs' : 'sm'}">
+				{#if postData.replyCount !== undefined}
+					<div class="flex items-center gap-1.5 text-ink-700 dark:text-ink-200">
+						<MessageCircle
+							class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}"
+							aria-hidden="true"
+						/>
+						<span class="font-medium">{formatNumber(postData.replyCount)}</span>
+					</div>
+				{/if}
 
-			{#if postData.repostCount !== undefined}
-				<div class="flex items-center gap-1.5 text-ink-700 dark:text-ink-200">
-					<Repeat2 class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}" aria-hidden="true" />
-					<span class="font-medium">{formatNumber(postData.repostCount)}</span>
-				</div>
-			{/if}
+				{#if postData.repostCount !== undefined}
+					<div class="flex items-center gap-1.5 text-ink-700 dark:text-ink-200">
+						<Repeat2 class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}" aria-hidden="true" />
+						<span class="font-medium">{formatNumber(postData.repostCount)}</span>
+					</div>
+				{/if}
 
-			{#if postData.replyCount !== undefined}
-				<div class="flex items-center gap-1.5 text-ink-700 dark:text-ink-200">
-					<MessageCircle class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}" aria-hidden="true" />
-					<span class="font-medium">{formatNumber(postData.replyCount)}</span>
-				</div>
-			{/if}
+				{#if postData.likeCount !== undefined}
+					<div class="flex items-center gap-1.5 text-ink-700 dark:text-ink-200">
+						<Heart class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}" aria-hidden="true" />
+						<span class="font-medium">{formatNumber(postData.likeCount)}</span>
+					</div>
+				{/if}
 
-			<time
-				datetime={postData.createdAt}
-				class="ml-auto text-xs font-medium text-ink-800 dark:text-ink-100"
-			>
-				{formatRelativeTime(postData.createdAt)}
-			</time>
-		</div>
+				<time
+					datetime={postData.createdAt}
+					class="ml-auto text-xs font-medium text-ink-800 dark:text-ink-100"
+				>
+					{formatRelativeTime(postData.createdAt)}
+				</time>
+			</div>
+		{/if}
 	</article>
 {/snippet}
 
 <div class="mx-auto w-full max-w-2xl">
 	{#if loading}
-		<div class="animate-pulse rounded-xl bg-canvas-200 p-6 shadow-md dark:bg-canvas-800">
-			<div class="mb-3 h-5 w-32 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-			<div class="mb-3 space-y-2">
-				<div class="h-4 w-full rounded bg-canvas-300 dark:bg-canvas-700"></div>
-				<div class="h-4 w-5/6 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-			</div>
-			<div class="flex gap-4">
-				<div class="h-3 w-12 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-				<div class="h-3 w-12 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-				<div class="h-3 w-12 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-			</div>
-		</div>
+		<Card loading={true} variant="elevated" padding="md">
+			{#snippet skeleton()}
+				<!-- Header -->
+				<div class="mb-3 flex items-center justify-between">
+					<div class="h-3 w-20 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+					<div class="h-4 w-4 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+				</div>
+
+				<!-- Author -->
+				<div class="mb-3 flex items-center gap-3">
+					<div class="h-12 w-12 rounded-full bg-canvas-300 dark:bg-canvas-700"></div>
+					<div class="flex-1 space-y-2">
+						<div class="h-4 w-32 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+						<div class="h-3 w-24 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+					</div>
+				</div>
+
+				<!-- Post content -->
+				<div class="mb-3 space-y-2">
+					<div class="h-4 w-full rounded bg-canvas-300 dark:bg-canvas-700"></div>
+					<div class="h-4 w-5/6 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+					<div class="h-4 w-4/6 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+				</div>
+
+				<!-- Engagement stats -->
+				<div class="flex gap-4">
+					<div class="h-3 w-12 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+					<div class="h-3 w-12 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+					<div class="h-3 w-12 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+				</div>
+			{/snippet}
+		</Card>
 	{:else if error}
-		<div class="rounded-xl bg-red-50 p-6 text-center shadow-md dark:bg-red-900/20">
-			<p class="text-red-600 dark:text-red-400">{error}</p>
-		</div>
+		<Card error={true} errorMessage={error} />
 	{:else if post}
 		{@render postContent(post, 0, false)}
 	{:else}
-		<div class="rounded-xl bg-canvas-100 p-12 text-center shadow-lg dark:bg-canvas-900">
-			<p class="text-ink-700 dark:text-ink-300">No posts found</p>
-		</div>
+		<Card variant="flat" padding="lg">
+			{#snippet children()}
+				<div class="text-center">
+					<p class="text-ink-700 dark:text-ink-300">No posts found</p>
+				</div>
+			{/snippet}
+		</Card>
 	{/if}
 </div>
+
+<!-- Lightbox Modal -->
+{#if lightboxImage}
+	<div
+		class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+		onclick={closeLightbox}
+		onkeydown={(e) => e.key === 'Escape' && closeLightbox()}
+		role="button"
+		tabindex="0"
+		aria-label="Close image lightbox"
+	>
+		<button
+			type="button"
+			onclick={closeLightbox}
+			class="absolute top-4 right-4 rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70 focus:ring-2 focus:ring-white focus:outline-none"
+			aria-label="Close"
+		>
+			<X class="h-6 w-6" />
+		</button>
+		<img
+			src={lightboxImage.url}
+			alt={lightboxImage.alt}
+			class="max-h-[90vh] max-w-[90vw] object-contain"
+			loading="lazy"
+		/>
+	</div>
+{/if}
