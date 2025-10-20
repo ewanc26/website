@@ -3,12 +3,16 @@
 	import { Card } from '$lib/components/ui';
 	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
 	import LinkCard from './LinkCard.svelte';
+	import { formatCompactNumber } from '$lib/utils/formatNumber';
 
 	let profile: ProfileData | null = null;
 	let loading = true;
 	let error: string | null = null;
 	let imageLoaded = false;
 	let bannerLoaded = false;
+
+	// Detect system locale, fallback to en-GB
+	const locale = typeof navigator !== 'undefined' ? navigator.language || 'en-GB' : 'en-GB';
 
 	onMount(async () => {
 		try {
@@ -19,13 +23,6 @@
 			loading = false;
 		}
 	});
-
-	function formatNumber(num?: number): string {
-		if (!num) return '0';
-		if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`;
-		if (num >= 1_000) return `${(num / 1_000).toFixed(1)}K`;
-		return num.toString();
-	}
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
@@ -118,21 +115,21 @@
 
 					<div class="flex gap-6 text-sm font-medium">
 						<div class="flex items-center gap-1">
-							<span class="font-bold text-ink-900 dark:text-ink-50"
-								>{formatNumber(safeProfile.postsCount)}</span
-							>
+							<span class="font-bold text-ink-900 dark:text-ink-50">
+								{formatCompactNumber(safeProfile.postsCount, locale)}
+							</span>
 							<span class="text-ink-700 dark:text-ink-200">Posts</span>
 						</div>
 						<div class="flex items-center gap-1">
-							<span class="font-bold text-ink-900 dark:text-ink-50"
-								>{formatNumber(safeProfile.followersCount)}</span
-							>
+							<span class="font-bold text-ink-900 dark:text-ink-50">
+								{formatCompactNumber(safeProfile.followersCount, locale)}
+							</span>
 							<span class="text-ink-700 dark:text-ink-200">Followers</span>
 						</div>
 						<div class="flex items-center gap-1">
-							<span class="font-bold text-ink-900 dark:text-ink-50"
-								>{formatNumber(safeProfile.followsCount)}</span
-							>
+							<span class="font-bold text-ink-900 dark:text-ink-50">
+								{formatCompactNumber(safeProfile.followsCount, locale)}
+							</span>
 							<span class="text-ink-700 dark:text-ink-200">Following</span>
 						</div>
 					</div>
