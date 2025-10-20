@@ -3,24 +3,42 @@
  */
 
 /**
- * Formats large numbers into compact human-readable format
- * @param num - The number to format
- * @returns Formatted string (e.g., "1.2K", "3.4M")
+ * Determines the effective locale, preferring system locale with fallback to 'en-GB'.
  */
-export function formatCompactNumber(num?: number): string {
-	if (!num) return '0';
-	if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`;
-	if (num >= 1_000) return `${(num / 1_000).toFixed(1)}K`;
-	return num.toString();
+function getLocale(locale?: string): string {
+	return (
+		locale ||
+		(typeof navigator !== 'undefined' && navigator.language) ||
+		'en-GB'
+	);
 }
 
 /**
- * Formats a number with thousand separators
+ * Formats large numbers into a compact, human-readable format.
+ * Automatically adapts to the given or system locale.
  * @param num - The number to format
- * @param locale - The locale to use (default: system locale)
+ * @param locale - Optional locale string (defaults to system or 'en-GB')
+ * @returns Formatted string (e.g., "1.2K", "3.4M")
+ */
+export function formatCompactNumber(num?: number, locale?: string): string {
+	if (num === undefined || num === null) return '0';
+	const effectiveLocale = getLocale(locale);
+
+	return new Intl.NumberFormat(effectiveLocale, {
+		notation: 'compact',
+		compactDisplay: 'short',
+		maximumFractionDigits: 1
+	}).format(num);
+}
+
+/**
+ * Formats a number with thousand separators.
+ * Automatically adapts to the given or system locale.
+ * @param num - The number to format
+ * @param locale - Optional locale string (defaults to system or 'en-GB')
  * @returns Formatted string (e.g., "1,234,567")
  */
 export function formatNumber(num: number, locale?: string): string {
-	const userLocale = locale || (typeof navigator !== 'undefined' ? navigator.language : 'en-GB');
-	return new Intl.NumberFormat(userLocale).format(num);
+	const effectiveLocale = getLocale(locale);
+	return new Intl.NumberFormat(effectiveLocale).format(num);
 }
