@@ -3,12 +3,16 @@
 	import { Card } from '$lib/components/ui';
 	import { fetchLatestBlueskyPost, type BlueskyPost } from '$lib/services/atproto';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
+	import { formatCompactNumber } from '$lib/utils/formatNumber';
 	import { Heart, Repeat2, MessageCircle, ExternalLink, X } from '@lucide/svelte';
 
 	let post: BlueskyPost | null = null;
 	let loading = true;
 	let error: string | null = null;
 	let lightboxImage: { url: string; alt: string } | null = null;
+
+	// Detect system locale, fallback to en-GB
+	const locale = typeof navigator !== 'undefined' ? navigator.language || 'en-GB' : 'en-GB';
 
 	onMount(async () => {
 		try {
@@ -20,16 +24,7 @@
 		}
 	});
 
-	function formatNumber(num?: number): string {
-		if (!num) return '0';
-		if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`;
-		if (num >= 1_000) return `${(num / 1_000).toFixed(1)}K`;
-		return num.toString();
-	}
-
 	function getPostUrl(uri: string): string {
-		// Convert AT URI to bsky.app URL
-		// Format: at://did:plc:xxx/app.bsky.feed.post/rkey
 		const parts = uri.split('/');
 		const did = parts[2];
 		const rkey = parts[4];
@@ -50,13 +45,8 @@
 		document.body.style.overflow = '';
 	}
 
-	// Render rich text with facets (links, mentions, hashtags)
 	function renderRichText(text: string, facets?: any[]): string {
-		if (!facets || facets.length === 0) {
-			return escapeHtml(text);
-		}
-
-		// Sort facets by byteStart to process them in order
+		if (!facets || facets.length === 0) return escapeHtml(text);
 		const sortedFacets = [...facets].sort((a, b) => a.index.byteStart - b.index.byteStart);
 
 		let result = '';
@@ -64,10 +54,7 @@
 
 		for (const facet of sortedFacets) {
 			const { byteStart, byteEnd } = facet.index;
-
-			// Add text before this facet
 			result += escapeHtml(text.slice(lastIndex, byteStart));
-
 			const facetText = text.slice(byteStart, byteEnd);
 			const feature = facet.features?.[0];
 
@@ -88,9 +75,7 @@
 			lastIndex = byteEnd;
 		}
 
-		// Add remaining text after last facet
 		result += escapeHtml(text.slice(lastIndex));
-
 		return result;
 	}
 
@@ -284,7 +269,7 @@
 			</div>
 		{/if}
 
-		<!-- Engagement Stats (only show on root post and first-level quoted posts) -->
+		<!-- Engagement Stats -->
 		{#if depth === 0 || (depth === 1 && !postData.quotedPost)}
 			<div class="flex items-center gap-{isQuoted ? '4' : '6'} text-{isQuoted ? 'xs' : 'sm'}">
 				{#if postData.replyCount !== undefined}
@@ -293,21 +278,21 @@
 							class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}"
 							aria-hidden="true"
 						/>
-						<span class="font-medium">{formatNumber(postData.replyCount)}</span>
+						<span class="font-medium">{formatCompactNumber(postData.replyCount, locale)}</span>
 					</div>
 				{/if}
 
 				{#if postData.repostCount !== undefined}
 					<div class="flex items-center gap-1.5 text-ink-700 dark:text-ink-200">
 						<Repeat2 class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}" aria-hidden="true" />
-						<span class="font-medium">{formatNumber(postData.repostCount)}</span>
+						<span class="font-medium">{formatCompactNumber(postData.repostCount, locale)}</span>
 					</div>
 				{/if}
 
 				{#if postData.likeCount !== undefined}
 					<div class="flex items-center gap-1.5 text-ink-700 dark:text-ink-200">
 						<Heart class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}" aria-hidden="true" />
-						<span class="font-medium">{formatNumber(postData.likeCount)}</span>
+						<span class="font-medium">{formatCompactNumber(postData.likeCount, locale)}</span>
 					</div>
 				{/if}
 
