@@ -108,7 +108,7 @@
 					<p class="font-medium text-ink-700 dark:text-ink-200">@{safeProfile.handle}</p>
 
 					{#if safeProfile.description}
-						<p class="mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-200">
+						<p class="mb-4 break-words whitespace-pre-wrap text-ink-700 dark:text-ink-200">
 							{safeProfile.description}
 						</p>
 					{/if}
