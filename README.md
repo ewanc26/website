@@ -27,7 +27,7 @@ A modern, AT Protocol-powered personal website built with SvelteKit 2 and Tailwi
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:ewanc26/website.git
 cd website-redesign
 ```
 
