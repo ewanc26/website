@@ -150,7 +150,11 @@ function getLeafletRSSUrl(publication: { basePath?: string; rkey: string }): str
 	}
 
 	if (publication.basePath) {
-		return `https://${publication.basePath}/rss`;
+		// Ensure basePath is a complete URL
+		const basePath = publication.basePath.startsWith('http') 
+			? publication.basePath 
+			: `https://${publication.basePath}`;
+		return `${basePath}/rss`;
 	}
 
 	// Fallback to Leaflet /lish format
