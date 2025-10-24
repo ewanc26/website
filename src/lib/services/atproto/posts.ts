@@ -158,7 +158,11 @@ export async function fetchBlogPosts(): Promise<BlogPostsData> {
 			if (PUBLIC_LEAFLET_BASE_PATH) {
 				url = `${PUBLIC_LEAFLET_BASE_PATH}/${rkey}`;
 			} else if (publication?.basePath) {
-				url = `${publication.basePath}/${rkey}`;
+				// Ensure basePath is a complete URL
+				const basePath = publication.basePath.startsWith('http') 
+					? publication.basePath 
+					: `https://${publication.basePath}`;
+				url = `${basePath}/${rkey}`;
 			} else if (publicationRkey) {
 				url = `https://leaflet.pub/lish/${PUBLIC_ATPROTO_DID}/${publicationRkey}/${rkey}`;
 			} else {
