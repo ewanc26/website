@@ -103,13 +103,13 @@
 								{/if}
 
 								<!-- Title -->
-								<h3 class="font-semibold text-ink-900 dark:text-ink-50">{post.title}</h3>
+								<h3 class="overflow-wrap-anywhere break-words font-semibold text-ink-900 dark:text-ink-50">{post.title}</h3>
 
 								<!-- Description -->
 								{#if post.description}
-									<p class="line-clamp-2 text-sm text-ink-700 dark:text-ink-200">
-										{post.description}
-									</p>
+								<p class="overflow-wrap-anywhere break-words line-clamp-2 text-sm text-ink-700 dark:text-ink-200">
+								{post.description}
+								</p>
 								{/if}
 
 								<!-- Timestamp -->

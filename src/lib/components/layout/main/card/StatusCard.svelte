@@ -47,7 +47,7 @@
 					</span>
 				</div>
 
-				<p class="mb-2 text-lg font-medium text-ink-900 dark:text-ink-50">
+				<p class="mb-2 overflow-wrap-anywhere break-words text-lg font-medium text-ink-900 dark:text-ink-50">
 					{safeStatus.text}
 				</p>
 
