@@ -71,10 +71,10 @@
       {/if}
 
       <!-- 👇 Title is always below the badges -->
-      <h3 class="font-semibold text-ink-900 dark:text-ink-50">{title}</h3>
+      <h3 class="overflow-wrap-anywhere break-words font-semibold text-ink-900 dark:text-ink-50">{title}</h3>
 
       {#if displayDescription}
-        <p class="text-sm text-ink-700 line-clamp-2 dark:text-ink-200">
+        <p class="overflow-wrap-anywhere break-words text-sm text-ink-700 line-clamp-2 dark:text-ink-200">
           {displayDescription}
         </p>
       {/if}

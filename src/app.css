@@ -74,6 +74,8 @@
   /* Base styles for consistent typography and accessibility */
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
   }
 
   body {
@@ -81,12 +83,25 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
   }
 
   /* Focus visible styles for accessibility */
   *:focus-visible {
     outline: 2px solid var(--color-sage-600);
     outline-offset: 2px;
+  }
+  
+  /* Ensure all elements stay within viewport */
+  * {
+    min-width: 0;
+  }
+  
+  img, video, iframe, embed, object {
+    max-width: 100%;
+    height: auto;
   }
 }
 

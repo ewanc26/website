@@ -18,10 +18,10 @@
 
 <div class="mx-auto max-w-6xl">
 	<div class="mb-8 text-center">
-		<h1 class="mb-4 text-4xl font-bold text-ink-900 md:text-5xl dark:text-ink-50">
+		<h1 class="mb-4 overflow-wrap-anywhere break-words text-4xl font-bold text-ink-900 md:text-5xl dark:text-ink-50">
 			Welcome to {meta.title}
 		</h1>
-		<p class="mx-auto max-w-2xl text-lg text-ink-700 dark:text-ink-200">
+		<p class="mx-auto max-w-2xl overflow-wrap-anywhere break-words text-lg text-ink-700 dark:text-ink-200">
 			{meta.description}
 		</p>
 	</div>
