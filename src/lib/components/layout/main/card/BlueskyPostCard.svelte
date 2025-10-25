@@ -159,7 +159,7 @@
 
 		<!-- Post Text with Rich Text Support -->
 		<div
-			class="mb-{isQuoted ? '3' : '4'} whitespace-pre-wrap text-{isQuoted
+			class="mb-{isQuoted ? '3' : '4'} overflow-wrap-anywhere break-words whitespace-pre-wrap text-{isQuoted
 				? 'base'
 				: 'lg'} leading-relaxed text-ink-900 dark:text-ink-50"
 		>
@@ -168,11 +168,11 @@
 
 		<!-- Video -->
 		{#if postData.hasVideo && postData.videoUrl}
-			<div class="mb-{isQuoted ? '3' : '4'} overflow-hidden rounded-lg">
+			<div class="mb-{isQuoted ? '3' : '4'} max-w-full overflow-hidden rounded-lg">
 				<video
 					src={postData.videoUrl}
 					controls
-					class="w-full"
+					class="w-full max-w-full"
 					preload="metadata"
 					poster={postData.videoThumbnail}
 				>
@@ -184,7 +184,7 @@
 		<!-- Images -->
 		{#if postData.hasImages && postData.imageUrls && postData.imageUrls.length > 0}
 			<div
-				class="mb-{isQuoted ? '3' : '4'} grid gap-2 {postData.imageUrls.length === 1
+				class="mb-{isQuoted ? '3' : '4'} grid max-w-full gap-2 {postData.imageUrls.length === 1
 					? 'grid-cols-1'
 					: postData.imageUrls.length === 2
 						? 'grid-cols-2'
@@ -197,12 +197,12 @@
 						type="button"
 						onclick={() =>
 							openLightbox(imageUrl, postData.imageAlts?.[index] || `Post attachment ${index + 1}`)}
-						class="h-auto w-full overflow-hidden rounded-lg transition-opacity hover:opacity-90 focus:ring-2 focus:ring-sage-500 focus:outline-none dark:focus:ring-sage-400"
+						class="h-auto w-full max-w-full overflow-hidden rounded-lg transition-opacity hover:opacity-90 focus:ring-2 focus:ring-sage-500 focus:outline-none dark:focus:ring-sage-400"
 					>
 						<img
 							src={imageUrl}
 							alt={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
-							class="h-auto w-full object-cover {postData.imageUrls.length === 4
+							class="h-auto w-full max-w-full object-cover {postData.imageUrls.length === 4
 								? 'aspect-square'
 								: postData.imageUrls.length > 1
 									? 'aspect-video'
@@ -224,7 +224,7 @@
 				rel="noopener noreferrer"
 				class="mb-{isQuoted
 					? '3'
-					: '4'} flex flex-col gap-2 overflow-hidden rounded-lg border border-canvas-300 bg-canvas-{isQuoted
+					: '4'} flex max-w-full flex-col gap-2 overflow-hidden rounded-lg border border-canvas-300 bg-canvas-{isQuoted
 					? '300'
 					: '200'} transition-colors hover:bg-canvas-{isQuoted
 					? '400'
@@ -236,13 +236,13 @@
 					<img
 						src={postData.externalLink.thumb}
 						alt={postData.externalLink.title}
-						class="h-{isQuoted ? '32' : '48'} w-full object-cover"
+						class="h-{isQuoted ? '32' : '48'} w-full max-w-full object-cover"
 						loading="lazy"
 					/>
 				{/if}
 				<div class="p-{isQuoted ? '3' : '4'}">
 					<h3
-						class="mb-1 text-{isQuoted
+						class="mb-1 overflow-wrap-anywhere break-words text-{isQuoted
 							? 'sm'
 							: 'base'} line-clamp-2 font-semibold text-ink-900 dark:text-ink-50"
 					>
@@ -250,12 +250,12 @@
 					</h3>
 					{#if postData.externalLink.description}
 						<p
-							class="mb-2 text-{isQuoted ? 'xs' : 'sm'} line-clamp-2 text-ink-700 dark:text-ink-200"
+							class="mb-2 overflow-wrap-anywhere break-words text-{isQuoted ? 'xs' : 'sm'} line-clamp-2 text-ink-700 dark:text-ink-200"
 						>
 							{postData.externalLink.description}
 						</p>
 					{/if}
-					<p class="text-xs text-ink-600 dark:text-ink-300">
+					<p class="overflow-wrap-anywhere break-words text-xs text-ink-600 dark:text-ink-300">
 						{new URL(postData.externalLink.uri).hostname}
 					</p>
 				</div>

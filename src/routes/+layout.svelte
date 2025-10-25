@@ -51,7 +51,7 @@
 <!-- Bespoke MetaTags component -->
 <MetaTags meta={headMeta} siteMeta={data.siteMeta} />
 
-<div class="flex min-h-screen flex-col bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50">
+<div class="flex min-h-screen flex-col overflow-x-hidden bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50">
 	<Header />
 	
 	<main class="container mx-auto flex-grow px-4 py-8">

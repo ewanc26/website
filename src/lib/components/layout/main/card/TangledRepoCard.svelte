@@ -40,17 +40,17 @@
 			class="h-5 w-5 flex-shrink-0 text-sage-600 dark:text-sage-400"
 			aria-hidden="true"
 		/>
-		<div class="flex flex-col gap-1 min-w-0">
-			<h3 class="font-semibold text-ink-900 truncate dark:text-ink-50">
+		<div class="flex flex-col gap-1 min-w-0 flex-1">
+			<h3 class="overflow-wrap-anywhere break-words font-semibold text-ink-900 dark:text-ink-50">
 				{repo.name}
 			</h3>
-			<div class="flex items-center gap-3 text-xs text-ink-700 dark:text-ink-200">
-				<div class="flex items-center gap-1">
-					<Server class="h-3 w-3" aria-hidden="true" />
+			<div class="flex flex-wrap items-center gap-3 text-xs text-ink-700 dark:text-ink-200">
+				<div class="flex items-center gap-1 min-w-0">
+					<Server class="h-3 w-3 flex-shrink-0" aria-hidden="true" />
 					<span class="truncate">{getKnotServerName(repo.knot)}</span>
 				</div>
-				<div class="flex items-center gap-1">
-					<User class="h-3 w-3" aria-hidden="true" />
+				<div class="flex items-center gap-1 min-w-0">
+					<User class="h-3 w-3 flex-shrink-0" aria-hidden="true" />
 					<span class="truncate">{handle || PUBLIC_ATPROTO_DID}</span>
 				</div>
 			</div>
