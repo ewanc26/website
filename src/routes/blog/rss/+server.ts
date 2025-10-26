@@ -5,7 +5,8 @@ import {
 	PUBLIC_SITE_DESCRIPTION,
 	PUBLIC_SITE_URL,
 	PUBLIC_LEAFLET_BASE_PATH,
-	PUBLIC_LEAFLET_BLOG_PUBLICATION
+	PUBLIC_LEAFLET_BLOG_PUBLICATION,
+	PUBLIC_ENABLE_WHITEWIND
 } from '$env/static/public';
 import { fetchBlogPosts, fetchLeafletPublications } from '$lib/services/atproto';
 
@@ -13,9 +14,9 @@ import { fetchBlogPosts, fetchLeafletPublications } from '$lib/services/atproto'
  * RSS 2.0 feed for blog posts
  *
  * Strategy:
- * 1. If only Leaflet posts exist and there's a single publication, redirect to its RSS feed
- * 2. If WhiteWind posts exist, generate RSS with WhiteWind posts (linking to them)
- * 3. If mixed content, prioritize WhiteWind and generate RSS for those
+ * 1. If WhiteWind is disabled or no WhiteWind posts exist, redirect to Leaflet RSS feed
+ * 2. If WhiteWind is enabled and WhiteWind posts exist, generate RSS with WhiteWind posts
+ * 3. If mixed content and WhiteWind is enabled, prioritize WhiteWind and generate RSS for those
  */
 export const GET: RequestHandler = async () => {
 	try {
@@ -25,12 +26,12 @@ export const GET: RequestHandler = async () => {
 		const whiteWindPosts = posts.filter((p) => p.platform === 'WhiteWind');
 		const leafletPosts = posts.filter((p) => p.platform === 'leaflet');
 
-		// If we have WhiteWind posts, generate RSS for them
-		if (whiteWindPosts.length > 0) {
+		// If WhiteWind is enabled and we have WhiteWind posts, generate RSS for them
+		if (PUBLIC_ENABLE_WHITEWIND === 'true' && whiteWindPosts.length > 0) {
 			return generateWhiteWindRSS(whiteWindPosts);
 		}
 
-		// If only Leaflet posts, redirect to Leaflet RSS feed
+		// If WhiteWind is disabled or only Leaflet posts exist, redirect to Leaflet RSS feed
 		if (leafletPosts.length > 0) {
 			return await redirectToLeafletRSS();
 		}
