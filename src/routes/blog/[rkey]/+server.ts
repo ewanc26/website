@@ -3,7 +3,8 @@ import {
 	PUBLIC_ATPROTO_DID,
 	PUBLIC_LEAFLET_BASE_PATH,
 	PUBLIC_LEAFLET_BLOG_PUBLICATION,
-	PUBLIC_BLOG_FALLBACK_URL
+	PUBLIC_BLOG_FALLBACK_URL,
+	PUBLIC_ENABLE_WHITEWIND
 } from '$env/static/public';
 import { withFallback } from '$lib/services/atproto';
 import { fetchLeafletPublications } from '$lib/services/atproto';
@@ -11,11 +12,12 @@ import { fetchLeafletPublications } from '$lib/services/atproto';
 /**
  * Smart blog post redirect handler
  *
- * Automatically detects whether the post is from WhiteWind or Leaflet
+ * Automatically detects whether the post is from Leaflet or WhiteWind (if enabled)
  * and redirects to the appropriate URL.
  *
- * WhiteWind: https://whtwnd.com/{DID}/{rkey}
- * Leaflet: {LEAFLET_BASE_PATH}/{rkey} or https://leaflet.pub/{DID}/{rkey}
+ * Priority order:
+ * 1. Leaflet: {LEAFLET_BASE_PATH}/{rkey} or https://leaflet.pub/{DID}/{rkey}
+ * 2. WhiteWind: https://whtwnd.com/{DID}/{rkey} (only if PUBLIC_ENABLE_WHITEWIND is true)
  *
  * If detection fails, falls back to PUBLIC_BLOG_FALLBACK_URL or returns 404.
  *
@@ -28,37 +30,7 @@ async function detectPostPlatform(
 	rkey: string
 ): Promise<{ platform: 'whitewind' | 'leaflet' | 'unknown'; url?: string }> {
 	try {
-		// Check WhiteWind first using atproto services
-		const whiteWindRecord = await withFallback(
-			PUBLIC_ATPROTO_DID,
-			async (agent) => {
-				try {
-					const response = await agent.com.atproto.repo.getRecord({
-						repo: PUBLIC_ATPROTO_DID,
-						collection: 'com.whtwnd.blog.entry',
-						rkey
-					});
-					return response.data;
-				} catch (err) {
-					// Record not found
-					return null;
-				}
-			},
-			true // Use PDS first for custom collections
-		);
-
-		if (whiteWindRecord) {
-			const value = whiteWindRecord.value as any;
-			// Skip drafts and non-public posts
-			if (!value?.isDraft && (!value?.visibility || value.visibility === 'public')) {
-				return {
-					platform: 'whitewind',
-					url: `https://whtwnd.com/${PUBLIC_ATPROTO_DID}/${rkey}`
-				};
-			}
-		}
-
-		// Check Leaflet using atproto services
+		// Check Leaflet FIRST (prioritized) using atproto services
 		const leafletRecord = await withFallback(
 			PUBLIC_ATPROTO_DID,
 			async (agent) => {
@@ -119,6 +91,38 @@ async function detectPostPlatform(
 			};
 		}
 
+		// Check WhiteWind as fallback (only if enabled)
+		if (PUBLIC_ENABLE_WHITEWIND === 'true') {
+			const whiteWindRecord = await withFallback(
+			PUBLIC_ATPROTO_DID,
+			async (agent) => {
+				try {
+					const response = await agent.com.atproto.repo.getRecord({
+						repo: PUBLIC_ATPROTO_DID,
+						collection: 'com.whtwnd.blog.entry',
+						rkey
+					});
+					return response.data;
+				} catch (err) {
+					// Record not found
+					return null;
+				}
+			},
+				true // Use PDS first for custom collections
+			);
+
+			if (whiteWindRecord) {
+				const value = whiteWindRecord.value as any;
+				// Skip drafts and non-public posts
+				if (!value?.isDraft && (!value?.visibility || value.visibility === 'public')) {
+					return {
+						platform: 'whitewind',
+						url: `https://whtwnd.com/${PUBLIC_ATPROTO_DID}/${rkey}`
+					};
+				}
+			}
+		}
+
 		return { platform: 'unknown' };
 	} catch (error) {
 		console.error('Error detecting post platform:', error);
@@ -158,15 +162,17 @@ export const GET: RequestHandler = async ({ params, url }) => {
 		const blogPublicationNote = PUBLIC_LEAFLET_BLOG_PUBLICATION
 			? `\n\nNote: Only checking Leaflet publication: ${PUBLIC_LEAFLET_BLOG_PUBLICATION}`
 			: '';
+		const whiteWindNote = PUBLIC_ENABLE_WHITEWIND === 'true'
+			? '\n- WhiteWind: https://whtwnd.com'
+			: '';
 
 		return new Response(
 			`Blog post not found: ${rkey}
 
-This post could not be found on WhiteWind or Leaflet platforms.${blogPublicationNote}
+This post could not be found on Leaflet${PUBLIC_ENABLE_WHITEWIND === 'true' ? ' or WhiteWind' : ''} platform${PUBLIC_ENABLE_WHITEWIND === 'true' ? 's' : ''}.${blogPublicationNote}
 
 Please check:
-- WhiteWind: https://whtwnd.com
-- Leaflet: https://leaflet.pub`,
+- Leaflet: https://leaflet.pub${whiteWindNote}`,
 			{
 				status: 404,
 				headers: {
