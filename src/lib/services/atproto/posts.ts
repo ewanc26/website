@@ -1,4 +1,4 @@
-import { PUBLIC_ATPROTO_DID, PUBLIC_LEAFLET_BASE_PATH } from '$env/static/public';
+import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 import { cache } from './cache';
 import { withFallback, defaultAgent } from './agents';
 import { resolveIdentity } from './agents';
@@ -146,28 +146,26 @@ export async function fetchBlogPosts(): Promise<BlogPostsData> {
 		);
 
 		for (const record of leafletDocsRecords) {
-			const value = record.value as any;
-			const rkey = record.uri.split('/').pop() || '';
-			const publicationUri = value.publication;
-			const publication = publicationsMap.get(publicationUri);
+		const value = record.value as any;
+		const rkey = record.uri.split('/').pop() || '';
+		const publicationUri = value.publication;
+		const publication = publicationsMap.get(publicationUri);
 
-			// Determine URL based on priority: env var → publication base_path → Leaflet /lish format
-			let url: string;
-			const publicationRkey = publicationUri ? publicationUri.split('/').pop() : '';
+		// Determine URL based on priority: publication base_path → Leaflet /lish format
+		let url: string;
+		const publicationRkey = publicationUri ? publicationUri.split('/').pop() : '';
 
-			if (PUBLIC_LEAFLET_BASE_PATH) {
-				url = `${PUBLIC_LEAFLET_BASE_PATH}/${rkey}`;
-			} else if (publication?.basePath) {
-				// Ensure basePath is a complete URL
-				const basePath = publication.basePath.startsWith('http') 
-					? publication.basePath 
-					: `https://${publication.basePath}`;
-				url = `${basePath}/${rkey}`;
-			} else if (publicationRkey) {
-				url = `https://leaflet.pub/lish/${PUBLIC_ATPROTO_DID}/${publicationRkey}/${rkey}`;
-			} else {
-				url = `https://leaflet.pub/${PUBLIC_ATPROTO_DID}/${rkey}`;
-			}
+		if (publication?.basePath) {
+		// Ensure basePath is a complete URL
+		 const basePath = publication.basePath.startsWith('http') 
+		 ? publication.basePath 
+		 : `https://${publication.basePath}`;
+		url = `${basePath}/${rkey}`;
+		} else if (publicationRkey) {
+		url = `https://leaflet.pub/lish/${PUBLIC_ATPROTO_DID}/${publicationRkey}/${rkey}`;
+		} else {
+		url = `https://leaflet.pub/${PUBLIC_ATPROTO_DID}/${rkey}`;
+		}
 
 			posts.push({
 				title: value.title || 'Untitled Document',

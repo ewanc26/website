@@ -1,16 +1,17 @@
-# Ewan’s Corner
+# Ewan's Corner
 
 A modern, AT Protocol-powered personal website built with SvelteKit 2 and Tailwind CSS 4.
 
 ## 🌟 Features
 
 - **AT Protocol Integration**: Fetch and display content from your AT Protocol repository  
+- **Multi-Publication Support**: Map friendly URL slugs to Leaflet publications with a simple config  
 - **Multi-Platform Blog**: Seamlessly aggregate blog posts from WhiteWind and/or Leaflet (configurable)  
 - **Dynamic Profile**: Automatically display your Bluesky profile information  
 - **Custom Status**: Show real-time status updates using custom AT Protocol lexicons  
 - **Link Board**: Display a Linkat board with emoji-styled link cards  
 - **Bluesky Posts**: Showcase your latest non-reply Bluesky posts with rich media support  
-- **Smart Blog Redirects**: Intelligent redirection system for blog-post URLs with platform prioritisation  
+- **Smart Redirects**: Intelligent redirection system for publication URLs with platform prioritisation  
 - **Responsive Design**: Mobile-first layout with dark-mode support  
 - **RSS Feed**: Intelligent RSS-feed handling for WhiteWind and/or Leaflet posts  
 - **Type-Safe**: Full TypeScript support throughout the application  
@@ -51,12 +52,6 @@ Edit `.env.local` with your settings:
 # Required: Your AT Protocol DID
 PUBLIC_ATPROTO_DID=did:plc:your-did-here
 
-# Optional: Custom Leaflet blog domain
-PUBLIC_LEAFLET_BASE_PATH=https://blog.example.com
-
-# Optional: Specific Leaflet publication rkey for blog posts
-PUBLIC_LEAFLET_BLOG_PUBLICATION=
-
 # Optional: Enable WhiteWind blog support (default: false)
 PUBLIC_ENABLE_WHITEWIND=false
 
@@ -70,7 +65,21 @@ PUBLIC_SITE_KEYWORDS="keywords, here"
 PUBLIC_SITE_URL="https://example.com"
 ```
 
-4. Start the development server:
+4. Configure your publication slugs in `src/lib/config/slugs.ts`:
+
+```typescript
+export const slugMappings: SlugMapping[] = [
+	{
+		slug: 'blog',
+		publicationRkey: '3m3x4bgbsh22k' // Your publication rkey
+	}
+	// Add more mappings as needed:
+	// { slug: 'notes', publicationRkey: 'xyz123abc' },
+	// { slug: 'essays', publicationRkey: 'def456ghi' },
+];
+```
+
+5. Start the development server:
 
 ```bash
 npm run dev
@@ -88,13 +97,15 @@ website-redesign/
 │   │   ├── components/      # Reusable Svelte components
 │   │   │   ├── layout/      # Header, Footer, Navigation
 │   │   │   └── ui/          # UI components (Card, etc.)
+│   │   ├── config/          # Configuration files
+│   │   │   └── slugs.ts     # Slug to publication mapping
 │   │   ├── data/            # Static data (navigation items)
 │   │   ├── helper/          # Helper functions (meta tags, OG images)
 │   │   ├── services/        # External service integrations
 │   │   │   └── atproto/     # AT Protocol service layer
 │   │   └── utils/           # Utility functions
 │   ├── routes/              # SvelteKit routes
-│   │   ├── blog/            # Blog redirect handlers
+│   │   ├── [slug]/          # Dynamic slug-based publication routes
 │   │   ├── now/             # Status-feed endpoints
 │   │   └── site/            # Site-metadata pages
 │   ├── app.css              # Global styles
@@ -131,15 +142,32 @@ const { posts } = await fetchBlogPosts();
 const post = await fetchLatestBlueskyPost();
 ```
 
-## 📝 Blog System
+## 📝 Publication System
 
-The blog system supports multiple platforms with configurable prioritisation and intelligent URL redirects.
+The publication system uses friendly URL slugs that map to Leaflet publications, with support for multiple platforms and intelligent URL redirects.
+
+### Slug Configuration
+
+Publications are mapped to URL slugs in `src/lib/config/slugs.ts`:
+
+```typescript
+export const slugMappings: SlugMapping[] = [
+	{
+		slug: 'blog',              // Access via /blog
+		publicationRkey: '3m3x4bgbsh22k'  // Leaflet publication rkey
+	},
+	{
+		slug: 'notes',             // Access via /notes
+		publicationRkey: 'xyz123abc'
+	}
+];
+```
 
 ### Supported Platforms
 
 1. **Leaflet** (`pub.leaflet.document`) – **Prioritised by default**  
    - Format: Custom domain or `https://leaflet.pub/lish/{did}/{publication}/{rkey}`  
-   - Supports multiple publications  
+   - Supports multiple publications via slug mapping  
    - Respects `base_path` configuration  
    - Always checked first  
 
@@ -148,46 +176,45 @@ The blog system supports multiple platforms with configurable prioritisation and
    - Automatically filters out drafts and non-public posts  
    - Only checked if `PUBLIC_ENABLE_WHITEWIND=true`  
 
-### Blog Routes
+### Publication Routes
 
-- `/blog` – Redirects to your blog homepage (Leaflet by default, WhiteWind if configured)  
-- `/blog/{rkey}` – Smart redirect to the correct platform (checks Leaflet first, then WhiteWind if enabled)  
-- `/blog/rss` – Intelligent RSS feed (redirects to Leaflet RSS by default, or generates WhiteWind RSS if enabled)  
-- `/blog/atom` – Deprecated (returns *410 Gone*, use RSS instead)  
+- `/{slug}` – Redirects to your publication homepage (configured in slugs.ts)  
+- `/{slug}/{rkey}` – Smart redirect to the correct platform (checks Leaflet first, then WhiteWind if enabled)  
+- `/{slug}/rss` – Intelligent RSS feed (redirects to Leaflet RSS by default, or generates WhiteWind RSS if enabled)  
+- `/{slug}/atom` – Deprecated (returns *410 Gone*, use RSS instead)  
 
 ### How It Works
 
 **Priority Order:**
 
-1. **Leaflet** is always checked first for blog posts  
-2. **WhiteWind** is only checked if `PUBLIC_ENABLE_WHITEWIND=true`  
-3. If neither platform has the post, it falls back to `PUBLIC_BLOG_FALLBACK_URL` if configured  
-4. Returns *404* if the post isn’t found and no fallback is set  
+1. **Leaflet** is always checked first for publications and documents  
+2. The slug mapping determines which publication to check  
+3. **WhiteWind** is only checked if `PUBLIC_ENABLE_WHITEWIND=true`  
+4. If neither platform has the document, it falls back to `PUBLIC_BLOG_FALLBACK_URL` if configured  
+5. Returns *404* if the document isn't found and no fallback is set  
 
-**When a user visits `/blog/{rkey}`:**
+**When a user visits `/{slug}/{rkey}`:**
 
-1. The system checks Leaflet for the post (with optional publication filtering)  
-2. If not found and WhiteWind is enabled, it checks WhiteWind  
-3. Redirects to the appropriate platform URL  
-4. Falls back to `PUBLIC_BLOG_FALLBACK_URL` if configured  
-5. Returns 404 if no post is found and no fallback exists  
+1. The system looks up the publication rkey from the slug configuration  
+2. It checks Leaflet for the document in that specific publication  
+3. If not found and WhiteWind is enabled, it checks WhiteWind  
+4. Redirects to the appropriate platform URL  
+5. Falls back to `PUBLIC_BLOG_FALLBACK_URL` if configured  
+6. Returns 404 if no document is found and no fallback exists  
 
 **RSS Feed Behaviour:**
 
-- **WhiteWind disabled** (default): Redirects to Leaflet’s native RSS feed (includes full content)  
+- **WhiteWind disabled** (default): Redirects to Leaflet's native RSS feed (includes full content)  
 - **WhiteWind enabled with posts**: Generates an RSS feed with WhiteWind post links  
 - **No posts found**: Returns 404  
 
 ### Configuration
 
-Control blog behaviour with environment variables:
+Control publication behaviour with environment variables:
 
 ```ini
 # Use a custom domain for Leaflet posts (recommended)
 PUBLIC_LEAFLET_BASE_PATH=https://blog.example.com
-
-# Only check a specific Leaflet publication
-PUBLIC_LEAFLET_BLOG_PUBLICATION=3kzcijpj2z2a
 
 # Enable WhiteWind support (set to "true" to enable, default: "false")
 PUBLIC_ENABLE_WHITEWIND=false
@@ -196,11 +223,22 @@ PUBLIC_ENABLE_WHITEWIND=false
 PUBLIC_BLOG_FALLBACK_URL=https://archive.example.com/blog
 ```
 
+And configure your slug mappings in `src/lib/config/slugs.ts`:
+
+```typescript
+export const slugMappings: SlugMapping[] = [
+	{ slug: 'blog', publicationRkey: '3m3x4bgbsh22k' },
+	{ slug: 'essays', publicationRkey: 'abc123xyz' },
+	{ slug: 'notes', publicationRkey: 'def456uvw' }
+];
+```
+
 ### Why Leaflet is Prioritised
 
-- **Better Performance**: Leaflet’s RSS feeds include full post content  
-- **Custom Domains**: Native support for custom domains (e.g. `blog.example.com`)  
+- **Better Performance**: Leaflet's RSS feeds include full post content  
+- **Custom Domains**: Each publication can have its own `base_path` configured in Leaflet  
 - **Rich Features**: Better media handling and publication management  
+- **Multiple Publications**: Easy management of multiple publications with slug mapping  
 - **Active Development**: Leaflet is actively maintained and improved  
 
 ### Enabling WhiteWind
@@ -213,9 +251,16 @@ PUBLIC_ENABLE_WHITEWIND=true
 
 With WhiteWind enabled:
 
-- Blog posts are checked on both platforms (Leaflet first, then WhiteWind)  
+- Documents are checked on both platforms (Leaflet first, then WhiteWind)  
 - RSS feed includes WhiteWind posts if they exist  
-- `/blog` redirects to WhiteWind if no Leaflet configuration is set  
+- `/{slug}` redirects to WhiteWind if no Leaflet configuration is set  
+
+### Finding Your Publication Rkey
+
+1. Visit your Leaflet publication page
+2. The URL will be in the format: `https://leaflet.pub/lish/{did}/{rkey}`
+3. Copy the `{rkey}` part (e.g., `3m3x4bgbsh22k`)
+4. Add it to your slug mapping in `src/lib/config/slugs.ts`
 
 ## 🎨 Styling
 
@@ -346,13 +391,20 @@ All components are built with Svelte 5 runes for better reactivity and performan
 
 ## 🐛 Troubleshooting
 
-### Blog Posts Not Found
+### Documents Not Found
 
 1. Check your `PUBLIC_ATPROTO_DID` is correct  
-2. Verify posts are not drafts (WhiteWind) or unpublished (Leaflet)  
-3. Check the publication configuration if using `PUBLIC_LEAFLET_BLOG_PUBLICATION`  
-4. If using WhiteWind, ensure `PUBLIC_ENABLE_WHITEWIND=true` is set  
-5. Check the browser console for AT Protocol service errors  
+2. Verify the slug mapping in `src/lib/config/slugs.ts` is correct  
+3. Ensure the publication rkey matches your Leaflet publication  
+4. Verify documents are not drafts (WhiteWind) or unpublished (Leaflet)  
+5. If using WhiteWind, ensure `PUBLIC_ENABLE_WHITEWIND=true` is set  
+6. Check the browser console for AT Protocol service errors  
+
+### Slug Not Found
+
+1. Add your slug mapping to `src/lib/config/slugs.ts`  
+2. Ensure the format is: `{ slug: 'your-slug', publicationRkey: 'your-rkey' }`  
+3. Restart the development server after changes  
 
 ### Profile Data Not Loading
 
