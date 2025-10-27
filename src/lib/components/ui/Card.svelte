@@ -71,9 +71,9 @@
 		elevated: 'bg-canvas-100 dark:bg-canvas-900 shadow-lg hover:shadow-xl',
 		flat: 'bg-canvas-200 dark:bg-canvas-800',
 		button:
-			'bg-canvas-200 dark:bg-canvas-800 hover:bg-canvas-300 dark:hover:bg-canvas-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage-600',
+			'bg-canvas-200 dark:bg-canvas-800 hover:bg-canvas-300 dark:hover:bg-canvas-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
 		outline:
-			'bg-transparent border-2 border-canvas-300 dark:border-canvas-700 hover:border-sage-400 dark:hover:border-sage-600'
+			'bg-transparent border-2 border-canvas-300 dark:border-canvas-700 hover:border-primary-400 dark:hover:border-primary-600'
 	};
 
 	// Padding classes
@@ -102,16 +102,16 @@
 		const colorClasses = {
 			mint:
 				badge.variant === 'soft'
-					? 'bg-mint-100 text-mint-800 dark:bg-mint-900 dark:text-mint-200'
-					: 'bg-mint-500 text-white dark:bg-mint-600',
+					? 'bg-secondary-100 text-secondary-800 dark:bg-secondary-900 dark:text-secondary-200'
+					: 'bg-secondary-500 text-white dark:bg-secondary-600',
 			sage:
 				badge.variant === 'soft'
-					? 'bg-sage-100 text-sage-800 dark:bg-sage-900 dark:text-sage-200'
-					: 'bg-sage-500 text-white dark:bg-sage-600',
+					? 'bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200'
+					: 'bg-primary-500 text-white dark:bg-primary-600',
 			jade:
 				badge.variant === 'soft'
-					? 'bg-jade-100 text-jade-800 dark:bg-jade-900 dark:text-jade-200'
-					: 'bg-jade-500 text-white dark:bg-jade-600',
+					? 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200'
+					: 'bg-accent-500 text-white dark:bg-accent-600',
 			ink:
 				badge.variant === 'soft'
 					? 'bg-ink-100 text-ink-800 dark:bg-ink-800 dark:text-ink-100'
@@ -165,7 +165,7 @@
 
 			{#if showExternalIcon}
 				<ExternalLink
-					class="h-4 w-4 flex-shrink-0 text-ink-700 transition-colors group-hover:text-sage-600 dark:text-ink-200 dark:group-hover:text-sage-400"
+					class="h-4 w-4 flex-shrink-0 text-ink-700 transition-colors group-hover:text-primary-600 dark:text-ink-200 dark:group-hover:text-primary-400"
 					aria-hidden="true"
 				/>
 			{/if}

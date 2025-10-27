@@ -23,9 +23,9 @@
         href={item.href}
         class="group flex items-center gap-2 font-medium transition-colors
           {$page.url.pathname === item.href
-            ? 'text-sage-600 dark:text-sage-400'
+            ? 'text-primary-600 dark:text-primary-400'
             : 'text-ink-700 dark:text-ink-200'}
-          hover:text-sage-500"
+          hover:text-primary-500"
         aria-current={$page.url.pathname === item.href ? 'page' : undefined}
         title={item.label}
       >
@@ -37,7 +37,7 @@
           />
         {:else}
           <div class="h-5 w-5 flex items-center justify-center" aria-hidden="true">
-            <div class="h-3 w-3 animate-pulse rounded-full bg-sage-500"></div>
+            <div class="h-3 w-3 animate-pulse rounded-full bg-primary-500"></div>
           </div>
         {/if}
         <span class="hidden sm:inline">{item.label}</span>

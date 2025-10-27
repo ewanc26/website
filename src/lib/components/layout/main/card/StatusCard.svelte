@@ -39,7 +39,7 @@
 		<Card variant="elevated" padding="md">
 			{#snippet children()}
 				<div class="mb-2 flex items-center gap-2">
-					<Rss class="h-4 w-4 text-sage-600 dark:text-sage-400" aria-hidden="true" />
+					<Rss class="h-4 w-4 text-primary-600 dark:text-primary-400" aria-hidden="true" />
 					<span
 						class="text-xs font-semibold tracking-wide text-ink-800 uppercase dark:text-ink-100"
 					>

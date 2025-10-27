@@ -66,7 +66,7 @@
 						Learn more about Tangled at
 						<a
 							href="https://tangled.sh/"
-							class="text-sage-600 hover:underline dark:text-sage-400"
+							class="text-primary-600 hover:underline dark:text-primary-400"
 							target="_blank"
 							rel="noopener noreferrer">https://tangled.org/</a
 						>

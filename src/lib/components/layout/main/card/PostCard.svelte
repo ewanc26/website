@@ -83,8 +83,8 @@
 											{#if badge.variant === 'soft'}
 												<span
 													class="rounded px-2 py-0.5 text-xs font-medium {badge.color === 'mint'
-														? 'bg-mint-100 text-mint-800 dark:bg-mint-900 dark:text-mint-200'
-														: 'bg-sage-100 text-sage-800 dark:bg-sage-900 dark:text-sage-200'}"
+														? 'bg-secondary-100 text-secondary-800 dark:bg-secondary-900 dark:text-secondary-200'
+														: 'bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200'}"
 												>
 													{badge.text}
 												</span>
@@ -92,8 +92,8 @@
 												<span
 													class="rounded px-2 py-0.5 text-xs font-semibold uppercase {badge.color ===
 													'mint'
-														? 'bg-mint-500 text-white dark:bg-mint-600'
-														: 'bg-sage-500 text-white dark:bg-sage-600'}"
+														? 'bg-secondary-500 text-white dark:bg-secondary-600'
+														: 'bg-primary-500 text-white dark:bg-primary-600'}"
 												>
 													{badge.text}
 												</span>
@@ -120,7 +120,7 @@
 
 							<!-- External Link Icon -->
 							<ExternalLink
-								class="h-4 w-4 flex-shrink-0 text-ink-700 transition-colors group-hover:text-sage-600 dark:text-ink-200 dark:group-hover:text-sage-400"
+								class="h-4 w-4 flex-shrink-0 text-ink-700 transition-colors group-hover:text-primary-600 dark:text-ink-200 dark:group-hover:text-primary-400"
 								aria-hidden="true"
 							/>
 						</a>
@@ -136,14 +136,14 @@
 						No blog posts available. Write on
 						<a
 							href="https://whtwnd.com/"
-							class="text-sage-600 hover:underline dark:text-sage-400"
+							class="text-primary-600 hover:underline dark:text-primary-400"
 							target="_blank"
 							rel="noopener noreferrer">WhiteWind</a
 						>
 						or
 						<a
 							href="https://leaflet.pub/"
-							class="text-sage-600 hover:underline dark:text-sage-400"
+							class="text-primary-600 hover:underline dark:text-primary-400"
 							target="_blank"
 							rel="noopener noreferrer">Leaflet</a
 						>
