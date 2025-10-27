@@ -32,7 +32,7 @@
 			{:else if profile}
 				<a
 					href="https://bsky.app/profile/{profile.did}"
-					class="underline hover:text-sage-500 dark:hover:text-sage-400">@{profile.handle}</a
+					class="underline hover:text-primary-500 dark:hover:text-primary-400">@{profile.handle}</a
 				>
 			{:else if error}
 				<span>Profile unavailable</span>
@@ -44,14 +44,14 @@
 			<span
 				>Powered by <a
 					href="https://atproto.com/guides/glossary#at-protocol"
-					class="underline hover:text-sage-500 dark:hover:text-sage-400">atproto</a
+					class="underline hover:text-primary-500 dark:hover:text-primary-400">atproto</a
 				></span
 			>
 			<a
 				href="https://github.com/ewanc26/website"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="underline hover:text-sage-500 dark:hover:text-sage-400">code</a
+				class="underline hover:text-primary-500 dark:hover:text-primary-400">code</a
 			>
 		</div>
 	</div>

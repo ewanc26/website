@@ -37,7 +37,7 @@
 >
 	<div class="flex items-center gap-3 min-w-0 flex-1">
 		<GitBranch
-			class="h-5 w-5 flex-shrink-0 text-sage-600 dark:text-sage-400"
+			class="h-5 w-5 flex-shrink-0 text-primary-600 dark:text-primary-400"
 			aria-hidden="true"
 		/>
 		<div class="flex flex-col gap-1 min-w-0 flex-1">

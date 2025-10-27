@@ -72,7 +72,7 @@
 							loading="lazy"
 						/>
 					{:else}
-						<div class="h-full w-full bg-gradient-to-r from-sage-400 to-mint-400"></div>
+						<div class="h-full w-full bg-gradient-to-r from-primary-400 to-secondary-400"></div>
 					{/if}
 				</div>
 
@@ -92,7 +92,7 @@
 							/>
 						{:else}
 							<div
-								class="flex h-full w-full items-center justify-center bg-sage-200 text-3xl font-bold text-sage-800 dark:bg-sage-800 dark:text-sage-200"
+								class="flex h-full w-full items-center justify-center bg-primary-200 text-3xl font-bold text-primary-800 dark:bg-primary-800 dark:text-primary-200"
 							>
 								{(safeProfile.displayName || safeProfile.handle).charAt(0).toUpperCase()}
 							</div>

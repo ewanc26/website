@@ -39,7 +39,7 @@
     aria-label="Scroll to top"
     title="Scroll to top"
     type="button"
-    class="flex h-12 w-12 items-center justify-center rounded-full border bg-canvas-100 text-ink-900 border-sage-200 shadow-lg transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-sage-500 hover:text-ink-50 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 dark:bg-canvas-900 dark:text-ink-50 dark:border-sage-800 dark:hover:bg-sage-600 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:h-11 sm:w-11"
+    class="flex h-12 w-12 items-center justify-center rounded-full border bg-canvas-100 text-ink-900 border-primary-200 shadow-lg transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-primary-500 hover:text-ink-50 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:bg-canvas-900 dark:text-ink-50 dark:border-primary-800 dark:hover:bg-primary-600 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:h-11 sm:w-11"
   >
     <ChevronUp width="20" height="20" aria-hidden="true" />
   </button>

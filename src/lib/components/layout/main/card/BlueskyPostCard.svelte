@@ -60,11 +60,11 @@
 
 			if (feature) {
 				if (feature.$type === 'app.bsky.richtext.facet#link') {
-					result += `<a href="${escapeHtml(feature.uri)}" target="_blank" rel="noopener noreferrer" class="text-sage-600 hover:text-sage-700 dark:text-sage-400 dark:hover:text-sage-300 underline">${escapeHtml(facetText)}</a>`;
+					result += `<a href="${escapeHtml(feature.uri)}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 underline">${escapeHtml(facetText)}</a>`;
 				} else if (feature.$type === 'app.bsky.richtext.facet#mention') {
-					result += `<a href="https://bsky.app/profile/${escapeHtml(feature.did)}" target="_blank" rel="noopener noreferrer" class="text-sage-600 hover:text-sage-700 dark:text-sage-400 dark:hover:text-sage-300 font-medium">${escapeHtml(facetText)}</a>`;
+					result += `<a href="https://bsky.app/profile/${escapeHtml(feature.did)}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium">${escapeHtml(facetText)}</a>`;
 				} else if (feature.$type === 'app.bsky.richtext.facet#tag') {
-					result += `<a href="https://bsky.app/hashtag/${escapeHtml(feature.tag)}" target="_blank" rel="noopener noreferrer" class="text-sage-600 hover:text-sage-700 dark:text-sage-400 dark:hover:text-sage-300 font-medium">${escapeHtml(facetText)}</a>`;
+					result += `<a href="https://bsky.app/hashtag/${escapeHtml(feature.tag)}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium">${escapeHtml(facetText)}</a>`;
 				} else {
 					result += escapeHtml(facetText);
 				}
@@ -104,7 +104,7 @@
 					href={getPostUrl(postData.uri)}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-sage-600 transition-colors hover:text-sage-700 dark:text-sage-400 dark:hover:text-sage-300"
+					class="text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
 					aria-label="View post on Bluesky"
 				>
 					<ExternalLink class="h-4 w-4" aria-hidden="true" />
@@ -132,10 +132,10 @@
 				<div
 					class="flex h-{isQuoted ? '10' : '12'} w-{isQuoted
 						? '10'
-						: '12'} items-center justify-center rounded-full bg-sage-200 dark:bg-sage-800"
+						: '12'} items-center justify-center rounded-full bg-primary-200 dark:bg-primary-800"
 				>
 					<span
-						class="text-{isQuoted ? 'base' : 'lg'} font-semibold text-sage-700 dark:text-sage-300"
+						class="text-{isQuoted ? 'base' : 'lg'} font-semibold text-primary-700 dark:text-primary-300"
 					>
 						{(postData.author.displayName || postData.author.handle).charAt(0).toUpperCase()}
 					</span>
@@ -197,7 +197,7 @@
 						type="button"
 						onclick={() =>
 							openLightbox(imageUrl, postData.imageAlts?.[index] || `Post attachment ${index + 1}`)}
-						class="h-auto w-full max-w-full overflow-hidden rounded-lg transition-opacity hover:opacity-90 focus:ring-2 focus:ring-sage-500 focus:outline-none dark:focus:ring-sage-400"
+						class="h-auto w-full max-w-full overflow-hidden rounded-lg transition-opacity hover:opacity-90 focus:ring-2 focus:ring-primary-500 focus:outline-none dark:focus:ring-primary-400"
 					>
 						<img
 							src={imageUrl}
