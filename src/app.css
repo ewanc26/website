@@ -31,43 +31,43 @@
   --color-canvas-950: light-dark(oklch(17.69% 0.027 125.57), oklch(98.50% 0.010 123.97));
 
   /* Sage - Primary colors (adjusted for WCAG AA compliance) */
-  --color-sage-50: light-dark(oklch(97.73% 0.020 121.83), oklch(18.09% 0.031 123.74));
-  --color-sage-100: light-dark(oklch(94.00% 0.042 123.12), oklch(26.23% 0.053 126.29));
-  --color-sage-200: light-dark(oklch(88.00% 0.082 123.68), oklch(40.39% 0.088 126.72));
-  --color-sage-300: light-dark(oklch(78.00% 0.122 124.71), oklch(53.63% 0.122 127.17));
-  --color-sage-400: light-dark(oklch(68.00% 0.155 125.79), oklch(65.86% 0.152 127.23));
-  --color-sage-500: light-dark(oklch(58.00% 0.182 127.42), oklch(77.77% 0.182 127.42));
-  --color-sage-600: light-dark(oklch(48.00% 0.152 127.23), oklch(81.83% 0.155 125.79));
-  --color-sage-700: light-dark(oklch(38.00% 0.122 127.17), oklch(86.28% 0.122 124.71));
-  --color-sage-800: light-dark(oklch(28.00% 0.088 126.72), oklch(90.67% 0.082 123.68));
-  --color-sage-900: light-dark(oklch(20.00% 0.053 126.29), oklch(95.38% 0.042 123.12));
-  --color-sage-950: light-dark(oklch(14.00% 0.031 123.74), oklch(97.73% 0.020 121.83));
+  --color-primary-50: light-dark(oklch(97.73% 0.020 121.83), oklch(18.09% 0.031 123.74));
+  --color-primary-100: light-dark(oklch(94.00% 0.042 123.12), oklch(26.23% 0.053 126.29));
+  --color-primary-200: light-dark(oklch(88.00% 0.082 123.68), oklch(40.39% 0.088 126.72));
+  --color-primary-300: light-dark(oklch(78.00% 0.122 124.71), oklch(53.63% 0.122 127.17));
+  --color-primary-400: light-dark(oklch(68.00% 0.155 125.79), oklch(65.86% 0.152 127.23));
+  --color-primary-500: light-dark(oklch(58.00% 0.182 127.42), oklch(77.77% 0.182 127.42));
+  --color-primary-600: light-dark(oklch(48.00% 0.152 127.23), oklch(81.83% 0.155 125.79));
+  --color-primary-700: light-dark(oklch(38.00% 0.122 127.17), oklch(86.28% 0.122 124.71));
+  --color-primary-800: light-dark(oklch(28.00% 0.088 126.72), oklch(90.67% 0.082 123.68));
+  --color-primary-900: light-dark(oklch(20.00% 0.053 126.29), oklch(95.38% 0.042 123.12));
+  --color-primary-950: light-dark(oklch(14.00% 0.031 123.74), oklch(97.73% 0.020 121.83));
 
   /* Mint - Secondary colors (adjusted for WCAG AA compliance) */
-  --color-mint-50: light-dark(oklch(97.87% 0.024 121.90), oklch(18.72% 0.037 126.20));
-  --color-mint-100: light-dark(oklch(94.50% 0.048 123.90), oklch(26.82% 0.058 127.38));
-  --color-mint-200: light-dark(oklch(89.00% 0.097 124.41), oklch(42.08% 0.101 128.02));
-  --color-mint-300: light-dark(oklch(80.00% 0.141 125.62), oklch(55.72% 0.137 128.49));
-  --color-mint-400: light-dark(oklch(70.00% 0.178 127.04), oklch(68.58% 0.171 128.75));
-  --color-mint-500: light-dark(oklch(60.00% 0.205 129.04), oklch(81.09% 0.205 129.04));
-  --color-mint-600: light-dark(oklch(50.00% 0.171 128.75), oklch(84.30% 0.178 127.04));
-  --color-mint-700: light-dark(oklch(40.00% 0.137 128.49), oklch(87.99% 0.141 125.62));
-  --color-mint-800: light-dark(oklch(30.00% 0.101 128.02), oklch(91.89% 0.097 124.41));
-  --color-mint-900: light-dark(oklch(22.00% 0.058 127.38), oklch(95.73% 0.048 123.90));
-  --color-mint-950: light-dark(oklch(15.00% 0.037 126.20), oklch(97.87% 0.024 121.90));
+  --color-secondary-50: light-dark(oklch(97.87% 0.024 121.90), oklch(18.72% 0.037 126.20));
+  --color-secondary-100: light-dark(oklch(94.50% 0.048 123.90), oklch(26.82% 0.058 127.38));
+  --color-secondary-200: light-dark(oklch(89.00% 0.097 124.41), oklch(42.08% 0.101 128.02));
+  --color-secondary-300: light-dark(oklch(80.00% 0.141 125.62), oklch(55.72% 0.137 128.49));
+  --color-secondary-400: light-dark(oklch(70.00% 0.178 127.04), oklch(68.58% 0.171 128.75));
+  --color-secondary-500: light-dark(oklch(60.00% 0.205 129.04), oklch(81.09% 0.205 129.04));
+  --color-secondary-600: light-dark(oklch(50.00% 0.171 128.75), oklch(84.30% 0.178 127.04));
+  --color-secondary-700: light-dark(oklch(40.00% 0.137 128.49), oklch(87.99% 0.141 125.62));
+  --color-secondary-800: light-dark(oklch(30.00% 0.101 128.02), oklch(91.89% 0.097 124.41));
+  --color-secondary-900: light-dark(oklch(22.00% 0.058 127.38), oklch(95.73% 0.048 123.90));
+  --color-secondary-950: light-dark(oklch(15.00% 0.037 126.20), oklch(97.87% 0.024 121.90));
 
   /* Jade - Accent colors (adjusted for WCAG AA compliance) */
-  --color-jade-50: light-dark(oklch(98.05% 0.027 122.65), oklch(19.03% 0.041 126.73));
-  --color-jade-100: light-dark(oklch(95.00% 0.056 123.80), oklch(27.78% 0.066 127.71));
-  --color-jade-200: light-dark(oklch(90.00% 0.110 124.83), oklch(43.51% 0.110 128.91));
-  --color-jade-300: light-dark(oklch(82.00% 0.159 126.06), oklch(57.90% 0.149 129.35));
-  --color-jade-400: light-dark(oklch(72.00% 0.198 127.63), oklch(71.44% 0.186 129.59));
-  --color-jade-500: light-dark(oklch(62.00% 0.221 129.75), oklch(84.36% 0.221 129.75));
-  --color-jade-600: light-dark(oklch(52.00% 0.186 129.59), oklch(86.93% 0.198 127.63));
-  --color-jade-700: light-dark(oklch(42.00% 0.149 129.35), oklch(89.79% 0.159 126.06));
-  --color-jade-800: light-dark(oklch(32.00% 0.110 128.91), oklch(92.93% 0.110 124.83));
-  --color-jade-900: light-dark(oklch(23.00% 0.066 127.71), oklch(96.35% 0.056 123.80));
-  --color-jade-950: light-dark(oklch(16.00% 0.041 126.73), oklch(98.05% 0.027 122.65));
+  --color-accent-50: light-dark(oklch(98.05% 0.027 122.65), oklch(19.03% 0.041 126.73));
+  --color-accent-100: light-dark(oklch(95.00% 0.056 123.80), oklch(27.78% 0.066 127.71));
+  --color-accent-200: light-dark(oklch(90.00% 0.110 124.83), oklch(43.51% 0.110 128.91));
+  --color-accent-300: light-dark(oklch(82.00% 0.159 126.06), oklch(57.90% 0.149 129.35));
+  --color-accent-400: light-dark(oklch(72.00% 0.198 127.63), oklch(71.44% 0.186 129.59));
+  --color-accent-500: light-dark(oklch(62.00% 0.221 129.75), oklch(84.36% 0.221 129.75));
+  --color-accent-600: light-dark(oklch(52.00% 0.186 129.59), oklch(86.93% 0.198 127.63));
+  --color-accent-700: light-dark(oklch(42.00% 0.149 129.35), oklch(89.79% 0.159 126.06));
+  --color-accent-800: light-dark(oklch(32.00% 0.110 128.91), oklch(92.93% 0.110 124.83));
+  --color-accent-900: light-dark(oklch(23.00% 0.066 127.71), oklch(96.35% 0.056 123.80));
+  --color-accent-950: light-dark(oklch(16.00% 0.041 126.73), oklch(98.05% 0.027 122.65));
 }
 
 @layer base {
@@ -90,7 +90,7 @@
 
   /* Focus visible styles for accessibility */
   *:focus-visible {
-    outline: 2px solid var(--color-sage-600);
+    outline: 2px solid var(--color-primary-600);
     outline-offset: 2px;
   }
   

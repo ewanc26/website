@@ -36,7 +36,7 @@
   rel="noopener noreferrer"
   class="
     {variant === 'button'
-      ? 'inline-flex items-center justify-center gap-2 rounded-lg bg-canvas-200 px-4 py-3 font-medium text-ink-900 transition-colors duration-200 hover:bg-canvas-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage-600 dark:bg-canvas-800 dark:text-ink-50 dark:hover:bg-canvas-700'
+      ? 'inline-flex items-center justify-center gap-2 rounded-lg bg-canvas-200 px-4 py-3 font-medium text-ink-900 transition-colors duration-200 hover:bg-canvas-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:bg-canvas-800 dark:text-ink-50 dark:hover:bg-canvas-700'
       : 'flex items-start justify-between gap-3 rounded-lg bg-canvas-200 p-4 transition-colors hover:bg-canvas-300 dark:bg-canvas-800 dark:hover:bg-canvas-700'}
   "
 >
@@ -53,11 +53,11 @@
           {#if badges && badges.length > 0}
             {#each badges as badge}
               {#if badge.color === 'mint'}
-                <span class="rounded bg-mint-100 px-2 py-0.5 text-xs font-medium text-mint-800 dark:bg-mint-900 dark:text-mint-200">
+                <span class="rounded bg-secondary-100 px-2 py-0.5 text-xs font-medium text-secondary-800 dark:bg-secondary-900 dark:text-secondary-200">
                   {badge.text}
                 </span>
               {:else if badge.color === 'sage'}
-                <span class="rounded bg-sage-100 px-2 py-0.5 text-xs font-medium text-sage-800 dark:bg-sage-900 dark:text-sage-200">
+                <span class="rounded bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-200">
                   {badge.text}
                 </span>
               {:else}
@@ -87,7 +87,7 @@
     </div>
 
     <ExternalLink
-      class="h-4 w-4 flex-shrink-0 text-ink-700 transition-colors group-hover:text-sage-600 dark:text-ink-200 dark:group-hover:text-sage-400"
+      class="h-4 w-4 flex-shrink-0 text-ink-700 transition-colors group-hover:text-primary-600 dark:text-ink-200 dark:group-hover:text-primary-400"
       aria-hidden="true"
     />
   {/if}
