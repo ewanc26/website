@@ -1,49 +1,51 @@
-/**
- * Slug to Leaflet Publication mapping configuration
- * 
- * Maps friendly URL slugs to Leaflet publication rkeys.
- * This allows you to access publications via /{slug} instead of /blog
- * 
- * Example:
- * - /blog → maps to publication with rkey "3m3x4bgbsh22k"
- * - /notes → maps to publication with rkey "xyz123abc"
- */
+import { slugMappings, type SlugMapping } from '$lib/data/slug-mappings';
 
-export interface SlugMapping {
-	/** The URL-friendly slug */
-	slug: string;
-	/** The Leaflet publication rkey */
-	publicationRkey: string;
+/**
+ * Normalize a slug to be URI-compatible
+ * 
+ * Transformations:
+ * - Convert to lowercase
+ * - Replace spaces with hyphens
+ * - Remove all characters except alphanumeric, hyphens, and underscores
+ * - Collapse multiple hyphens into single hyphen
+ * - Remove leading/trailing hyphens
+ * 
+ * @param slug - The slug to normalize
+ * @returns URI-compatible slug
+ * 
+ * @example
+ * normalizeSlug('My Blog Post!') // 'my-blog-post'
+ * normalizeSlug('Hello  World') // 'hello-world'
+ * normalizeSlug('Test---Slug___') // 'test-slug'
+ */
+export function normalizeSlug(slug: string): string {
+	return slug
+		.toLowerCase()
+		.trim()
+		.replace(/\s+/g, '-') // Replace spaces with hyphens
+		.replace(/[^a-z0-9\-_]/g, '') // Remove non-alphanumeric except hyphens and underscores
+		.replace(/-+/g, '-') // Collapse multiple hyphens
+		.replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
 }
 
 /**
- * Slug to publication rkey mappings
- * Add your custom mappings here
- */
-export const slugMappings: SlugMapping[] = [
-	{
-		slug: 'blog',
-		publicationRkey: '3m3x4bgbsh22k' // my blog publication rkey
-	},
-	{
-		slug: 'cailean',
-		publicationRkey: '3m4222fxc3k2q' // Cailean Uen's publication rkey for his journal
-	}
-	// Add more mappings as needed:
-	// { slug: 'notes', publicationRkey: 'xyz123abc' },
-	// { slug: 'essays', publicationRkey: 'def456ghi' },
-];
-
-/**
  * Get publication rkey from slug
+ * Automatically normalizes the slug before lookup
+ * 
+ * @param slug - The slug to look up (will be normalized)
+ * @returns The publication rkey or null if not found
  */
 export function getPublicationRkeyFromSlug(slug: string): string | null {
-	const mapping = slugMappings.find(m => m.slug === slug);
+	const normalizedSlug = normalizeSlug(slug);
+	const mapping = slugMappings.find(m => normalizeSlug(m.slug) === normalizedSlug);
 	return mapping?.publicationRkey || null;
 }
 
 /**
  * Get slug from publication rkey
+ * 
+ * @param rkey - The publication rkey
+ * @returns The slug or null if not found
  */
 export function getSlugFromPublicationRkey(rkey: string): string | null {
 	const mapping = slugMappings.find(m => m.publicationRkey === rkey);
@@ -51,8 +53,22 @@ export function getSlugFromPublicationRkey(rkey: string): string | null {
 }
 
 /**
- * Get all configured slugs
+ * Get all configured slugs (normalized)
+ * 
+ * @returns Array of normalized slugs
  */
 export function getAllSlugs(): string[] {
-	return slugMappings.map(m => m.slug);
+	return slugMappings.map(m => normalizeSlug(m.slug));
+}
+
+/**
+ * Get all slug mappings with normalized slugs
+ * 
+ * @returns Array of slug mappings with normalized slugs
+ */
+export function getAllSlugMappings(): SlugMapping[] {
+	return slugMappings.map(m => ({
+		...m,
+		slug: normalizeSlug(m.slug)
+	}));
 }
