@@ -31,7 +31,16 @@ export const GET: RequestHandler = async ({ params, url }) => {
 
 	// For /{slug} root, redirect to the publication
 	if (!slugPath || slugPath === '') {
-		// Get the publication rkey from the slug
+		// Validate slug and get the publication rkey
+		if (!slug) {
+			return new Response('Invalid slug', {
+				status: 400,
+				headers: {
+					'Content-Type': 'text/plain; charset=utf-8'
+				}
+			});
+		}
+		
 		const publicationRkey = getPublicationRkeyFromSlug(slug);
 		
 		if (!publicationRkey) {

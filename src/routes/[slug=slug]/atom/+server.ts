@@ -15,6 +15,16 @@ import { getPublicationRkeyFromSlug } from '$lib/config/slugs';
 export const GET: RequestHandler = ({ params }) => {
 	const slug = params.slug;
 	
+	// Validate slug
+	if (!slug) {
+		return new Response('Invalid slug', {
+			status: 400,
+			headers: {
+				'Content-Type': 'text/plain; charset=utf-8'
+			}
+		});
+	}
+	
 	// Validate slug exists in config
 	const publicationRkey = getPublicationRkeyFromSlug(slug);
 	
