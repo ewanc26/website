@@ -128,6 +128,16 @@ export const GET: RequestHandler = async ({ params, url }) => {
 	const slug = params.slug;
 	const rkey = params.rkey;
 
+	// Validate slug
+	if (!slug) {
+		return new Response('Invalid slug', {
+			status: 400,
+			headers: {
+				'Content-Type': 'text/plain; charset=utf-8'
+			}
+		});
+	}
+
 	// Get the publication rkey from the slug
 	const publicationRkey = getPublicationRkeyFromSlug(slug);
 	
