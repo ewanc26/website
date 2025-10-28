@@ -20,6 +20,16 @@ import { getPublicationRkeyFromSlug } from '$lib/config/slugs';
 export const GET: RequestHandler = async ({ params }) => {
 	const slug = params.slug;
 	
+	// Validate slug
+	if (!slug) {
+		return new Response('Invalid slug', {
+			status: 400,
+			headers: {
+				'Content-Type': 'text/plain; charset=utf-8'
+			}
+		});
+	}
+	
 	// Get the publication rkey from the slug
 	const publicationRkey = getPublicationRkeyFromSlug(slug);
 	
@@ -49,7 +59,8 @@ export const GET: RequestHandler = async ({ params }) => {
 
 		// If WhiteWind is enabled and we have WhiteWind posts, generate RSS for them
 		if (PUBLIC_ENABLE_WHITEWIND === 'true' && whiteWindPosts.length > 0) {
-			return generateWhiteWindRSS(whiteWindPosts, slug);
+			// slug is guaranteed to be defined here
+			return generateWhiteWindRSS(whiteWindPosts, slug as string);
 		}
 
 		// If WhiteWind is disabled or only Leaflet posts exist, redirect to Leaflet RSS feed
