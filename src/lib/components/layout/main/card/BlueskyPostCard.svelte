@@ -194,24 +194,26 @@
 			>
 				{#each postData.imageUrls as imageUrl, index}
 					<button
-						type="button"
-						onclick={() =>
-							openLightbox(imageUrl, postData.imageAlts?.[index] || `Post attachment ${index + 1}`)}
-						class="h-auto w-full max-w-full overflow-hidden rounded-lg transition-opacity hover:opacity-90 focus:ring-2 focus:ring-primary-500 focus:outline-none dark:focus:ring-primary-400"
+					type="button"
+					onclick={() =>
+					openLightbox(imageUrl, postData.imageAlts?.[index] || `Post attachment ${index + 1}`)}
+					class="h-auto w-full max-w-full overflow-hidden rounded-lg transition-opacity hover:opacity-90 focus:ring-2 focus:ring-primary-500 focus:outline-none dark:focus:ring-primary-400"
+					 title={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
 					>
-						<img
-							src={imageUrl}
-							alt={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
-							class="h-auto w-full max-w-full object-cover {postData.imageUrls.length === 4
-								? 'aspect-square'
-								: postData.imageUrls.length > 1
-									? 'aspect-video'
-									: isQuoted
-										? 'max-h-64'
-										: 'max-h-96'}"
-							loading="lazy"
-						/>
-					</button>
+					<img
+					src={imageUrl}
+					alt={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
+					title={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
+					class="h-auto w-full max-w-full object-cover {postData.imageUrls.length === 4
+					? 'aspect-square'
+					: postData.imageUrls.length > 1
+					? 'aspect-video'
+					: isQuoted
+					   ? 'max-h-64'
+					    : 'max-h-96'}"
+					  loading="lazy"
+					/>
+				</button>
 				{/each}
 			</div>
 		{/if}
@@ -374,11 +376,19 @@
 		>
 			<X class="h-6 w-6" />
 		</button>
-		<img
-			src={lightboxImage.url}
-			alt={lightboxImage.alt}
-			class="max-h-[90vh] max-w-[90vw] object-contain"
-			loading="lazy"
-		/>
+		<div class="relative flex max-h-[90vh] w-full max-w-[90vw] flex-col items-center">
+			<img
+				src={lightboxImage.url}
+				alt={lightboxImage.alt}
+				title={lightboxImage.alt}
+				class="max-h-[80vh] w-full object-contain"
+				loading="lazy"
+			/>
+			{#if lightboxImage.alt && lightboxImage.alt !== `Post attachment ${lightboxImage.url.split('/').pop()}`}
+				<div class="mt-4 w-full max-w-full overflow-y-auto rounded-lg bg-black/70 px-4 py-2 text-center text-sm text-white" style="max-height: calc(10vh - 2rem);">
+					{lightboxImage.alt}
+				</div>
+			{/if}
+		</div>
 	</div>
 {/if}
