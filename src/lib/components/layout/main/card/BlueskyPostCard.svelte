@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { Card } from '$lib/components/ui';
 	import { fetchLatestBlueskyPost, type BlueskyPost } from '$lib/services/atproto';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
@@ -10,17 +10,46 @@
 	let loading = true;
 	let error: string | null = null;
 	let lightboxImage: { url: string; alt: string } | null = null;
+	let pollInterval: ReturnType<typeof setInterval> | null = null;
 
 	// Detect system locale, fallback to en-GB
 	const locale = typeof navigator !== 'undefined' ? navigator.language || 'en-GB' : 'en-GB';
 
-	onMount(async () => {
+	// Poll interval in milliseconds (2 minutes)
+	const POLL_INTERVAL = 2 * 60 * 1000;
+
+	async function loadPost() {
 		try {
-			post = await fetchLatestBlueskyPost();
+			const newPost = await fetchLatestBlueskyPost();
+			if (newPost && (!post || newPost.uri !== post.uri)) {
+				// New post detected
+				post = newPost;
+				console.log('[BlueskyPostCard] New post detected:', newPost.uri);
+			}
 		} catch (err) {
 			error = err instanceof Error ? err.message : 'Failed to load latest post';
+			console.error('[BlueskyPostCard] Error loading post:', err);
 		} finally {
 			loading = false;
+		}
+	}
+
+	onMount(async () => {
+		// Initial load
+		await loadPost();
+
+		// Set up polling for new posts
+		pollInterval = setInterval(async () => {
+			console.log('[BlueskyPostCard] Polling for new posts...');
+			await loadPost();
+		}, POLL_INTERVAL);
+	});
+
+	onDestroy(() => {
+		// Clean up interval on component destroy
+		if (pollInterval) {
+			clearInterval(pollInterval);
+			pollInterval = null;
 		}
 	});
 
@@ -86,227 +115,218 @@
 	}
 </script>
 
-{#snippet postContent(postData: BlueskyPost, depth: number = 0, isQuoted: boolean = false)}
-	<article
-		class="rounded-xl bg-canvas-{isQuoted ? '200' : '100'} p-{isQuoted ? '4' : '6'} {isQuoted
-			? 'border border-canvas-300 dark:border-canvas-700'
-			: 'shadow-lg'} transition-all duration-300 {isQuoted
-			? ''
-			: 'hover:shadow-xl'} dark:bg-canvas-{isQuoted ? '800' : '900'}"
-	>
-		<!-- Header (only show on root post) -->
-		{#if !isQuoted}
-			<div class="mb-4 flex items-center justify-between">
-				<span class="text-xs font-semibold tracking-wide text-ink-800 uppercase dark:text-ink-100">
-					Latest Bluesky Post
-				</span>
+{#snippet postContent(postData: BlueskyPost, depth: number = 0, isReplyParent: boolean = false)}
+	<div>
+		<!-- Author Info -->
+		<div class="flex gap-{isReplyParent ? '2' : '3'} relative">
+			{#if isReplyParent}
 				<a
-					href={getPostUrl(postData.uri)}
+					href={getProfileUrl(postData.author.handle)}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-					aria-label="View post on Bluesky"
+					class="transition-opacity hover:opacity-80 shrink-0"
 				>
-					<ExternalLink class="h-4 w-4" aria-hidden="true" />
-				</a>
-			</div>
-		{/if}
-
-		<!-- Author Info -->
-		<a
-			href={getProfileUrl(postData.author.handle)}
-			target="_blank"
-			rel="noopener noreferrer"
-			class="mb-{isQuoted ? '3' : '4'} flex items-center gap-{isQuoted
-				? '2'
-				: '3'} transition-opacity hover:opacity-80"
-		>
-			{#if postData.author.avatar}
-				<img
-					src={postData.author.avatar}
-					alt={postData.author.displayName || postData.author.handle}
-					class="h-{isQuoted ? '10' : '12'} w-{isQuoted ? '10' : '12'} rounded-full object-cover"
-					loading="lazy"
-				/>
-			{:else}
-				<div
-					class="flex h-{isQuoted ? '10' : '12'} w-{isQuoted
-						? '10'
-						: '12'} items-center justify-center rounded-full bg-primary-200 dark:bg-primary-800"
-				>
-					<span
-						class="text-{isQuoted ? 'base' : 'lg'} font-semibold text-primary-700 dark:text-primary-300"
-					>
-						{(postData.author.displayName || postData.author.handle).charAt(0).toUpperCase()}
-					</span>
-				</div>
-			{/if}
-			<div class="flex flex-col">
-				<span class="text-{isQuoted ? 'sm' : 'base'} font-semibold text-ink-900 dark:text-ink-50">
-					{postData.author.displayName || postData.author.handle}
-				</span>
-				<span class="text-{isQuoted ? 'xs' : 'sm'} text-ink-700 dark:text-ink-200">
-					@{postData.author.handle}
-				</span>
-			</div>
-			{#if isQuoted}
-				<ExternalLink
-					class="ml-auto h-4 w-4 flex-shrink-0 text-ink-700 transition-colors dark:text-ink-200"
-					aria-hidden="true"
-				/>
-			{/if}
-		</a>
-
-		<!-- Post Text with Rich Text Support -->
-		<div
-			class="mb-{isQuoted ? '3' : '4'} overflow-wrap-anywhere break-words whitespace-pre-wrap text-{isQuoted
-				? 'base'
-				: 'lg'} leading-relaxed text-ink-900 dark:text-ink-50"
-		>
-			{@html renderRichText(postData.text, postData.facets)}
-		</div>
-
-		<!-- Video -->
-		{#if postData.hasVideo && postData.videoUrl}
-			<div class="mb-{isQuoted ? '3' : '4'} max-w-full overflow-hidden rounded-lg">
-				<video
-					src={postData.videoUrl}
-					controls
-					class="w-full max-w-full"
-					preload="metadata"
-					poster={postData.videoThumbnail}
-				>
-					<track kind="captions" />
-				</video>
-			</div>
-		{/if}
-
-		<!-- Images -->
-		{#if postData.hasImages && postData.imageUrls && postData.imageUrls.length > 0}
-			<div
-				class="mb-{isQuoted ? '3' : '4'} grid max-w-full gap-2 {postData.imageUrls.length === 1
-					? 'grid-cols-1'
-					: postData.imageUrls.length === 2
-						? 'grid-cols-2'
-						: postData.imageUrls.length === 3
-							? 'grid-cols-3'
-							: 'grid-cols-2'}"
-			>
-				{#each postData.imageUrls as imageUrl, index}
-					<button
-					type="button"
-					onclick={() =>
-					openLightbox(imageUrl, postData.imageAlts?.[index] || `Post attachment ${index + 1}`)}
-					class="h-auto w-full max-w-full overflow-hidden rounded-lg transition-opacity hover:opacity-90 focus:ring-2 focus:ring-primary-500 focus:outline-none dark:focus:ring-primary-400"
-					 title={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
-					>
-					<img
-					src={imageUrl}
-					alt={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
-					title={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
-					class="h-auto w-full max-w-full object-cover {postData.imageUrls.length === 4
-					? 'aspect-square'
-					: postData.imageUrls.length > 1
-					? 'aspect-video'
-					: isQuoted
-					   ? 'max-h-64'
-					    : 'max-h-96'}"
-					  loading="lazy"
-					/>
-				</button>
-				{/each}
-			</div>
-		{/if}
-
-		<!-- External Link Card -->
-		{#if postData.externalLink}
-			<a
-				href={postData.externalLink.uri}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="mb-{isQuoted
-					? '3'
-					: '4'} flex max-w-full flex-col gap-2 overflow-hidden rounded-lg border border-canvas-300 bg-canvas-{isQuoted
-					? '300'
-					: '200'} transition-colors hover:bg-canvas-{isQuoted
-					? '400'
-					: '300'} dark:border-canvas-700 dark:bg-canvas-{isQuoted
-					? '700'
-					: '800'} dark:hover:bg-canvas-{isQuoted ? '600' : '700'}"
-			>
-				{#if postData.externalLink.thumb}
-					<img
-						src={postData.externalLink.thumb}
-						alt={postData.externalLink.title}
-						class="h-{isQuoted ? '32' : '48'} w-full max-w-full object-cover"
-						loading="lazy"
-					/>
-				{/if}
-				<div class="p-{isQuoted ? '3' : '4'}">
-					<h3
-						class="mb-1 overflow-wrap-anywhere break-words text-{isQuoted
-							? 'sm'
-							: 'base'} line-clamp-2 font-semibold text-ink-900 dark:text-ink-50"
-					>
-						{postData.externalLink.title}
-					</h3>
-					{#if postData.externalLink.description}
-						<p
-							class="mb-2 overflow-wrap-anywhere break-words text-{isQuoted ? 'xs' : 'sm'} line-clamp-2 text-ink-700 dark:text-ink-200"
-						>
-							{postData.externalLink.description}
-						</p>
-					{/if}
-					<p class="overflow-wrap-anywhere break-words text-xs text-ink-600 dark:text-ink-300">
-						{new URL(postData.externalLink.uri).hostname}
-					</p>
-				</div>
-			</a>
-		{/if}
-
-		<!-- Recursively render quoted post -->
-		{#if postData.quotedPost && depth < 2}
-			<div class="mb-{isQuoted ? '3' : '4'}">
-				{@render postContent(postData.quotedPost, depth + 1, true)}
-			</div>
-		{/if}
-
-		<!-- Engagement Stats -->
-		{#if depth === 0 || (depth === 1 && !postData.quotedPost)}
-			<div class="flex items-center gap-{isQuoted ? '4' : '6'} text-{isQuoted ? 'xs' : 'sm'}">
-				{#if postData.replyCount !== undefined}
-					<div class="flex items-center gap-1.5 text-ink-700 dark:text-ink-200">
-						<MessageCircle
-							class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}"
-							aria-hidden="true"
+					{#if postData.author.avatar}
+						<img
+							src={postData.author.avatar}
+							alt={postData.author.displayName || postData.author.handle}
+							class="h-10 w-10 rounded-full object-cover"
+							loading="lazy"
 						/>
-						<span class="font-medium">{formatCompactNumber(postData.replyCount, locale)}</span>
-					</div>
-				{/if}
-
-				{#if postData.repostCount !== undefined}
-					<div class="flex items-center gap-1.5 text-ink-700 dark:text-ink-200">
-						<Repeat2 class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}" aria-hidden="true" />
-						<span class="font-medium">{formatCompactNumber(postData.repostCount, locale)}</span>
-					</div>
-				{/if}
-
-				{#if postData.likeCount !== undefined}
-					<div class="flex items-center gap-1.5 text-ink-700 dark:text-ink-200">
-						<Heart class="h-{isQuoted ? '3' : '4'} w-{isQuoted ? '3' : '4'}" aria-hidden="true" />
-						<span class="font-medium">{formatCompactNumber(postData.likeCount, locale)}</span>
-					</div>
-				{/if}
-
-				<time
-					datetime={postData.createdAt}
-					class="ml-auto text-xs font-medium text-ink-800 dark:text-ink-100"
+					{:else}
+						<div
+							class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-200 dark:bg-primary-800"
+						>
+							<span class="text-base font-semibold text-primary-700 dark:text-primary-300">
+								{(postData.author.displayName || postData.author.handle).charAt(0).toUpperCase()}
+							</span>
+						</div>
+					{/if}
+				</a>
+			{:else}
+				<a
+					href={getProfileUrl(postData.author.handle)}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="transition-opacity hover:opacity-80 shrink-0"
 				>
-					{formatRelativeTime(postData.createdAt)}
-				</time>
+					{#if postData.author.avatar}
+						<img
+							src={postData.author.avatar}
+							alt={postData.author.displayName || postData.author.handle}
+							class="h-12 w-12 rounded-full object-cover"
+							loading="lazy"
+						/>
+					{:else}
+						<div
+							class="flex h-12 w-12 items-center justify-center rounded-full bg-primary-200 dark:bg-primary-800"
+						>
+							<span class="text-lg font-semibold text-primary-700 dark:text-primary-300">
+								{(postData.author.displayName || postData.author.handle).charAt(0).toUpperCase()}
+							</span>
+						</div>
+					{/if}
+				</a>
+			{/if}
+			<div class="flex-1 min-w-0">
+				<!-- Author name and handle -->
+				<a
+					href={getProfileUrl(postData.author.handle)}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="inline-block {isReplyParent ? 'mb-1' : 'mb-2'} transition-opacity hover:opacity-80"
+				>
+					<div class="flex flex-col">
+						<span class="text-{isReplyParent ? 'sm' : 'base'} font-semibold text-ink-900 dark:text-ink-50 leading-tight">
+							{postData.author.displayName || postData.author.handle}
+						</span>
+						<span class="text-xs text-ink-600 dark:text-ink-400 leading-tight">
+							@{postData.author.handle}
+						</span>
+					</div>
+				</a>
+
+				<!-- Post Text with Rich Text Support -->
+				<div
+					class="{isReplyParent ? 'mb-2' : 'mb-3'} overflow-wrap-anywhere break-words whitespace-pre-wrap text-{isReplyParent
+						? 'sm'
+						: 'base'} leading-relaxed text-ink-900 dark:text-ink-50"
+				>
+					{@html renderRichText(postData.text, postData.facets)}
+				</div>
+
+				<!-- Video -->
+				{#if postData.hasVideo && postData.videoUrl}
+					<div class="{isReplyParent ? 'mb-2' : 'mb-3'} max-w-full overflow-hidden rounded-xl bg-black border border-canvas-300 dark:border-canvas-700">
+						<video
+							src={postData.videoUrl}
+							controls
+							class="w-full max-w-full"
+							preload="metadata"
+							poster={postData.videoThumbnail}
+							playsinline
+						>
+							<track kind="captions" />
+							Your browser does not support the video tag.
+						</video>
+					</div>
+				{/if}
+
+				<!-- Images -->
+				{#if postData.hasImages && postData.imageUrls && postData.imageUrls.length > 0}
+					<div
+						class="{isReplyParent ? 'mb-2' : 'mb-3'} grid max-w-full gap-1 {postData.imageUrls.length === 1
+							? 'grid-cols-1'
+							: postData.imageUrls.length === 2
+								? 'grid-cols-2'
+								: postData.imageUrls.length === 3
+									? 'grid-cols-3'
+									: 'grid-cols-2'}"
+					>
+						{#each postData.imageUrls as imageUrl, index}
+							<button
+							type="button"
+							onclick={() =>
+							openLightbox(imageUrl, postData.imageAlts?.[index] || `Post attachment ${index + 1}`)}
+							class="h-auto w-full max-w-full overflow-hidden rounded-lg transition-opacity hover:opacity-90 focus:ring-2 focus:ring-primary-500 focus:outline-none dark:focus:ring-primary-400 border border-canvas-300 dark:border-canvas-700"
+							 title={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
+							>
+							<img
+							src={imageUrl}
+							alt={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
+							title={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
+							class="h-auto w-full max-w-full object-cover {postData.imageUrls.length === 4
+							? 'aspect-square'
+							: postData.imageUrls.length > 1
+							? 'aspect-video'
+							: isReplyParent
+							   ? 'max-h-64'
+							    : 'max-h-96'}"
+							  loading="lazy"
+							/>
+						</button>
+						{/each}
+					</div>
+				{/if}
+
+				<!-- External Link Card -->
+				{#if postData.externalLink}
+					<a
+						href={postData.externalLink.uri}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="{isReplyParent ? 'mb-2' : 'mb-3'} flex max-w-full flex-col overflow-hidden rounded-xl border border-canvas-300 bg-canvas-200 transition-colors hover:bg-canvas-300 dark:border-canvas-700 dark:bg-canvas-800 dark:hover:bg-canvas-700"
+					>
+						{#if postData.externalLink.thumb}
+							<img
+								src={postData.externalLink.thumb}
+								alt={postData.externalLink.title}
+								class="h-48 w-full max-w-full object-cover"
+								loading="lazy"
+							/>
+						{/if}
+						<div class="p-3">
+							<h3
+								class="mb-1 overflow-wrap-anywhere break-words text-sm font-semibold text-ink-900 dark:text-ink-50 line-clamp-2"
+							>
+								{postData.externalLink.title}
+							</h3>
+							{#if postData.externalLink.description}
+								<p
+									class="mb-2 overflow-wrap-anywhere break-words text-xs text-ink-700 dark:text-ink-300 line-clamp-2"
+								>
+									{postData.externalLink.description}
+								</p>
+							{/if}
+							<p class="overflow-wrap-anywhere break-words text-xs text-ink-600 dark:text-ink-400">
+								{new URL(postData.externalLink.uri).hostname}
+							</p>
+						</div>
+					</a>
+				{/if}
+
+				<!-- Recursively render quoted post -->
+				{#if postData.quotedPost && depth < 3}
+					<div class="{isReplyParent ? 'mb-2' : 'mb-3'} rounded-xl border border-canvas-300 bg-canvas-200 p-3 dark:border-canvas-700 dark:bg-canvas-800">
+						{@render postContent(postData.quotedPost, depth + 1, depth === 0)}
+					</div>
+				{/if}
+
+				<!-- Engagement Stats (only for non-reply-parent posts) -->
+				{#if !isReplyParent}
+					<div class="flex items-center gap-6 text-sm pt-1">
+						{#if postData.replyCount !== undefined}
+							<div class="flex items-center gap-1.5 text-ink-600 dark:text-ink-400">
+								<MessageCircle class="h-4 w-4" aria-hidden="true" />
+								<span class="font-medium">{formatCompactNumber(postData.replyCount, locale)}</span>
+							</div>
+						{/if}
+
+						{#if postData.repostCount !== undefined}
+							<div class="flex items-center gap-1.5 text-ink-600 dark:text-ink-400">
+								<Repeat2 class="h-4 w-4" aria-hidden="true" />
+								<span class="font-medium">{formatCompactNumber(postData.repostCount, locale)}</span>
+							</div>
+						{/if}
+
+						{#if postData.likeCount !== undefined}
+							<div class="flex items-center gap-1.5 text-ink-600 dark:text-ink-400">
+								<Heart class="h-4 w-4" aria-hidden="true" />
+								<span class="font-medium">{formatCompactNumber(postData.likeCount, locale)}</span>
+							</div>
+						{/if}
+
+						<time
+							datetime={postData.createdAt}
+							class="ml-auto text-xs font-medium text-ink-700 dark:text-ink-300"
+						>
+							{formatRelativeTime(postData.createdAt)}
+						</time>
+					</div>
+				{/if}
 			</div>
-		{/if}
-	</article>
+		</div>
+	</div>
 {/snippet}
 
 <div class="mx-auto w-full max-w-2xl">
@@ -346,7 +366,64 @@
 	{:else if error}
 		<Card error={true} errorMessage={error} />
 	{:else if post}
-		{@render postContent(post, 0, false)}
+		<article class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
+			<!-- Header -->
+			<div class="mb-4 flex items-center justify-between">
+				<div class="flex items-center gap-2">
+					<span class="text-xs font-semibold tracking-wide text-ink-700 uppercase dark:text-ink-300">
+						Latest Bluesky Post
+					</span>
+					{#if post.isRepost && post.repostAuthor}
+						<span class="text-xs text-ink-600 dark:text-ink-400">·</span>
+						<div class="flex items-center gap-1.5 text-xs text-ink-600 dark:text-ink-400">
+							<Repeat2 class="h-3 w-3" aria-hidden="true" />
+							<a
+								href={getProfileUrl(post.repostAuthor.handle)}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="font-medium text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+							>
+								{post.repostAuthor.displayName || post.repostAuthor.handle}
+							</a>
+							<span>reposted</span>
+						</div>
+					{:else if post.replyParent}
+						<span class="text-xs text-ink-600 dark:text-ink-400">·</span>
+						<div class="flex items-center gap-1.5 text-xs text-ink-600 dark:text-ink-400">
+							<MessageCircle class="h-3 w-3" aria-hidden="true" />
+							<span>Replying to</span>
+							<a
+								href={getProfileUrl(post.replyParent.author.handle)}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="font-medium text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+							>
+								@{post.replyParent.author.handle}
+							</a>
+						</div>
+					{/if}
+				</div>
+				<a
+					href={getPostUrl(post.uri)}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-ink-600 transition-colors hover:text-primary-600 dark:text-ink-400 dark:hover:text-primary-400"
+					aria-label="View post on Bluesky"
+				>
+					<ExternalLink class="h-4 w-4" aria-hidden="true" />
+				</a>
+			</div>
+
+			<!-- Reply Context -->
+			{#if post.replyParent}
+				<div class="mb-4 rounded-xl border border-canvas-300 bg-canvas-200 p-3 dark:border-canvas-700 dark:bg-canvas-800">
+					{@render postContent(post.replyParent, 0, true)}
+				</div>
+			{/if}
+
+			<!-- Main Post -->
+			{@render postContent(post, 0, false)}
+		</article>
 	{:else}
 		<Card variant="flat" padding="lg">
 			{#snippet children()}
