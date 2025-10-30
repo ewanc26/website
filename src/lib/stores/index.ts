@@ -1,0 +1,1 @@
+export { wolfMode } from './wolfMode';
