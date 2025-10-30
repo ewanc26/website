@@ -3,6 +3,7 @@
 	import { defaultSiteMeta } from '$lib/helper/siteMeta';
 	import NavLinks from './NavLinks.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
+	import WolfToggle from './WolfToggle.svelte';
 	import { navItems } from '$lib/data/navItems';
 
 	const siteMeta: SiteMetadata = createSiteMeta(defaultSiteMeta);
@@ -18,7 +19,10 @@
 
 		<div class="flex flex-shrink-0 items-center gap-4">
 			<NavLinks {navItems} />
-			<ThemeToggle />
+			<div class="flex items-center gap-2">
+				<WolfToggle />
+				<ThemeToggle />
+			</div>
 		</div>
 	</nav>
 </header>
