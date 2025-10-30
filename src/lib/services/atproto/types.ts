@@ -170,6 +170,14 @@ export interface BlueskyPost {
 	quotedPost?: BlueskyPost;
 	facets?: Facet[];
 	externalLink?: ExternalLink;
+	// Reply context
+	replyParent?: BlueskyPost;
+	replyRoot?: BlueskyPost;
+	// Repost context
+	isRepost?: boolean;
+	repostAuthor?: PostAuthor;
+	repostCreatedAt?: string;
+	originalPost?: BlueskyPost;
 }
 
 export interface ResolvedIdentity {

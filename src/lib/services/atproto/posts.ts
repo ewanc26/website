@@ -192,7 +192,7 @@ export async function fetchBlogPosts(): Promise<BlogPostsData> {
 }
 
 /**
- * Fetches the latest non-reply Bluesky post
+ * Fetches the latest Bluesky post (including replies and reposts)
  */
 export async function fetchLatestBlueskyPost(): Promise<BlueskyPost | null> {
 	console.log('[fetchLatestBlueskyPost] Starting fetch...');
@@ -204,43 +204,58 @@ export async function fetchLatestBlueskyPost(): Promise<BlueskyPost | null> {
 	}
 
 	try {
-		console.log('[fetchLatestBlueskyPost] Fetching records from repo...');
-		const records = await withFallback(
-			PUBLIC_ATPROTO_DID,
-			async (agent) => {
-				const response = await agent.com.atproto.repo.listRecords({
-					repo: PUBLIC_ATPROTO_DID,
-					collection: 'app.bsky.feed.post',
-					limit: 10
-				});
-				return response.data.records;
-			},
-			true
-		);
-
-		console.log('[fetchLatestBlueskyPost] Records fetched:', records.length);
-
-		if (records.length === 0) {
-			console.warn('[fetchLatestBlueskyPost] No records found');
-			return null;
-		}
-
-		const nonReplyPost = records.find((record) => {
-			const value = record.value as any;
-			return !value.reply;
+		console.log('[fetchLatestBlueskyPost] Fetching author feed...');
+		// Use getAuthorFeed to get posts AND reposts in chronological order
+		const feedResponse = await defaultAgent.getAuthorFeed({
+			actor: PUBLIC_ATPROTO_DID,
+			limit: 5
 		});
 
-		if (!nonReplyPost) {
-			console.warn('[fetchLatestBlueskyPost] No non-reply post found');
+		const feed = feedResponse.data.feed;
+		console.log('[fetchLatestBlueskyPost] Feed items fetched:', feed.length);
+
+		if (feed.length === 0) {
+			console.warn('[fetchLatestBlueskyPost] No feed items found');
 			return null;
 		}
 
-		console.log('[fetchLatestBlueskyPost] Found non-reply post:', nonReplyPost.uri);
-		const post = await fetchPostFromUri(nonReplyPost.uri, 0);
-
+		// Take the latest feed item (first in array)
+		const latestFeedItem = feed[0];
+		const latestPostData = latestFeedItem.post;
+		console.log('[fetchLatestBlueskyPost] Found latest feed item:', latestPostData.uri);
+		
+		// Check if this is a repost
+		const isRepost = latestFeedItem.reason?.$type === 'app.bsky.feed.defs#reasonRepost';
+		let repostAuthor: PostAuthor | undefined;
+		let repostCreatedAt: string | undefined;
+		
+		if (isRepost && latestFeedItem.reason) {
+			const reason = latestFeedItem.reason as any;
+			repostAuthor = {
+				did: reason.by.did,
+				handle: reason.by.handle,
+				displayName: reason.by.displayName,
+				avatar: reason.by.avatar
+			};
+			repostCreatedAt = reason.indexedAt;
+			console.log('[fetchLatestBlueskyPost] This is a repost by:', repostAuthor.handle);
+		}
+		
+		// Fetch the full post data
+		const post = await fetchPostFromUri(latestPostData.uri, 0);
+		
 		if (!post) {
 			console.warn('[fetchLatestBlueskyPost] fetchPostFromUri returned null');
 			return null;
+		}
+		
+		// Add repost context if applicable
+		if (isRepost) {
+			post.isRepost = true;
+			post.repostAuthor = repostAuthor;
+			post.repostCreatedAt = repostCreatedAt;
+			// Store the original post data
+			post.originalPost = { ...post };
 		}
 
 		console.log('[fetchLatestBlueskyPost] Post fetched successfully, caching...');
@@ -258,7 +273,7 @@ export async function fetchLatestBlueskyPost(): Promise<BlueskyPost | null> {
 export async function fetchPostFromUri(uri: string, depth: number): Promise<BlueskyPost | null> {
 	console.log(`[fetchPostFromUri] Starting fetch at depth ${depth} for URI:`, uri);
 
-	if (depth >= 2) {
+	if (depth >= 3) {
 		console.log(`[fetchPostFromUri] Max depth reached (${depth}), stopping recursion`);
 		return null;
 	}
@@ -442,6 +457,19 @@ export async function fetchPostFromUri(uri: string, depth: number): Promise<Blue
 			}
 		}
 
+		// Handle reply context
+		let replyParent: BlueskyPost | undefined;
+		let replyRoot: BlueskyPost | undefined;
+		if (value.reply) {
+			console.log(`[fetchPostFromUri] Post is a reply, fetching parent...`);
+			if (value.reply.parent?.uri) {
+				replyParent = (await fetchPostFromUri(value.reply.parent.uri, depth + 1)) ?? undefined;
+			}
+			if (value.reply.root?.uri && value.reply.root.uri !== value.reply.parent?.uri) {
+				replyRoot = (await fetchPostFromUri(value.reply.root.uri, depth + 1)) ?? undefined;
+			}
+		}
+
 		const post: BlueskyPost = {
 			text: value.text,
 			createdAt: value.createdAt,
@@ -459,7 +487,9 @@ export async function fetchPostFromUri(uri: string, depth: number): Promise<Blue
 			quotedPostUri,
 			quotedPost,
 			facets,
-			externalLink
+			externalLink,
+			replyParent,
+			replyRoot
 		};
 
 		console.log(`[fetchPostFromUri] Post construction complete at depth ${depth}:`, {
