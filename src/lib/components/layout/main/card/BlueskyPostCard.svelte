@@ -118,7 +118,7 @@
 {#snippet postContent(postData: BlueskyPost, depth: number = 0, isReplyParent: boolean = false)}
 	<div>
 		<!-- Author Info -->
-		<div class="flex gap-{isReplyParent ? '2' : '3'} relative">
+		<div class="flex gap-{isReplyParent ? '2' : '3 sm:gap-3'} relative">
 			{#if isReplyParent}
 				<a
 					href={getProfileUrl(postData.author.handle)}
@@ -130,14 +130,14 @@
 						<img
 							src={postData.author.avatar}
 							alt={postData.author.displayName || postData.author.handle}
-							class="h-10 w-10 rounded-full object-cover"
+							class="h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover"
 							loading="lazy"
 						/>
 					{:else}
 						<div
-							class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-200 dark:bg-primary-800"
+							class="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-primary-200 dark:bg-primary-800"
 						>
-							<span class="text-base font-semibold text-primary-700 dark:text-primary-300">
+							<span class="text-sm sm:text-base font-semibold text-primary-700 dark:text-primary-300">
 								{(postData.author.displayName || postData.author.handle).charAt(0).toUpperCase()}
 							</span>
 						</div>
@@ -154,14 +154,14 @@
 						<img
 							src={postData.author.avatar}
 							alt={postData.author.displayName || postData.author.handle}
-							class="h-12 w-12 rounded-full object-cover"
+							class="h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover"
 							loading="lazy"
 						/>
 					{:else}
 						<div
-							class="flex h-12 w-12 items-center justify-center rounded-full bg-primary-200 dark:bg-primary-800"
+							class="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-primary-200 dark:bg-primary-800"
 						>
-							<span class="text-lg font-semibold text-primary-700 dark:text-primary-300">
+							<span class="text-base sm:text-lg font-semibold text-primary-700 dark:text-primary-300">
 								{(postData.author.displayName || postData.author.handle).charAt(0).toUpperCase()}
 							</span>
 						</div>
@@ -294,24 +294,24 @@
 
 				<!-- Engagement Stats (only for non-reply-parent posts) -->
 				{#if !isReplyParent}
-					<div class="flex items-center gap-6 text-sm pt-1">
+					<div class="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm pt-1">
 						{#if postData.replyCount !== undefined}
-							<div class="flex items-center gap-1.5 text-ink-600 dark:text-ink-400">
-								<MessageCircle class="h-4 w-4" aria-hidden="true" />
+							<div class="flex items-center gap-1 sm:gap-1.5 text-ink-600 dark:text-ink-400">
+								<MessageCircle class="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
 								<span class="font-medium">{formatCompactNumber(postData.replyCount, locale)}</span>
 							</div>
 						{/if}
 
 						{#if postData.repostCount !== undefined}
-							<div class="flex items-center gap-1.5 text-ink-600 dark:text-ink-400">
-								<Repeat2 class="h-4 w-4" aria-hidden="true" />
+							<div class="flex items-center gap-1 sm:gap-1.5 text-ink-600 dark:text-ink-400">
+								<Repeat2 class="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
 								<span class="font-medium">{formatCompactNumber(postData.repostCount, locale)}</span>
 							</div>
 						{/if}
 
 						{#if postData.likeCount !== undefined}
-							<div class="flex items-center gap-1.5 text-ink-600 dark:text-ink-400">
-								<Heart class="h-4 w-4" aria-hidden="true" />
+							<div class="flex items-center gap-1 sm:gap-1.5 text-ink-600 dark:text-ink-400">
+								<Heart class="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
 								<span class="font-medium">{formatCompactNumber(postData.likeCount, locale)}</span>
 							</div>
 						{/if}
@@ -366,37 +366,37 @@
 	{:else if error}
 		<Card error={true} errorMessage={error} />
 	{:else if post}
-		<article class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
+		<article class="rounded-xl bg-canvas-100 p-4 sm:p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
 			<!-- Header -->
-			<div class="mb-4 flex items-center justify-between">
-				<div class="flex items-center gap-2">
-					<span class="text-xs font-semibold tracking-wide text-ink-700 uppercase dark:text-ink-300">
+			<div class="mb-3 sm:mb-4 flex items-start sm:items-center justify-between gap-2">
+				<div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
+					<span class="text-xs font-semibold tracking-wide text-ink-700 uppercase dark:text-ink-300 whitespace-nowrap">
 						Latest Bluesky Post
 					</span>
 					{#if post.isRepost && post.repostAuthor}
-						<span class="text-xs text-ink-600 dark:text-ink-400">·</span>
+						<span class="hidden sm:inline text-xs text-ink-600 dark:text-ink-400">·</span>
 						<div class="flex items-center gap-1.5 text-xs text-ink-600 dark:text-ink-400">
-							<Repeat2 class="h-3 w-3" aria-hidden="true" />
+							<Repeat2 class="h-3 w-3 shrink-0" aria-hidden="true" />
 							<a
 								href={getProfileUrl(post.repostAuthor.handle)}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="font-medium text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+								class="font-medium text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 truncate"
 							>
 								{post.repostAuthor.displayName || post.repostAuthor.handle}
 							</a>
-							<span>reposted</span>
+							<span class="whitespace-nowrap">reposted</span>
 						</div>
 					{:else if post.replyParent}
-						<span class="text-xs text-ink-600 dark:text-ink-400">·</span>
+						<span class="hidden sm:inline text-xs text-ink-600 dark:text-ink-400">·</span>
 						<div class="flex items-center gap-1.5 text-xs text-ink-600 dark:text-ink-400">
-							<MessageCircle class="h-3 w-3" aria-hidden="true" />
-							<span>Replying to</span>
+							<MessageCircle class="h-3 w-3 shrink-0" aria-hidden="true" />
+							<span class="whitespace-nowrap">Replying to</span>
 							<a
 								href={getProfileUrl(post.replyParent.author.handle)}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="font-medium text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+								class="font-medium text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 truncate"
 							>
 								@{post.replyParent.author.handle}
 							</a>
@@ -407,7 +407,7 @@
 					href={getPostUrl(post.uri)}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-ink-600 transition-colors hover:text-primary-600 dark:text-ink-400 dark:hover:text-primary-400"
+					class="text-ink-600 transition-colors hover:text-primary-600 dark:text-ink-400 dark:hover:text-primary-400 shrink-0"
 					aria-label="View post on Bluesky"
 				>
 					<ExternalLink class="h-4 w-4" aria-hidden="true" />
@@ -416,7 +416,7 @@
 
 			<!-- Reply Context -->
 			{#if post.replyParent}
-				<div class="mb-4 rounded-xl border border-canvas-300 bg-canvas-200 p-3 dark:border-canvas-700 dark:bg-canvas-800">
+				<div class="mb-3 sm:mb-4 rounded-xl border border-canvas-300 bg-canvas-200 p-2.5 sm:p-3 dark:border-canvas-700 dark:bg-canvas-800">
 					{@render postContent(post.replyParent, 0, true)}
 				</div>
 			{/if}
@@ -438,7 +438,7 @@
 <!-- Lightbox Modal -->
 {#if lightboxImage}
 	<div
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+		class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-2 sm:p-4"
 		onclick={closeLightbox}
 		onkeydown={(e) => e.key === 'Escape' && closeLightbox()}
 		role="button"
@@ -448,21 +448,21 @@
 		<button
 			type="button"
 			onclick={closeLightbox}
-			class="absolute top-4 right-4 rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70 focus:ring-2 focus:ring-white focus:outline-none"
+			class="absolute top-2 right-2 sm:top-4 sm:right-4 rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70 focus:ring-2 focus:ring-white focus:outline-none z-10"
 			aria-label="Close"
 		>
-			<X class="h-6 w-6" />
+			<X class="h-5 w-5 sm:h-6 sm:w-6" />
 		</button>
-		<div class="relative flex max-h-[90vh] w-full max-w-[90vw] flex-col items-center">
+		<div class="relative flex max-h-[90vh] w-full max-w-[95vw] sm:max-w-[90vw] flex-col items-center">
 			<img
 				src={lightboxImage.url}
 				alt={lightboxImage.alt}
 				title={lightboxImage.alt}
-				class="max-h-[80vh] w-full object-contain"
+				class="max-h-[75vh] sm:max-h-[80vh] w-full object-contain"
 				loading="lazy"
 			/>
 			{#if lightboxImage.alt && lightboxImage.alt !== `Post attachment ${lightboxImage.url.split('/').pop()}`}
-				<div class="mt-4 w-full max-w-full overflow-y-auto rounded-lg bg-black/70 px-4 py-2 text-center text-sm text-white" style="max-height: calc(10vh - 2rem);">
+				<div class="mt-2 sm:mt-4 w-full max-w-full overflow-y-auto rounded-lg bg-black/70 px-3 py-2 sm:px-4 text-center text-xs sm:text-sm text-white" style="max-height: calc(15vh - 1rem); sm:max-height: calc(10vh - 2rem);">
 					{lightboxImage.alt}
 				</div>
 			{/if}
