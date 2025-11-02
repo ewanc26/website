@@ -5,12 +5,14 @@
 	import { formatRelativeTime } from '$lib/utils/formatDate';
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
 	import { Heart, Repeat2, MessageCircle, ExternalLink, X } from '@lucide/svelte';
+	import Hls from 'hls.js';
 
 	let post: BlueskyPost | null = null;
 	let loading = true;
 	let error: string | null = null;
 	let lightboxImage: { url: string; alt: string } | null = null;
 	let pollInterval: ReturnType<typeof setInterval> | null = null;
+	let videoElements = new Map<string, { element: HTMLVideoElement; hls: Hls | null }>();
 
 	// Detect system locale, fallback to en-GB
 	const locale = typeof navigator !== 'undefined' ? navigator.language || 'en-GB' : 'en-GB';
@@ -51,6 +53,13 @@
 			clearInterval(pollInterval);
 			pollInterval = null;
 		}
+		// Clean up all HLS instances
+		videoElements.forEach(({ hls }) => {
+			if (hls) {
+				hls.destroy();
+			}
+		});
+		videoElements.clear();
 	});
 
 	function getPostUrl(uri: string): string {
@@ -112,6 +121,57 @@
 		const div = document.createElement('div');
 		div.textContent = text;
 		return div.innerHTML;
+	}
+
+	function setupVideo(videoElement: HTMLVideoElement, videoUrl: string) {
+		if (!videoElement || !videoUrl) return;
+
+		// Clean up existing HLS instance for this video
+		const existing = videoElements.get(videoUrl);
+		if (existing?.hls) {
+			existing.hls.destroy();
+		}
+
+		let hls: Hls | null = null;
+
+		// Check if HLS is supported
+		if (videoUrl.includes('.m3u8')) {
+			if (Hls.isSupported()) {
+				hls = new Hls({
+					enableSoftwareAES: true,
+					maxBufferLength: 30,
+					maxMaxBufferLength: 600
+				});
+				hls.loadSource(videoUrl);
+				hls.attachMedia(videoElement);
+				hls.on(Hls.Events.MANIFEST_PARSED, () => {
+					console.log('[HLS] Video ready to play');
+				});
+				hls.on(Hls.Events.ERROR, (event, data) => {
+					if (data.fatal) {
+						console.error('[HLS] Fatal error:', data);
+					}
+				});
+				videoElements.set(videoUrl, { element: videoElement, hls });
+			} else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+				// Native HLS support (Safari)
+				videoElement.src = videoUrl;
+				videoElements.set(videoUrl, { element: videoElement, hls: null });
+			}
+		} else {
+			// Regular video file
+			videoElement.src = videoUrl;
+			videoElements.set(videoUrl, { element: videoElement, hls: null });
+		}
+
+		return {
+			destroy() {
+				if (hls) {
+					hls.destroy();
+				}
+				videoElements.delete(videoUrl);
+			}
+		};
 	}
 </script>
 
@@ -199,7 +259,7 @@
 				{#if postData.hasVideo && postData.videoUrl}
 					<div class="{isReplyParent ? 'mb-2' : 'mb-3'} max-w-full overflow-hidden rounded-xl bg-black border border-canvas-300 dark:border-canvas-700">
 						<video
-							src={postData.videoUrl}
+							use:setupVideo={postData.videoUrl}
 							controls
 							class="w-full max-w-full"
 							preload="metadata"

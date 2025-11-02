@@ -30,6 +30,7 @@
 	},
 	"dependencies": {
 		"@atproto/api": "^0.17.2",
-		"@lucide/svelte": "^0.545.0"
+		"@lucide/svelte": "^0.545.0",
+		"hls.js": "^1.5.19"
 	}
 }
