@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
 	import { Card } from '$lib/components/ui';
 	import { fetchLatestBlueskyPost, type BlueskyPost } from '$lib/services/atproto';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
@@ -7,11 +6,10 @@
 	import { Heart, Repeat2, MessageCircle, ExternalLink, X } from '@lucide/svelte';
 	import Hls from 'hls.js';
 
-	let post: BlueskyPost | null = null;
-	let loading = true;
-	let error: string | null = null;
-	let lightboxImage: { url: string; alt: string } | null = null;
-	let pollInterval: ReturnType<typeof setInterval> | null = null;
+	let post = $state<BlueskyPost | null>(null);
+	let loading = $state(true);
+	let error = $state<string | null>(null);
+	let lightboxImage = $state<{ url: string; alt: string } | null>(null);
 	let videoElements = new Map<string, { element: HTMLVideoElement; hls: Hls | null }>();
 
 	// Detect system locale, fallback to en-GB
@@ -36,30 +34,28 @@
 		}
 	}
 
-	onMount(async () => {
+	// Initial load and polling setup using $effect
+	$effect(() => {
 		// Initial load
-		await loadPost();
+		loadPost();
 
 		// Set up polling for new posts
-		pollInterval = setInterval(async () => {
+		const pollInterval = setInterval(async () => {
 			console.log('[BlueskyPostCard] Polling for new posts...');
 			await loadPost();
 		}, POLL_INTERVAL);
-	});
 
-	onDestroy(() => {
-		// Clean up interval on component destroy
-		if (pollInterval) {
+		// Cleanup function
+		return () => {
 			clearInterval(pollInterval);
-			pollInterval = null;
-		}
-		// Clean up all HLS instances
-		videoElements.forEach(({ hls }) => {
-			if (hls) {
-				hls.destroy();
-			}
-		});
-		videoElements.clear();
+			// Clean up all HLS instances
+			videoElements.forEach(({ hls }) => {
+				if (hls) {
+					hls.destroy();
+				}
+			});
+			videoElements.clear();
+		};
 	});
 
 	function getPostUrl(uri: string): string {
