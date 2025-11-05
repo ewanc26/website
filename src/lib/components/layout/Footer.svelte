@@ -6,16 +6,31 @@
 	let siteInfo: SiteInfoData | null = null;
 	let loading = true;
 	let error: string | null = null;
+	let copyrightText: string;
 
 	const currentYear = new Date().getFullYear();
-	const getBirthYear = () => {
+	
+	$: {
+		console.log('[Footer] Reactive: siteInfo updated:', siteInfo);
 		const birthYear = siteInfo?.additionalInfo?.websiteBirthYear;
-		// Ensure birth year is valid and not in the future
-		return birthYear && birthYear <= currentYear ? birthYear : currentYear;
-	};
-	const copyrightText = getBirthYear() === currentYear
-		? `${currentYear}`
-		: `${getBirthYear()} - ${currentYear}`;
+		console.log('[Footer] Current year:', currentYear);
+		console.log('[Footer] Birth year:', birthYear);
+		console.log('[Footer] Birth year type:', typeof birthYear);
+		
+		if (!birthYear || typeof birthYear !== 'number') {
+			console.log('[Footer] Using current year (invalid/missing birth year)');
+			copyrightText = `${currentYear}`;
+		} else if (birthYear > currentYear) {
+			console.log('[Footer] Using current year (birth year in future)');
+			copyrightText = `${currentYear}`;
+		} else if (birthYear === currentYear) {
+			console.log('[Footer] Using current year (birth year equals current)');
+			copyrightText = `${currentYear}`;
+		} else {
+			console.log('[Footer] Using year range');
+			copyrightText = `${birthYear} - ${currentYear}`;
+		}
+	}
 
 	onMount(async () => {
 		try {
