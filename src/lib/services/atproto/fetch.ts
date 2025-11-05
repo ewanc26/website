@@ -6,7 +6,7 @@ import type { ProfileData, StatusData, SiteInfoData, LinkData } from './types';
 /**
  * Fetches user profile from AT Protocol
  */
-export async function fetchProfile(): Promise<ProfileData> {
+export async function fetchProfile(fetchFn?: typeof fetch): Promise<ProfileData> {
 	console.info('[Profile] Fetching profile data');
 	const cacheKey = `profile:${PUBLIC_ATPROTO_DID}`;
 	const cached = cache.get<ProfileData>(cacheKey);
@@ -18,11 +18,16 @@ export async function fetchProfile(): Promise<ProfileData> {
 	try {
 		console.info('[Profile] Cache miss, fetching from network');
 		// Profile data is public, try Bluesky API first, then PDS
-		const profile = await withFallback(PUBLIC_ATPROTO_DID, async (agent) => {
-			console.debug('[Profile] Attempting profile fetch with agent:', agent.service.toString());
-			const response = await agent.getProfile({ actor: PUBLIC_ATPROTO_DID });
-			return response.data;
-		});
+		const profile = await withFallback(
+			PUBLIC_ATPROTO_DID,
+			async (agent) => {
+				console.debug('[Profile] Attempting profile fetch with agent:', agent.service.toString());
+				const response = await agent.getProfile({ actor: PUBLIC_ATPROTO_DID });
+				return response.data;
+			},
+			false,
+			fetchFn
+		);
 
 		const data: ProfileData = {
 			did: profile.did,
@@ -49,7 +54,7 @@ export async function fetchProfile(): Promise<ProfileData> {
 /**
  * Fetches user status from custom lexicon
  */
-export async function fetchStatus(): Promise<StatusData | null> {
+export async function fetchStatus(fetchFn?: typeof fetch): Promise<StatusData | null> {
 	console.info('[Status] Fetching status data');
 	const cacheKey = `status:${PUBLIC_ATPROTO_DID}`;
 	const cached = cache.get<StatusData>(cacheKey);
@@ -71,7 +76,8 @@ export async function fetchStatus(): Promise<StatusData | null> {
 				});
 				return response.data.records;
 			},
-			true
+			true,
+			fetchFn
 		); // usePDSFirst = true
 
 		if (records.length === 0) return null;
@@ -93,27 +99,40 @@ export async function fetchStatus(): Promise<StatusData | null> {
 /**
  * Fetches site information from custom lexicon
  */
-export async function fetchSiteInfo(): Promise<SiteInfoData | null> {
+export async function fetchSiteInfo(fetchFn?: typeof fetch): Promise<SiteInfoData | null> {
 	const cacheKey = `siteinfo:${PUBLIC_ATPROTO_DID}`;
 	const cached = cache.get<SiteInfoData>(cacheKey);
 	if (cached) return cached;
 
 	try {
 		// Custom collection, prefer PDS first
-		const value = await withFallback(
+		const result = await withFallback(
 			PUBLIC_ATPROTO_DID,
 			async (agent) => {
-				const response = await agent.com.atproto.repo.getRecord({
-					repo: PUBLIC_ATPROTO_DID,
-					collection: 'uk.ewancroft.site.info',
-					rkey: 'self'
-				});
-				return response.data.value;
+				try {
+					const response = await agent.com.atproto.repo.getRecord({
+						repo: PUBLIC_ATPROTO_DID,
+						collection: 'uk.ewancroft.site.info',
+						rkey: 'self'
+					});
+					return response.data;
+				} catch (err: any) {
+					// If record not found, return null instead of throwing
+					if (err.error === 'RecordNotFound') {
+						return null;
+					}
+					throw err;
+				}
 			},
-			true
+			true,
+			fetchFn
 		); // usePDSFirst = true
 
-		const data = value as SiteInfoData;
+		if (!result || !result.value) {
+			return null;
+		}
+
+		const data = result.value as SiteInfoData;
 		cache.set(cacheKey, data);
 		return data;
 	} catch (error) {
@@ -125,7 +144,7 @@ export async function fetchSiteInfo(): Promise<SiteInfoData | null> {
 /**
  * Fetches links from Linkat board
  */
-export async function fetchLinks(): Promise<LinkData | null> {
+export async function fetchLinks(fetchFn?: typeof fetch): Promise<LinkData | null> {
 	const cacheKey = `links:${PUBLIC_ATPROTO_DID}`;
 	const cached = cache.get<LinkData>(cacheKey);
 	if (cached) return cached;
@@ -142,7 +161,8 @@ export async function fetchLinks(): Promise<LinkData | null> {
 				});
 				return response.data.value;
 			},
-			true
+			true,
+			fetchFn
 		); // usePDSFirst = true
 
 		// Validate the response has the expected structure

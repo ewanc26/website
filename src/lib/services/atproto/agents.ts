@@ -1,11 +1,42 @@
 import { AtpAgent } from '@atproto/api';
 import type { ResolvedIdentity } from './types';
 
+/**
+ * Creates an AtpAgent with optional fetch function injection
+ */
+export function createAgent(service: string, fetchFn?: typeof fetch): AtpAgent {
+  // If we have an injected fetch, wrap it to ensure we handle headers correctly
+  const wrappedFetch = fetchFn ? async (url: URL | RequestInfo, init?: RequestInit) => {
+    // Convert URL to string if needed
+    const urlStr = url instanceof URL ? url.toString() : url;
+    
+    // Make the request with the injected fetch
+    const response = await fetchFn(urlStr, init);
+
+    // Create a new response with the same body but add content-type if missing
+    const headers = new Headers(response.headers);
+    if (!headers.has('content-type')) {
+      headers.set('content-type', 'application/json');
+    }
+    
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers
+    });
+  } : undefined;
+
+  return new AtpAgent({ 
+    service,
+    ...(wrappedFetch && { fetch: wrappedFetch })
+  });
+}
+
 // Primary Microcosm Constellation endpoint
-export const constellationAgent = new AtpAgent({ service: 'https://constellation.microcosm.blue' });
+export const constellationAgent = createAgent('https://constellation.microcosm.blue');
 
 // Default fallback agent for public Bluesky API calls
-export const defaultAgent = new AtpAgent({ service: 'https://public.api.bsky.app' });
+export const defaultAgent = createAgent('https://public.api.bsky.app');
 
 // Cached agents
 let resolvedAgent: AtpAgent | null = null;
@@ -14,11 +45,19 @@ let pdsAgent: AtpAgent | null = null;
 /**
  * Resolves a DID to find its PDS endpoint using Slingshot.
  */
-export async function resolveIdentity(did: string): Promise<ResolvedIdentity> {
+export async function resolveIdentity(
+	did: string,
+	fetchFn?: typeof fetch
+): Promise<ResolvedIdentity> {
 	console.info(`[Identity] Resolving DID: ${did}`);
-	
-	const response = await fetch(
-		`https://slingshot.microcosm.blue/xrpc/com.bad-example.identity.resolveMiniDoc?identifier=${encodeURIComponent(did)}`
+
+	// Prefer an injected fetch (from SvelteKit load), fall back to global fetch
+	const _fetch = fetchFn ?? globalThis.fetch;
+
+	const response = await _fetch(
+		`https://slingshot.microcosm.blue/xrpc/com.bad-example.identity.resolveMiniDoc?identifier=${encodeURIComponent(
+			did
+		)}`
 	);
 
 	if (!response.ok) {
@@ -26,8 +65,17 @@ export async function resolveIdentity(did: string): Promise<ResolvedIdentity> {
 		throw new Error(`Failed to resolve identifier via Slingshot: ${response.status} ${response.statusText}`);
 	}
 
-	console.debug(`[Identity] Raw response:`, await response.clone().text());
-	const data = await response.json();
+	// Some fetch implementations in Node (undici wrappers) can throw when calling Response.clone().
+	// Read the text once and parse it instead of cloning to avoid private field access errors.
+	const rawText = await response.text();
+	console.debug(`[Identity] Raw response:`, rawText);
+	let data: any;
+	try {
+		data = JSON.parse(rawText);
+	} catch (err) {
+		console.error('[Identity] Failed to parse identity resolver response as JSON', err);
+		throw err;
+	}
 
 	if (!data.did || !data.pds) {
 		throw new Error('Invalid response from identity resolver');
@@ -39,7 +87,7 @@ export async function resolveIdentity(did: string): Promise<ResolvedIdentity> {
 /**
  * Gets or creates an agent for the public Bluesky API with PDS fallback
  */
-export async function getPublicAgent(did: string): Promise<AtpAgent> {
+export async function getPublicAgent(did: string, fetchFn?: typeof fetch): Promise<AtpAgent> {
 	console.info(`[Agent] Getting public agent for DID: ${did}`);
 	if (resolvedAgent) {
 		console.debug('[Agent] Using cached agent');
@@ -60,11 +108,11 @@ export async function getPublicAgent(did: string): Promise<AtpAgent> {
 			console.warn('[Agent] Constellation endpoint unreachable:', constellationErr);
 		}
 
-		// Then try Slingshot for PDS resolution
-		console.info('[Agent] Attempting Slingshot resolution');
-		const resolved = await resolveIdentity(did);
+	// Then try Slingshot for PDS resolution
+	console.info('[Agent] Attempting Slingshot resolution');
+	const resolved = await resolveIdentity(did, fetchFn);
 		console.info(`[Agent] Resolved PDS endpoint: ${resolved.pds}`);
-		resolvedAgent = new AtpAgent({ service: resolved.pds });
+		resolvedAgent = createAgent(resolved.pds, fetchFn);
 		return resolvedAgent;
 	} catch (err) {
 		console.error('[Agent] All Microcosm endpoints failed, falling back to Bluesky:', err);
@@ -74,12 +122,12 @@ export async function getPublicAgent(did: string): Promise<AtpAgent> {
 }/**
  * Gets or creates a PDS-specific agent
  */
-export async function getPDSAgent(did: string): Promise<AtpAgent> {
+export async function getPDSAgent(did: string, fetchFn?: typeof fetch): Promise<AtpAgent> {
 	if (pdsAgent) return pdsAgent;
 
 	try {
-		const resolved = await resolveIdentity(did);
-		pdsAgent = new AtpAgent({ service: resolved.pds });
+		const resolved = await resolveIdentity(did, fetchFn);
+		pdsAgent = createAgent(resolved.pds, fetchFn);
 		return pdsAgent;
 	} catch (err) {
 		console.error('Failed to resolve PDS for DID:', err);
@@ -96,11 +144,16 @@ export async function getPDSAgent(did: string): Promise<AtpAgent> {
 export async function withFallback<T>(
 	did: string,
 	operation: (agent: AtpAgent) => Promise<T>,
-	usePDSFirst = false
+	usePDSFirst = false,
+	fetchFn?: typeof fetch
 ): Promise<T> {
+	const defaultAgentFn = () => fetchFn 
+		? createAgent('https://public.api.bsky.app', fetchFn) 
+		: Promise.resolve(defaultAgent);
+
 	const agents = usePDSFirst
-		? [() => getPDSAgent(did), () => Promise.resolve(defaultAgent)]
-		: [() => Promise.resolve(defaultAgent), () => getPDSAgent(did)];
+		? [() => getPDSAgent(did, fetchFn), defaultAgentFn]
+		: [defaultAgentFn, () => getPDSAgent(did, fetchFn)];
 
 	let lastError: any;
 

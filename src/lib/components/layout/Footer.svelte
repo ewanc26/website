@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { fetchProfile, type ProfileData, fetchSiteInfo, type SiteInfoData } from '$lib/services/atproto';
+	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 
-	let profile: ProfileData | null = null;
-	let siteInfo: SiteInfoData | null = null;
-	let loading = true;
+	export let profile: ProfileData | null = null;
+	export let siteInfo: SiteInfoData | null = null;
+	let loading = false;
 	let error: string | null = null;
 	let copyrightText: string;
 
@@ -32,18 +31,7 @@
 		}
 	}
 
-	onMount(async () => {
-		try {
-			[profile, siteInfo] = await Promise.all([
-				fetchProfile(),
-				fetchSiteInfo()
-			]);
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to load data';
-		} finally {
-			loading = false;
-		}
-	});
+	// Data is provided by layout load; no client-side fetch here to avoid using window.fetch during navigation.
 </script>
 
 <footer
