@@ -3,6 +3,7 @@
 	import { Header, Footer, ScrollToTop } from '$lib/components/layout';
 	import { MetaTags } from '$lib/components/seo';
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
+	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 	import type { Snippet } from 'svelte';
 	import { onMount } from 'svelte';
 
@@ -10,6 +11,8 @@
 		data: {
 			siteMeta: SiteMetadata;
 			meta?: Partial<SiteMetadata>;
+			profile?: ProfileData | null;
+			siteInfo?: SiteInfoData | null;
 		};
 		children: Snippet;
 	}
@@ -75,11 +78,11 @@
 
 <div class="flex min-h-screen flex-col overflow-x-hidden bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50">
 	<Header />
-	
+    
 	<main class="container mx-auto flex-grow px-4 py-8">
 		<ScrollToTop />
 		{@render children()}
 	</main>
 
-	<Footer />
+	<Footer profile={data.profile} siteInfo={data.siteInfo} />
 </div>

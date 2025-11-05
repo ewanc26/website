@@ -1,6 +1,6 @@
 import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 import { cache } from './cache';
-import { withFallback, defaultAgent } from './agents';
+import { withFallback, defaultAgent, createAgent } from './agents';
 import { resolveIdentity } from './agents';
 import { buildPdsBlobUrl } from './media';
 import { fetchAllEngagement } from './engagement';
@@ -17,7 +17,7 @@ import type {
 /**
  * Fetches all Leaflet publications for a user
  */
-export async function fetchLeafletPublications(): Promise<LeafletPublicationsData> {
+export async function fetchLeafletPublications(fetchFn?: typeof fetch): Promise<LeafletPublicationsData> {
 	console.info('[Leaflet] Fetching publications');
 	const cacheKey = `leaflet:publications:${PUBLIC_ATPROTO_DID}`;
 	const cached = cache.get<LeafletPublicationsData>(cacheKey);
@@ -41,7 +41,8 @@ export async function fetchLeafletPublications(): Promise<LeafletPublicationsDat
 				});
 				return response.data.records;
 			},
-			true
+			true,
+			fetchFn
 		);
 
 		for (const pubRecord of publicationsRecords) {
@@ -54,7 +55,7 @@ export async function fetchLeafletPublications(): Promise<LeafletPublicationsDat
 				uri: pubRecord.uri,
 				basePath: pubValue.base_path,
 				description: pubValue.description,
-				icon: pubValue.icon ? await getBlobUrl(pubValue.icon) : undefined
+				icon: pubValue.icon ? await getBlobUrl(pubValue.icon, fetchFn) : undefined
 			});
 		}
 
@@ -70,12 +71,12 @@ export async function fetchLeafletPublications(): Promise<LeafletPublicationsDat
 /**
  * Helper function to get a blob URL for Leaflet publication icons
  */
-async function getBlobUrl(blob: any): Promise<string | undefined> {
+async function getBlobUrl(blob: any, fetchFn?: typeof fetch): Promise<string | undefined> {
 	try {
 		const cid = blob.ref?.$link || blob.cid;
 		if (!cid) return undefined;
 
-		const resolved = await resolveIdentity(PUBLIC_ATPROTO_DID);
+		const resolved = await resolveIdentity(PUBLIC_ATPROTO_DID, fetchFn);
 		return buildPdsBlobUrl(resolved.pds, PUBLIC_ATPROTO_DID, cid);
 	} catch (error) {
 		console.warn('Failed to resolve blob URL:', error);
@@ -87,7 +88,7 @@ async function getBlobUrl(blob: any): Promise<string | undefined> {
  * Fetches blog posts from both WhiteWind and Leaflet sources
  * Now supports multiple Leaflet publications
  */
-export async function fetchBlogPosts(): Promise<BlogPostsData> {
+export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsData> {
 	const cacheKey = `blogposts:${PUBLIC_ATPROTO_DID}`;
 	const cached = cache.get<BlogPostsData>(cacheKey);
 	if (cached) return cached;
@@ -106,7 +107,8 @@ export async function fetchBlogPosts(): Promise<BlogPostsData> {
 				});
 				return response.data.records;
 			},
-			true
+			true,
+			fetchFn
 		);
 
 		for (const record of whiteWindRecords) {
@@ -132,7 +134,7 @@ export async function fetchBlogPosts(): Promise<BlogPostsData> {
 	// Fetch Leaflet publications and documents
 	try {
 		// Get all publications first
-		const publicationsData = await fetchLeafletPublications();
+	const publicationsData = await fetchLeafletPublications(fetchFn);
 		const publicationsMap = new Map<string, LeafletPublication>();
 		for (const pub of publicationsData.publications) {
 			publicationsMap.set(pub.uri, pub);
@@ -149,7 +151,8 @@ export async function fetchBlogPosts(): Promise<BlogPostsData> {
 				});
 				return response.data.records;
 			},
-			true
+			true,
+			fetchFn
 		);
 
 		for (const record of leafletDocsRecords) {
@@ -201,7 +204,7 @@ export async function fetchBlogPosts(): Promise<BlogPostsData> {
 /**
  * Fetches the latest Bluesky post (including replies and reposts)
  */
-export async function fetchLatestBlueskyPost(): Promise<BlueskyPost | null> {
+export async function fetchLatestBlueskyPost(fetchFn?: typeof fetch): Promise<BlueskyPost | null> {
 	console.log('[fetchLatestBlueskyPost] Starting fetch...');
 	const cacheKey = `blueskypost:latest:${PUBLIC_ATPROTO_DID}`;
 	const cached = cache.get<BlueskyPost>(cacheKey);
@@ -212,11 +215,18 @@ export async function fetchLatestBlueskyPost(): Promise<BlueskyPost | null> {
 
 	try {
 		console.log('[fetchLatestBlueskyPost] Fetching author feed...');
-		// Use getAuthorFeed to get posts AND reposts in chronological order
-		const feedResponse = await defaultAgent.getAuthorFeed({
-			actor: PUBLIC_ATPROTO_DID,
-			limit: 5
-		});
+		// Use withFallback to get posts AND reposts in chronological order
+		const feedResponse = await withFallback(
+			PUBLIC_ATPROTO_DID,
+			async (agent) => {
+				return agent.getAuthorFeed({
+					actor: PUBLIC_ATPROTO_DID,
+					limit: 5
+				});
+			},
+			false,
+			fetchFn
+		);
 
 		const feed = feedResponse.data.feed;
 		console.log('[fetchLatestBlueskyPost] Feed items fetched:', feed.length);
@@ -249,7 +259,7 @@ export async function fetchLatestBlueskyPost(): Promise<BlueskyPost | null> {
 		}
 		
 		// Fetch the full post data
-		const post = await fetchPostFromUri(latestPostData.uri, 0);
+		const post = await fetchPostFromUri(latestPostData.uri, 0, fetchFn);
 		
 		if (!post) {
 			console.warn('[fetchLatestBlueskyPost] fetchPostFromUri returned null');
@@ -277,7 +287,11 @@ export async function fetchLatestBlueskyPost(): Promise<BlueskyPost | null> {
 /**
  * Recursively fetches a Bluesky post by URI, supporting quoted posts up to 2 levels deep
  */
-export async function fetchPostFromUri(uri: string, depth: number): Promise<BlueskyPost | null> {
+export async function fetchPostFromUri(
+	uri: string, 
+	depth: number, 
+	fetchFn?: typeof fetch
+): Promise<BlueskyPost | null> {
 	console.log(`[fetchPostFromUri] Starting fetch at depth ${depth} for URI:`, uri);
 
 	if (depth >= 3) {
@@ -287,7 +301,14 @@ export async function fetchPostFromUri(uri: string, depth: number): Promise<Blue
 
 	try {
 		console.log(`[fetchPostFromUri] Fetching post thread from Bluesky API...`);
-		const threadResponse = await defaultAgent.getPostThread({ uri, depth: 0 });
+		const threadResponse = await withFallback(
+			PUBLIC_ATPROTO_DID,
+			async (agent) => {
+				return agent.getPostThread({ uri, depth: 0 });
+			},
+			false,
+			fetchFn
+		);
 
 		if (!threadResponse.data.thread || !('post' in threadResponse.data.thread)) {
 			console.warn(`[fetchPostFromUri] No valid thread data found for URI:`, uri);
@@ -434,13 +455,13 @@ export async function fetchPostFromUri(uri: string, depth: number): Promise<Blue
 			const quotedRecord = embed.record?.record || embed.record;
 			console.log(`[fetchPostFromUri] Quoted record in recordWithMedia:`, quotedRecord?.uri);
 			if (quotedRecord && typeof quotedRecord.uri === 'string') {
-				quotedPostUri = quotedRecord.uri;
-				console.log(
-					`[fetchPostFromUri] Recursively fetching quoted post at depth ${depth + 1}:`,
-					quotedPostUri
-				);
-				if (quotedPostUri) {
-					quotedPost = (await fetchPostFromUri(quotedPostUri, depth + 1)) ?? undefined;
+					quotedPostUri = quotedRecord.uri;
+					console.log(
+						`[fetchPostFromUri] Recursively fetching quoted post at depth ${depth + 1}:`,
+						quotedPostUri
+					);
+					if (quotedPostUri) {
+						quotedPost = (await fetchPostFromUri(quotedPostUri, depth + 1, fetchFn)) ?? undefined;
 					console.log(`[fetchPostFromUri] Quoted post fetched:`, quotedPost ? 'success' : 'failed');
 				}
 			}
@@ -458,7 +479,7 @@ export async function fetchPostFromUri(uri: string, depth: number): Promise<Blue
 					quotedPostUri
 				);
 				if (quotedPostUri) {
-					quotedPost = (await fetchPostFromUri(quotedPostUri, depth + 1)) ?? undefined;
+					quotedPost = (await fetchPostFromUri(quotedPostUri, depth + 1, fetchFn)) ?? undefined;
 					console.log(`[fetchPostFromUri] Quoted post fetched:`, quotedPost ? 'success' : 'failed');
 				}
 			}
@@ -470,10 +491,10 @@ export async function fetchPostFromUri(uri: string, depth: number): Promise<Blue
 		if (value.reply) {
 			console.log(`[fetchPostFromUri] Post is a reply, fetching parent...`);
 			if (value.reply.parent?.uri) {
-				replyParent = (await fetchPostFromUri(value.reply.parent.uri, depth + 1)) ?? undefined;
+				replyParent = (await fetchPostFromUri(value.reply.parent.uri, depth + 1, fetchFn)) ?? undefined;
 			}
 			if (value.reply.root?.uri && value.reply.root.uri !== value.reply.parent?.uri) {
-				replyRoot = (await fetchPostFromUri(value.reply.root.uri, depth + 1)) ?? undefined;
+				replyRoot = (await fetchPostFromUri(value.reply.root.uri, depth + 1, fetchFn)) ?? undefined;
 			}
 		}
 
