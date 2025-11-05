@@ -4,6 +4,7 @@
 	import { MetaTags } from '$lib/components/seo';
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 	import type { Snippet } from 'svelte';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		data: {
@@ -15,6 +16,27 @@
 
 	// Use $props() instead of export let in Svelte 5 runes mode
 	let { data, children }: Props = $props();
+
+	onMount(() => {
+		console.info('[App] Application mounted');
+		
+		// Setup global error handler
+		window.onerror = (msg, url, lineNo, columnNo, error) => {
+			console.error('[App] Global error:', {
+				message: msg,
+				url,
+				lineNo,
+				columnNo,
+				error
+			});
+			return false;
+		};
+
+		// Setup unhandled promise rejection handler
+		window.onunhandledrejection = (event) => {
+			console.error('[App] Unhandled promise rejection:', event.reason);
+		};
+	});
 	
 	// Reactive meta updates on navigation
 	let headMeta = $derived(createSiteMeta({
