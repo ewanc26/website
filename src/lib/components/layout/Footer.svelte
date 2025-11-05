@@ -1,19 +1,30 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
+	import { fetchProfile, type ProfileData, fetchSiteInfo, type SiteInfoData } from '$lib/services/atproto';
 
 	let profile: ProfileData | null = null;
+	let siteInfo: SiteInfoData | null = null;
 	let loading = true;
 	let error: string | null = null;
 
 	const currentYear = new Date().getFullYear();
-	const copyrightText = `${currentYear}`;
+	const getBirthYear = () => {
+		const birthYear = siteInfo?.additionalInfo?.websiteBirthYear;
+		// Ensure birth year is valid and not in the future
+		return birthYear && birthYear <= currentYear ? birthYear : currentYear;
+	};
+	const copyrightText = getBirthYear() === currentYear
+		? `${currentYear}`
+		: `${getBirthYear()} - ${currentYear}`;
 
 	onMount(async () => {
 		try {
-			profile = await fetchProfile();
+			[profile, siteInfo] = await Promise.all([
+				fetchProfile(),
+				fetchSiteInfo()
+			]);
 		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to load profile';
+			error = err instanceof Error ? err.message : 'Failed to load data';
 		} finally {
 			loading = false;
 		}
