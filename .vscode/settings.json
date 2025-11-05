@@ -3,11 +3,5 @@
   "css.validate": false,
   "tailwindCSS.includeLanguages": {
     "svelte": "html"
-  },
-  "cSpell.words": [
-    "Containerisation",
-    "containerised",
-    "customisations",
-    "genericised"
-  ]
+  }
 }
