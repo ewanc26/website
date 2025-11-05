@@ -1,6 +1,9 @@
 import { AtpAgent } from '@atproto/api';
 import type { ResolvedIdentity } from './types';
 
+// Primary Microcosm Constellation endpoint
+export const constellationAgent = new AtpAgent({ service: 'https://constellation.microcosm.blue' });
+
 // Default fallback agent for public Bluesky API calls
 export const defaultAgent = new AtpAgent({ service: 'https://public.api.bsky.app' });
 
@@ -12,14 +15,18 @@ let pdsAgent: AtpAgent | null = null;
  * Resolves a DID to find its PDS endpoint using Slingshot.
  */
 export async function resolveIdentity(did: string): Promise<ResolvedIdentity> {
+	console.info(`[Identity] Resolving DID: ${did}`);
+	
 	const response = await fetch(
 		`https://slingshot.microcosm.blue/xrpc/com.bad-example.identity.resolveMiniDoc?identifier=${encodeURIComponent(did)}`
 	);
 
 	if (!response.ok) {
-		throw new Error(`Failed to resolve identifier: ${response.status} ${response.statusText}`);
+		console.error(`[Identity] Resolution failed: ${response.status} ${response.statusText}`);
+		throw new Error(`Failed to resolve identifier via Slingshot: ${response.status} ${response.statusText}`);
 	}
 
+	console.debug(`[Identity] Raw response:`, await response.clone().text());
 	const data = await response.json();
 
 	if (!data.did || !data.pds) {
@@ -33,20 +40,38 @@ export async function resolveIdentity(did: string): Promise<ResolvedIdentity> {
  * Gets or creates an agent for the public Bluesky API with PDS fallback
  */
 export async function getPublicAgent(did: string): Promise<AtpAgent> {
-	if (resolvedAgent) return resolvedAgent;
+	console.info(`[Agent] Getting public agent for DID: ${did}`);
+	if (resolvedAgent) {
+		console.debug('[Agent] Using cached agent');
+		return resolvedAgent;
+	}
 
 	try {
+		// Try Constellation first
+		try {
+			console.info('[Agent] Attempting Constellation endpoint');
+			const response = await constellationAgent.getProfile({ actor: did });
+			if (response.success) {
+				console.info('[Agent] Successfully connected to Constellation');
+				resolvedAgent = constellationAgent;
+				return resolvedAgent;
+			}
+		} catch (constellationErr) {
+			console.warn('[Agent] Constellation endpoint unreachable:', constellationErr);
+		}
+
+		// Then try Slingshot for PDS resolution
+		console.info('[Agent] Attempting Slingshot resolution');
 		const resolved = await resolveIdentity(did);
+		console.info(`[Agent] Resolved PDS endpoint: ${resolved.pds}`);
 		resolvedAgent = new AtpAgent({ service: resolved.pds });
 		return resolvedAgent;
 	} catch (err) {
-		console.error('Failed to resolve DID via Slingshot, falling back:', err);
+		console.error('[Agent] All Microcosm endpoints failed, falling back to Bluesky:', err);
 		resolvedAgent = defaultAgent;
 		return resolvedAgent;
 	}
-}
-
-/**
+}/**
  * Gets or creates a PDS-specific agent
  */
 export async function getPDSAgent(did: string): Promise<AtpAgent> {

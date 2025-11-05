@@ -3,6 +3,7 @@ import { cache } from './cache';
 import { withFallback, defaultAgent } from './agents';
 import { resolveIdentity } from './agents';
 import { buildPdsBlobUrl } from './media';
+import { fetchAllEngagement } from './engagement';
 import type {
 	BlogPost,
 	BlogPostsData,
@@ -17,13 +18,19 @@ import type {
  * Fetches all Leaflet publications for a user
  */
 export async function fetchLeafletPublications(): Promise<LeafletPublicationsData> {
+	console.info('[Leaflet] Fetching publications');
 	const cacheKey = `leaflet:publications:${PUBLIC_ATPROTO_DID}`;
 	const cached = cache.get<LeafletPublicationsData>(cacheKey);
-	if (cached) return cached;
+	if (cached) {
+		console.debug('[Leaflet] Returning cached publications');
+		return cached;
+	}
 
 	const publications: LeafletPublication[] = [];
+	console.info('[Leaflet] Cache miss, fetching from network');
 
 	try {
+		console.debug('[Leaflet] Querying publications records');
 		const publicationsRecords = await withFallback(
 			PUBLIC_ATPROTO_DID,
 			async (agent) => {
@@ -470,13 +477,28 @@ export async function fetchPostFromUri(uri: string, depth: number): Promise<Blue
 			}
 		}
 
+		// Get engagement data from Constellation as a fallback
+		let finalLikeCount = postData.likeCount;
+		let finalRepostCount = postData.repostCount;
+		
+		try {
+			const [likers, reposters] = await Promise.all([
+				fetchAllEngagement(postData.uri, 'app.bsky.feed.like'),
+				fetchAllEngagement(postData.uri, 'app.bsky.feed.repost')
+			]);
+			finalLikeCount = Math.max(postData.likeCount || 0, likers.length);
+			finalRepostCount = Math.max(postData.repostCount || 0, reposters.length);
+		} catch (error: unknown) {
+			console.warn('[fetchPostFromUri] Failed to fetch engagement from Constellation:', error);
+		}
+
 		const post: BlueskyPost = {
 			text: value.text,
 			createdAt: value.createdAt,
 			uri: postData.uri,
 			author,
-			likeCount: postData.likeCount,
-			repostCount: postData.repostCount,
+			likeCount: finalLikeCount,
+			repostCount: finalRepostCount,
 			replyCount: postData.replyCount,
 			hasImages,
 			imageUrls,

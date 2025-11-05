@@ -7,13 +7,19 @@ import type { ProfileData, StatusData, SiteInfoData, LinkData } from './types';
  * Fetches user profile from AT Protocol
  */
 export async function fetchProfile(): Promise<ProfileData> {
+	console.info('[Profile] Fetching profile data');
 	const cacheKey = `profile:${PUBLIC_ATPROTO_DID}`;
 	const cached = cache.get<ProfileData>(cacheKey);
-	if (cached) return cached;
+	if (cached) {
+		console.debug('[Profile] Returning cached profile data');
+		return cached;
+	}
 
 	try {
+		console.info('[Profile] Cache miss, fetching from network');
 		// Profile data is public, try Bluesky API first, then PDS
 		const profile = await withFallback(PUBLIC_ATPROTO_DID, async (agent) => {
+			console.debug('[Profile] Attempting profile fetch with agent:', agent.service.toString());
 			const response = await agent.getProfile({ actor: PUBLIC_ATPROTO_DID });
 			return response.data;
 		});
@@ -30,10 +36,12 @@ export async function fetchProfile(): Promise<ProfileData> {
 			postsCount: profile.postsCount
 		};
 
+		console.info('[Profile] Successfully fetched profile data');
+		console.debug('[Profile] Profile data:', data);
 		cache.set(cacheKey, data);
 		return data;
 	} catch (error) {
-		console.error('Failed to fetch profile from all sources:', error);
+		console.error('[Profile] Failed to fetch profile from all sources:', error);
 		throw error;
 	}
 }
@@ -42,11 +50,16 @@ export async function fetchProfile(): Promise<ProfileData> {
  * Fetches user status from custom lexicon
  */
 export async function fetchStatus(): Promise<StatusData | null> {
+	console.info('[Status] Fetching status data');
 	const cacheKey = `status:${PUBLIC_ATPROTO_DID}`;
 	const cached = cache.get<StatusData>(cacheKey);
-	if (cached) return cached;
+	if (cached) {
+		console.debug('[Status] Returning cached status data');
+		return cached;
+	}
 
 	try {
+		console.info('[Status] Cache miss, fetching from network');
 		// Custom collection, prefer PDS first
 		const records = await withFallback(
 			PUBLIC_ATPROTO_DID,
