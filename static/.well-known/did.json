@@ -20,7 +20,7 @@
 		{
 			"id": "#atproto_pds",
 			"type": "AtprotoPersonalDataServer",
-			"serviceEndpoint": "https://altq.net"
+			"serviceEndpoint": "https://pds.topphie.cloud"
 		}
 	]
 }
