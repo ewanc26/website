@@ -1,7 +1,9 @@
 import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 import { cache } from './cache';
-import { withFallback } from './agents';
-import type { ProfileData, StatusData, SiteInfoData, LinkData } from './types';
+import { withFallback, resolveIdentity } from './agents';
+import type { ProfileData, StatusData, SiteInfoData, LinkData, MusicStatusData } from './types';
+import { buildPdsBlobUrl } from './media';
+import { searchMusicBrainzRelease, buildCoverArtUrl } from './musicbrainz';
 
 /**
  * Fetches user profile from AT Protocol
@@ -48,51 +50,6 @@ export async function fetchProfile(fetchFn?: typeof fetch): Promise<ProfileData>
 	} catch (error) {
 		console.error('[Profile] Failed to fetch profile from all sources:', error);
 		throw error;
-	}
-}
-
-/**
- * Fetches user status from custom lexicon
- */
-export async function fetchStatus(fetchFn?: typeof fetch): Promise<StatusData | null> {
-	console.info('[Status] Fetching status data');
-	const cacheKey = `status:${PUBLIC_ATPROTO_DID}`;
-	const cached = cache.get<StatusData>(cacheKey);
-	if (cached) {
-		console.debug('[Status] Returning cached status data');
-		return cached;
-	}
-
-	try {
-		console.info('[Status] Cache miss, fetching from network');
-		// Custom collection, prefer PDS first
-		const records = await withFallback(
-			PUBLIC_ATPROTO_DID,
-			async (agent) => {
-				const response = await agent.com.atproto.repo.listRecords({
-					repo: PUBLIC_ATPROTO_DID,
-					collection: 'uk.ewancroft.now',
-					limit: 1
-				});
-				return response.data.records;
-			},
-			true,
-			fetchFn
-		); // usePDSFirst = true
-
-		if (records.length === 0) return null;
-
-		const record = records[0];
-		const data: StatusData = {
-			text: (record.value as any).text,
-			createdAt: (record.value as any).createdAt
-		};
-
-		cache.set(cacheKey, data);
-		return data;
-	} catch (error) {
-		console.error('Failed to fetch status from all sources:', error);
-		return null;
 	}
 }
 
@@ -178,6 +135,196 @@ export async function fetchLinks(fetchFn?: typeof fetch): Promise<LinkData | nul
 		return data;
 	} catch (error) {
 		console.error('Failed to fetch links from all sources:', error);
+		return null;
+	}
+}
+
+/**
+ * Fetches music listening status from custom lexicons
+ * Checks both fm.teal.alpha.actor.status and fm.teal.alpha.feed.play collections
+ */
+export async function fetchMusicStatus(fetchFn?: typeof fetch): Promise<MusicStatusData | null> {
+	console.info('[MusicStatus] Fetching music status data');
+	const cacheKey = `music-status:${PUBLIC_ATPROTO_DID}`;
+	const cached = cache.get<MusicStatusData>(cacheKey);
+	if (cached) {
+		console.debug('[MusicStatus] Returning cached music status data');
+		return cached;
+	}
+
+	try {
+		console.info('[MusicStatus] Cache miss, fetching from network');
+		
+		// Try the actor status collection first (shorter-lived status)
+		try {
+			const statusRecords = await withFallback(
+				PUBLIC_ATPROTO_DID,
+				async (agent) => {
+					const response = await agent.com.atproto.repo.listRecords({
+						repo: PUBLIC_ATPROTO_DID,
+						collection: 'fm.teal.alpha.actor.status',
+						limit: 1
+					});
+					return response.data.records;
+				},
+				true,
+				fetchFn
+			);
+
+			if (statusRecords && statusRecords.length > 0) {
+				const record = statusRecords[0];
+				const value = record.value as any;
+				
+				// Check if status is still valid (not expired)
+				if (value.expiry) {
+					const expiryTime = parseInt(value.expiry) * 1000;
+					if (Date.now() > expiryTime) {
+						console.debug('[MusicStatus] Actor status expired, falling back to feed play');
+					} else {
+						// Build artwork URL - prefer MusicBrainz, fallback to atproto blob
+						let artworkUrl: string | undefined;
+						let releaseMbId = value.item?.releaseMbId || value.releaseMbId;
+						
+						console.debug('[MusicStatus] Looking for artwork, releaseMbId:', releaseMbId);
+						
+						// If no releaseMbId, try to search MusicBrainz
+						if (!releaseMbId) {
+							const trackName = value.item?.trackName || value.trackName;
+							const artists = value.item?.artists || value.artists || [];
+							const releaseName = value.item?.releaseName || value.releaseName;
+							const artistName = artists[0]?.artistName;
+							
+							if (trackName && artistName) {
+								console.debug('[MusicStatus] Searching MusicBrainz for missing release ID');
+								releaseMbId = await searchMusicBrainzRelease(trackName, artistName, releaseName);
+								if (releaseMbId) {
+									console.info('[MusicStatus] Found release via MusicBrainz search:', releaseMbId);
+								}
+							}
+						}
+						
+						if (releaseMbId) {
+							// Use MusicBrainz Cover Art Archive (no API key required)
+							artworkUrl = buildCoverArtUrl(releaseMbId);
+							console.info('[MusicStatus] Using MusicBrainz artwork URL:', artworkUrl);
+						} else {
+							// Fallback to atproto blob if available
+							const artwork = value.item?.artwork || value.artwork;
+							console.debug('[MusicStatus] Artwork field:', artwork);
+							if (artwork?.ref?.$link) {
+								const identity = await resolveIdentity(PUBLIC_ATPROTO_DID, fetchFn);
+								artworkUrl = buildPdsBlobUrl(identity.pds, PUBLIC_ATPROTO_DID, artwork.ref.$link);
+								console.info('[MusicStatus] Using atproto blob artwork URL:', artworkUrl);
+							}
+						}
+
+						const data: MusicStatusData = {
+							trackName: value.item?.trackName || value.trackName,
+							artists: value.item?.artists || value.artists || [],
+							releaseName: value.item?.releaseName || value.releaseName,
+							playedTime: value.item?.playedTime || value.playedTime,
+							originUrl: value.item?.originUrl || value.originUrl,
+							recordingMbId: value.item?.recordingMbId || value.recordingMbId,
+							releaseMbId: value.item?.releaseMbId || value.releaseMbId,
+							isrc: value.isrc,
+							duration: value.duration,
+							musicServiceBaseDomain: value.item?.musicServiceBaseDomain || value.musicServiceBaseDomain,
+							submissionClientAgent: value.item?.submissionClientAgent || value.submissionClientAgent,
+							$type: 'fm.teal.alpha.actor.status',
+							expiry: value.expiry,
+							artwork: value.item?.artwork || value.artwork,
+							artworkUrl
+						};
+						console.info('[MusicStatus] Successfully fetched actor status');
+						cache.set(cacheKey, data);
+						return data;
+					}
+				}
+			}
+		} catch (err) {
+			console.debug('[MusicStatus] Actor status not found or error, trying feed play:', err);
+		}
+
+		// Fall back to feed play collection
+		const playRecords = await withFallback(
+			PUBLIC_ATPROTO_DID,
+			async (agent) => {
+				const response = await agent.com.atproto.repo.listRecords({
+					repo: PUBLIC_ATPROTO_DID,
+					collection: 'fm.teal.alpha.feed.play',
+					limit: 1
+				});
+				return response.data.records;
+			},
+			true,
+			fetchFn
+		);
+
+		if (playRecords && playRecords.length > 0) {
+			const record = playRecords[0];
+			const value = record.value as any;
+			
+			// Build artwork URL - prefer MusicBrainz, fallback to atproto blob
+			let artworkUrl: string | undefined;
+			let releaseMbId = value.releaseMbId;
+			
+			console.debug('[MusicStatus] Looking for artwork, releaseMbId:', releaseMbId);
+			
+			// If no releaseMbId, try to search MusicBrainz
+			if (!releaseMbId) {
+				const trackName = value.trackName;
+				const artists = value.artists || [];
+				const releaseName = value.releaseName;
+				const artistName = artists[0]?.artistName;
+				
+				if (trackName && artistName) {
+					console.debug('[MusicStatus] Searching MusicBrainz for missing release ID');
+					releaseMbId = await searchMusicBrainzRelease(trackName, artistName, releaseName);
+					if (releaseMbId) {
+						console.info('[MusicStatus] Found release via MusicBrainz search:', releaseMbId);
+					}
+				}
+			}
+			
+			if (releaseMbId) {
+				// Use MusicBrainz Cover Art Archive (no API key required)
+				artworkUrl = buildCoverArtUrl(releaseMbId);
+				console.info('[MusicStatus] Using MusicBrainz artwork URL:', artworkUrl);
+			} else {
+				// Fallback to atproto blob if available
+				const artwork = value.artwork;
+				console.debug('[MusicStatus] Artwork field:', artwork);
+				if (artwork?.ref?.$link) {
+					const identity = await resolveIdentity(PUBLIC_ATPROTO_DID, fetchFn);
+					artworkUrl = buildPdsBlobUrl(identity.pds, PUBLIC_ATPROTO_DID, artwork.ref.$link);
+					console.info('[MusicStatus] Using atproto blob artwork URL:', artworkUrl);
+				}
+			}
+			
+			const data: MusicStatusData = {
+				trackName: value.trackName,
+				artists: value.artists || [],
+				releaseName: value.releaseName,
+				playedTime: value.playedTime,
+				originUrl: value.originUrl,
+				recordingMbId: value.recordingMbId,
+				releaseMbId: value.releaseMbId,
+				isrc: value.isrc,
+				duration: value.duration,
+				musicServiceBaseDomain: value.musicServiceBaseDomain,
+				submissionClientAgent: value.submissionClientAgent,
+				$type: 'fm.teal.alpha.feed.play',
+				artwork: value.artwork,
+				artworkUrl
+			};
+			console.info('[MusicStatus] Successfully fetched feed play');
+			cache.set(cacheKey, data);
+			return data;
+		}
+
+		return null;
+	} catch (error) {
+		console.error('[MusicStatus] Failed to fetch music status from all sources:', error);
 		return null;
 	}
 }

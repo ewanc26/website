@@ -189,3 +189,30 @@ export interface CacheEntry<T> {
 	data: T;
 	timestamp: number;
 }
+
+export interface MusicArtist {
+	artistName: string;
+	artistMbId?: string;
+}
+
+export interface MusicStatusData {
+	trackName: string;
+	artists: MusicArtist[];
+	releaseName?: string;
+	playedTime: string;
+	originUrl?: string;
+	recordingMbId?: string;
+	releaseMbId?: string;
+	isrc?: string;
+	duration?: number;
+	musicServiceBaseDomain?: string;
+	submissionClientAgent?: string;
+	$type: 'fm.teal.alpha.actor.status' | 'fm.teal.alpha.feed.play';
+	expiry?: string;
+	artwork?: {
+		ref?: { $link: string };
+		mimeType?: string;
+		size?: number;
+	};
+	artworkUrl?: string; // Computed URL for display
+}
