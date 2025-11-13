@@ -8,7 +8,6 @@
 // Export all types
 export type {
 	ProfileData,
-	StatusData,
 	SiteInfoData,
 	LinkData,
 	LinkCard,
@@ -28,13 +27,15 @@ export type {
 	Credit,
 	SectionLicense,
 	ResolvedIdentity,
-	CacheEntry
+	CacheEntry,
+	MusicStatusData,
+	MusicArtist
 } from './types';
 
 export type { TangledRepo, TangledReposData } from './tangled';
 
 // Export fetch functions
-export { fetchProfile, fetchStatus, fetchSiteInfo, fetchLinks } from './fetch';
+export { fetchProfile, fetchSiteInfo, fetchLinks, fetchMusicStatus } from './fetch';
 
 export { fetchTangledRepos } from './tangled';
 
@@ -49,6 +50,8 @@ export {
 export { buildPdsBlobUrl, extractCidFromImageObject, extractImageUrlsFromValue } from './media';
 
 export { resolveIdentity, withFallback, resetAgents } from './agents';
+
+export { searchMusicBrainzRelease, buildCoverArtUrl } from './musicbrainz';
 
 // Export cache for advanced use cases
 export { cache, ATProtoCache } from './cache';
