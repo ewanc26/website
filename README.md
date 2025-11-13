@@ -1,45 +1,127 @@
 # AT Protocol Personal Website
 
-A modern, AT Protocol-powered personal website template built with SvelteKit 2 and Tailwind CSS 4.
+A modern, feature-rich personal website powered by AT Protocol, built with SvelteKit 2 and Tailwind CSS 4.
 
 > **Note**: This repository contains the source code for [Ewan's Corner](https://ewancroft.uk). The current configuration (environment variables, slug mappings, static files) is specific to that website, but the codebase is designed to be easily adapted for your own AT Protocol-powered site. See the [Configuration](#configuration) section below for details on personalising it for your use.
 
 ## 🌟 Features
 
-- **AT Protocol Integration**: Fetch and display content from your AT Protocol repository  
-- **Multi-Publication Support**: Map friendly URL slugs to Leaflet publications with a simple config  
-- **Multi-Platform Blog**: Seamlessly aggregate blog posts from WhiteWind and/or Leaflet (configurable)  
-- **Dynamic Profile**: Automatically display your Bluesky profile information  
-- **Custom Status**: Show real-time status updates using custom AT Protocol lexicons  
-- **Link Board**: Display a Linkat board with emoji-styled link cards  
-- **Bluesky Posts**: Showcase your latest non-reply Bluesky posts with rich media support  
-- **Smart Redirects**: Intelligent redirection system for publication URLs with platform prioritisation  
-- **Responsive Design**: Mobile-first layout with dark-mode support  
-- **RSS Feed**: Intelligent RSS-feed handling for WhiteWind and/or Leaflet posts  
-- **Type-Safe**: Full TypeScript support throughout the application  
+### Core AT Protocol Integration
 
-## Configuration
+- **Dynamic Profile Display**: Automatically fetch and display your Bluesky profile information with avatar, banner, follower counts, and bio
+- **Site Metadata**: Store and display comprehensive site information using the `uk.ewancroft.site.info` lexicon (credits, tech stack, privacy statement, licenses)
+- **Smart Caching**: Intelligent 5-minute in-memory cache with TTL support for all AT Protocol data
+- **PDS Resolution**: Automatic PDS discovery with fallback to Bluesky public API for maximum reliability
+
+### Content & Publishing
+
+- **Multi-Platform Blog System**:
+  - **Leaflet** (`pub.leaflet.document`) - Primary platform with custom domain support
+  - **WhiteWind** (`com.whtwnd.blog.entry`) - Optional secondary platform (disabled by default)
+  - Intelligent RSS feed generation with full content support
+  - Automatic draft filtering and non-public post handling
+  - Multi-publication support via slug mapping
+
+- **Flexible Publication Management**:
+  - Map friendly URL slugs to AT Protocol publications
+  - Support for unlimited publications with individual configurations
+  - Custom base paths for each publication
+  - Smart redirects with platform prioritization
+  - Intelligent fallback handling for missing content
+
+- **Bluesky Post Display**:
+  - Showcase latest non-reply posts with rich media support
+  - Full thread context with recursive parent fetching
+  - Quoted post embedding with media preservation
+  - Image galleries with alt text support
+  - External link cards with preview generation
+  - Video embed support
+
+- **Engagement Tracking**:
+  - Real-time like and repost counts via Constellation API
+  - Paginated engagement data fetching
+  - Cached engagement metrics for performance
+
+### Music Integration (via teal.fm)
+
+- **Now Playing Display**: Show currently playing or recently played tracks via `fm.teal.alpha.actor.status`
+- **Play History**: Display listening history via `fm.teal.alpha.feed.play`
+- **Album Artwork**:
+  - **Primary**: MusicBrainz Cover Art Archive integration (no API key required!)
+  - **Automatic Search**: Searches MusicBrainz when release IDs are missing
+  - **Smart Caching**: Caches MusicBrainz lookups to avoid repeated searches
+  - **Fallback**: AT Protocol blob storage for custom artwork
+- **Rich Metadata**: Artist names, album info, duration, and relative timestamps
+- **Multi-Service Support**: Works with Last.fm, Spotify, and other scrobbling services
+- **Intelligent Expiry**: Automatically handles expired "now playing" status
+
+### Developer Tools
+
+- **Tangled Repository Display**: Showcase your code repositories using the `sh.tangled.repo` lexicon
+- **Repository Cards**: Display with descriptions, creation dates, labels, and source links
+- **Automatic Sorting**: Repos sorted by creation date (newest first)
+
+### User Experience
+
+- **Link Board**: Display curated link collections from Linkat (`blue.linkat.board`) with emoji icons
+- **Dark Mode**: Seamless light/dark theme switching with system preference detection
+- **Wolf Mode**: Fun "wolf speak" text transformation toggle that converts text to wolf sounds while preserving:
+  - Numbers and abbreviations (1K, 2M, 30s, etc.)
+  - Capitalization patterns (UPPERCASE → AWOO, Capitalized → Awoo)
+  - Punctuation and formatting
+  - Navigation and interactive elements
+- **Scroll to Top**: Smooth scroll-to-top button for long pages
+- **Responsive Design**: Mobile-first layout that adapts to all screen sizes
+- **SEO Optimization**: Comprehensive meta tags, Open Graph, and Twitter Card support
+- **RSS/Atom Feeds**: Multiple feed endpoints for blog posts and status updates
+
+### Technical Features
+
+- **Type-Safe Development**: Full TypeScript support with comprehensive type definitions
+- **Smart Error Handling**: Graceful degradation with informative error states
+- **Loading States**: Skeleton loaders for all async content
+- **Image Optimization**: Lazy loading and responsive image handling
+- **Blob URL Construction**: Proper PDS blob URL generation for media assets
+- **Media Extraction**: Automatic CID extraction from various image object formats
+- **Facet Processing**: Rich text with link detection and mention highlighting
+
+## 📋 Configuration
 
 Before using this template, you'll need to update several configuration files with your own information:
 
 ### Environment Variables (`.env`)
 
-Update these with your own values:
+Create a `.env.local` file with your configuration:
 
 ```ini
-PUBLIC_ATPROTO_DID=did:plc:your-did-here  # Your AT Protocol DID
-PUBLIC_SITE_TITLE="Your Site Title"       # Your site name
-PUBLIC_SITE_DESCRIPTION="..."             # Your description
-PUBLIC_SITE_URL="https://example.com"     # Your domain
-````
+# Required: Your AT Protocol DID
+PUBLIC_ATPROTO_DID=did:plc:your-did-here
 
-### Publication Slug Mappings (`src/lib/data/slug-mappings.ts`)
+# Optional: Enable WhiteWind blog support (default: false)
+PUBLIC_ENABLE_WHITEWIND=false
 
-Replace the example mappings with your own Leaflet publication rkeys:
+# Optional: Custom domain for Leaflet publications
+PUBLIC_LEAFLET_BASE_PATH=https://blog.example.com
+
+# Optional: Fallback URL for missing blog posts
+PUBLIC_BLOG_FALLBACK_URL=https://archive.example.com/blog
+
+# Site metadata
+PUBLIC_SITE_TITLE="Your Site Title"
+PUBLIC_SITE_DESCRIPTION="Your site description"
+PUBLIC_SITE_KEYWORDS="keywords, separated, by, commas"
+PUBLIC_SITE_URL="https://example.com"
+```
+
+### Publication Slug Mappings (`src/lib/config/slugs.ts`)
+
+Map friendly URLs to your Leaflet publications:
 
 ```typescript
 export const slugMappings: SlugMapping[] = [
-  { slug: 'blog', publicationRkey: 'your-rkey-here' }
+  { slug: 'blog', publicationRkey: '3m3x4bgbsh22k' },
+  { slug: 'essays', publicationRkey: 'abc123xyz' },
+  { slug: 'notes', publicationRkey: 'def456uvw' }
 ];
 ```
 
@@ -49,107 +131,97 @@ Update or remove these files that are specific to the example site:
 
 - `static/robots.txt` - Update the sitemap URL
 - `static/sitemap.xml` - Update with your domain and pages
-- `static/.well-known/*` - These files are specific to ewancroft.uk and should be replaced with your own
-
-### Favicon and Assets
-
-Replace the favicons in `static/favicon/` with your own branding.
+- `static/.well-known/*` - Replace with your own well-known files
+- `static/favicon/` - Replace with your branding
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+ and npm
-- An AT Protocol DID (Decentralised Identifier) from Bluesky
+- An AT Protocol DID (Decentralized Identifier) from Bluesky
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone the repository**:
 
-```bash
-git clone git@github.com:ewanc26/website.git
-cd website-redesign
-```
+   ```bash
+   git clone git@github.com:ewanc26/website.git
+   cd website
+   ```
 
-1. Install dependencies:
+2. **Install dependencies**:
 
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
-1. Configure environment variables:
+3. **Configure environment variables**:
 
-Copy the example environment file and update it with your own information:
+   ```bash
+   cp .env .env.local
+   ```
 
-```bash
-cp .env .env.local
-```
+   Edit `.env.local` with your settings (see Configuration section above)
 
-Edit `.env.local` with your settings:
+4. **Configure publication slugs** in `src/lib/config/slugs.ts`
 
-```ini
-# Required: Your AT Protocol DID
-PUBLIC_ATPROTO_DID=did:plc:your-did-here
+5. **Start the development server**:
 
-# Optional: Enable WhiteWind blog support (default: false)
-PUBLIC_ENABLE_WHITEWIND=false
+   ```bash
+   npm run dev
+   ```
 
-# Optional: Fallback URL for missing blog posts
-PUBLIC_BLOG_FALLBACK_URL=
-
-# Site metadata
-PUBLIC_SITE_TITLE="Your Site Title"
-PUBLIC_SITE_DESCRIPTION="Your site description"
-PUBLIC_SITE_KEYWORDS="keywords, here"
-PUBLIC_SITE_URL="https://example.com"
-```
-
-1. Configure your publication slugs in `src/lib/config/slugs.ts`:
-
-```typescript
-export const slugMappings: SlugMapping[] = [
-  {
-    slug: 'blog',
-    publicationRkey: '3m3x4bgbsh22k' // Your publication rkey
-  }
-  // Add more mappings as needed:
-  // { slug: 'notes', publicationRkey: 'xyz123abc' },
-  // { slug: 'essays', publicationRkey: 'def456ghi' },
-];
-```
-
-1. Start the development server:
-
-```bash
-npm run dev
-```
-
-Visit `http://localhost:5173` to view your site.
+   Visit `http://localhost:5173` to view your site
 
 ## 📁 Project Structure
 
 ```text
-website-redesign/
+website/
 ├── src/
 │   ├── lib/
-│   │   ├── assets/          # Static assets (images, icons)
-│   │   ├── components/      # Reusable Svelte components
-│   │   │   ├── layout/      # Header, Footer, Navigation
-│   │   │   └── ui/          # UI components (Card, etc.)
-│   │   ├── config/          # Configuration files
-│   │   │   └── slugs.ts     # Slug to publication mapping
-│   │   ├── data/            # Static data (navigation items)
-│   │   ├── helper/          # Helper functions (meta tags, OG images)
-│   │   ├── services/        # External service integrations
-│   │   │   └── atproto/     # AT Protocol service layer
-│   │   └── utils/           # Utility functions
-│   ├── routes/              # SvelteKit routes
-│   │   ├── [slug]/          # Dynamic slug-based publication routes
-│   │   ├── now/             # Status-feed endpoints
-│   │   └── site/            # Site-metadata pages
-│   ├── app.css              # Global styles
-│   └── app.html             # HTML template
-├── static/                  # Static files (favicon, etc.)
+│   │   ├── assets/               # Static assets (images, icons)
+│   │   ├── components/           # Reusable Svelte components
+│   │   │   ├── layout/          # Header, Footer, Navigation, ThemeToggle, WolfToggle
+│   │   │   │   └── main/
+│   │   │   │       ├── card/    # ProfileCard, MusicStatusCard, etc.
+│   │   │   │       ├── DynamicLinks.svelte
+│   │   │   │       ├── ScrollToTop.svelte
+│   │   │   │       └── TangledRepos.svelte
+│   │   │   ├── seo/             # MetaTags component
+│   │   │   └── ui/              # Reusable UI components (Card, etc.)
+│   │   ├── config/              # Configuration files
+│   │   │   └── slugs.ts         # Slug to publication mapping
+│   │   ├── data/                # Static data (navigation items)
+│   │   ├── helper/              # Helper functions (meta tags, OG images)
+│   │   ├── services/            # External service integrations
+│   │   │   └── atproto/         # AT Protocol service layer
+│   │   │       ├── agents.ts    # Agent management & PDS resolution
+│   │   │       ├── cache.ts     # In-memory caching
+│   │   │       ├── engagement.ts # Post engagement (likes/reposts)
+│   │   │       ├── fetch.ts     # Profile, status, site info, music status
+│   │   │       ├── media.ts     # Blob URL & image handling
+│   │   │       ├── musicbrainz.ts # MusicBrainz API integration
+│   │   │       ├── posts.ts     # Blog posts, Bluesky posts, publications
+│   │   │       ├── tangled.ts   # Tangled repository fetching
+│   │   │       └── types.ts     # TypeScript type definitions
+│   │   ├── stores/              # Svelte stores
+│   │   │   └── wolfMode.ts      # Wolf mode text transformation
+│   │   └── utils/               # Utility functions (date formatting, etc.)
+│   ├── routes/                  # SvelteKit routes
+│   │   ├── [slug=slug]/         # Dynamic slug-based publication routes
+│   │   │   ├── [rkey]/          # Individual document redirects
+│   │   │   ├── atom/            # Deprecated Atom feeds (410 Gone)
+│   │   │   └── rss/             # RSS feed endpoints
+│   │   ├── favicon.ico/         # Favicon endpoint
+│   │   ├── now/                 # Status feed endpoints
+│   │   │   ├── atom/            # Deprecated Atom feeds
+│   │   │   └── rss/             # RSS feeds
+│   │   └── site/
+│   │       └── meta/            # Site metadata page
+│   ├── app.css                  # Global styles
+│   └── app.html                 # HTML template
+├── static/                      # Static files (favicon, robots.txt, etc.)
 └── package.json
 ```
 
@@ -160,25 +232,40 @@ The application includes a comprehensive AT Protocol service layer in `src/lib/s
 ### Core Services
 
 - **agents.ts**: Agent management with automatic PDS resolution and fallback to the Bluesky public API
-- **fetch.ts**: Profile, status, site info, and links fetching
-- **posts.ts**: Blog posts, Leaflet publications, and Bluesky posts
-- **media.ts**: Image and blob-URL handling
-- **cache.ts**: In-memory caching with TTL support
-- **types.ts**: TypeScript definitions for all data structures
+- **fetch.ts**: Profile, status, site info, links, and music status fetching
+- **posts.ts**: Blog posts (WhiteWind & Leaflet), Bluesky posts, and publications
+- **tangled.ts**: Repository information from Tangled lexicon
+- **engagement.ts**: Post engagement data (likes/reposts) via Constellation API
+- **media.ts**: Image and blob URL handling with CID extraction
+- **musicbrainz.ts**: MusicBrainz API integration for album artwork
+- **cache.ts**: In-memory caching with configurable TTL support
+- **types.ts**: Comprehensive TypeScript definitions for all data structures
 
-### Usage Example
+### Usage Examples
 
 ```typescript
-import { fetchProfile, fetchBlogPosts, fetchLatestBlueskyPost } from '$lib/services/atproto';
+import { 
+  fetchProfile, 
+  fetchBlogPosts, 
+  fetchLatestBlueskyPost,
+  fetchMusicStatus,
+  fetchTangledRepos
+} from '$lib/services/atproto';
 
 // Fetch profile data
 const profile = await fetchProfile();
 
-// Fetch blog posts from WhiteWind and Leaflet
+// Fetch blog posts from WhiteWind and/or Leaflet
 const { posts } = await fetchBlogPosts();
 
 // Fetch latest Bluesky post
 const post = await fetchLatestBlueskyPost();
+
+// Fetch current or last played music
+const musicStatus = await fetchMusicStatus();
+
+// Fetch code repositories
+const repos = await fetchTangledRepos();
 ```
 
 ## 📝 Publication System
@@ -192,11 +279,11 @@ Publications are mapped to URL slugs in `src/lib/config/slugs.ts`:
 ```typescript
 export const slugMappings: SlugMapping[] = [
   {
-    slug: 'blog',              // Access via /blog
+    slug: 'blog',                  // Access via /blog
     publicationRkey: '3m3x4bgbsh22k'  // Leaflet publication rkey
   },
   {
-    slug: 'notes',             // Access via /notes
+    slug: 'notes',                 // Access via /notes
     publicationRkey: 'xyz123abc'
   }
 ];
@@ -204,15 +291,13 @@ export const slugMappings: SlugMapping[] = [
 
 ### Supported Platforms
 
-1. **Leaflet*- (`pub.leaflet.document`) – **Prioritised by default**
-
+1. **Leaflet** (`pub.leaflet.document`) – **Prioritized by default**
    - Format: Custom domain or `https://leaflet.pub/lish/{did}/{publication}/{rkey}`
    - Supports multiple publications via slug mapping
    - Respects `base_path` configuration
    - Always checked first
 
-2. **WhiteWind*- (`com.whtwnd.blog.entry`) – **Optional, disabled by default**
-
+2. **WhiteWind** (`com.whtwnd.blog.entry`) – **Optional, disabled by default**
    - Format: `https://whtwnd.com/{did}/{rkey}`
    - Automatically filters out drafts and non-public posts
    - Only checked if `PUBLIC_ENABLE_WHITEWIND=true`
@@ -222,79 +307,21 @@ export const slugMappings: SlugMapping[] = [
 - `/{slug}` – Redirects to your publication homepage (configured in slugs.ts)
 - `/{slug}/{rkey}` – Smart redirect to the correct platform (checks Leaflet first, then WhiteWind if enabled)
 - `/{slug}/rss` – Intelligent RSS feed (redirects to Leaflet RSS by default, or generates WhiteWind RSS if enabled)
-- `/{slug}/atom` – Deprecated (returns *410 Gone*, use RSS instead)
+- `/{slug}/atom` – Deprecated (returns 410 Gone, use RSS instead)
 
-### How It Works
+### Priority Order
 
-**Priority Order:**
-
-1. **Leaflet*- is always checked first for publications and documents
+1. **Leaflet** is always checked first for publications and documents
 2. The slug mapping determines which publication to check
-3. **WhiteWind*- is only checked if `PUBLIC_ENABLE_WHITEWIND=true`
+3. **WhiteWind** is only checked if `PUBLIC_ENABLE_WHITEWIND=true`
 4. If neither platform has the document, it falls back to `PUBLIC_BLOG_FALLBACK_URL` if configured
-5. Returns *404- if the document isn't found and no fallback is set
+5. Returns 404 if the document isn't found and no fallback is set
 
-**When a user visits `/{slug}/{rkey}`:**
+### RSS Feed Behavior
 
-1. The system looks up the publication rkey from the slug configuration
-2. It checks Leaflet for the document in that specific publication
-3. If not found and WhiteWind is enabled, it checks WhiteWind
-4. Redirects to the appropriate platform URL
-5. Falls back to `PUBLIC_BLOG_FALLBACK_URL` if configured
-6. Returns 404 if no document is found and no fallback exists
-
-**RSS Feed Behaviour:**
-
-- **WhiteWind disabled*- (default): Redirects to Leaflet's native RSS feed (includes full content)
+- **WhiteWind disabled** (default): Redirects to Leaflet's native RSS feed (includes full content)
 - **WhiteWind enabled with posts**: Generates an RSS feed with WhiteWind post links
 - **No posts found**: Returns 404
-
-### Platform Configuration (Leaflet / WhiteWind)
-
-Control publication behaviour with environment variables:
-
-```ini
-# Use a custom domain for Leaflet posts (recommended)
-PUBLIC_LEAFLET_BASE_PATH=https://blog.example.com
-
-# Enable WhiteWind support (set to "true" to enable, default: "false")
-PUBLIC_ENABLE_WHITEWIND=false
-
-# Fallback for missing posts
-PUBLIC_BLOG_FALLBACK_URL=https://archive.example.com/blog
-```
-
-And configure your slug mappings in `src/lib/config/slugs.ts`:
-
-```typescript
-export const slugMappings: SlugMapping[] = [
-  { slug: 'blog', publicationRkey: '3m3x4bgbsh22k' },
-  { slug: 'essays', publicationRkey: 'abc123xyz' },
-  { slug: 'notes', publicationRkey: 'def456uvw' }
-];
-```
-
-### Why Leaflet is Prioritised
-
-- **Better Performance**: Leaflet's RSS feeds include full post content
-- **Custom Domains**: Each publication can have its own `base_path` configured in Leaflet
-- **Rich Features**: Better media handling and publication management
-- **Multiple Publications**: Easy management of multiple publications with slug mapping
-- **Active Development**: Leaflet is actively maintained and improved
-
-### Enabling WhiteWind
-
-If you still use WhiteWind or want to support both platforms:
-
-```ini
-PUBLIC_ENABLE_WHITEWIND=true
-```
-
-With WhiteWind enabled:
-
-- Documents are checked on both platforms (Leaflet first, then WhiteWind)
-- RSS feed includes WhiteWind posts if they exist
-- `/{slug}` redirects to WhiteWind if no Leaflet configuration is set
 
 ### Finding Your Publication Rkey
 
@@ -303,14 +330,58 @@ With WhiteWind enabled:
 3. Copy the `{rkey}` part (e.g., `3m3x4bgbsh22k`)
 4. Add it to your slug mapping in `src/lib/config/slugs.ts`
 
+## 🎵 Music Integration
+
+The site displays your music listening activity via teal.fm integration:
+
+### Supported Record Types
+
+- **`fm.teal.alpha.actor.status`**: Current "Now Playing" status with expiry
+- **`fm.teal.alpha.feed.play`**: Historical play records
+
+### Album Artwork System
+
+The music card uses a sophisticated artwork retrieval system:
+
+1. **MusicBrainz Cover Art Archive** (Primary)
+   - Uses `releaseMbId` from music records
+   - Free, no API key required
+   - Automatic search fallback when IDs are missing
+   - Caches search results to avoid repeated lookups
+
+2. **AT Protocol Blob Storage** (Fallback)
+   - Uses `artwork` field from records
+   - Proper PDS blob URL construction
+
+### Features
+
+- Displays track name, artists, album, and duration
+- Shows relative timestamps ("2 minutes ago")
+- Links to origin URLs (Last.fm, Spotify, etc.)
+- Responsive artwork display with fallback icons
+- Smart caching with 5-minute TTL
+- Automatic status expiry handling
+
+### Configuration
+
+Set your DID in `.env.local` to fetch your music status:
+
+```ini
+PUBLIC_ATPROTO_DID=did:plc:your-did-here
+```
+
+The card will automatically display your current or last played track.
+
 ## 🎨 Styling
 
 The project uses:
 
-- **Tailwind CSS 4**: Latest Tailwind with new features
-- **@tailwindcss/typography**: Beautiful prose styling
-- **@tailwindcss/vite**: Vite plugin for Tailwind
-- **Custom Components**: Pre-built UI components with consistent styling
+- **Tailwind CSS 4**: Latest Tailwind with new features and improved performance
+- **@tailwindcss/typography**: Beautiful prose styling for blog content
+- **@tailwindcss/vite**: Vite plugin for optimal Tailwind integration
+- **Custom Color Palette**: Semantic color tokens (canvas, ink, primary) for consistent theming
+- **Dark Mode**: System preference detection with manual override
+- **Responsive Design**: Mobile-first approach with breakpoint utilities
 
 ## 🏗️ Building for Production
 
@@ -328,9 +399,9 @@ The build output will be in the `.svelte-kit` directory, ready for deployment.
 
 This project uses `@sveltejs/adapter-auto`, which automatically selects the best adapter for your deployment platform:
 
-- **Vercel**: Automatic detection and optimisation
-- **Netlify**: Automatic detection and optimisation
-- **Cloudflare Pages**: Automatic detection and optimisation
+- **Vercel**: Automatic detection and optimization
+- **Netlify**: Automatic detection and optimization
+- **Cloudflare Pages**: Automatic detection and optimization
 - **Node.js**: Fallback option
 
 For other platforms, see the [SvelteKit adapters documentation](https://kit.svelte.dev/docs/adapters).
@@ -339,22 +410,27 @@ For other platforms, see the [SvelteKit adapters documentation](https://kit.svel
 
 The site supports several custom AT Protocol lexicons:
 
-### Status Updates (`uk.ewancroft.now`)
-
-Display real-time status messages on your site.
-
 ### Site Information (`uk.ewancroft.site.info`)
 
-Store detailed site metadata including:
+Store comprehensive site metadata:
 
 - Technology stack
 - Privacy statement
 - Open-source information
-- Credits and licences
+- Credits and licenses
+- Related services
 
 ### Link Board (`blue.linkat.board`)
 
 Display a collection of links with emoji icons.
+
+### Music Status (`fm.teal.alpha.actor.status` & `fm.teal.alpha.feed.play`)
+
+Show music listening activity via teal.fm integration.
+
+### Tangled Repositories (`sh.tangled.repo`)
+
+Display code repositories with descriptions, labels, and metadata.
 
 ## 🛠️ Development
 
@@ -372,27 +448,24 @@ Display a collection of links with emoji icons.
 
 The project uses:
 
-- **TypeScript*- – Full type safety
-- **Prettier*- – Consistent code formatting
-- **svelte-check*- – Svelte-specific linting
-- **ESLint*- – (can be added if needed)
-
-## 📚 Reference Implementation
-
-The `other/leaflet-main` directory contains the reference Leaflet implementation, which was used as inspiration for:
-
-- Feed generation
-- Publication handling
-- Document rendering
-- Bluesky integration
+- **TypeScript** – Full type safety throughout
+- **Prettier** – Consistent code formatting
+- **svelte-check** – Svelte-specific linting
+- **Svelte 5 Runes** – Modern reactivity with better performance
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a pull request.
 
-## 📄 Licence
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-This project is open-source. See the [licence](./LICENCE) file for more details on the website source code specifically and the [third party licences](./THIRD-PARTY-LICENSES.txt) file for the rest.
+## 📄 License
+
+This project is open-source. See the [LICENSE](./LICENSE) file for more details on the website source code specifically and the [THIRD-PARTY-LICENSES.txt](./THIRD-PARTY-LICENSES.txt) file for third-party dependencies.
 
 ## 🔗 Links
 
@@ -402,16 +475,19 @@ This project is open-source. See the [licence](./LICENCE) file for more details 
 - [Bluesky](https://bsky.app/)
 - [WhiteWind](https://whtwnd.com/)
 - [Leaflet](https://leaflet.pub/)
+- [teal.fm](https://teal.fm/)
+- [MusicBrainz](https://musicbrainz.org/)
+- [Tangled](https://tangled.sh/)
+- [Linkat](https://linkat.blue/)
 
-## 💡 Tips
+## 💡 Tips & Troubleshooting
 
 ### Finding Your DID
 
-1. visit [PDSls](https://pdsls.dev/)
-1. enter your handle (i.e. `ewancroft.uk`)
-1. you will see a `did:plc` (or `did:web`) in the Repository field, that is your DID
-
-> if not, select the arrow to the right of the text, it might show your handle instead.
+1. Visit [PDSls](https://pdsls.dev/)
+2. Enter your handle (e.g., `ewancroft.uk`)
+3. Look for the `did:plc` (or `did:web`) in the Repository field
+4. If not visible, click the arrow to the right of the text
 
 ### Cache Management
 
@@ -425,48 +501,53 @@ cache.clear();
 
 // Clear a specific entry
 cache.delete('profile:did:plc:...');
+
+// Get cache statistics
+const profile = cache.get<ProfileData>('profile:did:plc:...');
 ```
 
-### Custom Components
+### Music Status Not Showing Artwork
 
-All components are built with Svelte 5 runes for better reactivity and performance. See the components directory for examples.
+If your music status doesn't show album artwork:
 
-## 🐛 Troubleshooting
+1. Ensure your scrobbler (e.g., piper) is including `releaseMbId` in records
+2. The system will automatically search MusicBrainz if IDs are missing
+3. Check browser console for MusicBrainz search results
+4. Fallback to blob storage if available
+5. Icon placeholder displays if no artwork is found
 
 ### Documents Not Found
 
-1. Check your `PUBLIC_ATPROTO_DID` is correct
-2. Verify the slug mapping in `src/lib/config/slugs.ts` is correct
-3. Ensure the publication rkey matches your Leaflet publication
-4. Verify documents are not drafts (WhiteWind) or unpublished (Leaflet)
-5. If using WhiteWind, ensure `PUBLIC_ENABLE_WHITEWIND=true` is set
-6. Check the browser console for AT Protocol service errors
+1. Verify `PUBLIC_ATPROTO_DID` is correct
+2. Check slug mapping in `src/lib/config/slugs.ts`
+3. Ensure publication rkey matches your Leaflet publication
+4. Verify documents are published (not drafts)
+5. If using WhiteWind, ensure `PUBLIC_ENABLE_WHITEWIND=true`
+6. Check browser console for AT Protocol service errors
 
-### Slug Not Found
+### Wolf Mode Not Working
 
-1. Add your slug mapping to `src/lib/config/slugs.ts`
-2. Ensure the format is: `{ slug: 'your-slug', publicationRkey: 'your-rkey' }`
-3. Restart the development server after changes
-
-### Profile Data Not Loading
-
-1. Ensure your DID is publicly accessible
-2. Check the browser console for errors
-3. Verify AT Protocol services are reachable
+1. Ensure JavaScript is enabled
+2. Check browser console for errors
+3. Wolf mode preserves navigation and interactive elements
+4. Numbers and abbreviations are preserved intentionally
 
 ### Build Errors
 
-1. Clear the `.svelte-kit` directory: `rm -rf .svelte-kit`
+1. Clear `.svelte-kit` directory: `rm -rf .svelte-kit`
 2. Remove `node_modules`: `rm -rf node_modules`
-3. Reinstall dependencies: `npm install`
-4. Try building again: `npm run build`
+3. Clear package lock: `rm package-lock.json`
+4. Reinstall: `npm install`
+5. Try building: `npm run build`
 
 ## 🙏 Acknowledgements
 
-- Thanks to the AT Protocol team for creating an open protocol
-- Thanks to the Bluesky, WhiteWind, and Leaflet teams
+- Thanks to the AT Protocol team for creating an open, decentralized protocol
+- Thanks to the Bluesky, WhiteWind, Leaflet, teal.fm, Tangled, and Linkat teams
+- Thanks to MusicBrainz for providing free album artwork via the Cover Art Archive
 - Inspired by the personal-web movement and IndieWeb principles
+- Built with love using modern web technologies
 
 ---
 
-Built with ❤️ using SvelteKit and AT Protocol
+Built with ❤️ using SvelteKit, AT Protocol, and open-source tools
