@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { DynamicLinks, TangledRepos } from '$lib/components/layout';
-	import { ProfileCard, StatusCard, PostCard } from '$lib/components/layout/main/card';
-	import BlueskyPostCard from '$lib/components/layout/main/card/BlueskyPostCard.svelte';
+	import { ProfileCard, PostCard, BlueskyPostCard, MusicStatusCard } from '$lib/components/layout/main/card';
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 
 	// The `data` object includes merged layout/page load data.
@@ -29,7 +28,7 @@
 	<div class="grid gap-6 lg:grid-cols-2">
 		<div class="space-y-6">
 			<ProfileCard />
-			<StatusCard />
+			<MusicStatusCard />
 			<BlueskyPostCard />
 		</div>
 		<div class="space-y-6">
