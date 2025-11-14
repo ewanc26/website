@@ -83,13 +83,26 @@
 		if (!facets || facets.length === 0) return escapeHtml(text);
 		const sortedFacets = [...facets].sort((a, b) => a.index.byteStart - b.index.byteStart);
 
+		// Convert text to UTF-8 bytes for proper facet indexing
+		const encoder = new TextEncoder();
+		const decoder = new TextDecoder();
+		const bytes = encoder.encode(text);
+
 		let result = '';
-		let lastIndex = 0;
+		let lastByteIndex = 0;
 
 		for (const facet of sortedFacets) {
 			const { byteStart, byteEnd } = facet.index;
-			result += escapeHtml(text.slice(lastIndex, byteStart));
-			const facetText = text.slice(byteStart, byteEnd);
+			
+			// Extract text before facet
+			if (lastByteIndex < byteStart) {
+				const beforeBytes = bytes.slice(lastByteIndex, byteStart);
+				result += escapeHtml(decoder.decode(beforeBytes));
+			}
+			
+			// Extract facet text
+			const facetBytes = bytes.slice(byteStart, byteEnd);
+			const facetText = decoder.decode(facetBytes);
 			const feature = facet.features?.[0];
 
 			if (feature) {
@@ -106,10 +119,15 @@
 				result += escapeHtml(facetText);
 			}
 
-			lastIndex = byteEnd;
+			lastByteIndex = byteEnd;
 		}
 
-		result += escapeHtml(text.slice(lastIndex));
+		// Add remaining text after last facet
+		if (lastByteIndex < bytes.length) {
+			const remainingBytes = bytes.slice(lastByteIndex);
+			result += escapeHtml(decoder.decode(remainingBytes));
+		}
+
 		return result;
 	}
 
