@@ -51,7 +51,14 @@ export { buildPdsBlobUrl, extractCidFromImageObject, extractImageUrlsFromValue }
 
 export { resolveIdentity, withFallback, resetAgents } from './agents';
 
-export { searchMusicBrainzRelease, buildCoverArtUrl } from './musicbrainz';
+export { 
+	searchMusicBrainzRelease, 
+	buildCoverArtUrl, 
+	searchiTunesArtwork,
+	searchDeezerArtwork,
+	searchLastFmArtwork,
+	findArtwork 
+} from './musicbrainz';
 
 // Export cache for advanced use cases
 export { cache, ATProtoCache } from './cache';
