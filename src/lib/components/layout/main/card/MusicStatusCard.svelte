@@ -1,19 +1,23 @@
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 	import { Card } from '$lib/components/ui';
 	import { fetchMusicStatus, type MusicStatusData } from '$lib/services/atproto';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
-	import { Music, Disc3 } from '@lucide/svelte';
+
+	// Icons
+	import {
+		Music,
+		Disc3,
+		Users,
+		Album,
+		Clock,
+		Radio
+	} from '@lucide/svelte';
 
 	let musicStatus: MusicStatusData | null = null;
 	let loading = true;
 	let error: string | null = null;
 	let artworkError = false;
-
-	// Refs for autoscroll detection
-	let trackNameEl: HTMLElement;
-	let artistEl: HTMLElement;
-	let albumEl: HTMLElement;
 
 	onMount(async () => {
 		try {
@@ -22,10 +26,6 @@
 				console.log('[MusicStatusCard] Music status loaded:', musicStatus);
 				console.log('[MusicStatusCard] Artwork URL:', musicStatus.artworkUrl);
 				console.log('[MusicStatusCard] Release MBID:', musicStatus.releaseMbId);
-				
-				// Wait for DOM to update then check for overflow
-				await tick();
-				checkOverflow();
 			}
 		} catch (err) {
 			console.error('[MusicStatusCard] Error loading music status:', err);
@@ -34,30 +34,6 @@
 			loading = false;
 		}
 	});
-
-	function checkOverflow() {
-		const elements = [trackNameEl, artistEl, albumEl].filter(Boolean);
-		
-		elements.forEach(el => {
-			if (!el) return;
-			
-			const container = el.parentElement;
-			if (!container) return;
-			
-			const isOverflowing = el.scrollWidth > container.clientWidth;
-			
-			if (isOverflowing) {
-				const overflowAmount = el.scrollWidth - container.clientWidth;
-				const duration = Math.max(8, overflowAmount / 20); // ~20px per second
-				
-				el.style.setProperty('--overflow-amount', `-${overflowAmount}px`);
-				el.style.setProperty('--scroll-duration', `${duration}s`);
-				el.classList.add('is-overflowing');
-			} else {
-				el.classList.remove('is-overflowing');
-			}
-		});
-	}
 
 	function formatArtists(artists: { artistName: string }[]): string {
 		if (!artists || artists.length === 0) return 'Unknown Artist';
@@ -76,37 +52,11 @@
 		return domain.replace('lastfm', 'Last.fm').replace('last.fm', 'Last.fm');
 	}
 
-	function handleImageError(event: Event) {
+	function handleImageError() {
 		console.error('[MusicStatusCard] Artwork failed to load');
 		artworkError = true;
 	}
 </script>
-
-<style>
-	.autoscroll-container {
-		position: relative;
-		overflow: hidden;
-		width: 100%;
-		max-width: 100%;
-	}
-
-	.autoscroll-text {
-		display: inline-block;
-		white-space: nowrap;
-	}
-
-	@keyframes autoscroll {
-		0%, 10% {
-			transform: translateX(0);
-		}
-		45%, 55% {
-			transform: translateX(var(--overflow-amount, -100px));
-		}
-		90%, 100% {
-			transform: translateX(0);
-		}
-	}
-</style>
 
 <div class="mx-auto w-full max-w-2xl">
 	{#if loading}
@@ -126,14 +76,17 @@
 				</div>
 			{/snippet}
 		</Card>
+
 	{:else if error}
 		<Card error={true} errorMessage={error} />
+
 	{:else if musicStatus}
 		{@const safeMusicStatus = musicStatus}
 		<Card variant="elevated" padding="md">
 			{#snippet children()}
 				<div class="flex items-start gap-4">
-					<!-- Artwork Section -->
+
+					<!-- Artwork -->
 					<div class="flex-shrink-0">
 						{#if safeMusicStatus.artworkUrl && !artworkError}
 							<img
@@ -144,75 +97,81 @@
 								onerror={handleImageError}
 							/>
 						{:else}
-							<!-- Fallback icon when no artwork or artwork fails to load -->
 							<div class="h-20 w-20 rounded-lg bg-canvas-200 dark:bg-canvas-700 flex items-center justify-center shadow-md">
 								<Disc3 class="h-10 w-10 text-ink-500 dark:text-ink-400" aria-hidden="true" />
 							</div>
 						{/if}
 					</div>
 
+					<!-- Info -->
 					<div class="flex-1 min-w-0">
+						<!-- Header (Now Listening / Last Played) -->
 						<div class="mb-2 flex items-center gap-2">
 							<Music class="h-4 w-4 text-primary-600 dark:text-primary-400" aria-hidden="true" />
-							<span
-								class="text-xs font-semibold tracking-wide text-ink-800 uppercase dark:text-ink-100"
-							>
-								{safeMusicStatus.$type === 'fm.teal.alpha.actor.status' 
-									? 'Now Listening' 
+							<span class="text-xs font-semibold tracking-wide text-ink-800 uppercase dark:text-ink-100">
+								{safeMusicStatus.$type === 'fm.teal.alpha.actor.status'
+									? 'Now Listening'
 									: 'Last Played'}
 							</span>
 						</div>
 
+						<!-- Content -->
 						<div class="mb-2">
-							<div class="autoscroll-container">
-								<a
-									bind:this={trackNameEl}
-									href={safeMusicStatus.originUrl || '#'}
-									target="_blank"
-									rel="noopener noreferrer"
-									class="autoscroll-text text-lg font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
-									class:pointer-events-none={!safeMusicStatus.originUrl}
-									class:cursor-default={!safeMusicStatus.originUrl}
-									class:opacity-70={!safeMusicStatus.originUrl}
-								>
-									{safeMusicStatus.trackName}
-								</a>
-							</div>
 
-							<div class="autoscroll-container">
-								<p bind:this={artistEl} class="autoscroll-text text-base text-ink-800 dark:text-ink-100">
-									{formatArtists(safeMusicStatus.artists)}
-								</p>
-							</div>
+							<!-- Track Name -->
+							<a
+								href={safeMusicStatus.originUrl || '#'}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="block text-lg font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors whitespace-normal break-words max-w-full"
+								class:pointer-events-none={!safeMusicStatus.originUrl}
+								class:cursor-default={!safeMusicStatus.originUrl}
+								class:opacity-70={!safeMusicStatus.originUrl}
+							>
+								{safeMusicStatus.trackName}
+							</a>
 
+							<!-- Artists -->
+							<p class="mt-1 flex items-start gap-1.5 text-base text-ink-800 dark:text-ink-100 whitespace-normal break-words max-w-full">
+								<Users class="h-4 w-4 text-ink-600 dark:text-ink-300 flex-shrink-0 mt-0.5" />
+								{formatArtists(safeMusicStatus.artists)}
+							</p>
+
+							<!-- Album + Duration -->
 							{#if safeMusicStatus.releaseName}
-								<div class="autoscroll-container">
-									<p bind:this={albumEl} class="autoscroll-text text-sm text-ink-700 dark:text-ink-200">
+								<p class="mt-1 flex items-start gap-1.5 text-sm text-ink-700 dark:text-ink-200 whitespace-normal break-words max-w-full">
+									<Album class="h-4 w-4 text-ink-500 dark:text-ink-400 flex-shrink-0 mt-0.5" />
+									<span>
 										{safeMusicStatus.releaseName}
+
 										{#if safeMusicStatus.duration}
-											<span class="text-ink-600 dark:text-ink-300">
-												· {formatDuration(safeMusicStatus.duration)}
+											<span class="inline-flex items-center gap-1 ml-1 text-ink-600 dark:text-ink-300">
+												· <Clock class="h-3 w-3" /> {formatDuration(safeMusicStatus.duration)}
 											</span>
 										{/if}
-									</p>
-								</div>
+									</span>
+								</p>
 							{/if}
 						</div>
 
+						<!-- Footer / Meta -->
 						<div class="flex items-center gap-2 text-xs text-ink-700 dark:text-ink-200">
 							<time datetime={safeMusicStatus.playedTime}>
 								{formatRelativeTime(safeMusicStatus.playedTime)}
 							</time>
+
 							{#if safeMusicStatus.musicServiceBaseDomain}
 								<span class="text-ink-600 dark:text-ink-300">·</span>
+
 								<a
 									href="https://teal.fm"
 									target="_blank"
 									rel="noopener noreferrer"
-									class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+									class="inline-flex items-center gap-1 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
 									title="Powered by teal.fm"
 								>
-									{formatServiceName(safeMusicStatus.musicServiceBaseDomain)} via teal.fm
+									<Radio class="h-3 w-3" />
+									{formatServiceName(safeMusicStatus.musicServiceBaseDomain)} via {safeMusicStatus.submissionClientAgent}
 								</a>
 							{/if}
 						</div>
