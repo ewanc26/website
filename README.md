@@ -111,6 +111,12 @@ PUBLIC_SITE_TITLE="Your Site Title"
 PUBLIC_SITE_DESCRIPTION="Your site description"
 PUBLIC_SITE_KEYWORDS="keywords, separated, by, commas"
 PUBLIC_SITE_URL="https://example.com"
+
+# CORS Configuration (for API endpoints)
+# Comma-separated list of allowed origins for CORS
+# Use "*" to allow all origins (not recommended for production)
+# Example: https://example.com,https://app.example.com
+PUBLIC_CORS_ALLOWED_ORIGINS="https://example.com"
 ```
 
 ### Publication Slug Mappings (`src/lib/config/slugs.ts`)
@@ -371,6 +377,61 @@ PUBLIC_ATPROTO_DID=did:plc:your-did-here
 ```
 
 The card will automatically display your current or last played track.
+
+## 🔐 CORS Configuration
+
+The API endpoints support Cross-Origin Resource Sharing (CORS) via dynamic configuration:
+
+### Environment Variable
+
+```ini
+# Single origin
+PUBLIC_CORS_ALLOWED_ORIGINS="https://example.com"
+
+# Multiple origins (comma-separated)
+PUBLIC_CORS_ALLOWED_ORIGINS="https://example.com,https://app.example.com,https://www.example.com"
+
+# Allow all origins (not recommended for production)
+PUBLIC_CORS_ALLOWED_ORIGINS="*"
+```
+
+### How It Works
+
+1. **Dynamic Origin Matching**: The server checks the `Origin` header against the allowed list
+2. **Preflight Requests**: OPTIONS requests are handled automatically with proper CORS headers
+3. **Security**: Only specified origins receive CORS headers (unless using `*`)
+4. **Headers Set**:
+   - `Access-Control-Allow-Origin`: The requesting origin (if allowed)
+   - `Access-Control-Allow-Methods`: GET, POST, PUT, DELETE, OPTIONS
+   - `Access-Control-Allow-Headers`: Content-Type, Authorization
+   - `Access-Control-Max-Age`: 86400 (24 hours)
+
+### API Endpoints
+
+CORS is automatically applied to all routes under `/api/`:
+
+- `/api/artwork` - Album artwork fetching service
+
+### Testing CORS
+
+```bash
+# Test from command line
+curl -H "Origin: https://example.com" \
+  -H "Access-Control-Request-Method: GET" \
+  -H "Access-Control-Request-Headers: Content-Type" \
+  -X OPTIONS \
+  http://localhost:5173/api/artwork
+
+# Check response headers for:
+# Access-Control-Allow-Origin: https://example.com
+```
+
+### Security Recommendations
+
+1. **Production**: Specify exact allowed origins instead of using `*`
+2. **Development**: Use `*` or localhost origins for testing
+3. **Multiple Domains**: List all your domains that need API access
+4. **HTTPS Only**: Always use HTTPS origins in production
 
 ## 🎨 Styling
 

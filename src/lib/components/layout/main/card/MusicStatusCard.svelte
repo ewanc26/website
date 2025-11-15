@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { Card } from '$lib/components/ui';
 	import { fetchMusicStatus, type MusicStatusData } from '$lib/services/atproto';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
@@ -10,6 +10,11 @@
 	let error: string | null = null;
 	let artworkError = false;
 
+	// Refs for autoscroll detection
+	let trackNameEl: HTMLElement;
+	let artistEl: HTMLElement;
+	let albumEl: HTMLElement;
+
 	onMount(async () => {
 		try {
 			musicStatus = await fetchMusicStatus();
@@ -17,6 +22,10 @@
 				console.log('[MusicStatusCard] Music status loaded:', musicStatus);
 				console.log('[MusicStatusCard] Artwork URL:', musicStatus.artworkUrl);
 				console.log('[MusicStatusCard] Release MBID:', musicStatus.releaseMbId);
+				
+				// Wait for DOM to update then check for overflow
+				await tick();
+				checkOverflow();
 			}
 		} catch (err) {
 			console.error('[MusicStatusCard] Error loading music status:', err);
@@ -25,6 +34,30 @@
 			loading = false;
 		}
 	});
+
+	function checkOverflow() {
+		const elements = [trackNameEl, artistEl, albumEl].filter(Boolean);
+		
+		elements.forEach(el => {
+			if (!el) return;
+			
+			const container = el.parentElement;
+			if (!container) return;
+			
+			const isOverflowing = el.scrollWidth > container.clientWidth;
+			
+			if (isOverflowing) {
+				const overflowAmount = el.scrollWidth - container.clientWidth;
+				const duration = Math.max(8, overflowAmount / 20); // ~20px per second
+				
+				el.style.setProperty('--overflow-amount', `-${overflowAmount}px`);
+				el.style.setProperty('--scroll-duration', `${duration}s`);
+				el.classList.add('is-overflowing');
+			} else {
+				el.classList.remove('is-overflowing');
+			}
+		});
+	}
 
 	function formatArtists(artists: { artistName: string }[]): string {
 		if (!artists || artists.length === 0) return 'Unknown Artist';
@@ -48,6 +81,32 @@
 		artworkError = true;
 	}
 </script>
+
+<style>
+	.autoscroll-container {
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.autoscroll-text {
+		display: inline-block;
+		white-space: nowrap;
+	}
+
+	@keyframes autoscroll {
+		0%, 10% {
+			transform: translateX(0);
+		}
+		45%, 55% {
+			transform: translateX(var(--overflow-amount, -100px));
+		}
+		90%, 100% {
+			transform: translateX(0);
+		}
+	}
+</style>
 
 <div class="mx-auto w-full max-w-2xl">
 	{#if loading}
@@ -105,34 +164,38 @@
 						</div>
 
 						<div class="mb-2">
-							{#if safeMusicStatus.originUrl}
+							<div class="autoscroll-container">
 								<a
-									href={safeMusicStatus.originUrl}
+									bind:this={trackNameEl}
+									href={safeMusicStatus.originUrl || '#'}
 									target="_blank"
 									rel="noopener noreferrer"
-									class="overflow-wrap-anywhere break-words text-lg font-semibold text-ink-900 hover:text-primary-600 dark:text-ink-50 dark:hover:text-primary-400 transition-colors"
+									class="autoscroll-text text-lg font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
+									class:pointer-events-none={!safeMusicStatus.originUrl}
+									class:cursor-default={!safeMusicStatus.originUrl}
+									class:opacity-70={!safeMusicStatus.originUrl}
 								>
 									{safeMusicStatus.trackName}
 								</a>
-							{:else}
-								<p class="overflow-wrap-anywhere break-words text-lg font-semibold text-ink-900 dark:text-ink-50">
-									{safeMusicStatus.trackName}
-								</p>
-							{/if}
+							</div>
 
-							<p class="text-base text-ink-800 dark:text-ink-100">
-								{formatArtists(safeMusicStatus.artists)}
-							</p>
+							<div class="autoscroll-container">
+								<p bind:this={artistEl} class="autoscroll-text text-base text-ink-800 dark:text-ink-100">
+									{formatArtists(safeMusicStatus.artists)}
+								</p>
+							</div>
 
 							{#if safeMusicStatus.releaseName}
-								<p class="text-sm text-ink-700 dark:text-ink-200">
-									{safeMusicStatus.releaseName}
-									{#if safeMusicStatus.duration}
-										<span class="text-ink-600 dark:text-ink-300">
-											· {formatDuration(safeMusicStatus.duration)}
-										</span>
-									{/if}
-								</p>
+								<div class="autoscroll-container">
+									<p bind:this={albumEl} class="autoscroll-text text-sm text-ink-700 dark:text-ink-200">
+										{safeMusicStatus.releaseName}
+										{#if safeMusicStatus.duration}
+											<span class="text-ink-600 dark:text-ink-300">
+												· {formatDuration(safeMusicStatus.duration)}
+											</span>
+										{/if}
+									</p>
+								</div>
 							{/if}
 						</div>
 
