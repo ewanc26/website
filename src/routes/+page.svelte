@@ -25,15 +25,24 @@
 		</p>
 	</div>
 
-	<div class="grid gap-6 lg:grid-cols-2">
-		<div class="space-y-6">
+	<!-- Masonry-style grid using Tailwind's column utilities -->
+	<div class="columns-1 gap-6 lg:columns-2">
+		<div class="mb-6 break-inside-avoid">
 			<ProfileCard />
+		</div>
+		<div class="mb-6 break-inside-avoid">
 			<MusicStatusCard />
+		</div>
+		<div class="mb-6 break-inside-avoid">
 			<BlueskyPostCard />
 		</div>
-		<div class="space-y-6">
+		<div class="mb-6 break-inside-avoid">
 			<DynamicLinks />
+		</div>
+		<div class="mb-6 break-inside-avoid">
 			<PostCard />
+		</div>
+		<div class="mb-6 break-inside-avoid">
 			<TangledRepos />
 		</div>
 	</div>
