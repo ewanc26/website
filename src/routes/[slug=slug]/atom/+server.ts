@@ -14,7 +14,7 @@ import { getPublicationRkeyFromSlug } from '$lib/config/slugs';
  */
 export const GET: RequestHandler = ({ params }) => {
 	const slug = params.slug;
-	
+
 	// Validate slug
 	if (!slug) {
 		return new Response('Invalid slug', {
@@ -24,10 +24,10 @@ export const GET: RequestHandler = ({ params }) => {
 			}
 		});
 	}
-	
+
 	// Validate slug exists in config
 	const publicationRkey = getPublicationRkeyFromSlug(slug);
-	
+
 	if (!publicationRkey) {
 		return new Response(
 			`Slug not configured: ${slug}\n\nPlease add this slug to src/lib/config/slugs.ts`,

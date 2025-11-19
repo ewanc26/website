@@ -69,8 +69,8 @@ async function detectPostPlatform(
 
 			if (publication?.basePath) {
 				// Ensure basePath is a complete URL
-				const basePath = publication.basePath.startsWith('http') 
-					? publication.basePath 
+				const basePath = publication.basePath.startsWith('http')
+					? publication.basePath
 					: `https://${publication.basePath}`;
 				url = `${basePath}/${rkey}`;
 			} else if (docPublicationRkey) {
@@ -88,20 +88,20 @@ async function detectPostPlatform(
 		// Check WhiteWind as fallback (only if enabled)
 		if (PUBLIC_ENABLE_WHITEWIND === 'true') {
 			const whiteWindRecord = await withFallback(
-			PUBLIC_ATPROTO_DID,
-			async (agent) => {
-				try {
-					const response = await agent.com.atproto.repo.getRecord({
-						repo: PUBLIC_ATPROTO_DID,
-						collection: 'com.whtwnd.blog.entry',
-						rkey
-					});
-					return response.data;
-				} catch (err) {
-					// Record not found
-					return null;
-				}
-			},
+				PUBLIC_ATPROTO_DID,
+				async (agent) => {
+					try {
+						const response = await agent.com.atproto.repo.getRecord({
+							repo: PUBLIC_ATPROTO_DID,
+							collection: 'com.whtwnd.blog.entry',
+							rkey
+						});
+						return response.data;
+					} catch (err) {
+						// Record not found
+						return null;
+					}
+				},
 				true // Use PDS first for custom collections
 			);
 
@@ -140,7 +140,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
 
 	// Get the publication rkey from the slug
 	const publicationRkey = getPublicationRkeyFromSlug(slug);
-	
+
 	if (!publicationRkey) {
 		return new Response(
 			`Slug not configured: ${slug}\n\nPlease add this slug to src/lib/config/slugs.ts`,
@@ -180,9 +180,8 @@ export const GET: RequestHandler = async ({ params, url }) => {
 	} else {
 		// No fallback configured, return 404
 		const publicationNote = `\n\nNote: Only checking Leaflet publication with rkey: ${publicationRkey}`;
-		const whiteWindNote = PUBLIC_ENABLE_WHITEWIND === 'true'
-			? '\n- WhiteWind: https://whtwnd.com'
-			: '';
+		const whiteWindNote =
+			PUBLIC_ENABLE_WHITEWIND === 'true' ? '\n- WhiteWind: https://whtwnd.com' : '';
 
 		return new Response(
 			`Document not found: ${rkey}

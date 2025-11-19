@@ -67,12 +67,12 @@ function getWolfSoundByPosition(position: number): string {
 function getWolfSoundForWord(word: string, position: number): string {
 	// Normalize the word to lowercase for consistent mapping
 	const normalizedWord = word.toLowerCase();
-	
+
 	// If we've seen this word before, return the same sound
 	if (wordToSoundMap.has(normalizedWord)) {
 		return wordToSoundMap.get(normalizedWord)!;
 	}
-	
+
 	// Otherwise, assign a new sound based on position and store it
 	const wolfSound = getWolfSoundByPosition(position);
 	wordToSoundMap.set(normalizedWord, wolfSound);
@@ -94,19 +94,19 @@ function shouldTransform(word: string): boolean {
 	if (!hasAlphabeticalCharacters(word)) {
 		return false;
 	}
-	
+
 	// Don't transform if it's a number abbreviation
 	if (isNumberAbbreviation(word)) {
 		return false;
 	}
-	
+
 	return true;
 }
 
 function splitWordAndPunctuation(token: string): { prefix: string; word: string; suffix: string } {
 	// Match leading punctuation, word, and trailing punctuation
 	const match = token.match(/^([^a-zA-Z0-9]*)([a-zA-Z0-9]+)([^a-zA-Z0-9]*)$/);
-	
+
 	if (match) {
 		return {
 			prefix: match[1],
@@ -114,7 +114,7 @@ function splitWordAndPunctuation(token: string): { prefix: string; word: string;
 			suffix: match[3]
 		};
 	}
-	
+
 	// If no match, treat entire token as word
 	return {
 		prefix: '',
@@ -127,24 +127,24 @@ function convertToWolfSpeak(text: string, startPosition: number): string {
 	// Split by words and replace each with a wolf sound
 	const words = text.split(/(\s+)/); // Keep whitespace
 	let currentPosition = startPosition;
-	
+
 	return words
 		.map((token) => {
 			if (token.trim().length === 0) {
 				return token; // Preserve whitespace
 			}
-			
+
 			// Split word from surrounding punctuation
 			const { prefix, word, suffix } = splitWordAndPunctuation(token);
-			
+
 			// Only transform words that should be transformed
 			if (!shouldTransform(word)) {
 				return token; // Keep numbers, abbreviations, punctuation, etc. as-is
 			}
-			
+
 			const wolfSound = getWolfSoundForWord(word, currentPosition);
 			currentPosition++;
-			
+
 			// Apply capitalization pattern to the wolf sound
 			let transformedWord = wolfSound;
 			if (word === word.toUpperCase() && word.length > 1) {
@@ -152,7 +152,7 @@ function convertToWolfSpeak(text: string, startPosition: number): string {
 			} else if (word[0] === word[0].toUpperCase()) {
 				transformedWord = wolfSound.charAt(0).toUpperCase() + wolfSound.slice(1);
 			}
-			
+
 			// Reconstruct with original punctuation
 			return prefix + transformedWord + suffix;
 		})
@@ -167,17 +167,17 @@ function shouldSkipElement(element: Element): boolean {
 			return true;
 		}
 	}
-	
+
 	// Skip buttons in the header navigation
 	if (element.closest('header button')) {
 		return true;
 	}
-	
+
 	// Skip nav elements
 	if (element.tagName === 'NAV' || element.closest('nav')) {
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -186,16 +186,12 @@ function walkTextNodes(node: Node, callback: (textNode: Text) => void) {
 		callback(node as Text);
 	} else if (node.nodeType === Node.ELEMENT_NODE) {
 		const element = node as Element;
-		
+
 		// Skip script, style tags, and navigation elements
-		if (
-			element.tagName === 'SCRIPT' || 
-			element.tagName === 'STYLE' ||
-			shouldSkipElement(element)
-		) {
+		if (element.tagName === 'SCRIPT' || element.tagName === 'STYLE' || shouldSkipElement(element)) {
 			return;
 		}
-		
+
 		for (const child of Array.from(node.childNodes)) {
 			walkTextNodes(child, callback);
 		}
@@ -206,7 +202,7 @@ function enableWolfMode() {
 	originalTexts.clear();
 	wordToSoundMap.clear();
 	wordCounter = 0;
-	
+
 	walkTextNodes(document.body, (textNode) => {
 		const originalText = textNode.textContent || '';
 		if (originalText.trim().length > 0) {
@@ -214,7 +210,7 @@ function enableWolfMode() {
 			const transformedText = convertToWolfSpeak(originalText, wordCounter);
 			textNode.textContent = transformedText;
 			// Update counter based on number of transformable words processed
-			wordCounter += originalText.split(/\s+/).filter(w => {
+			wordCounter += originalText.split(/\s+/).filter((w) => {
 				const { word } = splitWordAndPunctuation(w);
 				return shouldTransform(word);
 			}).length;

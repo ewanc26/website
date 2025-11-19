@@ -11,10 +11,7 @@
 
 	onMount(async () => {
 		try {
-			const [reposData, profile] = await Promise.all([
-				fetchTangledRepos(),
-				fetchProfile()
-			]);
+			const [reposData, profile] = await Promise.all([fetchTangledRepos(), fetchProfile()]);
 			repos = reposData;
 			handle = profile.handle;
 		} catch (err) {
@@ -43,9 +40,7 @@
 		{@const safeRepos = repos}
 		<Card variant="elevated" padding="md">
 			{#snippet children()}
-				<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">
-					Tangled Repositories
-				</h2>
+				<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Tangled Repositories</h2>
 				<div class="space-y-3">
 					{#each safeRepos.repos as repo}
 						<TangledRepoCard {repo} {handle} />

@@ -95,7 +95,7 @@ async function searchByReleaseName(
 		const response = await fetch(url, {
 			headers: {
 				'User-Agent': 'ewancroft.uk/1.0.0 (https://ewancroft.uk)',
-				'Accept': 'application/json'
+				Accept: 'application/json'
 			}
 		});
 
@@ -134,7 +134,7 @@ async function searchByTrackName(trackName: string, artistName: string): Promise
 		const response = await fetch(url, {
 			headers: {
 				'User-Agent': 'ewancroft.uk/1.0.0 (https://ewancroft.uk)',
-				'Accept': 'application/json'
+				Accept: 'application/json'
 			}
 		});
 
@@ -180,9 +180,7 @@ export async function searchiTunesArtwork(
 
 	try {
 		// Prefer searching by album + artist for better accuracy
-		const searchTerm = releaseName
-			? `${releaseName} ${artistName}`
-			: `${trackName} ${artistName}`;
+		const searchTerm = releaseName ? `${releaseName} ${artistName}` : `${trackName} ${artistName}`;
 
 		const url = `https://itunes.apple.com/search?term=${encodeURIComponent(searchTerm)}&entity=album&limit=5`;
 
@@ -330,9 +328,10 @@ export async function searchLastFmArtwork(
 
 		// Get the largest image available
 		const images = data.album.image;
-		const largeImage = images.find((img: any) => img.size === 'extralarge') ||
-		                   images.find((img: any) => img.size === 'large') ||
-		                   images.find((img: any) => img.size === 'medium');
+		const largeImage =
+			images.find((img: any) => img.size === 'extralarge') ||
+			images.find((img: any) => img.size === 'large') ||
+			images.find((img: any) => img.size === 'medium');
 
 		if (largeImage?.['#text']) {
 			const artworkUrl = largeImage['#text'];
@@ -371,7 +370,12 @@ export async function findArtwork(
 		if (releaseName) params.set('releaseName', releaseName);
 		if (releaseMbId) params.set('releaseMbId', releaseMbId);
 
-		console.info('[Artwork] Fetching via server API:', { trackName, artistName, releaseName, releaseMbId });
+		console.info('[Artwork] Fetching via server API:', {
+			trackName,
+			artistName,
+			releaseName,
+			releaseMbId
+		});
 
 		// Call our server-side API endpoint
 		const response = await fetch(`/api/artwork?${params.toString()}`);

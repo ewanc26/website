@@ -22,7 +22,7 @@
 
 	onMount(() => {
 		console.info('[App] Application mounted');
-		
+
 		// Setup global error handler
 		window.onerror = (msg, url, lineNo, columnNo, error) => {
 			console.error('[App] Global error:', {
@@ -40,23 +40,25 @@
 			console.error('[App] Unhandled promise rejection:', event.reason);
 		};
 	});
-	
+
 	// Reactive meta updates on navigation
-	let headMeta = $derived(createSiteMeta({
-		...data.siteMeta,
-		...data.meta
-	}));
+	let headMeta = $derived(
+		createSiteMeta({
+			...data.siteMeta,
+			...data.meta
+		})
+	);
 </script>
 
 <svelte:head>
 	<script>
 		// Prevent flash of unstyled content (FOUC) by applying theme before page renders
-		(function() {
+		(function () {
 			const stored = localStorage.getItem('theme');
 			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 			const isDark = stored === 'dark' || (!stored && prefersDark);
 			const htmlElement = document.documentElement;
-			
+
 			if (isDark) {
 				htmlElement.classList.add('dark');
 				htmlElement.style.colorScheme = 'dark';
@@ -76,9 +78,11 @@
 <!-- Bespoke MetaTags component -->
 <MetaTags meta={headMeta} siteMeta={data.siteMeta} />
 
-<div class="flex min-h-screen flex-col overflow-x-hidden bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50">
+<div
+	class="flex min-h-screen flex-col overflow-x-hidden bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50"
+>
 	<Header />
-    
+
 	<main class="container mx-auto flex-grow px-4 py-8">
 		<ScrollToTop />
 		{@render children()}

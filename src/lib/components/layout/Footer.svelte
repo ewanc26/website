@@ -8,14 +8,14 @@
 	let copyrightText: string;
 
 	const currentYear = new Date().getFullYear();
-	
+
 	$: {
 		console.log('[Footer] Reactive: siteInfo updated:', siteInfo);
 		const birthYear = siteInfo?.additionalInfo?.websiteBirthYear;
 		console.log('[Footer] Current year:', currentYear);
 		console.log('[Footer] Birth year:', birthYear);
 		console.log('[Footer] Birth year type:', typeof birthYear);
-		
+
 		if (!birthYear || typeof birthYear !== 'number') {
 			console.log('[Footer] Using current year (invalid/missing birth year)');
 			copyrightText = `${currentYear}`;
@@ -37,7 +37,9 @@
 <footer
 	class="mt-auto w-full border-t border-canvas-200 bg-canvas-50 py-6 dark:border-canvas-800 dark:bg-canvas-950"
 >
-	<div class="container mx-auto space-y-2 px-4 text-center text-sm font-medium text-ink-800 dark:text-ink-100">
+	<div
+		class="container mx-auto space-y-2 px-4 text-center text-sm font-medium text-ink-800 dark:text-ink-100"
+	>
 		<!-- Line 1: Copyright & Profile -->
 		<div class="flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-2">
 			<span>&copy; <span>{copyrightText}</span></span>
