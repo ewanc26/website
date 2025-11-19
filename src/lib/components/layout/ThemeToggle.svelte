@@ -9,7 +9,7 @@
 		// Check localStorage and system preference
 		const stored = localStorage.getItem('theme');
 		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		
+
 		isDark = stored === 'dark' || (!stored && prefersDark);
 		updateTheme();
 		mounted = true;
@@ -31,7 +31,7 @@
 
 	function updateTheme() {
 		const htmlElement = document.documentElement;
-		
+
 		if (isDark) {
 			htmlElement.classList.add('dark');
 			htmlElement.style.colorScheme = 'dark';
@@ -58,18 +58,18 @@
 		<div class="relative h-5 w-5">
 			<Sun
 				class="absolute inset-0 h-5 w-5 transition-all duration-300 {isDark
-					? 'rotate-90 scale-0 opacity-0'
-					: 'rotate-0 scale-100 opacity-100'}"
+					? 'scale-0 rotate-90 opacity-0'
+					: 'scale-100 rotate-0 opacity-100'}"
 				aria-hidden="true"
 			/>
 			<Moon
 				class="absolute inset-0 h-5 w-5 transition-all duration-300 {isDark
-					? 'rotate-0 scale-100 opacity-100'
-					: '-rotate-90 scale-0 opacity-0'}"
+					? 'scale-100 rotate-0 opacity-100'
+					: 'scale-0 -rotate-90 opacity-0'}"
 				aria-hidden="true"
 			/>
 		</div>
 	{:else}
-		<div class="h-5 w-5 animate-pulse bg-canvas-300 dark:bg-canvas-700 rounded"></div>
+		<div class="h-5 w-5 animate-pulse rounded bg-canvas-300 dark:bg-canvas-700"></div>
 	{/if}
 </button>

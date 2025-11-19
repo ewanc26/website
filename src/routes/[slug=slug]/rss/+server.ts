@@ -19,7 +19,7 @@ import { getPublicationRkeyFromSlug } from '$lib/config/slugs';
  */
 export const GET: RequestHandler = async ({ params }) => {
 	const slug = params.slug;
-	
+
 	// Validate slug
 	if (!slug) {
 		return new Response('Invalid slug', {
@@ -29,10 +29,10 @@ export const GET: RequestHandler = async ({ params }) => {
 			}
 		});
 	}
-	
+
 	// Get the publication rkey from the slug
 	const publicationRkey = getPublicationRkeyFromSlug(slug);
-	
+
 	if (!publicationRkey) {
 		return new Response(
 			`Slug not configured: ${slug}\n\nPlease add this slug to src/lib/config/slugs.ts`,
@@ -50,7 +50,7 @@ export const GET: RequestHandler = async ({ params }) => {
 
 		// Filter posts for this specific publication
 		const publicationPosts = posts.filter(
-			p => p.publicationRkey === publicationRkey || p.platform === 'WhiteWind'
+			(p) => p.publicationRkey === publicationRkey || p.platform === 'WhiteWind'
 		);
 
 		// Separate WhiteWind and Leaflet posts
@@ -134,22 +134,19 @@ async function redirectToLeafletRSS(publicationRkey: string): Promise<Response> 
 
 		// Find the specific publication
 		const publication = publications.find((p) => p.rkey === publicationRkey);
-		
+
 		if (publication) {
 			const rssUrl = getLeafletRSSUrl(publication);
 			return Response.redirect(rssUrl, 307); // Temporary redirect
 		}
 
 		// Publication not found
-		return new Response(
-			`Leaflet publication not found for rkey: ${publicationRkey}`,
-			{
-				status: 404,
-				headers: {
-					'Content-Type': 'text/plain; charset=utf-8'
-				}
+		return new Response(`Leaflet publication not found for rkey: ${publicationRkey}`, {
+			status: 404,
+			headers: {
+				'Content-Type': 'text/plain; charset=utf-8'
 			}
-		);
+		});
 	} catch (error) {
 		console.error('Error redirecting to Leaflet RSS:', error);
 		return new Response('Error finding Leaflet RSS feed', {
@@ -167,8 +164,8 @@ async function redirectToLeafletRSS(publicationRkey: string): Promise<Response> 
 function getLeafletRSSUrl(publication: { basePath?: string; rkey: string }): string {
 	if (publication.basePath) {
 		// Ensure basePath is a complete URL
-		const basePath = publication.basePath.startsWith('http') 
-			? publication.basePath 
+		const basePath = publication.basePath.startsWith('http')
+			? publication.basePath
 			: `https://${publication.basePath}`;
 		return `${basePath}/rss`;
 	}

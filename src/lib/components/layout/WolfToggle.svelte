@@ -23,7 +23,7 @@
 	type="button"
 	title={isWolfMode ? 'Return to normal text' : 'Transform to wolf speak - awoo!'}
 >
-	<span 
+	<span
 		class="text-2xl transition-transform duration-300 {isWolfMode ? 'scale-125' : 'scale-100'}"
 		aria-hidden="true"
 	>

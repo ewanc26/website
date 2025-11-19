@@ -154,7 +154,7 @@ export async function fetchMusicStatus(fetchFn?: typeof fetch): Promise<MusicSta
 
 	try {
 		console.info('[MusicStatus] Cache miss, fetching from network');
-		
+
 		// Try the actor status collection first (shorter-lived status)
 		try {
 			const statusRecords = await withFallback(
@@ -174,45 +174,55 @@ export async function fetchMusicStatus(fetchFn?: typeof fetch): Promise<MusicSta
 			if (statusRecords && statusRecords.length > 0) {
 				const record = statusRecords[0];
 				const value = record.value as any;
-				
+
 				// Check if status is still valid (not expired)
 				if (value.expiry) {
-				const expiryTime = parseInt(value.expiry) * 1000;
-				if (Date.now() > expiryTime) {
-				console.debug('[MusicStatus] Actor status expired, falling back to feed play');
-				} else {
-				// Build artwork URL - prioritize album art over individual track art
-				let artworkUrl: string | undefined;
-				const trackName = value.item?.trackName || value.trackName;
-				const artists = value.item?.artists || value.artists || [];
-				const releaseName = value.item?.releaseName || value.releaseName;
-				const artistName = artists[0]?.artistName;
-				const releaseMbId = value.item?.releaseMbId || value.releaseMbId;
-				
-				console.debug('[MusicStatus] Looking for artwork:', { trackName, artistName, releaseName, releaseMbId });
-				
-				// Priority 1: If we have album info, search for album art (more accurate)
-				if (releaseName && artistName) {
-				 console.info('[MusicStatus] Prioritizing album artwork search');
-				 artworkUrl = await findArtwork(releaseName, artistName, releaseName, releaseMbId) || undefined;
-				}
-				
-				// Priority 2: Fall back to track-based search if album search failed
-				if (!artworkUrl && trackName && artistName) {
-				 console.info('[MusicStatus] Falling back to track-based artwork search');
-				 artworkUrl = await findArtwork(trackName, artistName, releaseName, releaseMbId) || undefined;
-				}
-				
-				// Priority 3: Final fallback to atproto blob if no external artwork found
-				if (!artworkUrl) {
-				 const artwork = value.item?.artwork || value.artwork;
-								console.debug('[MusicStatus] No external artwork found, checking atproto blob:', artwork);
-								if (artwork?.ref?.$link) {
-									const identity = await resolveIdentity(PUBLIC_ATPROTO_DID, fetchFn);
-									artworkUrl = buildPdsBlobUrl(identity.pds, PUBLIC_ATPROTO_DID, artwork.ref.$link);
-									console.info('[MusicStatus] Using atproto blob artwork URL:', artworkUrl);
-								}
+					const expiryTime = parseInt(value.expiry) * 1000;
+					if (Date.now() > expiryTime) {
+						console.debug('[MusicStatus] Actor status expired, falling back to feed play');
+					} else {
+						// Build artwork URL - prioritize album art over individual track art
+						let artworkUrl: string | undefined;
+						const trackName = value.item?.trackName || value.trackName;
+						const artists = value.item?.artists || value.artists || [];
+						const releaseName = value.item?.releaseName || value.releaseName;
+						const artistName = artists[0]?.artistName;
+						const releaseMbId = value.item?.releaseMbId || value.releaseMbId;
+
+						console.debug('[MusicStatus] Looking for artwork:', {
+							trackName,
+							artistName,
+							releaseName,
+							releaseMbId
+						});
+
+						// Priority 1: If we have album info, search for album art (more accurate)
+						if (releaseName && artistName) {
+							console.info('[MusicStatus] Prioritizing album artwork search');
+							artworkUrl =
+								(await findArtwork(releaseName, artistName, releaseName, releaseMbId)) || undefined;
+						}
+
+						// Priority 2: Fall back to track-based search if album search failed
+						if (!artworkUrl && trackName && artistName) {
+							console.info('[MusicStatus] Falling back to track-based artwork search');
+							artworkUrl =
+								(await findArtwork(trackName, artistName, releaseName, releaseMbId)) || undefined;
+						}
+
+						// Priority 3: Final fallback to atproto blob if no external artwork found
+						if (!artworkUrl) {
+							const artwork = value.item?.artwork || value.artwork;
+							console.debug(
+								'[MusicStatus] No external artwork found, checking atproto blob:',
+								artwork
+							);
+							if (artwork?.ref?.$link) {
+								const identity = await resolveIdentity(PUBLIC_ATPROTO_DID, fetchFn);
+								artworkUrl = buildPdsBlobUrl(identity.pds, PUBLIC_ATPROTO_DID, artwork.ref.$link);
+								console.info('[MusicStatus] Using atproto blob artwork URL:', artworkUrl);
 							}
+						}
 
 						const data: MusicStatusData = {
 							trackName: value.item?.trackName || value.trackName,
@@ -224,8 +234,10 @@ export async function fetchMusicStatus(fetchFn?: typeof fetch): Promise<MusicSta
 							releaseMbId: value.item?.releaseMbId || value.releaseMbId,
 							isrc: value.isrc,
 							duration: value.duration,
-							musicServiceBaseDomain: value.item?.musicServiceBaseDomain || value.musicServiceBaseDomain,
-							submissionClientAgent: value.item?.submissionClientAgent || value.submissionClientAgent,
+							musicServiceBaseDomain:
+								value.item?.musicServiceBaseDomain || value.musicServiceBaseDomain,
+							submissionClientAgent:
+								value.item?.submissionClientAgent || value.submissionClientAgent,
 							$type: 'fm.teal.alpha.actor.status',
 							expiry: value.expiry,
 							artwork: value.item?.artwork || value.artwork,
@@ -259,7 +271,7 @@ export async function fetchMusicStatus(fetchFn?: typeof fetch): Promise<MusicSta
 		if (playRecords && playRecords.length > 0) {
 			const record = playRecords[0];
 			const value = record.value as any;
-			
+
 			// Build artwork URL - prioritize album art over individual track art
 			let artworkUrl: string | undefined;
 			const trackName = value.trackName;
@@ -267,21 +279,28 @@ export async function fetchMusicStatus(fetchFn?: typeof fetch): Promise<MusicSta
 			const releaseName = value.releaseName;
 			const artistName = artists[0]?.artistName;
 			const releaseMbId = value.releaseMbId;
-			
-			console.debug('[MusicStatus] Looking for artwork:', { trackName, artistName, releaseName, releaseMbId });
-			
+
+			console.debug('[MusicStatus] Looking for artwork:', {
+				trackName,
+				artistName,
+				releaseName,
+				releaseMbId
+			});
+
 			// Priority 1: If we have album info, search for album art (more accurate)
 			if (releaseName && artistName) {
 				console.info('[MusicStatus] Prioritizing album artwork search');
-				artworkUrl = await findArtwork(releaseName, artistName, releaseName, releaseMbId) || undefined;
+				artworkUrl =
+					(await findArtwork(releaseName, artistName, releaseName, releaseMbId)) || undefined;
 			}
-			
+
 			// Priority 2: Fall back to track-based search if album search failed
 			if (!artworkUrl && trackName && artistName) {
 				console.info('[MusicStatus] Falling back to track-based artwork search');
-				artworkUrl = await findArtwork(trackName, artistName, releaseName, releaseMbId) || undefined;
+				artworkUrl =
+					(await findArtwork(trackName, artistName, releaseName, releaseMbId)) || undefined;
 			}
-			
+
 			// Priority 3: Final fallback to atproto blob if no external artwork found
 			if (!artworkUrl) {
 				const artwork = value.artwork;
@@ -292,7 +311,7 @@ export async function fetchMusicStatus(fetchFn?: typeof fetch): Promise<MusicSta
 					console.info('[MusicStatus] Using atproto blob artwork URL:', artworkUrl);
 				}
 			}
-			
+
 			const data: MusicStatusData = {
 				trackName: value.trackName,
 				artists: value.artists || [],

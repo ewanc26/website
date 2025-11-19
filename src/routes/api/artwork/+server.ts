@@ -143,9 +143,7 @@ async function searchiTunes(
 	releaseName?: string
 ): Promise<string | null> {
 	try {
-		const searchTerm = releaseName
-			? `${releaseName} ${artistName}`
-			: `${trackName} ${artistName}`;
+		const searchTerm = releaseName ? `${releaseName} ${artistName}` : `${trackName} ${artistName}`;
 
 		const url = `https://itunes.apple.com/search?term=${encodeURIComponent(searchTerm)}&entity=album&limit=5`;
 
@@ -196,10 +194,7 @@ async function searchDeezer(
 /**
  * Search Last.fm for artwork
  */
-async function searchLastFm(
-	artistName: string,
-	releaseName?: string
-): Promise<string | null> {
+async function searchLastFm(artistName: string, releaseName?: string): Promise<string | null> {
 	if (!releaseName) return null;
 
 	try {
@@ -229,7 +224,7 @@ async function searchLastFm(
 /**
  * GET /api/artwork
  * Query params: trackName, artistName, releaseName?, releaseMbId?
- * 
+ *
  * Features:
  * - Intelligent caching (1 hour TTL)
  * - Multiple fallback sources (MusicBrainz, iTunes, Deezer, Last.fm)

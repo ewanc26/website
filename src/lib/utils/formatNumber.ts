@@ -6,11 +6,7 @@
  * Determines the effective locale, preferring system locale with fallback to 'en-GB'.
  */
 function getLocale(locale?: string): string {
-	return (
-		locale ||
-		(typeof navigator !== 'undefined' && navigator.language) ||
-		'en-GB'
-	);
+	return locale || (typeof navigator !== 'undefined' && navigator.language) || 'en-GB';
 }
 
 /**
@@ -33,7 +29,7 @@ export function formatCompactNumber(num?: number, locale?: string): string {
 		const roundedDown = Math.floor((num / divisor) * 10) / 10;
 		// Re-multiply to get the actual number to format
 		const adjustedNum = roundedDown * divisor;
-		
+
 		return new Intl.NumberFormat(effectiveLocale, {
 			notation: 'compact',
 			compactDisplay: 'short',

@@ -31,13 +31,11 @@
 		</div>
 	{:else if siteInfo}
 		<div class="space-y-8">
-			{#each [
-				{ title: 'Purpose', content: siteInfo.additionalInfo?.purpose },
-				{ title: 'History', content: siteInfo.additionalInfo?.websiteBirthYear ? `This website was first launched in ${siteInfo.additionalInfo.websiteBirthYear}.` : null },
-				{ title: 'Privacy', content: siteInfo.privacyStatement }
-			] as section}
+			{#each [{ title: 'Purpose', content: siteInfo.additionalInfo?.purpose }, { title: 'History', content: siteInfo.additionalInfo?.websiteBirthYear ? `This website was first launched in ${siteInfo.additionalInfo.websiteBirthYear}.` : null }, { title: 'Privacy', content: siteInfo.privacyStatement }] as section}
 				{#if section.content}
-					<section class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
+					<section
+						class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
+					>
 						<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">{section.title}</h2>
 						<p class="whitespace-pre-wrap text-ink-700 dark:text-ink-300">{section.content}</p>
 					</section>
@@ -45,7 +43,9 @@
 			{/each}
 
 			{#if siteInfo.technologyStack?.length}
-				<section class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
+				<section
+					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
+				>
 					<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Technology Stack</h2>
 					<div class="space-y-2">
 						{#each siteInfo.technologyStack as tech}
@@ -56,10 +56,14 @@
 			{/if}
 
 			{#if siteInfo.openSourceInfo}
-				<section class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
+				<section
+					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
+				>
 					<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Open Source</h2>
 					{#if siteInfo.openSourceInfo.description}
-						<p class="mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-300">{siteInfo.openSourceInfo.description}</p>
+						<p class="mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-300">
+							{siteInfo.openSourceInfo.description}
+						</p>
 					{/if}
 					{#if siteInfo.openSourceInfo.repositories?.length}
 						<div class="space-y-2">
@@ -80,14 +84,20 @@
 			{/if}
 
 			{#if siteInfo.credits?.length}
-				<section class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900">
+				<section
+					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
+				>
 					<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Credits</h2>
 					<div class="grid gap-4 md:grid-cols-2">
 						{#each siteInfo.credits as credit}
 							<div class="rounded-lg bg-canvas-200 p-4 dark:bg-canvas-800">
 								<h4 class="font-medium text-ink-900 dark:text-ink-50">{credit.name}</h4>
-								{#if credit.author}<p class="text-sm text-ink-600 dark:text-ink-400">by {credit.author}</p>{/if}
-								{#if credit.description}<p class="mt-1 text-sm text-ink-700 dark:text-ink-300">{credit.description}</p>{/if}
+								{#if credit.author}<p class="text-sm text-ink-600 dark:text-ink-400">
+										by {credit.author}
+									</p>{/if}
+								{#if credit.description}<p class="mt-1 text-sm text-ink-700 dark:text-ink-300">
+										{credit.description}
+									</p>{/if}
 							</div>
 						{/each}
 					</div>

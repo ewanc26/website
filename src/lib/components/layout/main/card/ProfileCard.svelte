@@ -108,9 +108,11 @@
 					<p class="font-medium text-ink-700 dark:text-ink-200">@{safeProfile.handle}</p>
 
 					{#if safeProfile.description}
-					<p class="mb-4 overflow-wrap-anywhere break-words whitespace-pre-wrap text-ink-700 dark:text-ink-200">
-					{safeProfile.description}
-					</p>
+						<p
+							class="overflow-wrap-anywhere mb-4 break-words whitespace-pre-wrap text-ink-700 dark:text-ink-200"
+						>
+							{safeProfile.description}
+						</p>
 					{/if}
 
 					<div class="flex gap-6 text-sm font-medium">

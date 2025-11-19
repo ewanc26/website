@@ -25,8 +25,12 @@ export function generateMetaTags(meta: SiteMetadata, defaults: SiteMetadata) {
 		{ property: 'og:description', content: finalMeta.description },
 		{ property: 'og:site_name', content: defaults.title }, // always site title for OG
 		{ property: 'og:image', content: finalMeta.image },
-		...(finalMeta.imageWidth ? [{ property: 'og:image:width', content: finalMeta.imageWidth.toString() }] : []),
-		...(finalMeta.imageHeight ? [{ property: 'og:image:height', content: finalMeta.imageHeight.toString() }] : []),
+		...(finalMeta.imageWidth
+			? [{ property: 'og:image:width', content: finalMeta.imageWidth.toString() }]
+			: []),
+		...(finalMeta.imageHeight
+			? [{ property: 'og:image:height', content: finalMeta.imageHeight.toString() }]
+			: []),
 
 		{ name: 'twitter:card', content: 'summary_large_image' },
 		{ name: 'twitter:url', content: finalMeta.url },
