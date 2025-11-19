@@ -2,7 +2,7 @@ import type { RequestHandler } from '@sveltejs/kit';
 
 /**
  * Redirects /favicon.ico to /favicon/favicon.ico
- * 
+ *
  * This handles browsers that request favicon.ico from the root
  * and redirects them to the actual location in the /favicon/ directory.
  */

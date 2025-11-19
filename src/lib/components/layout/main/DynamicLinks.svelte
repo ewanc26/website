@@ -50,9 +50,10 @@
 			{#snippet children()}
 				<div class="text-center">
 					<p class="text-ink-700 dark:text-ink-300">
-						No links available. Create a <code
-							class="rounded bg-canvas-200 px-1 dark:bg-canvas-800">blue.linkat.board</code
-						> record at
+						No links available. Create a <code class="rounded bg-canvas-200 px-1 dark:bg-canvas-800"
+							>blue.linkat.board</code
+						>
+						record at
 						<a
 							href="https://linkat.blue/"
 							class="text-primary-600 hover:underline dark:text-primary-400"

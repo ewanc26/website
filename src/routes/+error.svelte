@@ -48,7 +48,7 @@
 			<div class="text-center">
 				<!-- Large status code number -->
 				<div class="mb-6">
-					<h1 class="text-8xl font-bold text-primary-500 dark:text-primary-400 md:text-9xl">
+					<h1 class="text-8xl font-bold text-primary-500 md:text-9xl dark:text-primary-400">
 						{status}
 					</h1>
 				</div>
@@ -65,7 +65,9 @@
 
 				<!-- Show additional error message if it's different from the description -->
 				{#if errorMessage && errorMessage !== errorDetails.description && status !== 404}
-					<p class="mb-6 rounded-lg bg-canvas-200 p-4 text-sm text-ink-600 dark:bg-canvas-800 dark:text-ink-300">
+					<p
+						class="mb-6 rounded-lg bg-canvas-200 p-4 text-sm text-ink-600 dark:bg-canvas-800 dark:text-ink-300"
+					>
 						{errorMessage}
 					</p>
 				{/if}
@@ -78,7 +80,7 @@
 					>
 						Return to Home
 					</a>
-					
+
 					{#if status !== 404}
 						<button
 							onclick={() => window.location.reload()}

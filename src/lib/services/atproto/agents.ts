@@ -5,31 +5,33 @@ import type { ResolvedIdentity } from './types';
  * Creates an AtpAgent with optional fetch function injection
  */
 export function createAgent(service: string, fetchFn?: typeof fetch): AtpAgent {
-  // If we have an injected fetch, wrap it to ensure we handle headers correctly
-  const wrappedFetch = fetchFn ? async (url: URL | RequestInfo, init?: RequestInit) => {
-    // Convert URL to string if needed
-    const urlStr = url instanceof URL ? url.toString() : url;
-    
-    // Make the request with the injected fetch
-    const response = await fetchFn(urlStr, init);
+	// If we have an injected fetch, wrap it to ensure we handle headers correctly
+	const wrappedFetch = fetchFn
+		? async (url: URL | RequestInfo, init?: RequestInit) => {
+				// Convert URL to string if needed
+				const urlStr = url instanceof URL ? url.toString() : url;
 
-    // Create a new response with the same body but add content-type if missing
-    const headers = new Headers(response.headers);
-    if (!headers.has('content-type')) {
-      headers.set('content-type', 'application/json');
-    }
-    
-    return new Response(response.body, {
-      status: response.status,
-      statusText: response.statusText,
-      headers
-    });
-  } : undefined;
+				// Make the request with the injected fetch
+				const response = await fetchFn(urlStr, init);
 
-  return new AtpAgent({ 
-    service,
-    ...(wrappedFetch && { fetch: wrappedFetch })
-  });
+				// Create a new response with the same body but add content-type if missing
+				const headers = new Headers(response.headers);
+				if (!headers.has('content-type')) {
+					headers.set('content-type', 'application/json');
+				}
+
+				return new Response(response.body, {
+					status: response.status,
+					statusText: response.statusText,
+					headers
+				});
+			}
+		: undefined;
+
+	return new AtpAgent({
+		service,
+		...(wrappedFetch && { fetch: wrappedFetch })
+	});
 }
 
 // Primary Microcosm Constellation endpoint
@@ -62,7 +64,9 @@ export async function resolveIdentity(
 
 	if (!response.ok) {
 		console.error(`[Identity] Resolution failed: ${response.status} ${response.statusText}`);
-		throw new Error(`Failed to resolve identifier via Slingshot: ${response.status} ${response.statusText}`);
+		throw new Error(
+			`Failed to resolve identifier via Slingshot: ${response.status} ${response.statusText}`
+		);
 	}
 
 	// Some fetch implementations in Node (undici wrappers) can throw when calling Response.clone().
@@ -108,9 +112,9 @@ export async function getPublicAgent(did: string, fetchFn?: typeof fetch): Promi
 			console.warn('[Agent] Constellation endpoint unreachable:', constellationErr);
 		}
 
-	// Then try Slingshot for PDS resolution
-	console.info('[Agent] Attempting Slingshot resolution');
-	const resolved = await resolveIdentity(did, fetchFn);
+		// Then try Slingshot for PDS resolution
+		console.info('[Agent] Attempting Slingshot resolution');
+		const resolved = await resolveIdentity(did, fetchFn);
 		console.info(`[Agent] Resolved PDS endpoint: ${resolved.pds}`);
 		resolvedAgent = createAgent(resolved.pds, fetchFn);
 		return resolvedAgent;
@@ -119,7 +123,7 @@ export async function getPublicAgent(did: string, fetchFn?: typeof fetch): Promi
 		resolvedAgent = defaultAgent;
 		return resolvedAgent;
 	}
-}/**
+} /**
  * Gets or creates a PDS-specific agent
  */
 export async function getPDSAgent(did: string, fetchFn?: typeof fetch): Promise<AtpAgent> {
@@ -147,9 +151,8 @@ export async function withFallback<T>(
 	usePDSFirst = false,
 	fetchFn?: typeof fetch
 ): Promise<T> {
-	const defaultAgentFn = () => fetchFn 
-		? createAgent('https://public.api.bsky.app', fetchFn) 
-		: Promise.resolve(defaultAgent);
+	const defaultAgentFn = () =>
+		fetchFn ? createAgent('https://public.api.bsky.app', fetchFn) : Promise.resolve(defaultAgent);
 
 	const agents = usePDSFirst
 		? [() => getPDSAgent(did, fetchFn), defaultAgentFn]

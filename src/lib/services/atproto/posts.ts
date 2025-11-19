@@ -17,7 +17,9 @@ import type {
 /**
  * Fetches all Leaflet publications for a user
  */
-export async function fetchLeafletPublications(fetchFn?: typeof fetch): Promise<LeafletPublicationsData> {
+export async function fetchLeafletPublications(
+	fetchFn?: typeof fetch
+): Promise<LeafletPublicationsData> {
 	console.info('[Leaflet] Fetching publications');
 	const cacheKey = `leaflet:publications:${PUBLIC_ATPROTO_DID}`;
 	const cached = cache.get<LeafletPublicationsData>(cacheKey);
@@ -134,7 +136,7 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsD
 	// Fetch Leaflet publications and documents
 	try {
 		// Get all publications first
-	const publicationsData = await fetchLeafletPublications(fetchFn);
+		const publicationsData = await fetchLeafletPublications(fetchFn);
 		const publicationsMap = new Map<string, LeafletPublication>();
 		for (const pub of publicationsData.publications) {
 			publicationsMap.set(pub.uri, pub);
@@ -156,26 +158,26 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsD
 		);
 
 		for (const record of leafletDocsRecords) {
-		const value = record.value as any;
-		const rkey = record.uri.split('/').pop() || '';
-		const publicationUri = value.publication;
-		const publication = publicationsMap.get(publicationUri);
+			const value = record.value as any;
+			const rkey = record.uri.split('/').pop() || '';
+			const publicationUri = value.publication;
+			const publication = publicationsMap.get(publicationUri);
 
-		// Determine URL based on priority: publication base_path → Leaflet /lish format
-		let url: string;
-		const publicationRkey = publicationUri ? publicationUri.split('/').pop() : '';
+			// Determine URL based on priority: publication base_path → Leaflet /lish format
+			let url: string;
+			const publicationRkey = publicationUri ? publicationUri.split('/').pop() : '';
 
-		if (publication?.basePath) {
-		// Ensure basePath is a complete URL
-		 const basePath = publication.basePath.startsWith('http') 
-		 ? publication.basePath 
-		 : `https://${publication.basePath}`;
-		url = `${basePath}/${rkey}`;
-		} else if (publicationRkey) {
-		url = `https://leaflet.pub/lish/${PUBLIC_ATPROTO_DID}/${publicationRkey}/${rkey}`;
-		} else {
-		url = `https://leaflet.pub/${PUBLIC_ATPROTO_DID}/${rkey}`;
-		}
+			if (publication?.basePath) {
+				// Ensure basePath is a complete URL
+				const basePath = publication.basePath.startsWith('http')
+					? publication.basePath
+					: `https://${publication.basePath}`;
+				url = `${basePath}/${rkey}`;
+			} else if (publicationRkey) {
+				url = `https://leaflet.pub/lish/${PUBLIC_ATPROTO_DID}/${publicationRkey}/${rkey}`;
+			} else {
+				url = `https://leaflet.pub/${PUBLIC_ATPROTO_DID}/${rkey}`;
+			}
 
 			posts.push({
 				title: value.title || 'Untitled Document',
@@ -240,12 +242,12 @@ export async function fetchLatestBlueskyPost(fetchFn?: typeof fetch): Promise<Bl
 		const latestFeedItem = feed[0];
 		const latestPostData = latestFeedItem.post;
 		console.log('[fetchLatestBlueskyPost] Found latest feed item:', latestPostData.uri);
-		
+
 		// Check if this is a repost
 		const isRepost = latestFeedItem.reason?.$type === 'app.bsky.feed.defs#reasonRepost';
 		let repostAuthor: PostAuthor | undefined;
 		let repostCreatedAt: string | undefined;
-		
+
 		if (isRepost && latestFeedItem.reason) {
 			const reason = latestFeedItem.reason as any;
 			repostAuthor = {
@@ -257,15 +259,15 @@ export async function fetchLatestBlueskyPost(fetchFn?: typeof fetch): Promise<Bl
 			repostCreatedAt = reason.indexedAt;
 			console.log('[fetchLatestBlueskyPost] This is a repost by:', repostAuthor.handle);
 		}
-		
+
 		// Fetch the full post data
 		const post = await fetchPostFromUri(latestPostData.uri, 0, fetchFn);
-		
+
 		if (!post) {
 			console.warn('[fetchLatestBlueskyPost] fetchPostFromUri returned null');
 			return null;
 		}
-		
+
 		// Add repost context if applicable
 		if (isRepost) {
 			post.isRepost = true;
@@ -288,8 +290,8 @@ export async function fetchLatestBlueskyPost(fetchFn?: typeof fetch): Promise<Bl
  * Recursively fetches a Bluesky post by URI, supporting quoted posts up to 2 levels deep
  */
 export async function fetchPostFromUri(
-	uri: string, 
-	depth: number, 
+	uri: string,
+	depth: number,
 	fetchFn?: typeof fetch
 ): Promise<BlueskyPost | null> {
 	console.log(`[fetchPostFromUri] Starting fetch at depth ${depth} for URI:`, uri);
@@ -406,7 +408,10 @@ export async function fetchPostFromUri(
 
 			// Extract images from media
 			if (media?.$type === 'app.bsky.embed.images#view' && Array.isArray(media.images)) {
-				console.log(`[fetchPostFromUri] Processing images in recordWithMedia, count:`, media.images.length);
+				console.log(
+					`[fetchPostFromUri] Processing images in recordWithMedia, count:`,
+					media.images.length
+				);
 				hasImages = true;
 				imageUrls = [];
 				imageAlts = [];
@@ -455,13 +460,13 @@ export async function fetchPostFromUri(
 			const quotedRecord = embed.record?.record || embed.record;
 			console.log(`[fetchPostFromUri] Quoted record in recordWithMedia:`, quotedRecord?.uri);
 			if (quotedRecord && typeof quotedRecord.uri === 'string') {
-					quotedPostUri = quotedRecord.uri;
-					console.log(
-						`[fetchPostFromUri] Recursively fetching quoted post at depth ${depth + 1}:`,
-						quotedPostUri
-					);
-					if (quotedPostUri) {
-						quotedPost = (await fetchPostFromUri(quotedPostUri, depth + 1, fetchFn)) ?? undefined;
+				quotedPostUri = quotedRecord.uri;
+				console.log(
+					`[fetchPostFromUri] Recursively fetching quoted post at depth ${depth + 1}:`,
+					quotedPostUri
+				);
+				if (quotedPostUri) {
+					quotedPost = (await fetchPostFromUri(quotedPostUri, depth + 1, fetchFn)) ?? undefined;
 					console.log(`[fetchPostFromUri] Quoted post fetched:`, quotedPost ? 'success' : 'failed');
 				}
 			}
@@ -491,7 +496,8 @@ export async function fetchPostFromUri(
 		if (value.reply) {
 			console.log(`[fetchPostFromUri] Post is a reply, fetching parent...`);
 			if (value.reply.parent?.uri) {
-				replyParent = (await fetchPostFromUri(value.reply.parent.uri, depth + 1, fetchFn)) ?? undefined;
+				replyParent =
+					(await fetchPostFromUri(value.reply.parent.uri, depth + 1, fetchFn)) ?? undefined;
 			}
 			if (value.reply.root?.uri && value.reply.root.uri !== value.reply.parent?.uri) {
 				replyRoot = (await fetchPostFromUri(value.reply.root.uri, depth + 1, fetchFn)) ?? undefined;
@@ -501,7 +507,7 @@ export async function fetchPostFromUri(
 		// Get engagement data from Constellation as a fallback
 		let finalLikeCount = postData.likeCount;
 		let finalRepostCount = postData.repostCount;
-		
+
 		try {
 			const [likers, reposters] = await Promise.all([
 				fetchAllEngagement(postData.uri, 'app.bsky.feed.like'),

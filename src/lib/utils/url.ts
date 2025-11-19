@@ -44,7 +44,7 @@ export function getBlueskyProfileUrl(actor: string): string {
  */
 export function isExternalUrl(url: string): boolean {
 	if (typeof window === 'undefined') return true;
-	
+
 	try {
 		const urlObj = new URL(url, window.location.href);
 		return urlObj.origin !== window.location.origin;

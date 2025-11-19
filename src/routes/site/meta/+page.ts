@@ -4,23 +4,23 @@ import { createSiteMeta, type SiteMetadata, defaultSiteMeta } from '$lib/helper/
 import { ogImages } from '$lib/helper/ogImages';
 
 export const load: PageLoad = async ({ parent, fetch }) => {
-  const { siteMeta } = await parent();
+	const { siteMeta } = await parent();
 
-  let siteInfo: SiteInfoData | null = null;
-  let error: string | null = null;
+	let siteInfo: SiteInfoData | null = null;
+	let error: string | null = null;
 
-    try {
-    siteInfo = await fetchSiteInfo(fetch);
-  } catch (err) {
-    error = err instanceof Error ? err.message : 'Failed to load site information';
-  }
+	try {
+		siteInfo = await fetchSiteInfo(fetch);
+	} catch (err) {
+		error = err instanceof Error ? err.message : 'Failed to load site information';
+	}
 
-  const meta: SiteMetadata = createSiteMeta({
-    ...siteMeta,
-    title: `Site Meta - ${defaultSiteMeta.title}`,
-    description: 'Information about this website, its technology stack, and credits.',
-    image: ogImages.siteMeta,
-  });
+	const meta: SiteMetadata = createSiteMeta({
+		...siteMeta,
+		title: `Site Meta - ${defaultSiteMeta.title}`,
+		description: 'Information about this website, its technology stack, and credits.',
+		image: ogImages.siteMeta
+	});
 
-  return { siteInfo, error, meta };
+	return { siteInfo, error, meta };
 };

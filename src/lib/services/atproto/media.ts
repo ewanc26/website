@@ -28,11 +28,7 @@ export function extractCidFromImageObject(img: any): string | null {
  *   and nested structures.
  * - also detects 'app.bsky.embed.video' shapes and returns the video blob URL first
  */
-export function extractImageUrlsFromValue(
-	value: any,
-	did: string,
-	limit = 4
-): string[] {
+export function extractImageUrlsFromValue(value: any, did: string, limit = 4): string[] {
 	const urls: string[] = [];
 
 	try {
@@ -93,7 +89,10 @@ export function extractImageUrlsFromValue(
 				}
 
 				// Video in recordWithMedia
-				if (media && (media.$type === 'app.bsky.embed.video#view' || media.$type === 'app.bsky.embed.video')) {
+				if (
+					media &&
+					(media.$type === 'app.bsky.embed.video#view' || media.$type === 'app.bsky.embed.video')
+				) {
 					const videoCid = (media as any)?.video?.ref?.$link ?? (media as any)?.video?.cid ?? null;
 					if (videoCid) {
 						const videoUrl = `https://video.bsky.app/watch/${did}/${videoCid}/playlist.m3u8`;
@@ -146,7 +145,11 @@ export function extractImageUrlsFromValue(
 				}
 
 				if (e.$type === 'app.bsky.embed.video#view' || e.$type === 'app.bsky.embed.video') {
-					const videoCid = (e as any)?.jobStatus?.blob ?? (e as any)?.video?.ref?.$link ?? (e as any)?.video?.cid ?? null;
+					const videoCid =
+						(e as any)?.jobStatus?.blob ??
+						(e as any)?.video?.ref?.$link ??
+						(e as any)?.video?.cid ??
+						null;
 					if (videoCid) {
 						const videoUrl = `https://video.bsky.app/watch/${did}/${videoCid}/playlist.m3u8`;
 						urls.push(videoUrl);
@@ -156,7 +159,11 @@ export function extractImageUrlsFromValue(
 
 				if (e.$type === 'app.bsky.embed.recordWithMedia#view') {
 					const media = e.media;
-					if (media && media.$type === 'app.bsky.embed.images#view' && Array.isArray(media.images)) {
+					if (
+						media &&
+						media.$type === 'app.bsky.embed.images#view' &&
+						Array.isArray(media.images)
+					) {
 						for (const img of media.images) {
 							const imageUrl = img.fullsize || img.thumb;
 							if (imageUrl) {
