@@ -272,7 +272,7 @@
 				<div
 					class="{isReplyParent
 						? 'mb-2'
-						: 'mb-3'} overflow-wrap-anywhere break-words whitespace-pre-wrap text-{isReplyParent
+						: 'mb-3'} overflow-wrap-anywhere wrap-break-word whitespace-pre-wrap text-{isReplyParent
 						? 'sm'
 						: 'base'} leading-relaxed text-ink-900 dark:text-ink-50"
 				>
@@ -361,18 +361,20 @@
 						{/if}
 						<div class="p-3">
 							<h3
-								class="overflow-wrap-anywhere mb-1 line-clamp-2 text-sm font-semibold break-words text-ink-900 dark:text-ink-50"
+								class="overflow-wrap-anywhere mb-1 line-clamp-2 text-sm font-semibold wrap-break-word text-ink-900 dark:text-ink-50"
 							>
 								{postData.externalLink.title}
 							</h3>
 							{#if postData.externalLink.description}
 								<p
-									class="overflow-wrap-anywhere mb-2 line-clamp-2 text-xs break-words text-ink-700 dark:text-ink-300"
+									class="overflow-wrap-anywhere mb-2 line-clamp-2 text-xs wrap-break-word text-ink-700 dark:text-ink-300"
 								>
 									{postData.externalLink.description}
 								</p>
 							{/if}
-							<p class="overflow-wrap-anywhere text-xs break-words text-ink-600 dark:text-ink-400">
+							<p
+								class="overflow-wrap-anywhere text-xs wrap-break-word text-ink-600 dark:text-ink-400"
+							>
 								{new URL(postData.externalLink.uri).hostname}
 							</p>
 						</div>

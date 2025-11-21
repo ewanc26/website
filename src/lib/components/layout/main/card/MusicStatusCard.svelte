@@ -116,7 +116,7 @@
 								href={safeMusicStatus.originUrl || '#'}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="block max-w-full text-lg font-semibold break-words whitespace-normal text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+								class="block max-w-full text-lg font-semibold wrap-break-word whitespace-normal text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
 								class:pointer-events-none={!safeMusicStatus.originUrl}
 								class:cursor-default={!safeMusicStatus.originUrl}
 								class:opacity-70={!safeMusicStatus.originUrl}
@@ -126,7 +126,7 @@
 
 							<!-- Artists -->
 							<p
-								class="mt-1 flex max-w-full items-start gap-1.5 text-base break-words whitespace-normal text-ink-800 dark:text-ink-100"
+								class="mt-1 flex max-w-full items-start gap-1.5 text-base wrap-break-word whitespace-normal text-ink-800 dark:text-ink-100"
 							>
 								<Users class="mt-0.5 h-4 w-4 flex-shrink-0 text-ink-600 dark:text-ink-300" />
 								{formatArtists(safeMusicStatus.artists)}
@@ -135,7 +135,7 @@
 							<!-- Album + Duration -->
 							{#if safeMusicStatus.releaseName}
 								<p
-									class="mt-1 flex max-w-full items-start gap-1.5 text-sm break-words whitespace-normal text-ink-700 dark:text-ink-200"
+									class="mt-1 flex max-w-full items-start gap-1.5 text-sm wrap-break-word whitespace-normal text-ink-700 dark:text-ink-200"
 								>
 									<Album class="mt-0.5 h-4 w-4 flex-shrink-0 text-ink-500 dark:text-ink-400" />
 									<span>

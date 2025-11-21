@@ -33,14 +33,14 @@
 		{/if}
 
 		<!-- Title -->
-		<h4 class="overflow-wrap-anywhere font-semibold break-words text-ink-900 dark:text-ink-50">
+		<h4 class="overflow-wrap-anywhere font-semibold wrap-break-word text-ink-900 dark:text-ink-50">
 			{post.title}
 		</h4>
 
 		<!-- Description -->
 		{#if post.description}
 			<p
-				class="overflow-wrap-anywhere line-clamp-2 text-sm break-words text-ink-700 dark:text-ink-200"
+				class="overflow-wrap-anywhere line-clamp-2 text-sm wrap-break-word text-ink-700 dark:text-ink-200"
 			>
 				{post.description}
 			</p>
