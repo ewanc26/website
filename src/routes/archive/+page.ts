@@ -1,30 +1,18 @@
 import type { PageLoad } from './$types';
 import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
-import { withFallback } from '$lib/services/atproto/agents';
+import { fetchAllUserRecords } from '$lib/services/atproto/pagination';
 import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 import type { BlogPost } from '$lib/services/atproto';
 
 /**
- * Fetches ALL blog posts from WhiteWind and Leaflet (no limit)
+ * Fetches ALL blog posts from WhiteWind and Leaflet with proper pagination
  */
 async function fetchAllBlogPosts(fetchFn?: typeof fetch): Promise<BlogPost[]> {
 	const posts: BlogPost[] = [];
 
-	// Fetch WhiteWind posts
+	// Fetch WhiteWind posts with pagination
 	try {
-		const whiteWindRecords = await withFallback(
-			PUBLIC_ATPROTO_DID,
-			async (agent) => {
-				const response = await agent.com.atproto.repo.listRecords({
-					repo: PUBLIC_ATPROTO_DID,
-					collection: 'com.whtwnd.blog.entry',
-					limit: 100
-				});
-				return response.data.records;
-			},
-			true,
-			fetchFn
-		);
+		const whiteWindRecords = await fetchAllUserRecords('com.whtwnd.blog.entry', fetchFn);
 
 		for (const record of whiteWindRecords) {
 			const value = record.value as any;
@@ -46,22 +34,10 @@ async function fetchAllBlogPosts(fetchFn?: typeof fetch): Promise<BlogPost[]> {
 		console.warn('Failed to fetch WhiteWind posts:', error);
 	}
 
-	// Fetch Leaflet publications and documents
+	// Fetch Leaflet publications and documents with pagination
 	try {
-		// Get all publications first
-		const publicationsRecords = await withFallback(
-			PUBLIC_ATPROTO_DID,
-			async (agent) => {
-				const response = await agent.com.atproto.repo.listRecords({
-					repo: PUBLIC_ATPROTO_DID,
-					collection: 'pub.leaflet.publication',
-					limit: 100
-				});
-				return response.data.records;
-			},
-			true,
-			fetchFn
-		);
+		// Fetch all publications
+		const publicationsRecords = await fetchAllUserRecords('pub.leaflet.publication', fetchFn);
 
 		const publicationsMap = new Map<string, { name: string; basePath?: string }>();
 		for (const pubRecord of publicationsRecords) {
@@ -73,19 +49,7 @@ async function fetchAllBlogPosts(fetchFn?: typeof fetch): Promise<BlogPost[]> {
 		}
 
 		// Fetch all Leaflet documents
-		const leafletDocsRecords = await withFallback(
-			PUBLIC_ATPROTO_DID,
-			async (agent) => {
-				const response = await agent.com.atproto.repo.listRecords({
-					repo: PUBLIC_ATPROTO_DID,
-					collection: 'pub.leaflet.document',
-					limit: 100
-				});
-				return response.data.records;
-			},
-			true,
-			fetchFn
-		);
+		const leafletDocsRecords = await fetchAllUserRecords('pub.leaflet.document', fetchFn);
 
 		for (const record of leafletDocsRecords) {
 			const value = record.value as any;
