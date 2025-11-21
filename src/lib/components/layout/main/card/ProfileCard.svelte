@@ -109,7 +109,7 @@
 
 					{#if safeProfile.description}
 						<p
-							class="overflow-wrap-anywhere wrap-wrap-break-word mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-200"
+							class="mb-4 wrap-break-words break-all whitespace-pre-wrap text-ink-700 dark:text-ink-200"
 						>
 							{safeProfile.description}
 						</p>
