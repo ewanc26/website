@@ -75,7 +75,9 @@
 			{/if}
 
 			<!-- 👇 Title is always below the badges -->
-			<h3 class="overflow-wrap-anywhere font-semibold wrap-break-word text-ink-900 dark:text-ink-50">
+			<h3
+				class="overflow-wrap-anywhere font-semibold wrap-break-word text-ink-900 dark:text-ink-50"
+			>
 				{title}
 			</h3>
 
