@@ -101,6 +101,7 @@
 		"optimisation",
 		"Optimised",
 		"organisation",
+		"organised",
 		"pdsurl",
 		"Personalising",
 		"pids",
@@ -149,12 +150,22 @@
 		"xrpc"
 	],
 	"flagWords": [],
-	"ignorePaths": ["node_modules", "package-lock.json", "dist", "build"],
-	"ignoreRegExpList": ["/(\\w+)'s/g"],
+	"ignorePaths": [
+		"node_modules",
+		"package-lock.json",
+		"dist",
+		"build"
+	],
+	"ignoreRegExpList": [
+		"/(\\w+)'s/g"
+	],
 	"overrides": [
 		{
 			"filename": "**/*.svelte",
-			"ignoreRegExpList": ["/>.*</", "/(\\w+)'s/g"]
+			"ignoreRegExpList": [
+				"/>.*</",
+				"/(\\w+)'s/g"
+			]
 		}
 	]
 }
