@@ -111,7 +111,7 @@
 
 <div class="mx-auto max-w-4xl">
 	<!-- Page Header -->
-	<div class="mb-8">
+	<div class="mb-8 text-center">
 		<h1 class="mb-4 text-4xl font-bold text-ink-900 md:text-5xl dark:text-ink-50">Archive</h1>
 		<p class="text-lg text-ink-700 dark:text-ink-200">
 			Browse all {data.allPosts.length} blog posts from WhiteWind and Leaflet, organised by date.
