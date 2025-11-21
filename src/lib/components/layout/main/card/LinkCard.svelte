@@ -42,7 +42,7 @@
 >
 	{#if variant === 'button'}
 		<span class="font-medium">{title}</span>
-		<ExternalLink class="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+		<ExternalLink class="h-4 w-4 shrink-0" aria-hidden="true" />
 	{:else}
 		<div class="flex-1 space-y-1">
 			{#if emoji || (badges && badges.length > 0)}
@@ -75,13 +75,13 @@
 			{/if}
 
 			<!-- 👇 Title is always below the badges -->
-			<h3 class="overflow-wrap-anywhere font-semibold break-words text-ink-900 dark:text-ink-50">
+			<h3 class="overflow-wrap-anywhere font-semibold wrap-break-word text-ink-900 dark:text-ink-50">
 				{title}
 			</h3>
 
 			{#if displayDescription}
 				<p
-					class="overflow-wrap-anywhere line-clamp-2 text-sm break-words text-ink-700 dark:text-ink-200"
+					class="overflow-wrap-anywhere line-clamp-2 text-sm wrap-break-word text-ink-700 dark:text-ink-200"
 				>
 					{displayDescription}
 				</p>
@@ -95,7 +95,7 @@
 		</div>
 
 		<ExternalLink
-			class="h-4 w-4 flex-shrink-0 text-ink-700 transition-colors group-hover:text-primary-600 dark:text-ink-200 dark:group-hover:text-primary-400"
+			class="h-4 w-4 shrink-0 text-ink-700 transition-colors group-hover:text-primary-600 dark:text-ink-200 dark:group-hover:text-primary-400"
 			aria-hidden="true"
 		/>
 	{/if}

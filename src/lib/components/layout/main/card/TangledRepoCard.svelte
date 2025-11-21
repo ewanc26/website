@@ -41,7 +41,9 @@
 			aria-hidden="true"
 		/>
 		<div class="flex min-w-0 flex-1 flex-col gap-1">
-			<h3 class="overflow-wrap-anywhere font-semibold break-words text-ink-900 dark:text-ink-50">
+			<h3
+				class="overflow-wrap-anywhere font-semibold wrap-break-word text-ink-900 dark:text-ink-50"
+			>
 				{repo.name}
 			</h3>
 			<div class="flex flex-wrap items-center gap-3 text-xs text-ink-700 dark:text-ink-200">
