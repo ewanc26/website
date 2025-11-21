@@ -72,7 +72,7 @@
 							loading="lazy"
 						/>
 					{:else}
-						<div class="h-full w-full bg-gradient-to-r from-primary-400 to-secondary-400"></div>
+						<div class="h-full w-full bg-linear-to-r from-primary-400 to-secondary-400"></div>
 					{/if}
 				</div>
 
@@ -109,7 +109,7 @@
 
 					{#if safeProfile.description}
 						<p
-							class="overflow-wrap-anywhere mb-4 break-words whitespace-pre-wrap text-ink-700 dark:text-ink-200"
+							class="overflow-wrap-anywhere wrap-break-words mb-4 whitespace-pre-wrap text-ink-700 dark:text-ink-200"
 						>
 							{safeProfile.description}
 						</p>
