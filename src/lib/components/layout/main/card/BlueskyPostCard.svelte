@@ -192,7 +192,7 @@
 {#snippet postContent(postData: BlueskyPost, depth: number = 0, isReplyParent: boolean = false)}
 	<div>
 		<!-- Author Info -->
-		<div class="flex gap-{isReplyParent ? '2' : '3 sm:gap-3'} relative">
+		<div class="relative flex gap-3">
 			{#if isReplyParent}
 				<a
 					href={getProfileUrl(postData.author.handle)}
@@ -252,7 +252,7 @@
 					href={getProfileUrl(postData.author.handle)}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-block {isReplyParent ? 'mb-1' : 'mb-2'} transition-opacity hover:opacity-80"
+					class="mb-2 inline-block transition-opacity hover:opacity-80"
 				>
 					<div class="flex flex-col">
 						<span
@@ -270,11 +270,7 @@
 
 				<!-- Post Text with Rich Text Support -->
 				<div
-					class="{isReplyParent
-						? 'mb-2'
-						: 'mb-3'} overflow-wrap-anywhere wrap-break-word whitespace-pre-wrap text-{isReplyParent
-						? 'sm'
-						: 'base'} leading-relaxed text-ink-900 dark:text-ink-50"
+					class="overflow-wrap-anywhere mb-3 text-base leading-relaxed wrap-break-word whitespace-pre-wrap text-ink-900 dark:text-ink-50"
 				>
 					{@html renderRichText(postData.text, postData.facets)}
 				</div>
@@ -282,9 +278,7 @@
 				<!-- Video -->
 				{#if postData.hasVideo && postData.videoUrl}
 					<div
-						class="{isReplyParent
-							? 'mb-2'
-							: 'mb-3'} max-w-full overflow-hidden rounded-xl border border-canvas-300 bg-black dark:border-canvas-700"
+						class="mb-3 max-w-full overflow-hidden rounded-xl border border-canvas-300 bg-black dark:border-canvas-700"
 					>
 						<video
 							use:setupVideo={postData.videoUrl}
@@ -303,8 +297,7 @@
 				<!-- Images -->
 				{#if postData.hasImages && postData.imageUrls && postData.imageUrls.length > 0}
 					<div
-						class="{isReplyParent ? 'mb-2' : 'mb-3'} grid max-w-full gap-1 {postData.imageUrls
-							.length === 1
+						class="mb-3 grid max-w-full gap-1 {postData.imageUrls.length === 1
 							? 'grid-cols-1'
 							: postData.imageUrls.length === 2
 								? 'grid-cols-2'
@@ -347,9 +340,7 @@
 						href={postData.externalLink.uri}
 						target="_blank"
 						rel="noopener noreferrer"
-						class="{isReplyParent
-							? 'mb-2'
-							: 'mb-3'} flex max-w-full flex-col overflow-hidden rounded-xl border border-canvas-300 bg-canvas-200 transition-colors hover:bg-canvas-300 dark:border-canvas-700 dark:bg-canvas-800 dark:hover:bg-canvas-700"
+						class="mb-3 flex max-w-full flex-col overflow-hidden rounded-xl border border-canvas-300 bg-canvas-200 transition-colors hover:bg-canvas-300 dark:border-canvas-700 dark:bg-canvas-800 dark:hover:bg-canvas-700"
 					>
 						{#if postData.externalLink.thumb}
 							<img
@@ -384,9 +375,7 @@
 				<!-- Recursively render quoted post -->
 				{#if postData.quotedPost && depth < 3}
 					<div
-						class="{isReplyParent
-							? 'mb-2'
-							: 'mb-3'} rounded-xl border border-canvas-300 bg-canvas-200 p-3 dark:border-canvas-700 dark:bg-canvas-800"
+						class="mb-3 rounded-xl border border-canvas-300 bg-canvas-200 p-3 dark:border-canvas-700 dark:bg-canvas-800"
 					>
 						{@render postContent(postData.quotedPost, depth + 1, depth === 0)}
 					</div>
@@ -467,10 +456,10 @@
 		<Card error={true} errorMessage={error} />
 	{:else if post}
 		<article
-			class="rounded-xl bg-canvas-100 p-4 shadow-lg transition-all duration-300 hover:shadow-xl sm:p-6 dark:bg-canvas-900"
+			class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
 		>
 			<!-- Header -->
-			<div class="mb-3 flex items-start justify-between gap-2 sm:mb-4 sm:items-center">
+			<div class="mb-4 flex items-start justify-between gap-2 sm:items-center">
 				<div class="flex min-w-0 flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
 					<span
 						class="text-xs font-semibold tracking-wide whitespace-nowrap text-ink-700 uppercase dark:text-ink-300"
@@ -521,7 +510,7 @@
 			<!-- Reply Context -->
 			{#if post.replyParent}
 				<div
-					class="mb-3 rounded-xl border border-canvas-300 bg-canvas-200 p-2.5 sm:mb-4 sm:p-3 dark:border-canvas-700 dark:bg-canvas-800"
+					class="mb-4 rounded-xl border border-canvas-300 bg-canvas-200 p-3 dark:border-canvas-700 dark:bg-canvas-800"
 				>
 					{@render postContent(post.replyParent, 0, true)}
 				</div>
