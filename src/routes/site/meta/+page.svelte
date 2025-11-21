@@ -18,9 +18,9 @@
 </svelte:head>
 
 <div class="mx-auto max-w-5xl space-y-8">
-	<div class="mb-8">
+	<div class="mb-8 text-center">
 		<h1 class="mb-4 text-4xl font-bold text-ink-900 md:text-5xl dark:text-ink-50">Site Meta</h1>
-		<p class="text-lg text-ink-700 dark:text-ink-300">
+		<p class="text-lg text-ink-700 dark:text-ink-200">
 			Information about this website, its technology, and the people who made it possible.
 		</p>
 	</div>
