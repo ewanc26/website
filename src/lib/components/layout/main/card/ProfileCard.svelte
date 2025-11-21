@@ -27,10 +27,10 @@
 
 <div class="mx-auto w-full max-w-2xl">
 	{#if loading}
-		<Card loading={true} variant="elevated" padding="none">
+		<Card loading={true} variant="elevated" padding="none" class="overflow-hidden">
 			{#snippet skeleton()}
 				<!-- Banner skeleton -->
-				<div class="h-32 w-full bg-canvas-300 dark:bg-canvas-700"></div>
+				<div class="h-32 w-full rounded-t-xl bg-canvas-300 dark:bg-canvas-700"></div>
 
 				<!-- Avatar skeleton -->
 				<div class="relative -mt-16 flex justify-center sm:ml-6 sm:justify-start">

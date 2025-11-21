@@ -165,7 +165,7 @@
 
 			{#if showExternalIcon}
 				<ExternalLink
-					class="h-4 w-4 flex-shrink-0 text-ink-700 transition-colors group-hover:text-primary-600 dark:text-ink-200 dark:group-hover:text-primary-400"
+					class="h-4 w-4 shrink-0 text-ink-700 transition-colors group-hover:text-primary-600 dark:text-ink-200 dark:group-hover:text-primary-400"
 					aria-hidden="true"
 				/>
 			{/if}
