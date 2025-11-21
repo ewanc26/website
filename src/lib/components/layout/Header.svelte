@@ -1,18 +1,22 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { getStores } from '$app/stores';
-	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
-	import { defaultSiteMeta } from '$lib/helper/siteMeta';
-	import type { NavItem } from '$lib/data/navItems';
-	import { navItems } from '$lib/data/navItems';
-	import ThemeToggle from './ThemeToggle.svelte';
-	import WolfToggle from './WolfToggle.svelte';
 	import { Menu, X } from '@lucide/svelte';
 	import * as LucideIcons from '@lucide/svelte';
+	import ThemeToggle from './ThemeToggle.svelte';
+	import WolfToggle from './WolfToggle.svelte';
+	import { navItems } from '$lib/data/navItems';
+	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
+	import { defaultSiteMeta, createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 
 	const siteMeta: SiteMetadata = createSiteMeta(defaultSiteMeta);
 	const { page } = getStores();
 
-	let mobileMenuOpen = $state(false);
+	let profile: ProfileData | null = null;
+	let loading = true;
+	let error: string | null = null;
+	let imageLoaded = false;
+	let mobileMenuOpen = false;
 
 	// Map of icon names to Lucide components
 	let iconComponents: Record<string, any> = {};
@@ -31,28 +35,50 @@
 		mobileMenuOpen = false;
 	}
 
-	// Check if a nav item is active
-	function isActive(href: string): boolean {
+	function isActive(href: string) {
 		return $page.url.pathname === href;
 	}
+
+	onMount(async () => {
+		try {
+			profile = await fetchProfile();
+		} catch (err) {
+			error = err instanceof Error ? err.message : 'Failed to load profile';
+		} finally {
+			loading = false;
+		}
+	});
 </script>
 
-<header
-	class="sticky top-0 z-50 w-full border-b border-canvas-200 bg-canvas-50/90 backdrop-blur-md dark:border-canvas-800 dark:bg-canvas-950/90"
->
-	<nav
-		class="container mx-auto flex items-center justify-between px-3 py-3 sm:px-4 sm:py-4"
-		aria-label="Main navigation"
-	>
-		<!-- Logo/Brand -->
-		<a href="/" class="group flex min-w-0 shrink items-center gap-2" onclick={closeMobileMenu}>
-			<span
-				class="truncate text-lg font-bold text-ink-900 sm:text-xl dark:text-ink-50"
-				style="max-width: clamp(120px, 30vw, 200px);"
-				aria-label="{siteMeta.title} - Home"
-			>
-				{siteMeta.title}
-			</span>
+<header class="sticky top-0 z-50 w-full border-b border-canvas-200 bg-canvas-50/90 backdrop-blur-md dark:border-canvas-800 dark:bg-canvas-950/90">
+	<nav class="container mx-auto flex items-center justify-between px-3 py-3 sm:px-4 sm:py-4" aria-label="Main navigation">
+		<!-- Logo/Avatar with hover title -->
+		<a href="/" class="group flex min-w-0 shrink items-center gap-2 relative" onclick={closeMobileMenu}>
+			<div class="relative flex items-center">
+				{#if profile?.avatar}
+					<img
+						src={profile.avatar}
+						alt={profile.displayName || profile.handle}
+						class="h-10 w-10 rounded-full object-cover"
+						onload={() => (imageLoaded = true)}
+					/>
+				{:else if profile}
+					<div
+						class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-200 text-primary-800 dark:bg-primary-800 dark:text-primary-200 font-bold"
+					>
+						{(profile.displayName || profile.handle).charAt(0).toUpperCase()}
+					</div>
+				{:else}
+					<div class="h-10 w-10 rounded-full bg-canvas-300 dark:bg-canvas-700 animate-pulse"></div>
+				{/if}
+
+				<!-- Site title revealed on hover -->
+				<span
+					class="absolute left-full top-1/2 -translate-y-1/2 ml-2 truncate opacity-0 transition-all duration-300 group-hover:opacity-100 sm:ml-3 text-lg font-bold text-ink-900 dark:text-ink-50"
+				>
+					{siteMeta.title}
+				</span>
+			</div>
 		</a>
 
 		<!-- Desktop Navigation -->
@@ -70,10 +96,7 @@
 							title={item.label}
 						>
 							{#if IconComponent}
-								<IconComponent
-									class="h-5 w-5 transition-transform group-hover:scale-110"
-									aria-hidden="true"
-								/>
+								<IconComponent class="h-5 w-5 transition-transform group-hover:scale-110" aria-hidden="true" />
 							{:else}
 								<div class="flex h-5 w-5 items-center justify-center" aria-hidden="true">
 									<div class="h-3 w-3 animate-pulse rounded-full bg-primary-500"></div>
@@ -90,7 +113,7 @@
 			</div>
 		</div>
 
-		<!-- Mobile Menu Button & Controls -->
+		<!-- Mobile Menu Button -->
 		<div class="flex items-center gap-2 md:hidden">
 			<WolfToggle />
 			<ThemeToggle />
@@ -111,10 +134,7 @@
 
 	<!-- Mobile Menu Dropdown -->
 	{#if mobileMenuOpen}
-		<div
-			class="border-t border-canvas-200 bg-canvas-50 md:hidden dark:border-canvas-800 dark:bg-canvas-950"
-			role="menu"
-		>
+		<div class="border-t border-canvas-200 bg-canvas-50 md:hidden dark:border-canvas-800 dark:bg-canvas-950" role="menu">
 			<ul class="container mx-auto flex flex-col px-3 py-2">
 				{#each navItems as item}
 					{@const IconComponent = iconComponents[item.href]}
@@ -131,9 +151,7 @@
 						>
 							{#if IconComponent}
 								<IconComponent
-									class="h-5 w-5 {isActive(item.href)
-										? 'text-primary-600 dark:text-primary-400'
-										: 'text-ink-600 dark:text-ink-400'}"
+									class="h-5 w-5 {isActive(item.href) ? 'text-primary-600 dark:text-primary-400' : 'text-ink-600 dark:text-ink-400'}"
 									aria-hidden="true"
 								/>
 							{:else}
