@@ -75,9 +75,9 @@
 		{@const safeMusicStatus = musicStatus}
 		<Card variant="elevated" padding="md">
 			{#snippet children()}
-				<div class="flex items-start gap-4">
+				<div class="flex items-start gap-3">
 					<!-- Artwork -->
-					<div class="flex-shrink-0">
+					<div class="shrink-0">
 						{#if safeMusicStatus.artworkUrl && !artworkError}
 							<img
 								src={safeMusicStatus.artworkUrl}
@@ -98,7 +98,7 @@
 					<!-- Info -->
 					<div class="min-w-0 flex-1">
 						<!-- Header (Now Listening / Last Played) -->
-						<div class="mb-2 flex items-center gap-2">
+						<div class="mb-4 flex items-center gap-2">
 							<Music class="h-4 w-4 text-primary-600 dark:text-primary-400" aria-hidden="true" />
 							<span
 								class="text-xs font-semibold tracking-wide text-ink-800 uppercase dark:text-ink-100"
@@ -110,7 +110,7 @@
 						</div>
 
 						<!-- Content -->
-						<div class="mb-2">
+						<div class="mb-4">
 							<!-- Track Name -->
 							<a
 								href={safeMusicStatus.originUrl || '#'}

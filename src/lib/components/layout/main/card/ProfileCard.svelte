@@ -101,7 +101,7 @@
 				</div>
 
 				<!-- Profile Content -->
-				<div class="p-6 pt-2 sm:pt-4">
+				<div class="p-6">
 					<h2 class="text-2xl font-bold text-ink-900 dark:text-ink-50">
 						{safeProfile.displayName || safeProfile.handle}
 					</h2>
