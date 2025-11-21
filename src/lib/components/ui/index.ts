@@ -3,6 +3,7 @@
  */
 
 export { default as Card } from './Card.svelte';
+export { default as InternalCard } from './InternalCard.svelte';
 export { default as Dropdown } from './Dropdown.svelte';
 export { default as Pagination } from './Pagination.svelte';
 export { default as SearchBar } from './SearchBar.svelte';
