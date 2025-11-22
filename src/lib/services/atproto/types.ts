@@ -216,3 +216,10 @@ export interface MusicStatusData {
 	};
 	artworkUrl?: string; // Computed URL for display
 }
+
+export interface KibunStatusData {
+	text: string;
+	emoji: string;
+	createdAt: string;
+	$type: 'social.kibun.status';
+}

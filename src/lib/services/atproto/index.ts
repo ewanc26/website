@@ -29,13 +29,20 @@ export type {
 	ResolvedIdentity,
 	CacheEntry,
 	MusicStatusData,
-	MusicArtist
+	MusicArtist,
+	KibunStatusData
 } from './types';
 
 export type { TangledRepo, TangledReposData } from './tangled';
 
 // Export fetch functions
-export { fetchProfile, fetchSiteInfo, fetchLinks, fetchMusicStatus } from './fetch';
+export {
+	fetchProfile,
+	fetchSiteInfo,
+	fetchLinks,
+	fetchMusicStatus,
+	fetchKibunStatus
+} from './fetch';
 
 export { fetchTangledRepos } from './tangled';
 
