@@ -55,6 +55,14 @@ A modern, feature-rich personal website powered by AT Protocol, built with Svelt
 - **Multi-Service Support**: Works with Last.fm, Spotify, and other scrobbling services
 - **Intelligent Expiry**: Automatically handles expired "now playing" status
 
+### Mood Status (via kibun.social)
+
+- **Current Mood Display**: Show your current mood/feeling via `social.kibun.status`
+- **Emoji Support**: Display expressive emoji alongside mood text
+- **Relative Timestamps**: Show when the mood was last updated
+- **Real-time Updates**: Automatically refreshes to show your latest status
+- **Clean Design**: Simple, elegant card that fits seamlessly with other status cards
+
 ### Developer Tools
 
 - **Tangled Repository Display**: Showcase your code repositories using the `sh.tangled.repo` lexicon
@@ -125,9 +133,9 @@ Map friendly URLs to your Leaflet publications:
 
 ```typescript
 export const slugMappings: SlugMapping[] = [
-	{ slug: 'blog', publicationRkey: '3m3x4bgbsh22k' },
-	{ slug: 'essays', publicationRkey: 'abc123xyz' },
-	{ slug: 'notes', publicationRkey: 'def456uvw' }
+  { slug: 'blog', publicationRkey: '3m3x4bgbsh22k' },
+  { slug: 'essays', publicationRkey: 'abc123xyz' },
+  { slug: 'notes', publicationRkey: 'def456uvw' }
 ];
 ```
 
@@ -251,11 +259,11 @@ The application includes a comprehensive AT Protocol service layer in `src/lib/s
 
 ```typescript
 import {
-	fetchProfile,
-	fetchBlogPosts,
-	fetchLatestBlueskyPost,
-	fetchMusicStatus,
-	fetchTangledRepos
+  fetchProfile,
+  fetchBlogPosts,
+  fetchLatestBlueskyPost,
+  fetchMusicStatus,
+  fetchTangledRepos
 } from '$lib/services/atproto';
 
 // Fetch profile data
@@ -284,14 +292,14 @@ Publications are mapped to URL slugs in `src/lib/config/slugs.ts`:
 
 ```typescript
 export const slugMappings: SlugMapping[] = [
-	{
-		slug: 'blog', // Access via /blog
-		publicationRkey: '3m3x4bgbsh22k' // Leaflet publication rkey
-	},
-	{
-		slug: 'notes', // Access via /notes
-		publicationRkey: 'xyz123abc'
-	}
+  {
+     slug: 'blog', // Access via /blog
+     publicationRkey: '3m3x4bgbsh22k' // Leaflet publication rkey
+  },
+  {
+     slug: 'notes', // Access via /notes
+     publicationRkey: 'xyz123abc'
+  }
 ];
 ```
 
@@ -489,6 +497,10 @@ Display a collection of links with emoji icons.
 
 Show music listening activity via teal.fm integration.
 
+### Mood Status (`social.kibun.status`)
+
+Display your current mood or feeling via kibun.social integration.
+
 ### Tangled Repositories (`sh.tangled.repo`)
 
 Display code repositories with descriptions, labels, and metadata.
@@ -537,6 +549,7 @@ This project is open-source. See the [LICENSE](./LICENSE) file for more details 
 - [WhiteWind](https://whtwnd.com/)
 - [Leaflet](https://leaflet.pub/)
 - [teal.fm](https://teal.fm/)
+- [kibun.social](https://kibun.social/)
 - [MusicBrainz](https://musicbrainz.org/)
 - [Tangled](https://tangled.sh/)
 - [Linkat](https://linkat.blue/)
@@ -604,7 +617,7 @@ If your music status doesn't show album artwork:
 ## 🙏 Acknowledgements
 
 - Thanks to the AT Protocol team for creating an open, decentralized protocol
-- Thanks to the Bluesky, WhiteWind, Leaflet, teal.fm, Tangled, and Linkat teams
+- Thanks to the Bluesky, WhiteWind, Leaflet, teal.fm, kibun.social, Tangled, and Linkat teams
 - Thanks to MusicBrainz for providing free album artwork via the Cover Art Archive
 - Inspired by the personal-web movement and IndieWeb principles
 - Built with love using modern web technologies
