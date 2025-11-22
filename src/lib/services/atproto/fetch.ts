@@ -1,7 +1,14 @@
 import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 import { cache } from './cache';
 import { withFallback, resolveIdentity } from './agents';
-import type { ProfileData, StatusData, SiteInfoData, LinkData, MusicStatusData } from './types';
+import type {
+	ProfileData,
+	StatusData,
+	SiteInfoData,
+	LinkData,
+	MusicStatusData,
+	KibunStatusData
+} from './types';
 import { buildPdsBlobUrl } from './media';
 import { findArtwork } from './musicbrainz';
 
@@ -336,6 +343,58 @@ export async function fetchMusicStatus(fetchFn?: typeof fetch): Promise<MusicSta
 		return null;
 	} catch (error) {
 		console.error('[MusicStatus] Failed to fetch music status from all sources:', error);
+		return null;
+	}
+}
+
+/**
+ * Fetches Kibun status from social.kibun.status collection
+ */
+export async function fetchKibunStatus(fetchFn?: typeof fetch): Promise<KibunStatusData | null> {
+	console.info('[KibunStatus] Fetching kibun status data');
+	const cacheKey = `kibun-status:${PUBLIC_ATPROTO_DID}`;
+	const cached = cache.get<KibunStatusData>(cacheKey);
+	if (cached) {
+		console.debug('[KibunStatus] Returning cached kibun status data');
+		return cached;
+	}
+
+	try {
+		console.info('[KibunStatus] Cache miss, fetching from network');
+
+		const statusRecords = await withFallback(
+			PUBLIC_ATPROTO_DID,
+			async (agent) => {
+				const response = await agent.com.atproto.repo.listRecords({
+					repo: PUBLIC_ATPROTO_DID,
+					collection: 'social.kibun.status',
+					limit: 1
+				});
+				return response.data.records;
+			},
+			true,
+			fetchFn
+		);
+
+		if (statusRecords && statusRecords.length > 0) {
+			const record = statusRecords[0];
+			const value = record.value as any;
+
+			const data: KibunStatusData = {
+				text: value.text,
+				emoji: value.emoji,
+				createdAt: value.createdAt,
+				$type: 'social.kibun.status'
+			};
+
+			console.info('[KibunStatus] Successfully fetched kibun status');
+			cache.set(cacheKey, data);
+			return data;
+		}
+
+		return null;
+	} catch (error) {
+		console.error('[KibunStatus] Failed to fetch kibun status from all sources:', error);
 		return null;
 	}
 }
