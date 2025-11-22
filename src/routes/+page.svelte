@@ -4,7 +4,8 @@
 		ProfileCard,
 		PostCard,
 		BlueskyPostCard,
-		MusicStatusCard
+		MusicStatusCard,
+		KibunStatusCard
 	} from '$lib/components/layout/main/card';
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 
@@ -38,6 +39,9 @@
 	<div class="columns-1 gap-6 lg:columns-2">
 		<div class="mb-6 break-inside-avoid">
 			<ProfileCard />
+		</div>
+		<div class="mb-6 break-inside-avoid">
+			<KibunStatusCard />
 		</div>
 		<div class="mb-6 break-inside-avoid">
 			<MusicStatusCard />
