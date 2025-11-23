@@ -2,7 +2,7 @@
 
 A modern, feature-rich personal website powered by AT Protocol, built with SvelteKit 2 and Tailwind CSS 4.
 
-> **Note**: This repository contains the source code for [Ewan's Corner](https://ewancroft.uk). The current configuration (environment variables, slug mappings, static files) is specific to that website, but the codebase is designed to be easily adapted for your own AT Protocol-powered site. See the [Configuration](#configuration) section below for details on personalising it for your use.
+> **Note**: This repository contains the source code for [Ewan's Corner](https://ewancroft.uk). The current configuration (environment variables, slug mappings, static files) is specific to that website, but the codebase is designed to be easily adapted for your own AT Protocol-powered site. See [CONFIGURATION.md](./CONFIGURATION.md) for detailed setup instructions.
 
 ## 🌟 Features
 
@@ -95,58 +95,14 @@ A modern, feature-rich personal website powered by AT Protocol, built with Svelt
 
 ## 📋 Configuration
 
-Before using this template, you'll need to update several configuration files with your own information:
+For detailed configuration instructions, see [CONFIGURATION.md](./CONFIGURATION.md).
 
-### Environment Variables (`.env`)
+Quick start:
 
-Create a `.env.local` file with your configuration:
-
-```ini
-# Required: Your AT Protocol DID
-PUBLIC_ATPROTO_DID=did:plc:your-did-here
-
-# Optional: Enable WhiteWind blog support (default: false)
-PUBLIC_ENABLE_WHITEWIND=false
-
-# Optional: Custom domain for Leaflet publications
-PUBLIC_LEAFLET_BASE_PATH=https://blog.example.com
-
-# Optional: Fallback URL for missing blog posts
-PUBLIC_BLOG_FALLBACK_URL=https://archive.example.com/blog
-
-# Site metadata
-PUBLIC_SITE_TITLE="Your Site Title"
-PUBLIC_SITE_DESCRIPTION="Your site description"
-PUBLIC_SITE_KEYWORDS="keywords, separated, by, commas"
-PUBLIC_SITE_URL="https://example.com"
-
-# CORS Configuration (for API endpoints)
-# Comma-separated list of allowed origins for CORS
-# Use "*" to allow all origins (not recommended for production)
-# Example: https://example.com,https://app.example.com
-PUBLIC_CORS_ALLOWED_ORIGINS="https://example.com"
-```
-
-### Publication Slug Mappings (`src/lib/config/slugs.ts`)
-
-Map friendly URLs to your Leaflet publications:
-
-```typescript
-export const slugMappings: SlugMapping[] = [
-  { slug: 'blog', publicationRkey: '3m3x4bgbsh22k' },
-  { slug: 'essays', publicationRkey: 'abc123xyz' },
-  { slug: 'notes', publicationRkey: 'def456uvw' }
-];
-```
-
-### Static Files
-
-Update or remove these files that are specific to the example site:
-
-- `static/robots.txt` - Update the sitemap URL
-- `static/sitemap.xml` - Update with your domain and pages
-- `static/.well-known/*` - Replace with your own well-known files
-- `static/favicon/` - Replace with your branding
+1. Copy `.env.example` to `.env.local` and add your AT Protocol DID
+2. Configure publication slugs in `src/lib/config/slugs.ts`
+3. Update static files (robots.txt, sitemap.xml, favicons)
+4. Run `npm install && npm run dev`
 
 ## 🚀 Getting Started
 
@@ -176,7 +132,7 @@ Update or remove these files that are specific to the example site:
    cp .env .env.local
    ```
 
-   Edit `.env.local` with your settings (see Configuration section above)
+   Edit `.env.local` with your settings (see [CONFIGURATION.md](./CONFIGURATION.md) for details)
 
 4. **Configure publication slugs** in `src/lib/config/slugs.ts`
 
@@ -293,12 +249,12 @@ Publications are mapped to URL slugs in `src/lib/config/slugs.ts`:
 ```typescript
 export const slugMappings: SlugMapping[] = [
   {
-     slug: 'blog', // Access via /blog
-     publicationRkey: '3m3x4bgbsh22k' // Leaflet publication rkey
+    slug: 'blog', // Access via /blog
+    publicationRkey: '3m3x4bgbsh22k' // Leaflet publication rkey
   },
   {
-     slug: 'notes', // Access via /notes
-     publicationRkey: 'xyz123abc'
+    slug: 'notes', // Access via /notes
+    publicationRkey: 'xyz123abc'
   }
 ];
 ```
