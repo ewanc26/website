@@ -38,7 +38,7 @@ export const slugMappings: SlugMapping[] = [
 	{
 		slug: 'creativity',
 		publicationRkey: '3m6afhzlxt22p' // my creativity dump publication rkey
-	},
+	}
 	// Add more mappings as needed:
 	// { slug: 'notes', publicationRkey: 'xyz123abc' },
 	// { slug: 'essays', publicationRkey: 'def456ghi' },
