@@ -163,9 +163,9 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsD
 			const publicationUri = value.publication;
 			const publication = publicationsMap.get(publicationUri);
 
-			// Determine URL based on priority: publication base_path → Leaflet /lish format
+			// Determine URL based on priority: publication base_path → Leaflet /p/[DID]/[rkey] format
 			let url: string;
-			const publicationRkey = publicationUri ? publicationUri.split('/').pop() : '';
+			const publicationRkey = publicationUri ? publicationUri.split('/').pop() : undefined;
 
 			if (publication?.basePath) {
 				// Ensure basePath is a complete URL
@@ -173,10 +173,9 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsD
 					? publication.basePath
 					: `https://${publication.basePath}`;
 				url = `${basePath}/${rkey}`;
-			} else if (publicationRkey) {
-				url = `https://leaflet.pub/lish/${PUBLIC_ATPROTO_DID}/${publicationRkey}/${rkey}`;
 			} else {
-				url = `https://leaflet.pub/${PUBLIC_ATPROTO_DID}/${rkey}`;
+				// Fallback format: https://leaflet.pub/p/[DID]/[rkey]
+				url = `https://leaflet.pub/p/${PUBLIC_ATPROTO_DID}/${rkey}`;
 			}
 
 			posts.push({
@@ -187,7 +186,7 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsD
 				description: value.description,
 				rkey,
 				publicationName: publication?.name,
-				publicationRkey: publicationRkey || undefined
+				publicationRkey
 			});
 		}
 	} catch (error) {
