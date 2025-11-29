@@ -5,5 +5,4 @@ export { default as WolfToggle } from './WolfToggle.svelte';
 export { default as LinkCard } from './main/card/LinkCard.svelte';
 export { default as ProfileCard } from './main/card/ProfileCard.svelte';
 export { default as DynamicLinks } from './main/DynamicLinks.svelte';
-export { default as TangledRepos } from './main/TangledRepos.svelte';
 export { default as ScrollToTop } from './main/ScrollToTop.svelte';
