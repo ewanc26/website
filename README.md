@@ -507,7 +507,7 @@ This project is open-source. See the [LICENSE](./LICENSE) file for more details 
 - [teal.fm](https://teal.fm/)
 - [kibun.social](https://kibun.social/)
 - [MusicBrainz](https://musicbrainz.org/)
-- [Tangled](https://tangled.sh/)
+- [Tangled](https://tangled.org/)
 - [Linkat](https://linkat.blue/)
 
 ## 💡 Tips & Troubleshooting

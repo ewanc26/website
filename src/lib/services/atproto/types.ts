@@ -223,3 +223,18 @@ export interface KibunStatusData {
 	createdAt: string;
 	$type: 'social.kibun.status';
 }
+
+export interface TangledRepo {
+	uri: string;
+	name: string;
+	description?: string;
+	knot: string;
+	createdAt: string;
+	labels?: string[];
+	source?: string;
+	spindle?: string;
+}
+
+export interface TangledReposData {
+	repos: TangledRepo[];
+}
