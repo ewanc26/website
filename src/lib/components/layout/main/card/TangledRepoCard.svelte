@@ -66,14 +66,19 @@
 					{#each safeRepos.repos as repo}
 						<InternalCard href={buildRepoUrl(repo.name)}>
 							{#snippet children()}
-								<GitBranch class="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true" />
+								<GitBranch
+									class="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400"
+									aria-hidden="true"
+								/>
 								<div class="min-w-0 flex-1 space-y-2">
 									<h3
 										class="overflow-wrap-anywhere font-semibold wrap-break-word text-ink-900 dark:text-ink-50"
 									>
 										{repo.name}
 									</h3>
-									<div class="flex flex-wrap items-center gap-3 text-xs text-ink-700 dark:text-ink-200">
+									<div
+										class="flex flex-wrap items-center gap-3 text-xs text-ink-700 dark:text-ink-200"
+									>
 										<div class="flex min-w-0 items-center gap-1">
 											<Server class="h-3 w-3 shrink-0" aria-hidden="true" />
 											<span class="truncate">{getKnotServerName(repo.knot)}</span>
