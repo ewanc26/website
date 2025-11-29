@@ -32,7 +32,7 @@
 </script>
 
 {#if variant === 'button'}
-	<InternalCard href={url} class="!flex-row !items-center !justify-center !gap-2">
+	<InternalCard href={url} class="flex-row! items-center! justify-center! gap-2!">
 		{#snippet children()}
 			<span class="font-medium">{title}</span>
 			<ExternalLink class="h-4 w-4 shrink-0" aria-hidden="true" />

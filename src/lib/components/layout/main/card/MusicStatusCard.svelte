@@ -56,7 +56,7 @@
 		<Card loading={true} variant="elevated" padding="md">
 			{#snippet skeleton()}
 				<div class="mb-3 flex items-start gap-4">
-					<div class="h-20 w-20 flex-shrink-0 rounded-lg bg-canvas-300 dark:bg-canvas-700"></div>
+					<div class="h-20 w-20 shrink-0 rounded-lg bg-canvas-300 dark:bg-canvas-700"></div>
 					<div class="flex-1">
 						<div class="mb-2 flex items-center gap-2">
 							<div class="h-4 w-4 rounded bg-canvas-300 dark:bg-canvas-700"></div>
@@ -129,7 +129,7 @@
 								<p
 									class="mt-1 flex max-w-full items-start gap-1.5 text-base wrap-break-word whitespace-normal text-ink-800 dark:text-ink-100"
 								>
-									<Users class="mt-0.5 h-4 w-4 flex-shrink-0 text-ink-600 dark:text-ink-300" />
+									<Users class="mt-0.5 h-4 w-4 shrink-0 text-ink-600 dark:text-ink-300" />
 									{formatArtists(safeMusicStatus.artists)}
 								</p>
 
@@ -138,7 +138,7 @@
 									<p
 										class="mt-1 flex max-w-full items-start gap-1.5 text-sm wrap-break-word whitespace-normal text-ink-700 dark:text-ink-200"
 									>
-										<Album class="mt-0.5 h-4 w-4 flex-shrink-0 text-ink-500 dark:text-ink-400" />
+										<Album class="mt-0.5 h-4 w-4 shrink-0 text-ink-500 dark:text-ink-400" />
 										<span>
 											{safeMusicStatus.releaseName}
 
