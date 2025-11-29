@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { DynamicLinks, TangledRepos } from '$lib/components/layout';
+	import { DynamicLinks } from '$lib/components/layout';
 	import {
 		ProfileCard,
 		PostCard,
 		BlueskyPostCard,
 		MusicStatusCard,
-		KibunStatusCard
+		KibunStatusCard,
+		TangledRepoCard
 	} from '$lib/components/layout/main/card';
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 
@@ -56,7 +57,7 @@
 			<PostCard />
 		</div>
 		<div class="mb-6 break-inside-avoid">
-			<TangledRepos />
+			<TangledRepoCard />
 		</div>
 	</div>
 </div>

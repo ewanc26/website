@@ -23,10 +23,25 @@
 	{#if loading}
 		<Card loading={true} variant="elevated" padding="md">
 			{#snippet skeleton()}
+				<!-- Title -->
 				<div class="mb-4 h-6 w-20 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+				<!-- Link cards grid -->
 				<div class="grid gap-3 sm:grid-cols-2">
 					{#each Array(4) as _}
-						<div class="h-16 rounded-lg bg-canvas-300 dark:bg-canvas-700"></div>
+						<div class="rounded-lg bg-canvas-200 p-4 dark:bg-canvas-800">
+							<div class="flex items-start justify-between gap-3">
+								<div class="min-w-0 flex-1 space-y-2">
+									<!-- Emoji -->
+									<div class="h-5 w-5 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+									<!-- Title -->
+									<div class="h-5 w-3/4 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+									<!-- Description -->
+									<div class="h-4 w-1/2 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+								</div>
+								<!-- Icon -->
+								<div class="h-4 w-4 shrink-0 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+							</div>
+						</div>
 					{/each}
 				</div>
 			{/snippet}
