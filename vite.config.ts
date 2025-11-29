@@ -9,11 +9,20 @@ export default defineConfig({
 		// Optimize chunk splitting for better caching
 		rollupOptions: {
 			output: {
-				manualChunks: {
-					// Split vendor code into separate chunks
-					'atproto': ['@atproto/api'],
-					'lucide': ['@lucide/svelte'],
-					'hls': ['hls.js']
+				manualChunks: (id) => {
+					// Only chunk client-side code, not SSR externals
+					if (id.includes('node_modules')) {
+						// Lucide icons - client-side only
+						if (id.includes('@lucide/svelte')) {
+							return 'lucide';
+						}
+						// HLS.js - client-side only
+						if (id.includes('hls.js')) {
+							return 'hls';
+						}
+						// Other vendor code
+						return 'vendor';
+					}
 				}
 			}
 		},
@@ -30,8 +39,8 @@ export default defineConfig({
 	},
 	
 	optimizeDeps: {
-		include: ['@atproto/api', '@lucide/svelte', 'hls.js'],
-		exclude: []
+		include: ['@lucide/svelte', 'hls.js'],
+		exclude: ['@atproto/api']
 	},
 	
 	server: {
@@ -39,5 +48,10 @@ export default defineConfig({
 		fs: {
 			strict: true
 		}
+	},
+	
+	ssr: {
+		// Don't externalize these in SSR
+		noExternal: []
 	}
 });
