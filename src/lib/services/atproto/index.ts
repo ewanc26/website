@@ -30,10 +30,10 @@ export type {
 	CacheEntry,
 	MusicStatusData,
 	MusicArtist,
-	KibunStatusData
+	KibunStatusData,
+	TangledRepo,
+	TangledReposData
 } from './types';
-
-export type { TangledRepo, TangledReposData } from './tangled';
 
 // Export fetch functions
 export {
@@ -41,10 +41,9 @@ export {
 	fetchSiteInfo,
 	fetchLinks,
 	fetchMusicStatus,
-	fetchKibunStatus
+	fetchKibunStatus,
+	fetchTangledRepos
 } from './fetch';
-
-export { fetchTangledRepos } from './tangled';
 
 export {
 	fetchBlogPosts,
