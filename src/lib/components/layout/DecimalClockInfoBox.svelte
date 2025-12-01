@@ -11,6 +11,7 @@
 	let { show, onClose }: Props = $props();
 	let mounted = $state(false);
 	let currentTime = $state('00:00');
+	let intervalId: ReturnType<typeof setInterval> | null = null;
 
 	// Update current traditional time for the info box
 	function updateCurrentTime() {
@@ -20,11 +21,34 @@
 		currentTime = `${h}:${m}`;
 	}
 
+	function startInterval() {
+		if (!intervalId) {
+			updateCurrentTime();
+			intervalId = setInterval(updateCurrentTime, 1000);
+		}
+	}
+
+	function stopInterval() {
+		if (intervalId) {
+			clearInterval(intervalId);
+			intervalId = null;
+		}
+	}
+
+	// Watch for show changes
+	$effect(() => {
+		if (show) {
+			startInterval();
+		} else {
+			stopInterval();
+		}
+	});
+
 	onMount(() => {
 		mounted = true;
-		updateCurrentTime();
-		const interval = setInterval(updateCurrentTime, 1000);
-		return () => clearInterval(interval);
+		return () => {
+			stopInterval();
+		};
 	});
 </script>
 
