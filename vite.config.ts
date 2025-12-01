@@ -39,8 +39,7 @@ export default defineConfig({
 	},
 	
 	optimizeDeps: {
-		include: ['@lucide/svelte', 'hls.js'],
-		exclude: ['@atproto/api']
+		include: ['@lucide/svelte', 'hls.js', '@atproto/api']
 	},
 	
 	server: {
