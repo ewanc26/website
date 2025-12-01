@@ -6,6 +6,8 @@
 	let decimalTime = $state({ hours: '00', minutes: '00' });
 	let mounted = $state(false);
 	let showInfoBox = $state(false);
+	let intervalId: ReturnType<typeof setInterval> | null = null;
+	let isVisible = $state(false);
 
 	function updateDecimalTime() {
 		const now = new Date();
@@ -28,14 +30,51 @@
 		decimalTime = { hours, minutes };
 	}
 
+	function startInterval() {
+		if (!intervalId) {
+			intervalId = setInterval(updateDecimalTime, 100);
+		}
+	}
+
+	function stopInterval() {
+		if (intervalId) {
+			clearInterval(intervalId);
+			intervalId = null;
+		}
+	}
+
 	onMount(() => {
 		updateDecimalTime();
 		mounted = true;
 
-		const interval = setInterval(updateDecimalTime, 100);
+		// Use IntersectionObserver to detect when clock is visible
+		const clockElement = document.querySelector('[data-decimal-clock]');
+		if (clockElement) {
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						isVisible = entry.isIntersecting;
+						if (entry.isIntersecting) {
+							updateDecimalTime();
+							startInterval();
+						} else {
+							stopInterval();
+						}
+					});
+				},
+				{ threshold: 0 }
+			);
+
+			observer.observe(clockElement);
+
+			return () => {
+				observer.disconnect();
+				stopInterval();
+			};
+		}
 
 		return () => {
-			clearInterval(interval);
+			stopInterval();
 		};
 	});
 
@@ -50,6 +89,7 @@
 
 <button
 	type="button"
+	data-decimal-clock
 	onclick={toggleInfoBox}
 	class="hidden items-center gap-2 rounded-lg bg-canvas-200 px-3 py-2 text-ink-900 transition-colors hover:bg-canvas-300 md:flex dark:bg-canvas-800 dark:text-ink-50 dark:hover:bg-canvas-700"
 	title="French Revolutionary Decimal Time - Click for info"
