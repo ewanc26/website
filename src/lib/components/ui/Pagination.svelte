@@ -49,30 +49,30 @@
 </script>
 
 {#if totalPages > 1}
-	<div class="mt-12">
-		<div class="flex items-center justify-center gap-2">
+	<nav class="mt-12" aria-label="Pagination navigation">
+		<div class="flex items-center justify-center gap-2" role="navigation">
 			<!-- Previous Button -->
 			<button
 				onclick={() => currentPage > 1 && onPageChange(currentPage - 1)}
 				disabled={currentPage === 1}
-				class="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-canvas-300 bg-canvas-100 text-ink-700 transition-colors hover:bg-canvas-200 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-canvas-100 dark:border-canvas-700 dark:bg-canvas-900 dark:text-ink-200 dark:hover:bg-canvas-800 dark:disabled:hover:bg-canvas-900"
-				aria-label="Previous page"
+				class="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-canvas-300 bg-canvas-100 text-ink-700 transition-colors hover:bg-canvas-200 focus-visible:bg-canvas-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-canvas-100 dark:border-canvas-700 dark:bg-canvas-900 dark:text-ink-200 dark:hover:bg-canvas-800 dark:focus-visible:bg-canvas-800 dark:disabled:hover:bg-canvas-900"
+				aria-label="Go to previous page"
 			>
-				<ChevronLeft class="h-5 w-5" />
+				<ChevronLeft class="h-5 w-5" aria-hidden="true" />
 			</button>
 
 			<!-- Page Numbers -->
 			{#each pageNumbers as page}
 				{#if page === '...'}
-					<span class="px-2 text-ink-500 dark:text-ink-400">...</span>
+					<span class="px-2 text-ink-500 dark:text-ink-400" aria-hidden="true">...</span>
 				{:else}
 					<button
 						onclick={() => onPageChange(page as number)}
-						class="flex h-10 min-w-[2.5rem] items-center justify-center rounded-lg border-2 px-3 font-medium transition-colors {currentPage ===
+						class="flex h-10 min-w-[2.5rem] items-center justify-center rounded-lg border-2 px-3 font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 {currentPage ===
 						page
 							? 'border-primary-500 bg-primary-500 text-white dark:border-primary-400 dark:bg-primary-400'
-							: 'border-canvas-300 bg-canvas-100 text-ink-700 hover:bg-canvas-200 dark:border-canvas-700 dark:bg-canvas-900 dark:text-ink-200 dark:hover:bg-canvas-800'}"
-						aria-label="Page {page}"
+							: 'border-canvas-300 bg-canvas-100 text-ink-700 hover:bg-canvas-200 focus-visible:bg-canvas-200 dark:border-canvas-700 dark:bg-canvas-900 dark:text-ink-200 dark:hover:bg-canvas-800 dark:focus-visible:bg-canvas-800'}"
+						aria-label="Go to page {page}"
 						aria-current={currentPage === page ? 'page' : undefined}
 					>
 						{page}
@@ -84,17 +84,17 @@
 			<button
 				onclick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
 				disabled={currentPage === totalPages}
-				class="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-canvas-300 bg-canvas-100 text-ink-700 transition-colors hover:bg-canvas-200 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-canvas-100 dark:border-canvas-700 dark:bg-canvas-900 dark:text-ink-200 dark:hover:bg-canvas-800 dark:disabled:hover:bg-canvas-900"
-				aria-label="Next page"
+				class="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-canvas-300 bg-canvas-100 text-ink-700 transition-colors hover:bg-canvas-200 focus-visible:bg-canvas-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-canvas-100 dark:border-canvas-700 dark:bg-canvas-900 dark:text-ink-200 dark:hover:bg-canvas-800 dark:focus-visible:bg-canvas-800 dark:disabled:hover:bg-canvas-900"
+				aria-label="Go to next page"
 			>
-				<ChevronRight class="h-5 w-5" />
+				<ChevronRight class="h-5 w-5" aria-hidden="true" />
 			</button>
 		</div>
 
 		<!-- Page Info -->
-		<p class="mt-4 text-center text-sm text-ink-600 dark:text-ink-300">
+		<p class="mt-4 text-center text-sm text-ink-600 dark:text-ink-300" role="status" aria-live="polite" aria-atomic="true">
 			Page {currentPage} of {totalPages} &middot; Showing {startItem}–{endItem} of {totalItems}
 			{totalItems === 1 ? 'item' : 'items'}
 		</p>
-	</div>
+	</nav>
 {/if}

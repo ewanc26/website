@@ -44,14 +44,17 @@
 		<div class="flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-2">
 			<span>&copy; <span>{copyrightText}</span></span>
 			{#if loading}
-				<span>Loading profile…</span>
+				<span role="status" aria-live="polite">Loading profile…</span>
 			{:else if profile}
 				<a
 					href="https://bsky.app/profile/{profile.did}"
-					class="underline hover:text-primary-500 dark:hover:text-primary-400">@{profile.handle}</a
+					class="underline hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Visit {profile.handle}'s Bluesky profile">@{profile.handle}</a
 				>
 			{:else if error}
-				<span>Profile unavailable</span>
+				<span role="alert">Profile unavailable</span>
 			{/if}
 		</div>
 
@@ -60,17 +63,20 @@
 			<span
 				>Powered by <a
 					href="https://atproto.com/guides/glossary#at-protocol"
-					class="underline hover:text-primary-500 dark:hover:text-primary-400">atproto</a
+					class="underline hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
+					target="_blank"
+					rel="noopener noreferrer">atproto</a
 				></span
 			>
 			<a
 				href="https://github.com/ewanc26/website"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="underline hover:text-primary-500 dark:hover:text-primary-400">code</a
+				class="underline hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
+				aria-label="View source code on GitHub">code</a
 			>
 			<!-- Line 3: Version number because why not show it? -->
-			<span>v10.3.0</span>
+			<span aria-label="Version 10.3.0">v10.3.0</span>
 		</div>
 	</div>
 </footer>
