@@ -58,21 +58,25 @@
 		<Card error={true} errorMessage={error} />
 	{:else if profile}
 		{@const safeProfile = profile}
-		<Card variant="elevated" padding="none">
+		<Card variant="elevated" padding="none" ariaLabel="Profile information">
 			{#snippet children()}
 				<!-- Banner -->
 				<div class="relative h-32 w-full overflow-hidden rounded-t-xl">
 					{#if safeProfile.banner}
 						<img
 							src={safeProfile.banner}
-							alt="Profile banner"
+							alt=""
 							class="h-full w-full object-cover opacity-0 transition-opacity duration-300"
 							class:opacity-100={bannerLoaded}
 							onload={() => (bannerLoaded = true)}
 							loading="lazy"
+							role="presentation"
 						/>
 					{:else}
-						<div class="h-full w-full bg-linear-to-r from-primary-400 to-secondary-400"></div>
+						<div
+							class="h-full w-full bg-linear-to-r from-primary-400 to-secondary-400"
+							role="presentation"
+						></div>
 					{/if}
 				</div>
 
@@ -84,7 +88,7 @@
 						{#if safeProfile.avatar}
 							<img
 								src={safeProfile.avatar}
-								alt={safeProfile.displayName || safeProfile.handle}
+								alt="{safeProfile.displayName || safeProfile.handle}'s profile picture"
 								class="h-full w-full object-cover opacity-0 transition-opacity duration-300"
 								class:opacity-100={imageLoaded}
 								onload={() => (imageLoaded = true)}
@@ -93,6 +97,8 @@
 						{:else}
 							<div
 								class="flex h-full w-full items-center justify-center bg-primary-200 text-3xl font-bold text-primary-800 dark:bg-primary-800 dark:text-primary-200"
+								role="img"
+								aria-label="{safeProfile.displayName || safeProfile.handle}'s avatar initials"
 							>
 								{(safeProfile.displayName || safeProfile.handle).charAt(0).toUpperCase()}
 							</div>
@@ -115,20 +121,20 @@
 						</p>
 					{/if}
 
-					<div class="flex gap-6 text-sm font-medium">
-						<div class="flex items-center gap-1">
+					<div class="flex gap-6 text-sm font-medium" role="list" aria-label="Profile statistics">
+						<div class="flex items-center gap-1" role="listitem">
 							<span class="font-bold text-ink-900 dark:text-ink-50">
 								{formatCompactNumber(safeProfile.postsCount, locale)}
 							</span>
 							<span class="text-ink-700 dark:text-ink-200">Posts</span>
 						</div>
-						<div class="flex items-center gap-1">
+						<div class="flex items-center gap-1" role="listitem">
 							<span class="font-bold text-ink-900 dark:text-ink-50">
 								{formatCompactNumber(safeProfile.followersCount, locale)}
 							</span>
 							<span class="text-ink-700 dark:text-ink-200">Followers</span>
 						</div>
-						<div class="flex items-center gap-1">
+						<div class="flex items-center gap-1" role="listitem">
 							<span class="font-bold text-ink-900 dark:text-ink-50">
 								{formatCompactNumber(safeProfile.followsCount, locale)}
 							</span>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { X } from '@lucide/svelte';
+	import { X, Clock } from '@lucide/svelte';
 	import Card from '$lib/components/ui/Card.svelte';
 
 	interface Props {
@@ -9,27 +9,29 @@
 	}
 
 	let { show, onClose }: Props = $props();
-	let ref = $state<HTMLDivElement>();
+	let mounted = $state(false);
+	let currentTime = $state('00:00');
+
+	// Update current traditional time for the info box
+	function updateCurrentTime() {
+		const now = new Date();
+		const h = now.getHours().toString().padStart(2, '0');
+		const m = now.getMinutes().toString().padStart(2, '0');
+		currentTime = `${h}:${m}`;
+	}
 
 	onMount(() => {
-		// Move the modal to body to escape stacking context issues
-		if (ref) {
-			document.body.appendChild(ref);
-		}
-
-		return () => {
-			// Cleanup
-			if (ref && document.body.contains(ref)) {
-				document.body.removeChild(ref);
-			}
-		};
+		mounted = true;
+		updateCurrentTime();
+		const interval = setInterval(updateCurrentTime, 1000);
+		return () => clearInterval(interval);
 	});
 </script>
 
-{#if show}
+{#if show && mounted}
 	<div
-		bind:this={ref}
-		class="fixed inset-0 z-9999 flex items-center justify-center bg-black/70 p-4"
+		class="fixed left-0 top-0 z-9999 flex h-screen w-screen items-center justify-center bg-black/70 p-4"
+		style="position: fixed; margin: 0;"
 		onclick={onClose}
 		onkeydown={(e) => e.key === 'Escape' && onClose()}
 		role="button"
@@ -45,17 +47,13 @@
 			tabindex="-1"
 			class="w-full max-w-2xl"
 		>
-			<Card
-				variant="elevated"
-				padding="lg"
-				class="relative max-h-[90vh] overflow-y-auto"
-			>
+			<Card variant="elevated" padding="lg" class="relative max-h-[90vh] overflow-y-auto">
 				{#snippet children()}
 					<!-- Close button -->
 					<button
 						type="button"
 						onclick={onClose}
-						class="absolute top-4 right-4 rounded-lg p-2 text-ink-600 transition-colors hover:bg-canvas-200 dark:text-ink-400 dark:hover:bg-canvas-800"
+						class="absolute top-4 right-4 rounded-lg p-2 text-ink-600 transition-colors hover:bg-canvas-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:text-ink-400 dark:hover:bg-canvas-800"
 						aria-label="Close"
 					>
 						<X class="h-6 w-6" />
@@ -63,14 +61,18 @@
 
 					<!-- Content -->
 					<div class="space-y-4">
-						<h2 id="decimal-time-title" class="text-2xl font-bold text-ink-900 dark:text-ink-50">
+						<h2
+							id="decimal-time-title"
+							class="text-2xl font-bold text-ink-900 dark:text-ink-50"
+						>
 							French Revolutionary Decimal Time
 						</h2>
 
 						<div class="space-y-3 text-ink-700 dark:text-ink-200">
 							<p>
-								Decimal time was introduced during the French Revolution as part of the metric
-								system. Instead of dividing the day into 24 hours, it uses a base-10 system:
+								Decimal time was introduced during the French Revolution as part of the
+								metric system. Instead of dividing the day into 24 hours, it uses a base-10
+								system:
 							</p>
 
 							<ul class="list-disc space-y-2 pl-6">
@@ -94,6 +96,22 @@
 										<li>1 decimal minute ≈ 1.44 traditional minutes (86.4 seconds)</li>
 										<li>1 decimal second ≈ 0.864 traditional seconds</li>
 									</ul>
+									<div
+										class="mt-3 flex items-center gap-2 border-t border-canvas-300 pt-3 dark:border-canvas-700"
+									>
+										<div class="flex items-center gap-0.5" aria-hidden="true">
+											<Clock class="h-4 w-4 shrink-0 text-ink-600 dark:text-ink-400" />
+											<span class="text-xs font-bold text-secondary-600 dark:text-secondary-400"
+												>24</span
+											>
+										</div>
+										<p class="text-xs font-medium text-ink-600 dark:text-ink-400">
+											Current traditional time: <span
+												class="font-mono font-semibold text-ink-900 dark:text-ink-50"
+												>{currentTime}</span
+											>
+										</p>
+									</div>
 								{/snippet}
 							</Card>
 
@@ -108,7 +126,7 @@
 									href="https://www.youtube.com/watch?v=Ax7AbXfhftE"
 									target="_blank"
 									rel="noopener noreferrer"
-									class="underline hover:text-primary-500 dark:hover:text-primary-400"
+									class="underline hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
 									>"The Longest Softlock in Portal" by Marblr on YouTube</a
 								>.
 							</p>

@@ -81,6 +81,20 @@
 		width: 100%;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+		}
+	}
+
 	body {
 		font-family: var(--font-family-sans);
 		text-rendering: optimizeLegibility;
@@ -91,10 +105,38 @@
 		max-width: 100vw;
 	}
 
-	/* Focus visible styles for accessibility */
-	*:focus-visible {
-		outline: 2px solid var(--color-primary-600);
+	/* Skip to content link for keyboard navigation */
+	.skip-to-content {
+		position: absolute;
+		left: -9999px;
+		z-index: 999;
+		padding: 1rem 1.5rem;
+		background-color: var(--color-primary-600);
+		color: white;
+		font-weight: 600;
+		text-decoration: none;
+		border-radius: 0.5rem;
+	}
+
+	.skip-to-content:focus {
+		left: 1rem;
+		top: 1rem;
+		outline: 2px solid var(--color-primary-800);
 		outline-offset: 2px;
+	}
+
+	/* Focus visible styles for accessibility - Enhanced for better visibility */
+	*:focus-visible {
+		outline: 3px solid var(--color-primary-600);
+		outline-offset: 2px;
+		border-radius: 0.25rem;
+	}
+
+	/* High contrast mode support */
+	@media (prefers-contrast: high) {
+		*:focus-visible {
+			outline-width: 4px;
+		}
 	}
 
 	/* Ensure all elements stay within viewport */
@@ -109,6 +151,29 @@
 	object {
 		max-width: 100%;
 		height: auto;
+	}
+
+	/* Improve link accessibility */
+	a {
+		text-decoration-skip-ink: auto;
+	}
+
+	/* Better button accessibility */
+	button:disabled {
+		cursor: not-allowed;
+	}
+
+	/* Screen reader only utility */
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border-width: 0;
 	}
 }
 
