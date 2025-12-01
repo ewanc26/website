@@ -5,6 +5,7 @@
 	import * as LucideIcons from '@lucide/svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import WolfToggle from './WolfToggle.svelte';
+	import DecimalClock from './DecimalClock.svelte';
 	import { navItems } from '$lib/data/navItems';
 	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
 	import { defaultSiteMeta, createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
@@ -119,6 +120,7 @@
 					</li>
 				{/each}
 			</ul>
+			<DecimalClock />
 			<div class="flex items-center gap-2">
 				<WolfToggle />
 				<ThemeToggle />
