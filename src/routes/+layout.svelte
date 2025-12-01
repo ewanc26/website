@@ -83,7 +83,7 @@
 >
 	<Header />
 
-	<main class="container mx-auto grow px-4 py-8">
+	<main id="main-content" class="container mx-auto grow px-4 py-8" tabindex="-1">
 		<ScrollToTop />
 		{@render children()}
 	</main>
