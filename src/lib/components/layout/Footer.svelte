@@ -69,6 +69,8 @@
 				rel="noopener noreferrer"
 				class="underline hover:text-primary-500 dark:hover:text-primary-400">code</a
 			>
+			<!-- Line 3: Version number because why not show it? -->
+			<span>v10.3.0</span>
 		</div>
 	</div>
 </footer>
