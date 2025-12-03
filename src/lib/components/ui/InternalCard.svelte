@@ -29,7 +29,7 @@
 	}: Props = $props();
 
 	const baseClasses =
-		'flex items-start gap-3 rounded-lg bg-canvas-200 p-4 transition-colors hover:bg-canvas-300 dark:bg-canvas-800 dark:hover:bg-canvas-700';
+		'flex items-start gap-3 rounded-lg bg-canvas-200 p-4 transition-colors hover:bg-canvas-300 dark:bg-canvas-800 dark:hover:bg-canvas-700 self-start';
 	const combinedClasses = `${baseClasses} ${customClass}`;
 </script>
 
