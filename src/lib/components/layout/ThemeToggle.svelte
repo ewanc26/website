@@ -10,7 +10,7 @@
 		const stored = localStorage.getItem('theme');
 		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-		isDark = stored === 'dark' || (!stored && prefersDark);
+		isDark = stored === 'light' || (!stored && !prefersDark);
 		updateTheme();
 		mounted = true;
 
@@ -33,17 +33,17 @@
 		const htmlElement = document.documentElement;
 
 		if (isDark) {
-			htmlElement.classList.add('dark');
-			htmlElement.style.colorScheme = 'dark';
-		} else {
 			htmlElement.classList.remove('dark');
 			htmlElement.style.colorScheme = 'light';
+		} else {
+			htmlElement.classList.add('dark');
+			htmlElement.style.colorScheme = 'dark';
 		}
 	}
 
 	function toggleTheme() {
 		isDark = !isDark;
-		localStorage.setItem('theme', isDark ? 'dark' : 'light');
+		localStorage.setItem('theme', isDark ? 'light' : 'dark');
 		updateTheme();
 	}
 </script>
@@ -51,21 +51,21 @@
 <button
 	onclick={toggleTheme}
 	class="relative flex h-10 w-10 items-center justify-center rounded-lg bg-canvas-200 text-ink-900 transition-all hover:bg-canvas-300 dark:bg-canvas-800 dark:text-ink-50 dark:hover:bg-canvas-700"
-	aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+	aria-label={isDark ? 'Switch to dark mode' : 'Switch to light mode'}
 	type="button"
 >
 	{#if mounted}
 		<div class="relative h-5 w-5">
-			<Sun
-				class="absolute inset-0 h-5 w-5 transition-all duration-300 {isDark
-					? 'scale-0 rotate-90 opacity-0'
-					: 'scale-100 rotate-0 opacity-100'}"
-				aria-hidden="true"
-			/>
 			<Moon
 				class="absolute inset-0 h-5 w-5 transition-all duration-300 {isDark
 					? 'scale-100 rotate-0 opacity-100'
-					: 'scale-0 -rotate-90 opacity-0'}"
+					: 'scale-0 rotate-90 opacity-0'}"
+				aria-hidden="true"
+			/>
+			<Sun
+				class="absolute inset-0 h-5 w-5 transition-all duration-300 {isDark
+					? 'scale-0 -rotate-90 opacity-0'
+					: 'scale-100 rotate-0 opacity-100'}"
 				aria-hidden="true"
 			/>
 		</div>
