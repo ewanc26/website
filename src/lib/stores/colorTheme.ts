@@ -1,21 +1,6 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
-
-export type ColorTheme =
-	| 'sage' // Default (existing)
-	| 'monochrome' // Greyscale
-	// Rainbow spectrum
-	| 'ruby' // Red
-	| 'sunset' // Orange
-	| 'amber' // Yellow
-	| 'forest' // Green
-	| 'ocean' // Blue
-	| 'lavender' // Purple
-	| 'rose' // Pink
-	// Additional variations
-	| 'teal' // Blue-green
-	| 'coral' // Orange-pink
-	| 'slate'; // Blue-grey
+import { DEFAULT_THEME, type ColorTheme } from '$lib/config/themes.config';
 
 interface ColorThemeState {
 	current: ColorTheme;
@@ -23,7 +8,6 @@ interface ColorThemeState {
 }
 
 const STORAGE_KEY = 'color-theme';
-const DEFAULT_THEME: ColorTheme = 'slate';
 
 function createColorThemeStore() {
 	const { subscribe, set, update } = writable<ColorThemeState>({
@@ -65,3 +49,4 @@ function applyTheme(theme: ColorTheme) {
 }
 
 export const colorTheme = createColorThemeStore();
+export type { ColorTheme };
