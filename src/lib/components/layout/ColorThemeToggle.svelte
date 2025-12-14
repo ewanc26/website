@@ -2,126 +2,19 @@
 	import { onMount } from 'svelte';
 	import { Palette, Check } from '@lucide/svelte';
 	import { colorTheme, type ColorTheme } from '$lib/stores/colorTheme';
+	import {
+		getThemesByCategory,
+		CATEGORY_LABELS,
+		type ThemeDefinition
+	} from '$lib/config/themes.config';
 
 	let isOpen = $state(false);
 	let mounted = $state(false);
 	let currentTheme = $state<ColorTheme>('slate');
 
-	interface ThemeDefinition {
-		value: ColorTheme;
-		label: string;
-		description: string;
-		color: string;
-		category: 'neutral' | 'warm' | 'cool' | 'vibrant';
-	}
-
-	const themes: ThemeDefinition[] = [
-		// Neutral themes
-		{
-			value: 'sage',
-			label: 'Sage',
-			description: 'Calm green-blue',
-			color: 'oklch(77.77% 0.182 127.42)',
-			category: 'neutral'
-		},
-		{
-			value: 'monochrome',
-			label: 'Monochrome',
-			description: 'Pure greyscale',
-			color: 'oklch(78% 0 0)',
-			category: 'neutral'
-		},
-		{
-			value: 'slate',
-			label: 'Slate',
-			description: 'Blue-grey',
-			color: 'oklch(78.5% 0.095 230)',
-			category: 'neutral'
-		},
-		// Warm themes
-		{
-			value: 'ruby',
-			label: 'Ruby',
-			description: 'Bold red',
-			color: 'oklch(81.5% 0.228 10)',
-			category: 'warm'
-		},
-		{
-			value: 'coral',
-			label: 'Coral',
-			description: 'Orange-pink',
-			color: 'oklch(81.8% 0.212 20)',
-			category: 'warm'
-		},
-		{
-			value: 'sunset',
-			label: 'Sunset',
-			description: 'Warm orange',
-			color: 'oklch(80.5% 0.208 45)',
-			category: 'warm'
-		},
-		{
-			value: 'amber',
-			label: 'Amber',
-			description: 'Bright yellow',
-			color: 'oklch(82.8% 0.195 85)',
-			category: 'warm'
-		},
-		// Cool themes
-		{
-			value: 'forest',
-			label: 'Forest',
-			description: 'Natural green',
-			color: 'oklch(79.5% 0.195 145)',
-			category: 'cool'
-		},
-		{
-			value: 'teal',
-			label: 'Teal',
-			description: 'Blue-green',
-			color: 'oklch(79% 0.205 195)',
-			category: 'cool'
-		},
-		{
-			value: 'ocean',
-			label: 'Ocean',
-			description: 'Deep blue',
-			color: 'oklch(78.2% 0.188 240)',
-			category: 'cool'
-		},
-		// Vibrant themes
-		{
-			value: 'lavender',
-			label: 'Lavender',
-			description: 'Soft purple',
-			color: 'oklch(82% 0.215 295)',
-			category: 'vibrant'
-		},
-		{
-			value: 'rose',
-			label: 'Rose',
-			description: 'Pink-red',
-			color: 'oklch(83.5% 0.230 350)',
-			category: 'vibrant'
-		}
-	];
-
-	// Group themes by category
-	const themesByCategory = {
-		neutral: themes.filter((t) => t.category === 'neutral'),
-		warm: themes.filter((t) => t.category === 'warm'),
-		cool: themes.filter((t) => t.category === 'cool'),
-		vibrant: themes.filter((t) => t.category === 'vibrant')
-	};
-
-	const categoryLabels = {
-		neutral: 'Neutral',
-		warm: 'Warm',
-		cool: 'Cool',
-		vibrant: 'Vibrant'
-	};
-
-	type Category = keyof typeof categoryLabels;
+	// Get themes organized by category
+	const themesByCategory = getThemesByCategory();
+	type Category = keyof typeof CATEGORY_LABELS;
 
 	onMount(() => {
 		colorTheme.init();
@@ -197,12 +90,12 @@
 				{#each Object.entries(themesByCategory) as [category, categoryThemes]}
 					<div class="mb-3">
 						<div class="mb-1.5 px-3 text-xs font-medium text-ink-500 dark:text-ink-500">
-							{categoryLabels[category as Category]}
+							{CATEGORY_LABELS[category as Category]}
 						</div>
 						<div class="space-y-1">
 							{#each categoryThemes as theme}
 								<button
-									onclick={() => selectTheme(theme.value)}
+									onclick={() => selectTheme(theme.value as ColorTheme)}
 									class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-canvas-100 focus-visible:bg-canvas-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:bg-canvas-900 dark:focus-visible:bg-canvas-900"
 									role="menuitem"
 									aria-current={currentTheme === theme.value ? 'true' : undefined}
