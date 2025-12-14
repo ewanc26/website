@@ -80,7 +80,7 @@
 						aria-label="View source code on GitHub">code</a
 					>
 					<!-- Line 3: Version number -->
-					<span aria-label="Version 10.3.0">v10.3.0</span>
+					<span aria-label="Version 10.3.1">v10.3.1</span>
 				</div>
 			</div>
 
