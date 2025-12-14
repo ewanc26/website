@@ -5,7 +5,6 @@
 	import * as LucideIcons from '@lucide/svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import WolfToggle from './WolfToggle.svelte';
-	import DecimalClock from './DecimalClock.svelte';
 	import { navItems } from '$lib/data/navItems';
 	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
 	import { defaultSiteMeta, createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
@@ -85,7 +84,7 @@
 		<!-- Logo/Avatar with hover title -->
 		<a
 			href="/"
-			class="group relative flex min-w-0 shrink items-center gap-2"
+			class="group relative flex min-w-0 shrink items-center"
 			onclick={closeMobileMenu}
 			aria-label="Home - {siteMeta.title}"
 		>
@@ -113,17 +112,17 @@
 					></div>
 				{/if}
 
-				<!-- Site title revealed on hover -->
-				<span
-					class="absolute top-1/2 left-full ml-2 -translate-y-1/2 truncate text-lg font-bold text-ink-900 opacity-0 transition-all duration-300 group-hover:opacity-100 sm:ml-3 dark:text-ink-50"
-					aria-hidden="true"
-				>
-					{siteMeta.title}
-				</span>
 			</div>
+			<!-- Site title revealed on hover -->
+			<span
+				class="ml-2 truncate text-lg font-bold text-ink-900 opacity-0 transition-all duration-300 group-hover:opacity-100 sm:ml-3 dark:text-ink-50"
+				aria-hidden="true"
+			>
+				{siteMeta.title}
+			</span>
 		</a>
 
-		<!-- Desktop Navigation -->
+		<!-- Right side: Navigation + Toggles -->
 		<div class="hidden items-center gap-4 md:flex">
 			<ul class="flex items-center gap-6" role="list">
 				{#each navItems as item}
@@ -152,14 +151,15 @@
 					</li>
 				{/each}
 			</ul>
-			<DecimalClock />
+			
+			<!-- Desktop Toggles -->
 			<div class="flex items-center gap-2">
 				<WolfToggle />
 				<ThemeToggle />
 			</div>
 		</div>
 
-		<!-- Mobile Menu Button -->
+		<!-- Mobile Menu Button + Toggles -->
 		<div class="flex items-center gap-2 md:hidden">
 			<WolfToggle />
 			<ThemeToggle />
