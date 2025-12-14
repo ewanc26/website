@@ -40,7 +40,12 @@ function createColorThemeStore() {
 			const theme = stored || DEFAULT_THEME;
 
 			update((state) => ({ ...state, current: theme, mounted: true }));
-			applyTheme(theme);
+			
+			// Only apply theme if not already applied (to prevent flash)
+			const currentTheme = document.documentElement.getAttribute('data-color-theme');
+			if (currentTheme !== theme) {
+				applyTheme(theme);
+			}
 		},
 		setTheme: (theme: ColorTheme) => {
 			if (!browser) return;

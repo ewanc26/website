@@ -66,6 +66,10 @@
 				htmlElement.classList.remove('dark');
 				htmlElement.style.colorScheme = 'light';
 			}
+
+			// Apply color theme to prevent flash
+			const colorTheme = localStorage.getItem('color-theme') || 'forest';
+			htmlElement.setAttribute('data-color-theme', colorTheme);
 		})();
 	</script>
 	<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />

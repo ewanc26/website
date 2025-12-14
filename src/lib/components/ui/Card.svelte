@@ -60,7 +60,7 @@
 	}: Props = $props();
 
 	// Determine if card should be a link
-	const isLink = !!href;
+	let isLink = $derived(!!href);
 
 	// Base classes
 	const baseClasses = 'rounded-xl transition-all duration-300';
@@ -85,10 +85,10 @@
 	};
 
 	// Interactive classes (hover effects)
-	const interactiveClasses = interactive || isLink ? 'cursor-pointer' : '';
+	let interactiveClasses = $derived(interactive || isLink ? 'cursor-pointer' : '');
 
 	// Combine all classes
-	const cardClasses = `${baseClasses} ${variantClasses[variant]} ${paddingClasses[padding]} ${interactiveClasses} ${customClass}`;
+	let cardClasses = $derived(`${baseClasses} ${variantClasses[variant]} ${paddingClasses[padding]} ${interactiveClasses} ${customClass}`);
 
 	/**
 	 * Get badge styling classes based on color and variant
