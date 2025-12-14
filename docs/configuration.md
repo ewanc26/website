@@ -656,7 +656,7 @@ rm -rf .svelte-kit && npm run dev
 If you encounter issues not covered here:
 
 1. **Check Browser Console**: Press F12 and look for error messages
-2. **Review README**: See [README.md](./README.md) for detailed feature documentation
+2. **Review README**: See [README.md](../README.md) for detailed feature documentation
 3. **GitHub Issues**: Search existing issues or create a new one
 4. **AT Protocol Docs**: Visit [atproto.com](https://atproto.com/) for protocol details
 5. **SvelteKit Docs**: Check [kit.svelte.dev](https://kit.svelte.dev/) for framework help
@@ -699,7 +699,7 @@ After completing configuration:
    - Add site information via AT Protocol records
 
 2. **Deploy Your Site**:
-   - See [README.md](./README.md#-deployment) for deployment options
+   - See [README.md](../README.md#-deployment) for deployment options
    - Choose a platform (Vercel, Netlify, Cloudflare Pages, etc.)
    - Configure production environment variables
    - Set up custom domain
@@ -764,4 +764,4 @@ Use this checklist to track your configuration progress:
 
 ---
 
-**Configuration complete!** Your AT Protocol-powered personal website is ready to use. For detailed feature documentation, see [README.md](./README.md).
+**Configuration complete!** Your AT Protocol-powered personal website is ready to use. For detailed feature documentation, see [README.md](../README.md).

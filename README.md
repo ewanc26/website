@@ -2,7 +2,7 @@
 
 A modern, feature-rich personal website powered by AT Protocol, built with SvelteKit 2 and Tailwind CSS 4.
 
-> **Note**: This repository contains the source code for [Ewan's Corner](https://ewancroft.uk). The current configuration (environment variables, slug mappings, static files) is specific to that website, but the codebase is designed to be easily adapted for your own AT Protocol-powered site. See [CONFIGURATION.md](./CONFIGURATION.md) for detailed setup instructions.
+> **Note**: This repository contains the source code for [Ewan's Corner](https://ewancroft.uk). The current configuration (environment variables, slug mappings, static files) is specific to that website, but the codebase is designed to be easily adapted for your own AT Protocol-powered site. See [Configuration Guide](./docs/configuration.md) for detailed setup instructions.
 
 ## 🌟 Features
 
@@ -95,7 +95,7 @@ A modern, feature-rich personal website powered by AT Protocol, built with Svelt
 
 ## 📋 Configuration
 
-For detailed configuration instructions, see [CONFIGURATION.md](./CONFIGURATION.md).
+For detailed configuration instructions, see the [Configuration Guide](./docs/configuration.md).
 
 Quick start:
 
@@ -132,7 +132,7 @@ Quick start:
    cp .env .env.local
    ```
 
-   Edit `.env.local` with your settings (see [CONFIGURATION.md](./CONFIGURATION.md) for details)
+   Edit `.env.local` with your settings (see [Configuration Guide](./docs/configuration.md) for details)
 
 4. **Configure publication slugs** in `src/lib/config/slugs.ts`
 
