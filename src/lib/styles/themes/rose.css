@@ -1,0 +1,73 @@
+/* ============================================================================
+   ROSE THEME - Pink
+   Primary: Soft pink
+   Secondary: Magenta
+   Accent: Deep rose
+   Hue: 350° (pink-red)
+   ============================================================================ */
+[data-color-theme='rose'] {
+	/* Primary - Rose (350°) */
+	--color-primary-50: light-dark(oklch(19.8% 0.045 350), oklch(98.2% 0.030 350));
+	--color-primary-100: light-dark(oklch(28.8% 0.072 350), oklch(95.5% 0.055 350));
+	--color-primary-200: light-dark(oklch(44.2% 0.118 350), oklch(90.5% 0.105 350));
+	--color-primary-300: light-dark(oklch(58.5% 0.158 350), oklch(82.2% 0.152 350));
+	--color-primary-400: light-dark(oklch(71.5% 0.195 350), oklch(73% 0.188 350));
+	--color-primary-500: light-dark(oklch(83.5% 0.230 350), oklch(63.5% 0.230 350));
+	--color-primary-600: light-dark(oklch(86.2% 0.188 350), oklch(53% 0.195 350));
+	--color-primary-700: light-dark(oklch(89.5% 0.152 350), oklch(43% 0.158 350));
+	--color-primary-800: light-dark(oklch(92.8% 0.105 350), oklch(33% 0.118 350));
+	--color-primary-900: light-dark(oklch(96.5% 0.055 350), oklch(24.5% 0.072 350));
+	--color-primary-950: light-dark(oklch(98.5% 0.030 350), oklch(17.2% 0.045 350));
+
+	/* Ink - Pink-tinted text (350°) */
+	--color-ink-50: light-dark(oklch(18.2% 0.030 350), oklch(97.7% 0.020 350));
+	--color-ink-100: light-dark(oklch(26.2% 0.053 350), oklch(93.5% 0.040 350));
+	--color-ink-200: light-dark(oklch(39.8% 0.090 350), oklch(85.5% 0.075 350));
+	--color-ink-300: light-dark(oklch(51.8% 0.125 350), oklch(75.5% 0.110 350));
+	--color-ink-400: light-dark(oklch(63.5% 0.158 350), oklch(65.5% 0.142 350));
+	--color-ink-500: light-dark(oklch(74.5% 0.190 350), oklch(55.5% 0.190 350));
+	--color-ink-600: light-dark(oklch(79.2% 0.142 350), oklch(45.5% 0.158 350));
+	--color-ink-700: light-dark(oklch(84.2% 0.110 350), oklch(35.5% 0.125 350));
+	--color-ink-800: light-dark(oklch(89.6% 0.075 350), oklch(25.5% 0.090 350));
+	--color-ink-900: light-dark(oklch(94.9% 0.040 350), oklch(18.5% 0.053 350));
+	--color-ink-950: light-dark(oklch(97.7% 0.020 350), oklch(12.8% 0.030 350));
+
+	/* Canvas - Pink-tinted backgrounds (350°) */
+	--color-canvas-50: light-dark(oklch(18.4% 0.033 350), oklch(98.7% 0.012 350));
+	--color-canvas-100: light-dark(oklch(26.4% 0.058 350), oklch(96.7% 0.026 350));
+	--color-canvas-200: light-dark(oklch(40.2% 0.100 350), oklch(92.8% 0.055 350));
+	--color-canvas-300: light-dark(oklch(53% 0.135 350), oklch(86.8% 0.088 350));
+	--color-canvas-400: light-dark(oklch(65.2% 0.168 350), oklch(80.8% 0.122 350));
+	--color-canvas-500: light-dark(oklch(76.8% 0.202 350), oklch(76.8% 0.155 350));
+	--color-canvas-600: light-dark(oklch(80.8% 0.122 350), oklch(65.2% 0.168 350));
+	--color-canvas-700: light-dark(oklch(86.8% 0.088 350), oklch(53% 0.135 350));
+	--color-canvas-800: light-dark(oklch(92.8% 0.055 350), oklch(40.2% 0.100 350));
+	--color-canvas-900: light-dark(oklch(96.7% 0.026 350), oklch(26.4% 0.058 350));
+	--color-canvas-950: light-dark(oklch(98.7% 0.012 350), oklch(18.4% 0.033 350));
+
+	/* Secondary - Magenta (330°) */
+	--color-secondary-50: light-dark(oklch(19.5% 0.043 330), oklch(98% 0.029 330));
+	--color-secondary-100: light-dark(oklch(28.2% 0.069 330), oklch(95.2% 0.053 330));
+	--color-secondary-200: light-dark(oklch(43.5% 0.116 330), oklch(90.2% 0.103 330));
+	--color-secondary-300: light-dark(oklch(57.8% 0.156 330), oklch(82% 0.148 330));
+	--color-secondary-400: light-dark(oklch(71% 0.195 330), oklch(72.5% 0.185 330));
+	--color-secondary-500: light-dark(oklch(83.5% 0.232 330), oklch(63.2% 0.232 330));
+	--color-secondary-600: light-dark(oklch(86.5% 0.185 330), oklch(52.5% 0.195 330));
+	--color-secondary-700: light-dark(oklch(89.5% 0.148 330), oklch(42.5% 0.156 330));
+	--color-secondary-800: light-dark(oklch(92.8% 0.103 330), oklch(32.5% 0.116 330));
+	--color-secondary-900: light-dark(oklch(96.5% 0.053 330), oklch(24% 0.069 330));
+	--color-secondary-950: light-dark(oklch(98.5% 0.029 330), oklch(17% 0.043 330));
+
+	/* Accent - Deep Rose (5°) */
+	--color-accent-50: light-dark(oklch(19.2% 0.043 5), oklch(97.9% 0.029 5));
+	--color-accent-100: light-dark(oklch(27.8% 0.069 5), oklch(94.8% 0.053 5));
+	--color-accent-200: light-dark(oklch(42.8% 0.118 5), oklch(89.8% 0.105 5));
+	--color-accent-300: light-dark(oklch(56.8% 0.158 5), oklch(81% 0.150 5));
+	--color-accent-400: light-dark(oklch(69.8% 0.198 5), oklch(71.5% 0.188 5));
+	--color-accent-500: light-dark(oklch(81.8% 0.235 5), oklch(62% 0.235 5));
+	--color-accent-600: light-dark(oklch(84.8% 0.188 5), oklch(51.5% 0.198 5));
+	--color-accent-700: light-dark(oklch(88.2% 0.150 5), oklch(41.5% 0.158 5));
+	--color-accent-800: light-dark(oklch(92% 0.105 5), oklch(31.5% 0.118 5));
+	--color-accent-900: light-dark(oklch(96% 0.053 5), oklch(23% 0.069 5));
+	--color-accent-950: light-dark(oklch(98.2% 0.029 5), oklch(16.2% 0.043 5));
+}
