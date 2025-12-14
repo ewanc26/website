@@ -28,7 +28,7 @@
 		}
 	}
 
-	const displayDescription = description || getDomain(url);
+	let displayDescription = $derived(description || getDomain(url));
 </script>
 
 {#if variant === 'button'}
