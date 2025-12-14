@@ -68,7 +68,7 @@
 			}
 
 			// Apply color theme to prevent flash
-			const colorTheme = localStorage.getItem('color-theme') || 'forest';
+			const colorTheme = localStorage.getItem('color-theme') || 'slate';
 			htmlElement.setAttribute('data-color-theme', colorTheme);
 		})();
 	</script>

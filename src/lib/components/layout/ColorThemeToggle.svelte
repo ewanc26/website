@@ -5,7 +5,7 @@
 
 	let isOpen = $state(false);
 	let mounted = $state(false);
-	let currentTheme = $state<ColorTheme>('forest');
+	let currentTheme = $state<ColorTheme>('slate');
 
 	interface ThemeDefinition {
 		value: ColorTheme;
