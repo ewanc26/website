@@ -23,7 +23,7 @@ interface ColorThemeState {
 }
 
 const STORAGE_KEY = 'color-theme';
-const DEFAULT_THEME: ColorTheme = 'forest';
+const DEFAULT_THEME: ColorTheme = 'slate';
 
 function createColorThemeStore() {
 	const { subscribe, set, update } = writable<ColorThemeState>({
