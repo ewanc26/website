@@ -5,6 +5,7 @@
 	import * as LucideIcons from '@lucide/svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import WolfToggle from './WolfToggle.svelte';
+	import ColorThemeToggle from './ColorThemeToggle.svelte';
 	import { navItems } from '$lib/data/navItems';
 	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
 	import { defaultSiteMeta, createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
@@ -154,6 +155,7 @@
 			
 			<!-- Desktop Toggles -->
 			<div class="flex items-center gap-2">
+				<ColorThemeToggle />
 				<WolfToggle />
 				<ThemeToggle />
 			</div>
@@ -161,6 +163,7 @@
 
 		<!-- Mobile Menu Button + Toggles -->
 		<div class="flex items-center gap-2 md:hidden">
+			<ColorThemeToggle />
 			<WolfToggle />
 			<ThemeToggle />
 			<button

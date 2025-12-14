@@ -1,0 +1,73 @@
+/* ============================================================================
+   SLATE THEME - Blue-grey
+   Primary: Sophisticated slate
+   Secondary: Steel grey
+   Accent: Charcoal
+   Hue: 230° (blue-grey)
+   ============================================================================ */
+[data-color-theme='slate'] {
+	/* Primary - Slate (230°) */
+	--color-primary-50: light-dark(oklch(18.2% 0.018 230), oklch(97.8% 0.012 230));
+	--color-primary-100: light-dark(oklch(26.5% 0.030 230), oklch(94.8% 0.022 230));
+	--color-primary-200: light-dark(oklch(40.5% 0.048 230), oklch(89.5% 0.042 230));
+	--color-primary-300: light-dark(oklch(54% 0.065 230), oklch(79.5% 0.062 230));
+	--color-primary-400: light-dark(oklch(66.5% 0.080 230), oklch(69.5% 0.078 230));
+	--color-primary-500: light-dark(oklch(78.5% 0.095 230), oklch(59.5% 0.095 230));
+	--color-primary-600: light-dark(oklch(82.2% 0.078 230), oklch(49.5% 0.080 230));
+	--color-primary-700: light-dark(oklch(86.5% 0.062 230), oklch(39.5% 0.065 230));
+	--color-primary-800: light-dark(oklch(91% 0.042 230), oklch(29.5% 0.048 230));
+	--color-primary-900: light-dark(oklch(95.8% 0.022 230), oklch(21.5% 0.030 230));
+	--color-primary-950: light-dark(oklch(98% 0.012 230), oklch(15.2% 0.018 230));
+
+	/* Ink - Slate-tinted text (230°) */
+	--color-ink-50: light-dark(oklch(17.5% 0.012 230), oklch(97.6% 0.008 230));
+	--color-ink-100: light-dark(oklch(25% 0.022 230), oklch(93.2% 0.017 230));
+	--color-ink-200: light-dark(oklch(38.5% 0.037 230), oklch(85.2% 0.032 230));
+	--color-ink-300: light-dark(oklch(50.5% 0.052 230), oklch(75.2% 0.048 230));
+	--color-ink-400: light-dark(oklch(62% 0.065 230), oklch(65.2% 0.062 230));
+	--color-ink-500: light-dark(oklch(73% 0.078 230), oklch(55.2% 0.078 230));
+	--color-ink-600: light-dark(oklch(78% 0.062 230), oklch(45.2% 0.065 230));
+	--color-ink-700: light-dark(oklch(83.5% 0.048 230), oklch(35.2% 0.052 230));
+	--color-ink-800: light-dark(oklch(89% 0.032 230), oklch(25.2% 0.037 230));
+	--color-ink-900: light-dark(oklch(94.5% 0.017 230), oklch(18.2% 0.022 230));
+	--color-ink-950: light-dark(oklch(97.6% 0.008 230), oklch(12.5% 0.012 230));
+
+	/* Canvas - Slate-tinted backgrounds (230°) */
+	--color-canvas-50: light-dark(oklch(17.8% 0.014 230), oklch(98.6% 0.005 230));
+	--color-canvas-100: light-dark(oklch(25.8% 0.025 230), oklch(96.6% 0.011 230));
+	--color-canvas-200: light-dark(oklch(39.5% 0.042 230), oklch(92.5% 0.024 230));
+	--color-canvas-300: light-dark(oklch(52% 0.058 230), oklch(86.5% 0.038 230));
+	--color-canvas-400: light-dark(oklch(64% 0.072 230), oklch(80.5% 0.055 230));
+	--color-canvas-500: light-dark(oklch(75.5% 0.085 230), oklch(75.5% 0.068 230));
+	--color-canvas-600: light-dark(oklch(80.5% 0.055 230), oklch(64% 0.072 230));
+	--color-canvas-700: light-dark(oklch(86.5% 0.038 230), oklch(52% 0.058 230));
+	--color-canvas-800: light-dark(oklch(92.5% 0.024 230), oklch(39.5% 0.042 230));
+	--color-canvas-900: light-dark(oklch(96.6% 0.011 230), oklch(25.8% 0.025 230));
+	--color-canvas-950: light-dark(oklch(98.6% 0.005 230), oklch(17.8% 0.014 230));
+
+	/* Secondary - Steel Grey (215°) */
+	--color-secondary-50: light-dark(oklch(18.5% 0.020 215), oklch(97.9% 0.013 215));
+	--color-secondary-100: light-dark(oklch(26.8% 0.033 215), oklch(95% 0.024 215));
+	--color-secondary-200: light-dark(oklch(41% 0.052 215), oklch(89.8% 0.045 215));
+	--color-secondary-300: light-dark(oklch(54.5% 0.070 215), oklch(80.2% 0.065 215));
+	--color-secondary-400: light-dark(oklch(67% 0.087 215), oklch(70.2% 0.082 215));
+	--color-secondary-500: light-dark(oklch(79% 0.103 215), oklch(60.2% 0.103 215));
+	--color-secondary-600: light-dark(oklch(82.8% 0.082 215), oklch(50.2% 0.087 215));
+	--color-secondary-700: light-dark(oklch(87% 0.065 215), oklch(40.2% 0.070 215));
+	--color-secondary-800: light-dark(oklch(91.5% 0.045 215), oklch(30.5% 0.052 215));
+	--color-secondary-900: light-dark(oklch(96% 0.024 215), oklch(22.2% 0.033 215));
+	--color-secondary-950: light-dark(oklch(98.2% 0.013 215), oklch(15.8% 0.020 215));
+
+	/* Accent - Charcoal (240°) */
+	--color-accent-50: light-dark(oklch(18.5% 0.022 240), oklch(98% 0.014 240));
+	--color-accent-100: light-dark(oklch(26.8% 0.036 240), oklch(95.2% 0.026 240));
+	--color-accent-200: light-dark(oklch(41% 0.058 240), oklch(90% 0.048 240));
+	--color-accent-300: light-dark(oklch(54.5% 0.078 240), oklch(80.8% 0.072 240));
+	--color-accent-400: light-dark(oklch(67% 0.097 240), oklch(71% 0.092 240));
+	--color-accent-500: light-dark(oklch(79% 0.115 240), oklch(61% 0.115 240));
+	--color-accent-600: light-dark(oklch(82.8% 0.092 240), oklch(51% 0.097 240));
+	--color-accent-700: light-dark(oklch(87% 0.072 240), oklch(41% 0.078 240));
+	--color-accent-800: light-dark(oklch(91.5% 0.048 240), oklch(31% 0.058 240));
+	--color-accent-900: light-dark(oklch(96% 0.026 240), oklch(22.5% 0.036 240));
+	--color-accent-950: light-dark(oklch(98.2% 0.014 240), oklch(16.2% 0.022 240));
+}

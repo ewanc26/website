@@ -1,0 +1,15 @@
+/* Color Theme System - Modular Theme Imports */
+/* Each theme is defined in its own file for better organization */
+
+@import './themes/sage.css';
+@import './themes/monochrome.css';
+@import './themes/ruby.css';
+@import './themes/sunset.css';
+@import './themes/amber.css';
+@import './themes/forest.css';
+@import './themes/teal.css';
+@import './themes/ocean.css';
+@import './themes/lavender.css';
+@import './themes/rose.css';
+@import './themes/coral.css';
+@import './themes/slate.css';
