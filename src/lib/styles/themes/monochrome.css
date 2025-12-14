@@ -1,0 +1,71 @@
+/* ============================================================================
+   MONOCHROME THEME - Pure greyscale
+   Neutral, professional, accessible
+   All colors desaturated to greyscale
+   ============================================================================ */
+[data-color-theme='monochrome'] {
+	/* Primary - Greyscale */
+	--color-primary-50: light-dark(oklch(18% 0 0), oklch(98% 0 0));
+	--color-primary-100: light-dark(oklch(26% 0 0), oklch(94.5% 0 0));
+	--color-primary-200: light-dark(oklch(40% 0 0), oklch(89% 0 0));
+	--color-primary-300: light-dark(oklch(54% 0 0), oklch(79% 0 0));
+	--color-primary-400: light-dark(oklch(66% 0 0), oklch(69% 0 0));
+	--color-primary-500: light-dark(oklch(78% 0 0), oklch(59% 0 0));
+	--color-primary-600: light-dark(oklch(82% 0 0), oklch(49% 0 0));
+	--color-primary-700: light-dark(oklch(86.5% 0 0), oklch(39% 0 0));
+	--color-primary-800: light-dark(oklch(91% 0 0), oklch(29% 0 0));
+	--color-primary-900: light-dark(oklch(95.5% 0 0), oklch(21% 0 0));
+	--color-primary-950: light-dark(oklch(98% 0 0), oklch(15% 0 0));
+
+	/* Ink - Greyscale text */
+	--color-ink-50: light-dark(oklch(17% 0 0), oklch(97.5% 0 0));
+	--color-ink-100: light-dark(oklch(25% 0 0), oklch(93% 0 0));
+	--color-ink-200: light-dark(oklch(38% 0 0), oklch(85% 0 0));
+	--color-ink-300: light-dark(oklch(50% 0 0), oklch(75% 0 0));
+	--color-ink-400: light-dark(oklch(62% 0 0), oklch(65% 0 0));
+	--color-ink-500: light-dark(oklch(73% 0 0), oklch(55% 0 0));
+	--color-ink-600: light-dark(oklch(78% 0 0), oklch(45% 0 0));
+	--color-ink-700: light-dark(oklch(83.5% 0 0), oklch(35% 0 0));
+	--color-ink-800: light-dark(oklch(89% 0 0), oklch(25% 0 0));
+	--color-ink-900: light-dark(oklch(94.5% 0 0), oklch(18% 0 0));
+	--color-ink-950: light-dark(oklch(97.5% 0 0), oklch(12% 0 0));
+
+	/* Canvas - Greyscale backgrounds */
+	--color-canvas-50: light-dark(oklch(17.5% 0 0), oklch(98.5% 0 0));
+	--color-canvas-100: light-dark(oklch(25.5% 0 0), oklch(96.5% 0 0));
+	--color-canvas-200: light-dark(oklch(39.5% 0 0), oklch(92% 0 0));
+	--color-canvas-300: light-dark(oklch(52% 0 0), oklch(86% 0 0));
+	--color-canvas-400: light-dark(oklch(64% 0 0), oklch(80% 0 0));
+	--color-canvas-500: light-dark(oklch(75.5% 0 0), oklch(75.5% 0 0));
+	--color-canvas-600: light-dark(oklch(80% 0 0), oklch(64% 0 0));
+	--color-canvas-700: light-dark(oklch(86% 0 0), oklch(52% 0 0));
+	--color-canvas-800: light-dark(oklch(92% 0 0), oklch(39.5% 0 0));
+	--color-canvas-900: light-dark(oklch(96.5% 0 0), oklch(25.5% 0 0));
+	--color-canvas-950: light-dark(oklch(98.5% 0 0), oklch(17.5% 0 0));
+
+	/* Secondary - Slightly lighter greyscale */
+	--color-secondary-50: light-dark(oklch(19% 0 0), oklch(98% 0 0));
+	--color-secondary-100: light-dark(oklch(27% 0 0), oklch(95% 0 0));
+	--color-secondary-200: light-dark(oklch(42% 0 0), oklch(89.5% 0 0));
+	--color-secondary-300: light-dark(oklch(56% 0 0), oklch(80.5% 0 0));
+	--color-secondary-400: light-dark(oklch(69% 0 0), oklch(70.5% 0 0));
+	--color-secondary-500: light-dark(oklch(81% 0 0), oklch(60.5% 0 0));
+	--color-secondary-600: light-dark(oklch(84.5% 0 0), oklch(50.5% 0 0));
+	--color-secondary-700: light-dark(oklch(88% 0 0), oklch(40.5% 0 0));
+	--color-secondary-800: light-dark(oklch(92% 0 0), oklch(30.5% 0 0));
+	--color-secondary-900: light-dark(oklch(96% 0 0), oklch(22% 0 0));
+	--color-secondary-950: light-dark(oklch(98% 0 0), oklch(15.5% 0 0));
+
+	/* Accent - Darker greyscale */
+	--color-accent-50: light-dark(oklch(19.5% 0 0), oklch(98.2% 0 0));
+	--color-accent-100: light-dark(oklch(28% 0 0), oklch(95.5% 0 0));
+	--color-accent-200: light-dark(oklch(43.5% 0 0), oklch(90.5% 0 0));
+	--color-accent-300: light-dark(oklch(58% 0 0), oklch(82.5% 0 0));
+	--color-accent-400: light-dark(oklch(71.5% 0 0), oklch(73% 0 0));
+	--color-accent-500: light-dark(oklch(84.5% 0 0), oklch(63.5% 0 0));
+	--color-accent-600: light-dark(oklch(87% 0 0), oklch(53.5% 0 0));
+	--color-accent-700: light-dark(oklch(90% 0 0), oklch(43.5% 0 0));
+	--color-accent-800: light-dark(oklch(93% 0 0), oklch(33.5% 0 0));
+	--color-accent-900: light-dark(oklch(96.5% 0 0), oklch(24.5% 0 0));
+	--color-accent-950: light-dark(oklch(98.2% 0 0), oklch(17.2% 0 0));
+}
