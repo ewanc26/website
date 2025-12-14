@@ -5,7 +5,7 @@
 
 	let isOpen = $state(false);
 	let mounted = $state(false);
-	let currentTheme = $state<ColorTheme>('sage');
+	let currentTheme = $state<ColorTheme>('forest');
 
 	interface ThemeDefinition {
 		value: ColorTheme;
@@ -121,6 +121,8 @@
 		vibrant: 'Vibrant'
 	};
 
+	type Category = keyof typeof categoryLabels;
+
 	onMount(() => {
 		colorTheme.init();
 
@@ -187,7 +189,7 @@
 			class="absolute right-0 top-full z-50 mt-2 w-72 rounded-lg border border-canvas-200 bg-canvas-50 shadow-xl dark:border-canvas-800 dark:bg-canvas-950"
 			role="menu"
 		>
-			<div class="max-h-[32rem] overflow-y-auto p-2">
+			<div class="max-h-128 overflow-y-auto p-2">
 				<div class="mb-2 px-3 py-2 text-xs font-semibold uppercase text-ink-600 dark:text-ink-400">
 					Color Themes
 				</div>
@@ -195,7 +197,7 @@
 				{#each Object.entries(themesByCategory) as [category, categoryThemes]}
 					<div class="mb-3">
 						<div class="mb-1.5 px-3 text-xs font-medium text-ink-500 dark:text-ink-500">
-							{categoryLabels[category]}
+							{categoryLabels[category as Category]}
 						</div>
 						<div class="space-y-1">
 							{#each categoryThemes as theme}

@@ -12,7 +12,7 @@
 
 	let { posts, locale, filterYear }: Props = $props();
 
-	const userLocale = locale || getUserLocale();
+	let userLocale = $derived(locale || getUserLocale());
 
 	// Group posts by date
 	const groupedPosts = $derived(groupPostsByDate(posts, userLocale));
