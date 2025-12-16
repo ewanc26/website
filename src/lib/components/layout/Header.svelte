@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { getStores } from '$app/stores';
-	import { Menu, X } from '@lucide/svelte';
+	import { Menu, X, Check } from '@lucide/svelte';
 	import * as LucideIcons from '@lucide/svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import WolfToggle from './WolfToggle.svelte';
@@ -9,15 +9,27 @@
 	import { navItems } from '$lib/data/navItems';
 	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
 	import { defaultSiteMeta, createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
+	import { colorThemeDropdownOpen } from '$lib/stores/dropdownState';
+	import { colorTheme, type ColorTheme } from '$lib/stores/colorTheme';
+	import {
+		getThemesByCategory,
+		CATEGORY_LABELS
+	} from '$lib/config/themes.config';
 
 	const siteMeta: SiteMetadata = createSiteMeta(defaultSiteMeta);
 	const { page } = getStores();
 
-	let profile: ProfileData | null = null;
-	let loading = true;
-	let error: string | null = null;
-	let imageLoaded = false;
-	let mobileMenuOpen = false;
+	let profile = $state<ProfileData | null>(null);
+	let loading = $state(true);
+	let error = $state<string | null>(null);
+	let imageLoaded = $state(false);
+	let mobileMenuOpen = $state(false);
+	let colorThemeOpen = $state(false);
+	let currentTheme = $state<ColorTheme>('slate');
+
+	// Get themes organized by category
+	const themesByCategory = getThemesByCategory();
+	type Category = keyof typeof CATEGORY_LABELS;
 
 	// Map of icon names to Lucide components
 	let iconComponents: Record<string, any> = {};
@@ -30,17 +42,23 @@
 
 	function toggleMobileMenu() {
 		mobileMenuOpen = !mobileMenuOpen;
-		// Trap focus when mobile menu opens
+		// Close color theme dropdown when opening mobile menu
 		if (mobileMenuOpen) {
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = '';
+			colorThemeDropdownOpen.set(false);
 		}
 	}
 
 	function closeMobileMenu() {
 		mobileMenuOpen = false;
-		document.body.style.overflow = '';
+	}
+
+	function closeColorThemeDropdown() {
+		colorThemeDropdownOpen.set(false);
+	}
+
+	function selectTheme(theme: ColorTheme) {
+		colorTheme.setTheme(theme);
+		closeColorThemeDropdown();
 	}
 
 	function isActive(href: string) {
@@ -48,6 +66,20 @@
 	}
 
 	onMount(() => {
+		// Subscribe to color theme state
+		const unsubTheme = colorTheme.subscribe((state) => {
+			currentTheme = state.current;
+		});
+
+		// Subscribe to color theme dropdown state
+		const unsubDropdown = colorThemeDropdownOpen.subscribe((open) => {
+			colorThemeOpen = open;
+			// Close mobile menu when opening color theme dropdown
+			if (open) {
+				mobileMenuOpen = false;
+			}
+		});
+
 		// Fetch profile
 		fetchProfile()
 			.then((data) => {
@@ -60,17 +92,23 @@
 				loading = false;
 			});
 
-		// Close mobile menu on Escape key
+		// Close mobile menus on Escape key
 		const handleEscape = (e: KeyboardEvent) => {
-			if (e.key === 'Escape' && mobileMenuOpen) {
-				closeMobileMenu();
+			if (e.key === 'Escape') {
+				if (mobileMenuOpen) {
+					closeMobileMenu();
+				}
+				if (colorThemeOpen && window.innerWidth < 768) {
+					closeColorThemeDropdown();
+				}
 			}
 		};
 		document.addEventListener('keydown', handleEscape);
 		
 		return () => {
+			unsubTheme();
+			unsubDropdown();
 			document.removeEventListener('keydown', handleEscape);
-			document.body.style.overflow = '';
 		};
 	});
 </script>
@@ -219,6 +257,60 @@
 					</li>
 				{/each}
 			</ul>
+		</nav>
+	{/if}
+
+	<!-- Mobile Colour Theme Dropdown -->
+	{#if colorThemeOpen}
+		<nav
+			id="color-theme-menu"
+			class="border-t border-canvas-200 bg-canvas-50 md:hidden dark:border-canvas-800 dark:bg-canvas-950"
+			aria-label="Colour theme menu"
+		>
+			<div class="container mx-auto flex flex-col px-3 py-2">
+				{#each Object.entries(themesByCategory) as [category, categoryThemes]}
+					<div class="mb-4 last:mb-0">
+						<div class="mb-2 px-3 text-xs font-semibold uppercase tracking-wide text-ink-600 dark:text-ink-400">
+							{CATEGORY_LABELS[category as Category]}
+						</div>
+						<div class="space-y-1">
+							{#each categoryThemes as theme}
+								<button
+									onclick={() => selectTheme(theme.value as ColorTheme)}
+									class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600
+										{currentTheme === theme.value
+											? 'bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
+											: 'text-ink-700 hover:bg-canvas-100 focus-visible:bg-canvas-100 dark:text-ink-200 dark:hover:bg-canvas-900 dark:focus-visible:bg-canvas-900'}"
+									role="menuitem"
+									aria-current={currentTheme === theme.value ? 'true' : undefined}
+								>
+									<div
+										class="h-7 w-7 shrink-0 rounded-md border border-canvas-300 shadow-sm dark:border-canvas-700"
+										style="background-color: {theme.color}"
+										aria-hidden="true"
+									></div>
+									<div class="min-w-0 flex-1">
+										<div
+											class="font-medium {currentTheme === theme.value ? '' : 'text-ink-900 dark:text-ink-50'}"
+										>
+											{theme.label}
+										</div>
+										<div class="text-sm text-ink-600 dark:text-ink-400">
+											{theme.description}
+										</div>
+									</div>
+									{#if currentTheme === theme.value}
+										<Check
+											class="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400"
+											aria-hidden="true"
+										/>
+									{/if}
+								</button>
+							{/each}
+						</div>
+					</div>
+				{/each}
+			</div>
 		</nav>
 	{/if}
 </header>

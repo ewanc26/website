@@ -16,12 +16,12 @@ Complete setup and configuration guide for your personal website. Covers:
 
 ### [Theme System](./theme-system.md)
 Documentation for the centralized color theme system. Learn how to:
-- Add new color themes
+- Add new Colour Themes
 - Customize existing themes
 - Understand the theme architecture
 - Use the theme configuration API
 
-**Read this if you want to customize or add color themes.**
+**Read this if you want to customize or add Colour Themes.**
 
 ## 🚀 Quick Links
 
