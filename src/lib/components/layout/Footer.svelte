@@ -1,16 +1,25 @@
 <script lang="ts">
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 	import DecimalClock from './DecimalClock.svelte';
+	import { happyMacStore } from '$lib/stores';
 
-	export let profile: ProfileData | null = null;
-	export let siteInfo: SiteInfoData | null = null;
+	interface Props {
+		profile?: ProfileData | null;
+		siteInfo?: SiteInfoData | null;
+	}
+
+	let { profile = null, siteInfo = null }: Props = $props();
+	
 	let loading = false;
 	let error: string | null = null;
-	let copyrightText: string;
-
+	
 	const currentYear = new Date().getFullYear();
-
-	$: {
+	
+	// Show click count hint after 3 clicks
+	let showHint = $derived($happyMacStore.clickCount >= 3 && $happyMacStore.clickCount < 24);
+	
+	// Compute copyright text reactively
+	let copyrightText = $derived.by(() => {
 		console.log('[Footer] Reactive: siteInfo updated:', siteInfo);
 		const birthYear = siteInfo?.additionalInfo?.websiteBirthYear;
 		console.log('[Footer] Current year:', currentYear);
@@ -19,18 +28,18 @@
 
 		if (!birthYear || typeof birthYear !== 'number') {
 			console.log('[Footer] Using current year (invalid/missing birth year)');
-			copyrightText = `${currentYear}`;
+			return `${currentYear}`;
 		} else if (birthYear > currentYear) {
 			console.log('[Footer] Using current year (birth year in future)');
-			copyrightText = `${currentYear}`;
+			return `${currentYear}`;
 		} else if (birthYear === currentYear) {
 			console.log('[Footer] Using current year (birth year equals current)');
-			copyrightText = `${currentYear}`;
+			return `${currentYear}`;
 		} else {
 			console.log('[Footer] Using year range');
-			copyrightText = `${birthYear} - ${currentYear}`;
+			return `${birthYear} - ${currentYear}`;
 		}
-	}
+	});
 
 	// Data is provided by layout load; no client-side fetch here to avoid using window.fetch during navigation.
 </script>
@@ -79,8 +88,16 @@
 						class="underline hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
 						aria-label="View source code on GitHub">code</a
 					>
-					<!-- Line 3: Version number -->
-					<span aria-label="Version 10.3.2">v10.3.2</span>
+					<!-- Line 3: Version number (click 24 times for easter egg!) -->
+					<button
+						type="button"
+						onclick={() => happyMacStore.incrementClick()}
+						class="cursor-default select-none transition-colors hover:text-ink-600 dark:hover:text-ink-300"
+						aria-label="Version 10.3.2{showHint ? ` - ${$happyMacStore.clickCount} of 24 clicks` : ''}"
+						title={showHint ? `${$happyMacStore.clickCount}/24` : ''}
+					>
+						v10.3.2{#if showHint}<span class="ml-1 text-xs opacity-60">({$happyMacStore.clickCount}/24)</span>{/if}
+					</button>
 				</div>
 			</div>
 
