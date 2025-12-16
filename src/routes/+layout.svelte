@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { Header, Footer, ScrollToTop } from '$lib/components/layout';
+	import HappyMacEasterEgg from '$lib/components/HappyMacEasterEgg.svelte';
 	import { MetaTags } from '$lib/components/seo';
 	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
@@ -93,4 +94,7 @@
 	</main>
 
 	<Footer profile={data.profile} siteInfo={data.siteInfo} />
+	
+	<!-- Easter egg: Happy Mac walks across the screen (click version number 24 times!) -->
+	<HappyMacEasterEgg />
 </div>
