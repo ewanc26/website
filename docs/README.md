@@ -5,7 +5,9 @@ Welcome to the project documentation! This directory contains all technical docu
 ## 📚 Available Documentation
 
 ### [Configuration Guide](./configuration.md)
+
 Complete setup and configuration guide for your personal website. Covers:
+
 - Environment variables setup
 - Publication slug mapping
 - Static file customization
@@ -15,7 +17,9 @@ Complete setup and configuration guide for your personal website. Covers:
 **Start here if you're setting up the site for the first time.**
 
 ### [Theme System](./theme-system.md)
+
 Documentation for the centralized color theme system. Learn how to:
+
 - Add new Colour Themes
 - Customize existing themes
 - Understand the theme architecture
@@ -31,7 +35,7 @@ Documentation for the centralized color theme system. Learn how to:
 
 ## 📖 Documentation Structure
 
-```
+```plaintext
 docs/
 ├── README.md           # This file - documentation index
 ├── configuration.md    # Setup and configuration guide
