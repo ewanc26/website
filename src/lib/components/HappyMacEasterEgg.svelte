@@ -12,7 +12,49 @@
 		}
 	});
 
+	function playBeep() {
+		try {
+			const audioContext = new AudioContext();
+			const now = audioContext.currentTime;
+
+			// Tributary recreation of the classic Mac startup chord
+			// This is NOT the original sound - it's an approximation using Web Audio API
+			// The original Mac beep was a major chord: F4, A4, C5
+			// Frequencies: ~349 Hz, ~440 Hz, ~523 Hz
+			const frequencies = [349, 440, 523];
+			const masterGain = audioContext.createGain();
+			masterGain.connect(audioContext.destination);
+			masterGain.gain.value = 0.15;
+
+			// Create three oscillators for the chord
+			frequencies.forEach((freq) => {
+				const oscillator = audioContext.createOscillator();
+				const gainNode = audioContext.createGain();
+
+				oscillator.type = 'sine'; // Original Mac used sine waves
+				oscillator.frequency.value = freq;
+
+				// ADSR envelope for a more authentic sound
+				gainNode.gain.setValueAtTime(0, now);
+				gainNode.gain.linearRampToValueAtTime(0.3, now + 0.02); // Attack
+				gainNode.gain.exponentialRampToValueAtTime(0.01, now + 1.0); // Decay
+
+				oscillator.connect(gainNode);
+				gainNode.connect(masterGain);
+
+				oscillator.start(now);
+				oscillator.stop(now + 1.0);
+			});
+		} catch (e) {
+			// Fail silently if audio context isn't available
+			console.log('Audio playback not available');
+		}
+	}
+
 	function startAnimation() {
+		// Play the beep first
+		playBeep();
+
 		isVisible = true;
 		position = -100;
 
@@ -109,10 +151,16 @@
 	@keyframes hop {
 		0%,
 		100% {
-			transform: translateY(0) rotate(0deg);
+			transform: translateY(0) rotate(0deg) scaleY(1) scaleX(1);
+		}
+		25% {
+			transform: translateY(-10px) rotate(2deg) scaleY(1.15) scaleX(0.9);
 		}
 		50% {
-			transform: translateY(-20px) rotate(5deg);
+			transform: translateY(-20px) rotate(5deg) scaleY(1) scaleX(1);
+		}
+		75% {
+			transform: translateY(-10px) rotate(2deg) scaleY(0.85) scaleX(1.1);
 		}
 	}
 
