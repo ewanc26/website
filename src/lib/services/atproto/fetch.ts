@@ -40,6 +40,31 @@ export async function fetchProfile(fetchFn?: typeof fetch): Promise<ProfileData>
 			fetchFn
 		);
 
+		// Fetch the actual profile record to get pronouns and other fields
+		// The profile view doesn't include pronouns, so we need the record
+		let pronouns: string | undefined;
+		try {
+			console.debug('[Profile] Attempting to fetch profile record for pronouns');
+			const recordResponse = await withFallback(
+				PUBLIC_ATPROTO_DID,
+				async (agent) => {
+					const response = await agent.com.atproto.repo.getRecord({
+						repo: PUBLIC_ATPROTO_DID,
+						collection: 'app.bsky.actor.profile',
+						rkey: 'self'
+					});
+					return response.data;
+				},
+				false,
+				fetchFn
+			);
+			pronouns = (recordResponse.value as any).pronouns;
+			console.debug('[Profile] Successfully fetched pronouns:', pronouns);
+		} catch (error) {
+			console.debug('[Profile] Could not fetch profile record for pronouns:', error);
+			// Continue without pronouns if record fetch fails
+		}
+
 		const data: ProfileData = {
 			did: profile.did,
 			handle: profile.handle,
@@ -49,7 +74,8 @@ export async function fetchProfile(fetchFn?: typeof fetch): Promise<ProfileData>
 			banner: profile.banner,
 			followersCount: profile.followersCount,
 			followsCount: profile.followsCount,
-			postsCount: profile.postsCount
+			postsCount: profile.postsCount,
+			pronouns: pronouns
 		};
 
 		console.info('[Profile] Successfully fetched profile data');

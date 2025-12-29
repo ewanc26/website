@@ -1,0 +1,80 @@
+diff --git a/src/lib/components/layout/main/card/ProfileCard.svelte b/src/lib/components/layout/main/card/ProfileCard.svelte
+index dc23db8..5d6f030 100644
+--- a/src/lib/components/layout/main/card/ProfileCard.svelte
++++ b/src/lib/components/layout/main/card/ProfileCard.svelte
+@@ -112,6 +112,9 @@
+ 						{safeProfile.displayName || safeProfile.handle}
+ 					</h2>
+ 					<p class="font-medium text-ink-700 dark:text-ink-200">@{safeProfile.handle}</p>
++					{#if safeProfile.pronouns}
++						<p class="text-sm italic text-ink-600 dark:text-ink-300">{safeProfile.pronouns}</p>
++					{/if}
+ 
+ 					{#if safeProfile.description}
+ 						<p
+diff --git a/src/lib/services/atproto/fetch.ts b/src/lib/services/atproto/fetch.ts
+index c719682..853a0c2 100644
+--- a/src/lib/services/atproto/fetch.ts
++++ b/src/lib/services/atproto/fetch.ts
+@@ -40,6 +40,31 @@ export async function fetchProfile(fetchFn?: typeof fetch): Promise<ProfileData>
+ 			fetchFn
+ 		);
+ 
++		// Fetch the actual profile record to get pronouns and other fields
++		// The profile view doesn't include pronouns, so we need the record
++		let pronouns: string | undefined;
++		try {
++			console.debug('[Profile] Attempting to fetch profile record for pronouns');
++			const recordResponse = await withFallback(
++				PUBLIC_ATPROTO_DID,
++				async (agent) => {
++					const response = await agent.com.atproto.repo.getRecord({
++						repo: PUBLIC_ATPROTO_DID,
++						collection: 'app.bsky.actor.profile',
++						rkey: 'self'
++					});
++					return response.data;
++				},
++				false,
++				fetchFn
++			);
++			pronouns = (recordResponse.value as any).pronouns;
++			console.debug('[Profile] Successfully fetched pronouns:', pronouns);
++		} catch (error) {
++			console.debug('[Profile] Could not fetch profile record for pronouns:', error);
++			// Continue without pronouns if record fetch fails
++		}
++
+ 		const data: ProfileData = {
+ 			did: profile.did,
+ 			handle: profile.handle,
+@@ -49,7 +74,8 @@ export async function fetchProfile(fetchFn?: typeof fetch): Promise<ProfileData>
+ 			banner: profile.banner,
+ 			followersCount: profile.followersCount,
+ 			followsCount: profile.followsCount,
+-			postsCount: profile.postsCount
++			postsCount: profile.postsCount,
++			pronouns: pronouns
+ 		};
+ 
+ 		console.info('[Profile] Successfully fetched profile data');
+diff --git a/src/lib/services/atproto/types.ts b/src/lib/services/atproto/types.ts
+index f4d4b16..37440f6 100644
+--- a/src/lib/services/atproto/types.ts
++++ b/src/lib/services/atproto/types.ts
+@@ -12,6 +12,7 @@ export interface ProfileData {
+ 	followersCount?: number;
+ 	followsCount?: number;
+ 	postsCount?: number;
++	pronouns?: string;
+ }
+ 
+ export interface StatusData {
+@@ -150,6 +151,7 @@ export interface PostAuthor {
+ 	handle: string;
+ 	displayName?: string;
+ 	avatar?: string;
++	pronouns?: string;
+ }
+ 
+ export interface BlueskyPost {

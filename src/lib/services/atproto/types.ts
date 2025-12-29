@@ -12,6 +12,7 @@ export interface ProfileData {
 	followersCount?: number;
 	followsCount?: number;
 	postsCount?: number;
+	pronouns?: string;
 }
 
 export interface StatusData {
@@ -150,6 +151,7 @@ export interface PostAuthor {
 	handle: string;
 	displayName?: string;
 	avatar?: string;
+	pronouns?: string;
 }
 
 export interface BlueskyPost {
