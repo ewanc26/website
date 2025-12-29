@@ -112,6 +112,9 @@
 						{safeProfile.displayName || safeProfile.handle}
 					</h2>
 					<p class="font-medium text-ink-700 dark:text-ink-200">@{safeProfile.handle}</p>
+					{#if safeProfile.pronouns}
+						<p class="text-sm italic text-ink-600 dark:text-ink-300">{safeProfile.pronouns}</p>
+					{/if}
 
 					{#if safeProfile.description}
 						<p
