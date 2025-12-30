@@ -1,47 +1,51 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { fetchProfile, fetchSiteInfo } from '$lib/services/atproto';
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 	import DecimalClock from './DecimalClock.svelte';
 	import { happyMacStore } from '$lib/stores';
 
-	interface Props {
-		profile?: ProfileData | null;
-		siteInfo?: SiteInfoData | null;
-	}
+	let profile: ProfileData | null = $state(null);
+	let siteInfo: SiteInfoData | null = $state(null);
+	let loading = $state(true);
+	let error: string | null = $state(null);
 
-	let { profile = null, siteInfo = null }: Props = $props();
-	
-	let loading = false;
-	let error: string | null = null;
-	
 	const currentYear = new Date().getFullYear();
-	
+
 	// Show click count hint after 3 clicks
 	let showHint = $derived($happyMacStore.clickCount >= 3 && $happyMacStore.clickCount < 24);
-	
+
 	// Compute copyright text reactively
 	let copyrightText = $derived.by(() => {
-		console.log('[Footer] Reactive: siteInfo updated:', siteInfo);
 		const birthYear = siteInfo?.additionalInfo?.websiteBirthYear;
-		console.log('[Footer] Current year:', currentYear);
-		console.log('[Footer] Birth year:', birthYear);
-		console.log('[Footer] Birth year type:', typeof birthYear);
 
 		if (!birthYear || typeof birthYear !== 'number') {
-			console.log('[Footer] Using current year (invalid/missing birth year)');
 			return `${currentYear}`;
 		} else if (birthYear > currentYear) {
-			console.log('[Footer] Using current year (birth year in future)');
 			return `${currentYear}`;
 		} else if (birthYear === currentYear) {
-			console.log('[Footer] Using current year (birth year equals current)');
 			return `${currentYear}`;
 		} else {
-			console.log('[Footer] Using year range');
 			return `${birthYear} - ${currentYear}`;
 		}
 	});
 
-	// Data is provided by layout load; no client-side fetch here to avoid using window.fetch during navigation.
+	// Fetch data client-side for non-blocking layout
+	onMount(async () => {
+		try {
+			// Fetch both in parallel
+			const [profileData, siteInfoData] = await Promise.all([
+				fetchProfile().catch(() => null),
+				fetchSiteInfo().catch(() => null)
+			]);
+			profile = profileData;
+			siteInfo = siteInfoData;
+		} catch (err) {
+			error = err instanceof Error ? err.message : 'Failed to load footer data';
+		} finally {
+			loading = false;
+		}
+	});
 </script>
 
 <footer
