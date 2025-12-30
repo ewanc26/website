@@ -1,5 +1,6 @@
 import type { Handle } from '@sveltejs/kit';
 import { PUBLIC_CORS_ALLOWED_ORIGINS } from '$env/static/public';
+import { HTTP_CACHE_HEADERS } from '$lib/config/cache.config';
 
 /**
  * Global request handler with CORS support
@@ -31,9 +32,30 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	const response = await resolve(event, {
 		filterSerializedResponseHeaders: (name) => {
-			return name === 'content-type' || name.startsWith('x-');
+			return name === 'content-type' || name === 'cache-control' || name.startsWith('x-');
 		}
 	});
+
+	// Add HTTP caching headers for better performance and reduced timeouts
+	// Layout data (root route) is cached aggressively since profile/site info changes infrequently
+	if (!event.url.pathname.startsWith('/api/')) {
+		// Root layout loads profile and site info - cache aggressively
+		if (event.url.pathname === '/' || event.url.pathname === '') {
+			response.headers.set('Cache-Control', HTTP_CACHE_HEADERS.LAYOUT);
+		}
+		// Blog listing pages
+		else if (event.url.pathname.startsWith('/blog') || event.url.pathname.startsWith('/archive')) {
+			response.headers.set('Cache-Control', HTTP_CACHE_HEADERS.BLOG_LISTING);
+		}
+		// Individual blog post pages
+		else if (event.url.pathname.match(/^\/[a-z0-9-]+$/)) {
+			response.headers.set('Cache-Control', HTTP_CACHE_HEADERS.BLOG_POST);
+		}
+		// Other pages get moderate caching
+		else {
+			response.headers.set('Cache-Control', HTTP_CACHE_HEADERS.LAYOUT);
+		}
+	}
 
 	// Add CORS headers for API routes
 	if (event.url.pathname.startsWith('/api/')) {
