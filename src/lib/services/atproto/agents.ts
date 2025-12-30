@@ -1,5 +1,6 @@
 import { AtpAgent } from '@atproto/api';
 import type { ResolvedIdentity } from './types';
+import { cache } from './cache';
 
 /**
  * Creates an AtpAgent with optional fetch function injection
@@ -46,12 +47,21 @@ let pdsAgent: AtpAgent | null = null;
 
 /**
  * Resolves a DID to find its PDS endpoint using Slingshot.
+ * Results are cached to reduce resolution calls.
  */
 export async function resolveIdentity(
 	did: string,
 	fetchFn?: typeof fetch
 ): Promise<ResolvedIdentity> {
 	console.info(`[Identity] Resolving DID: ${did}`);
+
+	// Check cache first
+	const cacheKey = `identity:${did}`;
+	const cached = cache.get<ResolvedIdentity>(cacheKey);
+	if (cached) {
+		console.info('[Identity] Using cached identity resolution');
+		return cached;
+	}
 
 	// Prefer an injected fetch (from SvelteKit load), fall back to global fetch
 	const _fetch = fetchFn ?? globalThis.fetch;
@@ -84,6 +94,10 @@ export async function resolveIdentity(
 	if (!data.did || !data.pds) {
 		throw new Error('Invalid response from identity resolver');
 	}
+
+	// Cache the resolved identity
+	console.info('[Identity] Caching resolved identity');
+	cache.set(cacheKey, data);
 
 	return data;
 }
