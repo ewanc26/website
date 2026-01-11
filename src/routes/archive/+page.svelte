@@ -9,7 +9,7 @@
 	} from '$lib/components/ui';
 	import type { BlogPost } from '$lib/services/atproto';
 	import { getUserLocale } from '$lib/utils/locale';
-	import { filterPosts, getSortedYears, groupPostsByDate } from '$lib/helper/posts';
+	import { filterPosts, getSortedYears, groupPostsByDate, getAllTags } from '$lib/helper/posts';
 
 	interface Props {
 		data: {
@@ -26,6 +26,7 @@
 	let searchQuery = $state('');
 	let selectedYear = $state('all');
 	let selectedPublication = $state('');
+	let selectedTag = $state('');
 	let currentPage = $state(1);
 	const postsPerPage = 50;
 
@@ -54,6 +55,15 @@
 		}));
 	});
 
+	// Get unique tags
+	const allTags = $derived(getAllTags(data.allPosts));
+	const tagOptions = $derived(
+		allTags.map((tag) => ({
+			value: tag,
+			label: `#${tag}`
+		}))
+	);
+
 	// Filter posts by search, year, and publication
 	const filteredBySearch = $derived(filterPosts(data.allPosts, searchQuery));
 
@@ -65,7 +75,7 @@
 		});
 	});
 
-	const filteredPosts = $derived.by(() => {
+	const filteredByPublication = $derived.by(() => {
 		if (!selectedPublication) return filteredByYear;
 		return filteredByYear.filter((post: BlogPost) => {
 			if (post.platform === 'WhiteWind' && selectedPublication === 'whitewind') return true;
@@ -74,6 +84,13 @@
 				return key === selectedPublication;
 			}
 			return false;
+		});
+	});
+
+	const filteredPosts = $derived.by(() => {
+		if (!selectedTag) return filteredByPublication;
+		return filteredByPublication.filter((post: BlogPost) => {
+			return post.tags?.includes(selectedTag);
 		});
 	});
 
@@ -95,6 +112,7 @@
 		searchQuery;
 		selectedYear;
 		selectedPublication;
+		selectedTag;
 		currentPage = 1;
 	});
 
@@ -122,7 +140,7 @@
 	<div class="mb-6">
 		<SearchBar
 			bind:value={searchQuery}
-			placeholder="Search posts by title, description, platform, or publication..."
+			placeholder="Search posts by title, description, platform, publication, or tags..."
 			resultCount={searchQuery ? filteredPosts.length : undefined}
 		/>
 	</div>
@@ -140,6 +158,18 @@
 				/>
 			</div>
 		{/if}
+
+		<!-- Tag Dropdown -->
+		{#if tagOptions.length > 0}
+			<div class="flex-1 sm:max-w-xs">
+				<Dropdown
+					bind:value={selectedTag}
+					options={tagOptions}
+					label="Filter by Tag"
+					placeholder="All Tags"
+				/>
+			</div>
+		{/if}
 	</div>
 
 	<!-- Year Tabs (Pills) -->
@@ -150,7 +180,7 @@
 		<Card variant="flat" padding="lg">
 			{#snippet children()}
 				<div class="text-center">
-					{#if searchQuery || selectedPublication}
+					{#if searchQuery || selectedPublication || selectedTag}
 						<p class="text-ink-700 dark:text-ink-300">
 							No posts found matching your filters. Try adjusting your search or filters.
 						</p>

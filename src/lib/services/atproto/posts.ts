@@ -187,7 +187,8 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsD
 				description: value.description,
 				rkey,
 				publicationName: publication?.name,
-				publicationRkey
+				publicationRkey,
+				tags: value.tags || undefined
 			});
 		}
 	} catch (error) {

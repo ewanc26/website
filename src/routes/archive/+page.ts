@@ -81,7 +81,8 @@ async function fetchAllBlogPosts(fetchFn?: typeof fetch): Promise<BlogPost[]> {
 				description: value.description,
 				rkey,
 				publicationName: publication?.name,
-				publicationRkey: publicationRkey || undefined
+				publicationRkey: publicationRkey || undefined,
+				tags: value.tags || undefined
 			});
 		}
 	} catch (error) {
