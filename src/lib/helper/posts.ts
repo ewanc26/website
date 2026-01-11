@@ -20,7 +20,8 @@ export function filterPosts(posts: BlogPost[], query: string): BlogPost[] {
 		const descMatch = post.description?.toLowerCase().includes(lowerQuery);
 		const platformMatch = post.platform.toLowerCase().includes(lowerQuery);
 		const pubMatch = post.publicationName?.toLowerCase().includes(lowerQuery);
-		return titleMatch || descMatch || platformMatch || pubMatch;
+		const tagsMatch = post.tags?.some((tag) => tag.toLowerCase().includes(lowerQuery));
+		return titleMatch || descMatch || platformMatch || pubMatch || tagsMatch;
 	});
 }
 
@@ -73,4 +74,15 @@ export function getSortedMonths(yearGroup: Map<number, MonthData>): [number, Mon
  */
 export function getSortedYears(groupedPosts: GroupedPosts): number[] {
 	return Array.from(groupedPosts.keys()).sort((a, b) => b - a);
+}
+
+/**
+ * Extract all unique tags from posts
+ */
+export function getAllTags(posts: BlogPost[]): string[] {
+	const tagsSet = new Set<string>();
+	posts.forEach((post) => {
+		post.tags?.forEach((tag) => tagsSet.add(tag));
+	});
+	return Array.from(tagsSet).sort();
 }

@@ -107,6 +107,7 @@ export interface BlogPost {
 	rkey: string;
 	publicationName?: string;
 	publicationRkey?: string;
+	tags?: string[];
 }
 
 export interface BlogPostsData {
