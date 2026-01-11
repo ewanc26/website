@@ -102,7 +102,7 @@ export interface BlogPost {
 	title: string;
 	url: string;
 	createdAt: string;
-	platform: 'WhiteWind' | 'leaflet';
+	platform: 'WhiteWind' | 'leaflet' | 'standard.site';
 	description?: string;
 	rkey: string;
 	publicationName?: string;
@@ -239,4 +239,62 @@ export interface TangledRepo {
 
 export interface TangledReposData {
 	repos: TangledRepo[];
+}
+
+// Standard.site types
+export interface StandardSiteThemeColor {
+	r: number;
+	g: number;
+	b: number;
+	a?: number;
+}
+
+export interface StandardSiteBasicTheme {
+	background: StandardSiteThemeColor;
+	foreground: StandardSiteThemeColor;
+	accent: StandardSiteThemeColor;
+	accentForeground: StandardSiteThemeColor;
+}
+
+export interface StandardSitePublication {
+	name: string;
+	rkey: string;
+	uri: string;
+	url: string;
+	description?: string;
+	icon?: string;
+	basicTheme?: StandardSiteBasicTheme;
+	preferences?: {
+		showInDiscover?: boolean;
+	};
+}
+
+export interface StandardSitePublicationsData {
+	publications: StandardSitePublication[];
+}
+
+export interface StandardSiteDocument {
+	title: string;
+	rkey: string;
+	uri: string;
+	url: string;
+	site: string;
+	path?: string;
+	description?: string;
+	coverImage?: string;
+	content?: any;
+	textContent?: string;
+	bskyPostRef?: {
+		uri: string;
+		cid: string;
+	};
+	tags?: string[];
+	publishedAt: string;
+	updatedAt?: string;
+	publicationName?: string;
+	publicationRkey?: string;
+}
+
+export interface StandardSiteDocumentsData {
+	documents: StandardSiteDocument[];
 }
