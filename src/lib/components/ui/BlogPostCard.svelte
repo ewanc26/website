@@ -17,7 +17,7 @@
 
 <InternalCard href={post.url}>
 	{#snippet children()}
-		<div class="min-w-0 flex-1 space-y-2">
+		<div class="relative min-w-0 flex-1 space-y-2">
 			<!-- Badges: Platform and Publication -->
 			{#if badges.length > 0}
 				<div class="flex flex-wrap items-center gap-2">
@@ -45,10 +45,26 @@
 				</p>
 			{/if}
 
-			<!-- Timestamp -->
-			<p class="text-xs font-medium text-ink-800 dark:text-ink-100">
-				{formatLocalizedDate(post.createdAt, locale)}
-			</p>
+			<!-- Timestamp and Tags row -->
+			<div class="flex items-end justify-between gap-3 pt-1">
+				<!-- Timestamp (left) -->
+				<p class="text-xs font-medium text-ink-800 dark:text-ink-100">
+					{formatLocalizedDate(post.createdAt, locale)}
+				</p>
+
+				<!-- Tags (right) -->
+				{#if post.tags && post.tags.length > 0}
+					<div class="flex flex-wrap items-center justify-end gap-1.5">
+						{#each post.tags as tag}
+							<span
+								class="rounded bg-ink-100 px-2 py-0.5 text-xs font-medium text-ink-800 dark:bg-ink-800 dark:text-ink-100"
+							>
+								#{tag}
+							</span>
+						{/each}
+					</div>
+				{/if}
+			</div>
 		</div>
 
 		<!-- External Link Icon -->
