@@ -27,6 +27,25 @@ Documentation for the centralized color theme system. Learn how to:
 
 **Read this if you want to customize or add Colour Themes.**
 
+### [Standard.site Integration](./standard-site-integration.md)
+
+Complete guide to the Standard.site lexicons integration. Covers:
+
+- Overview of Standard.site lexicon collections
+- Type definitions and API reference
+- Fetching publications and documents
+- Slug-based routing configuration
+- Blog feed integration
+- URL resolution patterns
+- Troubleshooting and examples
+
+**Read this if you want to use Standard.site for long-form content.**
+
+**Quick References:**
+- [Integration Summary](./INTEGRATION_SUMMARY.md) - What was changed and why
+- [Quick Reference](./STANDARD_SITE_QUICK_REF.md) - Common patterns and snippets
+- [Migration Guide](./MIGRATION_GUIDE.md) - Migrate from Leaflet to Standard.site
+
 ## 🚀 Quick Links
 
 - [Main README](../README.md) - Project overview and features
@@ -37,9 +56,13 @@ Documentation for the centralized color theme system. Learn how to:
 
 ```plaintext
 docs/
-├── README.md           # This file - documentation index
-├── configuration.md    # Setup and configuration guide
-└── theme-system.md     # Theme system documentation
+├── README.md                        # This file - documentation index
+├── configuration.md                 # Setup and configuration guide
+├── theme-system.md                  # Theme system documentation
+├── standard-site-integration.md     # Standard.site integration guide
+├── INTEGRATION_SUMMARY.md           # Standard.site changes summary
+├── STANDARD_SITE_QUICK_REF.md       # Standard.site quick reference
+└── MIGRATION_GUIDE.md               # Leaflet to Standard.site migration
 ```
 
 ## 💡 Contributing to Documentation
@@ -58,3 +81,6 @@ When adding new documentation:
 - [SvelteKit Documentation](https://kit.svelte.dev/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/)
 - [Bluesky](https://bsky.app/)
+- [Standard.site](https://standard.site/) - Long-form publishing lexicons
+- [Leaflet](https://leaflet.pub/) - Blogging platform for AT Protocol
+- [WhiteWind](https://whtwnd.com/) - Alternative blogging platform

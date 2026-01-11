@@ -13,6 +13,7 @@ import type {
 	LeafletPublication,
 	LeafletPublicationsData
 } from './types';
+import { fetchStandardSiteDocuments } from './standard';
 
 /**
  * Fetches all Leaflet publications for a user
@@ -87,8 +88,8 @@ async function getBlobUrl(blob: any, fetchFn?: typeof fetch): Promise<string | u
 }
 
 /**
- * Fetches blog posts from both WhiteWind and Leaflet sources
- * Now supports multiple Leaflet publications
+ * Fetches blog posts from WhiteWind, Leaflet, and Standard.site sources
+ * Supports multiple publications from all platforms
  */
 export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsData> {
 	const cacheKey = `blogposts:${PUBLIC_ATPROTO_DID}`;
@@ -191,6 +192,26 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsD
 		}
 	} catch (error) {
 		console.warn('Failed to fetch Leaflet documents:', error);
+	}
+
+	// Fetch Standard.site documents
+	try {
+		const standardDocumentsData = await fetchStandardSiteDocuments(fetchFn);
+
+		for (const doc of standardDocumentsData.documents) {
+			posts.push({
+				title: doc.title,
+				url: doc.url,
+				createdAt: doc.publishedAt,
+				platform: 'standard.site',
+				description: doc.description,
+				rkey: doc.rkey,
+				publicationName: doc.publicationName,
+				publicationRkey: doc.publicationRkey
+			});
+		}
+	} catch (error) {
+		console.warn('Failed to fetch Standard.site documents:', error);
 	}
 
 	// Sort by date (newest first) and take top 5

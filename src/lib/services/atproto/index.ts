@@ -32,7 +32,13 @@ export type {
 	MusicArtist,
 	KibunStatusData,
 	TangledRepo,
-	TangledReposData
+	TangledReposData,
+	StandardSitePublication,
+	StandardSitePublicationsData,
+	StandardSiteDocument,
+	StandardSiteDocumentsData,
+	StandardSiteBasicTheme,
+	StandardSiteThemeColor
 } from './types';
 
 // Export fetch functions
@@ -44,6 +50,11 @@ export {
 	fetchKibunStatus,
 	fetchTangledRepos
 } from './fetch';
+
+export {
+	fetchStandardSitePublications,
+	fetchStandardSiteDocuments
+} from './standard';
 
 export {
 	fetchBlogPosts,
