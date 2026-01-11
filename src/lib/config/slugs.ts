@@ -1,4 +1,4 @@
-import { slugMappings, type SlugMapping } from '$lib/data/slug-mappings';
+import { slugMappings, type SlugMapping, type PublicationPlatform } from '$lib/data/slug-mappings';
 
 /**
  * Normalize a slug to be URI-compatible
@@ -29,16 +29,32 @@ export function normalizeSlug(slug: string): string {
 }
 
 /**
- * Get publication rkey from slug
+ * Get publication info from slug
+ * Automatically normalizes the slug before lookup
+ *
+ * @param slug - The slug to look up (will be normalized)
+ * @returns Object with rkey and platform, or null if not found
+ */
+export function getPublicationFromSlug(slug: string): { rkey: string; platform: PublicationPlatform } | null {
+	const normalizedSlug = normalizeSlug(slug);
+	const mapping = slugMappings.find((m) => normalizeSlug(m.slug) === normalizedSlug);
+	if (!mapping) return null;
+	return {
+		rkey: mapping.publicationRkey,
+		platform: mapping.platform || 'leaflet' // Default to leaflet for backwards compatibility
+	};
+}
+
+/**
+ * Get publication rkey from slug (backwards compatibility)
  * Automatically normalizes the slug before lookup
  *
  * @param slug - The slug to look up (will be normalized)
  * @returns The publication rkey or null if not found
  */
 export function getPublicationRkeyFromSlug(slug: string): string | null {
-	const normalizedSlug = normalizeSlug(slug);
-	const mapping = slugMappings.find((m) => normalizeSlug(m.slug) === normalizedSlug);
-	return mapping?.publicationRkey || null;
+	const result = getPublicationFromSlug(slug);
+	return result?.rkey || null;
 }
 
 /**

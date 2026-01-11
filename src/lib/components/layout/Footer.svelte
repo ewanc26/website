@@ -97,10 +97,10 @@
 						type="button"
 						onclick={() => happyMacStore.incrementClick()}
 						class="cursor-default select-none transition-colors hover:text-ink-600 dark:hover:text-ink-300"
-						aria-label="Version 10.5.0{showHint ? ` - ${$happyMacStore.clickCount} of 24 clicks` : ''}"
+						aria-label="Version 10.6.0{showHint ? ` - ${$happyMacStore.clickCount} of 24 clicks` : ''}"
 						title={showHint ? `${$happyMacStore.clickCount}/24` : ''}
 					>
-						v10.5.0{#if showHint}<span class="ml-1 text-xs opacity-60">({$happyMacStore.clickCount}/24)</span>{/if}
+						v10.6.0{#if showHint}<span class="ml-1 text-xs opacity-60">({$happyMacStore.clickCount}/24)</span>{/if}
 					</button>
 				</div>
 			</div>

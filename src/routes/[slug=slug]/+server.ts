@@ -1,15 +1,15 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { PUBLIC_ATPROTO_DID } from '$env/static/public';
-import { fetchLeafletPublications } from '$lib/services/atproto';
-import { getPublicationRkeyFromSlug } from '$lib/config/slugs';
+import { fetchLeafletPublications, fetchStandardSitePublications } from '$lib/services/atproto';
+import { getPublicationFromSlug } from '$lib/config/slugs';
 
 /**
  * Dynamic slug root redirect handler
  *
- * Redirects /{slug} to the appropriate Leaflet publication:
- * - Uses the slug mapping config to find the publication rkey
- * - Priority 1: Publication base_path from Leaflet API
- * - Priority 2: Leaflet /lish format
+ * Redirects /{slug} to the appropriate publication (Leaflet or Standard.site):
+ * - Uses the slug mapping config to find the publication rkey and platform
+ * - For Leaflet: Priority 1: Publication base_path, Priority 2: /lish format
+ * - For Standard.site: Uses the publication URL directly
  *
  * Individual posts are handled by the [rkey] route.
  */
@@ -31,7 +31,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
 
 	// For /{slug} root, redirect to the publication
 	if (!slugPath || slugPath === '') {
-		// Validate slug and get the publication rkey
+		// Validate slug and get the publication info
 		if (!slug) {
 			return new Response('Invalid slug', {
 				status: 400,
@@ -41,11 +41,11 @@ export const GET: RequestHandler = async ({ params, url }) => {
 			});
 		}
 
-		const publicationRkey = getPublicationRkeyFromSlug(slug);
+		const publicationInfo = getPublicationFromSlug(slug);
 
-		if (!publicationRkey) {
+		if (!publicationInfo) {
 			return new Response(
-				`Slug not configured: ${slug}\n\nPlease add this slug to src/lib/config/slugs.ts`,
+				`Slug not configured: ${slug}\n\nPlease add this slug to src/lib/data/slug-mappings.ts`,
 				{
 					status: 404,
 					headers: {
@@ -55,26 +55,42 @@ export const GET: RequestHandler = async ({ params, url }) => {
 			);
 		}
 
+		const { rkey: publicationRkey, platform } = publicationInfo;
 		let redirectUrl: string | null = null;
 
 		try {
-			// Fetch publications to get base path
-			const { publications } = await fetchLeafletPublications();
-			const publication = publications.find((p) => p.rkey === publicationRkey);
+			if (platform === 'standard.site') {
+				// Fetch Standard.site publications
+				const { publications } = await fetchStandardSitePublications();
+				const publication = publications.find((p) => p.rkey === publicationRkey);
 
-			if (publication?.basePath) {
-				// Ensure basePath is a complete URL
-				redirectUrl = publication.basePath.startsWith('http')
-					? publication.basePath
-					: `https://${publication.basePath}`;
+				if (publication) {
+					// Use the publication URL directly
+					redirectUrl = publication.url.startsWith('http')
+						? publication.url
+						: `https://${publication.url}`;
+				}
 			} else {
-				// Use Leaflet /lish format
-				redirectUrl = `https://leaflet.pub/lish/${PUBLIC_ATPROTO_DID}/${publicationRkey}`;
+				// Fetch Leaflet publications
+				const { publications } = await fetchLeafletPublications();
+				const publication = publications.find((p) => p.rkey === publicationRkey);
+
+				if (publication?.basePath) {
+					// Ensure basePath is a complete URL
+					redirectUrl = publication.basePath.startsWith('http')
+						? publication.basePath
+						: `https://${publication.basePath}`;
+				} else {
+					// Use Leaflet /lish format
+					redirectUrl = `https://leaflet.pub/lish/${PUBLIC_ATPROTO_DID}/${publicationRkey}`;
+				}
 			}
 		} catch (error) {
-			console.error('Error fetching Leaflet publication:', error);
-			// Fallback to /lish format
-			redirectUrl = `https://leaflet.pub/lish/${PUBLIC_ATPROTO_DID}/${publicationRkey}`;
+			console.error(`Error fetching ${platform} publication:`, error);
+			// Fallback based on platform
+			if (platform === 'leaflet') {
+				redirectUrl = `https://leaflet.pub/lish/${PUBLIC_ATPROTO_DID}/${publicationRkey}`;
+			}
 		}
 
 		// If we have a redirect URL, use it
@@ -90,7 +106,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
 
 		// No publication found
 		return new Response(
-			`Publication not found for slug: ${slug}\n\nPlease check your configuration in src/lib/config/slugs.ts`,
+			`Publication not found for slug: ${slug}\n\nPlease check your configuration in src/lib/data/slug-mappings.ts`,
 			{
 				status: 404,
 				headers: {
