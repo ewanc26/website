@@ -77,12 +77,12 @@ export function getSortedYears(groupedPosts: GroupedPosts): number[] {
 }
 
 /**
- * Extract all unique tags from posts
+ * Extract all unique tags from posts (normalized to lowercase)
  */
 export function getAllTags(posts: BlogPost[]): string[] {
 	const tagsSet = new Set<string>();
 	posts.forEach((post) => {
-		post.tags?.forEach((tag) => tagsSet.add(tag));
+		post.tags?.forEach((tag) => tagsSet.add(tag.toLowerCase()));
 	});
 	return Array.from(tagsSet).sort();
 }
