@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ExternalLink } from '@lucide/svelte';
+	import { ExternalLink, Tag } from '@lucide/svelte';
 	import type { BlogPost } from '$lib/services/atproto';
 	import { InternalCard } from '$lib/components/ui';
 	import { getPostBadges, getBadgeClasses } from '$lib/helper/badges';
@@ -45,32 +45,31 @@
 				</p>
 			{/if}
 
-			<!-- Timestamp and Tags row -->
-			<div class="flex items-end justify-between gap-3 pt-1">
-				<!-- Timestamp (left) -->
+			<!-- Timestamp -->
+			<div class="pt-1">
 				<p class="text-xs font-medium text-ink-800 dark:text-ink-100">
 					{formatLocalizedDate(post.createdAt, locale)}
 				</p>
-
-				<!-- Tags (right) -->
-				{#if post.tags && post.tags.length > 0}
-					<div class="flex flex-wrap items-center justify-end gap-1.5">
-						{#each post.tags as tag}
-							<span
-								class="rounded bg-ink-100 px-2 py-0.5 text-xs font-medium text-ink-800 dark:bg-ink-800 dark:text-ink-100"
-							>
-								#{tag}
-							</span>
-						{/each}
-					</div>
-				{/if}
 			</div>
 		</div>
 
-		<!-- External Link Icon -->
-		<ExternalLink
-			class="h-4 w-4 shrink-0 text-ink-700 transition-colors dark:text-ink-200"
-			aria-hidden="true"
-		/>
+		<!-- Right column: External Link Icon and Tags -->
+		<div class="flex shrink-0 flex-col items-end justify-between self-stretch gap-2">
+			<!-- External Link Icon -->
+			<ExternalLink
+				class="h-4 w-4 text-ink-700 transition-colors dark:text-ink-200"
+				aria-hidden="true"
+			/>
+
+			<!-- Tags -->
+			{#if post.tags && post.tags.length > 0}
+				<div class="flex items-center gap-1.5 rounded bg-ink-100 px-2 py-0.5 dark:bg-ink-800">
+					<Tag class="h-3 w-3 text-ink-700 dark:text-ink-200" aria-hidden="true" />
+					<span class="text-xs font-medium text-ink-800 dark:text-ink-100">
+						{post.tags.length}
+					</span>
+				</div>
+			{/if}
+		</div>
 	{/snippet}
 </InternalCard>
