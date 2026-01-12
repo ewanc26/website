@@ -90,7 +90,7 @@
 	const filteredPosts = $derived.by(() => {
 		if (!selectedTag) return filteredByPublication;
 		return filteredByPublication.filter((post: BlogPost) => {
-			return post.tags?.includes(selectedTag);
+			return post.tags?.some((tag) => tag.toLowerCase() === selectedTag.toLowerCase());
 		});
 	});
 
