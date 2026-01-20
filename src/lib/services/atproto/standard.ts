@@ -136,11 +136,11 @@ export async function fetchStandardSiteDocuments(
 				// It's a publication URI
 				publication = publicationsMap.get(siteValue);
 				publicationRkey = siteValue.split('/').pop();
-				
+
 				// Build URL from publication base URL + document path
 				if (publication) {
-					const basePath = publication.url.endsWith('/') 
-						? publication.url.slice(0, -1) 
+					const basePath = publication.url.endsWith('/')
+						? publication.url.slice(0, -1)
 						: publication.url;
 					const docPath = docValue.path || `/${rkey}`;
 					url = `${basePath}${docPath.startsWith('/') ? docPath : '/' + docPath}`;
@@ -178,9 +178,7 @@ export async function fetchStandardSiteDocuments(
 		}
 
 		// Sort by publishedAt (newest first)
-		documents.sort(
-			(a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-		);
+		documents.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
 		const data: StandardSiteDocumentsData = { documents };
 		cache.set(cacheKey, data);

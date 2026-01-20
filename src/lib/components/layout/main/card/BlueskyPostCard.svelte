@@ -6,8 +6,14 @@
 	import { Heart, Repeat2, MessageCircle, ExternalLink, X } from '@lucide/svelte';
 	import Hls from 'hls.js';
 
+	interface Props {
+		post?: BlueskyPost | null;
+	}
+
+	let { post: initialPost = null }: Props = $props();
+
 	let post = $state<BlueskyPost | null>(null);
-	let loading = $state(true);
+	let loading = $state(false);
 	let error = $state<string | null>(null);
 	let lightboxImage = $state<{ url: string; alt: string } | null>(null);
 	let videoElements = new Map<string, { element: HTMLVideoElement; hls: Hls | null }>();
@@ -34,10 +40,18 @@
 		}
 	}
 
-	// Initial load and polling setup using $effect
+	// Initialize post and set up polling
 	$effect(() => {
-		// Initial load
-		loadPost();
+		// Set initial post if provided
+		if (initialPost && !post) {
+			post = initialPost;
+		}
+
+		// Only do initial load if we don't have a post
+		if (!post) {
+			loading = true;
+			loadPost();
+		}
 
 		// Set up polling for new posts
 		const pollInterval = setInterval(async () => {

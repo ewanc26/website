@@ -1,32 +1,24 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { Card } from '$lib/components/ui';
-	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
+	import type { ProfileData } from '$lib/services/atproto';
 	import LinkCard from './LinkCard.svelte';
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
 
-	let profile: ProfileData | null = null;
-	let loading = true;
-	let error: string | null = null;
-	let imageLoaded = false;
-	let bannerLoaded = false;
+	interface Props {
+		profile?: ProfileData | null;
+	}
+
+	let { profile = null }: Props = $props();
+
+	let imageLoaded = $state(false);
+	let bannerLoaded = $state(false);
 
 	// Detect system locale, fallback to en-GB
 	const locale = typeof navigator !== 'undefined' ? navigator.language || 'en-GB' : 'en-GB';
-
-	onMount(async () => {
-		try {
-			profile = await fetchProfile();
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to load profile';
-		} finally {
-			loading = false;
-		}
-	});
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
-	{#if loading}
+	{#if !profile}
 		<Card loading={true} variant="elevated" padding="none" class="overflow-hidden">
 			{#snippet skeleton()}
 				<!-- Banner skeleton -->
@@ -54,9 +46,7 @@
 				</div>
 			{/snippet}
 		</Card>
-	{:else if error}
-		<Card error={true} errorMessage={error} />
-	{:else if profile}
+	{:else}
 		{@const safeProfile = profile}
 		<Card variant="elevated" padding="none" ariaLabel="Profile information">
 			{#snippet children()}
@@ -113,7 +103,7 @@
 					</h2>
 					<p class="font-medium text-ink-700 dark:text-ink-200">@{safeProfile.handle}</p>
 					{#if safeProfile.pronouns}
-						<p class="text-sm italic text-ink-600 dark:text-ink-300">{safeProfile.pronouns}</p>
+						<p class="text-sm text-ink-600 italic dark:text-ink-300">{safeProfile.pronouns}</p>
 					{/if}
 
 					{#if safeProfile.description}

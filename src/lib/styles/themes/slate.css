@@ -8,15 +8,15 @@
 [data-color-theme='slate'] {
 	/* Primary - Slate (230°) */
 	--color-primary-50: light-dark(oklch(18.2% 0.018 230), oklch(97.8% 0.012 230));
-	--color-primary-100: light-dark(oklch(26.5% 0.030 230), oklch(94.8% 0.022 230));
+	--color-primary-100: light-dark(oklch(26.5% 0.03 230), oklch(94.8% 0.022 230));
 	--color-primary-200: light-dark(oklch(40.5% 0.048 230), oklch(89.5% 0.042 230));
 	--color-primary-300: light-dark(oklch(54% 0.065 230), oklch(79.5% 0.062 230));
-	--color-primary-400: light-dark(oklch(66.5% 0.080 230), oklch(69.5% 0.078 230));
+	--color-primary-400: light-dark(oklch(66.5% 0.08 230), oklch(69.5% 0.078 230));
 	--color-primary-500: light-dark(oklch(78.5% 0.095 230), oklch(59.5% 0.095 230));
-	--color-primary-600: light-dark(oklch(82.2% 0.078 230), oklch(49.5% 0.080 230));
+	--color-primary-600: light-dark(oklch(82.2% 0.078 230), oklch(49.5% 0.08 230));
 	--color-primary-700: light-dark(oklch(86.5% 0.062 230), oklch(39.5% 0.065 230));
 	--color-primary-800: light-dark(oklch(91% 0.042 230), oklch(29.5% 0.048 230));
-	--color-primary-900: light-dark(oklch(95.8% 0.022 230), oklch(21.5% 0.030 230));
+	--color-primary-900: light-dark(oklch(95.8% 0.022 230), oklch(21.5% 0.03 230));
 	--color-primary-950: light-dark(oklch(98% 0.012 230), oklch(15.2% 0.018 230));
 
 	/* Ink - Slate-tinted text (230°) */
@@ -46,17 +46,17 @@
 	--color-canvas-950: light-dark(oklch(98.6% 0.005 230), oklch(17.8% 0.014 230));
 
 	/* Secondary - Steel Grey (215°) */
-	--color-secondary-50: light-dark(oklch(18.5% 0.020 215), oklch(97.9% 0.013 215));
+	--color-secondary-50: light-dark(oklch(18.5% 0.02 215), oklch(97.9% 0.013 215));
 	--color-secondary-100: light-dark(oklch(26.8% 0.033 215), oklch(95% 0.024 215));
 	--color-secondary-200: light-dark(oklch(41% 0.052 215), oklch(89.8% 0.045 215));
-	--color-secondary-300: light-dark(oklch(54.5% 0.070 215), oklch(80.2% 0.065 215));
+	--color-secondary-300: light-dark(oklch(54.5% 0.07 215), oklch(80.2% 0.065 215));
 	--color-secondary-400: light-dark(oklch(67% 0.087 215), oklch(70.2% 0.082 215));
 	--color-secondary-500: light-dark(oklch(79% 0.103 215), oklch(60.2% 0.103 215));
 	--color-secondary-600: light-dark(oklch(82.8% 0.082 215), oklch(50.2% 0.087 215));
-	--color-secondary-700: light-dark(oklch(87% 0.065 215), oklch(40.2% 0.070 215));
+	--color-secondary-700: light-dark(oklch(87% 0.065 215), oklch(40.2% 0.07 215));
 	--color-secondary-800: light-dark(oklch(91.5% 0.045 215), oklch(30.5% 0.052 215));
 	--color-secondary-900: light-dark(oklch(96% 0.024 215), oklch(22.2% 0.033 215));
-	--color-secondary-950: light-dark(oklch(98.2% 0.013 215), oklch(15.8% 0.020 215));
+	--color-secondary-950: light-dark(oklch(98.2% 0.013 215), oklch(15.8% 0.02 215));
 
 	/* Accent - Charcoal (240°) */
 	--color-accent-50: light-dark(oklch(18.5% 0.022 240), oklch(98% 0.014 240));

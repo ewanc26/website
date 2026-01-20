@@ -5,6 +5,7 @@ This guide helps you migrate content from Leaflet to Standard.site or run both p
 ## Should You Migrate?
 
 **Consider Standard.site if you want:**
+
 - More flexible content models (open union for content types)
 - Direct theme integration (colors defined in publication)
 - Better document organization (tags, paths, cover images)
@@ -12,6 +13,7 @@ This guide helps you migrate content from Leaflet to Standard.site or run both p
 - Bluesky integration (post references for comments)
 
 **Stay with Leaflet if you prefer:**
+
 - The Leaflet ecosystem and community
 - The /lish hosted format
 - Simpler publication structure
@@ -23,41 +25,44 @@ This guide helps you migrate content from Leaflet to Standard.site or run both p
 The easiest approach is to use both platforms together:
 
 ### 1. Keep Existing Leaflet Setup
+
 Your existing Leaflet publications continue to work:
 
 ```typescript
 // src/lib/data/slug-mappings.ts
 export const slugMappings: SlugMapping[] = [
-  {
-    slug: 'blog',
-    publicationRkey: '3m3x4bgbsh22k',
-    platform: 'leaflet'  // Existing Leaflet blog
-  },
-  // ... other Leaflet mappings
+	{
+		slug: 'blog',
+		publicationRkey: '3m3x4bgbsh22k',
+		platform: 'leaflet' // Existing Leaflet blog
+	}
+	// ... other Leaflet mappings
 ];
 ```
 
 ### 2. Add Standard.site Publications
+
 Add new Standard.site publications alongside:
 
 ```typescript
 export const slugMappings: SlugMapping[] = [
-  // Existing Leaflet
-  {
-    slug: 'blog',
-    publicationRkey: '3m3x4bgbsh22k',
-    platform: 'leaflet'
-  },
-  // New Standard.site
-  {
-    slug: 'articles',
-    publicationRkey: '3labc123xyz',
-    platform: 'standard.site'
-  }
+	// Existing Leaflet
+	{
+		slug: 'blog',
+		publicationRkey: '3m3x4bgbsh22k',
+		platform: 'leaflet'
+	},
+	// New Standard.site
+	{
+		slug: 'articles',
+		publicationRkey: '3labc123xyz',
+		platform: 'standard.site'
+	}
 ];
 ```
 
 ### 3. Content Appears in Unified Feed
+
 Both platforms' content automatically appears in `fetchBlogPosts()`:
 
 ```typescript
@@ -75,20 +80,22 @@ Create a `site.standard.publication` record in your AT Protocol repository:
 
 ```json
 {
-  "$type": "site.standard.publication",
-  "name": "My Blog",
-  "url": "https://myblog.com",
-  "description": "My personal blog about technology",
-  "icon": { /* blob reference */ },
-  "basicTheme": {
-    "background": { "r": 255, "g": 255, "b": 255 },
-    "foreground": { "r": 0, "g": 0, "b": 0 },
-    "accent": { "r": 59, "g": 130, "b": 246 },
-    "accentForeground": { "r": 255, "g": 255, "b": 255 }
-  },
-  "preferences": {
-    "showInDiscover": true
-  }
+	"$type": "site.standard.publication",
+	"name": "My Blog",
+	"url": "https://myblog.com",
+	"description": "My personal blog about technology",
+	"icon": {
+		/* blob reference */
+	},
+	"basicTheme": {
+		"background": { "r": 255, "g": 255, "b": 255 },
+		"foreground": { "r": 0, "g": 0, "b": 0 },
+		"accent": { "r": 59, "g": 130, "b": 246 },
+		"accentForeground": { "r": 255, "g": 255, "b": 255 }
+	},
+	"preferences": {
+		"showInDiscover": true
+	}
 }
 ```
 
@@ -97,29 +104,35 @@ Create a `site.standard.publication` record in your AT Protocol repository:
 For each Leaflet document, create a corresponding Standard.site document:
 
 **Leaflet Document:**
+
 ```json
 {
-  "$type": "pub.leaflet.document",
-  "title": "My Post",
-  "publication": "at://did:plc:abc/pub.leaflet.publication/xyz",
-  "content": { /* markdown or HTML */ },
-  "createdAt": "2024-01-01T12:00:00Z"
+	"$type": "pub.leaflet.document",
+	"title": "My Post",
+	"publication": "at://did:plc:abc/pub.leaflet.publication/xyz",
+	"content": {
+		/* markdown or HTML */
+	},
+	"createdAt": "2024-01-01T12:00:00Z"
 }
 ```
 
 **Standard.site Document:**
+
 ```json
 {
-  "$type": "site.standard.document",
-  "title": "My Post",
-  "site": "at://did:plc:abc/site.standard.publication/xyz",
-  "path": "/my-post",
-  "description": "A brief description of my post",
-  "content": { /* open union - flexible format */ },
-  "textContent": "Plain text version...",
-  "tags": ["technology", "tutorial"],
-  "publishedAt": "2024-01-01T12:00:00Z",
-  "updatedAt": "2024-01-15T14:30:00Z"
+	"$type": "site.standard.document",
+	"title": "My Post",
+	"site": "at://did:plc:abc/site.standard.publication/xyz",
+	"path": "/my-post",
+	"description": "A brief description of my post",
+	"content": {
+		/* open union - flexible format */
+	},
+	"textContent": "Plain text version...",
+	"tags": ["technology", "tutorial"],
+	"publishedAt": "2024-01-01T12:00:00Z",
+	"updatedAt": "2024-01-15T14:30:00Z"
 }
 ```
 
@@ -159,19 +172,19 @@ You can keep Leaflet records for historical purposes or delete them:
 
 ## Field Mapping Reference
 
-| Leaflet Field | Standard.site Field | Notes |
-|---------------|---------------------|-------|
-| `title` | `title` | Direct mapping |
-| `publication` | `site` | Both use AT URI reference |
-| `content` | `content` | Standard.site uses open union |
-| - | `textContent` | New: plaintext version |
-| - | `description` | New: excerpt/summary |
-| - | `path` | New: document URL path |
-| - | `coverImage` | New: cover/thumbnail |
-| `createdAt` | `publishedAt` | Rename for clarity |
-| - | `updatedAt` | New: track edits |
-| - | `tags` | New: categorization |
-| - | `bskyPostRef` | New: link to Bluesky post |
+| Leaflet Field | Standard.site Field | Notes                         |
+| ------------- | ------------------- | ----------------------------- |
+| `title`       | `title`             | Direct mapping                |
+| `publication` | `site`              | Both use AT URI reference     |
+| `content`     | `content`           | Standard.site uses open union |
+| -             | `textContent`       | New: plaintext version        |
+| -             | `description`       | New: excerpt/summary          |
+| -             | `path`              | New: document URL path        |
+| -             | `coverImage`        | New: cover/thumbnail          |
+| `createdAt`   | `publishedAt`       | Rename for clarity            |
+| -             | `updatedAt`         | New: track edits              |
+| -             | `tags`              | New: categorization           |
+| -             | `bskyPostRef`       | New: link to Bluesky post     |
 
 ## Theme Migration
 
@@ -180,10 +193,10 @@ Leaflet doesn't have built-in themes, but Standard.site does:
 ```typescript
 // Define your theme in the publication
 const theme = {
-  background: { r: 255, g: 255, b: 255 },      // White
-  foreground: { r: 17, g: 24, b: 39 },         // Dark gray
-  accent: { r: 59, g: 130, b: 246 },           // Blue
-  accentForeground: { r: 255, g: 255, b: 255 } // White
+	background: { r: 255, g: 255, b: 255 }, // White
+	foreground: { r: 17, g: 24, b: 39 }, // Dark gray
+	accent: { r: 59, g: 130, b: 246 }, // Blue
+	accentForeground: { r: 255, g: 255, b: 255 } // White
 };
 
 // Use in your site
@@ -195,19 +208,23 @@ const bgColor = `rgb(${theme.background.r}, ${theme.background.g}, ${theme.backg
 ### Leaflet URLs
 
 **Publication:**
+
 - With base_path: `https://myblog.com`
 - Without: `https://leaflet.pub/lish/{DID}/{publicationRkey}`
 
 **Document:**
+
 - With base_path: `https://myblog.com/{rkey}`
 - Without: `https://leaflet.pub/lish/{DID}/{publicationRkey}/{rkey}`
 
 ### Standard.site URLs
 
 **Publication:**
+
 - `{publication.url}` (e.g., `https://myblog.com`)
 
 **Document:**
+
 - `{publication.url}{document.path}` (e.g., `https://myblog.com/my-post`)
 
 ## Migration Tools
@@ -219,27 +236,27 @@ const bgColor = `rgb(${theme.background.r}, ${theme.background.g}, ${theme.backg
 import { fetchLeafletPublications, fetchStandardSitePublications } from '$lib/services/atproto';
 
 async function migratePublication(leafletRkey: string) {
-  // 1. Fetch Leaflet publication
-  const { publications: leafletPubs } = await fetchLeafletPublications();
-  const leafletPub = leafletPubs.find(p => p.rkey === leafletRkey);
-  
-  if (!leafletPub) {
-    throw new Error('Leaflet publication not found');
-  }
-  
-  // 2. Create Standard.site publication
-  const standardPub = {
-    $type: 'site.standard.publication',
-    name: leafletPub.name,
-    url: leafletPub.basePath || 'https://example.com',
-    description: leafletPub.description,
-    // ... map other fields
-  };
-  
-  // 3. Create record via AT Protocol
-  // (use @atproto/api to create the record)
-  
-  console.log('Migration complete!');
+	// 1. Fetch Leaflet publication
+	const { publications: leafletPubs } = await fetchLeafletPublications();
+	const leafletPub = leafletPubs.find((p) => p.rkey === leafletRkey);
+
+	if (!leafletPub) {
+		throw new Error('Leaflet publication not found');
+	}
+
+	// 2. Create Standard.site publication
+	const standardPub = {
+		$type: 'site.standard.publication',
+		name: leafletPub.name,
+		url: leafletPub.basePath || 'https://example.com',
+		description: leafletPub.description
+		// ... map other fields
+	};
+
+	// 3. Create record via AT Protocol
+	// (use @atproto/api to create the record)
+
+	console.log('Migration complete!');
 }
 ```
 
@@ -291,21 +308,25 @@ A: The Leaflet editor creates Leaflet records. You'll need to use Standard.site-
 ## Example Migration Timeline
 
 **Week 1: Preparation**
+
 - Read documentation
 - Test Standard.site locally
 - Create test publication
 
 **Week 2: Pilot Migration**
+
 - Migrate one small publication
 - Test thoroughly
 - Gather feedback
 
 **Week 3-4: Full Migration**
+
 - Migrate remaining publications
 - Update all slug mappings
 - Monitor for issues
 
 **Week 5: Cleanup**
+
 - Archive Leaflet records
 - Update documentation
 - Celebrate! 🎉

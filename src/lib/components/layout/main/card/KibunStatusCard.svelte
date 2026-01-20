@@ -1,33 +1,20 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { Card } from '$lib/components/ui';
-	import { fetchKibunStatus, type KibunStatusData } from '$lib/services/atproto';
+	import type { KibunStatusData } from '$lib/services/atproto';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
 
 	// Icons
 	import { Heart } from '@lucide/svelte';
 
-	let kibunStatus: KibunStatusData | null = null;
-	let loading = true;
-	let error: string | null = null;
+	interface Props {
+		kibunStatus?: KibunStatusData | null;
+	}
 
-	onMount(async () => {
-		try {
-			kibunStatus = await fetchKibunStatus();
-			if (kibunStatus) {
-				console.log('[KibunStatusCard] Kibun status loaded:', kibunStatus);
-			}
-		} catch (err) {
-			console.error('[KibunStatusCard] Error loading kibun status:', err);
-			error = err instanceof Error ? err.message : 'Failed to load kibun status';
-		} finally {
-			loading = false;
-		}
-	});
+	let { kibunStatus = null }: Props = $props();
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
-	{#if loading}
+	{#if !kibunStatus}
 		<Card loading={true} variant="elevated" padding="md">
 			{#snippet skeleton()}
 				<div class="mb-3">
@@ -43,9 +30,7 @@
 				</div>
 			{/snippet}
 		</Card>
-	{:else if error}
-		<Card error={true} errorMessage={error} />
-	{:else if kibunStatus}
+	{:else}
 		{@const safeKibunStatus = kibunStatus}
 		<Card variant="elevated" padding="md">
 			{#snippet children()}

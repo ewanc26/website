@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
-	
+
 	build: {
 		// Optimize chunk splitting for better caching
 		rollupOptions: {
@@ -37,18 +37,18 @@ export default defineConfig({
 		// Chunk size warnings
 		chunkSizeWarningLimit: 1000
 	},
-	
+
 	optimizeDeps: {
 		include: ['@lucide/svelte', 'hls.js', '@atproto/api']
 	},
-	
+
 	server: {
 		// Development server configuration
 		fs: {
 			strict: true
 		}
 	},
-	
+
 	ssr: {
 		// Don't externalize these in SSR
 		noExternal: []

@@ -88,7 +88,9 @@
 	let interactiveClasses = $derived(interactive || isLink ? 'cursor-pointer' : '');
 
 	// Combine all classes
-	let cardClasses = $derived(`${baseClasses} ${variantClasses[variant]} ${paddingClasses[padding]} ${interactiveClasses} ${customClass}`);
+	let cardClasses = $derived(
+		`${baseClasses} ${variantClasses[variant]} ${paddingClasses[padding]} ${interactiveClasses} ${customClass}`
+	);
 
 	/**
 	 * Get badge styling classes based on color and variant

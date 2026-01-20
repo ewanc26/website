@@ -54,7 +54,7 @@
 		</div>
 
 		<!-- Right column: External Link Icon and Tags -->
-		<div class="flex shrink-0 flex-col items-end justify-between self-stretch gap-2">
+		<div class="flex shrink-0 flex-col items-end justify-between gap-2 self-stretch">
 			<!-- External Link Icon -->
 			<ExternalLink
 				class="h-4 w-4 text-ink-700 transition-colors dark:text-ink-200"
