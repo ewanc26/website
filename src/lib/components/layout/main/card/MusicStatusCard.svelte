@@ -1,32 +1,18 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { Card } from '$lib/components/ui';
-	import { fetchMusicStatus, type MusicStatusData } from '$lib/services/atproto';
+	import type { MusicStatusData } from '$lib/services/atproto';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
 
 	// Icons
 	import { Music, Disc3, Users, Album, Clock, Radio } from '@lucide/svelte';
 
-	let musicStatus: MusicStatusData | null = null;
-	let loading = true;
-	let error: string | null = null;
-	let artworkError = false;
+	interface Props {
+		musicStatus?: MusicStatusData | null;
+	}
 
-	onMount(async () => {
-		try {
-			musicStatus = await fetchMusicStatus();
-			if (musicStatus) {
-				console.log('[MusicStatusCard] Music status loaded:', musicStatus);
-				console.log('[MusicStatusCard] Artwork URL:', musicStatus.artworkUrl);
-				console.log('[MusicStatusCard] Release MBID:', musicStatus.releaseMbId);
-			}
-		} catch (err) {
-			console.error('[MusicStatusCard] Error loading music status:', err);
-			error = err instanceof Error ? err.message : 'Failed to load music status';
-		} finally {
-			loading = false;
-		}
-	});
+	let { musicStatus = null }: Props = $props();
+
+	let artworkError = $state(false);
 
 	function formatArtists(artists: { artistName: string }[]): string {
 		if (!artists || artists.length === 0) return 'Unknown Artist';
@@ -52,7 +38,7 @@
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
-	{#if loading}
+	{#if !musicStatus}
 		<Card loading={true} variant="elevated" padding="md">
 			{#snippet skeleton()}
 				<div class="mb-3 flex items-start gap-4">
@@ -69,9 +55,7 @@
 				</div>
 			{/snippet}
 		</Card>
-	{:else if error}
-		<Card error={true} errorMessage={error} />
-	{:else if musicStatus}
+	{:else}
 		{@const safeMusicStatus = musicStatus}
 		<Card variant="elevated" padding="md">
 			{#snippet children()}

@@ -51,10 +51,7 @@ export {
 	fetchTangledRepos
 } from './fetch';
 
-export {
-	fetchStandardSitePublications,
-	fetchStandardSiteDocuments
-} from './standard';
+export { fetchStandardSitePublications, fetchStandardSiteDocuments } from './standard';
 
 export {
 	fetchBlogPosts,

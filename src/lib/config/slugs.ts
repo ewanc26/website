@@ -35,7 +35,9 @@ export function normalizeSlug(slug: string): string {
  * @param slug - The slug to look up (will be normalized)
  * @returns Object with rkey and platform, or null if not found
  */
-export function getPublicationFromSlug(slug: string): { rkey: string; platform: PublicationPlatform } | null {
+export function getPublicationFromSlug(
+	slug: string
+): { rkey: string; platform: PublicationPlatform } | null {
 	const normalizedSlug = normalizeSlug(slug);
 	const mapping = slugMappings.find((m) => normalizeSlug(m.slug) === normalizedSlug);
 	if (!mapping) return null;

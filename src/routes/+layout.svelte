@@ -86,7 +86,7 @@
 <div
 	class="flex min-h-screen flex-col overflow-x-hidden bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50"
 >
-	<Header />
+	<Header profile={data.profile} />
 
 	<main id="main-content" class="container mx-auto grow px-4 py-8" tabindex="-1">
 		<ScrollToTop />
@@ -94,7 +94,7 @@
 	</main>
 
 	<Footer />
-	
+
 	<!-- Easter egg: Happy Mac walks across the screen (click version number 24 times!) -->
 	<HappyMacEasterEgg />
 </div>

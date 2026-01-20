@@ -42,6 +42,7 @@ Complete guide to the Standard.site lexicons integration. Covers:
 **Read this if you want to use Standard.site for long-form content.**
 
 **Quick References:**
+
 - [Integration Summary](./INTEGRATION_SUMMARY.md) - What was changed and why
 - [Quick Reference](./STANDARD_SITE_QUICK_REF.md) - Common patterns and snippets
 - [Migration Guide](./MIGRATION_GUIDE.md) - Migrate from Leaflet to Standard.site

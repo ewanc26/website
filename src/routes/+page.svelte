@@ -8,18 +8,17 @@
 		KibunStatusCard,
 		TangledRepoCard
 	} from '$lib/components/layout/main/card';
-	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
+	import { createSiteMeta } from '$lib/helper/siteMeta';
+	import type { PageData } from './$types';
 
-	// The `data` object includes merged layout/page load data.
-	// Give it a proper type so TS knows data.meta may exist.
-	export let data: { siteMeta?: Partial<SiteMetadata>; meta?: Partial<SiteMetadata> };
+	let { data }: { data: PageData } = $props();
 
-	// Merge site defaults (if provided by layout) with page overrides.
-	// This produces a complete SiteMetadata object we can safely read from.
-	const meta: SiteMetadata = createSiteMeta({
-		...(data.siteMeta ?? {}),
-		...(data.meta ?? {})
-	});
+	// Use $derived for reactive metadata
+	const meta = $derived(
+		createSiteMeta({
+			...data.siteMeta
+		})
+	);
 </script>
 
 <div class="mx-auto max-w-6xl">
@@ -39,25 +38,25 @@
 	<!-- Masonry-style grid using Tailwind's column utilities -->
 	<div class="columns-1 gap-6 lg:columns-2">
 		<div class="mb-6 break-inside-avoid">
-			<ProfileCard />
+			<ProfileCard profile={data.profile} />
 		</div>
 		<div class="mb-6 break-inside-avoid">
-			<KibunStatusCard />
+			<KibunStatusCard kibunStatus={data.kibunStatus} />
 		</div>
 		<div class="mb-6 break-inside-avoid">
-			<MusicStatusCard />
+			<MusicStatusCard musicStatus={data.musicStatus} />
 		</div>
 		<div class="mb-6 break-inside-avoid">
-			<BlueskyPostCard />
+			<BlueskyPostCard post={data.latestPost} />
 		</div>
 		<div class="mb-6 break-inside-avoid">
 			<DynamicLinks />
 		</div>
 		<div class="mb-6 break-inside-avoid">
-			<PostCard />
+			<PostCard blogPosts={data.blogPosts} />
 		</div>
 		<div class="mb-6 break-inside-avoid">
-			<TangledRepoCard />
+			<TangledRepoCard repos={data.tangledRepos} profile={data.profile} />
 		</div>
 	</div>
 </div>

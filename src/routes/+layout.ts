@@ -1,12 +1,11 @@
 import type { LayoutLoad } from './$types';
 import { createSiteMeta, type SiteMetadata, defaultSiteMeta } from '$lib/helper/siteMeta';
+import { fetchProfile } from '$lib/services/atproto';
 
 /**
- * Non-blocking layout load
- * Returns immediately with default site metadata
- * All data fetching happens client-side in components for faster initial page load
+ * Layout load function - fetches profile data and provides base site metadata
  */
-export const load: LayoutLoad = async ({ url }) => {
+export const load: LayoutLoad = async ({ url, fetch }) => {
 	// Provide the default site metadata
 	const siteMeta: SiteMetadata = createSiteMeta({
 		title: defaultSiteMeta.title,
@@ -14,11 +13,16 @@ export const load: LayoutLoad = async ({ url }) => {
 		url: url.href // Include current URL for proper OG tags
 	});
 
-	// Return immediately - no blocking data fetches
-	// Components will fetch their own data client-side with skeletons
+	// Fetch profile data (needed by Header and page components)
+	let profile = null;
+	try {
+		profile = await fetchProfile(fetch);
+	} catch (error) {
+		console.error('[Layout] Failed to load profile:', error);
+	}
+
 	return {
 		siteMeta,
-		profile: null,
-		siteInfo: null
+		profile
 	};
 };

@@ -1,26 +1,17 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { Card } from '$lib/components/ui';
 	import { BlogPostCard } from '$lib/components/ui';
-	import { fetchBlogPosts, type BlogPostsData } from '$lib/services/atproto';
+	import type { BlogPostsData } from '$lib/services/atproto';
 
-	let blogPosts: BlogPostsData | null = null;
-	let loading = true;
-	let error: string | null = null;
+	interface Props {
+		blogPosts?: BlogPostsData | null;
+	}
 
-	onMount(async () => {
-		try {
-			blogPosts = await fetchBlogPosts();
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to load blog posts';
-		} finally {
-			loading = false;
-		}
-	});
+	let { blogPosts = null }: Props = $props();
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
-	{#if loading}
+	{#if !blogPosts}
 		<Card loading={true} variant="elevated" padding="md">
 			{#snippet skeleton()}
 				<div class="mb-4 h-6 w-32 rounded bg-canvas-300 dark:bg-canvas-700"></div>
@@ -39,14 +30,12 @@
 				</div>
 			{/snippet}
 		</Card>
-	{:else if error}
-		<Card error={true} errorMessage={error} />
-	{:else if blogPosts && blogPosts.posts && blogPosts.posts.length > 0}
+	{:else if blogPosts.posts && blogPosts.posts.length > 0}
 		<Card variant="elevated" padding="md">
 			{#snippet children()}
 				<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Recent Posts</h2>
 				<div class="space-y-3">
-					{#each blogPosts?.posts ?? [] as post}
+					{#each blogPosts.posts as post}
 						<BlogPostCard {post} />
 					{/each}
 				</div>

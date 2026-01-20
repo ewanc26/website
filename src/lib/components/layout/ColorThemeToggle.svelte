@@ -87,12 +87,12 @@
 		<!-- Desktop ONLY: Dropdown menu -->
 		<div
 			id="color-theme-menu"
-			class="absolute right-0 top-full z-50 mt-2 hidden w-72 rounded-lg border border-canvas-200 bg-canvas-50 shadow-xl md:block dark:border-canvas-800 dark:bg-canvas-950"
+			class="absolute top-full right-0 z-50 mt-2 hidden w-72 rounded-lg border border-canvas-200 bg-canvas-50 shadow-xl md:block dark:border-canvas-800 dark:bg-canvas-950"
 			role="menu"
 			aria-label="Colour theme menu"
 		>
 			<div class="max-h-128 overflow-y-auto p-2">
-				<div class="mb-2 px-3 py-2 text-xs font-semibold uppercase text-ink-600 dark:text-ink-400">
+				<div class="mb-2 px-3 py-2 text-xs font-semibold text-ink-600 uppercase dark:text-ink-400">
 					Colour Themes
 				</div>
 
@@ -107,8 +107,8 @@
 									onclick={() => selectTheme(theme.value as ColorTheme)}
 									class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600
 										{currentTheme === theme.value
-											? 'bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
-											: 'text-ink-700 hover:bg-canvas-100 focus-visible:bg-canvas-100 dark:text-ink-200 dark:hover:bg-canvas-900 dark:focus-visible:bg-canvas-900'}"
+										? 'bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
+										: 'text-ink-700 hover:bg-canvas-100 focus-visible:bg-canvas-100 dark:text-ink-200 dark:hover:bg-canvas-900 dark:focus-visible:bg-canvas-900'}"
 									role="menuitem"
 									aria-current={currentTheme === theme.value ? 'true' : undefined}
 								>
@@ -117,9 +117,11 @@
 										style="background-color: {theme.color}"
 										aria-hidden="true"
 									></div>
-									<div class="flex-1 min-w-0">
+									<div class="min-w-0 flex-1">
 										<div
-											class="font-medium {currentTheme === theme.value ? '' : 'text-ink-900 dark:text-ink-50'}"
+											class="font-medium {currentTheme === theme.value
+												? ''
+												: 'text-ink-900 dark:text-ink-50'}"
 										>
 											{theme.label}
 										</div>

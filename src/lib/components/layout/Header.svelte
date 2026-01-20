@@ -7,21 +7,21 @@
 	import WolfToggle from './WolfToggle.svelte';
 	import ColorThemeToggle from './ColorThemeToggle.svelte';
 	import { navItems } from '$lib/data/navItems';
-	import { fetchProfile, type ProfileData } from '$lib/services/atproto';
+	import type { ProfileData } from '$lib/services/atproto';
 	import { defaultSiteMeta, createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 	import { colorThemeDropdownOpen } from '$lib/stores/dropdownState';
 	import { colorTheme, type ColorTheme } from '$lib/stores/colorTheme';
-	import {
-		getThemesByCategory,
-		CATEGORY_LABELS
-	} from '$lib/config/themes.config';
+	import { getThemesByCategory, CATEGORY_LABELS } from '$lib/config/themes.config';
+
+	interface Props {
+		profile?: ProfileData | null;
+	}
+
+	let { profile = null }: Props = $props();
 
 	const siteMeta: SiteMetadata = createSiteMeta(defaultSiteMeta);
 	const { page } = getStores();
 
-	let profile = $state<ProfileData | null>(null);
-	let loading = $state(true);
-	let error = $state<string | null>(null);
 	let imageLoaded = $state(false);
 	let mobileMenuOpen = $state(false);
 	let colorThemeOpen = $state(false);
@@ -80,18 +80,6 @@
 			}
 		});
 
-		// Fetch profile
-		fetchProfile()
-			.then((data) => {
-				profile = data;
-			})
-			.catch((err) => {
-				error = err instanceof Error ? err.message : 'Failed to load profile';
-			})
-			.finally(() => {
-				loading = false;
-			});
-
 		// Close mobile menus on Escape key
 		const handleEscape = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') {
@@ -104,7 +92,7 @@
 			}
 		};
 		document.addEventListener('keydown', handleEscape);
-		
+
 		return () => {
 			unsubTheme();
 			unsubDropdown();
@@ -150,7 +138,6 @@
 						aria-label="Loading profile"
 					></div>
 				{/if}
-
 			</div>
 			<!-- Site title revealed on hover -->
 			<span
@@ -190,7 +177,7 @@
 					</li>
 				{/each}
 			</ul>
-			
+
 			<!-- Desktop Toggles -->
 			<div class="flex items-center gap-2">
 				<ColorThemeToggle />
@@ -270,7 +257,9 @@
 			<div class="container mx-auto flex flex-col px-3 py-2">
 				{#each Object.entries(themesByCategory) as [category, categoryThemes]}
 					<div class="mb-4 last:mb-0">
-						<div class="mb-2 px-3 text-xs font-semibold uppercase tracking-wide text-ink-600 dark:text-ink-400">
+						<div
+							class="mb-2 px-3 text-xs font-semibold tracking-wide text-ink-600 uppercase dark:text-ink-400"
+						>
 							{CATEGORY_LABELS[category as Category]}
 						</div>
 						<div class="space-y-1">
@@ -279,8 +268,8 @@
 									onclick={() => selectTheme(theme.value as ColorTheme)}
 									class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600
 										{currentTheme === theme.value
-											? 'bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
-											: 'text-ink-700 hover:bg-canvas-100 focus-visible:bg-canvas-100 dark:text-ink-200 dark:hover:bg-canvas-900 dark:focus-visible:bg-canvas-900'}"
+										? 'bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
+										: 'text-ink-700 hover:bg-canvas-100 focus-visible:bg-canvas-100 dark:text-ink-200 dark:hover:bg-canvas-900 dark:focus-visible:bg-canvas-900'}"
 									role="menuitem"
 									aria-current={currentTheme === theme.value ? 'true' : undefined}
 								>
@@ -291,7 +280,9 @@
 									></div>
 									<div class="min-w-0 flex-1">
 										<div
-											class="font-medium {currentTheme === theme.value ? '' : 'text-ink-900 dark:text-ink-50'}"
+											class="font-medium {currentTheme === theme.value
+												? ''
+												: 'text-ink-900 dark:text-ink-50'}"
 										>
 											{theme.label}
 										</div>

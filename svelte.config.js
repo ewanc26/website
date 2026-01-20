@@ -4,23 +4,23 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: vitePreprocess(),
-	
+
 	kit: {
 		adapter: adapter({
 			// Vercel adapter configuration
 			runtime: 'nodejs20.x',
 			regions: ['iad1'], // Default to US East (adjust based on your target audience)
 			split: false, // Set to true to deploy routes as individual functions
-			
+
 			// Edge runtime configuration (uncomment to use Edge Functions)
 			// runtime: 'edge',
 			// regions: 'all', // Deploy to all edge regions
-			
+
 			// Memory and execution limits
 			memory: 1024, // MB (256, 512, 1024, 3008)
 			maxDuration: 10 // seconds (max execution time)
 		}),
-		
+
 		// Alias configuration for cleaner imports
 		alias: {
 			$components: 'src/lib/components',
@@ -29,14 +29,14 @@ const config = {
 			$services: 'src/lib/services',
 			$helper: 'src/lib/helper'
 		},
-		
+
 		// Prerender configuration
 		prerender: {
 			handleHttpError: 'warn',
 			handleMissingId: 'warn',
 			entries: ['*'] // Prerender all discoverable pages
 		},
-		
+
 		// CSP configuration for security
 		csp: {
 			mode: 'auto',

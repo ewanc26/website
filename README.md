@@ -215,11 +215,11 @@ The application includes a comprehensive AT Protocol service layer in `src/lib/s
 
 ```typescript
 import {
-  fetchProfile,
-  fetchBlogPosts,
-  fetchLatestBlueskyPost,
-  fetchMusicStatus,
-  fetchTangledRepos
+	fetchProfile,
+	fetchBlogPosts,
+	fetchLatestBlueskyPost,
+	fetchMusicStatus,
+	fetchTangledRepos
 } from '$lib/services/atproto';
 
 // Fetch profile data
@@ -248,14 +248,14 @@ Publications are mapped to URL slugs in `src/lib/config/slugs.ts`:
 
 ```typescript
 export const slugMappings: SlugMapping[] = [
-  {
-    slug: 'blog', // Access via /blog
-    publicationRkey: '3m3x4bgbsh22k' // Leaflet publication rkey
-  },
-  {
-    slug: 'notes', // Access via /notes
-    publicationRkey: 'xyz123abc'
-  }
+	{
+		slug: 'blog', // Access via /blog
+		publicationRkey: '3m3x4bgbsh22k' // Leaflet publication rkey
+	},
+	{
+		slug: 'notes', // Access via /notes
+		publicationRkey: 'xyz123abc'
+	}
 ];
 ```
 

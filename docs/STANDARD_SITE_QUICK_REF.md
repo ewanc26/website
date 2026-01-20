@@ -4,10 +4,10 @@
 
 ```typescript
 import {
-  fetchStandardSitePublications,
-  fetchStandardSiteDocuments,
-  type StandardSitePublication,
-  type StandardSiteDocument
+	fetchStandardSitePublications,
+	fetchStandardSiteDocuments,
+	type StandardSitePublication,
+	type StandardSiteDocument
 } from '$lib/services/atproto';
 ```
 
@@ -16,11 +16,11 @@ import {
 ```typescript
 const { publications } = await fetchStandardSitePublications();
 
-publications.forEach(pub => {
-  console.log(pub.name);        // Publication name
-  console.log(pub.url);         // Base URL
-  console.log(pub.icon);        // Icon blob URL
-  console.log(pub.basicTheme);  // Theme colors
+publications.forEach((pub) => {
+	console.log(pub.name); // Publication name
+	console.log(pub.url); // Base URL
+	console.log(pub.icon); // Icon blob URL
+	console.log(pub.basicTheme); // Theme colors
 });
 ```
 
@@ -29,13 +29,13 @@ publications.forEach(pub => {
 ```typescript
 const { documents } = await fetchStandardSiteDocuments();
 
-documents.forEach(doc => {
-  console.log(doc.title);           // Document title
-  console.log(doc.url);             // Full canonical URL
-  console.log(doc.publishedAt);     // ISO timestamp
-  console.log(doc.coverImage);      // Cover image blob URL
-  console.log(doc.tags);            // Array of tags
-  console.log(doc.publicationName); // Parent publication name
+documents.forEach((doc) => {
+	console.log(doc.title); // Document title
+	console.log(doc.url); // Full canonical URL
+	console.log(doc.publishedAt); // ISO timestamp
+	console.log(doc.coverImage); // Cover image blob URL
+	console.log(doc.tags); // Array of tags
+	console.log(doc.publicationName); // Parent publication name
 });
 ```
 
@@ -45,11 +45,11 @@ documents.forEach(doc => {
 
 ```typescript
 export const slugMappings: SlugMapping[] = [
-  {
-    slug: 'my-blog',
-    publicationRkey: '3labc123xyz',
-    platform: 'standard.site'  // ← Required for Standard.site
-  }
+	{
+		slug: 'my-blog',
+		publicationRkey: '3labc123xyz',
+		platform: 'standard.site' // ← Required for Standard.site
+	}
 ];
 ```
 
@@ -68,7 +68,6 @@ Once configured, content is accessible at:
 
 - **Publication**: `https://yoursite.com/my-blog`
   - Redirects to publication URL
-  
 - **Document**: `https://yoursite.com/my-blog/3labc123xyz`
   - Redirects to `{publication.url}{document.path}`
 
@@ -91,14 +90,15 @@ import { fetchBlogPosts } from '$lib/services/atproto';
 const { posts } = await fetchBlogPosts();
 
 // Filter by platform
-const standardPosts = posts.filter(p => p.platform === 'standard.site');
-const leafletPosts = posts.filter(p => p.platform === 'leaflet');
-const whiteWindPosts = posts.filter(p => p.platform === 'WhiteWind');
+const standardPosts = posts.filter((p) => p.platform === 'standard.site');
+const leafletPosts = posts.filter((p) => p.platform === 'leaflet');
+const whiteWindPosts = posts.filter((p) => p.platform === 'WhiteWind');
 ```
 
 ## Document URL Patterns
 
 ### Publication-Based Document
+
 ```typescript
 {
   site: 'at://did:plc:abc/site.standard.publication/xyz',
@@ -108,6 +108,7 @@ const whiteWindPosts = posts.filter(p => p.platform === 'WhiteWind');
 ```
 
 ### Loose Document
+
 ```typescript
 {
   site: 'https://myblog.com',
@@ -118,49 +119,53 @@ const whiteWindPosts = posts.filter(p => p.platform === 'WhiteWind');
 
 ## Collections
 
-| Collection | Description |
-|------------|-------------|
+| Collection                  | Description               |
+| --------------------------- | ------------------------- |
 | `site.standard.publication` | Publication/blog metadata |
-| `site.standard.document` | Individual posts/articles |
+| `site.standard.document`    | Individual posts/articles |
 
 ## Cache Keys
 
-| Data | Cache Key |
-|------|-----------|
+| Data         | Cache Key                          |
+| ------------ | ---------------------------------- |
 | Publications | `standard-site:publications:{DID}` |
-| Documents | `standard-site:documents:{DID}` |
+| Documents    | `standard-site:documents:{DID}`    |
 
 ## Common Patterns
 
 ### Display Publication Icon
+
 ```svelte
 {#if publication.icon}
-  <img src={publication.icon} alt={publication.name} />
+	<img src={publication.icon} alt={publication.name} />
 {/if}
 ```
 
 ### Display Document Cover
+
 ```svelte
 {#if document.coverImage}
-  <img src={document.coverImage} alt={document.title} />
+	<img src={document.coverImage} alt={document.title} />
 {/if}
 ```
 
 ### Display Tags
+
 ```svelte
 {#if document.tags}
-  <div class="tags">
-    {#each document.tags as tag}
-      <span class="tag">{tag}</span>
-    {/each}
-  </div>
+	<div class="tags">
+		{#each document.tags as tag}
+			<span class="tag">{tag}</span>
+		{/each}
+	</div>
 {/if}
 ```
 
 ### Format Date
+
 ```svelte
 <time datetime={document.publishedAt}>
-  {new Date(document.publishedAt).toLocaleDateString()}
+	{new Date(document.publishedAt).toLocaleDateString()}
 </time>
 ```
 
@@ -171,20 +176,20 @@ const whiteWindPosts = posts.filter(p => p.platform === 'WhiteWind');
 import type { PublicationPlatform } from '$lib/data/slug-mappings';
 
 if (platform === 'standard.site') {
-  // Handle Standard.site
+	// Handle Standard.site
 } else if (platform === 'leaflet') {
-  // Handle Leaflet
+	// Handle Leaflet
 }
 ```
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Documents not showing | Check `publishedAt` is set |
-| Redirects not working | Verify publication `url` starts with `http://` or `https://` |
-| Images not loading | Check blob CIDs and PDS resolution |
-| Slug not found | Add mapping to `slug-mappings.ts` with `platform: 'standard.site'` |
+| Issue                 | Solution                                                           |
+| --------------------- | ------------------------------------------------------------------ |
+| Documents not showing | Check `publishedAt` is set                                         |
+| Redirects not working | Verify publication `url` starts with `http://` or `https://`       |
+| Images not loading    | Check blob CIDs and PDS resolution                                 |
+| Slug not found        | Add mapping to `slug-mappings.ts` with `platform: 'standard.site'` |
 
 ## Resources
 

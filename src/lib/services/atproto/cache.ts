@@ -41,12 +41,16 @@ export class ATProtoCache {
 		const age = Date.now() - entry.timestamp;
 
 		if (age > ttl) {
-			console.info(`[Cache] Entry expired for key: ${key} (age: ${Math.round(age / 1000)}s, ttl: ${Math.round(ttl / 1000)}s)`);
+			console.info(
+				`[Cache] Entry expired for key: ${key} (age: ${Math.round(age / 1000)}s, ttl: ${Math.round(ttl / 1000)}s)`
+			);
 			this.cache.delete(key);
 			return null;
 		}
 
-		console.info(`[Cache] Cache hit for key: ${key} (age: ${Math.round(age / 1000)}s, ttl: ${Math.round(ttl / 1000)}s)`);
+		console.info(
+			`[Cache] Cache hit for key: ${key} (age: ${Math.round(age / 1000)}s, ttl: ${Math.round(ttl / 1000)}s)`
+		);
 		return entry.data;
 	}
 

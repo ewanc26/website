@@ -1,26 +1,18 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { ExternalLink, GitBranch, Server, User } from '@lucide/svelte';
 	import { Card, InternalCard } from '$lib/components/ui';
-	import { fetchTangledRepos, type TangledReposData, fetchProfile } from '$lib/services/atproto';
+	import type { TangledReposData, ProfileData } from '$lib/services/atproto';
 	import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 
-	let repos: TangledReposData | null = $state(null);
-	let handle: string | null = $state(null);
-	let loading = $state(true);
-	let error: string | null = $state(null);
+	interface Props {
+		repos?: TangledReposData | null;
+		profile?: ProfileData | null;
+	}
 
-	onMount(async () => {
-		try {
-			const [reposData, profile] = await Promise.all([fetchTangledRepos(), fetchProfile()]);
-			repos = reposData;
-			handle = profile.handle;
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to load Tangled repositories';
-		} finally {
-			loading = false;
-		}
-	});
+	let { repos = null, profile = null }: Props = $props();
+
+	// Derive handle from profile
+	let handle = $derived(profile?.handle || null);
 
 	// Build the tangled.org URL: tangled.org/[handle or did]/[repo]
 	// Prefer handle if available, otherwise use DID
@@ -44,7 +36,7 @@
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
-	{#if loading}
+	{#if !repos}
 		<Card loading={true} variant="elevated" padding="md">
 			{#snippet skeleton()}
 				<div class="mb-4 h-6 w-32 rounded bg-canvas-300 dark:bg-canvas-700"></div>
@@ -55,9 +47,7 @@
 				</div>
 			{/snippet}
 		</Card>
-	{:else if error}
-		<Card error={true} errorMessage={error} />
-	{:else if repos && repos.repos.length > 0}
+	{:else if repos.repos.length > 0}
 		{@const safeRepos = repos}
 		<Card variant="elevated" padding="md">
 			{#snippet children()}
