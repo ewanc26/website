@@ -7,43 +7,43 @@
    ============================================================================ */
 [data-color-theme='coral'] {
 	/* Primary - Coral (20°) */
-	--color-primary-50: light-dark(oklch(19.2% 0.040 20), oklch(97.9% 0.027 20));
-	--color-primary-100: light-dark(oklch(28% 0.065 20), oklch(94.8% 0.050 20));
+	--color-primary-50: light-dark(oklch(19.2% 0.04 20), oklch(97.9% 0.027 20));
+	--color-primary-100: light-dark(oklch(28% 0.065 20), oklch(94.8% 0.05 20));
 	--color-primary-200: light-dark(oklch(43% 0.108 20), oklch(89.5% 0.098 20));
 	--color-primary-300: light-dark(oklch(57% 0.145 20), oklch(80.8% 0.142 20));
-	--color-primary-400: light-dark(oklch(69.8% 0.180 20), oklch(71.5% 0.178 20));
+	--color-primary-400: light-dark(oklch(69.8% 0.18 20), oklch(71.5% 0.178 20));
 	--color-primary-500: light-dark(oklch(81.8% 0.212 20), oklch(62% 0.212 20));
-	--color-primary-600: light-dark(oklch(84.8% 0.178 20), oklch(51.5% 0.180 20));
+	--color-primary-600: light-dark(oklch(84.8% 0.178 20), oklch(51.5% 0.18 20));
 	--color-primary-700: light-dark(oklch(88.2% 0.142 20), oklch(41.5% 0.145 20));
 	--color-primary-800: light-dark(oklch(92% 0.098 20), oklch(31.5% 0.108 20));
-	--color-primary-900: light-dark(oklch(96% 0.050 20), oklch(23% 0.065 20));
-	--color-primary-950: light-dark(oklch(98.2% 0.027 20), oklch(16.2% 0.040 20));
+	--color-primary-900: light-dark(oklch(96% 0.05 20), oklch(23% 0.065 20));
+	--color-primary-950: light-dark(oklch(98.2% 0.027 20), oklch(16.2% 0.04 20));
 
 	/* Ink - Coral-tinted text (20°) */
 	--color-ink-50: light-dark(oklch(17.8% 0.027 20), oklch(97.6% 0.018 20));
 	--color-ink-100: light-dark(oklch(25.5% 0.048 20), oklch(93.2% 0.037 20));
-	--color-ink-200: light-dark(oklch(39% 0.082 20), oklch(85.2% 0.070 20));
+	--color-ink-200: light-dark(oklch(39% 0.082 20), oklch(85.2% 0.07 20));
 	--color-ink-300: light-dark(oklch(51% 0.115 20), oklch(75.2% 0.102 20));
 	--color-ink-400: light-dark(oklch(62.5% 0.145 20), oklch(65.2% 0.132 20));
 	--color-ink-500: light-dark(oklch(73.5% 0.175 20), oklch(55.2% 0.175 20));
 	--color-ink-600: light-dark(oklch(78.5% 0.132 20), oklch(45.2% 0.145 20));
 	--color-ink-700: light-dark(oklch(83.8% 0.102 20), oklch(35.2% 0.115 20));
-	--color-ink-800: light-dark(oklch(89.2% 0.070 20), oklch(25.2% 0.082 20));
+	--color-ink-800: light-dark(oklch(89.2% 0.07 20), oklch(25.2% 0.082 20));
 	--color-ink-900: light-dark(oklch(94.5% 0.037 20), oklch(18.2% 0.048 20));
 	--color-ink-950: light-dark(oklch(97.6% 0.018 20), oklch(12.5% 0.027 20));
 
 	/* Canvas - Coral-tinted backgrounds (20°) */
-	--color-canvas-50: light-dark(oklch(18% 0.030 20), oklch(98.5% 0.011 20));
+	--color-canvas-50: light-dark(oklch(18% 0.03 20), oklch(98.5% 0.011 20));
 	--color-canvas-100: light-dark(oklch(26% 0.053 20), oklch(96.5% 0.024 20));
-	--color-canvas-200: light-dark(oklch(39.8% 0.092 20), oklch(92% 0.050 20));
+	--color-canvas-200: light-dark(oklch(39.8% 0.092 20), oklch(92% 0.05 20));
 	--color-canvas-300: light-dark(oklch(52.5% 0.125 20), oklch(86% 0.082 20));
 	--color-canvas-400: light-dark(oklch(64.5% 0.155 20), oklch(80% 0.115 20));
 	--color-canvas-500: light-dark(oklch(76% 0.185 20), oklch(76% 0.145 20));
 	--color-canvas-600: light-dark(oklch(80% 0.115 20), oklch(64.5% 0.155 20));
 	--color-canvas-700: light-dark(oklch(86% 0.082 20), oklch(52.5% 0.125 20));
-	--color-canvas-800: light-dark(oklch(92% 0.050 20), oklch(39.8% 0.092 20));
+	--color-canvas-800: light-dark(oklch(92% 0.05 20), oklch(39.8% 0.092 20));
 	--color-canvas-900: light-dark(oklch(96.5% 0.024 20), oklch(26% 0.053 20));
-	--color-canvas-950: light-dark(oklch(98.5% 0.011 20), oklch(18% 0.030 20));
+	--color-canvas-950: light-dark(oklch(98.5% 0.011 20), oklch(18% 0.03 20));
 
 	/* Secondary - Peach (35°) */
 	--color-secondary-50: light-dark(oklch(19.3% 0.038 35), oklch(98% 0.025 35));

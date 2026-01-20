@@ -33,8 +33,8 @@
 	--color-ink-950: light-dark(oklch(97.5% 0.016 45), oklch(12% 0.025 45));
 
 	/* Canvas - Orange-tinted backgrounds (45°) */
-	--color-canvas-50: light-dark(oklch(18% 0.028 45), oklch(98.5% 0.010 45));
-	--color-canvas-100: light-dark(oklch(26% 0.050 45), oklch(96.5% 0.022 45));
+	--color-canvas-50: light-dark(oklch(18% 0.028 45), oklch(98.5% 0.01 45));
+	--color-canvas-100: light-dark(oklch(26% 0.05 45), oklch(96.5% 0.022 45));
 	--color-canvas-200: light-dark(oklch(39.8% 0.088 45), oklch(92% 0.048 45));
 	--color-canvas-300: light-dark(oklch(52.5% 0.118 45), oklch(86% 0.078 45));
 	--color-canvas-400: light-dark(oklch(64.5% 0.148 45), oklch(80% 0.108 45));
@@ -42,8 +42,8 @@
 	--color-canvas-600: light-dark(oklch(80% 0.108 45), oklch(64.5% 0.148 45));
 	--color-canvas-700: light-dark(oklch(86% 0.078 45), oklch(52.5% 0.118 45));
 	--color-canvas-800: light-dark(oklch(92% 0.048 45), oklch(39.8% 0.088 45));
-	--color-canvas-900: light-dark(oklch(96.5% 0.022 45), oklch(26% 0.050 45));
-	--color-canvas-950: light-dark(oklch(98.5% 0.010 45), oklch(18% 0.028 45));
+	--color-canvas-900: light-dark(oklch(96.5% 0.022 45), oklch(26% 0.05 45));
+	--color-canvas-950: light-dark(oklch(98.5% 0.01 45), oklch(18% 0.028 45));
 
 	/* Secondary - Golden Yellow (75°) */
 	--color-secondary-50: light-dark(oklch(19.5% 0.035 75), oklch(98% 0.023 75));

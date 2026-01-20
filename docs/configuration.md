@@ -95,18 +95,18 @@ PUBLIC_CORS_ALLOWED_ORIGINS="https://yourdomain.com"
 
 ### Environment Variable Reference
 
-| Variable | Required | Default | Purpose |
-|----------|----------|---------|---------|
-| `PUBLIC_ATPROTO_DID` | ✅ Yes | - | Your AT Protocol identifier |
-| `PUBLIC_SITE_TITLE` | ✅ Yes | - | Website title for SEO |
-| `PUBLIC_SITE_DESCRIPTION` | ✅ Yes | - | Website description for SEO |
-| `PUBLIC_SITE_KEYWORDS` | ✅ Yes | - | SEO keywords |
-| `PUBLIC_SITE_URL` | ✅ Yes | - | Your website's URL |
-| `PUBLIC_ENABLE_WHITEWIND` | ❌ No | `false` | Enable WhiteWind blog support |
-| `PUBLIC_BLOG_FALLBACK_URL` | ❌ No | `""` | Fallback URL for missing posts |
-| `PUBLIC_LOCAL_SLINGSHOT_URL` | ❌ No | `""` | Local Slingshot instance URL |
-| `PUBLIC_SLINGSHOT_URL` | ❌ No | Public URL | Public Slingshot instance |
-| `PUBLIC_CORS_ALLOWED_ORIGINS` | ❌ No | `"*"` | CORS allowed origins |
+| Variable                      | Required | Default    | Purpose                        |
+| ----------------------------- | -------- | ---------- | ------------------------------ |
+| `PUBLIC_ATPROTO_DID`          | ✅ Yes   | -          | Your AT Protocol identifier    |
+| `PUBLIC_SITE_TITLE`           | ✅ Yes   | -          | Website title for SEO          |
+| `PUBLIC_SITE_DESCRIPTION`     | ✅ Yes   | -          | Website description for SEO    |
+| `PUBLIC_SITE_KEYWORDS`        | ✅ Yes   | -          | SEO keywords                   |
+| `PUBLIC_SITE_URL`             | ✅ Yes   | -          | Your website's URL             |
+| `PUBLIC_ENABLE_WHITEWIND`     | ❌ No    | `false`    | Enable WhiteWind blog support  |
+| `PUBLIC_BLOG_FALLBACK_URL`    | ❌ No    | `""`       | Fallback URL for missing posts |
+| `PUBLIC_LOCAL_SLINGSHOT_URL`  | ❌ No    | `""`       | Local Slingshot instance URL   |
+| `PUBLIC_SLINGSHOT_URL`        | ❌ No    | Public URL | Public Slingshot instance      |
+| `PUBLIC_CORS_ALLOWED_ORIGINS` | ❌ No    | `"*"`      | CORS allowed origins           |
 
 ---
 
@@ -139,7 +139,7 @@ import type { SlugMapping } from '$lib/services/atproto';
 
 /**
  * Maps friendly URL slugs to Leaflet publication rkeys
- * 
+ *
  * Example usage:
  * - { slug: 'blog', publicationRkey: '3m3x4bgbsh22k' }
  *   Accessible at: /blog
@@ -147,19 +147,19 @@ import type { SlugMapping } from '$lib/services/atproto';
  *   Accessible at: /essays
  */
 export const slugMappings: SlugMapping[] = [
- {
-  slug: 'blog',
-  publicationRkey: '3m3x4bgbsh22k' // Replace with your actual rkey
- }
- // Add more mappings as needed:
- // {
- //  slug: 'essays',
- //  publicationRkey: 'your-essays-rkey'
- // },
- // {
- //  slug: 'notes',
- //  publicationRkey: 'your-notes-rkey'
- // }
+	{
+		slug: 'blog',
+		publicationRkey: '3m3x4bgbsh22k' // Replace with your actual rkey
+	}
+	// Add more mappings as needed:
+	// {
+	//  slug: 'essays',
+	//  publicationRkey: 'your-essays-rkey'
+	// },
+	// {
+	//  slug: 'notes',
+	//  publicationRkey: 'your-notes-rkey'
+	// }
 ];
 ```
 
@@ -182,18 +182,18 @@ Once configured, your publications are accessible via:
 
 ```typescript
 export const slugMappings: SlugMapping[] = [
- {
-  slug: 'blog',           // Main blog
-  publicationRkey: '3m3x4bgbsh22k'
- },
- {
-  slug: 'tech',           // Tech articles
-  publicationRkey: 'xyz789tech'
- },
- {
-  slug: 'personal',       // Personal writing
-  publicationRkey: 'abc456personal'
- }
+	{
+		slug: 'blog', // Main blog
+		publicationRkey: '3m3x4bgbsh22k'
+	},
+	{
+		slug: 'tech', // Tech articles
+		publicationRkey: 'xyz789tech'
+	},
+	{
+		slug: 'personal', // Personal writing
+		publicationRkey: 'abc456personal'
+	}
 ];
 ```
 
@@ -205,12 +205,12 @@ Several static files need to be customized for your site.
 
 ### Files to Update
 
-| File | Purpose | Action Required |
-|------|---------|-----------------|
-| `static/robots.txt` | SEO crawling rules | Update sitemap URL |
-| `static/sitemap.xml` | Site structure for SEO | Update with your pages |
-| `static/.well-known/*` | Domain verification | Replace or remove |
-| `static/favicon/*` | Site icons | Replace with your branding |
+| File                   | Purpose                | Action Required            |
+| ---------------------- | ---------------------- | -------------------------- |
+| `static/robots.txt`    | SEO crawling rules     | Update sitemap URL         |
+| `static/sitemap.xml`   | Site structure for SEO | Update with your pages     |
+| `static/.well-known/*` | Domain verification    | Replace or remove          |
+| `static/favicon/*`     | Site icons             | Replace with your branding |
 
 ### Step 1: Update robots.txt
 
@@ -237,14 +237,14 @@ Edit `static/sitemap.xml`:
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-  
+
   <!-- Add your publication slugs -->
   <url>
     <loc>https://yourdomain.com/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  
+
   <!-- Add other important pages -->
   <url>
     <loc>https://yourdomain.com/site/meta</loc>
@@ -433,9 +433,9 @@ The site uses Tailwind CSS with custom semantic colors. To customize:
 
 ```css
 @theme {
-  --color-canvas: /* Background color */;
-  --color-ink: /* Text color */;
-  --color-primary: /* Accent color */;
+	--color-canvas: /* Background color */;
+	--color-ink: /* Text color */;
+	--color-primary: /* Accent color */;
 }
 ```
 

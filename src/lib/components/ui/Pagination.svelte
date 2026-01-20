@@ -92,7 +92,12 @@
 		</div>
 
 		<!-- Page Info -->
-		<p class="mt-4 text-center text-sm text-ink-600 dark:text-ink-300" role="status" aria-live="polite" aria-atomic="true">
+		<p
+			class="mt-4 text-center text-sm text-ink-600 dark:text-ink-300"
+			role="status"
+			aria-live="polite"
+			aria-atomic="true"
+		>
 			Page {currentPage} of {totalPages} &middot; Showing {startItem}–{endItem} of {totalItems}
 			{totalItems === 1 ? 'item' : 'items'}
 		</p>

@@ -58,11 +58,11 @@ async function detectPostPlatform(
 				// Fetch publications to get the publication info
 				const { publications } = await fetchStandardSitePublications();
 				let publication = null;
-				
+
 				// Check if site points to a publication URI
 				if (documentSite?.startsWith('at://')) {
 					publication = publications.find((p) => p.uri === documentSite);
-					
+
 					// Verify this document belongs to the requested publication
 					if (publication && publication.rkey !== publicationRkey) {
 						return { platform: 'unknown' };
@@ -79,9 +79,7 @@ async function detectPostPlatform(
 					url = `${basePath}${docPath.startsWith('/') ? docPath : '/' + docPath}`;
 				} else {
 					// Use the site value directly (it's a URL)
-					const basePath = documentSite.endsWith('/')
-						? documentSite.slice(0, -1)
-						: documentSite;
+					const basePath = documentSite.endsWith('/') ? documentSite.slice(0, -1) : documentSite;
 					const docPath = value.path || `/${rkey}`;
 					url = `${basePath}${docPath.startsWith('/') ? docPath : '/' + docPath}`;
 				}
@@ -250,7 +248,8 @@ export const GET: RequestHandler = async ({ params, url }) => {
 		const publicationNote = `\n\nNote: Only checking ${platformName} publication with rkey: ${publicationRkey}`;
 		const whiteWindNote =
 			PUBLIC_ENABLE_WHITEWIND === 'true' ? '\n- WhiteWind: https://whtwnd.com' : '';
-		const standardSiteNote = platform === 'standard.site' ? '\n- Standard.site: https://standard.site' : '';
+		const standardSiteNote =
+			platform === 'standard.site' ? '\n- Standard.site: https://standard.site' : '';
 
 		return new Response(
 			`Document not found: ${rkey}

@@ -54,7 +54,7 @@
 
 {#if show && mounted}
 	<div
-		class="fixed left-0 top-0 z-9999 flex h-screen w-screen items-center justify-center bg-black/70 p-4"
+		class="fixed top-0 left-0 z-9999 flex h-screen w-screen items-center justify-center bg-black/70 p-4"
 		style="position: fixed; margin: 0;"
 		onclick={onClose}
 		onkeydown={(e) => e.key === 'Escape' && onClose()}
@@ -85,18 +85,14 @@
 
 					<!-- Content -->
 					<div class="space-y-4">
-						<h2
-							id="decimal-time-title"
-							class="text-2xl font-bold text-ink-900 dark:text-ink-50"
-						>
+						<h2 id="decimal-time-title" class="text-2xl font-bold text-ink-900 dark:text-ink-50">
 							French Revolutionary Decimal Time
 						</h2>
 
 						<div class="space-y-3 text-ink-700 dark:text-ink-200">
 							<p>
-								Decimal time was introduced during the French Revolution as part of the
-								metric system. Instead of dividing the day into 24 hours, it uses a base-10
-								system:
+								Decimal time was introduced during the French Revolution as part of the metric
+								system. Instead of dividing the day into 24 hours, it uses a base-10 system:
 							</p>
 
 							<ul class="list-disc space-y-2 pl-6">
@@ -106,15 +102,12 @@
 							</ul>
 
 							<p>
-								This means a decimal day has 10 hours, 1,000 minutes, and 100,000 seconds
-								total.
+								This means a decimal day has 10 hours, 1,000 minutes, and 100,000 seconds total.
 							</p>
 
 							<Card variant="flat" padding="md" class="bg-canvas-200 dark:bg-canvas-800">
 								{#snippet children()}
-									<h3 class="mb-2 font-semibold text-ink-900 dark:text-ink-50">
-										Conversions:
-									</h3>
+									<h3 class="mb-2 font-semibold text-ink-900 dark:text-ink-50">Conversions:</h3>
 									<ul class="space-y-1 text-sm">
 										<li>1 decimal hour ≈ 2.4 traditional hours (2h 24m)</li>
 										<li>1 decimal minute ≈ 1.44 traditional minutes (86.4 seconds)</li>
@@ -140,9 +133,9 @@
 							</Card>
 
 							<p class="text-sm text-ink-600 dark:text-ink-400">
-								While decimal time was officially adopted in France from 1793-1795, it never
-								gained widespread acceptance and was eventually abandoned in favor of the
-								traditional 24-hour system.
+								While decimal time was officially adopted in France from 1793-1795, it never gained
+								widespread acceptance and was eventually abandoned in favor of the traditional
+								24-hour system.
 							</p>
 
 							<p class="text-sm text-ink-600 dark:text-ink-400">

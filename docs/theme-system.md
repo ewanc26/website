@@ -41,9 +41,9 @@ Create `/src/lib/styles/themes/midnight.css` with your color definitions:
    Hue: 240° (blue)
    ============================================================================ */
 [data-color-theme='midnight'] {
-  /* Define your CSS custom properties here */
-  --color-primary-500: oklch(20% 0.05 240);
-  /* ... other color definitions ... */
+	/* Define your CSS custom properties here */
+	--color-primary-500: oklch(20% 0.05 240);
+	/* ... other color definitions ... */
 }
 ```
 
@@ -58,6 +58,7 @@ Add the import to `/src/lib/styles/themes.css`:
 ## That's It!
 
 The theme will automatically:
+
 - ✅ Appear in the color theme dropdown
 - ✅ Be type-safe in TypeScript
 - ✅ Work with the theme switcher
@@ -66,7 +67,9 @@ The theme will automatically:
 ## Configuration API
 
 ### `THEMES`
+
 Array of all available themes. Each theme has:
+
 - `value`: Unique identifier (string)
 - `label`: Display name (string)
 - `description`: Short description (string)
@@ -74,15 +77,19 @@ Array of all available themes. Each theme has:
 - `category`: Theme category (string)
 
 ### `ColorTheme`
+
 TypeScript type automatically generated from theme values.
 
 ### `DEFAULT_THEME`
+
 The default theme used when no preference is stored.
 
 ### `getThemesByCategory()`
+
 Returns themes organized by category for UI rendering.
 
 ### `getTheme(value)`
+
 Get a specific theme definition by its value.
 
 ## Example: Adding Multiple Themes
@@ -90,23 +97,23 @@ Get a specific theme definition by its value.
 ```typescript
 // In themes.config.ts
 export const THEMES: readonly ThemeDefinition[] = [
-  // ... existing themes ...
-  
-  // New themes
-  {
-    value: 'midnight',
-    label: 'Midnight',
-    description: 'Deep night',
-    color: 'oklch(20% 0.05 240)',
-    category: 'cool'
-  },
-  {
-    value: 'sunrise',
-    label: 'Sunrise',
-    description: 'Morning glow',
-    color: 'oklch(75% 0.15 50)',
-    category: 'warm'
-  }
+	// ... existing themes ...
+
+	// New themes
+	{
+		value: 'midnight',
+		label: 'Midnight',
+		description: 'Deep night',
+		color: 'oklch(20% 0.05 240)',
+		category: 'cool'
+	},
+	{
+		value: 'sunrise',
+		label: 'Sunrise',
+		description: 'Morning glow',
+		color: 'oklch(75% 0.15 50)',
+		category: 'warm'
+	}
 ] as const;
 ```
 

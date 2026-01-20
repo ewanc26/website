@@ -1,5 +1,4 @@
 import { dev } from '$app/environment';
-import { env } from '$env/dynamic/private';
 
 /**
  * Cache configuration with environment-aware TTL values
@@ -7,16 +6,6 @@ import { env } from '$env/dynamic/private';
  * Development: Shorter TTLs for faster iteration
  * Production: Longer TTLs to reduce API calls and prevent timeouts
  */
-
-// Parse environment variable or use default (in milliseconds)
-const getEnvTTL = (key: string, defaultMinutes: number): number => {
-	const value = env[key];
-	if (value) {
-		const minutes = parseInt(value, 10);
-		return isNaN(minutes) ? defaultMinutes * 60 * 1000 : minutes * 60 * 1000;
-	}
-	return defaultMinutes * 60 * 1000;
-};
 
 /**
  * Default TTL values (in minutes) for different data types
@@ -57,20 +46,20 @@ const DEFAULT_TTL = {
 };
 
 /**
- * Cache TTL configuration
- * Values are loaded from environment variables with fallbacks to defaults
+ * Cache TTL configuration in milliseconds
+ * These are the default values - can be overridden via environment variables in server code
  */
 export const CACHE_TTL = {
-	PROFILE: getEnvTTL('CACHE_TTL_PROFILE', DEFAULT_TTL.PROFILE),
-	SITE_INFO: getEnvTTL('CACHE_TTL_SITE_INFO', DEFAULT_TTL.SITE_INFO),
-	LINKS: getEnvTTL('CACHE_TTL_LINKS', DEFAULT_TTL.LINKS),
-	MUSIC_STATUS: getEnvTTL('CACHE_TTL_MUSIC_STATUS', DEFAULT_TTL.MUSIC_STATUS),
-	KIBUN_STATUS: getEnvTTL('CACHE_TTL_KIBUN_STATUS', DEFAULT_TTL.KIBUN_STATUS),
-	TANGLED_REPOS: getEnvTTL('CACHE_TTL_TANGLED_REPOS', DEFAULT_TTL.TANGLED_REPOS),
-	BLOG_POSTS: getEnvTTL('CACHE_TTL_BLOG_POSTS', DEFAULT_TTL.BLOG_POSTS),
-	PUBLICATIONS: getEnvTTL('CACHE_TTL_PUBLICATIONS', DEFAULT_TTL.PUBLICATIONS),
-	INDIVIDUAL_POST: getEnvTTL('CACHE_TTL_INDIVIDUAL_POST', DEFAULT_TTL.INDIVIDUAL_POST),
-	IDENTITY: getEnvTTL('CACHE_TTL_IDENTITY', DEFAULT_TTL.IDENTITY)
+	PROFILE: DEFAULT_TTL.PROFILE * 60 * 1000,
+	SITE_INFO: DEFAULT_TTL.SITE_INFO * 60 * 1000,
+	LINKS: DEFAULT_TTL.LINKS * 60 * 1000,
+	MUSIC_STATUS: DEFAULT_TTL.MUSIC_STATUS * 60 * 1000,
+	KIBUN_STATUS: DEFAULT_TTL.KIBUN_STATUS * 60 * 1000,
+	TANGLED_REPOS: DEFAULT_TTL.TANGLED_REPOS * 60 * 1000,
+	BLOG_POSTS: DEFAULT_TTL.BLOG_POSTS * 60 * 1000,
+	PUBLICATIONS: DEFAULT_TTL.PUBLICATIONS * 60 * 1000,
+	INDIVIDUAL_POST: DEFAULT_TTL.INDIVIDUAL_POST * 60 * 1000,
+	IDENTITY: DEFAULT_TTL.IDENTITY * 60 * 1000
 } as const;
 
 /**

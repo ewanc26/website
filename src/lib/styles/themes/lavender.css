@@ -21,7 +21,7 @@
 
 	/* Ink - Purple-tinted text (295°) */
 	--color-ink-50: light-dark(oklch(18% 0.028 295), oklch(97.6% 0.018 295));
-	--color-ink-100: light-dark(oklch(26% 0.050 295), oklch(93.2% 0.038 295));
+	--color-ink-100: light-dark(oklch(26% 0.05 295), oklch(93.2% 0.038 295));
 	--color-ink-200: light-dark(oklch(39.5% 0.085 295), oklch(85.2% 0.072 295));
 	--color-ink-300: light-dark(oklch(51.5% 0.118 295), oklch(75.2% 0.105 295));
 	--color-ink-400: light-dark(oklch(63% 0.148 295), oklch(65.2% 0.135 295));
@@ -29,7 +29,7 @@
 	--color-ink-600: light-dark(oklch(78.8% 0.135 295), oklch(45.2% 0.148 295));
 	--color-ink-700: light-dark(oklch(84% 0.105 295), oklch(35.2% 0.118 295));
 	--color-ink-800: light-dark(oklch(89.5% 0.072 295), oklch(25.2% 0.085 295));
-	--color-ink-900: light-dark(oklch(94.8% 0.038 295), oklch(18.2% 0.050 295));
+	--color-ink-900: light-dark(oklch(94.8% 0.038 295), oklch(18.2% 0.05 295));
 	--color-ink-950: light-dark(oklch(97.6% 0.018 295), oklch(12.5% 0.028 295));
 
 	/* Canvas - Purple-tinted backgrounds (295°) */
@@ -48,26 +48,26 @@
 	/* Secondary - Violet (280°) */
 	--color-secondary-50: light-dark(oklch(19.2% 0.041 280), oklch(97.9% 0.027 280));
 	--color-secondary-100: light-dark(oklch(27.8% 0.066 280), oklch(94.8% 0.051 280));
-	--color-secondary-200: light-dark(oklch(42.8% 0.112 280), oklch(89.8% 0.100 280));
+	--color-secondary-200: light-dark(oklch(42.8% 0.112 280), oklch(89.8% 0.1 280));
 	--color-secondary-300: light-dark(oklch(56.8% 0.151 280), oklch(81% 0.145 280));
 	--color-secondary-400: light-dark(oklch(69.8% 0.188 280), oklch(71.5% 0.182 280));
 	--color-secondary-500: light-dark(oklch(81.8% 0.224 280), oklch(62% 0.224 280));
 	--color-secondary-600: light-dark(oklch(84.8% 0.182 280), oklch(51.5% 0.188 280));
 	--color-secondary-700: light-dark(oklch(88.2% 0.145 280), oklch(41.5% 0.151 280));
-	--color-secondary-800: light-dark(oklch(92% 0.100 280), oklch(31.5% 0.112 280));
+	--color-secondary-800: light-dark(oklch(92% 0.1 280), oklch(31.5% 0.112 280));
 	--color-secondary-900: light-dark(oklch(96% 0.051 280), oklch(23% 0.066 280));
 	--color-secondary-950: light-dark(oklch(98.2% 0.027 280), oklch(16.2% 0.041 280));
 
 	/* Accent - Deep Plum (310°) */
 	--color-accent-50: light-dark(oklch(19.5% 0.044 310), oklch(98.1% 0.029 310));
 	--color-accent-100: light-dark(oklch(28.2% 0.071 310), oklch(95.2% 0.054 310));
-	--color-accent-200: light-dark(oklch(43.5% 0.120 310), oklch(90.2% 0.105 310));
+	--color-accent-200: light-dark(oklch(43.5% 0.12 310), oklch(90.2% 0.105 310));
 	--color-accent-300: light-dark(oklch(57.8% 0.162 310), oklch(82% 0.152 310));
 	--color-accent-400: light-dark(oklch(71% 0.202 310), oklch(72.5% 0.192 310));
 	--color-accent-500: light-dark(oklch(83.5% 0.238 310), oklch(63.2% 0.238 310));
 	--color-accent-600: light-dark(oklch(86.5% 0.192 310), oklch(52.5% 0.202 310));
 	--color-accent-700: light-dark(oklch(89.5% 0.152 310), oklch(42.5% 0.162 310));
-	--color-accent-800: light-dark(oklch(92.8% 0.105 310), oklch(32.5% 0.120 310));
+	--color-accent-800: light-dark(oklch(92.8% 0.105 310), oklch(32.5% 0.12 310));
 	--color-accent-900: light-dark(oklch(96.5% 0.054 310), oklch(24% 0.071 310));
 	--color-accent-950: light-dark(oklch(98.5% 0.029 310), oklch(17% 0.044 310));
 }
