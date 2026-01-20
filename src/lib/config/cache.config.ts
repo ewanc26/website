@@ -1,4 +1,5 @@
 import { dev } from '$app/environment';
+import { env } from '$env/dynamic/private';
 
 /**
  * Cache configuration with environment-aware TTL values
@@ -9,8 +10,9 @@ import { dev } from '$app/environment';
 
 // Parse environment variable or use default (in milliseconds)
 const getEnvTTL = (key: string, defaultMinutes: number): number => {
-	if (typeof process !== 'undefined' && process.env?.[key]) {
-		const minutes = parseInt(process.env[key], 10);
+	const value = env[key];
+	if (value) {
+		const minutes = parseInt(value, 10);
 		return isNaN(minutes) ? defaultMinutes * 60 * 1000 : minutes * 60 * 1000;
 	}
 	return defaultMinutes * 60 * 1000;
