@@ -800,4 +800,4 @@ If you see "Cannot use relative URL with global fetch":
 
 Built with ❤️ using SvelteKit, AT Protocol, and open-source tools
 
-**Version**: 10.6.0
+**Version**: 10.7.0
