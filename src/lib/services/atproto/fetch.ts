@@ -235,14 +235,16 @@ export async function fetchMusicStatus(fetchFn?: typeof fetch): Promise<MusicSta
 						if (releaseName && artistName) {
 							console.info('[MusicStatus] Prioritizing album artwork search');
 							artworkUrl =
-								(await findArtwork(releaseName, artistName, releaseName, releaseMbId, fetchFn)) || undefined;
+								(await findArtwork(releaseName, artistName, releaseName, releaseMbId, fetchFn)) ||
+								undefined;
 						}
 
 						// Priority 2: Fall back to track-based search if album search failed
 						if (!artworkUrl && trackName && artistName) {
 							console.info('[MusicStatus] Falling back to track-based artwork search');
 							artworkUrl =
-								(await findArtwork(trackName, artistName, releaseName, releaseMbId, fetchFn)) || undefined;
+								(await findArtwork(trackName, artistName, releaseName, releaseMbId, fetchFn)) ||
+								undefined;
 						}
 
 						// Priority 3: Final fallback to atproto blob if no external artwork found
@@ -326,14 +328,16 @@ export async function fetchMusicStatus(fetchFn?: typeof fetch): Promise<MusicSta
 			if (releaseName && artistName) {
 				console.info('[MusicStatus] Prioritizing album artwork search');
 				artworkUrl =
-					(await findArtwork(releaseName, artistName, releaseName, releaseMbId, fetchFn)) || undefined;
+					(await findArtwork(releaseName, artistName, releaseName, releaseMbId, fetchFn)) ||
+					undefined;
 			}
 
 			// Priority 2: Fall back to track-based search if album search failed
 			if (!artworkUrl && trackName && artistName) {
 				console.info('[MusicStatus] Falling back to track-based artwork search');
 				artworkUrl =
-					(await findArtwork(trackName, artistName, releaseName, releaseMbId, fetchFn)) || undefined;
+					(await findArtwork(trackName, artistName, releaseName, releaseMbId, fetchFn)) ||
+					undefined;
 			}
 
 			// Priority 3: Final fallback to atproto blob if no external artwork found
