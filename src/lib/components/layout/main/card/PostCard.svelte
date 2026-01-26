@@ -1,27 +1,23 @@
 <script lang="ts">
 	import { Card } from '$lib/components/ui';
-	import { BlogPostCard } from '$lib/components/ui';
-	import type { BlogPostsData } from '$lib/services/atproto';
+	import { DocumentCard } from '$lib/components/ui';
+	import type { StandardSiteDocument } from '$lib/services/atproto';
 
 	interface Props {
-		blogPosts?: BlogPostsData | null;
+		documents?: StandardSiteDocument[] | null;
 	}
 
-	let { blogPosts = null }: Props = $props();
+	let { documents = null }: Props = $props();
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
-	{#if !blogPosts}
+	{#if !documents}
 		<Card loading={true} variant="elevated" padding="md">
 			{#snippet skeleton()}
 				<div class="mb-4 h-6 w-32 rounded bg-canvas-300 dark:bg-canvas-700"></div>
 				<div class="space-y-3">
 					{#each Array(3) as _}
 						<div class="rounded-lg bg-canvas-200 p-4 dark:bg-canvas-800">
-							<div class="mb-2 flex gap-2">
-								<div class="h-5 w-16 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-								<div class="h-5 w-20 rounded bg-canvas-300 dark:bg-canvas-700"></div>
-							</div>
 							<div class="mb-2 h-5 w-3/4 rounded bg-canvas-300 dark:bg-canvas-700"></div>
 							<div class="mb-2 h-4 w-full rounded bg-canvas-300 dark:bg-canvas-700"></div>
 							<div class="h-3 w-24 rounded bg-canvas-300 dark:bg-canvas-700"></div>
@@ -30,13 +26,13 @@
 				</div>
 			{/snippet}
 		</Card>
-	{:else if blogPosts.posts && blogPosts.posts.length > 0}
+	{:else if documents && documents.length > 0}
 		<Card variant="elevated" padding="md">
 			{#snippet children()}
 				<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Recent Posts</h2>
 				<div class="space-y-3">
-					{#each blogPosts.posts as post}
-						<BlogPostCard {post} />
+					{#each documents as document}
+						<DocumentCard {document} />
 					{/each}
 				</div>
 			{/snippet}
@@ -46,19 +42,12 @@
 			{#snippet children()}
 				<div class="text-center">
 					<p class="text-ink-700 dark:text-ink-300">
-						No blog posts available. Write on
+						No documents available. Start writing on
 						<a
-							href="https://whtwnd.com/"
+							href="https://standard.site/"
 							class="text-primary-600 hover:underline dark:text-primary-400"
 							target="_blank"
-							rel="noopener noreferrer">WhiteWind</a
-						>
-						or
-						<a
-							href="https://leaflet.pub/"
-							class="text-primary-600 hover:underline dark:text-primary-400"
-							target="_blank"
-							rel="noopener noreferrer">Leaflet</a
+							rel="noopener noreferrer">Standard.site</a
 						>
 						to get started!
 					</p>

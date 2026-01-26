@@ -53,7 +53,7 @@
 			<DynamicLinks />
 		</div>
 		<div class="mb-6 break-inside-avoid">
-			<PostCard blogPosts={data.blogPosts} />
+			<PostCard documents={data.documents} />
 		</div>
 		<div class="mb-6 break-inside-avoid">
 			<TangledRepoCard repos={data.tangledRepos} profile={data.profile} />

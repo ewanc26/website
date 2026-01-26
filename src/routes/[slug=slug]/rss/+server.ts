@@ -3,19 +3,15 @@ import {
 	PUBLIC_ATPROTO_DID,
 	PUBLIC_SITE_TITLE,
 	PUBLIC_SITE_DESCRIPTION,
-	PUBLIC_SITE_URL,
-	PUBLIC_ENABLE_WHITEWIND
+	PUBLIC_SITE_URL
 } from '$env/static/public';
-import { fetchBlogPosts, fetchLeafletPublications } from '$lib/services/atproto';
+import { fetchBlogPosts } from '$lib/services/atproto';
 import { getPublicationRkeyFromSlug } from '$lib/config/slugs';
 
 /**
- * RSS 2.0 feed for publications (accessed via /{slug}/rss)
+ * RSS 2.0 feed for Standard.site publications (accessed via /{slug}/rss)
  *
- * Strategy:
- * 1. If WhiteWind is disabled or no WhiteWind posts exist, redirect to Leaflet RSS feed
- * 2. If WhiteWind is enabled and WhiteWind posts exist, generate RSS with WhiteWind posts
- * 3. If mixed content and WhiteWind is enabled, prioritize WhiteWind and generate RSS for those
+ * Generates an RSS feed for all documents in the specified publication.
  */
 export const GET: RequestHandler = async ({ params }) => {
 	const slug = params.slug;
@@ -49,23 +45,11 @@ export const GET: RequestHandler = async ({ params }) => {
 		const { posts } = await fetchBlogPosts();
 
 		// Filter posts for this specific publication
-		const publicationPosts = posts.filter(
-			(p) => p.publicationRkey === publicationRkey || p.platform === 'WhiteWind'
-		);
+		const publicationPosts = posts.filter((p) => p.publicationRkey === publicationRkey);
 
-		// Separate WhiteWind and Leaflet posts
-		const whiteWindPosts = publicationPosts.filter((p) => p.platform === 'WhiteWind');
-		const leafletPosts = publicationPosts.filter((p) => p.platform === 'leaflet');
-
-		// If WhiteWind is enabled and we have WhiteWind posts, generate RSS for them
-		if (PUBLIC_ENABLE_WHITEWIND === 'true' && whiteWindPosts.length > 0) {
-			// slug is guaranteed to be defined here
-			return generateWhiteWindRSS(whiteWindPosts, slug as string);
-		}
-
-		// If WhiteWind is disabled or only Leaflet posts exist, redirect to Leaflet RSS feed
-		if (leafletPosts.length > 0) {
-			return await redirectToLeafletRSS(publicationRkey);
+		// Generate RSS for Standard.site posts
+		if (publicationPosts.length > 0) {
+			return generateRSS(publicationPosts, slug);
 		}
 
 		// No posts at all
@@ -87,9 +71,9 @@ export const GET: RequestHandler = async ({ params }) => {
 };
 
 /**
- * Generate RSS feed for WhiteWind posts
+ * Generate RSS feed for Standard.site posts
  */
-function generateWhiteWindRSS(posts: Array<any>, slug: string): Response {
+function generateRSS(posts: Array<any>, slug: string): Response {
 	const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -102,7 +86,7 @@ function generateWhiteWindRSS(posts: Array<any>, slug: string): Response {
     <generator>SvelteKit with AT Protocol</generator>
 ${posts
 	.map((post) => {
-		const description = post.description || 'Read this post on WhiteWind';
+		const description = post.description || 'Read this post on Standard.site';
 
 		return `    <item>
       <title>${escapeXml(post.title)}</title>
@@ -123,55 +107,6 @@ ${posts
 			'Cache-Control': 'public, max-age=3600'
 		}
 	});
-}
-
-/**
- * Redirect to Leaflet's native RSS feed
- */
-async function redirectToLeafletRSS(publicationRkey: string): Promise<Response> {
-	try {
-		const { publications } = await fetchLeafletPublications();
-
-		// Find the specific publication
-		const publication = publications.find((p) => p.rkey === publicationRkey);
-
-		if (publication) {
-			const rssUrl = getLeafletRSSUrl(publication);
-			return Response.redirect(rssUrl, 307); // Temporary redirect
-		}
-
-		// Publication not found
-		return new Response(`Leaflet publication not found for rkey: ${publicationRkey}`, {
-			status: 404,
-			headers: {
-				'Content-Type': 'text/plain; charset=utf-8'
-			}
-		});
-	} catch (error) {
-		console.error('Error redirecting to Leaflet RSS:', error);
-		return new Response('Error finding Leaflet RSS feed', {
-			status: 500,
-			headers: {
-				'Content-Type': 'text/plain; charset=utf-8'
-			}
-		});
-	}
-}
-
-/**
- * Get the RSS URL for a Leaflet publication
- */
-function getLeafletRSSUrl(publication: { basePath?: string; rkey: string }): string {
-	if (publication.basePath) {
-		// Ensure basePath is a complete URL
-		const basePath = publication.basePath.startsWith('http')
-			? publication.basePath
-			: `https://${publication.basePath}`;
-		return `${basePath}/rss`;
-	}
-
-	// Fallback to Leaflet /lish format
-	return `https://leaflet.pub/lish/${PUBLIC_ATPROTO_DID}/${publication.rkey}/rss`;
 }
 
 function escapeXml(unsafe: string): string {

@@ -1,95 +1,12 @@
 import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 import { cache } from './cache';
-import { withFallback, defaultAgent, createAgent } from './agents';
-import { resolveIdentity } from './agents';
-import { buildPdsBlobUrl } from './media';
-import { fetchAllEngagement } from './engagement';
-import type {
-	BlogPost,
-	BlogPostsData,
-	BlueskyPost,
-	PostAuthor,
-	ExternalLink,
-	LeafletPublication,
-	LeafletPublicationsData
-} from './types';
+import { withFallback } from './agents';
+import type { BlogPost, BlogPostsData, BlueskyPost, PostAuthor, ExternalLink } from './types';
 import { fetchStandardSiteDocuments } from './standard';
 
 /**
- * Fetches all Leaflet publications for a user
- */
-export async function fetchLeafletPublications(
-	fetchFn?: typeof fetch
-): Promise<LeafletPublicationsData> {
-	console.info('[Leaflet] Fetching publications');
-	const cacheKey = `leaflet:publications:${PUBLIC_ATPROTO_DID}`;
-	const cached = cache.get<LeafletPublicationsData>(cacheKey);
-	if (cached) {
-		console.debug('[Leaflet] Returning cached publications');
-		return cached;
-	}
-
-	const publications: LeafletPublication[] = [];
-	console.info('[Leaflet] Cache miss, fetching from network');
-
-	try {
-		console.debug('[Leaflet] Querying publications records');
-		const publicationsRecords = await withFallback(
-			PUBLIC_ATPROTO_DID,
-			async (agent) => {
-				const response = await agent.com.atproto.repo.listRecords({
-					repo: PUBLIC_ATPROTO_DID,
-					collection: 'pub.leaflet.publication',
-					limit: 100
-				});
-				return response.data.records;
-			},
-			true,
-			fetchFn
-		);
-
-		for (const pubRecord of publicationsRecords) {
-			const pubValue = pubRecord.value as any;
-			const rkey = pubRecord.uri.split('/').pop() || '';
-
-			publications.push({
-				name: pubValue.name || 'Untitled Publication',
-				rkey,
-				uri: pubRecord.uri,
-				basePath: pubValue.base_path,
-				description: pubValue.description,
-				icon: pubValue.icon ? await getBlobUrl(pubValue.icon, fetchFn) : undefined
-			});
-		}
-
-		const data: LeafletPublicationsData = { publications };
-		cache.set(cacheKey, data);
-		return data;
-	} catch (error) {
-		console.warn('Failed to fetch Leaflet publications:', error);
-		return { publications: [] };
-	}
-}
-
-/**
- * Helper function to get a blob URL for Leaflet publication icons
- */
-async function getBlobUrl(blob: any, fetchFn?: typeof fetch): Promise<string | undefined> {
-	try {
-		const cid = blob.ref?.$link || blob.cid;
-		if (!cid) return undefined;
-
-		const resolved = await resolveIdentity(PUBLIC_ATPROTO_DID, fetchFn);
-		return buildPdsBlobUrl(resolved.pds, PUBLIC_ATPROTO_DID, cid);
-	} catch (error) {
-		console.warn('Failed to resolve blob URL:', error);
-		return undefined;
-	}
-}
-
-/**
- * Fetches blog posts from WhiteWind, Leaflet, and Standard.site sources
- * Supports multiple publications from all platforms
+ * Fetches blog posts from Standard.site only
+ * @param fetchFn - Optional fetch function for SSR
  */
 export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsData> {
 	const cacheKey = `blogposts:${PUBLIC_ATPROTO_DID}`;
@@ -97,103 +14,6 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsD
 	if (cached) return cached;
 
 	const posts: BlogPost[] = [];
-
-	// Fetch WhiteWind posts
-	try {
-		const whiteWindRecords = await withFallback(
-			PUBLIC_ATPROTO_DID,
-			async (agent) => {
-				const response = await agent.com.atproto.repo.listRecords({
-					repo: PUBLIC_ATPROTO_DID,
-					collection: 'com.whtwnd.blog.entry',
-					limit: 100
-				});
-				return response.data.records;
-			},
-			true,
-			fetchFn
-		);
-
-		for (const record of whiteWindRecords) {
-			const value = record.value as any;
-			// Skip drafts and non-public posts
-			if (value.isDraft || (value.visibility && value.visibility !== 'public')) {
-				continue;
-			}
-
-			posts.push({
-				title: value.title || 'Untitled Post',
-				url: `https://whtwnd.com/${PUBLIC_ATPROTO_DID}/${record.uri.split('/').pop()}`,
-				createdAt: value.createdAt || record.value.createdAt || new Date().toISOString(),
-				platform: 'WhiteWind',
-				description: value.subtitle,
-				rkey: record.uri.split('/').pop() || ''
-			});
-		}
-	} catch (error) {
-		console.warn('Failed to fetch WhiteWind posts:', error);
-	}
-
-	// Fetch Leaflet publications and documents
-	try {
-		// Get all publications first
-		const publicationsData = await fetchLeafletPublications(fetchFn);
-		const publicationsMap = new Map<string, LeafletPublication>();
-		for (const pub of publicationsData.publications) {
-			publicationsMap.set(pub.uri, pub);
-		}
-
-		// Fetch all Leaflet documents
-		const leafletDocsRecords = await withFallback(
-			PUBLIC_ATPROTO_DID,
-			async (agent) => {
-				const response = await agent.com.atproto.repo.listRecords({
-					repo: PUBLIC_ATPROTO_DID,
-					collection: 'pub.leaflet.document',
-					limit: 100
-				});
-				return response.data.records;
-			},
-			true,
-			fetchFn
-		);
-
-		for (const record of leafletDocsRecords) {
-			const value = record.value as any;
-			const rkey = record.uri.split('/').pop() || '';
-			const publicationUri = value.publication;
-			const publication = publicationsMap.get(publicationUri);
-
-			// Determine URL based on priority: publication base_path → Leaflet /p/[DID]/[rkey] format
-			let url: string;
-			const publicationRkey = publicationUri ? publicationUri.split('/').pop() : undefined;
-
-			if (publication?.basePath) {
-				// Ensure basePath is a complete URL
-				const basePath = publication.basePath.startsWith('http')
-					? publication.basePath
-					: `https://${publication.basePath}`;
-				url = `${basePath}/${rkey}`;
-			} else {
-				// Fallback format: https://leaflet.pub/p/[DID]/[rkey]
-				url = `https://leaflet.pub/p/${PUBLIC_ATPROTO_DID}/${rkey}`;
-			}
-
-			posts.push({
-				title: value.title || 'Untitled Document',
-				url,
-				createdAt: value.publishedAt || new Date().toISOString(),
-				platform: 'leaflet',
-				description: value.description,
-				rkey,
-				publicationName: publication?.name,
-				publicationRkey,
-				tags: value.tags || undefined
-			});
-		}
-	} catch (error) {
-		console.warn('Failed to fetch Leaflet documents:', error);
-	}
 
 	// Fetch Standard.site documents
 	try {
@@ -208,15 +28,22 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch): Promise<BlogPostsD
 				description: doc.description,
 				rkey: doc.rkey,
 				publicationName: doc.publicationName,
-				publicationRkey: doc.publicationRkey
+				publicationRkey: doc.publicationRkey,
+				coverImage: doc.coverImage,
+				textContent: doc.textContent,
+				updatedAt: doc.updatedAt,
+				tags: doc.tags
 			});
 		}
 	} catch (error) {
 		console.warn('Failed to fetch Standard.site documents:', error);
 	}
 
-	// Sort by date (newest first) and take top 5
-	posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+	// Sort by date (newest first)
+	posts.sort((a, b) => {
+		return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+	});
+
 	const topPosts = posts.slice(0, 5);
 
 	const data: BlogPostsData = { posts: topPosts };
@@ -525,20 +352,9 @@ export async function fetchPostFromUri(
 			}
 		}
 
-		// Get engagement data from Constellation as a fallback
-		let finalLikeCount = postData.likeCount;
-		let finalRepostCount = postData.repostCount;
-
-		try {
-			const [likers, reposters] = await Promise.all([
-				fetchAllEngagement(postData.uri, 'app.bsky.feed.like'),
-				fetchAllEngagement(postData.uri, 'app.bsky.feed.repost')
-			]);
-			finalLikeCount = Math.max(postData.likeCount || 0, likers.length);
-			finalRepostCount = Math.max(postData.repostCount || 0, reposters.length);
-		} catch (error: unknown) {
-			console.warn('[fetchPostFromUri] Failed to fetch engagement from Constellation:', error);
-		}
+		// Get engagement data (like/repost counts) from the post data
+		const finalLikeCount = postData.likeCount || 0;
+		const finalRepostCount = postData.repostCount || 0;
 
 		const post: BlueskyPost = {
 			text: value.text,

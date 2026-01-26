@@ -9,4 +9,7 @@ export { default as Pagination } from './Pagination.svelte';
 export { default as SearchBar } from './SearchBar.svelte';
 export { default as Tabs } from './Tabs.svelte';
 export { default as PostsGroupedView } from './PostsGroupedView.svelte';
+export { default as DocumentCard } from './DocumentCard.svelte';
+
+// Deprecated: Use DocumentCard instead
 export { default as BlogPostCard } from './BlogPostCard.svelte';

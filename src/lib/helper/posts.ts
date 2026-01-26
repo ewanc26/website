@@ -20,7 +20,7 @@ export function filterPosts(posts: BlogPost[], query: string): BlogPost[] {
 		const descMatch = post.description?.toLowerCase().includes(lowerQuery);
 		const platformMatch = post.platform.toLowerCase().includes(lowerQuery);
 		const pubMatch = post.publicationName?.toLowerCase().includes(lowerQuery);
-		const tagsMatch = post.tags?.some((tag) => tag.toLowerCase().includes(lowerQuery));
+		const tagsMatch = post.tags?.some((tag: string) => tag.toLowerCase().includes(lowerQuery));
 		return titleMatch || descMatch || platformMatch || pubMatch || tagsMatch;
 	});
 }
@@ -77,12 +77,12 @@ export function getSortedYears(groupedPosts: GroupedPosts): number[] {
 }
 
 /**
- * Extract all unique tags from posts (normalized to lowercase)
+ * Extract all unique tags from posts or documents (normalized to lowercase)
  */
-export function getAllTags(posts: BlogPost[]): string[] {
+export function getAllTags(items: Array<{ tags?: string[] }>): string[] {
 	const tagsSet = new Set<string>();
-	posts.forEach((post) => {
-		post.tags?.forEach((tag) => tagsSet.add(tag.toLowerCase()));
+	items.forEach((item) => {
+		item.tags?.forEach((tag: string) => tagsSet.add(tag.toLowerCase()));
 	});
 	return Array.from(tagsSet).sort();
 }

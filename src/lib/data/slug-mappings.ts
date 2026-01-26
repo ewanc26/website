@@ -1,23 +1,23 @@
 /**
  * Slug to Publication mapping data
  *
- * Maps friendly URL slugs to publication rkeys from Leaflet or Standard.site.
+ * Maps friendly URL slugs to Standard.site publication rkeys.
  * This allows you to access publications via /{slug} instead of using rkeys.
  *
  * Example:
- * - /blog → maps to Leaflet publication with rkey "3m3x4bgbsh22k"
+ * - /blog → maps to Standard.site publication with rkey "3m3x4bgbsh22k"
  * - /notes → maps to Standard.site publication with rkey "xyz123abc"
  */
 
-export type PublicationPlatform = 'leaflet' | 'standard.site';
+export type PublicationPlatform = 'standard.site';
 
 export interface SlugMapping {
 	/** The URL-friendly slug (will be normalized automatically) */
 	slug: string;
 	/** The publication rkey */
 	publicationRkey: string;
-	/** The platform this publication belongs to (defaults to 'leaflet' for backwards compatibility) */
-	platform?: PublicationPlatform;
+	/** The platform this publication belongs to (always 'standard.site') */
+	platform: PublicationPlatform;
 }
 
 /**
@@ -33,20 +33,20 @@ export interface SlugMapping {
 export const slugMappings: SlugMapping[] = [
 	{
 		slug: 'blog',
-		publicationRkey: '3m3x4bgbsh22k', // my blog publication rkey
-		platform: 'leaflet'
+		publicationRkey: '3m3x4bgbsh22k', // Your blog publication rkey
+		platform: 'standard.site'
 	},
 	{
 		slug: 'cailean',
-		publicationRkey: '3m4222fxc3k2q', // Cailean Uen's publication rkey for his journal
-		platform: 'leaflet'
+		publicationRkey: '3m4222fxc3k2q', // Cailean Uen's journal publication rkey
+		platform: 'standard.site'
 	},
 	{
 		slug: 'creativity',
-		publicationRkey: '3m6afhzlxt22p', // my creativity dump publication rkey
-		platform: 'leaflet'
+		publicationRkey: '3m6afhzlxt22p', // Your creativity dump publication rkey
+		platform: 'standard.site'
 	}
 	// Add more mappings as needed:
 	// { slug: 'notes', publicationRkey: 'xyz123abc', platform: 'standard.site' },
-	// { slug: 'essays', publicationRkey: 'def456ghi', platform: 'leaflet' },
+	// { slug: 'essays', publicationRkey: 'def456ghi', platform: 'standard.site' },
 ];
