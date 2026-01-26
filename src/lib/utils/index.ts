@@ -14,3 +14,6 @@ export * from './url';
 
 // Validation and text processing utilities
 export * from './validators';
+
+// RSS feed generation utilities
+export * from './rss';
