@@ -102,29 +102,20 @@ export interface BlogPost {
 	title: string;
 	url: string;
 	createdAt: string;
-	platform: 'WhiteWind' | 'leaflet' | 'standard.site';
+	platform: 'standard.site';
 	description?: string;
 	rkey: string;
 	publicationName?: string;
 	publicationRkey?: string;
 	tags?: string[];
+	// Standard.site specific fields
+	coverImage?: string;
+	textContent?: string;
+	updatedAt?: string;
 }
 
 export interface BlogPostsData {
 	posts: BlogPost[];
-}
-
-export interface LeafletPublication {
-	name: string;
-	rkey: string;
-	uri: string;
-	basePath?: string;
-	description?: string;
-	icon?: string;
-}
-
-export interface LeafletPublicationsData {
-	publications: LeafletPublication[];
 }
 
 export interface Facet {

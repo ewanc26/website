@@ -1,42 +1,39 @@
 <script lang="ts">
 	import { ExternalLink, Tag } from '@lucide/svelte';
-	import type { BlogPost } from '$lib/services/atproto';
+	import type { StandardSiteDocument } from '$lib/services/atproto';
 	import { InternalCard } from '$lib/components/ui';
-	import { getPostBadges, getBadgeClasses } from '$lib/helper/badges';
 	import { formatLocalizedDate } from '$lib/utils/locale';
 
 	interface Props {
-		post: BlogPost;
+		document: StandardSiteDocument;
 		locale?: string;
 	}
 
-	let { post, locale }: Props = $props();
-
-	const badges = $derived(getPostBadges(post));
+	let { document, locale }: Props = $props();
 </script>
 
-<InternalCard href={post.url}>
+<InternalCard href={document.url}>
 	{#snippet children()}
-		<!-- Cover Image (Standard.site only) -->
-		{#if post.coverImage}
+		<!-- Cover Image -->
+		{#if document.coverImage}
 			<div class="mb-3 overflow-hidden rounded-lg">
 				<img
-					src={post.coverImage}
-					alt={post.title}
+					src={document.coverImage}
+					alt={document.title}
 					class="h-48 w-full object-cover transition-transform duration-300 hover:scale-105"
 				/>
 			</div>
 		{/if}
 
 		<div class="relative min-w-0 flex-1 space-y-2">
-			<!-- Badges: Platform and Publication -->
-			{#if badges.length > 0}
+			<!-- Publication Badge -->
+			{#if document.publicationName}
 				<div class="flex flex-wrap items-center gap-2">
-					{#each badges as badge}
-						<span class={getBadgeClasses(badge)}>
-							{badge.text}
-						</span>
-					{/each}
+					<span
+						class="rounded bg-accent-500 px-2 py-0.5 text-xs font-semibold text-white uppercase dark:bg-accent-600"
+					>
+						{document.publicationName}
+					</span>
 				</div>
 			{/if}
 
@@ -44,22 +41,22 @@
 			<h4
 				class="overflow-wrap-anywhere font-semibold wrap-break-word text-ink-900 dark:text-ink-50"
 			>
-				{post.title}
+				{document.title}
 			</h4>
 
 			<!-- Description -->
-			{#if post.description}
+			{#if document.description}
 				<p
 					class="overflow-wrap-anywhere line-clamp-2 text-sm wrap-break-word text-ink-700 dark:text-ink-200"
 				>
-					{post.description}
+					{document.description}
 				</p>
 			{/if}
 
 			<!-- Timestamp -->
 			<div class="pt-1">
 				<p class="text-xs font-medium text-ink-800 dark:text-ink-100">
-					{formatLocalizedDate(post.createdAt, locale)}
+					{formatLocalizedDate(document.publishedAt, locale)}
 				</p>
 			</div>
 		</div>
@@ -73,11 +70,11 @@
 			/>
 
 			<!-- Tags -->
-			{#if post.tags && post.tags.length > 0}
+			{#if document.tags && document.tags.length > 0}
 				<div class="flex items-center gap-1.5 rounded bg-ink-100 px-2 py-0.5 dark:bg-ink-800">
 					<Tag class="h-3 w-3 text-ink-700 dark:text-ink-200" aria-hidden="true" />
 					<span class="text-xs font-medium text-ink-800 dark:text-ink-100">
-						{post.tags.length}
+						{document.tags.length}
 					</span>
 				</div>
 			{/if}

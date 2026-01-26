@@ -43,7 +43,7 @@ export function getPublicationFromSlug(
 	if (!mapping) return null;
 	return {
 		rkey: mapping.publicationRkey,
-		platform: mapping.platform || 'leaflet' // Default to leaflet for backwards compatibility
+		platform: mapping.platform
 	};
 }
 

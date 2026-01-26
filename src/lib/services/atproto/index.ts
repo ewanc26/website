@@ -2,7 +2,8 @@
  * Unified AT Protocol service exports
  *
  * This module provides a clean API for interacting with AT Protocol services,
- * including profile data, blog posts, Bluesky posts, and custom lexicons.
+ * focusing exclusively on Standard.site documents and publications.
+ * Legacy platform support (WhiteWind, Leaflet) has been removed.
  */
 
 // Export all types
@@ -11,11 +12,8 @@ export type {
 	SiteInfoData,
 	LinkData,
 	LinkCard,
-	BlogPost,
-	BlogPostsData,
-	LeafletPublication,
-	LeafletPublicationsData,
 	BlueskyPost,
+	BlogPost,
 	PostAuthor,
 	ExternalLink,
 	Facet,
@@ -51,14 +49,16 @@ export {
 	fetchTangledRepos
 } from './fetch';
 
-export { fetchStandardSitePublications, fetchStandardSiteDocuments } from './standard';
-
+// Export Standard.site document functions
 export {
-	fetchBlogPosts,
-	fetchLeafletPublications,
-	fetchLatestBlueskyPost,
-	fetchPostFromUri
-} from './posts';
+	fetchPublications,
+	fetchDocuments,
+	fetchRecentDocuments,
+	fetchBlogPosts
+} from './documents';
+
+// Export Bluesky post functions
+export { fetchLatestBlueskyPost, fetchPostFromUri } from './posts';
 
 // Export utility functions
 export { buildPdsBlobUrl, extractCidFromImageObject, extractImageUrlsFromValue } from './media';

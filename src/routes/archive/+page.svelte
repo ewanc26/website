@@ -1,19 +1,13 @@
 <script lang="ts">
-	import {
-		Card,
-		SearchBar,
-		Pagination,
-		Tabs,
-		PostsGroupedView,
-		Dropdown
-	} from '$lib/components/ui';
-	import type { BlogPost } from '$lib/services/atproto';
+	import { Card, SearchBar, Pagination, Tabs, Dropdown } from '$lib/components/ui';
+	import { DocumentCard } from '$lib/components/ui';
+	import type { StandardSiteDocument } from '$lib/services/atproto';
 	import { getUserLocale } from '$lib/utils/locale';
-	import { filterPosts, getSortedYears, groupPostsByDate, getAllTags } from '$lib/helper/posts';
+	import { getAllTags } from '$lib/helper/posts';
 
 	interface Props {
 		data: {
-			allPosts: BlogPost[];
+			documents: StandardSiteDocument[];
 		};
 	}
 
@@ -28,11 +22,17 @@
 	let selectedPublication = $state('');
 	let selectedTag = $state('');
 	let currentPage = $state(1);
-	const postsPerPage = 50;
+	const documentsPerPage = 50;
 
-	// Get available years from all posts
-	const allGrouped = $derived(groupPostsByDate(data.allPosts, userLocale));
-	const availableYears = $derived(getSortedYears(allGrouped));
+	// Get available years from all documents
+	const availableYears = $derived.by(() => {
+		const years = new Set<number>();
+		data.documents.forEach((doc) => {
+			const year = new Date(doc.publishedAt).getFullYear();
+			years.add(year);
+		});
+		return Array.from(years).sort((a, b) => b - a); // Newest first
+	});
 
 	// Create year tabs (All + individual years)
 	const yearTabs = $derived([
@@ -43,10 +43,10 @@
 	// Get unique publications
 	const publications = $derived.by(() => {
 		const pubs = new Map<string, string>();
-		data.allPosts.forEach((post) => {
-			if (post.platform === 'leaflet' && post.publicationName) {
-				const key = `${post.publicationName}-${post.publicationRkey || 'default'}`;
-				pubs.set(key, post.publicationName);
+		data.documents.forEach((doc) => {
+			if (doc.publicationName && doc.publicationRkey) {
+				const key = `${doc.publicationName}-${doc.publicationRkey}`;
+				pubs.set(key, doc.publicationName);
 			}
 		});
 		return Array.from(pubs.entries()).map(([key, name]) => ({
@@ -56,7 +56,7 @@
 	});
 
 	// Get unique tags
-	const allTags = $derived(getAllTags(data.allPosts));
+	const allTags = $derived(getAllTags(data.documents));
 	const tagOptions = $derived(
 		allTags.map((tag) => ({
 			value: tag,
@@ -64,48 +64,69 @@
 		}))
 	);
 
-	// Filter posts by search, year, and publication
-	const filteredBySearch = $derived(filterPosts(data.allPosts, searchQuery));
+	// Filter documents by search query
+	const filteredBySearch = $derived.by(() => {
+		if (!searchQuery) return data.documents;
+		const query = searchQuery.toLowerCase();
+		return data.documents.filter((doc) => {
+			return (
+				doc.title.toLowerCase().includes(query) ||
+				doc.description?.toLowerCase().includes(query) ||
+				doc.publicationName?.toLowerCase().includes(query) ||
+				doc.tags?.some((tag) => tag.toLowerCase().includes(query))
+			);
+		});
+	});
 
+	// Filter by year
 	const filteredByYear = $derived.by(() => {
 		if (selectedYear === 'all') return filteredBySearch;
-		return filteredBySearch.filter((post) => {
-			const postYear = new Date(post.createdAt).getFullYear();
-			return postYear === parseInt(selectedYear);
+		return filteredBySearch.filter((doc) => {
+			const docYear = new Date(doc.publishedAt).getFullYear();
+			return docYear === parseInt(selectedYear);
 		});
 	});
 
+	// Filter by publication
 	const filteredByPublication = $derived.by(() => {
 		if (!selectedPublication) return filteredByYear;
-		return filteredByYear.filter((post: BlogPost) => {
-			if (post.platform === 'WhiteWind' && selectedPublication === 'whitewind') return true;
-			if (post.platform === 'leaflet') {
-				const key = `${post.publicationName}-${post.publicationRkey || 'default'}`;
-				return key === selectedPublication;
-			}
-			return false;
+		return filteredByYear.filter((doc) => {
+			if (!doc.publicationName || !doc.publicationRkey) return false;
+			const key = `${doc.publicationName}-${doc.publicationRkey}`;
+			return key === selectedPublication;
 		});
 	});
 
-	const filteredPosts = $derived.by(() => {
+	// Filter by tag
+	const filteredDocuments = $derived.by(() => {
 		if (!selectedTag) return filteredByPublication;
-		return filteredByPublication.filter((post: BlogPost) => {
-			return post.tags?.some((tag) => tag.toLowerCase() === selectedTag.toLowerCase());
+		return filteredByPublication.filter((doc) => {
+			return doc.tags?.some((tag) => tag.toLowerCase() === selectedTag.toLowerCase());
 		});
 	});
-
-	// Add WhiteWind to publication options if there are WhiteWind posts
-	const hasWhiteWind = $derived(data.allPosts.some((p) => p.platform === 'WhiteWind'));
-	const publicationOptions = $derived.by(() => [
-		...(hasWhiteWind ? [{ value: 'whitewind', label: 'WhiteWind' }] : []),
-		...publications
-	]);
 
 	// Pagination calculations
-	const totalPages = $derived(Math.ceil(filteredPosts.length / postsPerPage));
-	const paginatedPosts = $derived(
-		filteredPosts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage)
+	const totalPages = $derived(Math.ceil(filteredDocuments.length / documentsPerPage));
+	const paginatedDocuments = $derived(
+		filteredDocuments.slice((currentPage - 1) * documentsPerPage, currentPage * documentsPerPage)
 	);
+
+	// Group documents by month
+	const groupedDocuments = $derived.by(() => {
+		const groups = new Map<string, StandardSiteDocument[]>();
+
+		paginatedDocuments.forEach((doc) => {
+			const date = new Date(doc.publishedAt);
+			const monthKey = date.toLocaleDateString(userLocale, { year: 'numeric', month: 'long' });
+
+			if (!groups.has(monthKey)) {
+				groups.set(monthKey, []);
+			}
+			groups.get(monthKey)!.push(doc);
+		});
+
+		return groups;
+	});
 
 	// Reset to page 1 when filters change
 	$effect(() => {
@@ -132,7 +153,7 @@
 	<div class="mb-8 text-center">
 		<h1 class="mb-4 text-4xl font-bold text-ink-900 md:text-5xl dark:text-ink-50">Archive</h1>
 		<p class="text-lg text-ink-700 dark:text-ink-200">
-			Browse all {data.allPosts.length} blog posts from WhiteWind and Leaflet, organised by date.
+			Browse all {data.documents.length} documents from Standard.site
 		</p>
 	</div>
 
@@ -140,19 +161,19 @@
 	<div class="mb-6">
 		<SearchBar
 			bind:value={searchQuery}
-			placeholder="Search posts by title, description, platform, publication, or tags..."
-			resultCount={searchQuery ? filteredPosts.length : undefined}
+			placeholder="Search documents by title, description, publication, or tags..."
+			resultCount={searchQuery ? filteredDocuments.length : undefined}
 		/>
 	</div>
 
 	<!-- Filters Row -->
 	<div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end">
 		<!-- Publication Dropdown -->
-		{#if publicationOptions.length > 0}
+		{#if publications.length > 0}
 			<div class="flex-1 sm:max-w-xs">
 				<Dropdown
 					bind:value={selectedPublication}
-					options={publicationOptions}
+					options={publications}
 					label="Filter by Publication"
 					placeholder="All Publications"
 				/>
@@ -176,29 +197,22 @@
 	<Tabs tabs={yearTabs} activeTab={selectedYear} onTabChange={handleYearChange} />
 
 	<!-- Archive Content -->
-	{#if filteredPosts.length === 0}
+	{#if filteredDocuments.length === 0}
 		<Card variant="flat" padding="lg">
 			{#snippet children()}
 				<div class="text-center">
 					{#if searchQuery || selectedPublication || selectedTag}
 						<p class="text-ink-700 dark:text-ink-300">
-							No posts found matching your filters. Try adjusting your search or filters.
+							No documents found matching your filters. Try adjusting your search or filters.
 						</p>
 					{:else}
 						<p class="text-ink-700 dark:text-ink-300">
-							No blog posts found. Start writing on
+							No documents found. Start writing on
 							<a
-								href="https://whtwnd.com/"
+								href="https://standard.site/"
 								class="text-primary-600 hover:underline dark:text-primary-400"
 								target="_blank"
-								rel="noopener noreferrer">WhiteWind</a
-							>
-							or
-							<a
-								href="https://leaflet.pub/"
-								class="text-primary-600 hover:underline dark:text-primary-400"
-								target="_blank"
-								rel="noopener noreferrer">Leaflet</a
+								rel="noopener noreferrer">Standard.site</a
 							>!
 						</p>
 					{/if}
@@ -206,15 +220,24 @@
 			{/snippet}
 		</Card>
 	{:else}
-		<!-- Posts Grouped View -->
-		<PostsGroupedView posts={paginatedPosts} locale={userLocale} />
+		<!-- Grouped Documents View -->
+		{#each Array.from(groupedDocuments.entries()) as [monthKey, docs]}
+			<div class="mb-8">
+				<h3 class="mb-4 text-lg font-semibold text-ink-900 dark:text-ink-50">{monthKey}</h3>
+				<div class="space-y-3">
+					{#each docs as document}
+						<DocumentCard {document} locale={userLocale} />
+					{/each}
+				</div>
+			</div>
+		{/each}
 
 		<!-- Pagination -->
 		<Pagination
 			{currentPage}
 			{totalPages}
-			totalItems={filteredPosts.length}
-			itemsPerPage={postsPerPage}
+			totalItems={filteredDocuments.length}
+			itemsPerPage={documentsPerPage}
 			onPageChange={handlePageChange}
 		/>
 	{/if}
