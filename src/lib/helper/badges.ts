@@ -8,20 +8,17 @@ export interface PostBadge {
 
 /**
  * Get badge configuration for a post based on platform and publication
+ * Standard.site posts get jade color styling
  */
 export function getPostBadges(post: BlogPost): PostBadge[] {
 	const badges: PostBadge[] = [];
 
-	// Platform badge
-	if (post.platform === 'WhiteWind') {
-		badges.push({ text: 'WhiteWind', color: 'mint', variant: 'soft' });
-	} else if (post.platform === 'leaflet') {
-		badges.push({ text: 'Leaflet', color: 'sage', variant: 'soft' });
-	}
+	// Platform badge - Standard.site
+	badges.push({ text: 'Standard.site', color: 'jade', variant: 'solid' });
 
-	// Publication name badge for Leaflet posts
-	if (post.publicationName && post.platform === 'leaflet') {
-		badges.push({ text: post.publicationName, color: 'sage', variant: 'solid' });
+	// Publication name badge
+	if (post.publicationName) {
+		badges.push({ text: post.publicationName, color: 'jade', variant: 'soft' });
 	}
 
 	return badges;

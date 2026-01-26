@@ -4,7 +4,7 @@ import {
 	fetchKibunStatus,
 	fetchLatestBlueskyPost,
 	fetchTangledRepos,
-	fetchBlogPosts
+	fetchRecentDocuments
 } from '$lib/services/atproto';
 
 export const load: PageLoad = async ({ fetch, parent }) => {
@@ -12,12 +12,12 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 	const { profile } = await parent();
 
 	// Fetch page-specific data in parallel for better performance
-	const [musicStatus, kibunStatus, latestPost, tangledRepos, blogPosts] = await Promise.allSettled([
+	const [musicStatus, kibunStatus, latestPost, tangledRepos, documents] = await Promise.allSettled([
 		fetchMusicStatus(fetch),
 		fetchKibunStatus(fetch),
 		fetchLatestBlueskyPost(fetch),
 		fetchTangledRepos(fetch),
-		fetchBlogPosts(fetch)
+		fetchRecentDocuments(5, fetch) // Fetch 5 most recent documents
 	]);
 
 	return {
@@ -28,6 +28,6 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 		kibunStatus: kibunStatus.status === 'fulfilled' ? kibunStatus.value : null,
 		latestPost: latestPost.status === 'fulfilled' ? latestPost.value : null,
 		tangledRepos: tangledRepos.status === 'fulfilled' ? tangledRepos.value : null,
-		blogPosts: blogPosts.status === 'fulfilled' ? blogPosts.value : null
+		documents: documents.status === 'fulfilled' ? documents.value : []
 	};
 };

@@ -358,7 +358,8 @@ export async function findArtwork(
 	trackName: string,
 	artistName: string,
 	releaseName?: string,
-	releaseMbId?: string
+	releaseMbId?: string,
+	fetchFn?: typeof fetch
 ): Promise<string | null> {
 	try {
 		// Build query parameters
@@ -378,7 +379,8 @@ export async function findArtwork(
 		});
 
 		// Call our server-side API endpoint
-		const response = await fetch(`/api/artwork?${params.toString()}`);
+		const fetchFunc = fetchFn || fetch;
+		const response = await fetchFunc(`/api/artwork?${params.toString()}`);
 
 		if (!response.ok) {
 			console.error('[Artwork] API request failed:', response.status);
