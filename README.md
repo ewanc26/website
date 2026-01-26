@@ -371,6 +371,7 @@ export const slugMappings: SlugMapping[] = [
 ### RSS Feed Behavior
 
 Generates an RSS 2.0 feed containing all documents from the specified publication:
+
 - Includes title, link, publication date, and description
 - Filtered by publication rkey
 - Cached for 1 hour for performance
@@ -454,22 +455,26 @@ The site features 12 beautiful color themes organized into four categories:
 ### Available Themes
 
 **Neutral Themes**
+
 - **Sage**: Calm green-blue
 - **Monochrome**: Pure greyscale
 - **Slate**: Blue-grey (default)
 
 **Warm Themes**
+
 - **Ruby**: Bold red
 - **Coral**: Orange-pink
 - **Sunset**: Warm orange
 - **Amber**: Bright yellow
 
 **Cool Themes**
+
 - **Forest**: Natural green
 - **Teal**: Blue-green
 - **Ocean**: Deep blue
 
 **Vibrant Themes**
+
 - **Lavender**: Soft purple
 - **Rose**: Pink-red
 
@@ -493,7 +498,7 @@ export const THEMES: readonly ThemeDefinition[] = [
 		description: 'Custom colors',
 		color: 'oklch(80% 0.2 180)',
 		category: 'cool'
-	},
+	}
 	// ... more themes
 ];
 ```
@@ -593,6 +598,7 @@ The site supports several custom AT Protocol lexicons:
 ### Site Information (`uk.ewancroft.site.info`)
 
 Store comprehensive site metadata:
+
 - Technology stack
 - Privacy statement
 - Open-source information
@@ -731,6 +737,7 @@ If your music status doesn't show album artwork:
 6. Icon placeholder displays if no artwork is found
 
 The cascading fallback system tries multiple sources:
+
 - MusicBrainz (with automatic search)
 - iTunes
 - Deezer
@@ -800,4 +807,4 @@ If you see "Cannot use relative URL with global fetch":
 
 Built with ❤️ using SvelteKit, AT Protocol, and open-source tools
 
-**Version**: 10.7.0
+**Version**: 10.7.1
