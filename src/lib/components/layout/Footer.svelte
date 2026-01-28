@@ -64,7 +64,7 @@
 						<span role="status" aria-live="polite">Loading profile…</span>
 					{:else if profile}
 						<a
-							href="https://bsky.app/profile/{profile.did}"
+							href="https://witchsky.app/profile/{profile.did}"
 							class="underline hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
 							target="_blank"
 							rel="noopener noreferrer"
