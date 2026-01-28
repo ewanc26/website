@@ -137,7 +137,7 @@
 
 					<div class="mt-4">
 						<LinkCard
-							url="https://bsky.app/profile/{safeProfile.did}"
+							url="https://witchsky.app/profile/{safeProfile.did}"
 							title="View on Bluesky"
 							variant="button"
 						/>

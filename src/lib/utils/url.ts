@@ -25,7 +25,7 @@ export function atUriToBlueskyUrl(uri: string): string {
 	const parts = uri.split('/');
 	const did = parts[2];
 	const rkey = parts[4];
-	return `https://bsky.app/profile/${did}/post/${rkey}`;
+	return `https://witchsky.app/profile/${did}/post/${rkey}`;
 }
 
 /**
@@ -34,7 +34,7 @@ export function atUriToBlueskyUrl(uri: string): string {
  * @returns Bluesky profile URL
  */
 export function getBlueskyProfileUrl(actor: string): string {
-	return `https://bsky.app/profile/${actor}`;
+	return `https://witchsky.app/profile/${actor}`;
 }
 
 /**
