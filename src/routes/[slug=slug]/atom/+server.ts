@@ -1,8 +1,12 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { getPublicationRkeyFromSlug } from '$lib/config/slugs';
+import { getPublicationRkeyFromSlug, isTidFormat } from '$lib/config/slugs';
 
 /**
  * Deprecated Atom feed
+ *
+ * Accessible via:
+ * - /{slug}/atom - publication identified by slug
+ * - /{publication-rkey}/atom - publication identified by rkey
  *
  * Atom feeds are no longer supported. Use RSS instead.
  *
@@ -13,11 +17,11 @@ import { getPublicationRkeyFromSlug } from '$lib/config/slugs';
  * - Maintaining both RSS and Atom adds unnecessary complexity
  */
 export const GET: RequestHandler = ({ params }) => {
-	const slug = params.slug;
+	const slugOrRkey = params.slug;
 
-	// Validate slug
-	if (!slug) {
-		return new Response('Invalid slug', {
+	// Validate input
+	if (!slugOrRkey) {
+		return new Response('Invalid slug or publication rkey', {
 			status: 400,
 			headers: {
 				'Content-Type': 'text/plain; charset=utf-8'
@@ -25,19 +29,21 @@ export const GET: RequestHandler = ({ params }) => {
 		});
 	}
 
-	// Validate slug exists in config
-	const publicationRkey = getPublicationRkeyFromSlug(slug);
+	// Validate that either the slug exists in config or it's a valid rkey
+	if (!isTidFormat(slugOrRkey)) {
+		const publicationRkey = getPublicationRkeyFromSlug(slugOrRkey);
 
-	if (!publicationRkey) {
-		return new Response(
-			`Slug not configured: ${slug}\n\nPlease add this slug to src/lib/config/slugs.ts`,
-			{
-				status: 404,
-				headers: {
-					'Content-Type': 'text/plain; charset=utf-8'
+		if (!publicationRkey) {
+			return new Response(
+				`Slug not configured: ${slugOrRkey}\n\nPlease add this slug to src/lib/config/slugs.ts`,
+				{
+					status: 404,
+					headers: {
+						'Content-Type': 'text/plain; charset=utf-8'
+					}
 				}
-			}
-		);
+			);
+		}
 	}
 
 	return new Response(
@@ -45,7 +51,7 @@ export const GET: RequestHandler = ({ params }) => {
 
 This Atom feed is no longer available. Please use the RSS feed instead:
 
-RSS Feed: /${slug}/rss
+RSS Feed: /${slugOrRkey}/rss
 
 For Leaflet posts with full content, the RSS feed will automatically redirect you to 
 Leaflet's native RSS feed which includes complete post content.

@@ -1,19 +1,22 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { fetchPublications } from '$lib/services/atproto';
-import { getPublicationFromSlug } from '$lib/config/slugs';
+import { getPublicationFromSlug, isTidFormat, getSlugFromPublicationRkey } from '$lib/config/slugs';
 
 /**
- * Dynamic slug root redirect handler
+ * Dynamic slug/rkey root redirect handler
  *
- * Redirects /{slug} to the appropriate Standard.site publication URL
- * Uses the slug mapping config to find the publication rkey
+ * Handles both:
+ * - /{slug} redirects to the appropriate Standard.site publication URL
+ * - /{publication-rkey} redirects to the publication (for site.standard.publication rkeys)
+ * 
+ * Uses the slug mapping config to find the publication rkey for slugs.
  * Individual documents are handled by the [rkey] route.
  */
 export const GET: RequestHandler = async ({ params, url }) => {
-	const slug = params.slug;
+	const slugOrRkey = params.slug;
 
-	// If there's a path after /{slug}, let it fall through to other routes
-	const slugPath = url.pathname.replace(new RegExp(`^/${slug}/?`), '');
+	// If there's a path after /{slugOrRkey}, let it fall through to other routes
+	const slugPath = url.pathname.replace(new RegExp(`^/${slugOrRkey}/?`), '');
 
 	if (slugPath && !['rss', 'atom'].includes(slugPath)) {
 		// This will be caught by the [rkey] route
@@ -25,11 +28,11 @@ export const GET: RequestHandler = async ({ params, url }) => {
 		});
 	}
 
-	// For /{slug} root, redirect to the publication
+	// For /{slugOrRkey} root, redirect to the publication
 	if (!slugPath || slugPath === '') {
-		// Validate slug and get the publication info
-		if (!slug) {
-			return new Response('Invalid slug', {
+		// Validate input
+		if (!slugOrRkey) {
+			return new Response('Invalid slug or rkey', {
 				status: 400,
 				headers: {
 					'Content-Type': 'text/plain; charset=utf-8'
@@ -37,21 +40,32 @@ export const GET: RequestHandler = async ({ params, url }) => {
 			});
 		}
 
-		const publicationInfo = getPublicationFromSlug(slug);
+		let publicationRkey: string;
+		let isDirectRkey = false;
 
-		if (!publicationInfo) {
-			return new Response(
-				`Slug not configured: ${slug}\n\nPlease add this slug to src/lib/data/slug-mappings.ts`,
-				{
-					status: 404,
-					headers: {
-						'Content-Type': 'text/plain; charset=utf-8'
+		// Check if input is a TID (rkey) or a slug
+		if (isTidFormat(slugOrRkey)) {
+			// Input is an rkey - use it directly
+			publicationRkey = slugOrRkey;
+			isDirectRkey = true;
+		} else {
+			// Input is a slug - look up the rkey
+			const publicationInfo = getPublicationFromSlug(slugOrRkey);
+
+			if (!publicationInfo) {
+				return new Response(
+					`Slug not configured: ${slugOrRkey}\n\nPlease add this slug to src/lib/data/slug-mappings.ts`,
+					{
+						status: 404,
+						headers: {
+							'Content-Type': 'text/plain; charset=utf-8'
+						}
 					}
-				}
-			);
-		}
+				);
+			}
 
-		const { rkey: publicationRkey } = publicationInfo;
+			publicationRkey = publicationInfo.rkey;
+		}
 		let redirectUrl: string | null = null;
 
 		try {
@@ -81,8 +95,13 @@ export const GET: RequestHandler = async ({ params, url }) => {
 		}
 
 		// No publication found
+		const identifier = isDirectRkey ? `rkey: ${slugOrRkey}` : `slug: ${slugOrRkey}`;
 		return new Response(
-			`Publication not found for slug: ${slug}\n\nPlease check your configuration in src/lib/data/slug-mappings.ts`,
+			`Publication not found for ${identifier}\n\n${
+				isDirectRkey
+					? 'This publication rkey does not exist or is not accessible.'
+					: 'Please check your configuration in src/lib/data/slug-mappings.ts'
+			}`,
 			{
 				status: 404,
 				headers: {

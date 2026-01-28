@@ -90,3 +90,23 @@ export function getAllSlugMappings(): SlugMapping[] {
 		slug: normalizeSlug(m.slug)
 	}));
 }
+
+/**
+ * Check if a string is a valid TID (AT Protocol record key)
+ *
+ * @param str - String to check
+ * @returns True if the string matches TID format (12-16 alphanumeric characters)
+ */
+export function isTidFormat(str: string): boolean {
+	const tidPattern = /^[a-zA-Z0-9]{12,16}$/;
+	return tidPattern.test(str);
+}
+
+/**
+ * Get all publication rkeys from slug mappings
+ *
+ * @returns Array of publication rkeys
+ */
+export function getAllPublicationRkeys(): string[] {
+	return slugMappings.map((m) => m.publicationRkey);
+}
