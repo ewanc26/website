@@ -6,20 +6,24 @@ import {
 	PUBLIC_SITE_URL
 } from '$env/static/public';
 import { fetchBlogPosts } from '$lib/services/atproto';
-import { getPublicationRkeyFromSlug } from '$lib/config/slugs';
+import { getPublicationRkeyFromSlug, isTidFormat } from '$lib/config/slugs';
 import { generateRSSFeed, createRSSResponse, type RSSItem } from '$lib/utils/rss';
 
 /**
- * RSS 2.0 feed for Standard.site publications (accessed via /{slug}/rss)
+ * RSS 2.0 feed for Standard.site publications
+ * 
+ * Accessible via:
+ * - /{slug}/rss - publication identified by slug
+ * - /{publication-rkey}/rss - publication identified by rkey
  *
  * Generates an RSS feed for all documents in the specified publication.
  */
 export const GET: RequestHandler = async ({ params }) => {
-	const slug = params.slug;
+	const slugOrRkey = params.slug;
 
-	// Validate slug
-	if (!slug) {
-		return new Response('Invalid slug', {
+	// Validate input
+	if (!slugOrRkey) {
+		return new Response('Invalid slug or publication rkey', {
 			status: 400,
 			headers: {
 				'Content-Type': 'text/plain; charset=utf-8'
@@ -27,19 +31,29 @@ export const GET: RequestHandler = async ({ params }) => {
 		});
 	}
 
-	// Get the publication rkey from the slug
-	const publicationRkey = getPublicationRkeyFromSlug(slug);
+	let publicationRkey: string;
 
-	if (!publicationRkey) {
-		return new Response(
-			`Slug not configured: ${slug}\n\nPlease add this slug to src/lib/config/slugs.ts`,
-			{
-				status: 404,
-				headers: {
-					'Content-Type': 'text/plain; charset=utf-8'
+	// Check if input is a TID (rkey) or a slug
+	if (isTidFormat(slugOrRkey)) {
+		// Input is a publication rkey - use it directly
+		publicationRkey = slugOrRkey;
+	} else {
+		// Input is a slug - look up the publication rkey
+		const rkey = getPublicationRkeyFromSlug(slugOrRkey);
+
+		if (!rkey) {
+			return new Response(
+				`Slug not configured: ${slugOrRkey}\n\nPlease add this slug to src/lib/config/slugs.ts`,
+				{
+					status: 404,
+					headers: {
+						'Content-Type': 'text/plain; charset=utf-8'
+					}
 				}
-			}
-		);
+			);
+		}
+
+		publicationRkey = rkey;
 	}
 
 	try {
@@ -65,11 +79,11 @@ export const GET: RequestHandler = async ({ params }) => {
 			// Generate RSS feed
 			const feed = generateRSSFeed(
 				{
-					title: `${PUBLIC_SITE_TITLE} - ${slug}`,
+					title: `${PUBLIC_SITE_TITLE} - ${slugOrRkey}`,
 					link: PUBLIC_SITE_URL,
 					description: PUBLIC_SITE_DESCRIPTION,
 					language: 'en',
-					selfLink: `${PUBLIC_SITE_URL}/${slug}/rss`,
+					selfLink: `${PUBLIC_SITE_URL}/${slugOrRkey}/rss`,
 					generator: 'SvelteKit with AT Protocol'
 				},
 				items
@@ -79,7 +93,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		}
 
 		// No posts at all
-		return new Response(`No posts found for publication: ${slug}`, {
+		return new Response(`No posts found for publication: ${slugOrRkey}`, {
 			status: 404,
 			headers: {
 				'Content-Type': 'text/plain; charset=utf-8'

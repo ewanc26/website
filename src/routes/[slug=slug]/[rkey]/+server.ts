@@ -2,11 +2,15 @@ import type { RequestHandler } from '@sveltejs/kit';
 import { PUBLIC_ATPROTO_DID, PUBLIC_BLOG_FALLBACK_URL } from '$env/static/public';
 import { withFallback } from '$lib/services/atproto';
 import { fetchPublications } from '$lib/services/atproto';
-import { getPublicationFromSlug } from '$lib/config/slugs';
+import { getPublicationFromSlug, isTidFormat } from '$lib/config/slugs';
 import type { PublicationPlatform } from '$lib/data/slug-mappings';
 
 /**
- * Smart document redirect handler for slugged publications
+ * Smart document redirect handler for slugged or rkey-based publications
+ *
+ * Handles both:
+ * - /{slug}/{document-rkey} - publication identified by slug
+ * - /{publication-rkey}/{document-rkey} - publication identified by rkey
  *
  * Automatically detects Standard.site documents and redirects to the canonical URL.
  * Uses the publication's URL + document path to construct the final URL.
@@ -81,12 +85,12 @@ async function detectDocumentUrl(
 }
 
 export const GET: RequestHandler = async ({ params, url }) => {
-	const slug = params.slug;
-	const rkey = params.rkey;
+	const slugOrRkey = params.slug;
+	const documentRkey = params.rkey;
 
-	// Validate slug
-	if (!slug) {
-		return new Response('Invalid slug', {
+	// Validate input
+	if (!slugOrRkey) {
+		return new Response('Invalid slug or publication rkey', {
 			status: 400,
 			headers: {
 				'Content-Type': 'text/plain; charset=utf-8'
@@ -94,28 +98,38 @@ export const GET: RequestHandler = async ({ params, url }) => {
 		});
 	}
 
-	// Get the publication info from the slug
-	const publicationInfo = getPublicationFromSlug(slug);
+	let publicationRkey: string;
+	let isDirectRkey = false;
 
-	if (!publicationInfo) {
-		return new Response(
-			`Slug not configured: ${slug}\n\nPlease add this slug to src/lib/data/slug-mappings.ts`,
-			{
-				status: 404,
-				headers: {
-					'Content-Type': 'text/plain; charset=utf-8'
+	// Check if input is a TID (rkey) or a slug
+	if (isTidFormat(slugOrRkey)) {
+		// Input is a publication rkey - use it directly
+		publicationRkey = slugOrRkey;
+		isDirectRkey = true;
+	} else {
+		// Input is a slug - look up the publication rkey
+		const publicationInfo = getPublicationFromSlug(slugOrRkey);
+
+		if (!publicationInfo) {
+			return new Response(
+				`Slug not configured: ${slugOrRkey}\n\nPlease add this slug to src/lib/data/slug-mappings.ts`,
+				{
+					status: 404,
+					headers: {
+						'Content-Type': 'text/plain; charset=utf-8'
+					}
 				}
-			}
-		);
+			);
+		}
+
+		publicationRkey = publicationInfo.rkey;
 	}
 
-	const { rkey: publicationRkey } = publicationInfo;
-
-	// Validate TID format (AT Protocol record key)
+	// Validate document rkey TID format (AT Protocol record key)
 	const tidPattern = /^[a-zA-Z0-9]{12,16}$/;
 
-	if (!rkey || !tidPattern.test(rkey)) {
-		return new Response('Invalid TID format. Expected 12-16 alphanumeric characters.', {
+	if (!documentRkey || !tidPattern.test(documentRkey)) {
+		return new Response('Invalid document TID format. Expected 12-16 alphanumeric characters.', {
 			status: 400,
 			headers: {
 				'Content-Type': 'text/plain; charset=utf-8'
@@ -124,7 +138,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
 	}
 
 	// Detect document and get canonical URL
-	const detection = await detectDocumentUrl(rkey, publicationRkey);
+	const detection = await detectDocumentUrl(documentRkey, publicationRkey);
 
 	let targetUrl: string | null = null;
 	let statusCode = 301;
@@ -134,13 +148,14 @@ export const GET: RequestHandler = async ({ params, url }) => {
 		targetUrl = detection.url;
 	} else if (PUBLIC_BLOG_FALLBACK_URL) {
 		// Use fallback URL from environment variable
-		targetUrl = `${PUBLIC_BLOG_FALLBACK_URL}/${rkey}`;
+		targetUrl = `${PUBLIC_BLOG_FALLBACK_URL}/${documentRkey}`;
 	} else {
 		// No fallback configured, return 404
+		const identifier = isDirectRkey ? `publication rkey "${slugOrRkey}"` : `slug "${slugOrRkey}"`;
 		return new Response(
-			`Document not found: ${rkey}
+			`Document not found: ${documentRkey}
 
-This document could not be found in the Standard.site publication for slug "${slug}".
+This document could not be found in the Standard.site publication for ${identifier}.
 
 Note: Only checking Standard.site publication with rkey: ${publicationRkey}
 
