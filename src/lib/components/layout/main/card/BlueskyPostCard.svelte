@@ -76,11 +76,11 @@
 		const parts = uri.split('/');
 		const did = parts[2];
 		const rkey = parts[4];
-		return `https://bsky.app/profile/${did}/post/${rkey}`;
+		return `https://witchsky.app/profile/${did}/post/${rkey}`;
 	}
 
 	function getProfileUrl(handle: string): string {
-		return `https://bsky.app/profile/${handle}`;
+		return `https://witchsky.app/profile/${handle}`;
 	}
 
 	function openLightbox(url: string, alt: string) {
@@ -123,9 +123,9 @@
 				if (feature.$type === 'app.bsky.richtext.facet#link') {
 					result += `<a href="${escapeHtml(feature.uri)}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 underline">${escapeHtml(facetText)}</a>`;
 				} else if (feature.$type === 'app.bsky.richtext.facet#mention') {
-					result += `<a href="https://bsky.app/profile/${escapeHtml(feature.did)}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium">${escapeHtml(facetText)}</a>`;
+					result += `<a href="https://witchsky.app/profile/${escapeHtml(feature.did)}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium">${escapeHtml(facetText)}</a>`;
 				} else if (feature.$type === 'app.bsky.richtext.facet#tag') {
-					result += `<a href="https://bsky.app/hashtag/${escapeHtml(feature.tag)}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium">${escapeHtml(facetText)}</a>`;
+					result += `<a href="https://witchsky.app/hashtag/${escapeHtml(feature.tag)}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium">${escapeHtml(facetText)}</a>`;
 				} else {
 					result += escapeHtml(facetText);
 				}
