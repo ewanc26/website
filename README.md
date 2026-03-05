@@ -794,6 +794,10 @@ If you see "Cannot use relative URL with global fetch":
 3. Use `event.fetch` in server-side code
 4. This was fixed in the latest version
 
+## ☕ Support
+
+If you found this useful, consider [buying me a ko-fi](https://ko-fi.com/ewancroft)!
+
 ## 🙏 Acknowledgements
 
 - Thanks to the AT Protocol team for creating an open, decentralized protocol
