@@ -1,0 +1,44 @@
+{
+  "name": "@ewanc26/ui",
+  "version": "0.1.0",
+  "description": "Svelte UI component library extracted from ewancroft.uk — pluggable layout, UI primitives, stores, and SEO components.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "source": "./src/lib/index.ts",
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "svelte-package -i src/lib -o dist",
+    "dev": "svelte-package -i src/lib -o dist --watch",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "peerDependencies": {
+    "@sveltejs/kit": ">=2.0.0",
+    "svelte": ">=5.0.0",
+    "tailwindcss": ">=4.0.0"
+  },
+  "dependencies": {
+    "@lucide/svelte": "^0.554.0"
+  },
+  "optionalDependencies": {
+    "@ewanc26/atproto": "workspace:*"
+  },
+  "devDependencies": {
+    "@sveltejs/kit": "^2.49.0",
+    "@sveltejs/package": "^2.3.10",
+    "@sveltejs/vite-plugin-svelte": "^6.2.1",
+    "svelte": "^5.43.14",
+    "svelte-check": "^4.3.4",
+    "typescript": "^5.9.3"
+  }
+}

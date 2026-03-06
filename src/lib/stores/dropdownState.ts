@@ -1,3 +1,1 @@
-import { writable } from 'svelte/store';
-
-export const colorThemeDropdownOpen = writable(false);
+export { colorThemeDropdownOpen } from '@ewanc26/ui';
