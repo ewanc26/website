@@ -1,0 +1,28 @@
+{
+  "name": "@ewanc26/atproto",
+  "version": "0.1.0",
+  "description": "AT Protocol service layer extracted from ewancroft.uk",
+  "type": "module",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "dev": "tsc --project tsconfig.json --watch",
+    "check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@atproto/api": ">=0.13.0"
+  },
+  "devDependencies": {
+    "@atproto/api": "^0.18.1",
+    "typescript": "^5.9.3"
+  }
+}
