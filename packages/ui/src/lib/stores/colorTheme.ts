@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
-import { browser } from '$app/environment';
 import { DEFAULT_THEME, type ColorTheme } from '../config/themes.config.js';
+
+const browser = typeof window !== 'undefined';
 
 interface ColorThemeState {
 	current: ColorTheme;

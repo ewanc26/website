@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
-import { browser } from '$app/environment';
+
+const browser = typeof window !== 'undefined';
 
 const wolfSounds = [
 	'awoo', 'awooo', 'howl', 'ahroo', 'owww', 'yip', 'yap', 'arf', 'ruff', 'woof',
