@@ -1,0 +1,80 @@
+<script lang="ts">
+	import { ExternalLink, GitBranch, Server, User } from '@lucide/svelte';
+	import Card from '../../../ui/Card.svelte';
+	import InternalCard from '../../../ui/InternalCard.svelte';
+	import type { TangledReposData, ProfileData } from '@ewanc26/atproto';
+
+	interface Props {
+		repos?: TangledReposData | null;
+		profile?: ProfileData | null;
+		/** Fallback DID if profile handle is unavailable */
+		did?: string;
+	}
+
+	let { repos = null, profile = null, did = '' }: Props = $props();
+	let handle = $derived(profile?.handle || null);
+
+	function buildRepoUrl(repoName: string): string {
+		const identifier = handle || did;
+		return `https://tangled.org/${identifier}/${repoName}`;
+	}
+
+	function getKnotServerName(knot: string): string {
+		if (knot.startsWith('http')) {
+			try { return new URL(knot).hostname; } catch { return knot; }
+		}
+		return knot;
+	}
+</script>
+
+<div class="mx-auto w-full max-w-2xl">
+	{#if !repos}
+		<Card loading={true} variant="elevated" padding="md">
+			{#snippet skeleton()}
+				<div class="mb-4 h-6 w-32 rounded bg-canvas-300 dark:bg-canvas-700"></div>
+				<div class="space-y-3">
+					{#each Array(3) as _}
+						<div class="h-24 rounded-lg bg-canvas-300 dark:bg-canvas-700"></div>
+					{/each}
+				</div>
+			{/snippet}
+		</Card>
+	{:else if repos.repos.length > 0}
+		<Card variant="elevated" padding="md">
+			{#snippet children()}
+				<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Tangled Repositories</h2>
+				<div class="space-y-3">
+					{#each repos.repos as repo}
+						<InternalCard href={buildRepoUrl(repo.name)}>
+							{#snippet children()}
+								<GitBranch class="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true" />
+								<div class="min-w-0 flex-1 space-y-2">
+									<h3 class="overflow-wrap-anywhere font-semibold wrap-break-word text-ink-900 dark:text-ink-50">{repo.name}</h3>
+									<div class="flex flex-wrap items-center gap-3 text-xs text-ink-700 dark:text-ink-200">
+										<div class="flex min-w-0 items-center gap-1">
+											<Server class="h-3 w-3 shrink-0" aria-hidden="true" />
+											<span class="truncate">{getKnotServerName(repo.knot)}</span>
+										</div>
+										<div class="flex min-w-0 items-center gap-1">
+											<User class="h-3 w-3 shrink-0" aria-hidden="true" />
+											<span class="truncate">{handle || did}</span>
+										</div>
+									</div>
+								</div>
+								<ExternalLink class="h-4 w-4 shrink-0 text-ink-700 transition-colors dark:text-ink-200" aria-hidden="true" />
+							{/snippet}
+						</InternalCard>
+					{/each}
+				</div>
+			{/snippet}
+		</Card>
+	{:else}
+		<Card variant="flat" padding="lg">
+			{#snippet children()}
+				<div class="text-center">
+					<p class="text-ink-700 dark:text-ink-300">No Tangled repositories found.</p>
+				</div>
+			{/snippet}
+		</Card>
+	{/if}
+</div>

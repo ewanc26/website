@@ -1,1 +1,1 @@
-export { default as MetaTags } from './MetaTags.svelte';
+export { MetaTags } from '@ewanc26/ui';

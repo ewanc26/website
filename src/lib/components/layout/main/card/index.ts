@@ -1,7 +1,4 @@
-export { default as LinkCard } from './LinkCard.svelte';
-export { default as ProfileCard } from './ProfileCard.svelte';
-export { default as PostCard } from './PostCard.svelte';
+// BlueskyPostCard uses the app's DID-bound fetchLatestBlueskyPost wrapper — keep it local.
 export { default as BlueskyPostCard } from './BlueskyPostCard.svelte';
-export { default as TangledRepoCard } from './TangledRepoCard.svelte';
-export { default as MusicStatusCard } from './MusicStatusCard.svelte';
-export { default as KibunStatusCard } from './KibunStatusCard.svelte';
+// The rest are data-in, presentation-only — re-export from the package.
+export { LinkCard, ProfileCard, PostCard, TangledRepoCard, MusicStatusCard, KibunStatusCard } from '@ewanc26/ui';

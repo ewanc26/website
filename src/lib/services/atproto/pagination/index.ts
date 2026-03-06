@@ -1,2 +1,2 @@
-export { fetchAllRecords, fetchAllUserRecords } from './fetchAllRecords';
-export type { FetchRecordsConfig, AtProtoRecord } from './fetchAllRecords';
+export { fetchAllRecords, fetchAllUserRecords } from '@ewanc26/atproto';
+export type { FetchRecordsConfig, AtProtoRecord } from '@ewanc26/atproto';

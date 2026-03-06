@@ -1,9 +1,24 @@
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const pkg = (p: string) => path.resolve(__dirname, 'packages', p);
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
+
+	resolve: {
+		// Point workspace packages directly at source — applies to both client and SSR,
+		// so no pre-build step is needed for `pnpm dev`.
+		alias: {
+			'@ewanc26/atproto': pkg('atproto/src/index.ts'),
+			'@ewanc26/utils': pkg('utils/src/index.ts'),
+			'@ewanc26/ui': pkg('ui/src/lib/index.ts')
+		}
+	},
 
 	build: {
 		// Optimize chunk splitting for better caching
@@ -45,7 +60,9 @@ export default defineConfig({
 	server: {
 		// Development server configuration
 		fs: {
-			strict: true
+			strict: true,
+			// Allow Vite to serve workspace package source files resolved via alias.
+			allow: ['packages', 'src', 'node_modules']
 		}
 	},
 
