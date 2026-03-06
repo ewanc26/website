@@ -1,9 +1,9 @@
+// App-specific components stay local.
 export { default as Header } from './components/layout/Header.svelte';
 export { default as Footer } from './components/layout/Footer.svelte';
-export { default as DynamicLinks } from './components/layout/main/DynamicLinks.svelte';
-export { default as ScrollToTop } from './components/layout/main/ScrollToTop.svelte';
-export { default as LinkCard } from './components/layout/main/card/LinkCard.svelte';
-export { default as ProfileCard } from './components/layout/main/card/ProfileCard.svelte';
+
+// Shared components delegated to @ewanc26/ui.
+export { DynamicLinks, ScrollToTop, LinkCard, ProfileCard } from '@ewanc26/ui';
 
 export * from './services/atproto';
 export * from './helper/siteMeta';
