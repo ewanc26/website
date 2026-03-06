@@ -15,7 +15,6 @@
     "declaration": true,
     "declarationMap": true,
     "paths": {
-      "$app/environment": ["./node_modules/@sveltejs/kit/src/runtime/app/environment.js"],
       "$app/stores": ["./node_modules/@sveltejs/kit/src/runtime/app/stores.js"]
     }
   },
