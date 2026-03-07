@@ -1,5 +1,7 @@
 # @ewanc26/ui
 
+> **Canonical source:** This package is now maintained in the [`@ewanc26/pkgs`](https://github.com/ewanc26/pkgs) monorepo under [`packages/ui`](https://github.com/ewanc26/pkgs/tree/main/packages/ui). This copy exists for historical context — please open issues and PRs there.
+
 Svelte UI component library extracted from [ewancroft.uk](https://ewancroft.uk). Provides layout and card components, UI primitives, SEO helpers, Svelte stores, post utilities, and a multi-theme configuration system.
 
 ## Installation
@@ -54,6 +56,8 @@ import type { SiteMetadata, NavItem, ColorTheme, ThemeDefinition, PostBadge, Mon
 
 ## Build
 
+Development happens in the [`@ewanc26/pkgs`](https://github.com/ewanc26/pkgs) monorepo. Local commands (from `packages/ui`):
+
 ```bash
 pnpm build   # svelte-package
 pnpm dev     # svelte-package --watch
@@ -62,4 +66,4 @@ pnpm check   # svelte-check
 
 ## Licence
 
-See the root [LICENSE](../../LICENSE).
+AGPL-3.0-only — see the [pkgs monorepo licence](https://github.com/ewanc26/pkgs/blob/main/LICENSE).
