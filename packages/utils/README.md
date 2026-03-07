@@ -1,5 +1,7 @@
 # @ewanc26/utils
 
+> **Canonical source:** This package is now maintained in the [`@ewanc26/pkgs`](https://github.com/ewanc26/pkgs) monorepo under [`packages/utils`](https://github.com/ewanc26/pkgs/tree/main/packages/utils). This copy exists for historical context — please open issues and PRs there.
+
 Shared utility functions extracted from [ewancroft.uk](https://ewancroft.uk). Zero runtime dependencies.
 
 ## Modules
@@ -33,6 +35,8 @@ All functions are SSR-safe and fall back to `en-GB` when `navigator` / `window` 
 
 ## Build
 
+Development happens in the [`@ewanc26/pkgs`](https://github.com/ewanc26/pkgs) monorepo. Local commands (from `packages/utils`):
+
 ```bash
 pnpm build   # tsc
 pnpm dev     # tsc --watch
@@ -41,4 +45,4 @@ pnpm check   # tsc --noEmit
 
 ## Licence
 
-See the root [LICENSE](../../LICENSE).
+AGPL-3.0-only — see the [pkgs monorepo licence](https://github.com/ewanc26/pkgs/blob/main/LICENSE).

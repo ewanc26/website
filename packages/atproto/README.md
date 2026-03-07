@@ -1,5 +1,7 @@
 # @ewanc26/atproto
 
+> **Canonical source:** This package is now maintained in the [`@ewanc26/pkgs`](https://github.com/ewanc26/pkgs) monorepo under [`packages/atproto`](https://github.com/ewanc26/pkgs/tree/main/packages/atproto). This copy exists for historical context — please open issues and PRs there.
+
 AT Protocol service layer extracted from [ewancroft.uk](https://ewancroft.uk). Handles identity resolution, record fetching, Bluesky posts, Standard.site documents, music/mood status, and more — with a built-in in-memory cache.
 
 **Key difference from the app's internal service layer:** all functions accept `did: string` as their first argument rather than reading `PUBLIC_ATPROTO_DID` from the environment.
@@ -72,6 +74,8 @@ All interfaces (`ProfileData`, `BlueskyPost`, `BlogPost`, `MusicStatusData`, `Ki
 
 ## Build
 
+Development happens in the [`@ewanc26/pkgs`](https://github.com/ewanc26/pkgs) monorepo. Local commands (from `packages/atproto`):
+
 ```bash
 pnpm build   # tsc
 pnpm dev     # tsc --watch
@@ -80,4 +84,4 @@ pnpm check   # tsc --noEmit
 
 ## Licence
 
-See the root [LICENSE](../../LICENSE).
+AGPL-3.0-only — see the [pkgs monorepo licence](https://github.com/ewanc26/pkgs/blob/main/LICENSE).
