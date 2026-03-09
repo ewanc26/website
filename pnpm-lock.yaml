@@ -18,14 +18,14 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0
       '@ewanc26/supporters':
-        specifier: ^0.1.1
-        version: 0.1.1(@atproto/api@0.18.21)(svelte@5.53.8)
+        specifier: ^0.1.2
+        version: 0.1.2(@atproto/api@0.18.21)(svelte@5.53.8)
       '@ewanc26/tid':
         specifier: ^1.1.1
         version: 1.1.1
       '@ewanc26/ui':
-        specifier: ^0.1.6
-        version: 0.1.6(@atproto/api@0.18.21)(@sveltejs/kit@2.53.4(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.53.8)(vite@7.3.1(@types/node@25.4.0)(jiti@2.6.1)(lightningcss@1.31.1)))(svelte@5.53.8)(typescript@5.9.3)(vite@7.3.1(@types/node@25.4.0)(jiti@2.6.1)(lightningcss@1.31.1)))(svelte@5.53.8)(tailwindcss@4.2.1)
+        specifier: ^0.1.7
+        version: 0.1.7(@atproto/api@0.18.21)(@sveltejs/kit@2.53.4(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.53.8)(vite@7.3.1(@types/node@25.4.0)(jiti@2.6.1)(lightningcss@1.31.1)))(svelte@5.53.8)(typescript@5.9.3)(vite@7.3.1(@types/node@25.4.0)(jiti@2.6.1)(lightningcss@1.31.1)))(svelte@5.53.8)(tailwindcss@4.2.1)
       '@ewanc26/utils':
         specifier: ^0.1.2
         version: 0.1.2
@@ -425,8 +425,8 @@ packages:
   '@ewanc26/noise-avatar@0.1.0':
     resolution: {integrity: sha512-T7a1zYaie2GkL6Fe3OKWDxJr68pu/nWrObwI8LPjRsaJiV432Tt9l5pGppb869CfNYEtUTLoGhgXL+RrPnNBKw==}
 
-  '@ewanc26/supporters@0.1.1':
-    resolution: {integrity: sha512-S6LpXmV1FAzJZALJw2kVjvrspFMTJXqs0HfIMCRxq2q3jWQMlWb7EY3Y96gTOcjLTb09N+idssF2wK+JO05FnA==}
+  '@ewanc26/supporters@0.1.2':
+    resolution: {integrity: sha512-Ao1vccKk72P0lWoHsVWSgvtOMe5PkJ3ZW14pw5bJ67vxjlsa3lGoudWfUqBpvmPTcuxSLdan0mVkNBQfsKvYNA==}
     peerDependencies:
       '@atproto/api': '>=0.13.0'
       svelte: ^5.0.0
@@ -434,10 +434,10 @@ packages:
   '@ewanc26/tid@1.1.1':
     resolution: {integrity: sha512-u/Ks251B+5Dy1lx1PC814mWpMg2TNly4b+bHMdLCz4TwiArD/se3iApL+L6pl16eKQQlqWS2yrVKhhSwThC3WA==}
 
-  '@ewanc26/ui@0.1.6':
-    resolution: {integrity: sha512-AXP8bGq8Mb64FpSYi0lhmk0BxtEIAD3t5gb0NiHZ+yaUd58CEHYZZSnc9k4eVDlsa2ATfNUKojMxNhOah6mPKQ==}
+  '@ewanc26/ui@0.1.7':
+    resolution: {integrity: sha512-3YTH6f9vv124inztpJSZ77FXtLUnag8Da4H0EfeREEH5nOECt+/dfkmOtzjBw4+heAtiGjTELv3sLlRXqtzVQA==}
     peerDependencies:
-      '@sveltejs/kit': '>=2.0.0'
+      '@sveltejs/kit': '>=2.8.3'
       svelte: '>=5.0.0'
       tailwindcss: '>=4.0.0'
 
@@ -1511,7 +1511,7 @@ snapshots:
 
   '@ewanc26/noise-avatar@0.1.0': {}
 
-  '@ewanc26/supporters@0.1.1(@atproto/api@0.18.21)(svelte@5.53.8)':
+  '@ewanc26/supporters@0.1.2(@atproto/api@0.18.21)(svelte@5.53.8)':
     dependencies:
       '@atproto/api': 0.18.21
       '@ewanc26/tid': 1.1.1
@@ -1519,7 +1519,7 @@ snapshots:
 
   '@ewanc26/tid@1.1.1': {}
 
-  '@ewanc26/ui@0.1.6(@atproto/api@0.18.21)(@sveltejs/kit@2.53.4(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.53.8)(vite@7.3.1(@types/node@25.4.0)(jiti@2.6.1)(lightningcss@1.31.1)))(svelte@5.53.8)(typescript@5.9.3)(vite@7.3.1(@types/node@25.4.0)(jiti@2.6.1)(lightningcss@1.31.1)))(svelte@5.53.8)(tailwindcss@4.2.1)':
+  '@ewanc26/ui@0.1.7(@atproto/api@0.18.21)(@sveltejs/kit@2.53.4(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.53.8)(vite@7.3.1(@types/node@25.4.0)(jiti@2.6.1)(lightningcss@1.31.1)))(svelte@5.53.8)(typescript@5.9.3)(vite@7.3.1(@types/node@25.4.0)(jiti@2.6.1)(lightningcss@1.31.1)))(svelte@5.53.8)(tailwindcss@4.2.1)':
     dependencies:
       '@lucide/svelte': 0.554.0(svelte@5.53.8)
       '@sveltejs/kit': 2.53.4(@sveltejs/vite-plugin-svelte@6.2.4(svelte@5.53.8)(vite@7.3.1(@types/node@25.4.0)(jiti@2.6.1)(lightningcss@1.31.1)))(svelte@5.53.8)(typescript@5.9.3)(vite@7.3.1(@types/node@25.4.0)(jiti@2.6.1)(lightningcss@1.31.1))
