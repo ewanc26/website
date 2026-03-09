@@ -39,7 +39,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	// Add HTTP caching headers for better performance and reduced timeouts
 	// Layout data (root route) is cached aggressively since profile/site info changes infrequently
-	if (!event.url.pathname.startsWith('/api/')) {
+	if (!event.url.pathname.startsWith('/api/') && event.url.pathname !== '/webhook') {
 		// Root layout loads profile and site info - cache aggressively
 		if (event.url.pathname === '/' || event.url.pathname === '') {
 			response.headers.set('Cache-Control', HTTP_CACHE_HEADERS.LAYOUT);
