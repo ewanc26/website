@@ -76,3 +76,7 @@ export {
 
 // Export cache for advanced use cases
 export { cache, ATProtoCache } from './cache';
+
+// Export Ko-fi supporters
+export { fetchSupporters } from './supporters';
+export type { KofiSupporter, KofiEventType } from './supporters';
