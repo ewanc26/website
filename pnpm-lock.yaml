@@ -18,8 +18,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0
       '@ewanc26/supporters':
-        specifier: ^0.1.4
-        version: 0.1.4(@atproto/api@0.18.21)(svelte@5.53.8)
+        specifier: ^0.1.5
+        version: 0.1.5(@atproto/api@0.18.21)(svelte@5.53.8)
       '@ewanc26/tid':
         specifier: ^1.1.1
         version: 1.1.1
@@ -425,8 +425,8 @@ packages:
   '@ewanc26/noise-avatar@0.1.0':
     resolution: {integrity: sha512-T7a1zYaie2GkL6Fe3OKWDxJr68pu/nWrObwI8LPjRsaJiV432Tt9l5pGppb869CfNYEtUTLoGhgXL+RrPnNBKw==}
 
-  '@ewanc26/supporters@0.1.4':
-    resolution: {integrity: sha512-ZsnhX4I1Z65TmisbCCAfkljEFnY0nuLDookQgly6Uz8q3NI56rjD6SYJvePDwTn3dXiHx98B+P8+occoBvL5fw==}
+  '@ewanc26/supporters@0.1.5':
+    resolution: {integrity: sha512-Kl2TUY/b/Y99rbOqcm9HJqBGlHRnnBiF9BIxDJYW4SwxfmnwWEeIwM7mAjRVb2s23CQwvHAQUz/JdX8R6W7Hww==}
     peerDependencies:
       '@atproto/api': '>=0.13.0'
       svelte: ^5.0.0
@@ -1511,7 +1511,7 @@ snapshots:
 
   '@ewanc26/noise-avatar@0.1.0': {}
 
-  '@ewanc26/supporters@0.1.4(@atproto/api@0.18.21)(svelte@5.53.8)':
+  '@ewanc26/supporters@0.1.5(@atproto/api@0.18.21)(svelte@5.53.8)':
     dependencies:
       '@atproto/api': 0.18.21
       '@ewanc26/tid': 1.1.1
