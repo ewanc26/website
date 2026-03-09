@@ -10,22 +10,16 @@ export const POST: RequestHandler = async ({ request }) => {
 		userAgent: request.headers.get('user-agent')
 	});
 
-	// The supporters package reads auth config from process.env directly;
-	// bridge SvelteKit's private env into it before any calls.
-	process.env.KOFI_VERIFICATION_TOKEN = env.KOFI_VERIFICATION_TOKEN;
-	if (env.KOFI_TEST_TOKEN) process.env.KOFI_TEST_TOKEN = env.KOFI_TEST_TOKEN;
+	// Bridge SvelteKit's private env into process.env for the supporters package.
 	process.env.ATPROTO_DID = PUBLIC_ATPROTO_DID;
 	process.env.ATPROTO_APP_PASSWORD = env.ATPROTO_APP_PASSWORD;
 
-	console.log('[webhook] env check', {
-		hasVerificationToken: !!env.KOFI_VERIFICATION_TOKEN,
-		hasDid: !!PUBLIC_ATPROTO_DID,
-		hasAppPassword: !!env.ATPROTO_APP_PASSWORD
-	});
-
 	let payload;
 	try {
-		payload = await parseWebhook(request);
+		payload = await parseWebhook(request, {
+			secret: env.KOFI_VERIFICATION_TOKEN,
+			...(env.KOFI_TEST_TOKEN ? { testToken: env.KOFI_TEST_TOKEN } : {})
+		});
 		console.log('[webhook] parsed payload', {
 			type: payload.type,
 			from: payload.from_name,

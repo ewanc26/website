@@ -33,7 +33,7 @@
 		"@atproto/api": "^0.18.21",
 		"@ewanc26/atproto": "^0.2.2",
 		"@ewanc26/noise-avatar": "^0.1.0",
-		"@ewanc26/supporters": "^0.1.3",
+		"@ewanc26/supporters": "^0.1.4",
 		"@ewanc26/tid": "^1.1.1",
 		"@ewanc26/ui": "^0.1.7",
 		"@ewanc26/utils": "^0.1.2",
