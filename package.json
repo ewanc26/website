@@ -35,7 +35,7 @@
 		"@ewanc26/noise-avatar": "^0.1.0",
 		"@ewanc26/supporters": "^0.1.2",
 		"@ewanc26/tid": "^1.1.1",
-		"@ewanc26/ui": "^0.1.6",
+		"@ewanc26/ui": "^0.1.7",
 		"@ewanc26/utils": "^0.1.2",
 		"@lucide/svelte": "^0.554.0",
 		"hls.js": "^1.6.15"
