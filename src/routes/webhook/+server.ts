@@ -22,17 +22,6 @@ export const POST: RequestHandler = async ({ request }) => {
 		hasAppPassword: !!env.ATPROTO_APP_PASSWORD
 	});
 
-	// TEMP: log raw token to identify Ko-fi test token
-	try {
-		const cloned = request.clone();
-		const form = await cloned.formData();
-		const raw = form.get('data');
-		if (typeof raw === 'string') {
-			const parsed = JSON.parse(raw);
-			console.log('[webhook] raw verification_token', parsed.verification_token);
-		}
-	} catch { /* ignore */ }
-
 	let payload;
 	try {
 		payload = await parseWebhook(request);
@@ -45,7 +34,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 	} catch (err) {
 		if (err instanceof WebhookError) {
-			console.error('[webhook] WebhookError', { status: err.status, message: err.message, receivedToken: payload?.verification_token });
+			console.error('[webhook] WebhookError', { status: err.status, message: err.message });
 			return json({ error: err.message }, { status: err.status });
 		}
 		console.error('[webhook] unexpected parse error', err);
