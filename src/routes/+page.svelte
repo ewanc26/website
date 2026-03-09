@@ -6,7 +6,8 @@
 		BlueskyPostCard,
 		MusicStatusCard,
 		KibunStatusCard,
-		TangledRepoCard
+		TangledRepoCard,
+		SupportersCard
 	} from '$lib/components/layout/main/card';
 	import { createSiteMeta } from '$lib/helper/siteMeta';
 	import type { PageData } from './$types';
@@ -58,5 +59,10 @@
 		<div class="mb-6 break-inside-avoid">
 			<TangledRepoCard repos={data.tangledRepos} profile={data.profile} />
 		</div>
+		{#if data.supporters.length > 0}
+			<div class="mb-6 break-inside-avoid">
+				<SupportersCard supporters={data.supporters} />
+			</div>
+		{/if}
 	</div>
 </div>
