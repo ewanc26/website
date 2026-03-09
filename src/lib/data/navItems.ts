@@ -1,9 +1,6 @@
-export interface NavItem {
-	href: string;
-	label: string;
-	// The property holds the Lucide component name (e.g., 'Home')
-	iconPath: string;
-}
+import type { NavItem } from '@ewanc26/ui';
+
+export type { NavItem };
 
 export const navItems: NavItem[] = [
 	{ href: '/', label: 'Home', iconPath: 'Home' },
