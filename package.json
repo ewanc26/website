@@ -19,6 +19,7 @@
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@tailwindcss/typography": "^0.5.19",
 		"@tailwindcss/vite": "^4.2.1",
+		"@types/node": "^25.4.0",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.5.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
@@ -34,7 +35,7 @@
 		"@ewanc26/noise-avatar": "^0.1.0",
 		"@ewanc26/supporters": "^0.1.0",
 		"@ewanc26/tid": "^1.1.1",
-		"@ewanc26/ui": "^0.1.4",
+		"@ewanc26/ui": "^0.1.5",
 		"@ewanc26/utils": "^0.1.2",
 		"@lucide/svelte": "^0.554.0",
 		"hls.js": "^1.6.15"

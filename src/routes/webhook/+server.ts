@@ -9,6 +9,9 @@ import type { RequestHandler } from './$types';
 const COLLECTION = 'uk.ewancroft.kofi.supporter';
 
 export const POST: RequestHandler = async ({ request }) => {
+	// parseWebhook reads process.env directly; bridge SvelteKit's private env into it
+	process.env.KOFI_VERIFICATION_TOKEN = env.KOFI_VERIFICATION_TOKEN;
+
 	let payload;
 	try {
 		payload = await parseWebhook(request);
@@ -35,7 +38,8 @@ export const POST: RequestHandler = async ({ request }) => {
 	await agent.com.atproto.repo.putRecord({
 		repo: PUBLIC_ATPROTO_DID,
 		collection: COLLECTION,
-		rkey: generateTID(payload.timestamp),
+		// Ko-fi timestamps have no timezone; append 'Z' so they parse as UTC
+		rkey: generateTID(payload.timestamp.endsWith('Z') ? payload.timestamp : payload.timestamp + 'Z'),
 		record: record as Record<string, unknown>
 	});
 
