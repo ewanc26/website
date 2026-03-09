@@ -11,17 +11,9 @@ export default defineConfig({
 		rollupOptions: {
 			output: {
 				manualChunks: (id) => {
-					// Only chunk client-side code, not SSR externals
 					if (id.includes('node_modules')) {
-						// Lucide icons - client-side only
-						if (id.includes('@lucide/svelte')) {
-							return 'lucide';
-						}
-						// HLS.js - client-side only
-						if (id.includes('hls.js')) {
-							return 'hls';
-						}
-						// Other vendor code
+						// HLS.js is large and only used on one route — keep it separate
+						if (id.includes('hls.js')) return 'hls';
 						return 'vendor';
 					}
 				}
@@ -40,7 +32,7 @@ export default defineConfig({
 	},
 
 	optimizeDeps: {
-		include: ['@lucide/svelte', 'hls.js', '@atproto/api']
+		include: ['hls.js', '@atproto/api']
 	},
 
 	server: {
