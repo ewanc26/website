@@ -2,11 +2,13 @@
 // The app's service wrappers use these directly.
 export type {
 	ProfileData,
+	StatusData,
 	SiteInfoData,
 	LinkData,
 	LinkCard,
 	BlueskyPost,
 	BlogPost,
+	BlogPostsData,
 	PostAuthor,
 	ExternalLink,
 	Facet,
@@ -31,14 +33,3 @@ export type {
 	StandardSiteBasicTheme,
 	StandardSiteThemeColor
 } from '@ewanc26/atproto';
-
-// StatusData is app-local (not in the package) — keep it here.
-export interface StatusData {
-	text: string;
-	createdAt: string;
-}
-
-// BlogPostsData is also app-local.
-export interface BlogPostsData {
-	posts: import('@ewanc26/atproto').BlogPost[];
-}
