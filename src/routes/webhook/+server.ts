@@ -13,6 +13,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	// The supporters package reads auth config from process.env directly;
 	// bridge SvelteKit's private env into it before any calls.
 	process.env.KOFI_VERIFICATION_TOKEN = env.KOFI_VERIFICATION_TOKEN;
+	if (env.KOFI_TEST_TOKEN) process.env.KOFI_TEST_TOKEN = env.KOFI_TEST_TOKEN;
 	process.env.ATPROTO_DID = PUBLIC_ATPROTO_DID;
 	process.env.ATPROTO_APP_PASSWORD = env.ATPROTO_APP_PASSWORD;
 
