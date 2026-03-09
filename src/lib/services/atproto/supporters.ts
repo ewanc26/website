@@ -1,49 +1,33 @@
 /**
  * Ko-fi supporters service
  *
- * Reads uk.ewancroft.kofi.supporter records from the PDS and aggregates them
- * into KofiSupporter objects. No auth required — records are publicly readable.
+ * Reads uk.ewancroft.kofi.supporter records from the PDS as a timeline.
+ * Each record is returned with its rkey and decoded timestamp.
+ * No auth required — records are publicly readable.
  *
  * The PDS URL is resolved automatically from PUBLIC_ATPROTO_DID via resolveIdentity.
- * No additional environment variables are needed for the read path.
  */
 
 import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 import { getPDSAgent } from '@ewanc26/atproto';
-import type { KofiSupporter, KofiEventType } from '@ewanc26/supporters';
+import { decodeTid } from '@ewanc26/tid';
+import type { KofiEventType } from '@ewanc26/supporters';
 
-export type { KofiSupporter, KofiEventType };
+export type { KofiEventType };
 
 const COLLECTION = 'uk.ewancroft.kofi.supporter';
 
-interface KofiEventRecord {
+export interface KofiSupportEvent {
+	rkey: string;
 	name: string;
 	type: KofiEventType;
 	tier?: string;
+	date: Date;
 }
 
-function dedupe<T>(arr: T[], extra: T): T[] {
-	return Array.from(new Set([...arr, extra]));
-}
-
-function aggregateEvents(events: KofiEventRecord[]): KofiSupporter[] {
-	const map = new Map<string, KofiSupporter>();
-
-	for (const event of events) {
-		const existing = map.get(event.name);
-		map.set(event.name, {
-			name: event.name,
-			types: dedupe(existing?.types ?? [], event.type),
-			tiers: event.tier ? dedupe(existing?.tiers ?? [], event.tier) : (existing?.tiers ?? [])
-		});
-	}
-
-	return Array.from(map.values());
-}
-
-export async function fetchSupporters(): Promise<KofiSupporter[]> {
+export async function fetchSupporters(): Promise<KofiSupportEvent[]> {
 	const agent = await getPDSAgent(PUBLIC_ATPROTO_DID);
-	const events: KofiEventRecord[] = [];
+	const events: KofiSupportEvent[] = [];
 	let cursor: string | undefined;
 
 	do {
@@ -55,11 +39,20 @@ export async function fetchSupporters(): Promise<KofiSupporter[]> {
 		});
 
 		for (const record of res.data.records) {
-			events.push(record.value as unknown as KofiEventRecord);
+			const value = record.value as { name: string; type: KofiEventType; tier?: string };
+			const rkey = record.uri.split('/').pop() ?? '';
+			let date: Date;
+			try {
+				date = decodeTid(rkey).date;
+			} catch {
+				date = new Date(0);
+			}
+			events.push({ rkey, name: value.name, type: value.type, tier: value.tier, date });
 		}
 
 		cursor = res.data.cursor;
 	} while (cursor);
 
-	return aggregateEvents(events);
+	// Most recent first
+	return events.sort((a, b) => b.date.getTime() - a.date.getTime());
 }
