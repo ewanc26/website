@@ -18,7 +18,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	try {
 		payload = await parseWebhook(request, {
 			secret: env.KOFI_VERIFICATION_TOKEN,
-			testToken: process.env.KOFI_TEST_TOKEN
+			testToken: env.KOFI_TEST_TOKEN
 		});
 		console.log('[webhook] parsed payload', {
 			type: payload.type,
