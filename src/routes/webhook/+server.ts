@@ -32,7 +32,10 @@ export const POST: RequestHandler = async ({ request }) => {
 	const record = {
 		name: payload.from_name,
 		type: payload.type,
-		...(payload.tier_name ? { tier: payload.tier_name } : {})
+		...(payload.tier_name ? { tier: payload.tier_name } : {}),
+		...(payload.is_subscription_payment ? { isSubscriptionPayment: true } : {}),
+		...(payload.is_first_subscription_payment ? { isFirstSubscriptionPayment: true } : {}),
+		...(payload.shop_items?.length ? { shopItems: payload.shop_items.map((i) => i.direct_link_code) } : {})
 	};
 
 	await agent.com.atproto.repo.putRecord({
