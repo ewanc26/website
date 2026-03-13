@@ -30,10 +30,10 @@ const config = {
 			$helper: 'src/lib/helper'
 		},
 
-		// Disable CSRF protection for the webhook route so Ko-fi's server-to-server
+		// Disable CSRF origin checking for the webhook route so Ko-fi's server-to-server
 		// POST requests (which have no matching Origin header) are not rejected.
 		csrf: {
-			checkOrigin: false
+			trustedOrigins: ['*']
 		},
 
 		// Prerender configuration

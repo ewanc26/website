@@ -3,6 +3,7 @@
 	import type { ProfileData } from '$lib/services/atproto';
 	import LinkCard from './LinkCard.svelte';
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
+	import { noiseAvatarAction } from '@ewanc26/noise-avatar';
 
 	interface Props {
 		profile?: ProfileData | null;
@@ -85,13 +86,11 @@
 								loading="lazy"
 							/>
 						{:else}
-							<div
-								class="flex h-full w-full items-center justify-center bg-primary-200 text-3xl font-bold text-primary-800 dark:bg-primary-800 dark:text-primary-200"
-								role="img"
-								aria-label="{safeProfile.displayName || safeProfile.handle}'s avatar initials"
-							>
-								{(safeProfile.displayName || safeProfile.handle).charAt(0).toUpperCase()}
-							</div>
+						<canvas
+						use:noiseAvatarAction={`${safeProfile.did || safeProfile.handle}|avatar`}
+						class="h-full w-full"
+						aria-label="{safeProfile.displayName || safeProfile.handle}'s avatar placeholder"
+						></canvas>
 						{/if}
 					</div>
 				</div>
