@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { ExternalLink, Tag } from '@lucide/svelte';
 	import type { StandardSiteDocument } from '$lib/services/atproto';
-	import { InternalCard } from '$lib/components/ui';
+	import { InternalCard, NoiseImage } from '$lib/components/ui';
 	import { formatLocalizedDate } from '$lib/utils/locale';
-	import { noiseAvatarAction } from '@ewanc26/noise-avatar';
 
 	interface Props {
 		document: StandardSiteDocument;
@@ -17,19 +16,12 @@
 	{#snippet children()}
 		<!-- Cover Image -->
 		<div class="mb-3 overflow-hidden rounded-lg">
-			{#if document.coverImage}
-				<img
-					src={document.coverImage}
-					alt={document.title}
-					class="h-48 w-full object-cover transition-transform duration-300 hover:scale-105"
-				/>
-			{:else}
-				<canvas
-					use:noiseAvatarAction={`${document.title}|cover`}
-					class="h-48 w-full"
-					aria-hidden="true"
-				></canvas>
-			{/if}
+			<NoiseImage
+				src={document.coverImage}
+				seed={`${document.title}|cover`}
+				class="h-48 w-full object-cover"
+				alt={document.title}
+			/>
 		</div>
 
 		<div class="relative min-w-0 flex-1 space-y-2">

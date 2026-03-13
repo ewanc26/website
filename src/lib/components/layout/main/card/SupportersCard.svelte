@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Heart } from '@lucide/svelte';
-	import { Card } from '$lib/components/ui';
-	import { noiseAvatarAction } from '@ewanc26/noise-avatar';
+	import { Card, NoiseImage } from '$lib/components/ui';
 	import type { KofiSupportEvent, KofiEventType } from '$lib/services/atproto';
 
 	interface Props {
@@ -57,11 +56,10 @@
 				<ol class="space-y-3" aria-label="Ko-fi support timeline">
 					{#each supporters as event (event.rkey)}
 						<li class="flex items-start gap-3">
-							<canvas
-								use:noiseAvatarAction={`${event.name}|${event.type}`}
-								class="mt-0.5 h-8 w-8 shrink-0 rounded-full"
-								aria-hidden="true"
-							></canvas>
+							<NoiseImage
+							seed={`${event.name}|${event.type}`}
+							class="mt-0.5 h-8 w-8 shrink-0 rounded-full"
+							/>
 							<div class="flex flex-col">
 								<p class="text-sm text-ink-900 dark:text-ink-100">
 									<span class="font-semibold">{event.name}</span>
