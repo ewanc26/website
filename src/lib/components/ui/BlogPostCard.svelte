@@ -4,6 +4,7 @@
 	import { InternalCard } from '$lib/components/ui';
 	import { getPostBadges, getBadgeClasses } from '$lib/helper/badges';
 	import { formatLocalizedDate } from '$lib/utils/locale';
+	import { noiseAvatarAction } from '@ewanc26/noise-avatar';
 
 	interface Props {
 		post: BlogPost;
@@ -18,15 +19,21 @@
 <InternalCard href={post.url}>
 	{#snippet children()}
 		<!-- Cover Image (Standard.site only) -->
-		{#if post.coverImage}
-			<div class="mb-3 overflow-hidden rounded-lg">
+		<div class="mb-3 overflow-hidden rounded-lg">
+			{#if post.coverImage}
 				<img
 					src={post.coverImage}
 					alt={post.title}
 					class="h-48 w-full object-cover transition-transform duration-300 hover:scale-105"
 				/>
-			</div>
-		{/if}
+			{:else}
+				<canvas
+					use:noiseAvatarAction={`${post.title}|cover`}
+					class="h-48 w-full"
+					aria-hidden="true"
+				></canvas>
+			{/if}
+		</div>
 
 		<div class="relative min-w-0 flex-1 space-y-2">
 			<!-- Badges: Platform and Publication -->

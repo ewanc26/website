@@ -4,7 +4,8 @@
 	import { formatRelativeTime } from '$lib/utils/formatDate';
 
 	// Icons
-	import { Music, Disc3, Users, Album, Clock, Radio } from '@lucide/svelte';
+	import { Music, Users, Album, Clock, Radio } from '@lucide/svelte';
+	import { noiseAvatarAction } from '@ewanc26/noise-avatar';
 
 	interface Props {
 		musicStatus?: MusicStatusData | null;
@@ -84,11 +85,11 @@
 									onerror={handleImageError}
 								/>
 							{:else}
-								<div
-									class="flex h-20 w-20 items-center justify-center rounded-lg bg-canvas-200 shadow-md dark:bg-canvas-700"
-								>
-									<Disc3 class="h-10 w-10 text-ink-500 dark:text-ink-400" aria-hidden="true" />
-								</div>
+							<canvas
+							use:noiseAvatarAction={`${safeMusicStatus.trackName}|${formatArtists(safeMusicStatus.artists)}`}
+							 class="h-20 w-20 rounded-lg shadow-md"
+							aria-label="Album artwork placeholder for {safeMusicStatus.trackName}"
+							></canvas>
 							{/if}
 						</div>
 
