@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { Card } from '$lib/components/ui';
+	import { Card, NoiseImage } from '$lib/components/ui';
 	import { fetchLatestBlueskyPost, type BlueskyPost } from '$lib/services/atproto';
-	import { noiseAvatarAction } from '@ewanc26/noise-avatar';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
 	import { Heart, Repeat2, MessageCircle, ExternalLink, X } from '@lucide/svelte';
@@ -210,25 +209,17 @@
 		<div class="relative flex gap-3">
 			{#if isReplyParent}
 			<a
-			href={getProfileUrl(postData.author.handle)}
-			target="_blank"
-			rel="noopener noreferrer"
-			class="shrink-0 transition-opacity hover:opacity-80"
+				href={getProfileUrl(postData.author.handle)}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="shrink-0 transition-opacity hover:opacity-80"
 			>
-			{#if postData.author.avatar}
-			<img
-			src={postData.author.avatar}
-			alt={postData.author.displayName || postData.author.handle}
-			class="h-8 w-8 rounded-full object-cover sm:h-10 sm:w-10"
-			loading="lazy"
-			/>
-			{:else}
-			<canvas
-			use:noiseAvatarAction={`${postData.author.did || postData.author.handle}|avatar`}
-			 class="h-8 w-8 rounded-full sm:h-10 sm:w-10"
-			aria-label="{postData.author.displayName || postData.author.handle}'s avatar placeholder"
-			></canvas>
-			{/if}
+				<NoiseImage
+					src={postData.author.avatar}
+					seed={`${postData.author.did || postData.author.handle}|avatar`}
+					class="h-8 w-8 rounded-full object-cover sm:h-10 sm:w-10"
+					alt="{postData.author.displayName || postData.author.handle}'s avatar"
+				/>
 			</a>
 			{:else}
 				<a
@@ -237,20 +228,12 @@
 					rel="noopener noreferrer"
 					class="shrink-0 transition-opacity hover:opacity-80"
 				>
-					{#if postData.author.avatar}
-						<img
-							src={postData.author.avatar}
-							alt={postData.author.displayName || postData.author.handle}
-							class="h-10 w-10 rounded-full object-cover sm:h-12 sm:w-12"
-							loading="lazy"
-						/>
-					{:else}
-						<canvas
-							use:noiseAvatarAction={`${postData.author.did || postData.author.handle}|avatar`}
-							class="h-10 w-10 rounded-full sm:h-12 sm:w-12"
-							aria-label="{postData.author.displayName || postData.author.handle}'s avatar placeholder"
-						></canvas>
-					{/if}
+					<NoiseImage
+						src={postData.author.avatar}
+						seed={`${postData.author.did || postData.author.handle}|avatar`}
+						class="h-10 w-10 rounded-full object-cover sm:h-12 sm:w-12"
+						alt="{postData.author.displayName || postData.author.handle}'s avatar"
+					/>
 				</a>
 			{/if}
 			<div class="min-w-0 flex-1">
@@ -313,6 +296,7 @@
 									: 'grid-cols-2'}"
 					>
 						{#each postData.imageUrls as imageUrl, index}
+							{@const imgClass = `h-auto w-full max-w-full object-cover ${postData.imageUrls.length === 4 ? 'aspect-square' : postData.imageUrls.length > 1 ? 'aspect-video' : isReplyParent ? 'max-h-64' : 'max-h-96'}`}
 							<button
 								type="button"
 								onclick={() =>
@@ -323,18 +307,11 @@
 								class="h-auto w-full max-w-full overflow-hidden rounded-lg border border-canvas-300 transition-opacity hover:opacity-90 focus:ring-2 focus:ring-primary-500 focus:outline-none dark:border-canvas-700 dark:focus:ring-primary-400"
 								title={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
 							>
-								<img
+								<NoiseImage
 									src={imageUrl}
+									seed={`${postData.uri}|image|${index}`}
+									class={imgClass}
 									alt={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
-									title={postData.imageAlts?.[index] || `Post attachment ${index + 1}`}
-									class="h-auto w-full max-w-full object-cover {postData.imageUrls.length === 4
-										? 'aspect-square'
-										: postData.imageUrls.length > 1
-											? 'aspect-video'
-											: isReplyParent
-												? 'max-h-64'
-												: 'max-h-96'}"
-									loading="lazy"
 								/>
 							</button>
 						{/each}
@@ -349,14 +326,11 @@
 						rel="noopener noreferrer"
 						class="mb-3 flex max-w-full flex-col overflow-hidden rounded-xl border border-canvas-300 bg-canvas-200 transition-colors hover:bg-canvas-300 dark:border-canvas-700 dark:bg-canvas-800 dark:hover:bg-canvas-700"
 					>
-						{#if postData.externalLink.thumb}
-							<img
-								src={postData.externalLink.thumb}
-								alt={postData.externalLink.title}
-								class="h-48 w-full max-w-full object-cover"
-								loading="lazy"
-							/>
-						{/if}
+							<NoiseImage
+							src={postData.externalLink.thumb}
+							seed={`${postData.externalLink.uri}|thumb`}
+							class="h-48 w-full max-w-full object-cover"
+						/>
 						<div class="p-3">
 							<h3
 								class="overflow-wrap-anywhere mb-1 line-clamp-2 text-sm font-semibold wrap-break-word text-ink-900 dark:text-ink-50"

@@ -1,19 +1,16 @@
 <script lang="ts">
-	import { Card } from '$lib/components/ui';
+	import { Card, NoiseImage } from '$lib/components/ui';
 	import type { MusicStatusData } from '$lib/services/atproto';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
 
 	// Icons
 	import { Music, Users, Album, Clock, Radio } from '@lucide/svelte';
-	import { noiseAvatarAction } from '@ewanc26/noise-avatar';
 
 	interface Props {
 		musicStatus?: MusicStatusData | null;
 	}
 
 	let { musicStatus = null }: Props = $props();
-
-	let artworkError = $state(false);
 
 	function formatArtists(artists: { artistName: string }[]): string {
 		if (!artists || artists.length === 0) return 'Unknown Artist';
@@ -32,10 +29,6 @@
 		return domain.replace('lastfm', 'Last.fm').replace('last.fm', 'Last.fm');
 	}
 
-	function handleImageError() {
-		console.error('[MusicStatusCard] Artwork failed to load');
-		artworkError = true;
-	}
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
@@ -76,21 +69,12 @@
 					<div class="flex items-start gap-3">
 						<!-- Artwork -->
 						<div class="shrink-0">
-							{#if safeMusicStatus.artworkUrl && !artworkError}
-								<img
-									src={safeMusicStatus.artworkUrl}
-									alt="Album artwork for {safeMusicStatus.releaseName || safeMusicStatus.trackName}"
-									class="h-20 w-20 rounded-lg object-cover shadow-md"
-									loading="lazy"
-									onerror={handleImageError}
-								/>
-							{:else}
-							<canvas
-							use:noiseAvatarAction={`${safeMusicStatus.trackName}|${formatArtists(safeMusicStatus.artists)}`}
-							 class="h-20 w-20 rounded-lg shadow-md"
-							aria-label="Album artwork placeholder for {safeMusicStatus.trackName}"
-							></canvas>
-							{/if}
+							<NoiseImage
+							src={safeMusicStatus.artworkUrl}
+							seed={`${safeMusicStatus.trackName}|${formatArtists(safeMusicStatus.artists)}`}
+							class="h-20 w-20 rounded-lg object-cover shadow-md"
+							alt="Album artwork for {safeMusicStatus.releaseName || safeMusicStatus.trackName}"
+							/>
 						</div>
 
 						<!-- Info -->

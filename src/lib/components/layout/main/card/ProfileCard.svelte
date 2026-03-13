@@ -1,18 +1,14 @@
 <script lang="ts">
-	import { Card } from '$lib/components/ui';
+	import { Card, NoiseImage } from '$lib/components/ui';
 	import type { ProfileData } from '$lib/services/atproto';
 	import LinkCard from './LinkCard.svelte';
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
-	import { noiseAvatarAction } from '@ewanc26/noise-avatar';
 
 	interface Props {
 		profile?: ProfileData | null;
 	}
 
 	let { profile = null }: Props = $props();
-
-	let imageLoaded = $state(false);
-	let bannerLoaded = $state(false);
 
 	// Detect system locale, fallback to en-GB
 	const locale = typeof navigator !== 'undefined' ? navigator.language || 'en-GB' : 'en-GB';
@@ -54,13 +50,10 @@
 				<!-- Banner -->
 				<div class="relative h-32 w-full overflow-hidden rounded-t-xl">
 					{#if safeProfile.banner}
-						<img
+						<NoiseImage
 							src={safeProfile.banner}
-							alt=""
-							class="h-full w-full object-cover opacity-0 transition-opacity duration-300"
-							class:opacity-100={bannerLoaded}
-							onload={() => (bannerLoaded = true)}
-							loading="lazy"
+							seed={`${safeProfile.did || safeProfile.handle}|banner`}
+							class="h-full w-full object-cover"
 							role="presentation"
 						/>
 					{:else}
@@ -76,22 +69,12 @@
 					<div
 						class="h-32 w-32 overflow-hidden rounded-full border-4 border-white bg-canvas-200 dark:border-canvas-900"
 					>
-						{#if safeProfile.avatar}
-							<img
-								src={safeProfile.avatar}
-								alt="{safeProfile.displayName || safeProfile.handle}'s profile picture"
-								class="h-full w-full object-cover opacity-0 transition-opacity duration-300"
-								class:opacity-100={imageLoaded}
-								onload={() => (imageLoaded = true)}
-								loading="lazy"
-							/>
-						{:else}
-						<canvas
-						use:noiseAvatarAction={`${safeProfile.did || safeProfile.handle}|avatar`}
-						class="h-full w-full"
-						aria-label="{safeProfile.displayName || safeProfile.handle}'s avatar placeholder"
-						></canvas>
-						{/if}
+						<NoiseImage
+						src={safeProfile.avatar}
+						seed={`${safeProfile.did || safeProfile.handle}|avatar`}
+						class="h-full w-full object-cover"
+						alt="{safeProfile.displayName || safeProfile.handle}'s avatar"
+						/>
 					</div>
 				</div>
 

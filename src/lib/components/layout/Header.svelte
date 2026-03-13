@@ -8,6 +8,7 @@
 	import ColorThemeToggle from './ColorThemeToggle.svelte';
 	import { navItems } from '$lib/data/navItems';
 	import type { ProfileData } from '$lib/services/atproto';
+	import { NoiseImage } from '$lib/components/ui';
 	import { defaultSiteMeta, createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
 	import { colorThemeDropdownOpen } from '$lib/stores/dropdownState';
 	import { colorTheme, type ColorTheme } from '$lib/stores/colorTheme';
@@ -22,7 +23,6 @@
 	const siteMeta: SiteMetadata = createSiteMeta(defaultSiteMeta);
 	const { page } = getStores();
 
-	let imageLoaded = $state(false);
 	let mobileMenuOpen = $state(false);
 	let colorThemeOpen = $state(false);
 	let currentTheme = $state<ColorTheme>('slate');
@@ -116,21 +116,13 @@
 			aria-label="Home - {siteMeta.title}"
 		>
 			<div class="relative flex items-center">
-				{#if profile?.avatar}
-					<img
+				{#if profile}
+					<NoiseImage
 						src={profile.avatar}
-						alt=""
+						seed={`${profile.did || profile.handle}|avatar`}
 						class="h-10 w-10 rounded-full object-cover"
-						onload={() => (imageLoaded = true)}
+						alt="{profile.displayName || profile.handle}'s avatar"
 					/>
-				{:else if profile}
-					<div
-						class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-200 font-bold text-primary-800 dark:bg-primary-800 dark:text-primary-200"
-						role="img"
-						aria-label="{profile.displayName || profile.handle} avatar"
-					>
-						{(profile.displayName || profile.handle).charAt(0).toUpperCase()}
-					</div>
 				{:else}
 					<div
 						class="h-10 w-10 animate-pulse rounded-full bg-canvas-300 dark:bg-canvas-700"
