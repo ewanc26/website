@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Card } from '$lib/components/ui';
 	import { fetchLatestBlueskyPost, type BlueskyPost } from '$lib/services/atproto';
+	import { noiseAvatarAction } from '@ewanc26/noise-avatar';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
 	import { Heart, Repeat2, MessageCircle, ExternalLink, X } from '@lucide/svelte';
@@ -208,31 +209,27 @@
 		<!-- Author Info -->
 		<div class="relative flex gap-3">
 			{#if isReplyParent}
-				<a
-					href={getProfileUrl(postData.author.handle)}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="shrink-0 transition-opacity hover:opacity-80"
-				>
-					{#if postData.author.avatar}
-						<img
-							src={postData.author.avatar}
-							alt={postData.author.displayName || postData.author.handle}
-							class="h-8 w-8 rounded-full object-cover sm:h-10 sm:w-10"
-							loading="lazy"
-						/>
-					{:else}
-						<div
-							class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-200 sm:h-10 sm:w-10 dark:bg-primary-800"
-						>
-							<span
-								class="text-sm font-semibold text-primary-700 sm:text-base dark:text-primary-300"
-							>
-								{(postData.author.displayName || postData.author.handle).charAt(0).toUpperCase()}
-							</span>
-						</div>
-					{/if}
-				</a>
+			<a
+			href={getProfileUrl(postData.author.handle)}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="shrink-0 transition-opacity hover:opacity-80"
+			>
+			{#if postData.author.avatar}
+			<img
+			src={postData.author.avatar}
+			alt={postData.author.displayName || postData.author.handle}
+			class="h-8 w-8 rounded-full object-cover sm:h-10 sm:w-10"
+			loading="lazy"
+			/>
+			{:else}
+			<canvas
+			use:noiseAvatarAction={`${postData.author.did || postData.author.handle}|avatar`}
+			 class="h-8 w-8 rounded-full sm:h-10 sm:w-10"
+			aria-label="{postData.author.displayName || postData.author.handle}'s avatar placeholder"
+			></canvas>
+			{/if}
+			</a>
 			{:else}
 				<a
 					href={getProfileUrl(postData.author.handle)}
@@ -248,15 +245,11 @@
 							loading="lazy"
 						/>
 					{:else}
-						<div
-							class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-200 sm:h-12 sm:w-12 dark:bg-primary-800"
-						>
-							<span
-								class="text-base font-semibold text-primary-700 sm:text-lg dark:text-primary-300"
-							>
-								{(postData.author.displayName || postData.author.handle).charAt(0).toUpperCase()}
-							</span>
-						</div>
+						<canvas
+							use:noiseAvatarAction={`${postData.author.did || postData.author.handle}|avatar`}
+							class="h-10 w-10 rounded-full sm:h-12 sm:w-12"
+							aria-label="{postData.author.displayName || postData.author.handle}'s avatar placeholder"
+						></canvas>
 					{/if}
 				</a>
 			{/if}
