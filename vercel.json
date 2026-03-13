@@ -47,5 +47,12 @@
 			]
 		}
 	],
-	"rewrites": []
+	"rewrites": [],
+  "redirects": [
+    {
+      "source": "/.well-known/webfinger",
+      "destination": "https://ap.ewancroft.uk/.well-known/webfinger",
+      "permanent": false
+    }
+  ]
 }
