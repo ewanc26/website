@@ -53,6 +53,16 @@
       "source": "/.well-known/webfinger",
       "destination": "https://ap.ewancroft.uk/.well-known/webfinger",
       "permanent": false
+    },
+    {
+      "source": "/.well-known/nodeinfo",
+      "destination": "https://ap.ewancroft.uk/.well-known/nodeinfo",
+      "permanent": false
+    },
+    {
+      "source": "/.well-known/host-meta",
+      "destination": "https://ap.ewancroft.uk/.well-known/host-meta",
+      "permanent": false
     }
   ]
 }
