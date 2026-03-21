@@ -1,5 +1,9 @@
 <script lang="ts">
 	import type { SiteMetadata } from '$lib/helper/siteMeta';
+	import {
+		PUBLIC_AP_INSTANCE_URL,
+		PUBLIC_AP_USERNAME
+	} from '$env/static/public';
 
 	interface Props {
 		meta: SiteMetadata;
@@ -7,6 +11,12 @@
 	}
 
 	let { meta, siteMeta }: Props = $props();
+
+	const instanceDomain = PUBLIC_AP_INSTANCE_URL
+		? new URL(PUBLIC_AP_INSTANCE_URL).hostname
+		: null;
+	const fediverseCreator =
+		PUBLIC_AP_USERNAME && instanceDomain ? `${PUBLIC_AP_USERNAME}@${instanceDomain}` : null;
 
 	// Merge with defaults
 	const finalMeta = $derived({
@@ -37,6 +47,11 @@
 	{/if}
 	{#if finalMeta.imageHeight}
 		<meta property="og:image:height" content={finalMeta.imageHeight.toString()} />
+	{/if}
+
+	<!-- Fediverse -->
+	{#if fediverseCreator}
+		<meta name="fediverse:creator" content={fediverseCreator} />
 	{/if}
 
 	<!-- Twitter -->
