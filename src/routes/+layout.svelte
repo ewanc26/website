@@ -14,6 +14,8 @@
 			meta?: Partial<SiteMetadata>;
 			profile?: ProfileData | null;
 			siteInfo?: SiteInfoData | null;
+			apInstanceUrl?: string | null;
+			apUsername?: string | null;
 		};
 		children: Snippet;
 	}
@@ -81,7 +83,7 @@
 </svelte:head>
 
 <!-- Bespoke MetaTags component -->
-<MetaTags meta={headMeta} siteMeta={data.siteMeta} />
+<MetaTags meta={headMeta} siteMeta={data.siteMeta} apInstanceUrl={data.apInstanceUrl} apUsername={data.apUsername} />
 
 <div
 	class="flex min-h-screen flex-col overflow-x-hidden bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50"
