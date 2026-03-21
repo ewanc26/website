@@ -12,11 +12,16 @@ export const GET: RequestHandler = async ({ url, setHeaders, fetch }) => {
 		throw error(501, 'ActivityPub not configured');
 	}
 
-	const resource = url.searchParams.get('resource');
+	const rawResource = url.searchParams.get('resource');
 
-	if (!resource) {
+	if (!rawResource) {
 		throw error(400, 'Missing resource parameter');
 	}
+
+	// Normalise acct: URIs — strip a leading '@' from the user part if present.
+	// Some clients (e.g. webfinger.net lookup tool) send acct:@user@host instead
+	// of the correct acct:user@host form per RFC 7565.
+	const resource = rawResource.replace(/^acct:@/, 'acct:');
 
 	const instanceDomain = new URL(apInstanceUrl).hostname;
 	const siteDomain = new URL(PUBLIC_SITE_URL).hostname;
