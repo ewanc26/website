@@ -1,22 +1,18 @@
 <script lang="ts">
 	import type { SiteMetadata } from '$lib/helper/siteMeta';
-	import {
-		PUBLIC_AP_INSTANCE_URL,
-		PUBLIC_AP_USERNAME
-	} from '$env/dynamic/public';
 
 	interface Props {
 		meta: SiteMetadata;
 		siteMeta: SiteMetadata;
+		apInstanceUrl?: string | null;
+		apUsername?: string | null;
 	}
 
-	let { meta, siteMeta }: Props = $props();
+	let { meta, siteMeta, apInstanceUrl, apUsername }: Props = $props();
 
-	const instanceDomain = PUBLIC_AP_INSTANCE_URL
-		? new URL(PUBLIC_AP_INSTANCE_URL).hostname
-		: null;
+	const instanceDomain = apInstanceUrl ? new URL(apInstanceUrl).hostname : null;
 	const fediverseCreator =
-		PUBLIC_AP_USERNAME && instanceDomain ? `${PUBLIC_AP_USERNAME}@${instanceDomain}` : null;
+		apUsername && instanceDomain ? `${apUsername}@${instanceDomain}` : null;
 
 	// Merge with defaults
 	const finalMeta = $derived({
