@@ -1,5 +1,5 @@
 import type { RequestHandler } from './$types';
-import { PUBLIC_ATPROTO_DID } from '$env/static/public';
+import { PUBLIC_ATPROTO_DID } from '$env/dynamic/public';
 
 export const prerender = false;
 

@@ -1,6 +1,6 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { PUBLIC_AP_INSTANCE_URL, PUBLIC_AP_USERNAME, PUBLIC_SITE_URL } from '$env/static/public';
+import { PUBLIC_AP_INSTANCE_URL, PUBLIC_AP_USERNAME, PUBLIC_SITE_URL } from '$env/dynamic/public';
 
 export const prerender = false;
 
