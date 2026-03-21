@@ -3,7 +3,7 @@
 	import {
 		PUBLIC_AP_INSTANCE_URL,
 		PUBLIC_AP_USERNAME
-	} from '$env/static/public';
+	} from '$env/dynamic/public';
 
 	interface Props {
 		meta: SiteMetadata;
