@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Heart } from '@lucide/svelte';
+	import { Heart, ExternalLink } from '@lucide/svelte';
 	import { Card, NoiseImage } from '$lib/components/ui';
 	import type { KofiSupportEvent, KofiEventType } from '$lib/services/atproto';
 
@@ -79,6 +79,17 @@
 						</li>
 					{/each}
 				</ol>
+				<div class="mt-4 border-t border-canvas-200 pt-4 dark:border-canvas-700">
+					<a
+						href="https://ko-fi.com/ewancroft"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-flex items-center gap-2 text-sm font-medium text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+					>
+						Support me on Ko-fi
+						<ExternalLink class="h-3.5 w-3.5" aria-hidden="true" />
+					</a>
+				</div>
 			{/snippet}
 		</Card>
 	{/if}
