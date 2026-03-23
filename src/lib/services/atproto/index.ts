@@ -8,6 +8,9 @@
 
 // Export all types
 export type {
+	PopfeedReview,
+	PopfeedCreativeWorkType,
+	PopfeedMainCreditRole,
 	ProfileData,
 	SiteInfoData,
 	LinkData,
@@ -46,7 +49,8 @@ export {
 	fetchLinks,
 	fetchMusicStatus,
 	fetchKibunStatus,
-	fetchTangledRepos
+	fetchTangledRepos,
+	fetchRecentPopfeedReviews
 } from './fetch';
 
 // Export Standard.site document functions

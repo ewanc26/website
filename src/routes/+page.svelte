@@ -7,7 +7,8 @@
 		MusicStatusCard,
 		KibunStatusCard,
 		TangledRepoCard,
-		SupportersCard
+		SupportersCard,
+		PopfeedCard
 	} from '$lib/components/layout/main/card';
 	import { createSiteMeta } from '$lib/helper/siteMeta';
 	import type { PageData } from './$types';
@@ -62,6 +63,11 @@
 		{#if data.supporters.length > 0}
 			<div class="mb-6 break-inside-avoid">
 				<SupportersCard supporters={data.supporters} />
+			</div>
+		{/if}
+		{#if data.popfeedReviews.length > 0}
+			<div class="mb-6 break-inside-avoid">
+				<PopfeedCard reviews={data.popfeedReviews} handle={data.profile?.handle} />
 			</div>
 		{/if}
 	</div>
