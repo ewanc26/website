@@ -7,7 +7,8 @@ import {
 	fetchLinks as _fetchLinks,
 	fetchMusicStatus as _fetchMusicStatus,
 	fetchKibunStatus as _fetchKibunStatus,
-	fetchTangledRepos as _fetchTangledRepos
+	fetchTangledRepos as _fetchTangledRepos,
+	fetchRecentPopfeedReviews as _fetchRecentPopfeedReviews
 } from '@ewanc26/atproto';
 
 export async function fetchProfile(fetchFn?: typeof fetch) {
@@ -32,4 +33,8 @@ export async function fetchKibunStatus(fetchFn?: typeof fetch) {
 
 export async function fetchTangledRepos(fetchFn?: typeof fetch) {
 	return _fetchTangledRepos(PUBLIC_ATPROTO_DID, fetchFn);
+}
+
+export async function fetchRecentPopfeedReviews(fetchFn?: typeof fetch) {
+	return _fetchRecentPopfeedReviews(PUBLIC_ATPROTO_DID, 5, fetchFn);
 }

@@ -5,7 +5,8 @@ import {
 	fetchLatestBlueskyPost,
 	fetchTangledRepos,
 	fetchRecentDocuments,
-	fetchSupporters
+	fetchSupporters,
+	fetchRecentPopfeedReviews
 } from '$lib/services/atproto';
 
 export const load: PageLoad = async ({ fetch, parent }) => {
@@ -13,13 +14,14 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 	const { profile } = await parent();
 
 	// Fetch page-specific data in parallel for better performance
-	const [musicStatus, kibunStatus, latestPost, tangledRepos, documents, supporters] = await Promise.allSettled([
+	const [musicStatus, kibunStatus, latestPost, tangledRepos, documents, supporters, popfeedReview] = await Promise.allSettled([
 		fetchMusicStatus(fetch),
 		fetchKibunStatus(fetch),
 		fetchLatestBlueskyPost(fetch),
 		fetchTangledRepos(fetch),
 		fetchRecentDocuments(5, fetch), // Fetch 5 most recent documents
-		fetchSupporters()
+		fetchSupporters(),
+		fetchRecentPopfeedReviews(fetch)
 	]);
 
 	return {
@@ -31,6 +33,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 		latestPost: latestPost.status === 'fulfilled' ? latestPost.value : null,
 		tangledRepos: tangledRepos.status === 'fulfilled' ? tangledRepos.value : null,
 		documents: documents.status === 'fulfilled' ? documents.value : [],
-		supporters: supporters.status === 'fulfilled' ? supporters.value : []
+		supporters: supporters.status === 'fulfilled' ? supporters.value : [],
+		popfeedReviews: popfeedReview.status === 'fulfilled' ? popfeedReview.value : []
 	};
 };
