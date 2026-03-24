@@ -12,7 +12,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
 		"lint": "prettier --check .",
-		"postversion": "node -e \"const fs=require('fs'),v=process.env.npm_package_version,c=fs.readFileSync('README.md','utf8');fs.writeFileSync('README.md',c.replace(/\\*\\*Version\\*\\*: .+/,'**Version**: '+v));\" && git add README.md"
+		"version": "node -e \"const fs=require('fs'),v=process.env.npm_package_version,c=fs.readFileSync('README.md','utf8');fs.writeFileSync('README.md',c.replace(/\\*\\*Version\\*\\*: .+/,'**Version**: '+v));\" && git add README.md"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "^6.3.3",
