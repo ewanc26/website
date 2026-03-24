@@ -12,8 +12,8 @@ importers:
         specifier: ^0.18.21
         version: 0.18.21
       '@ewanc26/atproto':
-        specifier: ^0.2.7
-        version: 0.2.7(@atproto/api@0.18.21)
+        specifier: ^0.2.8
+        version: 0.2.8(@atproto/api@0.18.21)
       '@ewanc26/noise-avatar':
         specifier: ^0.2.3
         version: 0.2.3
@@ -417,8 +417,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@ewanc26/atproto@0.2.7':
-    resolution: {integrity: sha512-I6qN8KH6cqK+CrO647/8nqxIHMiWaMT7LZtulivxbwzD8svWVP3++rzYY1kcfkTthIBlV20CEeD8j31J9MtSvg==}
+  '@ewanc26/atproto@0.2.8':
+    resolution: {integrity: sha512-x1E5Ol1pb0OXTTIQN0meV82nJpxofwbTsEDnc/2FiLIff2s6NGSzCq+hUIE7gnNY79tcb9dJiwNXVQZ7a8YkgA==}
     peerDependencies:
       '@atproto/api': '>=0.13.0'
 
@@ -1520,7 +1520,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.4':
     optional: true
 
-  '@ewanc26/atproto@0.2.7(@atproto/api@0.18.21)':
+  '@ewanc26/atproto@0.2.8(@atproto/api@0.18.21)':
     dependencies:
       '@atproto/api': 0.18.21
 
@@ -1548,7 +1548,7 @@ snapshots:
       svelte: 5.54.1
       tailwindcss: 4.2.2
     optionalDependencies:
-      '@ewanc26/atproto': 0.2.7(@atproto/api@0.18.21)
+      '@ewanc26/atproto': 0.2.8(@atproto/api@0.18.21)
     transitivePeerDependencies:
       - '@atproto/api'
 
