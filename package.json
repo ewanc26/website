@@ -11,7 +11,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
-		"lint": "prettier --check ."
+		"lint": "prettier --check .",
+		"postversion": "node -e \"const fs=require('fs'),v=process.env.npm_package_version,c=fs.readFileSync('README.md','utf8');fs.writeFileSync('README.md',c.replace(/\\*\\*Version\\*\\*: .+/,'**Version**: '+v));\" && git add README.md package.json"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "^6.3.3",
@@ -31,7 +32,7 @@
 	},
 	"dependencies": {
 		"@atproto/api": "^0.18.21",
-		"@ewanc26/atproto": "^0.2.7",
+		"@ewanc26/atproto": "^0.2.8",
 		"@ewanc26/noise-avatar": "^0.2.3",
 		"@ewanc26/supporters": "^0.1.8",
 		"@ewanc26/tid": "^1.1.3",
