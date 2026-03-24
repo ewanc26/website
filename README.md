@@ -811,4 +811,4 @@ If you found this useful, consider [buying me a ko-fi](https://ko-fi.com/ewancro
 
 Built with ❤️ using SvelteKit, AT Protocol, and open-source tools
 
-**Version**: 11.4.1
+**Version**: 11.4.3
