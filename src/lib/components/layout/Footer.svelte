@@ -4,6 +4,7 @@
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 	import DecimalClock from './DecimalClock.svelte';
 	import { happyMacStore } from '$lib/stores';
+	import { Code } from '@lucide/svelte';
 
 	let profile: ProfileData | null = $state(null);
 	let siteInfo: SiteInfoData | null = $state(null);
@@ -82,37 +83,60 @@
 					{/if}
 				</div>
 
-				<!-- Line 2: Powered by & Code -->
+				<!-- Line 2: Powered by, Code, Version -->
 				<div class="flex flex-col flex-wrap items-center gap-1 sm:flex-row sm:gap-2 md:items-start">
-					<span
-						>Powered by <a
+					<span>
+						Powered by <a
 							href="https://atproto.com/guides/glossary#at-protocol"
 							class="underline hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
 							target="_blank"
 							rel="noopener noreferrer">atproto</a
-						></span
-					>
+						>
+					</span>
+
 					<a
 						href="https://github.com/ewanc26/website"
 						target="_blank"
 						rel="noopener noreferrer"
 						class="underline hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
-						aria-label="View source code on GitHub">code</a
+						aria-label="View source code on GitHub"
 					>
-					<!-- Line 3: Version number (click 24 times for easter egg!) -->
+						code
+					</a>
+				</div>
+
+				<!-- Line 3: Commit hash -->
+				<div
+					class="flex items-center justify-center gap-2 text-sm text-ink-700 md:justify-start dark:text-ink-300"
+				>
+					<Code class="h-4 w-4 opacity-70" />
+
 					<button
 						type="button"
 						onclick={() => happyMacStore.incrementClick()}
-						class="cursor-default transition-colors select-none hover:text-ink-600 dark:hover:text-ink-300"
+						class="transition-colors hover:text-ink-900 dark:hover:text-ink-100"
 						aria-label="Version {__APP_VERSION__}{showHint
 							? ` - ${$happyMacStore.clickCount} of 24 clicks`
 							: ''}"
 						title={showHint ? `${$happyMacStore.clickCount}/24` : ''}
 					>
-						v{__APP_VERSION__}{#if showHint}<span class="ml-1 text-xs opacity-60"
-								>({$happyMacStore.clickCount}/24)</span
-							>{/if}
+						v{__APP_VERSION__}
+						{#if showHint}
+							<span class="ml-1 text-xs opacity-60">
+								({$happyMacStore.clickCount}/24)
+							</span>
+						{/if}
 					</button>
+
+					<a
+						href="https://github.com/ewanc26/website/commit/{__GIT_COMMIT__}"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="font-mono text-xs opacity-60 transition-colors hover:text-primary-500 hover:opacity-100 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
+						aria-label="View commit {__GIT_COMMIT__} on GitHub"
+					>
+						#{__GIT_COMMIT__}
+					</a>
 				</div>
 			</div>
 

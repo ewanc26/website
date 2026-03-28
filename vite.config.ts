@@ -2,11 +2,21 @@ import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import { version } from './package.json';
+import { execSync } from 'node:child_process';
+
+const gitCommit = (() => {
+	try {
+		return execSync('git rev-parse --short HEAD').toString().trim();
+	} catch {
+		return 'unknown';
+	}
+})();
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	define: {
-		__APP_VERSION__: JSON.stringify(version)
+		__APP_VERSION__: JSON.stringify(version),
+		__GIT_COMMIT__: JSON.stringify(gitCommit)
 	},
 
 
