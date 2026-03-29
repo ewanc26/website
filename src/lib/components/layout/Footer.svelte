@@ -4,6 +4,8 @@
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 	import DecimalClock from './DecimalClock.svelte';
 	import { happyMacStore } from '$lib/stores';
+	import { witchskyProfileUrl } from '$lib/config/urls';
+	import { PUBLIC_KOFI_PAGE_ID } from '$env/static/public';
 	import { Code } from '@lucide/svelte';
 
 	let profile: ProfileData | null = $state(null);
@@ -65,14 +67,14 @@
 						<span role="status" aria-live="polite">Loading profile…</span>
 					{:else if profile}
 						<a
-							href="https://witchsky.app/profile/{profile.did}"
+							href={witchskyProfileUrl(profile.did)}
 							class="underline hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Visit {profile.handle}'s Bluesky profile">@{profile.handle}</a
 						>
 						<a
-							href="https://ko-fi.com/ewancroft"
+							href="https://ko-fi.com/{PUBLIC_KOFI_PAGE_ID}"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="underline hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
