@@ -1,1 +1,1 @@
-export { formatRelativeTime } from '@ewanc26/utils';
+export { formatRelativeTime, formatLocalizedDate, getUserLocale } from './locale';

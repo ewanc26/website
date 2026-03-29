@@ -3,6 +3,8 @@
 	import type { ProfileData } from '$lib/services/atproto';
 	import LinkCard from './LinkCard.svelte';
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
+	import { getUserLocale } from '$lib/utils/locale';
+	import { witchskyProfileUrl } from '$lib/config/urls';
 
 	interface Props {
 		profile?: ProfileData | null;
@@ -10,8 +12,7 @@
 
 	let { profile = null }: Props = $props();
 
-	// Detect system locale, fallback to en-GB
-	const locale = typeof navigator !== 'undefined' ? navigator.language || 'en-GB' : 'en-GB';
+	const locale = getUserLocale();
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
@@ -119,7 +120,7 @@
 
 					<div class="mt-4">
 						<LinkCard
-							url="https://witchsky.app/profile/{safeProfile.did}"
+						url={witchskyProfileUrl(safeProfile.did)}
 							title="View on Bluesky"
 							variant="button"
 						/>

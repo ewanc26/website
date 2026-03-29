@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
-import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 import { parseWebhook, WebhookError, appendEvent } from '@ewanc26/supporters';
+import { bridgeAtprotoEnv } from '$lib/server/bridgeAtprotoEnv';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -10,9 +10,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		userAgent: request.headers.get('user-agent')
 	});
 
-	// Bridge SvelteKit's private env into process.env for the supporters package.
-	process.env.ATPROTO_DID = PUBLIC_ATPROTO_DID;
-	process.env.ATPROTO_APP_PASSWORD = env.ATPROTO_APP_PASSWORD;
+	bridgeAtprotoEnv();
 
 	let payload;
 	try {
