@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Card, NoiseImage } from '$lib/components/ui';
 	import { fetchLatestBlueskyPost, type BlueskyPost } from '$lib/services/atproto';
+	import { getUserLocale } from '$lib/utils/locale';
+	import { witchskyProfileUrl, witchskyPostUrl, witchskyHashtagUrl } from '$lib/config/urls';
 	import { formatRelativeTime } from '$lib/utils/formatDate';
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
 	import { Heart, Repeat2, MessageCircle, ExternalLink, X } from '@lucide/svelte';
@@ -18,8 +20,7 @@
 	let lightboxImage = $state<{ url: string; alt: string } | null>(null);
 	let videoElements = new Map<string, { element: HTMLVideoElement; hls: Hls | null }>();
 
-	// Detect system locale, fallback to en-GB
-	const locale = typeof navigator !== 'undefined' ? navigator.language || 'en-GB' : 'en-GB';
+	const locale = getUserLocale();
 
 	// Poll interval in milliseconds (2 minutes)
 	const POLL_INTERVAL = 2 * 60 * 1000;
@@ -72,16 +73,8 @@
 		};
 	});
 
-	function getPostUrl(uri: string): string {
-		const parts = uri.split('/');
-		const did = parts[2];
-		const rkey = parts[4];
-		return `https://witchsky.app/profile/${did}/post/${rkey}`;
-	}
-
-	function getProfileUrl(handle: string): string {
-		return `https://witchsky.app/profile/${handle}`;
-	}
+	const getPostUrl = witchskyPostUrl;
+	const getProfileUrl = witchskyProfileUrl;
 
 	function openLightbox(url: string, alt: string) {
 		lightboxImage = { url, alt };
@@ -123,9 +116,9 @@
 				if (feature.$type === 'app.bsky.richtext.facet#link') {
 					result += `<a href="${escapeHtml(feature.uri)}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 underline">${escapeHtml(facetText)}</a>`;
 				} else if (feature.$type === 'app.bsky.richtext.facet#mention') {
-					result += `<a href="https://witchsky.app/profile/${escapeHtml(feature.did)}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium">${escapeHtml(facetText)}</a>`;
+					result += `<a href="${witchskyProfileUrl(escapeHtml(feature.did))}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium">${escapeHtml(facetText)}</a>`;
 				} else if (feature.$type === 'app.bsky.richtext.facet#tag') {
-					result += `<a href="https://witchsky.app/hashtag/${escapeHtml(feature.tag)}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium">${escapeHtml(facetText)}</a>`;
+					result += `<a href="${witchskyHashtagUrl(escapeHtml(feature.tag))}" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium">${escapeHtml(facetText)}</a>`;
 				} else {
 					result += escapeHtml(facetText);
 				}

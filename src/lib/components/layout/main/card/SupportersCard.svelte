@@ -2,6 +2,7 @@
 	import { Heart, ExternalLink } from '@lucide/svelte';
 	import { Card, NoiseImage } from '$lib/components/ui';
 	import type { UnifiedSupportEvent, KofiEventType, GitHubSponsorshipAction } from '$lib/services/atproto';
+	import { PUBLIC_KOFI_PAGE_ID, PUBLIC_GITHUB_USERNAME } from '$env/static/public';
 
 	interface Props {
 		supporters?: UnifiedSupportEvent[] | null;
@@ -102,8 +103,9 @@
 					{/each}
 				</ol>
 				<div class="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-canvas-200 pt-4 dark:border-canvas-700">
+					{#if PUBLIC_KOFI_PAGE_ID}
 					<a
-						href="https://ko-fi.com/ewancroft"
+						href="https://ko-fi.com/{PUBLIC_KOFI_PAGE_ID}"
 						target="_blank"
 						rel="noopener noreferrer"
 						class="inline-flex items-center gap-2 text-sm font-medium text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
@@ -111,8 +113,10 @@
 						Support me on Ko-fi
 						<ExternalLink class="h-3.5 w-3.5" aria-hidden="true" />
 					</a>
+					{/if}
+					{#if PUBLIC_GITHUB_USERNAME}
 					<a
-						href="https://github.com/sponsors/ewanc26"
+						href="https://github.com/sponsors/{PUBLIC_GITHUB_USERNAME}"
 						target="_blank"
 						rel="noopener noreferrer"
 						class="inline-flex items-center gap-2 text-sm font-medium text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
@@ -120,6 +124,7 @@
 						Sponsor me on GitHub
 						<ExternalLink class="h-3.5 w-3.5" aria-hidden="true" />
 					</a>
+					{/if}
 				</div>
 			{/snippet}
 		</Card>
