@@ -1,6 +1,9 @@
 // Re-export all types from @ewanc26/atproto.
 // The app's service wrappers use these directly.
 export type {
+	PopfeedReview,
+	PopfeedCreativeWorkType,
+	PopfeedMainCreditRole,
 	ProfileData,
 	StatusData,
 	SiteInfoData,
