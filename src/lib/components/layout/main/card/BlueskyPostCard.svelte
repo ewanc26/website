@@ -271,7 +271,6 @@
 							poster={postData.videoThumbnail}
 							playsinline
 						>
-							<track kind="captions" />
 							Your browser does not support the video tag.
 						</video>
 					</div>
@@ -534,8 +533,7 @@
 			/>
 			{#if lightboxImage.alt && lightboxImage.alt !== `Post attachment ${lightboxImage.url.split('/').pop()}`}
 				<div
-					class="mt-2 w-full max-w-full overflow-y-auto rounded-lg bg-black/70 px-3 py-2 text-center text-xs text-white sm:mt-4 sm:px-4 sm:text-sm"
-					style="max-height: calc(15vh - 1rem); sm:max-height: calc(10vh - 2rem);"
+					class="mt-2 max-h-[calc(15vh-1rem)] w-full max-w-full overflow-y-auto rounded-lg bg-black/70 px-3 py-2 text-center text-xs text-white sm:mt-4 sm:max-h-[calc(10vh-2rem)] sm:px-4 sm:text-sm"
 				>
 					{lightboxImage.alt}
 				</div>
