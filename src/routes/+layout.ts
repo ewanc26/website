@@ -6,11 +6,10 @@ import { fetchProfile } from '$lib/services/atproto';
  * Layout load function - fetches profile data and provides base site metadata
  */
 export const load: LayoutLoad = async ({ url, fetch }) => {
-	// Provide the default site metadata
+	// Provide the default site metadata with current URL for proper OG tags
 	const siteMeta: SiteMetadata = createSiteMeta({
-		title: defaultSiteMeta.title,
-		description: defaultSiteMeta.description,
-		url: url.href // Include current URL for proper OG tags
+		...defaultSiteMeta,
+		url: url.href
 	});
 
 	// Fetch profile data (needed by Header and page components)
