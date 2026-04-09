@@ -1,9 +1,12 @@
 import type { PageLoad } from './$types';
-import { fetchGitHubData } from '$lib/services/github';
+import { fetchGitHubData, fetchContributions } from '$lib/services/github';
 
 const GITHUB_USERNAME = 'ewanc26';
 
 export const load: PageLoad = async ({ fetch }) => {
-	const { profile, repos } = await fetchGitHubData(GITHUB_USERNAME, fetch);
-	return { profile, repos };
+	const [profileData, contributions] = await Promise.all([
+		fetchGitHubData(GITHUB_USERNAME, fetch),
+		fetchContributions(GITHUB_USERNAME, fetch, 90)
+	]);
+	return { ...profileData, contributions };
 };

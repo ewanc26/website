@@ -5,9 +5,8 @@
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
 	import { formatLocalizedDate, getUserLocale } from '$lib/utils/locale';
 	import { createSiteMeta, defaultSiteMeta } from '$lib/helper/siteMeta';
-
 	let { data }: { data: PageData } = $props();
-	const { profile, repos } = data;
+	const { profile, repos, contributions } = data;
 
 	const locale = getUserLocale();
 
@@ -172,6 +171,69 @@
 			</div>
 		{/snippet}
 	</Card>
+
+	<!-- Contribution Graph -->
+	<section>
+		<Card variant="elevated" padding="lg">
+			{#snippet children()}
+				<div class="flex items-center justify-between">
+					<h2 class="text-xl font-bold text-ink-900 dark:text-ink-50">
+						{formatCompactNumber(contributions.total, locale)} contributions
+					</h2>
+					<span class="text-sm text-ink-600 dark:text-ink-300">last 90 days</span>
+				</div>
+
+				<!-- Contribution grid -->
+				<div class="mt-4 overflow-x-auto">
+					<div class="flex gap-[3px]" style="width: min-content;">
+						{#each contributions.weeks as week}
+							<div class="flex flex-col gap-[3px]">
+								{#each week as day}
+									<div
+										class="h-3 w-3 rounded-sm transition-colors"
+										class:bg-canvas-200={day.level === 0}
+										class:dark:bg-canvas-700={day.level === 0}
+										class:bg-primary-200={day.level === 1}
+										class:dark:bg-primary-900={day.level === 1}
+										class:bg-primary-300={day.level === 2}
+										class:dark:bg-primary-700={day.level === 2}
+										class:bg-primary-400={day.level === 3}
+										class:dark:bg-primary-500={day.level === 3}
+										class:bg-primary-600={day.level === 4}
+										class:dark:bg-primary-400={day.level === 4}
+										title={day.date ? `${day.count} contribution${day.count !== 1 ? 's' : ''} on ${day.date}` : ''}
+										role="img"
+										aria-label={day.date ? `${day.count} contribution${day.count !== 1 ? 's' : ''} on ${day.date}` : ''}
+									></div>
+								{/each}
+							</div>
+						{/each}
+					</div>
+				</div>
+
+				<!-- Legend -->
+				<div class="mt-4 flex items-center justify-end gap-2 text-xs text-ink-600 dark:text-ink-300">
+					<span>Less</span>
+					{#each [0, 1, 2, 3, 4] as level}
+						<div
+							class="h-3 w-3 rounded-sm"
+							class:bg-canvas-200={level === 0}
+							class:dark:bg-canvas-700={level === 0}
+							class:bg-primary-200={level === 1}
+							class:dark:bg-primary-900={level === 1}
+							class:bg-primary-300={level === 2}
+							class:dark:bg-primary-700={level === 2}
+							class:bg-primary-400={level === 3}
+							class:dark:bg-primary-500={level === 3}
+							class:bg-primary-600={level === 4}
+							class:dark:bg-primary-400={level === 4}
+						></div>
+					{/each}
+					<span>More</span>
+				</div>
+			{/snippet}
+		</Card>
+	</section>
 
 	<!-- Repositories Grid -->
 	<section>
