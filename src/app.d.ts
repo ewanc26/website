@@ -8,9 +8,10 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
-}
 
-declare const __APP_VERSION__: string;
-declare const __GIT_COMMIT__: string;
+	// Vite-defined globals (from vite.config.ts)
+	const __APP_VERSION__: string;
+	const __GIT_COMMIT__: string;
+}
 
 export {};
