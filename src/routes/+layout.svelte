@@ -51,6 +51,16 @@
 			...data.meta
 		})
 	);
+
+	// Compute fediverse:creator from AP instance and username
+	const fediverseCreator = $derived(() => {
+		if (!data.apInstanceUrl || !data.apUsername) return null;
+		try {
+			return `${data.apUsername}@${new URL(data.apInstanceUrl).hostname}`;
+		} catch {
+			return null;
+		}
+	})();
 </script>
 
 <svelte:head>
@@ -83,7 +93,7 @@
 </svelte:head>
 
 <!-- Bespoke MetaTags component -->
-<MetaTags meta={headMeta} siteMeta={data.siteMeta} apInstanceUrl={data.apInstanceUrl} apUsername={data.apUsername} />
+<MetaTags meta={headMeta} siteMeta={data.siteMeta} fediverseCreator={fediverseCreator} />
 
 <div
 	class="flex min-h-screen flex-col overflow-x-hidden bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50"
