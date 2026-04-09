@@ -4,19 +4,11 @@
 	interface Props {
 		meta: SiteMetadata;
 		siteMeta: SiteMetadata;
-		apInstanceUrl?: string | null;
-		apUsername?: string | null;
+		fediverseCreator?: string | null;
 	}
 
-	let { meta, siteMeta, apInstanceUrl, apUsername }: Props = $props();
+	let { meta, siteMeta, fediverseCreator }: Props = $props();
 
-	// Reactive computed values for fediverse:creator meta tag
-	const instanceDomain = $derived(apInstanceUrl ? new URL(apInstanceUrl).hostname : null);
-	const fediverseCreator = $derived(
-		apUsername && instanceDomain ? `${apUsername}@${instanceDomain}` : null
-	);
-
-	// Merge with defaults
 	const finalMeta = $derived({
 		title: meta.title || siteMeta.title,
 		description: meta.description || siteMeta.description,
@@ -32,8 +24,6 @@
 	<title>{finalMeta.title}</title>
 	<meta name="description" content={finalMeta.description} />
 	<meta name="keywords" content={finalMeta.keywords} />
-
-	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content={finalMeta.url} />
 	<meta property="og:title" content={finalMeta.title} />
@@ -46,13 +36,9 @@
 	{#if finalMeta.imageHeight}
 		<meta property="og:image:height" content={finalMeta.imageHeight.toString()} />
 	{/if}
-
-	<!-- Fediverse -->
 	{#if fediverseCreator}
 		<meta name="fediverse:creator" content={fediverseCreator} />
 	{/if}
-
-	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:url" content={finalMeta.url} />
 	<meta name="twitter:title" content={finalMeta.title} />
