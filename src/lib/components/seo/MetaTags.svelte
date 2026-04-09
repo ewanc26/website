@@ -10,9 +10,11 @@
 
 	let { meta, siteMeta, apInstanceUrl, apUsername }: Props = $props();
 
-	const instanceDomain = apInstanceUrl ? new URL(apInstanceUrl).hostname : null;
-	const fediverseCreator =
-		apUsername && instanceDomain ? `${apUsername}@${instanceDomain}` : null;
+	// Reactive computed values for fediverse:creator meta tag
+	const instanceDomain = $derived(apInstanceUrl ? new URL(apInstanceUrl).hostname : null);
+	const fediverseCreator = $derived(
+		apUsername && instanceDomain ? `${apUsername}@${instanceDomain}` : null
+	);
 
 	// Merge with defaults
 	const finalMeta = $derived({
