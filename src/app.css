@@ -1,6 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 @import './lib/styles/themes.css';
+
+/* Self-hosted Inter variable font */
+@font-face {
+	font-family: 'Inter';
+	src: url('/fonts/InterVariable.woff2') format('woff2-variations'),
+	     url('/fonts/InterVariable.woff2') format('woff2');
+	font-weight: 100 900;
+	font-display: swap;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Inter';
+	src: url('/fonts/InterVariable-Italic.woff2') format('woff2-variations'),
+	     url('/fonts/InterVariable-Italic.woff2') format('woff2');
+	font-weight: 100 900;
+	font-display: swap;
+	font-style: italic;
+}
 
 @theme {
 	/* Font Family */
