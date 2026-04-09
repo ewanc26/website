@@ -1,7 +1,7 @@
 {
 	"name": "website",
 	"private": true,
-	"version": "11.6.0",
+	"version": "11.7.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
@@ -31,7 +31,9 @@
 		"vite": "^7.3.1"
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": ["esbuild"]
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
 	},
 	"dependencies": {
 		"@atproto/api": "^0.18.21",
