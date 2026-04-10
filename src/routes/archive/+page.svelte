@@ -1,13 +1,16 @@
 <script lang="ts">
 	import { Card, SearchBar, Pagination, Tabs, Dropdown } from '$lib/components/ui';
 	import { DocumentCard } from '$lib/components/ui';
+	import { MetaTags } from '$lib/components/seo';
 	import type { StandardSiteDocument } from '$lib/services/atproto';
+	import type { SiteMetadata } from '$lib/helper/siteMeta';
 	import { getUserLocale } from '$lib/utils/locale';
 	import { getAllTags } from '$lib/helper/posts';
 
 	interface Props {
 		data: {
 			documents: StandardSiteDocument[];
+			meta: SiteMetadata;
 		};
 	}
 
@@ -147,6 +150,8 @@
 		selectedYear = yearId;
 	}
 </script>
+
+<MetaTags meta={data.meta} siteMeta={data.meta} />
 
 <div class="mx-auto max-w-4xl">
 	<!-- Page Header -->
