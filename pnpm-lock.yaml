@@ -18,8 +18,8 @@ importers:
         specifier: ^0.2.3
         version: 0.2.3
       '@ewanc26/og':
-        specifier: file:../pkgs/packages/og
-        version: file:../pkgs/packages/og
+        specifier: ^0.1.3
+        version: 0.1.3
       '@ewanc26/supporters':
         specifier: ^0.3.0
         version: 0.3.0(@atproto/api@0.18.21)(svelte@5.54.1)
@@ -625,8 +625,8 @@ packages:
   '@ewanc26/noise@0.1.3':
     resolution: {integrity: sha512-iffC4uo/6gtAdHcmJ2VY2+o278nECydJ8OAPmr6rkPO9eUKq9t/42A2KHO5gxPlttjWPQjj3kCQz1aCE7IlAMg==}
 
-  '@ewanc26/og@file:../pkgs/packages/og':
-    resolution: {directory: ../pkgs/packages/og, type: directory}
+  '@ewanc26/og@0.1.3':
+    resolution: {integrity: sha512-nHxYqfn5JUf0nEbfA6FD4ERuC5lRRc2vI20B+GQMynwYhdCvt5RJ/ixMW29J+P6RpM/XcLdDmQEurz7RttDLCQ==}
 
   '@ewanc26/supporters@0.3.0':
     resolution: {integrity: sha512-T+E7U0uhi1KX4mKbjprRi3BzsADPqileMQHo9oFOc5n9NIIwsddxLYDg0jGzW5XCr39voQkfRGj7g1vyfggKYA==}
@@ -3117,7 +3117,7 @@ snapshots:
 
   '@ewanc26/noise@0.1.3': {}
 
-  '@ewanc26/og@file:../pkgs/packages/og':
+  '@ewanc26/og@0.1.3':
     dependencies:
       '@ewanc26/noise': 0.1.3
       '@resvg/resvg-js': 2.6.2
