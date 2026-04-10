@@ -23,12 +23,12 @@
 		<h1
 			class="overflow-wrap-anywhere mb-4 text-4xl font-bold wrap-break-word text-ink-900 md:text-5xl dark:text-ink-50"
 		>
-			Welcome to {meta.title}
+			Welcome to {data.meta.title}
 		</h1>
 		<p
 			class="overflow-wrap-anywhere mx-auto max-w-2xl text-lg wrap-break-word text-ink-700 dark:text-ink-200"
 		>
-			{meta.description}
+			{data.meta.description}
 		</p>
 	</div>
 
