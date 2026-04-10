@@ -53,14 +53,14 @@
 	);
 
 	// Compute fediverse:creator from AP instance and username
-	const fediverseCreator = $derived(() => {
+	const fediverseCreator = $derived.by(() => {
 		if (!data.apInstanceUrl || !data.apUsername) return null;
 		try {
 			return `${data.apUsername}@${new URL(data.apInstanceUrl).hostname}`;
 		} catch {
 			return null;
 		}
-	})();
+	});
 </script>
 
 <svelte:head>
