@@ -1,7 +1,6 @@
 import type { PageLoad } from './$types';
 import { fetchSiteInfo, type SiteInfoData } from '$lib/services/atproto';
-import { createSiteMeta, type SiteMetadata, defaultSiteMeta } from '$lib/helper/siteMeta';
-import { ogImages } from '$lib/helper/ogImages';
+import { createDynamicSiteMeta } from '$lib/helper/siteMeta';
 
 export const load: PageLoad = async ({ parent, fetch }) => {
 	const { siteMeta } = await parent();
@@ -15,11 +14,9 @@ export const load: PageLoad = async ({ parent, fetch }) => {
 		error = err instanceof Error ? err.message : 'Failed to load site information';
 	}
 
-	const meta: SiteMetadata = createSiteMeta({
-		...siteMeta,
-		title: `Site Meta - ${defaultSiteMeta.title}`,
-		description: 'Information about this website, its technology stack, and credits.',
-		image: ogImages.siteMeta
+	const meta = createDynamicSiteMeta({
+		title: 'Site Meta',
+		description: 'Information about this website, its technology stack, and credits.'
 	});
 
 	return { siteInfo, error, meta };
