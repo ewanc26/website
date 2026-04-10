@@ -2,7 +2,6 @@
 	import '../app.css';
 	import { Header, Footer, ScrollToTop } from '$lib/components/layout';
 	import HappyMacEasterEgg from '$lib/components/HappyMacEasterEgg.svelte';
-	import { MetaTags } from '$lib/components/seo';
 	import { type SiteMetadata } from '$lib/helper/siteMeta';
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 	import type { Snippet } from 'svelte';
@@ -86,8 +85,7 @@
 	<link rel="manifest" href="/favicon/site.webmanifest" />
 </svelte:head>
 
-<!-- Bespoke MetaTags component -->
-<MetaTags meta={data.meta ?? data.siteMeta} fediverseCreator={fediverseCreator} />
+
 
 <div
 	class="flex min-h-screen flex-col overflow-x-hidden bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50"
