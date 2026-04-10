@@ -90,7 +90,7 @@
 	<meta name="description" content={errorConfig.description.replace(/<[^>]*>/g, '')} />
 </svelte:head>
 
-<MetaTags {meta} siteMeta={meta} />
+<MetaTags siteMeta={meta} />
 
 <div class="mx-auto max-w-2xl py-8">
 	<Card variant="elevated" padding="lg">

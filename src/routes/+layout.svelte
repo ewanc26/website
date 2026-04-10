@@ -44,11 +44,7 @@
 		};
 	});
 
-	// Reactive meta updates on navigation - merge page meta with site defaults
-	let headMeta = $derived({
-		...data.siteMeta,
-		...data.meta
-	});
+
 
 	// Compute fediverse:creator from AP instance and username
 	const fediverseCreator = $derived.by(() => {
@@ -91,7 +87,7 @@
 </svelte:head>
 
 <!-- Bespoke MetaTags component -->
-<MetaTags meta={headMeta} siteMeta={data.siteMeta} fediverseCreator={fediverseCreator} />
+<MetaTags meta={data.meta ?? data.siteMeta} fediverseCreator={fediverseCreator} />
 
 <div
 	class="flex min-h-screen flex-col overflow-x-hidden bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50"
