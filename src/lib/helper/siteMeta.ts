@@ -1,4 +1,4 @@
-import { ogImages } from '$lib/helper/ogImages';
+import { ogUrl } from '$lib/helper/ogImages';
 import {
 	PUBLIC_SITE_TITLE,
 	PUBLIC_SITE_DESCRIPTION,
@@ -12,14 +12,58 @@ export { createSiteMeta } from '@ewanc26/ui';
 
 /**
  * Default metadata that applies site-wide.
- * Can be overridden per-page via createSiteMeta.
+ * Generates dynamic OG images via /api/og endpoint.
  */
 export const defaultSiteMeta: SiteMetadata = {
 	title: PUBLIC_SITE_TITLE,
 	description: PUBLIC_SITE_DESCRIPTION,
 	keywords: PUBLIC_SITE_KEYWORDS,
 	url: PUBLIC_SITE_URL,
-	image: ogImages.main,
+	image: `${PUBLIC_SITE_URL}${ogUrl({ title: PUBLIC_SITE_TITLE })}`,
 	imageWidth: 1200,
 	imageHeight: 630
 };
+
+/**
+ * Create site meta with dynamic OG image.
+ *
+ * @example
+ * ```ts
+ * // Home page
+ * createDynamicSiteMeta({
+ *   title: "Ewan's Corner",
+ *   description: 'personal site, blog, and digital garden'
+ * })
+ *
+ * // Blog post
+ * createDynamicSiteMeta({
+ *   title: post.title,
+ *   description: post.description,
+ *   template: 'blog'
+ * })
+ * ```
+ */
+export interface DynamicSiteMetaOptions {
+	title: string
+	description?: string
+	template?: 'default' | 'blog' | 'profile'
+	url?: string
+}
+
+export function createDynamicSiteMeta(options: DynamicSiteMetaOptions): SiteMetadata {
+	const siteUrl = options.url || PUBLIC_SITE_URL
+
+	return {
+		title: options.title,
+		description: options.description || PUBLIC_SITE_DESCRIPTION,
+		keywords: PUBLIC_SITE_KEYWORDS,
+		url: siteUrl,
+		image: `${PUBLIC_SITE_URL}${ogUrl({
+			title: options.title,
+			description: options.description,
+			template: options.template
+		})}`,
+		imageWidth: 1200,
+		imageHeight: 630
+	}
+}

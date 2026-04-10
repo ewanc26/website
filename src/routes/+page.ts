@@ -1,4 +1,5 @@
 import type { PageLoad } from './$types';
+import { createDynamicSiteMeta } from '$lib/helper/siteMeta';
 import {
 	fetchMusicStatus,
 	fetchKibunStatus,
@@ -22,8 +23,15 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 		fetchRecentPopfeedReviews(fetch)
 	]);
 
+	// Create page metadata with dynamic OG
+	const meta = createDynamicSiteMeta({
+		title: "Ewan's Corner",
+		description: 'personal site, blog, and digital garden'
+	});
+
 	return {
 		profile,
+		meta,
 		musicStatus: musicStatus.status === 'fulfilled' ? musicStatus.value : null,
 		kibunStatus: kibunStatus.status === 'fulfilled' ? kibunStatus.value : null,
 		latestPost: latestPost.status === 'fulfilled' ? latestPost.value : null,
