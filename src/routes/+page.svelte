@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { DynamicLinks } from '$lib/components/layout';
+	import { MetaTags } from '$lib/components/seo';
 	import {
 		ProfileCard,
 		PostCard,
@@ -10,18 +11,12 @@
 		SupportersCard,
 		PopfeedCard
 	} from '$lib/components/layout/main/card';
-	import { createSiteMeta } from '$lib/helper/siteMeta';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-
-	// Use $derived for reactive metadata
-	const meta = $derived(
-		createSiteMeta({
-			...data.siteMeta
-		})
-	);
 </script>
+
+<MetaTags meta={data.meta} siteMeta={data.meta} />
 
 <div class="mx-auto max-w-6xl">
 	<div class="mb-8 text-center">

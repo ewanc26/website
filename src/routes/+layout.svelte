@@ -3,7 +3,7 @@
 	import { Header, Footer, ScrollToTop } from '$lib/components/layout';
 	import HappyMacEasterEgg from '$lib/components/HappyMacEasterEgg.svelte';
 	import { MetaTags } from '$lib/components/seo';
-	import { createSiteMeta, type SiteMetadata } from '$lib/helper/siteMeta';
+	import { type SiteMetadata } from '$lib/helper/siteMeta';
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 	import type { Snippet } from 'svelte';
 	import { onMount } from 'svelte';
@@ -44,13 +44,11 @@
 		};
 	});
 
-	// Reactive meta updates on navigation
-	let headMeta = $derived(
-		createSiteMeta({
-			...data.siteMeta,
-			...data.meta
-		})
-	);
+	// Reactive meta updates on navigation - merge page meta with site defaults
+	let headMeta = $derived({
+		...data.siteMeta,
+		...data.meta
+	});
 
 	// Compute fediverse:creator from AP instance and username
 	const fediverseCreator = $derived.by(() => {
