@@ -1,21 +1,15 @@
 <script lang="ts">
 	import { Card, NoiseImage } from '$lib/components/ui';
 	import { ExternalLink, MapPin, Link as LinkIcon, Calendar, Users, GitBranch, Star, Eye } from '@lucide/svelte';
+	import { MetaTags } from '$lib/components/seo';
 	import type { PageData } from './$types';
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
 	import { formatLocalizedDate, getUserLocale } from '$lib/utils/locale';
-	import { createSiteMeta, defaultSiteMeta } from '$lib/helper/siteMeta';
+
 	let { data }: { data: PageData } = $props();
-	const { profile, repos, contributions } = data;
 
 	const locale = getUserLocale();
-
-	const siteMeta = createSiteMeta({
-		...defaultSiteMeta,
-		title: `GitHub @${profile.login}`,
-		description: profile.bio || `${profile.name || profile.login}'s GitHub profile`,
-		url: `${defaultSiteMeta.url}/github`
-	});
+	const { profile, repos, contributions, meta } = $derived(data);
 
 	// Language colours for common languages
 	const languageColors: Record<string, string> = {
@@ -52,10 +46,7 @@
 	}
 </script>
 
-<svelte:head>
-	<title>{siteMeta.title}</title>
-	<meta name="description" content={siteMeta.description} />
-</svelte:head>
+<MetaTags {meta} siteMeta={meta} />
 
 <div class="mx-auto max-w-6xl space-y-8">
 	<!-- Profile Hero -->

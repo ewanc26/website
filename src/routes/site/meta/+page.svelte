@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { LinkCard } from '$lib/components/layout/main/card';
+	import { MetaTags } from '$lib/components/seo';
 	import type { SiteInfoData } from '$lib/services/atproto';
 	import type { SiteMetadata } from '$lib/helper/siteMeta';
 
@@ -16,6 +17,8 @@
 	<title>{meta.title}</title>
 	<meta name="description" content={meta.description} />
 </svelte:head>
+
+<MetaTags {meta} siteMeta={meta} />
 
 <div class="mx-auto max-w-5xl space-y-8">
 	<div class="mb-8 text-center">
