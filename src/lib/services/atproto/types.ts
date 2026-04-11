@@ -41,5 +41,12 @@ export type {
 	SifaLanguage,
 	SifaCertification,
 	SifaExternalAccount,
-	SifaLocation
+	SifaLocation,
+	SifaPosition,
+	SifaEducation,
+	SifaVolunteering,
+	SifaHonor,
+	SifaCourse,
+	SifaPublication,
+	SifaPublicationAuthor
 } from '@ewanc26/atproto';
