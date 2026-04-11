@@ -12,8 +12,8 @@ importers:
         specifier: ^0.18.21
         version: 0.18.21
       '@ewanc26/atproto':
-        specifier: ^0.2.8
-        version: 0.2.8(@atproto/api@0.18.21)
+        specifier: link:../pkgs/packages/atproto
+        version: link:../pkgs/packages/atproto
       '@ewanc26/noise-avatar':
         specifier: ^0.2.3
         version: 0.2.3
@@ -3108,6 +3108,7 @@ snapshots:
   '@ewanc26/atproto@0.2.8(@atproto/api@0.18.21)':
     dependencies:
       '@atproto/api': 0.18.21
+    optional: true
 
   '@ewanc26/noise-avatar@0.2.3':
     dependencies:

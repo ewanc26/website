@@ -8,7 +8,13 @@ import {
 	fetchMusicStatus as _fetchMusicStatus,
 	fetchKibunStatus as _fetchKibunStatus,
 	fetchTangledRepos as _fetchTangledRepos,
-	fetchRecentPopfeedReviews as _fetchRecentPopfeedReviews
+	fetchRecentPopfeedReviews as _fetchRecentPopfeedReviews,
+	fetchSifaProfile as _fetchSifaProfile,
+	fetchSifaSkills as _fetchSifaSkills,
+	fetchSifaProjects as _fetchSifaProjects,
+	fetchSifaLanguages as _fetchSifaLanguages,
+	fetchSifaCertifications as _fetchSifaCertifications,
+	fetchSifaExternalAccounts as _fetchSifaExternalAccounts
 } from '@ewanc26/atproto';
 
 export async function fetchProfile(fetchFn?: typeof fetch) {
@@ -37,4 +43,28 @@ export async function fetchTangledRepos(fetchFn?: typeof fetch) {
 
 export async function fetchRecentPopfeedReviews(fetchFn?: typeof fetch) {
 	return _fetchRecentPopfeedReviews(PUBLIC_ATPROTO_DID, 5, fetchFn);
+}
+
+export async function fetchSifaProfile(fetchFn?: typeof fetch) {
+	return _fetchSifaProfile(PUBLIC_ATPROTO_DID, fetchFn);
+}
+
+export async function fetchSifaSkills(fetchFn?: typeof fetch) {
+	return _fetchSifaSkills(PUBLIC_ATPROTO_DID, fetchFn);
+}
+
+export async function fetchSifaProjects(fetchFn?: typeof fetch) {
+	return _fetchSifaProjects(PUBLIC_ATPROTO_DID, fetchFn);
+}
+
+export async function fetchSifaLanguages(fetchFn?: typeof fetch) {
+	return _fetchSifaLanguages(PUBLIC_ATPROTO_DID, fetchFn);
+}
+
+export async function fetchSifaCertifications(fetchFn?: typeof fetch) {
+	return _fetchSifaCertifications(PUBLIC_ATPROTO_DID, fetchFn);
+}
+
+export async function fetchSifaExternalAccounts(fetchFn?: typeof fetch) {
+	return _fetchSifaExternalAccounts(PUBLIC_ATPROTO_DID, fetchFn);
 }
