@@ -46,7 +46,13 @@ export type {
 	SifaLanguage,
 	SifaCertification,
 	SifaExternalAccount,
-	SifaLocation
+	SifaLocation,
+	SifaPosition,
+	SifaEducation,
+	SifaVolunteering,
+	SifaHonor,
+	SifaCourse,
+	SifaPublication
 } from './types';
 
 // Export fetch functions
@@ -63,7 +69,13 @@ export {
 	fetchSifaProjects,
 	fetchSifaLanguages,
 	fetchSifaCertifications,
-	fetchSifaExternalAccounts
+	fetchSifaExternalAccounts,
+	fetchSifaPositions,
+	fetchSifaEducation,
+	fetchSifaVolunteering,
+	fetchSifaHonors,
+	fetchSifaCourses,
+	fetchSifaPublications
 } from './fetch';
 
 // Export Standard.site document functions
