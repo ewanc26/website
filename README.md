@@ -2,7 +2,7 @@
 
 Personal website powered by AT Protocol, built with SvelteKit 2 and Tailwind CSS 4.
 
-**Version**: 11.7.1
+**Version**: 11.7.2
 
 Live at [ewancroft.uk](https://ewancroft.uk).
 
