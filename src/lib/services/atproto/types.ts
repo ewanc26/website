@@ -34,5 +34,12 @@ export type {
 	StandardSiteDocument,
 	StandardSiteDocumentsData,
 	StandardSiteBasicTheme,
-	StandardSiteThemeColor
+	StandardSiteThemeColor,
+	SifaProfileData,
+	SifaSkill,
+	SifaProject,
+	SifaLanguage,
+	SifaCertification,
+	SifaExternalAccount,
+	SifaLocation
 } from '@ewanc26/atproto';

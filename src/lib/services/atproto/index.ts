@@ -39,7 +39,14 @@ export type {
 	StandardSiteDocument,
 	StandardSiteDocumentsData,
 	StandardSiteBasicTheme,
-	StandardSiteThemeColor
+	StandardSiteThemeColor,
+	SifaProfileData,
+	SifaSkill,
+	SifaProject,
+	SifaLanguage,
+	SifaCertification,
+	SifaExternalAccount,
+	SifaLocation
 } from './types';
 
 // Export fetch functions
@@ -50,7 +57,13 @@ export {
 	fetchMusicStatus,
 	fetchKibunStatus,
 	fetchTangledRepos,
-	fetchRecentPopfeedReviews
+	fetchRecentPopfeedReviews,
+	fetchSifaProfile,
+	fetchSifaSkills,
+	fetchSifaProjects,
+	fetchSifaLanguages,
+	fetchSifaCertifications,
+	fetchSifaExternalAccounts
 } from './fetch';
 
 // Export Standard.site document functions
