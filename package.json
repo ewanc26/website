@@ -1,7 +1,7 @@
 {
 	"name": "website",
 	"private": true,
-	"version": "11.7.0",
+	"version": "11.7.1",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
@@ -38,7 +38,7 @@
 	},
 	"dependencies": {
 		"@atproto/api": "^0.18.21",
-		"@ewanc26/atproto": "link:../pkgs/packages/atproto",
+		"@ewanc26/atproto": "^0.2.9",
 		"@ewanc26/noise-avatar": "^0.2.3",
 		"@ewanc26/og": "^0.1.8",
 		"@ewanc26/supporters": "^0.3.0",
