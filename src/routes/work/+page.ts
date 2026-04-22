@@ -14,6 +14,9 @@ import {
 	fetchSifaCourses,
 	fetchSifaPublications
 } from '$lib/services/atproto';
+import { fetchGitHubData, fetchContributions } from '$lib/services/github';
+
+const GITHUB_USERNAME = 'ewanc26';
 
 export const load: PageLoad = async ({ fetch }) => {
 	const [
@@ -28,7 +31,9 @@ export const load: PageLoad = async ({ fetch }) => {
 		volunteering,
 		honors,
 		courses,
-		publications
+		publications,
+		githubData,
+		contributions
 	] = await Promise.all([
 		fetchSifaProfile(fetch),
 		fetchSifaSkills(fetch),
@@ -41,7 +46,9 @@ export const load: PageLoad = async ({ fetch }) => {
 		fetchSifaVolunteering(fetch),
 		fetchSifaHonors(fetch),
 		fetchSifaCourses(fetch),
-		fetchSifaPublications(fetch)
+		fetchSifaPublications(fetch),
+		fetchGitHubData(GITHUB_USERNAME, fetch),
+		fetchContributions(GITHUB_USERNAME, fetch, 90)
 	]);
 
 	const meta = createDynamicSiteMeta({
@@ -62,6 +69,8 @@ export const load: PageLoad = async ({ fetch }) => {
 		honors,
 		courses,
 		publications,
+		github: githubData,
+		contributions,
 		meta
 	};
 };

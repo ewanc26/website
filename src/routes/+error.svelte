@@ -2,7 +2,14 @@
 	import { page } from '$app/stores';
 	import { MetaTags } from '$lib/components/seo';
 	import { Card } from '$lib/components/ui';
-	import { Home, RefreshCw, FileQuestion, Shield, ServerCrash, AlertTriangle } from '@lucide/svelte';
+	import {
+		Home,
+		RefreshCw,
+		FileQuestion,
+		Shield,
+		ServerCrash,
+		AlertTriangle
+	} from '@lucide/svelte';
 
 	// Get error details from page store
 	const status = $derived($page.status);
@@ -29,9 +36,10 @@
 				return {
 					icon: Shield,
 					title: 'Access Denied',
-					description: 'You don\'t have permission to access this resource. This could be due to authentication requirements or restricted access.',
+					description:
+						"You don't have permission to access this resource. This could be due to authentication requirements or restricted access.",
 					suggestions: [
-						'Make sure you\'re logged in if required',
+						"Make sure you're logged in if required",
 						'The content may be private or restricted',
 						'Contact the site owner if you believe this is an error'
 					],
@@ -42,26 +50,38 @@
 				return {
 					icon: ServerCrash,
 					title: 'Something Went Wrong',
-					description: 'An internal error occurred while processing your request. This is usually temporary.',
+					description:
+						'An internal error occurred while processing your request. This is usually temporary.',
 					suggestions: [
 						'Try refreshing the page',
 						'Clear your browser cache',
 						'The issue has been logged and will be investigated'
 					],
-					primaryAction: { label: 'Try Again', href: null, icon: RefreshCw, action: () => window.location.reload() },
+					primaryAction: {
+						label: 'Try Again',
+						href: null,
+						icon: RefreshCw,
+						action: () => window.location.reload()
+					},
 					secondaryAction: { label: 'Go to Homepage', href: '/', icon: Home }
 				};
 			case 503:
 				return {
 					icon: AlertTriangle,
 					title: 'Service Temporarily Unavailable',
-					description: 'The server is currently unavailable, usually due to maintenance or high load. Please try again shortly.',
+					description:
+						'The server is currently unavailable, usually due to maintenance or high load. Please try again shortly.',
 					suggestions: [
 						'Wait a few moments and try again',
 						'The site may be undergoing maintenance',
 						'Check back in a minute or two'
 					],
-					primaryAction: { label: 'Try Again', href: null, icon: RefreshCw, action: () => window.location.reload() },
+					primaryAction: {
+						label: 'Try Again',
+						href: null,
+						icon: RefreshCw,
+						action: () => window.location.reload()
+					},
 					secondaryAction: { label: 'Go to Homepage', href: '/', icon: Home }
 				};
 			default:
@@ -75,7 +95,12 @@
 						'If the problem persists, please contact support'
 					],
 					primaryAction: { label: 'Go to Homepage', href: '/', icon: Home },
-					secondaryAction: { label: 'Try Again', href: null, icon: RefreshCw, action: () => window.location.reload() }
+					secondaryAction: {
+						label: 'Try Again',
+						href: null,
+						icon: RefreshCw,
+						action: () => window.location.reload()
+					}
 				};
 		}
 	});
@@ -98,7 +123,9 @@
 			<div class="text-center">
 				<!-- Icon with status code -->
 				<div class="mb-6 flex flex-col items-center">
-					<div class="mb-4 rounded-full bg-primary-100 p-6 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400">
+					<div
+						class="mb-4 rounded-full bg-primary-100 p-6 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400"
+					>
 						{#if errorConfig.icon === FileQuestion}
 							<FileQuestion class="h-16 w-16" />
 						{:else if errorConfig.icon === Shield}
@@ -127,9 +154,7 @@
 				<!-- Show additional error message if available and meaningful -->
 				{#if errorMessage && !errorMessage.includes('Internal Error') && status !== 404}
 					<div class="mb-6 rounded-lg bg-red-50 p-4 text-left dark:bg-red-900/20">
-						<p class="text-sm font-medium text-red-800 dark:text-red-200">
-							Error details:
-						</p>
+						<p class="text-sm font-medium text-red-800 dark:text-red-200">Error details:</p>
 						<p class="mt-1 font-mono text-sm text-red-700 dark:text-red-300">
 							{errorMessage}
 						</p>
@@ -139,9 +164,7 @@
 				<!-- Suggestions -->
 				{#if errorConfig.suggestions.length > 0}
 					<div class="mb-8 text-left">
-						<p class="mb-3 text-sm font-medium text-ink-600 dark:text-ink-400">
-							What you can try:
-						</p>
+						<p class="mb-3 text-sm font-medium text-ink-600 dark:text-ink-400">What you can try:</p>
 						<ul class="space-y-2">
 							{#each errorConfig.suggestions as suggestion}
 								<li class="flex items-start gap-2 text-sm text-ink-700 dark:text-ink-300">
@@ -226,10 +249,10 @@
 								Archive
 							</a>
 							<a
-								href="/github"
+								href="/work"
 								class="rounded-lg bg-canvas-100 px-4 py-2 text-sm text-ink-700 transition-colors hover:bg-canvas-200 dark:bg-canvas-800 dark:text-ink-300 dark:hover:bg-canvas-700"
 							>
-								GitHub
+								Work
 							</a>
 							<a
 								href="/site/meta"

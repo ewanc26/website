@@ -44,17 +44,21 @@ export const defaultSiteMeta: SiteMetadata = {
  * ```
  */
 export interface DynamicSiteMetaOptions {
-	title: string
-	description?: string
-	template?: 'default' | 'blog' | 'profile'
-	url?: string
+	title: string;
+	description?: string;
+	template?: 'default' | 'blog' | 'profile';
+	url?: string;
 }
 
 export function createDynamicSiteMeta(options: DynamicSiteMetaOptions): SiteMetadata {
-	const siteUrl = options.url || PUBLIC_SITE_URL
+	const siteUrl = options.url || PUBLIC_SITE_URL;
+	const title =
+		options.title === PUBLIC_SITE_TITLE
+			? PUBLIC_SITE_TITLE
+			: `${options.title} | ${PUBLIC_SITE_TITLE}`;
 
 	return {
-		title: options.title,
+		title,
 		description: options.description || PUBLIC_SITE_DESCRIPTION,
 		keywords: PUBLIC_SITE_KEYWORDS,
 		url: siteUrl,
@@ -65,5 +69,5 @@ export function createDynamicSiteMeta(options: DynamicSiteMetaOptions): SiteMeta
 		})}`,
 		imageWidth: 1200,
 		imageHeight: 630
-	}
+	};
 }
