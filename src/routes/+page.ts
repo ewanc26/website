@@ -1,5 +1,6 @@
 import type { PageLoad } from './$types';
 import { createDynamicSiteMeta } from '$lib/helper/siteMeta';
+import { PUBLIC_SITE_TITLE } from '$env/static/public';
 import {
 	fetchMusicStatus,
 	fetchKibunStatus,
@@ -13,19 +14,20 @@ import {
 export const load: PageLoad = async ({ fetch, parent }) => {
 	const { profile } = await parent();
 
-	const [musicStatus, kibunStatus, latestPost, tangledRepos, documents, supporters, popfeedReview] = await Promise.allSettled([
-		fetchMusicStatus(fetch),
-		fetchKibunStatus(fetch),
-		fetchLatestBlueskyPost(fetch),
-		fetchTangledRepos(fetch),
-		fetchRecentDocuments(5, fetch),
-		fetchAllSupporters(),
-		fetchRecentPopfeedReviews(fetch)
-	]);
+	const [musicStatus, kibunStatus, latestPost, tangledRepos, documents, supporters, popfeedReview] =
+		await Promise.allSettled([
+			fetchMusicStatus(fetch),
+			fetchKibunStatus(fetch),
+			fetchLatestBlueskyPost(fetch),
+			fetchTangledRepos(fetch),
+			fetchRecentDocuments(5, fetch),
+			fetchAllSupporters(),
+			fetchRecentPopfeedReviews(fetch)
+		]);
 
 	// Create page metadata with dynamic OG
 	const meta = createDynamicSiteMeta({
-		title: "Ewan's Corner",
+		title: PUBLIC_SITE_TITLE,
 		description: 'personal site, blog, and digital garden'
 	});
 
