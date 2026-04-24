@@ -6,6 +6,8 @@ Personal website powered by AT Protocol, built with SvelteKit 2 and Tailwind CSS
 
 Live at [ewancroft.uk](https://ewancroft.uk).
 
+> 🧶 Also available on [Tangled](https://tangled.org/ewancroft.uk/website)
+
 ## Documentation
 
 Full documentation is available at [docs.ewancroft.uk](https://docs.ewancroft.uk).
