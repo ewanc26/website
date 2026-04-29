@@ -5,7 +5,6 @@ import {
 	fetchMusicStatus,
 	fetchKibunStatus,
 	fetchLatestBlueskyPost,
-	fetchTangledRepos,
 	fetchRecentDocuments,
 	fetchAllSupporters,
 	fetchRecentPopfeedReviews
@@ -14,12 +13,11 @@ import {
 export const load: PageLoad = async ({ fetch, parent }) => {
 	const { profile } = await parent();
 
-	const [musicStatus, kibunStatus, latestPost, tangledRepos, documents, supporters, popfeedReview] =
+	const [musicStatus, kibunStatus, latestPost, documents, supporters, popfeedReview] =
 		await Promise.allSettled([
 			fetchMusicStatus(fetch),
 			fetchKibunStatus(fetch),
 			fetchLatestBlueskyPost(fetch),
-			fetchTangledRepos(fetch),
 			fetchRecentDocuments(5, fetch),
 			fetchAllSupporters(),
 			fetchRecentPopfeedReviews(fetch)
@@ -37,7 +35,6 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 		musicStatus: musicStatus.status === 'fulfilled' ? musicStatus.value : null,
 		kibunStatus: kibunStatus.status === 'fulfilled' ? kibunStatus.value : null,
 		latestPost: latestPost.status === 'fulfilled' ? latestPost.value : null,
-		tangledRepos: tangledRepos.status === 'fulfilled' ? tangledRepos.value : null,
 		documents: documents.status === 'fulfilled' ? documents.value : [],
 		supporters: supporters.status === 'fulfilled' ? supporters.value : [],
 		popfeedReviews: popfeedReview.status === 'fulfilled' ? popfeedReview.value : []
