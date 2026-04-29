@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { Header, Footer, ScrollToTop } from '$lib/components/layout';
+	import { Header, Footer, ScrollToTop, NavigationProgress } from '$lib/components/layout';
 	import HappyMacEasterEgg from '$lib/components/HappyMacEasterEgg.svelte';
 	import { type SiteMetadata } from '$lib/helper/siteMeta';
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
@@ -43,8 +43,6 @@
 		};
 	});
 
-
-
 	// Compute fediverse:creator from AP instance and username
 	const fediverseCreator = $derived.by(() => {
 		if (!data.apInstanceUrl || !data.apUsername) return null;
@@ -85,11 +83,10 @@
 	<link rel="manifest" href="/favicon/site.webmanifest" />
 </svelte:head>
 
-
-
 <div
 	class="flex min-h-screen flex-col overflow-x-hidden bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50"
 >
+	<NavigationProgress />
 	<Header profile={data.profile} />
 
 	<main id="main-content" class="container mx-auto grow px-4 py-8" tabindex="-1">
