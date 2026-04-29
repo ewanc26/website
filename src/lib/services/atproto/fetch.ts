@@ -7,7 +7,6 @@ import {
 	fetchLinks as _fetchLinks,
 	fetchMusicStatus as _fetchMusicStatus,
 	fetchKibunStatus as _fetchKibunStatus,
-	fetchTangledRepos as _fetchTangledRepos,
 	fetchRecentPopfeedReviews as _fetchRecentPopfeedReviews,
 	fetchSifaProfile as _fetchSifaProfile,
 	fetchSifaSkills as _fetchSifaSkills,
@@ -41,10 +40,6 @@ export async function fetchMusicStatus(fetchFn?: typeof fetch) {
 
 export async function fetchKibunStatus(fetchFn?: typeof fetch) {
 	return _fetchKibunStatus(PUBLIC_ATPROTO_DID, fetchFn);
-}
-
-export async function fetchTangledRepos(fetchFn?: typeof fetch) {
-	return _fetchTangledRepos(PUBLIC_ATPROTO_DID, fetchFn);
 }
 
 export async function fetchRecentPopfeedReviews(fetchFn?: typeof fetch) {

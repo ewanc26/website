@@ -15,15 +15,10 @@ export class ATProtoCache {
 		if (key.startsWith('links:')) return CACHE_TTL.LINKS;
 		if (key.startsWith('music-status:')) return CACHE_TTL.MUSIC_STATUS;
 		if (key.startsWith('kibun-status:')) return CACHE_TTL.KIBUN_STATUS;
-		if (key.startsWith('tangled:')) return CACHE_TTL.TANGLED_REPOS;
 		if (key.startsWith('blog-posts:') || key.startsWith('blogposts:')) return CACHE_TTL.BLOG_POSTS;
-		if (
-			key.startsWith('publications:') ||
-			key.startsWith('standard-site:publications:')
-		)
+		if (key.startsWith('publications:') || key.startsWith('standard-site:publications:'))
 			return CACHE_TTL.PUBLICATIONS;
-		if (key.startsWith('post:') || key.startsWith('blueskypost:'))
-			return CACHE_TTL.INDIVIDUAL_POST;
+		if (key.startsWith('post:') || key.startsWith('blueskypost:')) return CACHE_TTL.INDIVIDUAL_POST;
 		if (key.startsWith('identity:')) return CACHE_TTL.IDENTITY;
 		return 30 * 60 * 1000;
 	}
