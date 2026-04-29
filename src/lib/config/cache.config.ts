@@ -29,9 +29,6 @@ const DEFAULT_TTL = {
 	// Kibun status: 15 minutes (changes occasionally)
 	KIBUN_STATUS: dev ? 2 : 15,
 
-	// Tangled repos: 60 minutes (changes occasionally)
-	TANGLED_REPOS: dev ? 5 : 60,
-
 	// Blog posts: 30 minutes (balance between freshness and performance)
 	BLOG_POSTS: dev ? 5 : 30,
 
@@ -55,7 +52,6 @@ export const CACHE_TTL = {
 	LINKS: DEFAULT_TTL.LINKS * 60 * 1000,
 	MUSIC_STATUS: DEFAULT_TTL.MUSIC_STATUS * 60 * 1000,
 	KIBUN_STATUS: DEFAULT_TTL.KIBUN_STATUS * 60 * 1000,
-	TANGLED_REPOS: DEFAULT_TTL.TANGLED_REPOS * 60 * 1000,
 	BLOG_POSTS: DEFAULT_TTL.BLOG_POSTS * 60 * 1000,
 	PUBLICATIONS: DEFAULT_TTL.PUBLICATIONS * 60 * 1000,
 	INDIVIDUAL_POST: DEFAULT_TTL.INDIVIDUAL_POST * 60 * 1000,

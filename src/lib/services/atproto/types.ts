@@ -27,8 +27,6 @@ export type {
 	MusicStatusData,
 	MusicArtist,
 	KibunStatusData,
-	TangledRepo,
-	TangledReposData,
 	StandardSitePublication,
 	StandardSitePublicationsData,
 	StandardSiteDocument,
