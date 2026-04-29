@@ -15,8 +15,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	let payload;
 	try {
 		payload = await parseWebhook(request, {
-			secret: env.KOFI_VERIFICATION_TOKEN,
-			testToken: env.KOFI_TEST_TOKEN
+			secret: env.KOFI_VERIFICATION_TOKEN
 		});
 		console.log('[webhook] parsed payload', {
 			type: payload.type,
@@ -40,17 +39,11 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 
 	try {
-		await appendEvent(
-			payload.from_name,
-			payload.type,
-			payload.tier_name,
-			payload.timestamp,
-			{
-				isSubscriptionPayment: payload.is_subscription_payment,
-				isFirstSubscriptionPayment: payload.is_first_subscription_payment,
-				shopItems: payload.shop_items?.map((i) => i.direct_link_code)
-			}
-		);
+		await appendEvent(payload.from_name, payload.type, payload.tier_name, payload.timestamp, {
+			isSubscriptionPayment: payload.is_subscription_payment,
+			isFirstSubscriptionPayment: payload.is_first_subscription_payment,
+			shopItems: payload.shop_items?.map((i) => i.direct_link_code)
+		});
 		console.log('[webhook] appendEvent success', { from: payload.from_name, type: payload.type });
 	} catch (err) {
 		console.error('[webhook] appendEvent failed', err);
