@@ -7,7 +7,6 @@
 		BlueskyPostCard,
 		MusicStatusCard,
 		KibunStatusCard,
-		TangledRepoCard,
 		SupportersCard,
 		PopfeedCard
 	} from '$lib/components/layout/main/card';
@@ -19,19 +18,6 @@
 <MetaTags meta={data.meta} siteMeta={data.meta} />
 
 <div class="mx-auto max-w-6xl">
-	<div class="mb-8 text-center">
-		<h1
-			class="overflow-wrap-anywhere mb-4 text-4xl font-bold wrap-break-word text-ink-900 md:text-5xl dark:text-ink-50"
-		>
-			Welcome to {data.meta.title}
-		</h1>
-		<p
-			class="overflow-wrap-anywhere mx-auto max-w-2xl text-lg wrap-break-word text-ink-700 dark:text-ink-200"
-		>
-			{data.meta.description}
-		</p>
-	</div>
-
 	<!-- Masonry-style grid using Tailwind's column utilities -->
 	<div class="columns-1 gap-6 lg:columns-2">
 		<div class="mb-6 break-inside-avoid">
@@ -51,9 +37,6 @@
 		</div>
 		<div class="mb-6 break-inside-avoid">
 			<PostCard documents={data.documents} />
-		</div>
-		<div class="mb-6 break-inside-avoid">
-			<TangledRepoCard repos={data.tangledRepos} profile={data.profile} />
 		</div>
 		{#if data.supporters.length > 0}
 			<div class="mb-6 break-inside-avoid">
