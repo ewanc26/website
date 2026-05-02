@@ -10,17 +10,40 @@ import {
 	fetchRecentPopfeedReviews
 } from '$lib/services/atproto';
 
+/**
+ * Wraps a promise with a timeout. Returns null on timeout or rejection,
+ * so it's safe to use with Promise.allSettled.
+ */
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T | null> {
+	return new Promise((resolve) => {
+		const timer = setTimeout(() => resolve(null), ms);
+		promise.then(
+			(value) => {
+				clearTimeout(timer);
+				resolve(value);
+			},
+			() => {
+				clearTimeout(timer);
+				resolve(null);
+			}
+		);
+	});
+}
+
+/** Per-request timeout — keeps Vercel serverless functions under the 10s limit. */
+const REQUEST_TIMEOUT = 8_000;
+
 export const load: PageLoad = async ({ fetch, parent }) => {
 	const { profile } = await parent();
 
 	const [musicStatus, kibunStatus, latestPost, documents, supporters, popfeedReview] =
 		await Promise.allSettled([
-			fetchMusicStatus(fetch),
-			fetchKibunStatus(fetch),
-			fetchLatestBlueskyPost(fetch),
-			fetchRecentDocuments(5, fetch),
-			fetchAllSupporters(),
-			fetchRecentPopfeedReviews(fetch)
+			withTimeout(fetchMusicStatus(fetch), REQUEST_TIMEOUT),
+			withTimeout(fetchKibunStatus(fetch), REQUEST_TIMEOUT),
+			withTimeout(fetchLatestBlueskyPost(fetch), REQUEST_TIMEOUT),
+			withTimeout(fetchRecentDocuments(5, fetch), REQUEST_TIMEOUT),
+			withTimeout(fetchAllSupporters(), REQUEST_TIMEOUT),
+			withTimeout(fetchRecentPopfeedReviews(fetch), REQUEST_TIMEOUT)
 		]);
 
 	// Create page metadata with dynamic OG
