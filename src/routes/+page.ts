@@ -59,7 +59,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 		kibunStatus: kibunStatus.status === 'fulfilled' ? kibunStatus.value : null,
 		latestPost: latestPost.status === 'fulfilled' ? latestPost.value : null,
 		documents: documents.status === 'fulfilled' ? documents.value : [],
-		supporters: supporters.status === 'fulfilled' ? supporters.value : [],
+		supporters: supporters.status === 'fulfilled' ? (supporters.value ?? []) : [],
 		popfeedReviews: popfeedReview.status === 'fulfilled' ? popfeedReview.value : []
 	};
 };
