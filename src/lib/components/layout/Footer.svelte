@@ -33,6 +33,18 @@
 		}
 	});
 
+	// XMR
+	const XMR_ADDRESS =
+		'44yH2LpkSsrSmWQC3SVmrABw2MUhNjNCE365hG7Rr7veJYNPBD1f6dNgXNr2nc6ZcP3jEyj9vXnqmg7VBBPeS8uwMhJ4yXW';
+	let xmrCopied = $state(false);
+	let showXmrQr = $state(false);
+
+	async function copyXmrAddress() {
+		await navigator.clipboard.writeText(XMR_ADDRESS);
+		xmrCopied = true;
+		setTimeout(() => (xmrCopied = false), 2000);
+	}
+
 	// Fetch data client-side for non-blocking layout
 	onMount(async () => {
 		try {
@@ -139,6 +151,46 @@
 					>
 						#{__GIT_COMMIT__}
 					</a>
+				</div>
+
+				<!-- Line 4: XMR donation -->
+				<div
+					class="relative flex items-center justify-center gap-2 text-sm text-ink-700 md:justify-start dark:text-ink-300"
+				>
+					<span class="font-mono text-xs font-semibold opacity-70">XMR</span>
+					<span class="hidden font-mono text-xs opacity-60 sm:inline" aria-label="Monero address">
+						{XMR_ADDRESS.slice(0, 8)}…{XMR_ADDRESS.slice(-6)}
+					</span>
+					<button
+						type="button"
+						onclick={copyXmrAddress}
+						class="text-xs underline transition-colors hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
+						aria-label="Copy Monero address to clipboard"
+					>
+						{xmrCopied ? 'copied!' : 'copy'}
+					</button>
+					<button
+						type="button"
+						onclick={() => (showXmrQr = !showXmrQr)}
+						class="text-xs underline transition-colors hover:text-primary-500 focus-visible:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:hover:text-primary-400 dark:focus-visible:text-primary-400"
+						aria-label="{showXmrQr ? 'Hide' : 'Show'} Monero QR code"
+					>
+						{showXmrQr ? 'hide qr' : 'qr'}
+					</button>
+
+					{#if showXmrQr}
+						<div
+							class="absolute bottom-full left-0 mb-2 rounded-lg border border-canvas-200 bg-white p-2 shadow-lg dark:border-canvas-700 dark:bg-canvas-900"
+						>
+							<img
+								src="/xmr-qr.png"
+								alt="Monero address QR code"
+								width="160"
+								height="160"
+								class="block"
+							/>
+						</div>
+					{/if}
 				</div>
 			</div>
 
