@@ -46,6 +46,7 @@
 		"@ewanc26/ui": "^0.3.8",
 		"@ewanc26/utils": "^0.1.5",
 		"@lucide/svelte": "^0.554.0",
-		"hls.js": "^1.6.15"
+		"hls.js": "^1.6.15",
+		"qrcode-generator": "^2.0.4"
 	}
 }
