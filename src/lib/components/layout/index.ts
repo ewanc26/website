@@ -1,6 +1,6 @@
 // App-specific layout components stay local.
 export { default as Header } from './Header.svelte';
-export { default as Footer } from './Footer.svelte';
+export { default as Footer } from './footer/Footer.svelte';
 export { default as ColorThemeToggle } from './ColorThemeToggle.svelte';
 
 // DynamicLinks stays local — it uses the DID-bound service wrapper.
