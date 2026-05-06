@@ -35,6 +35,12 @@
 			coin: 'Ethereum',
 			scheme: 'ethereum',
 			address: '0x4B8c9d62ff89bc7199a197C55dac2abef1808B77'
+		},
+		{
+			label: 'BTC',
+			coin: 'Bitcoin',
+			scheme: 'bitcoin',
+			address: 'bc1qp3l6e9pjc5jan7ulpd58av8wfdtyhrchj84clh'
 		}
 	]);
 
