@@ -33,7 +33,10 @@
 
 {#if showBar}
 	<div
-		class="fixed top-0 left-0 z-[60] h-0.5 bg-primary-500 transition-[width] duration-300 ease-out dark:bg-primary-400"
+		class="fixed top-0 left-0 z-[60] h-0.5 transition-[width] duration-300 ease-out dark:bg-primary-400
+			{isLoading
+			? 'animate-progress-shimmer bg-gradient-to-r from-primary-500 via-primary-300 to-primary-500 dark:from-primary-400 dark:via-primary-200 dark:to-primary-400'
+			: 'bg-primary-500 dark:bg-primary-400'}"
 		class:opacity-0={fadeOut}
 		class:transition-opacity={fadeOut}
 		style="width: {progress}%"
