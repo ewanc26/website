@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Palette, Check } from '@lucide/svelte';
+	import { Palette, Check, Sparkles } from '@lucide/svelte';
 	import { colorTheme, type ColorTheme } from '$lib/stores/colorTheme';
 	import { colorThemeDropdownOpen } from '$lib/stores/dropdownState';
 	import {
@@ -12,6 +12,7 @@
 	let isOpen = $state(false);
 	let mounted = $state(false);
 	let currentTheme = $state<ColorTheme>('slate');
+	let isSeasonal = $state(false);
 
 	// Get themes organized by category
 	const themesByCategory = getThemesByCategory();
@@ -23,6 +24,7 @@
 		const unsubscribe = colorTheme.subscribe((state) => {
 			currentTheme = state.current;
 			mounted = state.mounted;
+			isSeasonal = state.isSeasonal;
 		});
 
 		// Subscribe to dropdown state
@@ -65,6 +67,11 @@
 		colorTheme.setTheme(theme);
 		colorThemeDropdownOpen.set(false);
 	}
+
+	function resetToSeasonal() {
+		colorTheme.resetToSeasonal();
+		colorThemeDropdownOpen.set(false);
+	}
 </script>
 
 <div class="color-theme-dropdown relative">
@@ -95,6 +102,15 @@
 				<div class="mb-2 px-3 py-2 text-xs font-semibold text-ink-600 uppercase dark:text-ink-400">
 					Colour Themes
 				</div>
+				{#if isSeasonal}
+					<button
+						onclick={resetToSeasonal}
+						class="mb-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-ink-500 transition-colors hover:bg-canvas-100 dark:text-ink-500 dark:hover:bg-canvas-900"
+					>
+						<Sparkles class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+						Currently seasonal — click to keep
+					</button>
+				{/if}
 
 				{#each Object.entries(themesByCategory) as [category, categoryThemes]}
 					<div class="mb-3">
