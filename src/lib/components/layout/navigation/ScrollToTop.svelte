@@ -27,11 +27,13 @@
 
 <svelte:window bind:scrollY />
 
-<!-- just Tailwind fade via opacity -->
+<!-- Tailwind fade + slide via opacity and transform -->
 <div
-	class="fixed bottom-8 left-8 z-50 transition-opacity duration-300 motion-reduce:transition-none sm:bottom-6 sm:left-6"
+	class="fixed bottom-8 left-8 z-50 transition-all duration-300 motion-reduce:transition-none sm:bottom-6 sm:left-6"
 	class:opacity-100={isVisible}
+	class:translate-y-0={isVisible}
 	class:opacity-0={!isVisible}
+	class:translate-y-1={!isVisible}
 >
 	<button
 		on:click={scrollToTop}
