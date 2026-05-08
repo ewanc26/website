@@ -28,14 +28,15 @@
 	let { data } = $props();
 
 	// Mutable copies for firehose live updates — initialised from SSR data
-	// Using $state with a function to avoid state_referenced_locally warning
-	let kibunStatus = $state<PageData['kibunStatus']>(() => data.kibunStatus);
-	let musicStatus = $state<PageData['musicStatus']>(() => data.musicStatus);
-	let latestPost = $state<PageData['latestPost']>(() => data.latestPost);
-	let documents = $state<PageData['documents']>(() => data.documents);
-	let supporters = $state<PageData['supporters']>(() => data.supporters);
-	let popfeedReviews = $state<PageData['popfeedReviews']>(() => data.popfeedReviews);
-	let profile = $state<PageData['profile']>(() => data.profile);
+	// (state_referenced_locally warnings are intentional: we need mutable copies
+	// that firehose can update independently of the prop)
+	let kibunStatus = $state<PageData['kibunStatus']>(data.kibunStatus);
+	let musicStatus = $state<PageData['musicStatus']>(data.musicStatus);
+	let latestPost = $state<PageData['latestPost']>(data.latestPost);
+	let documents = $state<PageData['documents']>(data.documents);
+	let supporters = $state<PageData['supporters']>(data.supporters);
+	let popfeedReviews = $state<PageData['popfeedReviews']>(data.popfeedReviews);
+	let profile = $state<PageData['profile']>(data.profile);
 
 	// Live-update pulse indicators — briefly true when firehose updates a card
 	let kibunPulse = $state(false);
