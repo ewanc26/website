@@ -26,6 +26,21 @@
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
 	import { formatLocalizedDate, getUserLocale } from '$lib/utils/locale';
 
+	// Scroll-reveal action: adds .animate-entrance when element enters viewport
+	function scrollReveal(node: HTMLElement) {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					node.classList.add('animate-entrance');
+					observer.unobserve(node);
+				}
+			},
+			{ threshold: 0.1 }
+		);
+		observer.observe(node);
+		return { destroy: () => observer.disconnect() };
+	}
+
 	let { data }: { data: PageData } = $props();
 
 	const locale = getUserLocale();
@@ -233,7 +248,7 @@
 
 	<!-- Positions Section -->
 	{#if positions.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Experience</h2>
 			<div class="space-y-4">
 				{#each positions as position}
@@ -293,7 +308,7 @@
 
 	<!-- Education Section -->
 	{#if education.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Education</h2>
 			<div class="space-y-4">
 				{#each education as edu}
@@ -334,7 +349,7 @@
 
 	<!-- Skills Section -->
 	{#if skills.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Skills</h2>
 			{#each Object.entries(skillsByCategory) as [category, categorySkills]}
 				<div class="mb-6">
@@ -357,7 +372,7 @@
 
 	<!-- Projects Section -->
 	{#if projects.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Projects</h2>
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 				{#each projects as project}
@@ -401,7 +416,7 @@
 
 	<!-- Volunteering Section -->
 	{#if volunteering.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Volunteering</h2>
 			<div class="space-y-4">
 				{#each volunteering as vol}
@@ -441,7 +456,7 @@
 
 	<!-- Publications Section -->
 	{#if publications.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Publications</h2>
 			<div class="space-y-4">
 				{#each publications as pub}
@@ -485,7 +500,7 @@
 
 	<!-- Honors Section -->
 	{#if honors.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Honors & Awards</h2>
 			<div class="space-y-4">
 				{#each honors as honor}
@@ -522,7 +537,7 @@
 
 	<!-- Certifications Section -->
 	{#if certifications.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Certifications</h2>
 			<div class="space-y-4">
 				{#each certifications as cert}
@@ -556,7 +571,7 @@
 
 	<!-- Courses Section -->
 	{#if courses.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Courses</h2>
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 				{#each courses as course}
@@ -588,7 +603,7 @@
 
 	<!-- Languages Section -->
 	{#if languages.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Languages</h2>
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 				{#each languages as lang}
@@ -618,7 +633,7 @@
 
 	<!-- External Accounts Section -->
 	{#if externalAccounts.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Links</h2>
 			<div class="flex flex-wrap gap-3">
 				{#each externalAccounts as account}
@@ -652,7 +667,7 @@
 
 	<!-- GitHub Contribution Graph -->
 	{#if contributions}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">GitHub Activity</h2>
 			<Card variant="elevated" padding="lg">
 				{#snippet children()}
@@ -767,7 +782,7 @@
 
 	<!-- Notable Repositories -->
 	{#if github?.repos && github.repos.length > 0}
-		<section>
+		<section use:scrollReveal>
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Notable Repositories</h2>
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 				{#each github.repos as repo}
