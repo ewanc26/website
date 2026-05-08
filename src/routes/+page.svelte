@@ -128,31 +128,31 @@
 <div class="mx-auto max-w-6xl">
 	<!-- Masonry-style grid using Tailwind's column utilities -->
 	<div class="columns-1 gap-6 lg:columns-2">
-		<div class="mb-6 break-inside-avoid">
+		<div class="animate-entrance mb-6 break-inside-avoid" style="animation-delay: 0ms">
 			<ProfileCard {profile} />
 		</div>
-		<div class="mb-6 break-inside-avoid">
+		<div class="animate-entrance mb-6 break-inside-avoid" style="animation-delay: 80ms">
 			<KibunStatusCard {kibunStatus} />
 		</div>
-		<div class="mb-6 break-inside-avoid">
+		<div class="animate-entrance mb-6 break-inside-avoid" style="animation-delay: 160ms">
 			<MusicStatusCard {musicStatus} />
 		</div>
-		<div class="mb-6 break-inside-avoid">
+		<div class="animate-entrance mb-6 break-inside-avoid" style="animation-delay: 240ms">
 			<BlueskyPostCard post={latestPost} />
 		</div>
-		<div class="mb-6 break-inside-avoid">
+		<div class="animate-entrance mb-6 break-inside-avoid" style="animation-delay: 320ms">
 			<DynamicLinks />
 		</div>
-		<div class="mb-6 break-inside-avoid">
+		<div class="animate-entrance mb-6 break-inside-avoid" style="animation-delay: 400ms">
 			<PostCard {documents} />
 		</div>
 		{#if supporters.length > 0}
-			<div class="mb-6 break-inside-avoid">
+			<div class="animate-entrance mb-6 break-inside-avoid" style="animation-delay: 480ms">
 				<SupportersCard {supporters} />
 			</div>
 		{/if}
 		{#if popfeedReviews.length > 0}
-			<div class="mb-6 break-inside-avoid">
+			<div class="animate-entrance mb-6 break-inside-avoid" style="animation-delay: 560ms">
 				<PopfeedCard reviews={popfeedReviews} handle={profile?.handle} />
 			</div>
 		{/if}
