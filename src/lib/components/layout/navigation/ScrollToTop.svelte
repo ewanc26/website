@@ -29,7 +29,7 @@
 
 <!-- Tailwind fade + slide via opacity and transform -->
 <div
-	class="fixed right-8 bottom-8 z-50 transition-all duration-300 motion-reduce:transition-none sm:right-6 sm:bottom-6"
+	class="fixed right-8 bottom-24 z-50 transition-all duration-300 motion-reduce:transition-none sm:right-6 sm:bottom-24"
 	class:opacity-100={isVisible}
 	class:translate-y-0={isVisible}
 	class:opacity-0={!isVisible}
