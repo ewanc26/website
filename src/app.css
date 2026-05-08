@@ -269,4 +269,37 @@
 	}
 }
 
+/* View Transitions — smooth crossfade between pages */
+::view-transition-old(root) {
+	animation: 180ms var(--ease-out-quart) both vt-fade-out;
+}
+
+::view-transition-new(root) {
+	animation: 220ms var(--ease-out-expo) both vt-fade-in;
+}
+
+/* Keep header/footer stable during transitions */
+::view-transition-group(header),
+::view-transition-group(footer) {
+	animation-duration: 0s;
+}
+
+@keyframes vt-fade-out {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes vt-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
 @plugin '@tailwindcss/typography';
