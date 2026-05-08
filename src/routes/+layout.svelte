@@ -6,18 +6,31 @@
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 	import type { Snippet } from 'svelte';
 	import { onMount } from 'svelte';
-	import { afterNavigate, onNavigate } from '$app/navigation';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { wolfMode } from '$lib/stores/wolfMode';
 
-	// Enable View Transitions API for smooth crossfade between pages
-	onNavigate((navigation) => {
+	// View Transitions API — smooth crossfade between pages
+	let viewTransitionResolve: (() => void) | null = null;
+
+	beforeNavigate(() => {
 		if (!document.startViewTransition) return;
 
-		const transition = document.startViewTransition(async () => {
-			await new Promise((resolve) => requestAnimationFrame(resolve));
+		// Start the transition — SvelteKit's DOM update will happen
+		// inside the transition callback, giving us the crossfade
+		const transition = document.startViewTransition(() => {
+			// Return a promise that resolves when SvelteKit finishes updating
+			return new Promise<void>((resolve) => {
+				viewTransitionResolve = resolve;
+			});
 		});
 
-		return transition.finished;
+		transition.finished.catch(() => {});
+	});
+
+	afterNavigate(() => {
+		// Resolve the transition promise so the browser can animate
+		viewTransitionResolve?.();
+		viewTransitionResolve = null;
 	});
 
 	interface Props {
@@ -111,7 +124,12 @@
 	<NavigationProgress />
 	<Header profile={data.profile} />
 
-	<main id="main-content" class="container mx-auto grow px-4 py-8" tabindex="-1">
+	<main
+		id="main-content"
+		class="container mx-auto grow px-4 py-8"
+		style="view-transition-name: main-content"
+		tabindex="-1"
+	>
 		<ScrollToTop />
 		{@render children()}
 	</main>
