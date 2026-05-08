@@ -11,8 +11,104 @@
 		PopfeedCard
 	} from '$lib/components/layout/main/card';
 	import type { PageData } from './$types';
+	import { subscribeAutoConnect } from '$lib/stores/firehose';
+	import type { JetstreamCommit } from '$lib/stores/firehose';
+	import {
+		fetchMusicStatus,
+		fetchKibunStatus,
+		fetchLatestBlueskyPost,
+		fetchRecentDocuments,
+		fetchAllSupporters,
+		fetchRecentPopfeedReviews,
+		fetchProfile
+	} from '$lib/services/atproto';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
+
+	// Reactive copies of SSR data — updated by firehose events
+	let kibunStatus = $state(data.kibunStatus);
+	let musicStatus = $state(data.musicStatus);
+	let latestPost = $state(data.latestPost);
+	let documents = $state(data.documents);
+	let supporters = $state(data.supporters);
+	let popfeedReviews = $state(data.popfeedReviews);
+	let profile = $state(data.profile);
+
+	onMount(() => {
+		// Kibun — simple record, use payload directly
+		const unsubKibun = subscribeAutoConnect('kibun', (event: JetstreamCommit) => {
+			if (event.commit.operation === 'delete') {
+				kibunStatus = null;
+			} else if (event.commit.record) {
+				kibunStatus = event.commit.record as any;
+			}
+		});
+
+		// Music — needs artwork resolution, re-fetch
+		const unsubMusic = subscribeAutoConnect('music', async () => {
+			try {
+				musicStatus = await fetchMusicStatus();
+			} catch {
+				// Silently fail — keep existing data
+			}
+		});
+
+		// Bluesky post — needs embed resolution, re-fetch
+		const unsubPost = subscribeAutoConnect('bluesky-post', async () => {
+			try {
+				latestPost = await fetchLatestBlueskyPost();
+			} catch {
+				// Keep existing
+			}
+		});
+
+		// Documents — re-fetch
+		const unsubDocs = subscribeAutoConnect('documents', async () => {
+			try {
+				documents = (await fetchRecentDocuments(5)) ?? [];
+			} catch {
+				// Keep existing
+			}
+		});
+
+		// Supporters — re-fetch
+		const unsubSupporters = subscribeAutoConnect('supporters', async () => {
+			try {
+				supporters = await fetchAllSupporters();
+			} catch {
+				// Keep existing
+			}
+		});
+
+		// Popfeed — re-fetch
+		const unsubPopfeed = subscribeAutoConnect('popfeed', async () => {
+			try {
+				popfeedReviews = (await fetchRecentPopfeedReviews()) ?? [];
+			} catch {
+				// Keep existing
+			}
+		});
+
+		// Profile — re-fetch
+		const unsubProfile = subscribeAutoConnect('profile', async () => {
+			try {
+				profile = await fetchProfile();
+			} catch {
+				// Keep existing
+			}
+		});
+
+		return () => {
+			unsubKibun();
+			unsubMusic();
+			unsubPost();
+			unsubDocs();
+			unsubSupporters();
+			unsubPopfeed();
+			unsubProfile();
+		};
+	});
 </script>
 
 <MetaTags meta={data.meta} siteMeta={data.meta} />
@@ -21,31 +117,31 @@
 	<!-- Masonry-style grid using Tailwind's column utilities -->
 	<div class="columns-1 gap-6 lg:columns-2">
 		<div class="mb-6 break-inside-avoid">
-			<ProfileCard profile={data.profile} />
+			<ProfileCard {profile} />
 		</div>
 		<div class="mb-6 break-inside-avoid">
-			<KibunStatusCard kibunStatus={data.kibunStatus} />
+			<KibunStatusCard {kibunStatus} />
 		</div>
 		<div class="mb-6 break-inside-avoid">
-			<MusicStatusCard musicStatus={data.musicStatus} />
+			<MusicStatusCard {musicStatus} />
 		</div>
 		<div class="mb-6 break-inside-avoid">
-			<BlueskyPostCard post={data.latestPost} />
+			<BlueskyPostCard post={latestPost} />
 		</div>
 		<div class="mb-6 break-inside-avoid">
 			<DynamicLinks />
 		</div>
 		<div class="mb-6 break-inside-avoid">
-			<PostCard documents={data.documents} />
+			<PostCard {documents} />
 		</div>
-		{#if data.supporters.length > 0}
+		{#if supporters.length > 0}
 			<div class="mb-6 break-inside-avoid">
-				<SupportersCard supporters={data.supporters} />
+				<SupportersCard {supporters} />
 			</div>
 		{/if}
-		{#if data.popfeedReviews.length > 0}
+		{#if popfeedReviews.length > 0}
 			<div class="mb-6 break-inside-avoid">
-				<PopfeedCard reviews={data.popfeedReviews} handle={data.profile?.handle} />
+				<PopfeedCard reviews={popfeedReviews} handle={profile?.handle} />
 			</div>
 		{/if}
 	</div>
