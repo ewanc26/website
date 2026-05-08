@@ -11,6 +11,7 @@
 	let loading = $state(true);
 	let error = $state<string | null>(null);
 	let showDonations = $state(false);
+	let visible = $state(false);
 
 	const currentYear = new Date().getFullYear();
 
@@ -36,11 +37,26 @@
 				loading = false;
 			}
 		})();
+
+		// Fade in when footer scrolls into view
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					visible = true;
+					observer.disconnect();
+				}
+			},
+			{ threshold: 0.1 }
+		);
+		const footer = document.querySelector('footer');
+		if (footer) observer.observe(footer);
+		return () => observer.disconnect();
 	});
 </script>
 
 <footer
 	class="mt-auto w-full border-t border-canvas-200 bg-canvas-50 py-3 transition-colors dark:border-canvas-800 dark:bg-canvas-950"
+	class:animate-fade-in={visible}
 >
 	<div class="container mx-auto px-6">
 		<!-- Using items-center ensures the 'pill' shapes and text shapes share a center axis -->
