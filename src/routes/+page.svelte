@@ -27,13 +27,25 @@
 	let { data }: { data: PageData } = $props();
 
 	// Reactive copies of SSR data — updated by firehose events
-	let kibunStatus = $state(data.kibunStatus);
-	let musicStatus = $state(data.musicStatus);
-	let latestPost = $state(data.latestPost);
-	let documents = $state(data.documents);
-	let supporters = $state(data.supporters);
-	let popfeedReviews = $state(data.popfeedReviews);
-	let profile = $state(data.profile);
+	let kibunStatus = $state<PageData['kibunStatus']>();
+	let musicStatus = $state<PageData['musicStatus']>();
+	let latestPost = $state<PageData['latestPost']>();
+	let documents = $state<PageData['documents']>();
+	let supporters = $state<PageData['supporters']>();
+	let popfeedReviews = $state<PageData['popfeedReviews']>();
+	let profile = $state<PageData['profile']>();
+
+	// Seed from SSR data inside a closure — avoids state_referenced_locally
+	// (we intentionally capture once; firehose manages subsequent updates)
+	$effect(() => {
+		kibunStatus ??= data.kibunStatus;
+		musicStatus ??= data.musicStatus;
+		latestPost ??= data.latestPost;
+		documents ??= data.documents;
+		supporters ??= data.supporters;
+		popfeedReviews ??= data.popfeedReviews;
+		profile ??= data.profile;
+	});
 
 	onMount(() => {
 		// Kibun — simple record, use payload directly
