@@ -37,7 +37,7 @@
 			{#each [{ title: 'Purpose', content: siteInfo.additionalInfo?.purpose }, { title: 'History', content: siteInfo.additionalInfo?.websiteBirthYear ? `This website was first launched in ${siteInfo.additionalInfo.websiteBirthYear}.` : null }, { title: 'Privacy', content: siteInfo.privacyStatement }] as section}
 				{#if section.content}
 					<section
-						class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
+						class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl dark:bg-canvas-900"
 					>
 						<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">{section.title}</h2>
 						<p class="whitespace-pre-wrap text-ink-700 dark:text-ink-300">{section.content}</p>
@@ -47,7 +47,7 @@
 
 			{#if siteInfo.technologyStack?.length}
 				<section
-					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
+					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl dark:bg-canvas-900"
 				>
 					<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Technology Stack</h2>
 					<div class="space-y-2">
@@ -60,7 +60,7 @@
 
 			{#if siteInfo.openSourceInfo}
 				<section
-					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
+					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl dark:bg-canvas-900"
 				>
 					<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Open Source</h2>
 					{#if siteInfo.openSourceInfo.description}
@@ -88,7 +88,7 @@
 
 			{#if siteInfo.credits?.length}
 				<section
-					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-canvas-900"
+					class="rounded-xl bg-canvas-100 p-6 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl dark:bg-canvas-900"
 				>
 					<h2 class="mb-4 text-2xl font-bold text-ink-900 dark:text-ink-50">Credits</h2>
 					<div class="grid gap-4 md:grid-cols-2">
