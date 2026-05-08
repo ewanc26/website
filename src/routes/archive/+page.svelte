@@ -6,6 +6,22 @@
 	import type { SiteMetadata } from '$lib/helper/siteMeta';
 	import { getUserLocale } from '$lib/utils/locale';
 	import { getAllTags } from '$lib/helper/posts';
+	import { onMount } from 'svelte';
+
+	// Scroll-reveal action: adds .animate-entrance when element enters viewport
+	function scrollReveal(node: HTMLElement) {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					node.classList.add('animate-entrance');
+					observer.unobserve(node);
+				}
+			},
+			{ threshold: 0.1 }
+		);
+		observer.observe(node);
+		return { destroy: () => observer.disconnect() };
+	}
 
 	interface Props {
 		data: {
@@ -226,8 +242,8 @@
 		</Card>
 	{:else}
 		<!-- Grouped Documents View -->
-		{#each Array.from(groupedDocuments.entries()) as [monthKey, docs]}
-			<div class="mb-8">
+		{#each Array.from(groupedDocuments.entries()) as [monthKey, docs], i}
+			<div class="mb-8" use:scrollReveal style="animation-delay: {i * 60}ms">
 				<h3 class="mb-4 text-lg font-semibold text-ink-900 dark:text-ink-50">{monthKey}</h3>
 				<div class="space-y-3">
 					{#each docs as document}
