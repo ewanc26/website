@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { fly, fade } from 'svelte/transition';
 	import { getStores } from '$app/stores';
 	import { Menu, X, Check } from '@lucide/svelte';
 	import * as LucideIcons from '@lucide/svelte';
@@ -150,7 +151,8 @@
 							href={item.href}
 							class="group flex items-center gap-2 font-medium transition-colors
 								{isActive(item.href) ? 'text-primary-600 dark:text-primary-400' : 'text-ink-700 dark:text-ink-200'}
-								hover:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+								hover:text-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600
+								{isActive(item.href) ? 'border-b-2 border-primary-600 pb-0.5 dark:border-primary-400' : ''}"
 							aria-current={isActive(item.href) ? 'page' : undefined}
 							title={item.label}
 						>
@@ -205,6 +207,8 @@
 			id="mobile-menu"
 			class="border-t border-canvas-200 bg-canvas-50 md:hidden dark:border-canvas-800 dark:bg-canvas-950"
 			aria-label="Mobile navigation"
+			in:fly={{ y: -8, duration: 200 }}
+			out:fly={{ y: -8, duration: 150 }}
 		>
 			<ul class="container mx-auto flex flex-col px-3 py-2" role="list">
 				{#each navItems as item}
@@ -245,6 +249,8 @@
 			id="color-theme-menu"
 			class="border-t border-canvas-200 bg-canvas-50 md:hidden dark:border-canvas-800 dark:bg-canvas-950"
 			aria-label="Colour theme menu"
+			in:fly={{ y: -8, duration: 200 }}
+			out:fly={{ y: -8, duration: 150 }}
 		>
 			<div class="container mx-auto flex flex-col px-3 py-2">
 				{#each Object.entries(themesByCategory) as [category, categoryThemes]}

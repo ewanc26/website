@@ -92,6 +92,14 @@
 	--color-accent-800: light-dark(oklch(91.5% 0.048 240), oklch(31% 0.058 240));
 	--color-accent-900: light-dark(oklch(96% 0.026 240), oklch(22.5% 0.036 240));
 	--color-accent-950: light-dark(oklch(98.2% 0.014 240), oklch(16.2% 0.022 240));
+
+	/* Animation timing tokens */
+	--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+	--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+	--duration-instant: 100ms;
+	--duration-fast: 200ms;
+	--duration-normal: 300ms;
+	--duration-slow: 500ms;
 }
 
 @layer base {
@@ -199,14 +207,6 @@
 }
 
 @layer utilities {
-	/* Animation timing tokens */
-	--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-	--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-	--duration-instant: 100ms;
-	--duration-fast: 200ms;
-	--duration-normal: 300ms;
-	--duration-slow: 500ms;
-
 	/* Entrance animations */
 	.animate-entrance {
 		animation: fade-slide-up var(--duration-slow) var(--ease-out-expo) both;
