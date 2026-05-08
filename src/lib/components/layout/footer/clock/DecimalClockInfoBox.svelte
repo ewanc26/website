@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { X, Clock } from '@lucide/svelte';
 	import Card from '$lib/components/ui/Card.svelte';
+	import { wolfMode } from '$lib/stores/wolfMode';
+	import { get } from 'svelte/store';
 
 	interface Props {
 		show: boolean;
@@ -39,6 +41,10 @@
 	$effect(() => {
 		if (show) {
 			startInterval();
+			// Re-apply wolf mode after modal DOM is rendered
+			tick().then(() => {
+				if (get(wolfMode)) wolfMode.enable();
+			});
 		} else {
 			stopInterval();
 		}
