@@ -1,9 +1,12 @@
 <script lang="ts">
 	import qrcode from 'qrcode-generator';
-	import { X, Coffee, Github, Heart } from '@lucide/svelte';
+	import { Coffee, Github, Heart } from '@lucide/svelte';
 	import Card from '$lib/components/ui/Card.svelte';
+	import { MetaTags } from '$lib/components/seo';
 	import { PUBLIC_KOFI_PAGE_ID } from '$env/static/public';
-	import { goto } from '$app/navigation';
+	import type { PageData } from './$types';
+
+	let { data }: { data: PageData } = $props();
 
 	type Crypto = {
 		label: string;
@@ -78,23 +81,12 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Support my work · ewan.croft.uk</title>
-	<meta
-		name="description"
-		content="Support my open-source work via Ko-fi, GitHub Sponsors, or cryptocurrency."
-	/>
-</svelte:head>
+<MetaTags meta={data.meta} />
 
 <div class="mx-auto max-w-md space-y-6">
-	<div class="flex items-center gap-3">
-		<a href="/" class="rounded-full p-2 hover:bg-canvas-200 dark:hover:bg-canvas-800">
-			<X class="h-5 w-5" />
-		</a>
-		<div class="flex items-center gap-2">
-			<Heart size={20} class="text-primary-600 dark:text-primary-400" />
-			<h1 class="text-xl font-black text-ink-900 dark:text-ink-50">Support my work</h1>
-		</div>
+	<div class="flex items-center gap-2">
+		<Heart size={20} class="text-primary-600 dark:text-primary-400" />
+		<h1 class="text-xl font-black text-ink-900 dark:text-ink-50">Support my work</h1>
 	</div>
 
 	<p class="text-sm font-medium opacity-60">
@@ -216,8 +208,11 @@
 							stroke="currentColor"
 							stroke-width="2"
 							stroke-linecap="round"
-							stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg
-						> Copied!
+							stroke-linejoin="round"
+						>
+							<polyline points="20 6 9 17 4 12" />
+						</svg>
+						Copied!
 					{:else}
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -229,10 +224,10 @@
 							stroke-width="2"
 							stroke-linecap="round"
 							stroke-linejoin="round"
-							><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path
-								d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
-							/></svg
 						>
+							<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+							<path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+						</svg>
 						Copy {active.label}
 					{/if}
 				</button>
