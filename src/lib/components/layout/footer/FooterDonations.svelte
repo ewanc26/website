@@ -19,6 +19,7 @@
 		coin: string;
 		scheme: string;
 		address: string;
+		preferred?: boolean;
 		qrSvg?: string;
 	};
 
@@ -28,7 +29,8 @@
 			coin: 'Monero',
 			scheme: 'monero',
 			address:
-				'44yH2LpkSsrSmWQC3SVmrABw2MUhNjNCE365hG7Rr7veJYNPBD1f6dNgXNr2nc6ZcP3jEyj9vXnqmg7VBBPeS8uwMhJ4yXW'
+				'44yH2LpkSsrSmWQC3SVmrABw2MUhNjNCE365hG7Rr7veJYNPBD1f6dNgXNr2nc6ZcP3jEyj9vXnqmg7VBBPeS8uwMhJ4yXW',
+			preferred: true
 		},
 		{
 			label: 'ETH',
@@ -43,6 +45,9 @@
 			address: 'bc1qp3l6e9pjc5jan7ulpd58av8wfdtyhrchj84clh'
 		}
 	]);
+
+	type Tab = 'fiat' | 'crypto';
+	let activeTab = $state<Tab>('fiat');
 
 	let mounted = $state(false);
 	let selectedIndex = $state(0);
@@ -77,7 +82,7 @@
 	}
 
 	$effect(() => {
-		if (show && !cryptos[selectedIndex].qrSvg) {
+		if (show && activeTab === 'crypto' && !cryptos[selectedIndex].qrSvg) {
 			const uri = `${active.scheme}:${active.address}`;
 			cryptos[selectedIndex].qrSvg = generateQrSvg(uri);
 		}
@@ -93,7 +98,7 @@
 	class="flex items-center gap-2 text-xs font-medium text-ink-600 underline decoration-canvas-300 underline-offset-4 transition-colors hover:text-primary-600 hover:decoration-primary-600 dark:text-ink-400 dark:decoration-canvas-700 dark:hover:text-primary-400"
 >
 	<Heart size={14} />
-	Support
+	Support my work
 </button>
 
 {#if show && mounted}
@@ -106,7 +111,6 @@
 		tabindex="0"
 		aria-label="Close modal"
 	>
-		<!-- Added tabindex="-1" to resolve the diagnostic error -->
 		<div
 			onclick={(e) => e.stopPropagation()}
 			onkeydown={(e) => e.stopPropagation()}
@@ -130,98 +134,133 @@
 						<X class="h-5 w-5" />
 					</button>
 
-					<div class="space-y-6">
-						<div class="pt-2">
-							<h2 class="text-2xl font-black text-ink-900 dark:text-ink-50">Support</h2>
-							<p class="text-xs font-medium opacity-50">Crypto or Fiat</p>
+					<div class="space-y-4">
+						<div>
+							<h2 class="text-2xl font-black text-ink-900 dark:text-ink-50">Support my work</h2>
+							<p class="text-xs font-medium opacity-50">
+								If you find my projects useful, consider buying me a tea.
+							</p>
 						</div>
 
-						<!-- Crypto Tabs -->
-						<div class="space-y-4">
-							<div
-								role="tablist"
-								class="flex gap-1 rounded-2xl bg-canvas-200 p-1 dark:bg-canvas-800"
+						<!-- Fiat / Crypto Tabs -->
+						<div role="tablist" class="flex gap-1 rounded-2xl bg-canvas-200 p-1 dark:bg-canvas-800">
+							<button
+								type="button"
+								role="tab"
+								aria-selected={activeTab === 'fiat'}
+								onclick={() => (activeTab = 'fiat')}
+								class="flex-1 rounded-xl py-2 text-xs font-black uppercase transition-all
+									{activeTab === 'fiat'
+									? 'bg-canvas-50 shadow-sm dark:bg-canvas-700'
+									: 'opacity-50 hover:opacity-100'}"
 							>
-								{#each cryptos as crypto, i}
+								Fiat
+							</button>
+							<button
+								type="button"
+								role="tab"
+								aria-selected={activeTab === 'crypto'}
+								onclick={() => (activeTab = 'crypto')}
+								class="flex-1 rounded-xl py-2 text-xs font-black uppercase transition-all
+									{activeTab === 'crypto'
+									? 'bg-canvas-50 shadow-sm dark:bg-canvas-700'
+									: 'opacity-50 hover:opacity-100'}"
+							>
+								Crypto
+							</button>
+						</div>
+
+						{#if activeTab === 'fiat'}
+							<!-- Fiat Links -->
+							<div class="grid grid-cols-2 gap-3">
+								<a
+									href="https://ko-fi.com/{PUBLIC_KOFI_PAGE_ID}"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="group flex items-center justify-center gap-2 rounded-2xl border border-canvas-200 py-3 text-xs font-bold transition-all hover:border-primary-500 hover:bg-primary-500/5 dark:border-canvas-700 dark:hover:border-primary-400 dark:hover:bg-primary-400/5"
+								>
+									<Coffee
+										size={16}
+										class="transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400"
+									/>
+									Ko-fi
+								</a>
+								<a
+									href="https://github.com/sponsors/ewanc26"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="group flex items-center justify-center gap-2 rounded-2xl border border-canvas-200 py-3 text-xs font-bold transition-all hover:border-primary-500 hover:bg-primary-500/5 dark:border-canvas-700 dark:hover:border-primary-400 dark:hover:bg-primary-400/5"
+								>
+									<Github
+										size={16}
+										class="transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400"
+									/>
+									GitHub
+								</a>
+							</div>
+						{:else}
+							<!-- Crypto Section -->
+							<div class="space-y-3">
+								{#if active.preferred}
+									<p class="text-xs font-medium opacity-60">Preferred: Monero (XMR)</p>
+								{/if}
+
+								<!-- Crypto Tabs -->
+								<div
+									role="tablist"
+									class="flex gap-1 rounded-2xl bg-canvas-200 p-1 dark:bg-canvas-800"
+								>
+									{#each cryptos as crypto, i}
+										<button
+											type="button"
+											role="tab"
+											aria-selected={selectedIndex === i}
+											onclick={() => {
+												selectedIndex = i;
+												copied = false;
+											}}
+											class="flex-1 rounded-xl py-2 text-[10px] font-black uppercase transition-all
+												{selectedIndex === i
+												? 'bg-canvas-50 shadow-sm dark:bg-canvas-700'
+												: 'opacity-50 hover:opacity-100'}"
+										>
+											{crypto.label}
+										</button>
+									{/each}
+								</div>
+
+								<!-- QR Code Area -->
+								<div class="aspect-square w-full rounded-3xl bg-white p-4 shadow-inner">
+									<div class="qr-container h-full w-full">
+										{#if active.qrSvg}
+											{@html active.qrSvg}
+										{/if}
+									</div>
+								</div>
+
+								<!-- Address & Copy -->
+								<div class="space-y-2">
+									<div
+										class="rounded-2xl border border-canvas-200 bg-canvas-100/50 p-3 dark:border-canvas-700/50 dark:bg-canvas-800/30"
+									>
+										<p class="font-mono text-[10px] break-all opacity-80 select-all">
+											{active.address}
+										</p>
+									</div>
 									<button
 										type="button"
-										role="tab"
-										aria-selected={selectedIndex === i}
-										onclick={() => {
-											selectedIndex = i;
-											copied = false;
-										}}
-										class="flex-1 rounded-xl py-2 text-[10px] font-black uppercase transition-all
-                                        {selectedIndex === i
-											? 'bg-canvas-50 shadow-sm dark:bg-canvas-700'
-											: 'opacity-50 hover:opacity-100'}"
+										onclick={copyAddress}
+										class="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary-950 font-bold text-primary-50 transition-all hover:bg-primary-800 dark:bg-primary-50 dark:text-primary-950"
 									>
-										{crypto.label}
+										{#if copied}
+											<Check size={16} /> Copied!
+										{:else}
+											<Copy size={16} /> Copy {active.label}
+										{/if}
 									</button>
-								{/each}
-							</div>
-
-							<!-- QR Code Area -->
-							<div class="aspect-square w-full rounded-3xl bg-white p-6 shadow-inner">
-								<div class="qr-container h-full w-full">
-									{#if active.qrSvg}
-										{@html active.qrSvg}
-									{/if}
 								</div>
 							</div>
-
-							<!-- Address & Copy -->
-							<div class="space-y-2">
-								<div
-									class="rounded-2xl border border-canvas-200 bg-canvas-100/50 p-3 dark:border-canvas-700/50 dark:bg-canvas-800/30"
-								>
-									<p class="font-mono text-[10px] break-all opacity-80 select-all">
-										{active.address}
-									</p>
-								</div>
-								<button
-									type="button"
-									onclick={copyAddress}
-									class="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary-950 font-bold text-primary-50 transition-all hover:bg-primary-800 dark:bg-primary-50 dark:text-primary-950"
-								>
-									{#if copied}
-										<Check size={16} /> Copied!
-									{:else}
-										<Copy size={16} /> Copy {active.label}
-									{/if}
-								</button>
-							</div>
-						</div>
-
-						<div class="h-px w-full bg-canvas-200 dark:bg-canvas-800"></div>
-
-						<!-- Fiat Links -->
-						<div class="grid grid-cols-2 gap-3">
-							<a
-								href="https://ko-fi.com/{PUBLIC_KOFI_PAGE_ID}"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="group flex items-center justify-center gap-2 rounded-2xl border border-canvas-200 py-3 text-xs font-bold transition-all hover:border-primary-500 hover:bg-primary-500/5 dark:border-canvas-700 dark:hover:border-primary-400 dark:hover:bg-primary-400/5"
-							>
-								<Coffee
-									size={16}
-									class="transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400"
-								/>
-								Ko-fi
-							</a>
-							<a
-								href="https://github.com/sponsors/ewanc26"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="group flex items-center justify-center gap-2 rounded-2xl border border-canvas-200 py-3 text-xs font-bold transition-all hover:border-primary-500 hover:bg-primary-500/5 dark:border-canvas-700 dark:hover:border-primary-400 dark:hover:bg-primary-400/5"
-							>
-								<Github
-									size={16}
-									class="transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400"
-								/>
-								GitHub
-							</a>
-						</div>
+						{/if}
 					</div>
 				{/snippet}
 			</Card>
