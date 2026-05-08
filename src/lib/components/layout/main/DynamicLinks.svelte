@@ -3,19 +3,32 @@
 	import { Card } from '$lib/components/ui';
 	import { LinkCard } from '$lib/components/layout/main/card';
 	import { fetchLinks, type LinkData } from '$lib/services/atproto';
+	import { subscribeAutoConnect } from '$lib/stores/firehose';
 
 	let links: LinkData | null = null;
 	let loading = true;
 	let error: string | null = null;
 
-	onMount(async () => {
+	async function loadLinks() {
 		try {
 			links = await fetchLinks();
+			error = null;
 		} catch (err) {
 			error = err instanceof Error ? err.message : 'Failed to load links';
 		} finally {
 			loading = false;
 		}
+	}
+
+	onMount(() => {
+		loadLinks();
+
+		// Refresh when links record changes on the firehose
+		const unsub = subscribeAutoConnect('links', () => {
+			loadLinks();
+		});
+
+		return unsub;
 	});
 </script>
 
