@@ -6,6 +6,8 @@
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 	import type { Snippet } from 'svelte';
 	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
+	import { wolfMode } from '$lib/stores/wolfMode';
 
 	interface Props {
 		data: {
@@ -41,6 +43,15 @@
 		window.onunhandledrejection = (event) => {
 			console.error('[App] Unhandled promise rejection:', event.reason);
 		};
+	});
+
+	// Re-apply wolf mode after SvelteKit page transitions
+	afterNavigate(() => {
+		let isActive = false;
+		wolfMode.subscribe((v) => {
+			isActive = v;
+		})();
+		if (isActive) wolfMode.enable();
 	});
 
 	// Compute fediverse:creator from AP instance and username
