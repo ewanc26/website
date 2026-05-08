@@ -10,7 +10,7 @@
 	let siteInfo = $state<SiteInfoData | null>(null);
 	let loading = $state(true);
 	let error = $state<string | null>(null);
-	let showDonations = $state(false);
+
 	let visible = $state(false);
 
 	const currentYear = new Date().getFullYear();
@@ -66,11 +66,7 @@
 
 				<!-- This wrapper ensures the donation button doesn't jump line height -->
 				<div class="flex items-center">
-					<FooterDonations
-						show={showDonations}
-						onOpen={() => (showDonations = true)}
-						onClose={() => (showDonations = false)}
-					/>
+					<FooterDonations />
 				</div>
 			</div>
 
