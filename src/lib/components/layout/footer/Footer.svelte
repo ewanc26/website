@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { fetchProfile, fetchSiteInfo } from '$lib/services/atproto';
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
-	import DecimalClock from './DecimalClock.svelte';
+	import DecimalClock from './clock/DecimalClock.svelte';
 	import FooterProfile from './FooterProfile.svelte';
 	import FooterDonations from './FooterDonations.svelte';
 
