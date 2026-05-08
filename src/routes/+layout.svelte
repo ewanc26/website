@@ -6,8 +6,19 @@
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 	import type { Snippet } from 'svelte';
 	import { onMount } from 'svelte';
-	import { afterNavigate } from '$app/navigation';
+	import { afterNavigate, onNavigate } from '$app/navigation';
 	import { wolfMode } from '$lib/stores/wolfMode';
+
+	// Enable View Transitions API for smooth crossfade between pages
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+
+		const transition = document.startViewTransition(async () => {
+			await new Promise((resolve) => requestAnimationFrame(resolve));
+		});
+
+		return transition.finished;
+	});
 
 	interface Props {
 		data: {
