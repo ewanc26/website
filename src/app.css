@@ -4,8 +4,9 @@
 /* Self-hosted Inter variable font */
 @font-face {
 	font-family: 'Inter';
-	src: url('/fonts/InterVariable.woff2') format('woff2-variations'),
-	     url('/fonts/InterVariable.woff2') format('woff2');
+	src:
+		url('/fonts/InterVariable.woff2') format('woff2-variations'),
+		url('/fonts/InterVariable.woff2') format('woff2');
 	font-weight: 100 900;
 	font-display: swap;
 	font-style: normal;
@@ -13,8 +14,9 @@
 
 @font-face {
 	font-family: 'Inter';
-	src: url('/fonts/InterVariable-Italic.woff2') format('woff2-variations'),
-	     url('/fonts/InterVariable-Italic.woff2') format('woff2');
+	src:
+		url('/fonts/InterVariable-Italic.woff2') format('woff2-variations'),
+		url('/fonts/InterVariable-Italic.woff2') format('woff2');
 	font-weight: 100 900;
 	font-display: swap;
 	font-style: italic;
@@ -193,6 +195,77 @@
 		clip: rect(0, 0, 0, 0);
 		white-space: nowrap;
 		border-width: 0;
+	}
+}
+
+@layer utilities {
+	/* Animation timing tokens */
+	--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+	--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+	--duration-instant: 100ms;
+	--duration-fast: 200ms;
+	--duration-normal: 300ms;
+	--duration-slow: 500ms;
+
+	/* Entrance animations */
+	.animate-entrance {
+		animation: fade-slide-up var(--duration-slow) var(--ease-out-expo) both;
+	}
+
+	.animate-fade-in {
+		animation: fade-in var(--duration-normal) var(--ease-out-quart) both;
+	}
+
+	/* Live update pulse — fires once when firehose data changes */
+	.animate-live-pulse {
+		animation: live-pulse 600ms var(--ease-out-quart) both;
+	}
+
+	/* Progress bar shimmer while loading */
+	.animate-progress-shimmer {
+		background-size: 200% 100%;
+		animation: progress-shimmer 1.5s ease-in-out infinite;
+	}
+}
+
+@keyframes fade-slide-up {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes live-pulse {
+	0% {
+		box-shadow: 0 0 0 0 oklch(72% 0.19 160 / 0.4);
+	}
+	70% {
+		box-shadow: 0 0 0 6px oklch(72% 0.19 160 / 0);
+	}
+	100% {
+		box-shadow: 0 0 0 0 oklch(72% 0.19 160 / 0);
+	}
+}
+
+@keyframes progress-shimmer {
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
 	}
 }
 
