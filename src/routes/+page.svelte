@@ -83,10 +83,13 @@
 			}
 		});
 
-		// Documents — re-fetch
+		// Documents — re-fetch (filtered to blog posts only)
 		const unsubDocs = subscribeAutoConnect('documents', async () => {
 			try {
-				documents = (await fetchRecentDocuments(5)) ?? [];
+				const allDocs = (await fetchRecentDocuments(20)) ?? [];
+				documents = allDocs
+					.filter((doc: any) => doc.publicationRkey === '3mlen2qhzrt2s')
+					.slice(0, 5);
 				triggerPulse((v) => (docsPulse = v));
 			} catch {
 				// Keep existing
