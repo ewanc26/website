@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { fetchProfile, fetchSiteInfo } from '$lib/services/atproto';
-	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 	import DecimalClock from './clock/DecimalClock.svelte';
 	import FooterProfile from './FooterProfile.svelte';
 	import FooterDonations from './FooterDonations.svelte';
+	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
 
-	let profile = $state<ProfileData | null>(null);
-	let siteInfo = $state<SiteInfoData | null>(null);
-	let loading = $state(true);
-	let error = $state<string | null>(null);
+	interface Props {
+		profile: ProfileData | null;
+		siteInfo: SiteInfoData | null;
+	}
+
+	let { profile, siteInfo }: Props = $props();
 
 	let visible = $state(false);
 
@@ -22,22 +22,9 @@
 			: `${birthYear}—${currentYear}`;
 	});
 
-	onMount(() => {
-		(async () => {
-			try {
-				const [p, s] = await Promise.all([
-					fetchProfile().catch(() => null),
-					fetchSiteInfo().catch(() => null)
-				]);
-				profile = p;
-				siteInfo = s;
-			} catch (err) {
-				error = err instanceof Error ? err.message : 'Error loading footer';
-			} finally {
-				loading = false;
-			}
-		})();
+	import { onMount } from 'svelte';
 
+	onMount(() => {
 		// Fade in when footer scrolls into view
 		const observer = new IntersectionObserver(
 			([entry]) => {
@@ -62,7 +49,7 @@
 		<!-- Using items-center ensures the 'pill' shapes and text shapes share a center axis -->
 		<div class="flex flex-col items-center justify-between gap-4 md:flex-row">
 			<div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-start">
-				<FooterProfile {profile} {loading} {copyrightText} />
+				<FooterProfile {profile} {copyrightText} />
 
 				<!-- This wrapper ensures the donation button doesn't jump line height -->
 				<div class="flex items-center">

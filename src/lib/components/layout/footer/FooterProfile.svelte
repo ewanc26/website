@@ -3,10 +3,14 @@
 	import { happyMacStore } from '$lib/stores';
 	import type { ProfileData } from '$lib/services/atproto';
 
-	let { profile, loading, copyrightText } = $props<{
+	let {
+		profile,
+		copyrightText,
+		loading = false
+	} = $props<{
 		profile: ProfileData | null;
-		loading: boolean;
 		copyrightText: string;
+		loading?: boolean;
 	}>();
 
 	let showHint = $derived($happyMacStore.clickCount >= 3 && $happyMacStore.clickCount < 24);
