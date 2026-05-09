@@ -41,7 +41,7 @@
 		}
 	}
 
-	// Initialize post and set up polling
+	// Initialize post and set up polling (gated by visibility)
 	$effect(() => {
 		// Set initial post if provided
 		if (initialPost && !post) {
@@ -54,15 +54,34 @@
 			loadPost();
 		}
 
-		// Set up polling for new posts
-		const pollInterval = setInterval(async () => {
-			console.log('[BlueskyPostCard] Polling for new posts...');
-			await loadPost();
-		}, POLL_INTERVAL);
+		// Set up polling for new posts — only when the tab is visible
+		let pollTimer: ReturnType<typeof setTimeout> | null = null;
+
+		function schedulePoll() {
+			if (document.visibilityState !== 'visible') return;
+			pollTimer = setTimeout(async () => {
+				await loadPost();
+				schedulePoll(); // schedule next poll after this one completes
+			}, POLL_INTERVAL);
+		}
+
+		// Start polling when visible, stop when hidden
+		function onVisibilityChange() {
+			if (document.visibilityState === 'visible') {
+				schedulePoll();
+			} else if (pollTimer) {
+				clearTimeout(pollTimer);
+				pollTimer = null;
+			}
+		}
+
+		document.addEventListener('visibilitychange', onVisibilityChange);
+		schedulePoll(); // start if already visible
 
 		// Cleanup function
 		return () => {
-			clearInterval(pollInterval);
+			if (pollTimer) clearTimeout(pollTimer);
+			document.removeEventListener('visibilitychange', onVisibilityChange);
 			// Clean up all HLS instances
 			videoElements.forEach(({ hls }) => {
 				if (hls) {
@@ -201,19 +220,19 @@
 		<!-- Author Info -->
 		<div class="relative flex gap-3">
 			{#if isReplyParent}
-			<a
-				href={getProfileUrl(postData.author.handle)}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="shrink-0 transition-opacity hover:opacity-80"
-			>
-				<NoiseImage
-					src={postData.author.avatar}
-					seed={`${postData.author.did || postData.author.handle}|avatar`}
-					class="h-8 w-8 rounded-full object-cover sm:h-10 sm:w-10"
-					alt="{postData.author.displayName || postData.author.handle}'s avatar"
-				/>
-			</a>
+				<a
+					href={getProfileUrl(postData.author.handle)}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="shrink-0 transition-opacity hover:opacity-80"
+				>
+					<NoiseImage
+						src={postData.author.avatar}
+						seed={`${postData.author.did || postData.author.handle}|avatar`}
+						class="h-8 w-8 rounded-full object-cover sm:h-10 sm:w-10"
+						alt="{postData.author.displayName || postData.author.handle}'s avatar"
+					/>
+				</a>
 			{:else}
 				<a
 					href={getProfileUrl(postData.author.handle)}
@@ -318,7 +337,7 @@
 						rel="noopener noreferrer"
 						class="mb-3 flex max-w-full flex-col overflow-hidden rounded-xl border border-canvas-300 bg-canvas-200 transition-colors hover:bg-canvas-300 dark:border-canvas-700 dark:bg-canvas-800 dark:hover:bg-canvas-700"
 					>
-							<NoiseImage
+						<NoiseImage
 							src={postData.externalLink.thumb}
 							seed={`${postData.externalLink.uri}|thumb`}
 							class="h-48 w-full max-w-full object-cover"
