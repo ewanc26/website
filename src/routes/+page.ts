@@ -10,6 +10,9 @@ import {
 	fetchRecentPopfeedReviews
 } from '$lib/services/atproto';
 
+/** Devlog publication rkey — only show blog posts, not documentation. */
+const DEVLOG_PUBLICATION_RKEY = '3mlen2qhzrt2s';
+
 /**
  * Wraps a promise with a timeout. Returns null on timeout or rejection,
  * so it's safe to use with Promise.allSettled.
@@ -41,10 +44,16 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 			withTimeout(fetchMusicStatus(fetch), REQUEST_TIMEOUT),
 			withTimeout(fetchKibunStatus(fetch), REQUEST_TIMEOUT),
 			withTimeout(fetchLatestBlueskyPost(fetch), REQUEST_TIMEOUT),
-			withTimeout(fetchRecentDocuments(5, fetch), REQUEST_TIMEOUT),
+			withTimeout(fetchRecentDocuments(20, fetch), REQUEST_TIMEOUT),
 			withTimeout(fetchAllSupporters(), REQUEST_TIMEOUT),
 			withTimeout(fetchRecentPopfeedReviews(fetch), REQUEST_TIMEOUT)
 		]);
+
+	// Filter to only blog posts (devlog publication), take 5
+	const allDocuments = documents.status === 'fulfilled' ? documents.value : [];
+	const blogPosts = allDocuments
+		.filter((doc) => doc.publicationRkey === DEVLOG_PUBLICATION_RKEY)
+		.slice(0, 5);
 
 	// Create page metadata with dynamic OG
 	const meta = createDynamicSiteMeta({
@@ -58,7 +67,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 		musicStatus: musicStatus.status === 'fulfilled' ? musicStatus.value : null,
 		kibunStatus: kibunStatus.status === 'fulfilled' ? kibunStatus.value : null,
 		latestPost: latestPost.status === 'fulfilled' ? latestPost.value : null,
-		documents: documents.status === 'fulfilled' ? documents.value : [],
+		documents: blogPosts,
 		supporters: supporters.status === 'fulfilled' ? (supporters.value ?? []) : [],
 		popfeedReviews: popfeedReview.status === 'fulfilled' ? popfeedReview.value : []
 	};
