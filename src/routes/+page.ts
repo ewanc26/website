@@ -10,8 +10,8 @@ import {
 	fetchRecentPopfeedReviews
 } from '$lib/services/atproto';
 
-/** Devlog publication rkey — only show blog posts, not documentation. */
-const DEVLOG_PUBLICATION_RKEY = '3mlen2qhzrt2s';
+/** Blog publication rkey — only show blog posts, not devlog/docs. */
+const BLOG_PUBLICATION_RKEY = '3m3x4bgbsh22k';
 
 /**
  * Wraps a promise with a timeout. Returns null on timeout or rejection,
@@ -52,7 +52,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 	// Filter to only blog posts (devlog publication), take 5
 	const allDocuments = documents.status === 'fulfilled' ? documents.value : [];
 	const blogPosts = allDocuments
-		.filter((doc) => doc.publicationRkey === DEVLOG_PUBLICATION_RKEY)
+		.filter((doc) => doc.publicationRkey === BLOG_PUBLICATION_RKEY)
 		.slice(0, 5);
 
 	// Create page metadata with dynamic OG

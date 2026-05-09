@@ -88,7 +88,7 @@
 			try {
 				const allDocs = (await fetchRecentDocuments(20)) ?? [];
 				documents = allDocs
-					.filter((doc: any) => doc.publicationRkey === '3mlen2qhzrt2s')
+					.filter((doc: any) => doc.publicationRkey === '3m3x4bgbsh22k')
 					.slice(0, 5);
 				triggerPulse((v) => (docsPulse = v));
 			} catch {
