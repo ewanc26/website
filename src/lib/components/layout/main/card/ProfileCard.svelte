@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, NoiseImage } from '$lib/components/ui';
+	import { Card, NoiseImage, Triskele } from '$lib/components/ui';
 	import type { ProfileData } from '$lib/services/atproto';
 	import LinkCard from './LinkCard.svelte';
 	import { formatCompactNumber } from '$lib/utils/formatNumber';
@@ -61,7 +61,9 @@
 						<div
 							class="h-full w-full bg-linear-to-r from-primary-400 to-secondary-400"
 							role="presentation"
-						></div>
+						>
+							<Triskele class="absolute inset-0 m-auto h-20 w-20 -translate-y-1 text-white/10" />
+						</div>
 					{/if}
 				</div>
 
@@ -71,10 +73,10 @@
 						class="h-32 w-32 overflow-hidden rounded-full border-4 border-white bg-canvas-200 dark:border-canvas-900"
 					>
 						<NoiseImage
-						src={safeProfile.avatar}
-						seed={`${safeProfile.did || safeProfile.handle}|avatar`}
-						class="h-full w-full object-cover"
-						alt="{safeProfile.displayName || safeProfile.handle}'s avatar"
+							src={safeProfile.avatar}
+							seed={`${safeProfile.did || safeProfile.handle}|avatar`}
+							class="h-full w-full object-cover"
+							alt="{safeProfile.displayName || safeProfile.handle}'s avatar"
 						/>
 					</div>
 				</div>
@@ -120,7 +122,7 @@
 
 					<div class="mt-4">
 						<LinkCard
-						url={witchskyProfileUrl(safeProfile.did)}
+							url={witchskyProfileUrl(safeProfile.did)}
 							title="View on Bluesky"
 							variant="button"
 						/>

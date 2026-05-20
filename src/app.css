@@ -221,6 +221,15 @@
 		animation: live-pulse 600ms var(--ease-out-quart) both;
 	}
 
+	/* Background symbol float animations */
+	.animate-float-a {
+		animation: float-a 22s ease-in-out infinite;
+	}
+
+	.animate-float-b {
+		animation: float-b 28s ease-in-out infinite;
+	}
+
 	/* Progress bar shimmer while loading */
 	.animate-progress-shimmer {
 		background-size: 200% 100%;
@@ -257,6 +266,36 @@
 	}
 	100% {
 		box-shadow: 0 0 0 0 oklch(72% 0.19 160 / 0);
+	}
+}
+
+@keyframes float-a {
+	0% {
+		transform: translateY(0px) rotate(0deg);
+	}
+	33% {
+		transform: translateY(-18px) rotate(6deg);
+	}
+	66% {
+		transform: translateY(8px) rotate(-4deg);
+	}
+	100% {
+		transform: translateY(0px) rotate(0deg);
+	}
+}
+
+@keyframes float-b {
+	0% {
+		transform: translateY(0px) rotate(0deg);
+	}
+	40% {
+		transform: translateY(14px) rotate(-5deg);
+	}
+	75% {
+		transform: translateY(-10px) rotate(3deg);
+	}
+	100% {
+		transform: translateY(0px) rotate(0deg);
 	}
 }
 
