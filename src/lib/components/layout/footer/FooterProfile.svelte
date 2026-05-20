@@ -2,6 +2,7 @@
 	import { witchskyProfileUrl } from '$lib/config/urls';
 	import { happyMacStore } from '$lib/stores';
 	import type { ProfileData } from '$lib/services/atproto';
+	import { Pentacle } from '$lib/components/ui';
 
 	let {
 		profile,
@@ -32,7 +33,7 @@
 		</a>
 	{/if}
 
-	<span class="opacity-20 select-none">|</span>
+	<Pentacle size={12} class="shrink-0 self-center text-ink-600 opacity-40 dark:text-ink-400" />
 
 	<div class="flex items-baseline gap-3 opacity-60">
 		<a href="https://github.com/ewanc26/website" target="_blank" class="hover:underline">code</a>

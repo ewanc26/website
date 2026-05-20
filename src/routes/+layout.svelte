@@ -1,6 +1,12 @@
 <script lang="ts">
 	import '../app.css';
-	import { Header, Footer, ScrollToTop, NavigationProgress } from '$lib/components/layout';
+	import {
+		Header,
+		Footer,
+		ScrollToTop,
+		NavigationProgress,
+		BackgroundSymbols
+	} from '$lib/components/layout';
 	import HappyMacEasterEgg from '$lib/components/HappyMacEasterEgg.svelte';
 	import { type SiteMetadata } from '$lib/helper/siteMeta';
 	import type { ProfileData, SiteInfoData } from '$lib/services/atproto';
@@ -121,6 +127,9 @@
 <div
 	class="flex min-h-screen flex-col overflow-x-hidden bg-canvas-50 text-ink-900 dark:bg-canvas-950 dark:text-ink-50"
 >
+	<!-- Floating background symbols — cursor-reactive parallax + scroll drift -->
+	<BackgroundSymbols />
+
 	<NavigationProgress />
 	<Header profile={data.profile} />
 
