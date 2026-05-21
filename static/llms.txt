@@ -1,0 +1,40 @@
+# ewancroft.uk
+
+> Personal website of Ewan Croft — student, developer, and writer.
+
+ewancroft.uk is the personal website of Ewan Croft, a UK-based student, developer, and writer. It serves as a personal hub showing his current status, recent Bluesky posts, music listening activity, recent Standard.site documents, and links to his projects and writing.
+
+## About Ewan
+
+Ewan Croft is a UK-based student, developer, and writer building open-source tools around the AT Protocol/Bluesky ecosystem. He writes poetry and short fiction (available as Ko-fi commissions), has an interest in Scottish Gaelic, and self-hosts on NixOS. Active on Bluesky at @ewancroft.uk.
+
+## Pages
+
+- /: Home — profile card, latest Bluesky post, music status (Teal.fm), mood status (Kibun), recent Standard.site documents, supporters, and Popfeed reviews
+- /[slug]: Blog posts and essays
+- /archive: Full post archive
+- /support: Support page (Ko-fi and GitHub Sponsors)
+- /work: Work and projects overview
+- /site: Site colophon and technical information
+
+## Projects
+
+Ewan's open-source tools are hosted on croft.click:
+- Jasper (jasper.croft.click): Instagram → Grain/Spark on ATProto
+- Malachite (malachite.croft.click): Last.fm/Spotify → Teal on ATProto
+- Bismuth (bismuth.croft.click): Standard.site documents → Markdown
+- Opal (opal.croft.click): Twitter/Mastodon/Threads/Nostr → Bluesky
+- Tourmaline (tourmaline.croft.click): Teal.fm scrobble analyser
+
+## Commissions
+
+Poetry from £10, short stories from £20, SvelteKit websites from £100. Via Ko-fi: https://ko-fi.com/ewancroft
+
+## Source
+
+https://github.com/ewanc26/website
+
+## Contact
+
+Bluesky: https://witchsky.app/profile/ewancroft.uk
+Support him: https://ewancroft.uk/support
