@@ -4,24 +4,27 @@
 
 	interface SymbolDef {
 		type: 'pentacle' | 'triskele';
-		/** Tailwind positioning classes (absolute + placement) */
 		pos: string;
-		/** Parallax depth — higher = moves more with cursor/scroll */
 		depth: number;
-		/** Float animation class */
 		anim: string;
-		/** CSS animation-delay value (negative to start mid-cycle) */
 		delay: string;
-		/** Tailwind opacity value e.g. "0.04" */
 		opacity: string;
-		/** Pentacle: pixel size passed to the size prop */
 		size?: number;
-		/** Triskele: Tailwind h-* w-* sizing classes */
 		sz?: string;
 	}
 
+	interface MotionState {
+		xSeed: number;
+		ySeed: number;
+		xFreq: number;
+		yFreq: number;
+		xAmp: number;
+		yAmp: number;
+		rotSeed: number;
+		rotFreq: number;
+	}
+
 	const SYMBOLS: SymbolDef[] = [
-		// Top-right — large pentacle
 		{
 			type: 'pentacle',
 			size: 220,
@@ -31,7 +34,6 @@
 			delay: '0s',
 			opacity: '0.04'
 		},
-		// Bottom-left — large triskele
 		{
 			type: 'triskele',
 			sz: 'h-64 w-64',
@@ -41,7 +43,6 @@
 			delay: '0s',
 			opacity: '0.04'
 		},
-		// Top-left — medium triskele
 		{
 			type: 'triskele',
 			sz: 'h-40 w-40',
@@ -51,7 +52,6 @@
 			delay: '-14s',
 			opacity: '0.03'
 		},
-		// Bottom-right — small pentacle
 		{
 			type: 'pentacle',
 			size: 90,
@@ -61,7 +61,6 @@
 			delay: '-8s',
 			opacity: '0.05'
 		},
-		// Mid-left — medium pentacle
 		{
 			type: 'pentacle',
 			size: 150,
@@ -71,7 +70,6 @@
 			delay: '-5s',
 			opacity: '0.03'
 		},
-		// Mid-right — small triskele
 		{
 			type: 'triskele',
 			sz: 'h-28 w-28',
@@ -81,7 +79,6 @@
 			delay: '-19s',
 			opacity: '0.05'
 		},
-		// Upper-centre — small pentacle
 		{
 			type: 'pentacle',
 			size: 64,
@@ -91,7 +88,6 @@
 			delay: '-11s',
 			opacity: '0.04'
 		},
-		// Lower-centre — tiny triskele
 		{
 			type: 'triskele',
 			sz: 'h-20 w-20',
@@ -103,26 +99,62 @@
 		}
 	];
 
-	// Lerped cursor offset, normalised to [-0.5, 0.5] relative to viewport centre
+	// Randomised motion profile for every symbol
+	const MOTION: MotionState[] = SYMBOLS.map((s) => ({
+		xSeed: Math.random() * Math.PI * 2,
+		ySeed: Math.random() * Math.PI * 2,
+
+		xFreq: 0.08 + Math.random() * 0.18,
+		yFreq: 0.08 + Math.random() * 0.18,
+
+		xAmp: 10 + Math.random() * (40 + s.depth * 1200),
+		yAmp: 10 + Math.random() * (40 + s.depth * 1200),
+
+		rotSeed: Math.random() * Math.PI * 2,
+		rotFreq: 0.02 + Math.random() * 0.08
+	}));
+
 	let curX = $state(0);
 	let curY = $state(0);
-	// Raw scroll position
 	let scrollY = $state(0);
+	let time = $state(0);
 
-	/** Compute the parallax translate string for a given depth */
-	function parallax(depth: number): string {
-		const CURSOR_SCALE = 80; // max px offset at the screen edge
-		const SCROLL_SCALE = 0.18; // px of vertical offset per scrolled px
-		const px = (curX * depth * CURSOR_SCALE).toFixed(2);
-		const py = (curY * depth * CURSOR_SCALE - scrollY * depth * SCROLL_SCALE).toFixed(2);
-		return `transform: translate(${px}px, ${py}px)`;
+	function parallax(depth: number, index: number): string {
+		const CURSOR_SCALE = 80;
+		const SCROLL_SCALE = 0.18;
+
+		const px = curX * depth * CURSOR_SCALE;
+		const py = curY * depth * CURSOR_SCALE - scrollY * depth * SCROLL_SCALE;
+
+		const t = time * 0.001;
+		const m = MOTION[index];
+
+		// Multi-wave procedural motion
+		const driftX =
+			Math.sin(t * m.xFreq + m.xSeed) * m.xAmp +
+			Math.cos(t * (m.xFreq * 0.6) + m.ySeed) * (m.xAmp * 0.4);
+
+		const driftY =
+			Math.cos(t * m.yFreq + m.ySeed) * m.yAmp +
+			Math.sin(t * (m.yFreq * 0.5) + m.xSeed) * (m.yAmp * 0.35);
+
+		// Slow natural rotation
+		const rotation = Math.sin(t * m.rotFreq + m.rotSeed) * 12;
+
+		return `
+			transform:
+				translate(${(px + driftX).toFixed(2)}px, ${(py + driftY).toFixed(2)}px)
+				rotate(${rotation.toFixed(2)}deg)
+		`;
 	}
 
 	onMount(() => {
-		let rafId: number;
+		let rafId = 0;
+
 		let targetX = 0;
 		let targetY = 0;
-		const LERP = 0.045; // smoothing factor — lower = lazier
+
+		const LERP = 0.045;
 
 		function onMouseMove(e: MouseEvent) {
 			targetX = e.clientX / window.innerWidth - 0.5;
@@ -133,35 +165,33 @@
 			scrollY = window.scrollY;
 		}
 
-		function tick() {
-			// Exponential lerp toward the cursor target
+		function tick(now: number) {
+			time = now;
+
 			curX += (targetX - curX) * LERP;
 			curY += (targetY - curY) * LERP;
+
 			rafId = requestAnimationFrame(tick);
 		}
 
 		window.addEventListener('mousemove', onMouseMove, { passive: true });
 		window.addEventListener('scroll', onScroll, { passive: true });
+
 		rafId = requestAnimationFrame(tick);
 
 		return () => {
 			window.removeEventListener('mousemove', onMouseMove);
 			window.removeEventListener('scroll', onScroll);
+
 			cancelAnimationFrame(rafId);
 		};
 	});
 </script>
 
-<!--
-  Each symbol is two wrapper levels:
-    Outer div — absolute position + CSS float animation (translateY/rotate)
-    Inner div — JS parallax transform (translate)
-  Keeping them separate prevents the inline style from clobbering the keyframe transform.
--->
 <div class="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
-	{#each SYMBOLS as s}
+	{#each SYMBOLS as s, i}
 		<div class="{s.pos} {s.anim}" style="animation-delay: {s.delay}">
-			<div style={parallax(s.depth)}>
+			<div style={parallax(s.depth, i)}>
 				{#if s.type === 'pentacle'}
 					<Pentacle
 						size={s.size}
