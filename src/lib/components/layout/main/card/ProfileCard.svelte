@@ -19,17 +19,14 @@
 	{#if !profile}
 		<Card loading={true} variant="elevated" padding="none" class="overflow-hidden">
 			{#snippet skeleton()}
-				<!-- Banner skeleton -->
 				<div class="h-32 w-full rounded-t-xl bg-canvas-300 dark:bg-canvas-700"></div>
 
-				<!-- Avatar skeleton -->
 				<div class="relative -mt-16 flex justify-center sm:ml-6 sm:justify-start">
 					<div
 						class="h-32 w-32 rounded-full border-4 border-white bg-canvas-300 dark:border-canvas-900 dark:bg-canvas-700"
 					></div>
 				</div>
 
-				<!-- Profile content skeleton -->
 				<div class="space-y-2 p-6 pt-2 sm:pt-4">
 					<div class="h-6 w-1/2 rounded bg-canvas-300 dark:bg-canvas-700"></div>
 					<div class="h-4 w-1/3 rounded bg-canvas-300 dark:bg-canvas-700"></div>
@@ -46,9 +43,10 @@
 		</Card>
 	{:else}
 		{@const safeProfile = profile}
+		{@const profileName = safeProfile.displayName?.trim() || safeProfile.handle}
+
 		<Card variant="elevated" padding="none" ariaLabel="Profile information">
 			{#snippet children()}
-				<!-- Banner -->
 				<div class="relative h-32 w-full overflow-hidden rounded-t-xl">
 					{#if safeProfile.banner}
 						<NoiseImage
@@ -67,7 +65,6 @@
 					{/if}
 				</div>
 
-				<!-- Avatar -->
 				<div class="relative -mt-16 flex justify-center sm:ml-6 sm:justify-start">
 					<div
 						class="h-32 w-32 overflow-hidden rounded-full border-4 border-white bg-canvas-200 dark:border-canvas-900"
@@ -76,25 +73,24 @@
 							src={safeProfile.avatar}
 							seed={`${safeProfile.did || safeProfile.handle}|avatar`}
 							class="h-full w-full object-cover"
-							alt="{safeProfile.displayName || safeProfile.handle}'s avatar"
+							alt={`${profileName}'s avatar`}
 						/>
 					</div>
 				</div>
 
-				<!-- Profile Content -->
 				<div class="p-6">
 					<h2 class="text-2xl font-bold text-ink-900 dark:text-ink-50">
-						{safeProfile.displayName || safeProfile.handle}
+						{profileName}
 					</h2>
+
 					<p class="font-medium text-ink-700 dark:text-ink-200">@{safeProfile.handle}</p>
+
 					{#if safeProfile.pronouns}
 						<p class="text-sm text-ink-600 italic dark:text-ink-300">{safeProfile.pronouns}</p>
 					{/if}
 
 					{#if safeProfile.description}
-						<p
-							class="wrap-break-words mb-4 break-all whitespace-pre-wrap text-ink-700 dark:text-ink-200"
-						>
+						<p class="mb-4 break-words whitespace-pre-wrap text-ink-700 dark:text-ink-200">
 							{safeProfile.description}
 						</p>
 					{/if}
@@ -106,12 +102,14 @@
 							</span>
 							<span class="text-ink-700 dark:text-ink-200">Posts</span>
 						</div>
+
 						<div class="flex items-center gap-1" role="listitem">
 							<span class="font-bold text-ink-900 dark:text-ink-50">
 								{formatCompactNumber(safeProfile.followersCount, locale)}
 							</span>
 							<span class="text-ink-700 dark:text-ink-200">Followers</span>
 						</div>
+
 						<div class="flex items-center gap-1" role="listitem">
 							<span class="font-bold text-ink-900 dark:text-ink-50">
 								{formatCompactNumber(safeProfile.followsCount, locale)}
