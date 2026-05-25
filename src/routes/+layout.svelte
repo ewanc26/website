@@ -5,7 +5,8 @@
 		Footer,
 		ScrollToTop,
 		NavigationProgress,
-		BackgroundSymbols
+		BackgroundSymbols,
+		DevBadge
 	} from '$lib/components/layout';
 	import HappyMacEasterEgg from '$lib/components/HappyMacEasterEgg.svelte';
 	import { type SiteMetadata } from '$lib/helper/siteMeta';
@@ -129,6 +130,7 @@
 >
 	<!-- Floating background symbols — cursor-reactive parallax + scroll drift -->
 	<BackgroundSymbols />
+	<DevBadge />
 
 	<NavigationProgress />
 	<Header profile={data.profile} />

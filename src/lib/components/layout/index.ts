@@ -3,6 +3,7 @@ export { default as Header } from './header/Header.svelte';
 export { default as Footer } from './footer/Footer.svelte';
 export { default as ColorThemeToggle } from './header/ColorThemeToggle.svelte';
 export { default as BackgroundSymbols } from './BackgroundSymbols.svelte';
+export { default as DevBadge } from './DevBadge.svelte';
 
 // DynamicLinks stays local — it uses the DID-bound service wrapper.
 export { default as DynamicLinks } from './main/DynamicLinks.svelte';
