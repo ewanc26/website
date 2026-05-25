@@ -8,7 +8,7 @@ import { getPublicationFromSlug, isTidFormat, getSlugFromPublicationRkey } from 
  * Handles both:
  * - /{slug} redirects to the appropriate Standard.site publication URL
  * - /{publication-rkey} redirects to the publication (for site.standard.publication rkeys)
- * 
+ *
  * Uses the slug mapping config to find the publication rkey for slugs.
  * Individual documents are handled by the [rkey] route.
  */

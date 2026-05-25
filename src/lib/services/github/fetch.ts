@@ -66,7 +66,11 @@ export async function fetchGitHubProfile(
 export async function fetchGitHubRepos(
 	username: string,
 	fetchFn?: typeof fetch,
-	options?: { sort?: 'created' | 'updated' | 'pushed' | 'full_name'; direction?: 'asc' | 'desc'; per_page?: number }
+	options?: {
+		sort?: 'created' | 'updated' | 'pushed' | 'full_name';
+		direction?: 'asc' | 'desc';
+		per_page?: number;
+	}
 ): Promise<GitHubRepo[]> {
 	const params = new URLSearchParams({
 		sort: options?.sort || 'updated',

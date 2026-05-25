@@ -145,7 +145,7 @@
 		{@render children()}
 	</main>
 
-	<Footer profile={data.profile} siteInfo={data.siteInfo} />
+	<Footer profile={data.profile ?? null} siteInfo={data.siteInfo ?? null} />
 
 	<!-- Easter egg: Happy Mac walks across the screen (click version number 24 times!) -->
 	<HappyMacEasterEgg />

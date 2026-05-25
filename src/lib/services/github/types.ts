@@ -59,14 +59,14 @@ export interface GitHubRepo {
 	language: string | null;
 	forks_count: number;
 	stargazers_count: number;
- watchers_count: number;
+	watchers_count: number;
 	size: number;
 	default_branch: string;
 	open_issues_count: number;
 	is_template: boolean;
 	topics: string[];
 	visibility: 'public' | 'private';
- pushed_at: string;
+	pushed_at: string;
 	created_at: string;
 	updated_at: string;
 	archived: boolean;

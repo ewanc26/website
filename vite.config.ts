@@ -19,7 +19,6 @@ export default defineConfig({
 		__GIT_COMMIT__: JSON.stringify(gitCommit)
 	},
 
-
 	build: {
 		// Optimize chunk splitting for better caching
 		rollupOptions: {

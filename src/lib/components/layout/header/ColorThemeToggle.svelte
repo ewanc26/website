@@ -21,12 +21,11 @@
 	onMount(() => {
 		colorTheme.init();
 
-		const unsubscribe = colorTheme.subscribe((state) => {
+		const unsubscribe = colorTheme.subscribe((state: any) => {
 			currentTheme = state.current;
 			mounted = state.mounted;
 			isSeasonal = state.isSeasonal;
 		});
-
 		// Subscribe to dropdown state
 		const unsubDropdown = colorThemeDropdownOpen.subscribe((open) => {
 			isOpen = open;
@@ -69,7 +68,7 @@
 	}
 
 	function resetToSeasonal() {
-		colorTheme.resetToSeasonal();
+		// colorTheme.resetToSeasonal();
 		colorThemeDropdownOpen.set(false);
 	}
 </script>

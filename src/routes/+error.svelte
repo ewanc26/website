@@ -106,7 +106,11 @@
 	});
 
 	const meta = $derived({
-		title: `${status} - ${errorConfig.title}`
+		title: `${status} - ${errorConfig.title}`,
+		description: errorConfig.description.replace(/<[^>]*>/g, ''),
+		keywords: 'error, page not found, issue',
+		url: $page.url.href,
+		image: '/favicon/android-chrome-512x512.png'
 	});
 </script>
 
@@ -115,7 +119,7 @@
 	<meta name="description" content={errorConfig.description.replace(/<[^>]*>/g, '')} />
 </svelte:head>
 
-<MetaTags siteMeta={meta} />
+<MetaTags {meta} />
 
 <div class="mx-auto max-w-2xl py-8">
 	<Card variant="elevated" padding="lg">

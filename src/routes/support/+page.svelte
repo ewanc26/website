@@ -154,8 +154,8 @@
 			</a>
 		</div>
 		<div class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2">
-			<KofiSupporters />
-			<GitHubSponsors />
+			<KofiSupporters supporters={[]} />
+			<GitHubSponsors sponsors={[]} />
 		</div>
 		<TransparencyCard />
 

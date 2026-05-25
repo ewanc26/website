@@ -167,7 +167,7 @@
 	}
 </script>
 
-<MetaTags meta={data.meta} siteMeta={data.meta} />
+<MetaTags meta={data.meta} />
 
 <div class="mx-auto max-w-4xl">
 	<!-- Page Header -->

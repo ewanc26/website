@@ -27,13 +27,13 @@ interface GitHubEvent {
 	created_at: string;
 }
 
-interface ContributionDay {
+export interface ContributionDay {
 	date: string;
 	count: number;
 	level: 0 | 1 | 2 | 3 | 4;
 }
 
-interface ContributionData {
+export interface ContributionData {
 	total: number;
 	days: ContributionDay[];
 	weeks: ContributionDay[][];
