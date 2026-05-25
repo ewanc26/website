@@ -1,7 +1,9 @@
 <script lang="ts">
 	import qrcode from 'qrcode-generator';
 	import { Coffee, Github, Heart } from '@lucide/svelte';
-	import Card from '$lib/components/ui/Card.svelte';
+	import { KofiSupporters, GitHubSponsors } from '@ewanc26/supporters';
+	import TransparencyCard from '$lib/components/TransparencyCard.svelte';
+	import FaqCard from '$lib/components/FaqCard.svelte';
 	import { MetaTags } from '$lib/components/seo';
 	import { PUBLIC_KOFI_PAGE_ID } from '$env/static/public';
 	import type { PageData } from './$types';
@@ -83,15 +85,18 @@
 
 <MetaTags meta={data.meta} />
 
-<div class="mx-auto max-w-md space-y-6">
-	<div class="flex items-center gap-2">
-		<Heart size={20} class="text-primary-600 dark:text-primary-400" />
-		<h1 class="text-xl font-black text-ink-900 dark:text-ink-50">Support my work</h1>
+<div class="mx-auto max-w-md space-y-8">
+	<div class="space-y-4">
+		<div class="flex items-center gap-2">
+			<Heart size={24} class="text-primary-600 dark:text-primary-400" />
+			<h1 class="text-2xl font-black text-ink-900 dark:text-ink-50">Support the Toolkit</h1>
+		</div>
+		<p class="text-sm leading-relaxed font-medium opacity-80">
+			Everything I build is free and open-source because I believe the tools for the open social web
+			should be accessible to everyone. Your support keeps these projects running, pays for server
+			costs, and gives me the time to keep building things that matter.
+		</p>
 	</div>
-
-	<p class="text-sm font-medium opacity-60">
-		If you find my projects useful, consider buying me a tea.
-	</p>
 
 	<!-- Fiat / Crypto Tabs -->
 	<div role="tablist" class="flex gap-1 rounded-2xl bg-canvas-200 p-1 dark:bg-canvas-800">
@@ -133,7 +138,7 @@
 					size={18}
 					class="transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400"
 				/>
-				Ko-fi
+				Buy me a tea
 			</a>
 			<a
 				href="https://github.com/sponsors/ewanc26"
@@ -148,6 +153,12 @@
 				GitHub
 			</a>
 		</div>
+		<div class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2">
+			<KofiSupporters />
+			<GitHubSponsors />
+		</div>
+		<TransparencyCard />
+		<FaqCard />
 	{:else}
 		<div class="space-y-3">
 			{#if active.preferred}

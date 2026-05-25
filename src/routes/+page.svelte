@@ -38,6 +38,16 @@
 	let popfeedReviews = $state<PageData['popfeedReviews']>(data.popfeedReviews);
 	let profile = $state<PageData['profile']>(data.profile);
 
+	$effect(() => {
+		kibunStatus = data.kibunStatus;
+		musicStatus = data.musicStatus;
+		latestPost = data.latestPost;
+		documents = data.documents;
+		supporters = data.supporters;
+		popfeedReviews = data.popfeedReviews;
+		profile = data.profile;
+	});
+
 	// Live-update pulse indicators — briefly true when firehose updates a card
 	let kibunPulse = $state(false);
 	let musicPulse = $state(false);
