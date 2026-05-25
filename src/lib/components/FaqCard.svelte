@@ -1,48 +1,32 @@
-<div class="faq-card">
-	<div class="card-header">
-		<h2 class="text-lg font-black text-ink-900 dark:text-ink-50">FAQ</h2>
-	</div>
+<div
+	class="rounded-2xl border border-canvas-200 bg-canvas-100 p-6 dark:border-canvas-700 dark:bg-canvas-800/30"
+>
+	<h2 class="mb-4 text-lg font-black text-ink-900 dark:text-ink-50">Frequently Asked Questions</h2>
 	<div class="faq-list space-y-4">
 		<div class="item">
-			<h3 class="q">Is my support mandatory?</h3>
-			<p class="a">No. All tools remain free and open-source. Patronage is entirely optional.</p>
+			<h3 class="mb-1 text-sm font-bold text-ink-900 dark:text-ink-100">
+				Is my support mandatory?
+			</h3>
+			<p class="text-sm leading-relaxed text-ink-700 dark:text-ink-300">
+				No. All tools remain free and open-source. Patronage is entirely optional.
+			</p>
 		</div>
 		<div class="item">
-			<h3 class="q">Where does the money go?</h3>
-			<p class="a">
+			<h3 class="mb-1 text-sm font-bold text-ink-900 dark:text-ink-100">
+				Where does the money go?
+			</h3>
+			<p class="text-sm leading-relaxed text-ink-700 dark:text-ink-300">
 				It directly funds server infrastructure, domain costs, and my time spent maintaining and
 				building new features.
 			</p>
 		</div>
 		<div class="item">
-			<h3 class="q">Why not just use a subscription?</h3>
-			<p class="a">
+			<h3 class="mb-1 text-sm font-bold text-ink-900 dark:text-ink-100">
+				Why not just use a subscription?
+			</h3>
+			<p class="text-sm leading-relaxed text-ink-700 dark:text-ink-300">
 				I prefer the patronage model. It keeps the community open and removes barriers to entry.
 			</p>
 		</div>
 	</div>
 </div>
-
-<style>
-	.faq-card {
-		background: var(--canvas-100);
-		border: 1px solid var(--border);
-		border-radius: 1rem;
-		padding: 1.5rem;
-	}
-	.card-header {
-		margin-bottom: 1rem;
-	}
-	.q {
-		font-size: 0.9rem;
-		font-weight: 700;
-		color: #fafaf9;
-		margin-bottom: 0.25rem;
-	}
-	.a {
-		font-size: 0.85rem;
-		color: var(--muted);
-		margin: 0;
-		line-height: 1.5;
-	}
-</style>

@@ -158,6 +158,29 @@
 			<GitHubSponsors />
 		</div>
 		<TransparencyCard />
+
+		<!-- CTA: How else to help -->
+		<div
+			class="rounded-2xl border border-canvas-200 bg-canvas-50 p-6 dark:border-canvas-700 dark:bg-canvas-800/50"
+		>
+			<h2 class="mb-3 text-lg font-black text-ink-900 dark:text-ink-50">
+				Can't support financially?
+			</h2>
+			<p class="mb-4 text-sm leading-relaxed font-medium opacity-80">
+				That's perfectly fine! You can still help by sharing these tools with your community,
+				reporting bugs, or contributing to the codebase on GitHub. Every bit of visibility helps.
+			</p>
+			<a
+				href="https://github.com/ewanc26"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="inline-flex items-center gap-2 text-sm font-bold text-primary-600 hover:underline dark:text-primary-400"
+			>
+				<Github size={16} />
+				Visit GitHub
+			</a>
+		</div>
+
 		<FaqCard />
 	{:else}
 		<div class="space-y-3">
