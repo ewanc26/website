@@ -50,7 +50,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 		]);
 
 	// Filter to only blog posts (devlog publication), take 5
-	const allDocuments = documents.status === 'fulfilled' ? documents.value : [];
+	const allDocuments = documents.status === 'fulfilled' ? (documents.value ?? []) : [];
 	const blogPosts = allDocuments
 		.filter((doc) => doc.publicationRkey === BLOG_PUBLICATION_RKEY)
 		.slice(0, 5);

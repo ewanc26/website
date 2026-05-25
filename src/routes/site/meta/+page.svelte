@@ -18,7 +18,7 @@
 	<meta name="description" content={meta.description} />
 </svelte:head>
 
-<MetaTags {meta} siteMeta={meta} />
+<MetaTags {meta} />
 
 <div class="mx-auto max-w-5xl space-y-8">
 	<div class="mb-8 text-center">

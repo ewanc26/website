@@ -8,8 +8,8 @@
  * - template: 'default' | 'blog' | 'profile' (default: 'default')
  */
 
-import { createOgEndpoint } from '@ewanc26/og'
-import { PUBLIC_SITE_URL } from '$env/static/public'
+import { createOgEndpoint } from '@ewanc26/og';
+import { PUBLIC_SITE_URL } from '$env/static/public';
 
 export const GET = createOgEndpoint({
 	siteName: new URL(PUBLIC_SITE_URL).hostname,
@@ -17,8 +17,8 @@ export const GET = createOgEndpoint({
 	colors: {
 		background: '#0f1a15',
 		text: '#e8f5e9',
-		accent: '#86efac',
+		accent: '#86efac'
 	},
 
-	cacheMaxAge: 86400, // 24 hours
-})
+	cacheMaxAge: 86400 // 24 hours
+});

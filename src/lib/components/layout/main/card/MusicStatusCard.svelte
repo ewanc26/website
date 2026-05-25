@@ -28,7 +28,6 @@
 		if (!domain) return '';
 		return domain.replace('lastfm', 'Last.fm').replace('last.fm', 'Last.fm');
 	}
-
 </script>
 
 <div class="mx-auto w-full max-w-2xl">
@@ -70,10 +69,10 @@
 						<!-- Artwork -->
 						<div class="shrink-0">
 							<NoiseImage
-							src={safeMusicStatus.artworkUrl}
-							seed={`${safeMusicStatus.trackName}|${formatArtists(safeMusicStatus.artists)}`}
-							class="h-20 w-20 rounded-lg object-cover shadow-md"
-							alt="Album artwork for {safeMusicStatus.releaseName || safeMusicStatus.trackName}"
+								src={safeMusicStatus.artworkUrl}
+								seed={`${safeMusicStatus.trackName}|${formatArtists(safeMusicStatus.artists)}`}
+								class="h-20 w-20 rounded-lg object-cover shadow-md"
+								alt="Album artwork for {safeMusicStatus.releaseName || safeMusicStatus.trackName}"
 							/>
 						</div>
 

@@ -1,6 +1,11 @@
 import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 import { fetchEvents, fetchSponsorEvents } from '@ewanc26/supporters';
-import type { KofiSupportEvent, KofiEventType, GitHubSponsorEvent, GitHubSponsorshipAction } from '@ewanc26/supporters';
+import type {
+	KofiSupportEvent,
+	KofiEventType,
+	GitHubSponsorEvent,
+	GitHubSponsorshipAction
+} from '@ewanc26/supporters';
 
 export type { KofiEventType, GitHubSponsorshipAction };
 

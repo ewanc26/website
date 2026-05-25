@@ -1,6 +1,10 @@
 import { json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
-import { parseGitHubSponsorsWebhook, GitHubWebhookError, appendSponsorEvent } from '@ewanc26/supporters';
+import {
+	parseGitHubSponsorsWebhook,
+	GitHubWebhookError,
+	appendSponsorEvent
+} from '@ewanc26/supporters';
 import { bridgeAtprotoEnv } from '$lib/server/bridgeAtprotoEnv';
 import type { RequestHandler } from './$types';
 
@@ -25,7 +29,10 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 	} catch (err) {
 		if (err instanceof GitHubWebhookError) {
-			console.error('[webhook/github] GitHubWebhookError', { status: err.status, message: err.message });
+			console.error('[webhook/github] GitHubWebhookError', {
+				status: err.status,
+				message: err.message
+			});
 			return json({ error: err.message }, { status: err.status });
 		}
 		console.error('[webhook/github] unexpected parse error', err);

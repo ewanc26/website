@@ -11,7 +11,7 @@ import { generateRSSFeed, createRSSResponse, type RSSItem } from '$lib/utils/rss
 
 /**
  * RSS 2.0 feed for Standard.site publications
- * 
+ *
  * Accessible via:
  * - /{slug}/rss - publication identified by slug
  * - /{publication-rkey}/rss - publication identified by rkey

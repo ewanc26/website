@@ -180,7 +180,7 @@
 	}
 </script>
 
-<MetaTags {meta} siteMeta={meta} />
+<MetaTags {meta} />
 
 <div class="mx-auto max-w-6xl space-y-8">
 	<!-- Hero Section -->
@@ -252,7 +252,7 @@
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Experience</h2>
 			<div class="space-y-4">
 				{#each positions as position}
-					<Card key={position.uri} variant="default" padding="md">
+					<Card variant="default" padding="md">
 						{#snippet children()}
 							<div class="flex items-start gap-3">
 								<div class="rounded-lg bg-canvas-200 p-2 dark:bg-canvas-700">
@@ -312,7 +312,7 @@
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Education</h2>
 			<div class="space-y-4">
 				{#each education as edu}
-					<Card key={edu.uri} variant="default" padding="md">
+					<Card variant="default" padding="md">
 						{#snippet children()}
 							<div class="flex items-start gap-3">
 								<div class="rounded-lg bg-canvas-200 p-2 dark:bg-canvas-700">
@@ -377,7 +377,6 @@
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 				{#each projects as project}
 					<Card
-						key={project.uri}
 						variant="default"
 						padding="md"
 						class="flex flex-col"
@@ -420,7 +419,7 @@
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Volunteering</h2>
 			<div class="space-y-4">
 				{#each volunteering as vol}
-					<Card key={vol.uri} variant="default" padding="md">
+					<Card variant="default" padding="md">
 						{#snippet children()}
 							<div class="flex items-start gap-3">
 								<div class="rounded-lg bg-canvas-200 p-2 dark:bg-canvas-700">
@@ -461,7 +460,6 @@
 			<div class="space-y-4">
 				{#each publications as pub}
 					<Card
-						key={pub.uri}
 						variant="default"
 						padding="md"
 						interactive={!!pub.url}
@@ -504,7 +502,7 @@
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Honors & Awards</h2>
 			<div class="space-y-4">
 				{#each honors as honor}
-					<Card key={honor.uri} variant="default" padding="md">
+					<Card variant="default" padding="md">
 						{#snippet children()}
 							<div class="flex items-start gap-3">
 								<div class="rounded-lg bg-canvas-200 p-2 dark:bg-canvas-700">
@@ -541,7 +539,7 @@
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Certifications</h2>
 			<div class="space-y-4">
 				{#each certifications as cert}
-					<Card key={cert.uri} variant="default" padding="md">
+					<Card variant="default" padding="md">
 						{#snippet children()}
 							<div class="flex items-start gap-3">
 								<div class="rounded-lg bg-canvas-200 p-2 dark:bg-canvas-700">
@@ -575,7 +573,7 @@
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Courses</h2>
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 				{#each courses as course}
-					<Card key={course.uri} variant="default" padding="md">
+					<Card variant="default" padding="md">
 						{#snippet children()}
 							<div class="flex items-start gap-3">
 								<div class="rounded-lg bg-canvas-200 p-2 dark:bg-canvas-700">
@@ -607,7 +605,7 @@
 			<h2 class="mb-6 text-2xl font-bold text-ink-900 dark:text-ink-50">Languages</h2>
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 				{#each languages as lang}
-					<Card key={lang.uri} variant="default" padding="md">
+					<Card variant="default" padding="md">
 						{#snippet children()}
 							<div class="flex items-center gap-3">
 								<div class="rounded-lg bg-canvas-200 p-2 dark:bg-canvas-700">

@@ -5,4 +5,9 @@ export {
 	fetchRecentDocuments as fetchRecentStandardSiteDocuments,
 	fetchBlogPosts
 } from './documents';
-export type { StandardSitePublication, StandardSitePublicationsData, StandardSiteDocument, StandardSiteDocumentsData } from './documents';
+export type {
+	StandardSitePublication,
+	StandardSitePublicationsData,
+	StandardSiteDocument,
+	StandardSiteDocumentsData
+} from './documents';

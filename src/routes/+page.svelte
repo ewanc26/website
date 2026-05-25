@@ -27,16 +27,14 @@
 	// SSR data — immutable baseline from the load function
 	let { data } = $props();
 
-	// Mutable copies for firehose live updates — initialised from SSR data
-	// (state_referenced_locally warnings are intentional: we need mutable copies
-	// that firehose can update independently of the prop)
-	let kibunStatus = $state<PageData['kibunStatus']>(data.kibunStatus);
-	let musicStatus = $state<PageData['musicStatus']>(data.musicStatus);
-	let latestPost = $state<PageData['latestPost']>(data.latestPost);
-	let documents = $state<PageData['documents']>(data.documents);
-	let supporters = $state<PageData['supporters']>(data.supporters);
-	let popfeedReviews = $state<PageData['popfeedReviews']>(data.popfeedReviews);
-	let profile = $state<PageData['profile']>(data.profile);
+	// Mutable copies for firehose live updates
+	let kibunStatus = $state(data.kibunStatus);
+	let musicStatus = $state(data.musicStatus);
+	let latestPost = $state(data.latestPost);
+	let documents = $state(data.documents);
+	let supporters = $state(data.supporters);
+	let popfeedReviews = $state(data.popfeedReviews);
+	let profile = $state(data.profile);
 
 	$effect(() => {
 		kibunStatus = data.kibunStatus;
@@ -148,7 +146,7 @@
 	});
 </script>
 
-<MetaTags meta={data.meta} siteMeta={data.meta} />
+<MetaTags meta={data.meta} />
 
 <div class="mx-auto max-w-6xl">
 	<!-- Masonry-style grid using Tailwind's column utilities -->
@@ -200,7 +198,7 @@
 				<SupportersCard {supporters} />
 			</div>
 		{/if}
-		{#if popfeedReviews.length > 0}
+		{#if popfeedReviews && popfeedReviews.length > 0}
 			<div
 				class="animate-entrance mb-6 break-inside-avoid"
 				class:animate-live-pulse={popfeedPulse}
