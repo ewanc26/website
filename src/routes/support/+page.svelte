@@ -153,10 +153,7 @@
 				GitHub
 			</a>
 		</div>
-		<div class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2">
-			<KofiSupporters supporters={[]} />
-			<GitHubSponsors sponsors={[]} />
-		</div>
+		<div class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2"></div>
 		<TransparencyCard />
 
 		<!-- CTA: How else to help -->
