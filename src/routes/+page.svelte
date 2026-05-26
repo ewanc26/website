@@ -151,31 +151,31 @@
 		<div
 			class="animate-entrance mb-6 break-inside-avoid"
 			class:animate-live-pulse={kibunPulse}
-			style="animation-delay: 80ms"
+			style="animation-delay: 150ms"
 		>
 			<KibunStatusCard {kibunStatus} />
 		</div>
 		<div
 			class="animate-entrance mb-6 break-inside-avoid"
 			class:animate-live-pulse={musicPulse}
-			style="animation-delay: 160ms"
+			style="animation-delay: 300ms"
 		>
 			<MusicStatusCard {musicStatus} />
 		</div>
 		<div
 			class="animate-entrance mb-6 break-inside-avoid"
 			class:animate-live-pulse={postPulse}
-			style="animation-delay: 240ms"
+			style="animation-delay: 450ms"
 		>
 			<BlueskyPostCard post={latestPost} />
 		</div>
-		<div class="animate-entrance mb-6 break-inside-avoid" style="animation-delay: 320ms">
+		<div class="animate-entrance mb-6 break-inside-avoid" style="animation-delay: 600ms">
 			<DynamicLinks />
 		</div>
 		<div
 			class="animate-entrance mb-6 break-inside-avoid"
 			class:animate-live-pulse={docsPulse}
-			style="animation-delay: 400ms"
+			style="animation-delay: 750ms"
 		>
 			<PostCard {documents} />
 		</div>
@@ -183,7 +183,7 @@
 			<div
 				class="animate-entrance mb-6 break-inside-avoid"
 				class:animate-live-pulse={supportersPulse}
-				style="animation-delay: 480ms"
+				style="animation-delay: 900ms"
 			>
 				<SupportersCard {supporters} />
 			</div>
@@ -192,7 +192,7 @@
 			<div
 				class="animate-entrance mb-6 break-inside-avoid"
 				class:animate-live-pulse={popfeedPulse}
-				style="animation-delay: 560ms"
+				style="animation-delay: 1050ms"
 			>
 				<PopfeedCard reviews={popfeedReviews} handle={profile?.handle} />
 			</div>
