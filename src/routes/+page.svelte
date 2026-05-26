@@ -27,24 +27,14 @@
 	// SSR data — immutable baseline from the load function
 	let { data } = $props();
 
-	// Mutable copies for firehose live updates
-	let kibunStatus = $state(data.kibunStatus);
-	let musicStatus = $state(data.musicStatus);
-	let latestPost = $state(data.latestPost);
-	let documents = $state(data.documents);
-	let supporters = $state(data.supporters);
-	let popfeedReviews = $state(data.popfeedReviews);
-	let profile = $state(data.profile);
-
-	$effect(() => {
-		kibunStatus = data.kibunStatus;
-		musicStatus = data.musicStatus;
-		latestPost = data.latestPost;
-		documents = data.documents;
-		supporters = data.supporters;
-		popfeedReviews = data.popfeedReviews;
-		profile = data.profile;
-	});
+	// Derived values for firehose live updates
+	let kibunStatus = $derived(data.kibunStatus);
+	let musicStatus = $derived(data.musicStatus);
+	let latestPost = $derived(data.latestPost);
+	let documents = $derived(data.documents);
+	let supporters = $derived(data.supporters);
+	let popfeedReviews = $derived(data.popfeedReviews);
+	let profile = $derived(data.profile);
 
 	// Live-update pulse indicators — briefly true when firehose updates a card
 	let kibunPulse = $state(false);
