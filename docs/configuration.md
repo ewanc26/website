@@ -381,7 +381,7 @@ The site automatically displays data from these AT Protocol lexicons:
 
 - Current playing status via teal.fm
 - Automatic album artwork from MusicBrainz
-- Scrobbles from Last.fm, Spotify, etc.
+- Scrobbles from Last.fm, Spotify, Apple Music, and YouTube Music
 - No configuration needed
 
 #### Mood Status (`social.kibun.status`)

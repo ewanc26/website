@@ -225,6 +225,8 @@ async function searchLastFm(artistName: string, releaseName?: string): Promise<s
  * GET /api/artwork
  * Query params: trackName, artistName, releaseName?, releaseMbId?
  *
+ * `releaseMbId` may be either a raw UUID or an `mbid:<uuid>` URI.
+ *
  * Features:
  * - Intelligent caching (1 hour TTL)
  * - Multiple fallback sources (MusicBrainz, iTunes, Deezer, Last.fm)
@@ -234,14 +236,18 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
 	const trackName = url.searchParams.get('trackName');
 	const artistName = url.searchParams.get('artistName');
 	const releaseName = url.searchParams.get('releaseName') || undefined;
-	const releaseMbId = url.searchParams.get('releaseMbId') || undefined;
+	const rawReleaseMbId = url.searchParams.get('releaseMbId') || undefined;
+	const releaseMbId = rawReleaseMbId?.trim();
+	const releaseMbUuid = releaseMbId?.toLowerCase().startsWith('mbid:')
+		? releaseMbId.slice(5).toLowerCase()
+		: releaseMbId?.toLowerCase();
 
 	if (!trackName || !artistName) {
 		throw error(400, 'Missing required parameters: trackName and artistName');
 	}
 
 	// Create cache key from parameters
-	const cacheKey = `artwork:${trackName}:${artistName}:${releaseName || ''}:${releaseMbId || ''}`;
+	const cacheKey = `artwork:${trackName}:${artistName}:${releaseName || ''}:${releaseMbUuid || ''}`;
 
 	// Check cache first
 	const cachedResult = artworkCache.get(cacheKey);
@@ -261,8 +267,8 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
 	let result: ArtworkResult;
 
 	// If we have a MusicBrainz ID, use it directly
-	if (releaseMbId) {
-		const artworkUrl = `https://coverartarchive.org/release/${releaseMbId}/front-500`;
+	if (releaseMbUuid) {
+		const artworkUrl = `https://coverartarchive.org/release/${releaseMbUuid}/front-500`;
 		result = {
 			artworkUrl,
 			source: 'musicbrainz-direct'
