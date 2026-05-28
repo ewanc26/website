@@ -21,7 +21,7 @@ Ewan Croft is a UK-based student, developer, and writer building open-source too
 
 Ewan's open-source tools are hosted on croft.click:
 - Jasper (jasper.croft.click): Instagram → Grain/Spark on ATProto
-- Malachite (malachite.croft.click): Last.fm/Spotify → Teal on ATProto
+- Malachite (malachite.croft.click): Last.fm, Spotify, Apple Music, and YouTube Music → Teal on ATProto
 - Bismuth (bismuth.croft.click): Standard.site documents → Markdown
 - Opal (opal.croft.click): Twitter/Mastodon/Threads/Nostr → Bluesky
 - Tourmaline (tourmaline.croft.click): Teal.fm scrobble analyser
