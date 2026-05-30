@@ -1,4 +1,10 @@
 <script lang="ts">
+  import ProjectList from '$lib/components/ProjectList.svelte';
+
+  const projects = [
+    { title: 'Project A', description: 'A systematic design study.', url: '#' },
+    { title: 'Project B', description: 'Exploring data structures.', url: '#' }
+  ];
 </script>
 
 <main>
@@ -7,7 +13,7 @@
         <p>A minimalist, systematic redesign.</p>
     </header>
     <section>
-        <h2 style="font-size: var(--text-lg);">Welcome</h2>
-        <p>This is the initial index page for the redesign.</p>
+        <h2 style="font-size: var(--text-lg);">Projects</h2>
+        <ProjectList {projects} />
     </section>
 </main>
