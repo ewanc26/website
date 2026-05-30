@@ -1,2 +1,4 @@
 allowBuilds:
   core-js: set this to true or false
+minimumReleaseAgeExclude:
+  - "@ewanc26/atproto@0.2.12"
