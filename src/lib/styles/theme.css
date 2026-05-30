@@ -1,0 +1,40 @@
+:root {
+  /* Color (OKLCH - Example base Hue 240, neutral tinted) */
+  --bg-color: oklch(0.98 0.005 240);
+  --text-color: oklch(0.2 0.01 240);
+  --accent-color: oklch(0.6 0.15 240);
+  --surface-color: oklch(0.96 0.005 240);
+
+  /* Spacing (4pt Scale) */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 32px;
+  --space-xl: 64px;
+
+  /* Typography (Variable Inter) */
+  --font-family: "InterVariable", sans-serif;
+  --text-sm: clamp(0.8rem, 0.75vw + 0.6rem, 1rem);
+  --text-md: clamp(1rem, 1vw + 0.8rem, 1.25rem);
+  --text-lg: clamp(1.25rem, 1.5vw + 1rem, 2rem);
+  --text-xl: clamp(2rem, 2vw + 1.5rem, 3rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: oklch(0.15 0.01 240);
+    --text-color: oklch(0.9 0.01 240);
+    --surface-color: oklch(0.2 0.01 240);
+  }
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  margin: 0;
+  padding: var(--space-md);
+  line-height: 1.5;
+  max-width: 70ch;
+  margin-inline: auto;
+}
