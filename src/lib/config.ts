@@ -1,6 +1,6 @@
 export const SITE = {
-  title: "Website Redesign",
-  description: "A minimalist, systematic redesign.",
+  title: "Ewan’s Blog",
+  description: "I ramble, enjoy.",
 };
 
 export const NOW = {
