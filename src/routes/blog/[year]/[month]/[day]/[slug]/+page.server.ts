@@ -28,10 +28,12 @@ export const load: PageServerLoad = async ({ params }) => {
         throw error(404, 'Post not found');
     }
 
-    let markdown = post.content || post.textContent || "";
-    if (post.content && leafletProvider.matches(post.content)) {
+    let markdown = "";
+    if (post.content && typeof post.content === 'object' && leafletProvider.matches(post.content)) {
         const result = await leafletProvider.toMarkdown(post.content, { fetchBlob });
         markdown = result.markdown;
+    } else {
+        markdown = typeof post.content === 'string' ? post.content : (post.textContent || "");
     }
     
     const renderedContent = await renderMarkdown(markdown);
