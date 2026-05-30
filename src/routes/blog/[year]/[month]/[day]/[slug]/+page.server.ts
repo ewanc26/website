@@ -29,7 +29,7 @@ export const load: PageServerLoad = async ({ params }) => {
     }
 
     let markdown = post.content || post.textContent || "";
-    if (leafletProvider.matches(post.content)) {
+    if (post.content && leafletProvider.matches(post.content)) {
         const result = await leafletProvider.toMarkdown(post.content, { fetchBlob });
         markdown = result.markdown;
     }
