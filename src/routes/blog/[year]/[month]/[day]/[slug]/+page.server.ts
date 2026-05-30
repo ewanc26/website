@@ -2,6 +2,7 @@ import type { PageServerLoad } from './$types';
 import { fetchBlogPosts } from '$lib/services/atproto/fetch';
 import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from '$env/static/public';
 import { error } from '@sveltejs/kit';
+import { normalizeSlug } from '$lib/utils/slugify';
 
 export const load: PageServerLoad = async ({ params }) => {
     const { year, month, day, slug } = params;
@@ -16,8 +17,7 @@ export const load: PageServerLoad = async ({ params }) => {
         const m = (date.getMonth() + 1).toString().padStart(2, '0');
         const d = date.getDate().toString().padStart(2, '0');
         
-        // This is a naive slug mapping, will need adjustment based on real BlogPost structure
-        const postSlug = p.title.toLowerCase().replace(/ /g, '-'); 
+        const postSlug = normalizeSlug(p.title); 
         
         return y === year && m === month && d === day && postSlug === slug;
     });
