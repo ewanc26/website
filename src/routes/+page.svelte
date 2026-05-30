@@ -2,10 +2,8 @@
   import { SITE, PROJECTS } from '$lib/config';
   import ProjectList from '$lib/components/ProjectList.svelte';
   import Now from '$lib/components/Now.svelte';
-  import { normalizeSlug } from '$lib/utils/slugify';
 
   let { data } = $props();
-
   function getBlogUrl(post: any) {
     const rkey = post.rkey || post.uri.split('/').pop();
     return `/blog/${rkey}`;
