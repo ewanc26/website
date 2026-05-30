@@ -25,9 +25,13 @@
   "dependencies": {
     "@ewanc26/atproto": "^0.2.10",
     "lucide-svelte": "^0.475.0",
+    "rehype-raw": "^7.0.0",
+    "rehype-sanitize": "^6.0.0",
+    "rehype-stringify": "^10.0.1",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
     "remark-html": "^16.0.1",
+    "remark-rehype": "^11.1.2",
     "unified": "^11.0.5"
   }
 }
