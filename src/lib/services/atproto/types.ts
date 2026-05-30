@@ -6,7 +6,8 @@ export type KibunStatusData = {
 
 export type BlogPost = {
     title: string;
-    content: string;
+    content?: string;
+    textContent?: string;
     createdAt: string;
     publicationRkey: string;
     rkey: string;
