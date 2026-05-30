@@ -2,7 +2,8 @@
   import { SITE, PROJECTS } from '$lib/config';
   import ProjectList from '$lib/components/ProjectList.svelte';
   import Now from '$lib/components/Now.svelte';
-  
+  import { normalizeSlug } from '$lib/utils/slugify';
+
   let { data } = $props();
 
   function getBlogUrl(post: any) {
@@ -10,10 +11,11 @@
     const y = date.getFullYear();
     const m = (date.getMonth() + 1).toString().padStart(2, '0');
     const d = date.getDate().toString().padStart(2, '0');
-    const slug = post.title.toLowerCase().replace(/ /g, '-');
+    const slug = normalizeSlug(post.title);
     return `/blog/${y}/${m}/${d}/${slug}`;
   }
 </script>
+...
 
 <main>
     <header>
