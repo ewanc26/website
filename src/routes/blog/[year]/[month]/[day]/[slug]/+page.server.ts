@@ -1,9 +1,10 @@
 import type { PageServerLoad } from './$types';
-import { fetchBlogPosts } from '$lib/services/atproto/fetch';
+import { fetchBlogPosts, fetchBlob } from '$lib/services/atproto/fetch';
 import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from '$env/static/public';
 import { error } from '@sveltejs/kit';
 import { normalizeSlug } from '$lib/utils/slugify';
 import { renderMarkdown } from '$lib/utils/markdown';
+import { leafletProvider } from '$lib/providers/leaflet';
 
 export const load: PageServerLoad = async ({ params }) => {
     const { year, month, day, slug } = params;
@@ -27,7 +28,13 @@ export const load: PageServerLoad = async ({ params }) => {
         throw error(404, 'Post not found');
     }
 
-    const renderedContent = await renderMarkdown(post.content || post.textContent || "");
+    let markdown = post.content || post.textContent || "";
+    if (leafletProvider.matches(post.content)) {
+        const result = await leafletProvider.toMarkdown(post.content, { fetchBlob });
+        markdown = result.markdown;
+    }
+    
+    const renderedContent = await renderMarkdown(markdown);
 
     return { 
         post: {
