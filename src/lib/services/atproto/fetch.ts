@@ -4,6 +4,7 @@ import {
     fetchBlogPosts as _fetchBlogPosts,
     fetchProfile as _fetchProfile
 } from '@ewanc26/atproto';
+import { getPDSAgent } from './agents';
 
 export async function fetchKibunStatus(fetchFn?: typeof fetch) {
 	return _fetchKibunStatus(PUBLIC_ATPROTO_DID, fetchFn);
@@ -15,4 +16,11 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch) {
 
 export async function fetchProfile(fetchFn?: typeof fetch) {
 	return _fetchProfile(PUBLIC_ATPROTO_DID, fetchFn);
+}
+
+export async function fetchBlob(ref: any) {
+    const agent = await getPDSAgent();
+    const cid = ref.$link || ref.ref?.$link || ref;
+    const blob = await agent.getBlob({ did: PUBLIC_ATPROTO_DID, cid });
+    return new Uint8Array(blob.data);
 }
