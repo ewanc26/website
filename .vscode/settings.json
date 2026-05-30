@@ -1,7 +1,0 @@
-{
-	"css.customData": [".vscode/tailwind.json"],
-	"css.validate": false,
-	"tailwindCSS.includeLanguages": {
-		"svelte": "html"
-	}
-}
