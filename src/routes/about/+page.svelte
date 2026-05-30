@@ -1,20 +1,19 @@
 <script lang="ts">
-    import { SITE } from '$lib/config';
+  let { data } = $props();
+  const { profile } = data;
 </script>
 
 <main>
     <header>
         <h1 style="font-size: var(--text-xl);">About</h1>
     </header>
-    <section>
-        <p style="font-size: var(--text-md);">
-            Welcome to the redesign of {SITE.title}. This site is an ongoing experiment 
-            in minimalist, systematic web design, focused on clarity, accessibility, 
-            and functional integrity.
-        </p>
-        <p style="font-size: var(--text-md);">
-            It is built to be a clear, performant view layer for my projects and 
-            technical explorations.
-        </p>
-    </section>
+    {#if profile}
+        <section style="margin-top: var(--space-md);">
+            <h2 style="font-size: var(--text-lg);">{profile.displayName}</h2>
+            <p style="font-size: var(--text-sm); opacity: 0.8;">{profile.pronouns}</p>
+            <p style="margin-top: var(--space-md); font-size: var(--text-md); line-height: 1.6;">
+                {profile.description}
+            </p>
+        </section>
+    {/if}
 </main>
