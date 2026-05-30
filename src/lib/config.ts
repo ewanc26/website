@@ -12,7 +12,6 @@ export const SITE = {
 export const BLOG = {
   rkey: "3m3x4bgbsh22k",
 };
-...
 
 export const NOW = {
   status: "Exploring systematic design patterns",
