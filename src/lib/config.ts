@@ -1,6 +1,10 @@
 export const SITE = {
-  title: "Ewan’s Blog",
-  description: "I ramble, enjoy.",
+  title: "Website",
+  description: "A general-purpose site.",
+};
+
+export const BLOG = {
+  rkey: "3m3x4bgbsh22k",
 };
 
 export const NOW = {
