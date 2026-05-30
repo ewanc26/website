@@ -16,4 +16,3 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch) {
 export async function fetchProfile(fetchFn?: typeof fetch) {
 	return _fetchProfile(PUBLIC_ATPROTO_DID, fetchFn);
 }
-
