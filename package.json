@@ -27,6 +27,7 @@
     "lucide-svelte": "^0.475.0",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
+    "remark-html": "^16.0.1",
     "unified": "^11.0.5"
   }
 }
