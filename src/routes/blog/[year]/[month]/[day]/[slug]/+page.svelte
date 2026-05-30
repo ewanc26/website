@@ -12,7 +12,7 @@
         <time style="font-size: var(--text-sm); opacity: 0.7;">{new Date(post.createdAt).toLocaleDateString()}</time>
     </header>
     <div style="font-size: var(--text-md); line-height: 1.6;">
-        {@html post.content}
+        {@html post.renderedContent}
     </div>
     <ShareButtons url={page.url.href} title={post.title} />
 </article>

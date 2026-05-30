@@ -3,6 +3,7 @@ import { fetchBlogPosts } from '$lib/services/atproto/fetch';
 import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from '$env/static/public';
 import { error } from '@sveltejs/kit';
 import { normalizeSlug } from '$lib/utils/slugify';
+import { renderMarkdown } from '$lib/utils/markdown';
 
 export const load: PageServerLoad = async ({ params }) => {
     const { year, month, day, slug } = params;
@@ -26,5 +27,12 @@ export const load: PageServerLoad = async ({ params }) => {
         throw error(404, 'Post not found');
     }
 
-    return { post };
+    const renderedContent = await renderMarkdown(post.content);
+
+    return { 
+        post: {
+            ...post,
+            renderedContent
+        }
+    };
 };

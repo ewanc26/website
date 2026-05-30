@@ -23,8 +23,10 @@
     "vite": "^8.0.7"
   },
   "dependencies": {
-  	"@ewanc26/atproto": "^0.2.10",
-  	"lucide-svelte": "^0.475.0"
+    "@ewanc26/atproto": "^0.2.10",
+    "lucide-svelte": "^0.475.0",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
+    "unified": "^11.0.5"
   }
-  }
-
+}
