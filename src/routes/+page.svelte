@@ -3,11 +3,19 @@
   import ProjectList from '$lib/components/ProjectList.svelte';
   import Now from '$lib/components/Now.svelte';
 
+  import { normalizeSlug } from '$lib/utils/slugify';
+
   let { data } = $props();
+
   function getBlogUrl(post: any) {
-    const rkey = post.rkey || post.uri.split('/').pop();
-    return `/blog/${rkey}`;
+    const date = new Date(post.createdAt);
+    const y = date.getFullYear();
+    const m = (date.getMonth() + 1).toString().padStart(2, '0');
+    const d = date.getDate().toString().padStart(2, '0');
+    const slug = normalizeSlug(post.title);
+    return `/blog/${y}/${m}/${d}/${slug}`;
   }
+
 </script>
 ...
 
