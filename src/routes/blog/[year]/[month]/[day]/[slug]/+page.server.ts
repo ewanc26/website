@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { fetchBlogPosts } from '$lib/services/atproto/fetch';
 import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from '$env/static/public';
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { normalizeSlug } from '$lib/utils/slugify';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -26,5 +26,7 @@ export const load: PageServerLoad = async ({ params }) => {
         throw error(404, 'Post not found');
     }
 
-    return { post };
+    // Redirect to canonical RKey URL
+    const rkey = post.rkey || post.uri.split('/').pop();
+    throw redirect(301, `/blog/${rkey}`);
 };
