@@ -1,4 +1,7 @@
 <script lang="ts">
+    import ShareButtons from '$lib/components/ShareButtons.svelte';
+    import { page } from '$app/state';
+
     let { data } = $props();
     const { post } = data;
 </script>
@@ -11,4 +14,5 @@
     <div style="font-size: var(--text-md); line-height: 1.6;">
         {@html post.content}
     </div>
+    <ShareButtons url={page.url.href} title={post.title} />
 </article>
