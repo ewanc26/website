@@ -19,10 +19,13 @@ URL: ${url}
 ---
 Sent from my website.`;
   const mailtoLink = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+  // Use intent/compose correctly for Bluesky
+  const bskyLink = `https://bsky.app/intent/compose?text=${encodeURIComponent(`${title}\n\n${url}`)}`;
 </script>
 
 <div style="display: flex; gap: var(--space-md); margin-top: var(--space-lg); padding-top: var(--space-md); border-top: 1px solid var(--color-canvas-200);">
-  <a href="https://bsky.app/intent/compose?text={encodeURIComponent(title)}&url={encodeURIComponent(url)}" 
+  <a href={bskyLink}
      target="_blank" rel="noopener" style="color: var(--color-ink-700); display: flex; align-items: center; gap: 4px; text-decoration: none; font-size: var(--text-sm);">
     <Bluesky size={16} /> Bluesky
   </a>
