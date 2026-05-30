@@ -8,6 +8,17 @@
     navigator.clipboard.writeText(url);
     alert('Link copied to clipboard!');
   }
+
+  // Construct structured email template
+  const emailSubject = `Check out this post: ${title}`;
+  const emailBody = `I thought you might find this interesting:
+
+Title: ${title}
+URL: ${url}
+
+---
+Sent from my website.`;
+  const mailtoLink = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
 </script>
 
 <div style="display: flex; gap: var(--space-md); margin-top: var(--space-lg); padding-top: var(--space-md); border-top: 1px solid var(--color-canvas-200);">
@@ -18,7 +29,7 @@
   <button onclick={copyToClipboard} style="background: none; border: none; cursor: pointer; color: var(--color-ink-700); display: flex; align-items: center; gap: 4px; font-size: var(--text-sm);">
     <Link2 size={16} /> Copy Link
   </button>
-  <a href="mailto:?subject={encodeURIComponent(title)}&body={encodeURIComponent(url)}" 
+  <a href={mailtoLink}
      style="color: var(--color-ink-700); display: flex; align-items: center; gap: 4px; text-decoration: none; font-size: var(--text-sm);">
     <Mail size={16} /> Email
   </a>
