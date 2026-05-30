@@ -1,58 +1,58 @@
-import { json, error } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
-import { PUBLIC_SITE_URL } from '$env/static/public';
+import { json, error } from "@sveltejs/kit";
+import type { RequestHandler } from "./$types";
+import { PUBLIC_SITE_URL } from "$env/static/public";
 
 export const prerender = false;
 
 export const GET: RequestHandler = async ({ url, setHeaders, fetch }) => {
-	const apInstanceUrl = process.env.PUBLIC_AP_INSTANCE_URL;
-	const apUsername = process.env.PUBLIC_AP_USERNAME;
+  const apInstanceUrl = process.env.PUBLIC_AP_INSTANCE_URL;
+  const apUsername = process.env.PUBLIC_AP_USERNAME;
 
-	if (!apInstanceUrl || !apUsername) {
-		throw error(501, 'ActivityPub not configured');
-	}
+  if (!apInstanceUrl || !apUsername) {
+    throw error(501, "ActivityPub not configured");
+  }
 
-	const rawResource = url.searchParams.get('resource');
+  const rawResource = url.searchParams.get("resource");
 
-	if (!rawResource) {
-		throw error(400, 'Missing resource parameter');
-	}
+  if (!rawResource) {
+    throw error(400, "Missing resource parameter");
+  }
 
-	// Normalise acct: URIs — strip a leading '@' from the user part if present.
-	// Some clients (e.g. webfinger.net lookup tool) send acct:@user@host instead
-	// of the correct acct:user@host form per RFC 7565.
-	const resource = rawResource.replace(/^acct:@/, 'acct:');
+  // Normalise acct: URIs — strip a leading '@' from the user part if present.
+  // Some clients (e.g. webfinger.net lookup tool) send acct:@user@host instead
+  // of the correct acct:user@host form per RFC 7565.
+  const resource = rawResource.replace(/^acct:@/, "acct:");
 
-	const instanceDomain = new URL(apInstanceUrl).hostname;
-	const siteDomain = new URL(PUBLIC_SITE_URL).hostname;
-	const knownResources = new Set([
-		`acct:${apUsername}@${instanceDomain}`,
-		`acct:${apUsername}@${siteDomain}`,
-		`${apInstanceUrl}/@${apUsername}`
-	]);
+  const instanceDomain = new URL(apInstanceUrl).hostname;
+  const siteDomain = new URL(PUBLIC_SITE_URL).hostname;
+  const knownResources = new Set([
+    `acct:${apUsername}@${instanceDomain}`,
+    `acct:${apUsername}@${siteDomain}`,
+    `${apInstanceUrl}/@${apUsername}`,
+  ]);
 
-	if (!knownResources.has(resource)) {
-		throw error(404, 'Resource not found');
-	}
+  if (!knownResources.has(resource)) {
+    throw error(404, "Resource not found");
+  }
 
-	// Proxy the canonical webfinger from the AP instance so we don't need to
-	// hardcode internal user IDs — the instance always returns the correct links.
-	const instanceUrl = `${apInstanceUrl}/.well-known/webfinger?resource=acct:${apUsername}@${instanceDomain}`;
-	const upstream = await fetch(instanceUrl);
+  // Proxy the canonical webfinger from the AP instance so we don't need to
+  // hardcode internal user IDs — the instance always returns the correct links.
+  const instanceUrl = `${apInstanceUrl}/.well-known/webfinger?resource=acct:${apUsername}@${instanceDomain}`;
+  const upstream = await fetch(instanceUrl);
 
-	if (!upstream.ok) {
-		throw error(502, 'Failed to fetch webfinger from AP instance');
-	}
+  if (!upstream.ok) {
+    throw error(502, "Failed to fetch webfinger from AP instance");
+  }
 
-	const webfinger = await upstream.json();
+  const webfinger = await upstream.json();
 
-	// Inject the site-domain alias so Fediverse servers can resolve @user@sitedomain
-	const siteAlias = `acct:${apUsername}@${siteDomain}`;
-	const aliases: string[] = webfinger.aliases ?? [];
-	if (!aliases.includes(siteAlias)) {
-		webfinger.aliases = [siteAlias, ...aliases];
-	}
+  // Inject the site-domain alias so Fediverse servers can resolve @user@sitedomain
+  const siteAlias = `acct:${apUsername}@${siteDomain}`;
+  const aliases: string[] = webfinger.aliases ?? [];
+  if (!aliases.includes(siteAlias)) {
+    webfinger.aliases = [siteAlias, ...aliases];
+  }
 
-	setHeaders({ 'Content-Type': 'application/jrd+json' });
-	return json(webfinger);
+  setHeaders({ "Content-Type": "application/jrd+json" });
+  return json(webfinger);
 };
