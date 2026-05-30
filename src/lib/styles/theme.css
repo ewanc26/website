@@ -26,3 +26,11 @@ body {
   max-width: 70ch;
   margin-inline: auto;
 }
+
+h1,
+h2,
+h3 {
+  font-weight: 800; /* Increased contrast for headings */
+  letter-spacing: -0.025em;
+  color: var(--color-ink-950);
+}
