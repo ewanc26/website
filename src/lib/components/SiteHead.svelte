@@ -4,12 +4,10 @@
 
     let { title, description, image }: { title?: string; description?: string; image?: string } = $props();
 
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-
     const fullTitle = $derived(title ? `${title} — ${SITE.title}` : SITE.title);
     const fullDescription = $derived(description ?? SITE.description);
-    const canonicalUrl = $derived(`${origin}${page.url.pathname}`);
-    const ogImage = $derived(image ?? `${origin}/og/${encodeURIComponent(title ?? SITE.title)}`);
+    const canonicalUrl = $derived(`${page.url.origin}${page.url.pathname}`);
+    const ogImage = $derived(image ?? `${page.url.origin}/og/${encodeURIComponent(title ?? SITE.title)}`);
 </script>
 
 <svelte:head>
