@@ -71,12 +71,16 @@
         <div class="year-head">{year}</div>
         {#each months as [month, monthPosts]}
             <div class="month-label">{formatMonth(month)}</div>
-            {#each monthPosts as post}
-                <a href={getPostUrl(post)} class="post-row">
-                    <span class="post-title">{post.title}</span>
-                    <time class="post-date">{new Date(post.createdAt).toLocaleDateString()}</time>
-                </a>
-            {/each}
+            <ul class="post-list">
+                {#each monthPosts as post}
+                    <li>
+                        <a href={getPostUrl(post)} class="post-row">
+                            <span class="post-title">{post.title}</span>
+                            <time class="post-date">{new Date(post.createdAt).toLocaleDateString()}</time>
+                        </a>
+                    </li>
+                {/each}
+            </ul>
         {/each}
     {/each}
 

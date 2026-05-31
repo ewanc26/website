@@ -112,6 +112,15 @@ a.post-row:hover {
   flex-direction: column;
 }
 
+/* ── Row meta — trailing metadata in post-row ────────────────── */
+
+.row-meta {
+  font-size: var(--text-xs);
+  color: var(--color-ink-600);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 /* ── Muted icon — reduced opacity decorative icons ────────────── */
 
 .muted-icon {
