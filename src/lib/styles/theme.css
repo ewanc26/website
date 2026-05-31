@@ -168,11 +168,11 @@ p:last-child {
 /* ── Links ──────────────────────────────────────────────────── */
 
 a {
-  color: var(--color-canvas-50);
+  color: light-dark(var(--color-ink-950), var(--color-canvas-50));
   text-decoration: underline;
   text-decoration-color: color-mix(
     in oklch,
-    var(--color-canvas-50) 35%,
+    light-dark(var(--color-ink-950), var(--color-canvas-50)) 35%,
     transparent
   );
   text-underline-offset: 3px;

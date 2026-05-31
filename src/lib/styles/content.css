@@ -40,7 +40,6 @@
 }
 
 /* ── Post row — list item with label + trailing meta ─────────── */
-
 .post-row {
   display: flex;
   justify-content: space-between;
