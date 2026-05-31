@@ -42,6 +42,11 @@
   --surface-color: var(--color-canvas-200);
   --surface-raised: var(--color-canvas-100);
   --surface-sunken: var(--color-canvas-50);
+
+  /* Radii */
+  --radius-sm: 2px;
+  --radius-md: 8px;
+  --radius-lg: 0.5rem;
 }
 
 /* ── Box-sizing reset ───────────────────────────────────────── */
@@ -258,7 +263,7 @@ mark {
   );
   color: var(--color-ink-950);
   padding: 0.1em 0.25em;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 small {
@@ -306,7 +311,7 @@ code {
   color: var(--color-accent-600);
   background-color: var(--surface-raised);
   padding: 0.15em 0.4em;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--surface-color);
 }
 
@@ -317,7 +322,7 @@ pre {
   color: var(--color-ink-800);
   background-color: var(--surface-raised);
   border: 1px solid var(--surface-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: var(--space-md);
   overflow-x: auto;
   margin-top: 0;
@@ -341,7 +346,7 @@ kbd {
   background-color: var(--surface-raised);
   border: 1px solid var(--color-canvas-300);
   border-bottom-width: 2px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 0.1em 0.4em;
 }
 
@@ -434,7 +439,7 @@ svg:not([class]) {
 }
 
 img {
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 figure {
@@ -517,7 +522,7 @@ select {
   color: var(--color-ink-900);
   background-color: var(--surface-raised);
   border: 1px solid var(--surface-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: var(--space-xs) var(--space-sm);
   width: 100%;
   line-height: 1.5;
@@ -558,7 +563,7 @@ input[type="reset"] {
   color: var(--color-canvas-50);
   background-color: var(--color-primary-500);
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: var(--space-xs) var(--space-sm);
   cursor: pointer;
   line-height: 1.5;
@@ -582,7 +587,7 @@ input[type="submit"]:disabled {
 
 fieldset {
   border: 1px solid var(--surface-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: var(--space-md);
   margin-bottom: var(--space-md);
 }
@@ -598,7 +603,7 @@ legend {
 
 details {
   border: 1px solid var(--surface-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: var(--space-sm) var(--space-md);
   margin-bottom: var(--space-sm);
 }
@@ -617,7 +622,7 @@ summary {
   gap: var(--space-xs);
   margin: calc(-1 * var(--space-sm)) calc(-1 * var(--space-md));
   padding: var(--space-sm) var(--space-md);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   transition: background-color var(--duration-fast) var(--ease-out-quart);
 }
 
@@ -670,7 +675,7 @@ dialog {
   background-color: var(--color-canvas-50);
   color: var(--color-ink-900);
   border: 1px solid var(--surface-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: var(--space-lg);
   max-width: min(90vw, 60ch);
 }
@@ -684,7 +689,7 @@ dialog::backdrop {
 progress {
   appearance: none;
   height: 4px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   background-color: var(--surface-color);
   border: none;
   width: 100%;
@@ -692,17 +697,17 @@ progress {
 
 progress::-webkit-progress-bar {
   background-color: var(--surface-color);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 progress::-webkit-progress-value {
   background-color: var(--color-primary-500);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 progress::-moz-progress-bar {
   background-color: var(--color-primary-500);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 /* Meter */
