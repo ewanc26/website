@@ -237,7 +237,7 @@
 	/* Base Layout */
 	.spec-header { margin-bottom: var(--space-xl); }
 	.page-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin: var(--space-sm) 0; }
-	.spec-abstract { max-width: 60ch; font-size: var(--text-md); color: var(--color-ink-700); line-height: 1.5; }
+	.spec-abstract { max-width: 100%; font-size: var(--text-md); color: var(--color-ink-700); line-height: 1.5; }
 
 	.spec-grid {
 		display: grid;
@@ -264,14 +264,14 @@
 	.section-hd { margin-bottom: var(--space-md); }
 	.section-num { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-primary-500); font-weight: 700; }
 	.section-title { font-size: var(--text-md); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; margin: 0; }
-	.section-intro { font-size: var(--text-sm); color: var(--color-ink-700); max-width: 65ch; margin-bottom: var(--space-md); }
+	.section-intro { font-size: var(--text-sm); color: var(--color-ink-700); max-width: 100%; margin-bottom: var(--space-md); }
 
 	.sidebar-group { margin-bottom: var(--space-md); }
 	.sub-heading { font-size: var(--text-sm); font-weight: 700; margin-bottom: var(--space-xs); color: var(--color-ink-600); }
 	.meta-list { display: flex; flex-direction: column; gap: var(--space-xs); }
 	.credit-name { font-weight: 600; }
 
-	.meta-card { padding: var(--space-sm); border: 1px solid var(--surface-color); border-radius: var(--radius-md); max-width: 65ch; }
+	.meta-card { padding: var(--space-sm); border: 1px solid var(--surface-color); border-radius: var(--radius-md); max-width: 100%; }
 	.meta-card-row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-sm); }
 	.meta-card-link { color: inherit; text-decoration: none; display: inline-flex; align-items: baseline; gap: var(--space-xs); transition: color var(--duration-fast) var(--ease-out-quart); }
 	.meta-card-link:hover { color: var(--color-primary-500); }
