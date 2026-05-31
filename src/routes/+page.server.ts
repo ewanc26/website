@@ -20,6 +20,15 @@ export const load: PageServerLoad = async () => {
     (p) => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION,
   );
 
+  // Other publications (excluding blog — it's already shown above)
+  const otherPublications = publications
+    .filter((p) => p.rkey !== PUBLIC_LEAFLET_BLOG_PUBLICATION)
+    .map(({ name, description, url }) => ({
+      name,
+      description: description ?? "",
+      url,
+    }));
+
   return {
     kibunStatus,
     blog: blogPublication
@@ -40,5 +49,6 @@ export const load: PageServerLoad = async () => {
         rkey,
         uri,
       })),
+    publications: otherPublications,
   };
 };
