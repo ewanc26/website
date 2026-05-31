@@ -226,6 +226,8 @@
     border-radius: var(--radius-lg);
     object-fit: cover;
     flex-shrink: 0;
+    aspect-ratio: 1;
+    background-color: var(--surface-raised);
   }
 
   .page-title {
@@ -260,17 +262,25 @@
     gap: var(--space-lg);
     padding: var(--space-lg) 0;
     align-items: start;
+    contain: layout;
+  }
+
+  .about-main {
+    min-width: 0;
   }
 
   .about-sidebar {
     position: sticky;
     top: 72px;
     height: max-content;
+    min-width: 0;
   }
 
   /* Sections */
   .about-section {
     margin-bottom: var(--space-lg);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 200px;
   }
 
   .section-heading {
