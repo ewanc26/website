@@ -23,6 +23,14 @@
   let sifaExternalAccounts = $derived(data.sifaExternalAccounts as SifaExternalAccount[]);
   let sifaProjects = $derived(data.sifaProjects as SifaProject[]);
 
+  let copiedIndex = $state<number | null>(null);
+
+  async function copyToClipboard(text: string, id: string) {
+    await navigator.clipboard.writeText(text);
+    copiedIndex = id as any;
+    setTimeout(() => (copiedIndex = null), 2000);
+  }
+
   function formatSkillCategory(uri: string): string {
     const map: Record<string, string> = {
       'id.sifa.defs#technical': 'Technical',
@@ -194,6 +202,17 @@
       <section class="sidebar-section">
         <h2 class="section-heading">Identity</h2>
         <dl class="id-list">
+          <dt>DID</dt>
+          <dd>
+            <button 
+              type="button" 
+              class="copy-btn" 
+              onclick={() => copyToClipboard(profile.did, 'did')}
+              style="font-size: var(--text-xs); padding: 2px 6px; border-radius: var(--radius-xs);"
+            >
+              {copiedIndex === 'did' ? 'Copied' : 'Copy DID'}
+            </button>
+          </dd>
           <dt>Handle</dt>
           <dd><code class="id-code">{profile.handle}</code></dd>
           <dt>PDS</dt>
