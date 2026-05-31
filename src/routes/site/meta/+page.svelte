@@ -136,7 +136,7 @@
 
 			<aside class="about-sidebar">
 				{#if info.technologyStack?.length}
-					<section class="sidebar-section">
+<section class="sidebar-section">
 						<h2 class="section-heading">Technology Stack</h2>
 						{#each groupBySection(info.technologyStack) as [section, techs]}
 							<div class="sidebar-group">
@@ -337,3 +337,4 @@
 		border-color: var(--color-primary-800);
 	}
 </style>
+
