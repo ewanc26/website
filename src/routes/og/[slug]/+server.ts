@@ -39,6 +39,9 @@ export const GET: RequestHandler = async ({ params }) => {
       <!-- Background -->
       <rect width="1200" height="630" fill="${bg}" />
       
+      <!-- Subtle Pentacle Background -->
+      <path d="M1050 450 L1150 450 L1080 500 L1105 580 L1000 530 L895 580 L920 500 L850 450 L950 450 L1000 380 Z" fill="${border}" opacity="0.15" />
+
       <!-- Minimalist border card -->
       <rect x="40" y="40" width="1120" height="550" rx="16" fill="${surface}" stroke="${border}" stroke-width="2" />
 
