@@ -135,6 +135,7 @@
   /* Hero */
   .hero {
     padding: var(--space-xl) 0 var(--space-lg);
+    contain: layout;
   }
 
   .hero-title-row {
@@ -142,6 +143,7 @@
     align-items: center;
     gap: var(--space-md);
     margin-bottom: var(--space-sm);
+    min-height: 64px;
   }
 
   .hero-title {
@@ -166,6 +168,8 @@
     border-radius: var(--radius-lg);
     object-fit: cover;
     flex-shrink: 0;
+    aspect-ratio: 1;
+    background-color: var(--surface-raised);
   }
 
   /* Status row */
@@ -197,6 +201,8 @@
   /* Sections */
   .home-section {
     padding: var(--space-lg) 0;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 300px;
   }
 
   .section-title {

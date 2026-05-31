@@ -220,6 +220,7 @@
 		gap: var(--space-lg);
 		padding: var(--space-lg) 0;
 		align-items: start;
+		contain: layout;
 	}
 
 	.meta-sidebar {
@@ -228,6 +229,7 @@
 		max-height: calc(100vh - 72px - var(--space-md));
 		overflow-y: auto;
 		overscroll-behavior: contain;
+		min-width: 0;
 	}
 
 	.meta-section {
