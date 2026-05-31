@@ -137,6 +137,101 @@ export async function fetchSubscriptions(
     .map((r) => r.value);
 }
 
+export interface LeafletComment {
+  uri: string;
+  plaintext: string;
+  createdAt: string;
+  authorDid: string;
+  authorHandle: string;
+  authorDisplayName?: string;
+  reply?: { parent: string };
+}
+
+const CONSTELLATION = "https://constellation.microcosm.blue";
+const SLINGSHOT = "https://slingshot.microcosm.blue";
+
+/**
+ * Fetch leaflet comments on a document using Constellation (backlink index)
+ * and Slingshot (record cache). Resolves author DIDs to handles + display names.
+ */
+export async function fetchComments(
+  subjectUri: string,
+  fetchFn: typeof fetch = fetch,
+): Promise<LeafletComment[]> {
+  // 1. Find all pub.leaflet.comment records linking to this document
+  const backlinksRes = await fetchFn(
+    `${CONSTELLATION}/xrpc/blue.microcosm.links.getBacklinks?subject=${encodeURIComponent(subjectUri)}&source=pub.leaflet.comment:subject&limit=100`,
+  );
+  if (!backlinksRes.ok) return [];
+  const backlinks = await backlinksRes.json();
+
+  if (!backlinks.records?.length) return [];
+
+  // 2. Fetch each comment record via Slingshot and resolve author identity
+  const comments = await Promise.allSettled(
+    backlinks.records.map(async (ref: { did: string; rkey: string }) => {
+      const recordRes = await fetchFn(
+        `${SLINGSHOT}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(ref.did)}&collection=pub.leaflet.comment&rkey=${ref.rkey}`,
+      );
+      if (!recordRes.ok) throw new Error(`Comment not found: ${ref.rkey}`);
+      const recordData = await recordRes.json();
+      const value = recordData.value;
+
+      // Resolve DID → handle + displayName
+      const didRes = await fetchFn(
+        `https://plc.directory/${encodeURIComponent(ref.did)}`,
+      );
+      let authorHandle = ref.did;
+      let authorDisplayName: string | undefined;
+
+      if (didRes.ok) {
+        const didDoc = await didRes.json();
+        const handleEntry: string | undefined = didDoc.alsoKnownAs?.find(
+          (a: string) => a.startsWith("at://"),
+        );
+        authorHandle = handleEntry ? handleEntry.replace("at://", "") : ref.did;
+
+        // Best-effort profile fetch for displayName
+        const pdsUrl = didDoc.service?.[0]?.serviceEndpoint;
+        if (pdsUrl) {
+          try {
+            const profileRes = await fetchFn(
+              `${pdsUrl}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(ref.did)}&collection=app.bsky.actor.profile&rkey=self`,
+            );
+            if (profileRes.ok) {
+              const profileData = await profileRes.json();
+              authorDisplayName = profileData.value?.displayName;
+            }
+          } catch {
+            // best-effort
+          }
+        }
+      }
+
+      return {
+        uri: `at://${ref.did}/pub.leaflet.comment/${ref.rkey}`,
+        plaintext: value.plaintext ?? "",
+        createdAt: value.createdAt,
+        authorDid: ref.did,
+        authorHandle,
+        authorDisplayName,
+        reply: value.reply,
+      } satisfies LeafletComment;
+    }),
+  );
+
+  return comments
+    .filter(
+      (r): r is PromiseFulfilledResult<LeafletComment> =>
+        r.status === "fulfilled",
+    )
+    .map((r) => r.value)
+    .sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
+}
+
 export async function fetchBlob(ref: any) {
   const agent = await getPDSAgent();
   const cid = ref.$link || ref.ref?.$link || ref;

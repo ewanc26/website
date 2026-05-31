@@ -3,6 +3,7 @@ import {
   fetchDocuments,
   fetchBlob,
   fetchPublications,
+  fetchComments,
 } from "$lib/services/atproto/fetch";
 import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
 import { error } from "@sveltejs/kit";
@@ -10,7 +11,7 @@ import { normalizeSlug } from "$lib/utils/slugify";
 import { renderMarkdown } from "$lib/utils/markdown";
 import { leafletProvider } from "$lib/providers/leaflet";
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, fetch }) => {
   const { year, month, day, slug } = params;
   const [{ documents }, { publications }] = await Promise.all([
     fetchDocuments(),
@@ -55,6 +56,9 @@ export const load: PageServerLoad = async ({ params }) => {
 
   const renderedContent = await renderMarkdown(markdown);
 
+  // Fetch comments via Constellation + Slingshot
+  const comments = await fetchComments(post.uri, fetch);
+
   return {
     post: {
       ...post,
@@ -69,5 +73,6 @@ export const load: PageServerLoad = async ({ params }) => {
           rss: `${blogPublication.url}/rss`,
         }
       : null,
+    comments,
   };
 };
