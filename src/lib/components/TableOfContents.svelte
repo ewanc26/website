@@ -11,8 +11,10 @@
 
     let entries: TocEntry[] = $state([]);
     let activeId: string = $state('');
+    let mounted = $state(false);
 
     onMount(() => {
+        mounted = true;
         const el = document.querySelector(container);
         if (!el) return;
 
@@ -44,10 +46,23 @@
     });
 </script>
 
-{#if entries.length > 1}
+{#if !mounted}
+    <!-- SSR placeholder: reserves space to prevent layout shift -->
+    <nav aria-label="Table of contents" class="toc toc-placeholder">
+        <h2>Contents</h2>
+        <ol>
+            <li><span class="toc-skeleton"></span></li>
+            <li><span class="toc-skeleton"></span></li>
+            <li><span class="toc-skeleton"></span></li>
+            <li><span class="toc-skeleton"></span></li>
+            <li><span class="toc-skeleton"></span></li>
+            <li><span class="toc-skeleton"></span></li>
+        </ol>
+    </nav>
+{:else if entries.length > 1}
     <nav aria-label="Table of contents" class="toc">
-        <h2 style="font-size: var(--text-sm); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-ink-700); margin: 0 0 var(--space-sm);">Contents</h2>
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-2xs); border-left: 1px solid var(--surface-color);">
+        <h2>Contents</h2>
+        <ol>
             {#each entries as entry}
                 <li>
                     <a
@@ -66,6 +81,25 @@
 <style>
     .toc {
         margin-bottom: var(--space-lg);
+    }
+
+    .toc h2 {
+        font-size: var(--text-sm);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-ink-700);
+        margin: 0 0 var(--space-sm);
+    }
+
+    .toc ol {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2xs);
+        border-left: 1px solid var(--surface-color);
     }
 
     .toc-link {
@@ -93,5 +127,22 @@
         color: var(--color-primary-500);
         border-left-color: var(--color-primary-500);
         font-weight: 600;
+    }
+
+    /* SSR placeholder skeleton */
+    .toc-skeleton {
+        display: block;
+        height: 1em;
+        width: 60%;
+        background: var(--surface-color);
+        border-radius: var(--radius-xs);
+    }
+
+    .toc-placeholder ol {
+        gap: var(--space-xs);
+    }
+
+    .toc-placeholder li {
+        padding: var(--space-2xs) var(--space-sm);
     }
 </style>

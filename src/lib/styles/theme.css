@@ -167,23 +167,49 @@ p:last-child {
 
 /* ── Links ──────────────────────────────────────────────────── */
 
+@keyframes link-progress {
+  0% {
+    transform: scaleX(0);
+  }
+  50% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
+
 a {
   color: var(--color-primary-500);
-  text-decoration: underline;
-  text-decoration-color: color-mix(
-    in oklch,
-    var(--color-primary-500) 35%,
-    transparent
-  );
-  text-underline-offset: 3px;
-  transition:
-    color var(--duration-fast) var(--ease-out-quart),
-    text-decoration-color var(--duration-fast) var(--ease-out-quart);
+  text-decoration: none;
+  position: relative;
+  transition: color var(--duration-fast) var(--ease-out-quart);
+  display: inline-block;
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  opacity: 0.6;
 }
 
 a:hover {
   color: var(--color-primary-400);
-  text-decoration-color: var(--color-primary-400);
+}
+
+a:hover::after {
+  animation: link-progress var(--duration-normal) var(--ease-out-quart) forwards;
+}
+
+a:active {
+  transform: translateY(0.5px);
 }
 
 a:visited {
