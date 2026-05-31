@@ -54,6 +54,7 @@
   padding: var(--space-sm) 0;
   border-bottom: 1px dashed var(--surface-color);
   text-decoration: none;
+  color: var(--color-ink-950);
   transition:
     background-color var(--duration-fast) var(--ease-out-quart),
     padding-left var(--duration-fast) var(--ease-out-quart),
@@ -63,7 +64,11 @@
     color var(--duration-fast) var(--ease-out-quart);
 }
 
-.post-row:hover {
+a.post-row {
+  cursor: pointer;
+}
+
+a.post-row:hover {
   background-color: var(--surface-raised);
   padding-left: var(--space-sm);
   padding-right: var(--space-sm);
