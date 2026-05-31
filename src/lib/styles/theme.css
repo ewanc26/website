@@ -192,10 +192,6 @@ a:active {
   transform: translateY(0.5px);
 }
 
-a:visited {
-  color: var(--color-secondary-500);
-}
-
 /* ── Inline text semantics ──────────────────────────────────── */
 
 strong,
