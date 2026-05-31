@@ -1,6 +1,8 @@
 <script lang="ts">
   import { SITE } from '$lib/config';
   import Now from '$lib/components/Now.svelte';
+  import SiteHead from '$lib/components/SiteHead.svelte';
+  import { ArrowRight } from '@lucide/svelte';
 
   import { normalizeSlug } from '$lib/utils/slugify';
 
@@ -16,6 +18,8 @@
   }
 </script>
 
+<SiteHead />
+
 <main style="padding-top: var(--space-lg);">
     <header style="margin-bottom: var(--space-xl);">
         <h1 style="font-size: var(--text-xl); font-weight: 800; margin-bottom: var(--space-sm);">{SITE.title}</h1>
@@ -25,7 +29,7 @@
     <Now kibunStatus={data.kibunStatus} />
 
     <section style="margin-top: var(--space-xl);">
-        <h2 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-md);">Blog</h2>
+        <h2 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-md);">{data.blog?.title ?? 'Blog'}</h2>
         <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-sm);">
             {#each data.posts as post}
                 <li>
@@ -36,5 +40,6 @@
                 </li>
             {/each}
         </ul>
+        <a href="/blog" style="display: inline-flex; align-items: center; gap: var(--space-xs); margin-top: var(--space-md); font-size: var(--text-sm); color: var(--color-primary-500); text-decoration: none;">All posts <ArrowRight size={14} strokeWidth={2} /></a>
     </section>
 </main>

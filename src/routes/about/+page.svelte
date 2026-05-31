@@ -1,7 +1,11 @@
 <script lang="ts">
+  import SiteHead from '$lib/components/SiteHead.svelte';
+
   let { data } = $props();
   const { profile } = data;
 </script>
+
+<SiteHead title="About" description={profile?.description} />
 
 <main>
     <header>

@@ -1,5 +1,9 @@
 import type { PageServerLoad } from "./$types";
-import { fetchDocuments, fetchBlob } from "$lib/services/atproto/fetch";
+import {
+  fetchDocuments,
+  fetchBlob,
+  fetchPublications,
+} from "$lib/services/atproto/fetch";
 import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
 import { error } from "@sveltejs/kit";
 import { normalizeSlug } from "$lib/utils/slugify";
@@ -8,7 +12,14 @@ import { leafletProvider } from "$lib/providers/leaflet";
 
 export const load: PageServerLoad = async ({ params }) => {
   const { year, month, day, slug } = params;
-  const { documents } = await fetchDocuments();
+  const [{ documents }, { publications }] = await Promise.all([
+    fetchDocuments(),
+    fetchPublications(),
+  ]);
+
+  const blogPublication = publications.find(
+    (p) => p.rkey === PUBLIC_LEAFLET_BLOG_PUBLICATION,
+  );
 
   const publicationDocs = documents.filter(
     (d) => d.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION,
@@ -50,5 +61,13 @@ export const load: PageServerLoad = async ({ params }) => {
       createdAt: post.publishedAt,
       renderedContent,
     },
+    blog: blogPublication
+      ? {
+          title: blogPublication.name,
+          description: blogPublication.description ?? "",
+          url: blogPublication.url,
+          rss: `${blogPublication.url}/rss`,
+        }
+      : null,
   };
 };

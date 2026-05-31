@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Link2, Mail } from 'lucide-svelte';
+  import { Link2, Mail } from '@lucide/svelte';
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
 
   let { url, title } = $props<{ url: string, title: string }>();
