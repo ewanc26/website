@@ -54,11 +54,11 @@
     }
 
     .nav-link:hover {
-        color: var(--color-primary-500);
+        color: var(--color-primary-700);
     }
 
     .nav-link.active {
-        color: var(--color-primary-500);
+        color: var(--color-primary-700);
     }
 
     @media (max-width: 560px) {
