@@ -271,7 +271,7 @@
 	.meta-list { display: flex; flex-direction: column; gap: var(--space-xs); }
 	.credit-name { font-weight: 600; }
 
-	.meta-card { padding: var(--space-sm); border: 1px solid var(--surface-color); border-radius: var(--radius-md); }
+	.meta-card { padding: var(--space-sm); border: 1px solid var(--surface-color); border-radius: var(--radius-md); width: fit-content; }
 	.meta-card-row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-sm); }
 	.meta-card-link { color: inherit; text-decoration: none; display: inline-flex; align-items: baseline; gap: var(--space-xs); transition: color var(--duration-fast) var(--ease-out-quart); }
 	.meta-card-link:hover { color: var(--color-primary-500); }
