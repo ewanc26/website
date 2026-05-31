@@ -4,6 +4,7 @@ import {
   fetchBlogPosts as _fetchBlogPosts,
   fetchProfile as _fetchProfile,
   fetchDocuments as _fetchDocuments,
+  fetchPublications as _fetchPublications,
 } from "@ewanc26/atproto";
 import { getPDSAgent } from "./agents";
 
@@ -21,6 +22,10 @@ export async function fetchProfile(fetchFn?: typeof fetch) {
 
 export async function fetchDocuments(fetchFn?: typeof fetch) {
   return _fetchDocuments(PUBLIC_ATPROTO_DID, fetchFn);
+}
+
+export async function fetchPublications(fetchFn?: typeof fetch) {
+  return _fetchPublications(PUBLIC_ATPROTO_DID, fetchFn);
 }
 
 export async function fetchBlob(ref: any) {
