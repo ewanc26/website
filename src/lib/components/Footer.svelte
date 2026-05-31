@@ -39,7 +39,7 @@
     }
 
     .footer-link:hover {
-        color: var(--color-primary-500);
+        color: var(--color-primary-700);
     }
 
     @media (max-width: 640px) {
