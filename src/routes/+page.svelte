@@ -1,6 +1,7 @@
 <script lang="ts">
   import Now from '$lib/components/Now.svelte';
   import SiteHead from '$lib/components/SiteHead.svelte';
+  import BlueskyPostCard from '$lib/components/layout/main/card/BlueskyPostCard.svelte';
   import { ArrowRight, ExternalLink, Music } from '@lucide/svelte';
   import { normalizeSlug } from '$lib/utils/slugify';
   import type { ProfileData, MusicStatusData, KibunStatusData } from '@ewanc26/atproto';
@@ -51,6 +52,10 @@
     {/if}
   </div>
 
+  <section class="home-section">
+    <BlueskyPostCard />
+  </section>
+
   <!-- Writing -->
   <section class="home-section">
     <h2 class="section-heading">{data.blog?.title ?? 'Blog'}</h2>
@@ -70,7 +75,7 @@
   <!-- Projects -->
   {#if data.projects.length > 0}
     <section class="home-section">
-      <h2 class="section-title">Projects</h2>
+      <h2 class="section-heading">Projects</h2>
       <div class="project-grid">
         {#each data.projects as project}
           <div class="project-card">
@@ -93,16 +98,13 @@
   <!-- Publications -->
   {#if data.publications.length > 0}
     <section class="home-section">
-      <h2 class="section-title">Publications</h2>
-      <ul class="pub-list">
+      <h2 class="section-heading">Publications</h2>
+      <ul class="post-list">
         {#each data.publications as pub}
           <li>
-            <a href={pub.url} target="_blank" rel="noopener" class="pub-row">
-              <span class="pub-name">{pub.name}</span>
-              {#if pub.description}
-                <span class="pub-desc">{pub.description}</span>
-              {/if}
-              <ExternalLink size={12} strokeWidth={2} style="opacity: 0.3; flex-shrink: 0;" />
+            <a href={pub.url} target="_blank" rel="noopener" class="post-row">
+              <span class="post-title">{pub.name}</span>
+              <span class="post-date" style="max-width: 50%; text-align: right;">{pub.description}</span>
             </a>
           </li>
         {/each}
@@ -113,7 +115,7 @@
   <!-- Links -->
   {#if data.links.length > 0}
     <section class="home-section">
-      <h2 class="section-title">Elsewhere</h2>
+      <h2 class="section-heading">Elsewhere</h2>
       <div class="link-grid">
         {#each data.links as link}
           <a href={link.url} target="_blank" rel="noopener" class="link-chip">
@@ -203,36 +205,6 @@
     contain-intrinsic-size: auto 300px;
   }
 
-  .section-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-    margin-top: var(--space-md);
-    font-size: var(--text-sm);
-    color: var(--color-primary-500);
-    text-decoration: none;
-  }
-
-  /* Blog posts */
-  .post-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .post-title {
-    font-weight: 600;
-  }
-
-  .post-date {
-    font-size: var(--text-xs);
-    color: var(--color-ink-600);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
   /* Project grid */
   .project-grid {
     display: grid;
@@ -251,6 +223,7 @@
 
   .project-name {
     font-size: var(--text-md);
+    font-weight: 600;
   }
 
   .project-desc {
@@ -273,49 +246,6 @@
     font-size: var(--text-sm);
     color: var(--color-primary-500);
     text-decoration: none;
-  }
-
-  /* Publications */
-  .pub-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .pub-row {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-sm);
-    padding: var(--space-sm) 0;
-    border-bottom: 1px dashed var(--surface-color);
-    text-decoration: none;
-    color: inherit;
-    transition: background-color var(--duration-fast) var(--ease-out-quart);
-  }
-
-  .pub-row:hover {
-    background-color: var(--surface-raised);
-    padding-left: var(--space-sm);
-    padding-right: var(--space-sm);
-    margin-left: calc(-1 * var(--space-sm));
-    margin-right: calc(-1 * var(--space-sm));
-  }
-
-  .pub-name {
-    font-weight: 600;
-    flex-shrink: 0;
-  }
-
-  .pub-desc {
-    font-size: var(--text-sm);
-    color: var(--color-ink-600);
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   /* Links grid */
@@ -357,14 +287,6 @@
     .hero-avatar {
       width: 48px;
       height: 48px;
-    }
-
-    .pub-row {
-      flex-wrap: wrap;
-    }
-
-    .pub-desc {
-      white-space: normal;
     }
   }
 </style>
