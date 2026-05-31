@@ -1,11 +1,10 @@
 import type { PageServerLoad } from "./$types";
+import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
+import { fetchBlob, fetchComments } from "$lib/services/atproto/fetch";
 import {
-  fetchDocuments,
-  fetchBlob,
-  fetchPublications,
-  fetchComments,
-} from "$lib/services/atproto/fetch";
-import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
+  PUBLIC_ATPROTO_DID,
+  PUBLIC_LEAFLET_BLOG_PUBLICATION,
+} from "$env/static/public";
 import { error } from "@sveltejs/kit";
 import { normalizeSlug } from "$lib/utils/slugify";
 import { renderMarkdown } from "$lib/utils/markdown";
@@ -14,8 +13,8 @@ import { leafletProvider } from "$lib/providers/leaflet";
 export const load: PageServerLoad = async ({ params, fetch }) => {
   const { year, month, day, slug } = params;
   const [{ documents }, { publications }] = await Promise.all([
-    fetchDocuments(),
-    fetchPublications(),
+    fetchDocuments(PUBLIC_ATPROTO_DID, fetch),
+    fetchPublications(PUBLIC_ATPROTO_DID, fetch),
   ]);
 
   const blogPublication = publications.find(

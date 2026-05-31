@@ -1,11 +1,14 @@
 import type { PageServerLoad } from "./$types";
-import { fetchDocuments, fetchPublications } from "$lib/services/atproto/fetch";
-import { PUBLIC_LEAFLET_DOCS_PUBLICATION } from "$env/static/public";
+import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
+import {
+  PUBLIC_ATPROTO_DID,
+  PUBLIC_LEAFLET_DOCS_PUBLICATION,
+} from "$env/static/public";
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ fetch }) => {
   const [{ documents }, { publications }] = await Promise.all([
-    fetchDocuments(),
-    fetchPublications(),
+    fetchDocuments(PUBLIC_ATPROTO_DID, fetch),
+    fetchPublications(PUBLIC_ATPROTO_DID, fetch),
   ]);
 
   const docsPublication = publications.find(
