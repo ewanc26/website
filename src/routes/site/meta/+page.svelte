@@ -76,19 +76,7 @@
 
 	{#if data.error}
 		<p class="error">{data.error}</p>
-	{:else if info}
-		<div class="spec-grid">
-			<nav class="spec-toc">
-				<ul class="bare-list toc-list">
-					<li><a href="#purpose">01 Purpose</a></li>
-					<li><a href="#history">02 History</a></li>
-					<li><a href="#privacy">03 Privacy</a></li>
-					<li><a href="#open-source">04 Open Source</a></li>
-					<li><a href="#tech-stack">05 Tech Stack</a></li>
-					<li><a href="#credits">06 Credits</a></li>
-				</ul>
-			</nav>
-
+	{#else if info}
 			<div class="spec-content">
 				{#if info.additionalInfo?.purpose}
 					<section class="spec-section" id="purpose">
@@ -238,24 +226,6 @@
 	.spec-header { margin-bottom: var(--space-xl); }
 	.page-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin: var(--space-sm) 0; }
 	.spec-abstract { max-width: 100%; font-size: var(--text-md); color: var(--color-ink-700); line-height: 1.5; }
-
-	.spec-grid {
-		display: grid;
-		grid-template-columns: 200px 1fr;
-		gap: var(--space-2xl);
-		align-items: start;
-	}
-
-	@media (max-width: 900px) {
-		.spec-grid { grid-template-columns: 1fr; }
-	}
-
-	.spec-toc { position: sticky; top: 72px; }
-
-	.bare-list { list-style: none; padding: 0; margin: 0; }
-	.toc-list { display: flex; flex-direction: column; gap: var(--space-xs); }
-	.toc-list a { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-ink-600); text-decoration: none; }
-	.toc-list a:hover { color: var(--color-primary-500); }
 
 	.spec-content { display: flex; flex-direction: column; gap: var(--space-xl); }
 
