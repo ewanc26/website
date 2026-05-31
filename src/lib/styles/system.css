@@ -202,7 +202,7 @@ html {
 *:focus-visible {
   outline: 3px solid var(--color-primary-600);
   outline-offset: 2px;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
 }
 
 .sr-only {
