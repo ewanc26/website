@@ -147,6 +147,7 @@
 <SiteHead
   title="Brand Kit"
   description="The full brand language, asset reference, and component primitives for ewancroft.uk."
+  ogType="BRAND KIT"
 />
 
 <main class="shell-wide">
