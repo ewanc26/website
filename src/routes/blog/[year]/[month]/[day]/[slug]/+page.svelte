@@ -93,12 +93,15 @@
         gap: var(--space-lg);
         padding: var(--space-lg) 0;
         align-items: start;
+        contain: layout;
     }
 
     .post-sidebar {
         position: sticky;
         top: 72px;
         height: max-content;
+        min-width: 0;
+        contain-intrinsic-size: auto 150px;
     }
 
     .post-body {
