@@ -38,12 +38,15 @@ export interface SubscriptionPublication {
   name: string;
   url: string;
   description?: string;
+  authorDid: string;
+  authorHandle: string;
+  authorDisplayName?: string;
 }
 
 /**
  * Fetch subscriptions and resolve each publication record.
  * Each subscription points to an AT URI for a publication on another DID's PDS,
- * so we resolve the DID → PDS → fetch the publication record.
+ * so we resolve the DID → PDS → fetch the publication record + author profile.
  */
 export async function fetchSubscriptions(
   fetchFn: typeof fetch = fetch,
@@ -77,7 +80,7 @@ export async function fetchSubscriptions(
       const did = parts[0];
       const rkey = parts[parts.length - 1];
 
-      // Resolve DID to find PDS
+      // Resolve DID to find PDS and handle
       const didRes = await fetchFn(
         `https://plc.directory/${encodeURIComponent(did)}`,
       );
@@ -85,6 +88,12 @@ export async function fetchSubscriptions(
       const didDoc = await didRes.json();
       const pdsUrl = didDoc.service?.[0]?.serviceEndpoint;
       if (!pdsUrl) throw new Error(`No PDS for ${did}`);
+
+      // Extract handle from alsoKnownAs
+      const handleEntry: string | undefined = didDoc.alsoKnownAs?.find(
+        (a: string) => a.startsWith("at://"),
+      );
+      const authorHandle = handleEntry ? handleEntry.replace("at://", "") : did;
 
       // Fetch the publication record from their PDS
       const pubRes = await fetchFn(
@@ -94,11 +103,28 @@ export async function fetchSubscriptions(
       const pubData = await pubRes.json();
       const value = pubData.value;
 
+      // Fetch the author's profile for displayName
+      let authorDisplayName: string | undefined;
+      try {
+        const profileRes = await fetchFn(
+          `${pdsUrl}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(did)}&collection=app.bsky.actor.profile&rkey=self`,
+        );
+        if (profileRes.ok) {
+          const profileData = await profileRes.json();
+          authorDisplayName = profileData.value?.displayName;
+        }
+      } catch {
+        // Profile fetch is best-effort
+      }
+
       return {
         uri: pubUri,
         name: value.name ?? "Unknown",
         url: value.url ?? "#",
         description: value.description,
+        authorDid: did,
+        authorHandle,
+        authorDisplayName,
       } satisfies SubscriptionPublication;
     }),
   );
