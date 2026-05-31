@@ -46,81 +46,71 @@
 
   <section class="support-section">
     <h2 class="section-heading">Funding</h2>
-    <ul class="bare-list">
-      <li>
-        <a
-          href="https://ko-fi.com/ewancroft"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="post-row"
-        >
-          <span class="row-label">
-            <Coffee size={14} strokeWidth={2} aria-hidden="true" />
-            Ko-fi
-          </span>
-          <span class="row-meta">Buy me a tea</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/sponsors/ewanc26"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="post-row"
-        >
-          <span class="row-label">
-            GitHub Sponsors
-          </span>
-          <span class="row-meta">Sponsor work</span>
-        </a>
-      </li>
-    </ul>
+    <div class="support-grid">
+      <a
+        href="https://ko-fi.com/ewancroft"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="post-row"
+      >
+        <span class="row-label">
+          <Coffee size={16} strokeWidth={2} aria-hidden="true" />
+          Ko-fi
+        </span>
+        <span class="row-meta">Buy me a tea</span>
+      </a>
+      <a
+        href="https://github.com/sponsors/ewanc26"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="post-row"
+      >
+        <span class="row-label">GitHub Sponsors</span>
+        <span class="row-meta">Sponsor work</span>
+      </a>
+    </div>
   </section>
 
   <section class="support-section">
     <h2 class="section-heading">Cryptocurrency</h2>
     <p class="section-note">Monero is preferred — the only genuinely private option.</p>
-    <ul class="bare-list crypto-list">
+    <div class="crypto-grid">
       {#each cryptos as crypto, i}
-        <li class="crypto-item">
+        <div class="crypto-card">
           <div class="crypto-header">
             <span class="crypto-coin">{crypto.coin}</span>
             {#if crypto.preferred}
-              <span class="pref-tag">preferred</span>
+              <span class="pref-tag">Preferred</span>
             {/if}
           </div>
-          <div class="crypto-body">
-            <code class="crypto-addr">{crypto.address}</code>
-            <button
-              type="button"
-              class="copy-btn"
-              aria-label="Copy {crypto.coin} address"
-              onclick={() => copyAddress(crypto.address, i)}
-            >
-              {#if copiedIndex === i}
-                <Check size={12} strokeWidth={2.5} aria-hidden="true" />
-                Copied
-              {:else}
-                <Copy size={12} strokeWidth={2} aria-hidden="true" />
-                Copy
-              {/if}
-            </button>
-          </div>
-        </li>
+          <code class="crypto-addr">{crypto.address}</code>
+          <button
+            type="button"
+            class="copy-btn"
+            aria-label="Copy {crypto.coin} address"
+            onclick={() => copyAddress(crypto.address, i)}
+          >
+            {#if copiedIndex === i}
+              <Check size={12} strokeWidth={2.5} aria-hidden="true" />
+              Copied
+            {:else}
+              <Copy size={12} strokeWidth={2} aria-hidden="true" />
+              Copy
+            {/if}
+          </button>
+        </div>
       {/each}
-    </ul>
+    </div>
   </section>
 
   <section class="support-section">
     <h2 class="section-heading">Other ways to help</h2>
     <ul class="help-list">
-      <li>
-        Share these tools with your community. Word of mouth is the most effective
-        way to grow open ecosystems.
+      <li class="help-item">
+        <strong>Share.</strong> Word of mouth is the most effective way to grow open ecosystems.
       </li>
-      <li>
-        Report bugs, suggest features, or submit pull requests on GitHub. Technical
-        contributions are as valuable as funding.
+      <li class="help-item">
+        <strong>Contribute.</strong> Report bugs, suggest features, or submit pull requests on GitHub.
       </li>
     </ul>
   </section>
@@ -137,49 +127,38 @@
     margin: 0 0 var(--space-md);
   }
 
-  /* Shared list reset */
-  .bare-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  /* Funding rows — uses global .post-row, local label/meta only */
   .row-label {
     display: flex;
     align-items: center;
-    gap: var(--space-xs);
+    gap: var(--space-sm);
     font-weight: 600;
   }
 
   .row-meta {
     font-size: var(--text-sm);
     color: var(--color-ink-600);
-    flex-shrink: 0;
   }
 
-  /* Crypto */
-  .crypto-list {
+  /* Cryptocurrency Grid */
+  .crypto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .crypto-card {
+    padding: var(--space-md);
+    border: 2px solid var(--surface-color);
+    border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;
-  }
-
-  .crypto-item {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-    padding: var(--space-md) 0;
-    border-bottom: 1px dashed var(--surface-color);
-  }
-
-  .crypto-item:last-child {
-    border-bottom: none;
+    gap: var(--space-sm);
   }
 
   .crypto-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: var(--space-sm);
   }
 
   .crypto-coin {
@@ -196,28 +175,20 @@
     border: 1px solid currentColor;
     padding: 1px 6px;
     border-radius: var(--radius-xs);
-    line-height: 1.6;
-  }
-
-  .crypto-body {
-    display: flex;
-    gap: var(--space-sm);
-    align-items: flex-start;
   }
 
   .crypto-addr {
-    flex: 1;
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--color-ink-600);
     word-break: break-all;
-    line-height: 1.55;
-    background: none;
-    border: none;
-    padding: 0;
+    background: var(--surface-sunken);
+    padding: var(--space-sm);
+    border-radius: var(--radius-xs);
   }
 
   .copy-btn {
+    align-self: flex-start;
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -227,10 +198,8 @@
     background: none;
     border: 1px solid currentColor;
     border-radius: var(--radius-xs);
-    padding: 3px 8px;
+    padding: 4px 8px;
     cursor: pointer;
-    flex-shrink: 0;
-    line-height: 1.5;
     transition:
       background-color var(--duration-fast) var(--ease-out-quart),
       color var(--duration-fast) var(--ease-out-quart);
@@ -241,28 +210,19 @@
     color: var(--color-canvas-50);
   }
 
-  @media (max-width: 480px) {
-    .crypto-body {
-      flex-direction: column;
-    }
-
-    .copy-btn {
-      align-self: flex-start;
-    }
-  }
-
   /* Other ways to help */
   .help-list {
+    list-style: none;
+    padding: 0;
     margin: 0;
-    padding-left: var(--space-md);
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--space-md);
   }
 
-  .help-list li {
+  .help-item {
     color: var(--color-ink-700);
-    font-size: var(--text-sm);
+    font-size: var(--text-md);
     line-height: 1.65;
   }
 </style>
