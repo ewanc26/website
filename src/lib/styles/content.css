@@ -95,3 +95,46 @@ a.post-row:hover {
 .section-link:hover {
   color: var(--color-primary-400);
 }
+
+/* ── Sub-heading — secondary grouping label ──────────────────── */
+
+.sub-heading {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-ink-700);
+  margin: 0 0 var(--space-sm);
+}
+
+/* ── Row stack — flex column inside post-row ──────────────────── */
+
+.row-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Muted icon — reduced opacity decorative icons ────────────── */
+
+.muted-icon {
+  opacity: 0.6;
+}
+
+/* ── Load more — pagination button wrapper ────────────────────── */
+
+.load-more {
+  padding: var(--space-lg) 0;
+  text-align: center;
+}
+
+/* ── Copy button — compact variant ────────────────────────────── */
+
+.copy-btn--compact {
+  font-size: var(--text-xs);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+}
+
+/* ── Shell main — layout flex child ──────────────────────────── */
+
+.shell-main {
+  flex: 1;
+}

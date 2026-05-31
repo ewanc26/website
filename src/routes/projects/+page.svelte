@@ -39,14 +39,6 @@
 </main>
 
 <style>
-	.post-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-	}
-
 	.project-info {
 		display: flex;
 		flex-direction: column;

@@ -81,7 +81,7 @@
     {/each}
 
     {#if hasMore}
-        <div style="padding: var(--space-lg) 0; text-align: center;">
+        <div class="load-more">
             <button
                 onclick={loadMore}
                 disabled={loading}

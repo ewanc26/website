@@ -45,7 +45,7 @@
     {/if}
     {#if musicStatus}
       <div class="status-chip">
-        <Music size={14} strokeWidth={2} style="opacity: 0.6;" />
+        <Music size={14} strokeWidth={2} class="muted-icon" />
         <span class="status-text">{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(', ')}</span>
       </div>
     {/if}
@@ -99,7 +99,7 @@
           <li>
             <a href={pub.url} target="_blank" rel="noopener" class="post-row">
               <span class="post-title">{pub.name}</span>
-              <span class="post-date" style="max-width: 50%; text-align: right;">{pub.description}</span>
+              <span class="post-date pub-desc">{pub.description}</span>
             </a>
           </li>
         {/each}
@@ -118,7 +118,7 @@
               <span class="link-emoji">{link.emoji}</span>
             {/if}
             <span class="link-text">{link.text}</span>
-            <ExternalLink size={10} strokeWidth={2} style="opacity: 0.3;" />
+            <ExternalLink size={10} strokeWidth={2} class="muted-icon" />
           </a>
         {/each}
       </div>
@@ -275,6 +275,12 @@
 
   .link-text {
     white-space: nowrap;
+  }
+
+  /* Publication description alignment */
+  .pub-desc {
+    max-width: 50%;
+    text-align: right;
   }
 
   /* Responsive */

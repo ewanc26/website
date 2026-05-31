@@ -76,9 +76,9 @@
   ];
 
   const shells = [
-    { name: 'Wide Shell', cls: '.shell-wide', width: '72rem', usage: 'Home, blog listing, brand' },
+    { name: 'Wide Shell', cls: '.shell-wide', width: '72rem', usage: 'Home, blog, about, projects, meta, brand' },
     { name: 'Prose Shell', cls: '.shell-prose', width: '72rem + TOC', usage: 'Blog posts' },
-    { name: 'Narrow Shell', cls: '.shell-narrow', width: '48rem', usage: 'About, projects, subscriptions' },
+    { name: 'Narrow Shell', cls: '.shell-narrow', width: '48rem', usage: 'Subscriptions, support' },
   ];
 
   const principles = [

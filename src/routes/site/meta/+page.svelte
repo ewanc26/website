@@ -134,7 +134,7 @@
 						<h2 class="section-heading">Technology Stack</h2>
 						{#each groupBySection(info.technologyStack) as [section, techs]}
 							<div class="sidebar-group">
-								<h3 class="meta-subheading">{section}</h3>
+								<h3 class="sub-heading">{section}</h3>
 								<ul class="bare-list meta-list">
 									{#each techs as tech}
 										<li class="meta-card">
@@ -162,7 +162,7 @@
 						<h2 class="section-heading">Credits</h2>
 						{#each groupBySection(info.credits) as [section, credits]}
 							<div class="sidebar-group">
-								<h3 class="meta-subheading">{section}</h3>
+								<h3 class="sub-heading">{section}</h3>
 								<ul class="bare-list meta-list">
 									{#each credits as credit}
 										<li class="meta-card">
@@ -202,13 +202,6 @@
 		white-space: pre-wrap;
 		line-height: 1.75;
 		margin: 0;
-	}
-
-	.meta-subheading {
-		font-size: var(--text-sm);
-		font-weight: 600;
-		color: var(--color-ink-700);
-		margin: 0 0 var(--space-sm);
 	}
 
 	.meta-card {
