@@ -1,7 +1,8 @@
 import type { RequestHandler } from "./$types";
 
-export const GET: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params, url }) => {
   const { slug } = params;
+  const typeParam = url.searchParams.get("type") ?? "TECHNICAL SPEC";
 
   // Decode the slug
   const title = decodeURIComponent(slug);
@@ -46,7 +47,7 @@ export const GET: RequestHandler = async ({ params }) => {
       <rect x="40" y="40" width="1120" height="550" rx="16" fill="${surface}" stroke="${border}" stroke-width="2" />
 
       <!-- Content -->
-      <text x="80" y="120" font-family="'JetBrains Mono', monospace" font-size="20" fill="${primary}" letter-spacing="0.1em" text-transform="uppercase">TECHNICAL SPEC</text>
+      <text x="80" y="120" font-family="'JetBrains Mono', monospace" font-size="20" fill="${primary}" letter-spacing="0.1em" text-transform="uppercase">${escapeXml(typeParam)}</text>
       
       <text x="80" y="200" font-family="'Inter', sans-serif" font-size="80" font-weight="800" fill="${text}" letter-spacing="-0.02em">${escapeXml(displayTitle)}</text>
       
