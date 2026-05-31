@@ -27,6 +27,7 @@
         z-index: 10;
         font-size: var(--text-sm);
         white-space: nowrap;
+        max-width: 100vw;
         overflow-x: auto;
         overflow-y: hidden;
         scrollbar-width: none;
