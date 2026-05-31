@@ -299,13 +299,6 @@
     contain-intrinsic-size: auto 200px;
   }
 
-  .row-meta {
-    font-size: var(--text-xs);
-    color: var(--color-ink-600);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
   /* Skills */
   .skill-group {
     margin-bottom: var(--space-md);

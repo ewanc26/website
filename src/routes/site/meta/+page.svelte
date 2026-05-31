@@ -108,10 +108,16 @@
 							<ul class="bare-list meta-list">
 								{#each info.openSourceInfo.repositories as repo}
 									<li class="meta-card">
-										<a href={repo.url} target="_blank" rel="noopener" class="post-row meta-link">
-											<strong>{repo.description || repo.url}</strong>
-											<ExternalLink size={12} strokeWidth={2} />
-										</a>
+										<div class="meta-card-row">
+											{#if repo.url}
+												<a href={repo.url} target="_blank" rel="noopener" class="meta-card-link">
+													<strong>{repo.description || repo.url}</strong>
+													<ExternalLink size={12} strokeWidth={2} />
+												</a>
+											{:else}
+												<strong>{repo.description || repo.url}</strong>
+											{/if}
+										</div>
 										<div class="meta-tags">
 											{#if repo.platform}
 												<span class="meta-tag">{repo.platform}</span>
@@ -138,14 +144,16 @@
 								<ul class="bare-list meta-list">
 									{#each techs as tech}
 										<li class="meta-card">
-											{#if tech.url}
-												<a href={tech.url} target="_blank" rel="noopener" class="post-row meta-link">
+											<div class="meta-card-row">
+												{#if tech.url}
+													<a href={tech.url} target="_blank" rel="noopener" class="meta-card-link">
+														<strong>{tech.name}</strong>
+														<ExternalLink size={12} strokeWidth={2} />
+													</a>
+												{:else}
 													<strong>{tech.name}</strong>
-													<ExternalLink size={12} strokeWidth={2} />
-												</a>
-											{:else}
-												<strong>{tech.name}</strong>
-											{/if}
+												{/if}
+											</div>
 											{#if tech.description}
 												<p class="meta-card-desc">{tech.description}</p>
 											{/if}
@@ -166,14 +174,16 @@
 								<ul class="bare-list meta-list">
 									{#each credits as credit}
 										<li class="meta-card">
-											{#if credit.url}
-												<a href={credit.url} target="_blank" rel="noopener" class="post-row meta-link">
-													{credit.name}
-													<ExternalLink size={12} strokeWidth={2} />
-												</a>
-											{:else}
-												<span class="credit-name">{credit.name}</span>
-											{/if}
+											<div class="meta-card-row">
+												{#if credit.url}
+													<a href={credit.url} target="_blank" rel="noopener" class="meta-card-link">
+														{credit.name}
+														<ExternalLink size={12} strokeWidth={2} />
+													</a>
+												{:else}
+													<span class="credit-name">{credit.name}</span>
+												{/if}
+											</div>
 											{#if credit.author}
 												<p class="meta-card-desc">by {credit.author}</p>
 											{/if}
@@ -196,7 +206,6 @@
 	.empty-state { opacity: 0.6; }
 	.sidebar-group { margin-bottom: var(--space-md); }
 	.meta-list { display: flex; flex-direction: column; gap: var(--space-xs); }
-	.meta-link { border: none; padding: 0; }
 	.credit-name { font-weight: 600; }
 	.meta-text {
 		white-space: pre-wrap;
@@ -208,6 +217,26 @@
 		padding: var(--space-sm);
 		border: 1px solid var(--surface-color);
 		border-radius: var(--radius-md);
+	}
+
+	.meta-card-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: var(--space-sm);
+	}
+
+	.meta-card-link {
+		color: inherit;
+		text-decoration: none;
+		display: inline-flex;
+		align-items: baseline;
+		gap: var(--space-xs);
+		transition: color var(--duration-fast) var(--ease-out-quart);
+	}
+
+	.meta-card-link:hover {
+		color: var(--color-primary-500);
 	}
 
 	.meta-card-desc {

@@ -105,12 +105,14 @@
 
   <section class="support-section">
     <h2 class="section-heading">Other ways to help</h2>
-    <ul class="help-list">
-      <li class="help-item">
-        <strong>Share.</strong> Word of mouth is the most effective way to grow open ecosystems.
+    <ul class="bare-list">
+      <li class="post-row">
+        <strong>Share</strong>
+        <span class="row-meta">Word of mouth</span>
       </li>
-      <li class="help-item">
-        <strong>Contribute.</strong> Report bugs, suggest features, or submit pull requests on GitHub.
+      <li class="post-row">
+        <strong>Contribute</strong>
+        <span class="row-meta">Bugs, features, PRs</span>
       </li>
     </ul>
   </section>
@@ -132,11 +134,6 @@
     align-items: center;
     gap: var(--space-sm);
     font-weight: 600;
-  }
-
-  .row-meta {
-    font-size: var(--text-sm);
-    color: var(--color-ink-600);
   }
 
   /* Cryptocurrency Grid */
@@ -208,21 +205,5 @@
   .copy-btn:hover {
     background: var(--color-primary-500);
     color: var(--color-canvas-50);
-  }
-
-  /* Other ways to help */
-  .help-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-
-  .help-item {
-    color: var(--color-ink-700);
-    font-size: var(--text-md);
-    line-height: 1.65;
   }
 </style>
