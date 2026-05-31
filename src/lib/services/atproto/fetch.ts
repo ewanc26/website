@@ -137,6 +137,84 @@ export async function fetchSubscriptions(
     .map((r) => r.value);
 }
 
+export interface RecommendationItem {
+  uri: string;
+  name: string;
+  url: string;
+  description?: string;
+  authorDid: string;
+  authorHandle: string;
+}
+
+export async function fetchRecommendations(
+  fetchFn: typeof fetch = fetch,
+): Promise<RecommendationItem[]> {
+  const agent = await getPDSAgent(PUBLIC_ATPROTO_DID, fetchFn);
+  const allRecords: { uri: string; value: { document: string } }[] = [];
+  let cursor: string | undefined;
+
+  do {
+    const resp = await agent.com.atproto.repo.listRecords({
+      repo: PUBLIC_ATPROTO_DID,
+      collection: "site.standard.graph.recommend",
+      limit: 100,
+      cursor,
+    });
+    allRecords.push(
+      ...resp.data.records.map((r: any) => ({
+        uri: r.uri,
+        value: r.value as { document: string },
+      })),
+    );
+    cursor = resp.data.cursor;
+  } while (cursor);
+
+  const resolved = await Promise.allSettled(
+    allRecords.map(async (record): Promise<RecommendationItem> => {
+      const docUri = record.value.document;
+      const parts = docUri.replace("at://", "").split("/");
+      const did = parts[0];
+      const rkey = parts[parts.length - 1];
+
+      const didRes = await fetchFn(
+        `https://plc.directory/${encodeURIComponent(did)}`,
+      );
+      if (!didRes.ok) throw new Error(`DID resolution failed for ${did}`);
+      const didDoc = await didRes.json();
+      const pdsUrl = didDoc.service?.[0]?.serviceEndpoint;
+      if (!pdsUrl) throw new Error(`No PDS for ${did}`);
+
+      const handleEntry: string | undefined = didDoc.alsoKnownAs?.find(
+        (a: string) => a.startsWith("at://"),
+      );
+      const authorHandle = handleEntry ? handleEntry.replace("at://", "") : did;
+
+      const docRes = await fetchFn(
+        `${pdsUrl}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(did)}&collection=site.standard.document&rkey=${rkey}`,
+      );
+      if (!docRes.ok) throw new Error(`Document not found: ${docUri}`);
+      const docData = await docRes.json();
+      const value = docData.value;
+
+      return {
+        uri: docUri,
+        name: value.title ?? "Unknown",
+        url: value.url ?? "#",
+        description: value.description,
+        authorDid: did,
+        authorHandle,
+      };
+    }),
+  );
+
+  return resolved
+    .filter(
+      (r): r is PromiseFulfilledResult<RecommendationItem> =>
+        r.status === "fulfilled",
+    )
+    .map((r) => r.value);
+}
+
 export interface LeafletComment {
   uri: string;
   plaintext: string;
@@ -235,6 +313,9 @@ export async function fetchComments(
 export async function fetchBlob(ref: any) {
   const agent = await getPDSAgent(PUBLIC_ATPROTO_DID);
   const cid = ref.$link || ref.ref?.$link || ref;
-  const blob = await agent.com.atproto.sync.getBlob({ did: PUBLIC_ATPROTO_DID, cid });
+  const blob = await agent.com.atproto.sync.getBlob({
+    did: PUBLIC_ATPROTO_DID,
+    cid,
+  });
   return new Uint8Array(blob.data);
 }
