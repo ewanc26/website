@@ -67,14 +67,13 @@
 <SiteHead title="Site Meta" description="Information about this website, its technology, and the people who made it possible." />
 
 <main class="shell-wide">
-<main class="shell-wide">
 	<header class="page-hd">
 		<h1 class="page-title">Site Meta</h1>
 		<p class="page-desc">Information about this website, its technology, and the people who made it possible.</p>
 	</header>
 
 	{#if data.error}
-		<p style="color: var(--color-accent-500);">{data.error}</p>
+		<p class="error">{data.error}</p>
 	{:else if info}
 		<div class="content-grid">
 			<div class="about-main">
@@ -106,10 +105,10 @@
 							<p class="meta-text">{info.openSourceInfo.description}</p>
 						{/if}
 						{#if info.openSourceInfo.repositories?.length}
-							<ul class="bare-list" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+							<ul class="bare-list meta-list">
 								{#each info.openSourceInfo.repositories as repo}
 									<li class="meta-card">
-										<a href={repo.url} target="_blank" rel="noopener" class="post-row" style="border: none; padding: 0;">
+										<a href={repo.url} target="_blank" rel="noopener" class="post-row meta-link">
 											<strong>{repo.description || repo.url}</strong>
 											<ExternalLink size={12} strokeWidth={2} />
 										</a>
@@ -134,13 +133,13 @@
 					<section class="sidebar-section">
 						<h2 class="section-heading">Technology Stack</h2>
 						{#each groupBySection(info.technologyStack) as [section, techs]}
-							<div style="margin-bottom: var(--space-md);">
+							<div class="sidebar-group">
 								<h3 class="meta-subheading">{section}</h3>
-								<ul class="bare-list" style="display: flex; flex-direction: column; gap: var(--space-xs);">
+								<ul class="bare-list meta-list">
 									{#each techs as tech}
 										<li class="meta-card">
 											{#if tech.url}
-												<a href={tech.url} target="_blank" rel="noopener" class="post-row" style="border: none; padding: 0;">
+												<a href={tech.url} target="_blank" rel="noopener" class="post-row meta-link">
 													<strong>{tech.name}</strong>
 													<ExternalLink size={12} strokeWidth={2} />
 												</a>
@@ -162,18 +161,18 @@
 					<section class="sidebar-section">
 						<h2 class="section-heading">Credits</h2>
 						{#each groupBySection(info.credits) as [section, credits]}
-							<div style="margin-bottom: var(--space-md);">
+							<div class="sidebar-group">
 								<h3 class="meta-subheading">{section}</h3>
-								<ul class="bare-list" style="display: flex; flex-direction: column; gap: var(--space-xs);">
+								<ul class="bare-list meta-list">
 									{#each credits as credit}
 										<li class="meta-card">
 											{#if credit.url}
-												<a href={credit.url} target="_blank" rel="noopener" class="post-row" style="border: none; padding: 0;">
+												<a href={credit.url} target="_blank" rel="noopener" class="post-row meta-link">
 													{credit.name}
 													<ExternalLink size={12} strokeWidth={2} />
 												</a>
 											{:else}
-												<span style="font-weight: 600;">{credit.name}</span>
+												<span class="credit-name">{credit.name}</span>
 											{/if}
 											{#if credit.author}
 												<p class="meta-card-desc">by {credit.author}</p>
@@ -188,11 +187,17 @@
 			</aside>
 		</div>
 	{:else}
-		<p style="opacity: 0.6;">No site information available.</p>
+		<p class="empty-state">No site information available.</p>
 	{/if}
 </main>
 
 <style>
+	.error { color: var(--color-accent-500); }
+	.empty-state { opacity: 0.6; }
+	.sidebar-group { margin-bottom: var(--space-md); }
+	.meta-list { display: flex; flex-direction: column; gap: var(--space-xs); }
+	.meta-link { border: none; padding: 0; }
+	.credit-name { font-weight: 600; }
 	.meta-text {
 		white-space: pre-wrap;
 		line-height: 1.75;

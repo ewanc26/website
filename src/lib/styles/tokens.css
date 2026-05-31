@@ -182,6 +182,7 @@
   --text-md: clamp(1rem, 1vw + 0.8rem, 1.25rem);
   --text-lg: clamp(1.25rem, 1.5vw + 1rem, 2rem);
   --text-xl: clamp(2rem, 2vw + 1.5rem, 3rem);
+  --text-2xl: clamp(2rem, 5vw, 3.5rem);
 
   /* ── Surface aliases ──────────────────────────────────────── */
   --surface-color: var(--color-canvas-200);

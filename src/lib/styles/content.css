@@ -13,7 +13,7 @@
 }
 
 .page-title {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: var(--text-2xl);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -40,7 +40,8 @@
 }
 
 /* ── Post row — list item with label + trailing meta ─────────── */
-.post-list, .bare-list {
+.post-list,
+.bare-list {
   list-style: none;
   padding: 0;
   margin: 0;

@@ -25,9 +25,9 @@
 
   let copiedIndex = $state<number | null>(null);
 
-  async function copyToClipboard(text: string, id: string) {
+  async function copyToClipboard(text: string, id: 'did') {
     await navigator.clipboard.writeText(text);
-    copiedIndex = id as any;
+    copiedIndex = id;
     setTimeout(() => (copiedIndex = null), 2000);
   }
 
