@@ -39,12 +39,12 @@ export const load: PageServerLoad = async ({ fetch }) => {
 
   // Flatten for initial page — take first PAGE_SIZE posts across all groups
   const allPostsFlat = publicationPosts.map(
-    ({ title, createdAt, publicationRkey, rkey, uri }) => ({
+    ({ title, createdAt, publicationRkey, rkey, url }) => ({
       title,
       createdAt,
       publicationRkey,
       rkey,
-      uri,
+      url,
     }),
   );
 

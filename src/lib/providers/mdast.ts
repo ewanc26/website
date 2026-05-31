@@ -143,9 +143,9 @@ export function resolveMarkdownImage(
       return {
         kind: "blob",
         ref: up.ref,
-        width: up.width,
-        height: up.height,
-        alt: alt ?? up.alt,
+        width: up.owner.width as number | undefined,
+        height: up.owner.height as number | undefined,
+        alt: alt ?? (up.owner.alt as string | undefined),
       }
     const prev = harvestImages(ctx.previousContent).get(cid)
     if (prev) {

@@ -7,8 +7,8 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
   const { rkey } = params;
   const { posts } = await fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch);
 
-  // Attempt to find post by rkey (some structures use .uri as at://.../rkey)
-  const post = posts.find((p) => p.rkey === rkey || p.uri.endsWith(`/${rkey}`));
+  // Attempt to find post by rkey (some structures use .url as at://.../rkey)
+  const post = posts.find((p) => p.rkey === rkey || p.url.endsWith(`/${rkey}`));
 
   if (!post) {
     throw error(404, "Post not found");

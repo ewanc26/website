@@ -11,5 +11,5 @@ export type BlogPost = {
     createdAt: string;
     publicationRkey: string;
     rkey: string;
-    uri: string;
+    url: string;
 };

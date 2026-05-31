@@ -7,9 +7,9 @@
 
   let { data } = $props();
 
-  const profile = data.profile as ProfileData;
-  const musicStatus = data.musicStatus as MusicStatusData | null;
-  const kibunStatus = data.kibunStatus as KibunStatusData | null;
+  let profile = $derived(data.profile as ProfileData);
+  let musicStatus = $derived(data.musicStatus as MusicStatusData | null);
+  let kibunStatus = $derived(data.kibunStatus as KibunStatusData | null);
 
   function getBlogUrl(post: any) {
     const date = new Date(post.createdAt);
@@ -292,6 +292,7 @@
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
