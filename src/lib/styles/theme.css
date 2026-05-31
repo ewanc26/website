@@ -168,11 +168,11 @@ p:last-child {
 /* ── Links ──────────────────────────────────────────────────── */
 
 a {
-  color: var(--color-primary-500);
+  color: var(--color-canvas-50);
   text-decoration: underline;
   text-decoration-color: color-mix(
     in oklch,
-    var(--color-primary-500) 35%,
+    var(--color-canvas-50) 35%,
     transparent
   );
   text-underline-offset: 3px;
@@ -183,8 +183,8 @@ a {
 }
 
 a:hover {
-  color: var(--color-primary-400);
-  text-decoration-color: var(--color-primary-400);
+  color: var(--color-primary-500);
+  text-decoration-color: var(--color-primary-500);
   text-underline-offset: 4px;
 }
 
