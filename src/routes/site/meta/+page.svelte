@@ -270,7 +270,6 @@
 	.sub-heading { font-size: var(--text-sm); font-weight: 700; margin-bottom: var(--space-xs); color: var(--color-ink-600); }
 	.meta-list { display: flex; flex-direction: column; gap: var(--space-xs); }
 	.credit-name { font-weight: 600; }
-	.meta-text { white-space: pre-wrap; line-height: 1.75; margin: 0; }
 
 	.meta-card { padding: var(--space-sm); border: 1px solid var(--surface-color); border-radius: var(--radius-md); }
 	.meta-card-row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-sm); }

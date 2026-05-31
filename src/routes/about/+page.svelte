@@ -23,7 +23,7 @@
   let sifaExternalAccounts = $derived(data.sifaExternalAccounts as SifaExternalAccount[]);
   let sifaProjects = $derived(data.sifaProjects as SifaProject[]);
 
-  let copiedIndex = $state<number | null>(null);
+  let copiedIndex = $state<'did' | null>(null);
 
   async function copyToClipboard(text: string, id: 'did') {
     await navigator.clipboard.writeText(text);
@@ -338,19 +338,6 @@
   .project-name {
     font-size: var(--text-md);
     font-weight: 600;
-  }
-
-  .project-link {
-    color: var(--color-ink-500);
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    flex-shrink: 0;
-    transition: color var(--duration-fast) var(--ease-out-quart);
-  }
-
-  .project-link:hover {
-    color: var(--color-primary-500);
   }
 
   .project-desc {

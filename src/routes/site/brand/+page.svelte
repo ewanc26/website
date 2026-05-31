@@ -1264,10 +1264,6 @@
       grid-template-columns: 100px 1fr;
     }
 
-    .spec-title {
-      font-size: 2.5rem;
-    }
-
     .motion-layout, .geo-grid {
       grid-template-columns: 1fr;
     }
