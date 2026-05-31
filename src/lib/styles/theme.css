@@ -62,7 +62,11 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: var(--space-md);
-  max-width: 90rem;
+}
+
+/* Page content — readable line length for standard pages */
+.page-content {
+  max-width: 70ch;
   margin-inline: auto;
 }
 

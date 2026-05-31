@@ -6,7 +6,7 @@
 
 <SiteHead title="About" description={data.profile?.description} />
 
-<main>
+<div class="page-content" style="padding-top: var(--space-lg);">
     <header>
         <h1 style="font-size: var(--text-xl);">About</h1>
     </header>
@@ -19,4 +19,4 @@
             </p>
         </section>
     {/if}
-</main>
+</div>

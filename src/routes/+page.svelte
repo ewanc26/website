@@ -20,7 +20,7 @@
 
 <SiteHead />
 
-<main style="padding-top: var(--space-lg);">
+<div class="page-content" style="padding-top: var(--space-lg);">
     <header style="margin-bottom: var(--space-xl);">
         <h1 style="font-size: var(--text-xl); font-weight: 800; margin-bottom: var(--space-sm);">{SITE.title}</h1>
         <p style="margin: 0; opacity: 0.7;">{SITE.description}</p>
@@ -63,4 +63,4 @@
             </ul>
         </section>
     {/if}
-</main>
+</div>
