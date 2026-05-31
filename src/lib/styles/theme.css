@@ -62,8 +62,13 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: var(--space-md);
-  max-width: 70ch;
+  max-width: 90rem;
   margin-inline: auto;
+}
+
+/* Prose content — readable line length */
+.prose {
+  max-width: 70ch;
 }
 
 /* ── Headings ───────────────────────────────────────────────── */

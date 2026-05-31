@@ -94,14 +94,4 @@
         border-left-color: var(--color-primary-500);
         font-weight: 600;
     }
-
-    @media (min-width: 64rem) {
-        .toc {
-            position: sticky;
-            top: var(--space-lg);
-            max-height: calc(100vh - var(--space-xl));
-            overflow-y: auto;
-            margin-bottom: 0;
-        }
-    }
 </style>
