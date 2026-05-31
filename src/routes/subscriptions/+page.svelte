@@ -35,7 +35,31 @@
       </ul>
     {/if}
   </section>
-</main>
+
+  <section class="sub-section">
+      <h2 class="section-heading">Recommendations</h2>
+
+      {#if data.recommendations.length === 0}
+          <p class="empty-mono">NULL_SET</p>
+      {:else}
+          <ul class="bare-list">
+              {#each data.recommendations as rec}
+                  <li>
+                      <a href={rec.url} target="_blank" rel="noopener" class="post-row">
+                          <div class="row-stack">
+                              <span class="sub-name">{rec.name}</span>
+                              {#if rec.description}
+                                  <span class="sub-author">{rec.description}</span>
+                              {/if}
+                          </div>
+                          <span class="sub-handle">{rec.authorHandle}</span>
+                      </a>
+                  </li>
+              {/each}
+          </ul>
+      {/if}
+  </section>
+  </main>
 
 <style>
   .sub-section {
