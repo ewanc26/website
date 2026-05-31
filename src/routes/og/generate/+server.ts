@@ -1,11 +1,8 @@
 import type { RequestHandler } from "./$types";
 
-export const GET: RequestHandler = async ({ params, url }) => {
-  const { slug } = params;
+export const GET: RequestHandler = async ({ url }) => {
+  const title = url.searchParams.get("title") ?? "ewan croft";
   const typeParam = url.searchParams.get("type") ?? "TECHNICAL SPEC";
-
-  // Decode the slug
-  const title = decodeURIComponent(slug);
 
   // Truncate long titles to fit the card
   const maxChars = 50;
