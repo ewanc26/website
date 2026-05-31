@@ -1,7 +1,13 @@
 <script lang="ts">
+    import Pentacle from '$lib/components/icons/Pentacle.svelte';
+    import Triskele from '$lib/components/icons/Triskele.svelte';
 </script>
 
 <footer class="site-footer">
+    <div class="footer-symbols">
+        <Pentacle size={16} />
+        <Triskele size={16} />
+    </div>
     <p>&copy; {new Date().getFullYear()} ewan croft</p>
     <nav class="footer-nav">
         <a href="mailto:contact@ewancroft.uk" class="footer-link">contact@ewancroft.uk</a>
@@ -19,9 +25,14 @@
         align-items: center;
         font-size: var(--text-xs);
         color: var(--color-ink-600);
-
     }
 
+    .footer-symbols {
+        display: flex;
+        gap: var(--space-xs);
+        opacity: 0.6;
+    }
+...
     .site-footer p {
         margin: 0;
     }
