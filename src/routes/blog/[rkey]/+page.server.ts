@@ -1,17 +1,18 @@
-import type { PageServerLoad } from './$types';
-import { fetchBlogPosts } from '$lib/services/atproto/fetch';
-import { error } from '@sveltejs/kit';
+import type { PageServerLoad } from "./$types";
+import { fetchBlogPosts } from "@ewanc26/atproto";
+import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { error } from "@sveltejs/kit";
 
-export const load: PageServerLoad = async ({ params }) => {
-    const { rkey } = params;
-    const { posts } = await fetchBlogPosts();
-    
-    // Attempt to find post by rkey (some structures use .uri as at://.../rkey)
-    const post = posts.find((p) => p.rkey === rkey || p.uri.endsWith(`/${rkey}`));
+export const load: PageServerLoad = async ({ params, fetch }) => {
+  const { rkey } = params;
+  const { posts } = await fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch);
 
-    if (!post) {
-        throw error(404, 'Post not found');
-    }
+  // Attempt to find post by rkey (some structures use .uri as at://.../rkey)
+  const post = posts.find((p) => p.rkey === rkey || p.uri.endsWith(`/${rkey}`));
 
-    return { post };
+  if (!post) {
+    throw error(404, "Post not found");
+  }
+
+  return { post };
 };

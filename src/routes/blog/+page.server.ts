@@ -1,13 +1,16 @@
 import type { PageServerLoad } from "./$types";
-import { fetchBlogPosts, fetchPublications } from "$lib/services/atproto/fetch";
-import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
+import { fetchBlogPosts, fetchPublications } from "@ewanc26/atproto";
+import {
+  PUBLIC_ATPROTO_DID,
+  PUBLIC_LEAFLET_BLOG_PUBLICATION,
+} from "$env/static/public";
 
 const PAGE_SIZE = 20;
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ fetch }) => {
   const [{ posts }, { publications }] = await Promise.all([
-    fetchBlogPosts(),
-    fetchPublications(),
+    fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch),
+    fetchPublications(PUBLIC_ATPROTO_DID, fetch),
   ]);
 
   const blogPublication = publications.find(
