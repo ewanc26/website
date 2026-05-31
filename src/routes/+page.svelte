@@ -163,7 +163,7 @@
   .hero-avatar {
     width: 64px;
     height: 64px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     object-fit: cover;
     flex-shrink: 0;
   }

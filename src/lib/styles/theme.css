@@ -224,7 +224,7 @@ mark {
   );
   color: var(--color-ink-950);
   padding: 0.1em 0.25em;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
 }
 
 small {
@@ -272,7 +272,7 @@ code {
   color: var(--color-accent-600);
   background-color: var(--surface-raised);
   padding: 0.15em 0.4em;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--surface-color);
 }
 
@@ -307,7 +307,7 @@ kbd {
   background-color: var(--surface-raised);
   border: 1px solid var(--color-canvas-300);
   border-bottom-width: 2px;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   padding: 0.1em 0.4em;
 }
 
@@ -548,7 +548,7 @@ input[type="submit"]:disabled {
 
 fieldset {
   border: 1px solid var(--surface-color);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: var(--space-md);
   margin-bottom: var(--space-md);
 }
@@ -564,7 +564,7 @@ legend {
 
 details {
   border: 1px solid var(--surface-color);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: var(--space-sm) var(--space-md);
   margin-bottom: var(--space-sm);
 }
@@ -636,7 +636,7 @@ dialog {
   background-color: var(--color-canvas-50);
   color: var(--color-ink-900);
   border: 1px solid var(--surface-color);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: var(--space-lg);
   max-width: min(90vw, 60ch);
 }
@@ -650,7 +650,7 @@ dialog::backdrop {
 progress {
   appearance: none;
   height: 4px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   background-color: var(--surface-color);
   border: none;
   width: 100%;
@@ -658,17 +658,17 @@ progress {
 
 progress::-webkit-progress-bar {
   background-color: var(--surface-color);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
 }
 
 progress::-webkit-progress-value {
   background-color: var(--color-primary-500);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
 }
 
 progress::-moz-progress-bar {
   background-color: var(--color-primary-500);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
 }
 
 /* Meter */
