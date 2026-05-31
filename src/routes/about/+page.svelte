@@ -317,6 +317,7 @@
     font-size: var(--text-sm);
     padding: 2px 10px;
     border: 1px solid var(--surface-color);
+    border-radius: var(--radius-sm);
     background: var(--surface-raised);
   }
 
@@ -385,6 +386,7 @@
   .project-item {
     padding: var(--space-sm);
     border: 1px solid var(--surface-color);
+    border-radius: var(--radius-lg);
   }
 
   .project-header {

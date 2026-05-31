@@ -138,6 +138,7 @@
     .comment {
         padding: var(--space-md);
         border: 1px solid var(--surface-color);
+        border-radius: var(--radius-lg);
     }
 
     .comment-head {
