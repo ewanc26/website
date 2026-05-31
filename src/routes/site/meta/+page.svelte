@@ -66,7 +66,7 @@
 
 <SiteHead title="Site Meta" description="Information about this website, its technology, and the people who made it possible." />
 
-<main class="shell-wide">
+<main class="shell-narrow">
 	<header class="page-hd">
 		<h1 class="page-title">Site Meta</h1>
 		<p class="page-desc">Information about this website, its technology, and the people who made it possible.</p>
@@ -75,122 +75,118 @@
 	{#if data.error}
 		<p style="color: var(--color-accent-500);">{data.error}</p>
 	{:else if info}
-		<div class="meta-grid">
-			<div class="meta-main">
-				{#if info.additionalInfo?.purpose}
-					<section class="meta-section">
-						<h2 class="meta-heading">Purpose</h2>
-						<p class="meta-text">{info.additionalInfo.purpose}</p>
-					</section>
-				{/if}
+		<div class="meta-content">
+			{#if info.additionalInfo?.purpose}
+				<section class="meta-section">
+					<h2 class="meta-heading">Purpose</h2>
+					<p class="meta-text">{info.additionalInfo.purpose}</p>
+				</section>
+			{/if}
 
-				{#if info.additionalInfo?.websiteBirthYear}
-					<section class="meta-section">
-						<h2 class="meta-heading">History</h2>
-						<p class="meta-text">This website was first launched in {info.additionalInfo.websiteBirthYear}.</p>
-					</section>
-				{/if}
+			{#if info.additionalInfo?.websiteBirthYear}
+				<section class="meta-section">
+					<h2 class="meta-heading">History</h2>
+					<p class="meta-text">This website was first launched in {info.additionalInfo.websiteBirthYear}.</p>
+				</section>
+			{/if}
 
-				{#if info.privacyStatement}
-					<section class="meta-section">
-						<h2 class="meta-heading">Privacy</h2>
-						<p class="meta-text">{info.privacyStatement}</p>
-					</section>
-				{/if}
+			{#if info.privacyStatement}
+				<section class="meta-section">
+					<h2 class="meta-heading">Privacy</h2>
+					<p class="meta-text">{info.privacyStatement}</p>
+				</section>
+			{/if}
 
-				{#if info.openSourceInfo}
-					<section class="meta-section">
-						<h2 class="meta-heading">Open Source</h2>
-						{#if info.openSourceInfo.description}
-							<p class="meta-text">{info.openSourceInfo.description}</p>
-						{/if}
-						{#if info.openSourceInfo.repositories?.length}
-							<ul class="meta-list">
-								{#each info.openSourceInfo.repositories as repo}
-									<li class="meta-card">
-										<a href={repo.url} target="_blank" rel="noopener" class="meta-card-link">
-											<strong>{repo.description || repo.url}</strong>
-											<ExternalLink size={12} strokeWidth={2} style="opacity: 0.5; flex-shrink: 0;" />
-										</a>
-										<div class="meta-tags">
-											{#if repo.platform}
-												<span class="meta-tag">{repo.platform}</span>
-											{/if}
-											{#if repo.type}
-												<span class="meta-tag meta-tag--accent">{repo.type}</span>
-											{/if}
-										</div>
-									</li>
+			{#if info.technologyStack?.length}
+				<section class="meta-section">
+					<h2 class="meta-heading">Technology Stack</h2>
+					{#each groupBySection(info.technologyStack) as [section, techs]}
+						<div class="tech-group">
+							<h3 class="meta-subheading">{section}</h3>
+							<div class="tech-grid">
+								{#each techs as tech}
+									<div class="tech-item">
+										{#if tech.url}
+											<a href={tech.url} target="_blank" rel="noopener" class="tech-name">
+												{tech.name}
+												<ExternalLink size={10} strokeWidth={2} style="opacity: 0.4;" />
+											</a>
+										{:else}
+											<span class="tech-name">{tech.name}</span>
+										{/if}
+										{#if tech.description}
+											<span class="tech-desc">{tech.description}</span>
+										{/if}
+									</div>
 								{/each}
-							</ul>
-						{/if}
-					</section>
-				{/if}
-			</div>
-
-			<aside class="meta-sidebar">
-				{#if info.technologyStack?.length}
-					<section class="meta-section">
-						<h2 class="meta-heading">Technology Stack</h2>
-						{#each groupBySection(info.technologyStack) as [section, techs]}
-							<div style="margin-bottom: var(--space-md);">
-								<h3 class="meta-subheading">{section}</h3>
-								<ul class="meta-list">
-									{#each techs as tech}
-										<li class="meta-card">
-											{#if tech.url}
-												<a href={tech.url} target="_blank" rel="noopener" class="meta-card-link">
-													<strong>{tech.name}</strong>
-													<ExternalLink size={12} strokeWidth={2} style="opacity: 0.5; flex-shrink: 0;" />
-												</a>
-											{:else}
-												<strong>{tech.name}</strong>
-											{/if}
-											{#if tech.description}
-												<p class="meta-card-desc">{tech.description}</p>
-											{/if}
-										</li>
-									{/each}
-								</ul>
 							</div>
-						{/each}
-					</section>
-				{/if}
+						</div>
+					{/each}
+				</section>
+			{/if}
 
-				{#if info.credits?.length}
-					<section class="meta-section">
-						<h2 class="meta-heading">Credits</h2>
-						{#each groupBySection(info.credits) as [section, credits]}
-							<div style="margin-bottom: var(--space-md);">
-								<h3 class="meta-subheading">{section}</h3>
-								<ul class="meta-list">
-									{#each credits as credit}
-										<li class="meta-card">
-											{#if credit.url}
-												<a href={credit.url} target="_blank" rel="noopener" class="meta-card-link">{credit.name}</a>
-											{:else}
-												<span style="font-weight: 600;">{credit.name}</span>
-											{/if}
-											{#if credit.author}
-												<p class="meta-card-desc">by {credit.author}</p>
-											{/if}
-											{#if credit.license}
-												<p class="meta-card-desc" style="opacity: 0.5;">
-													{#if credit.license.url}
-														<a href={credit.license.url} target="_blank" rel="noopener">{credit.license.name ?? 'License'}</a>
-													{:else}
-														{credit.license.name}
-													{/if}
-												</p>
-											{/if}
-										</li>
-									{/each}
-								</ul>
+			{#if info.openSourceInfo}
+				<section class="meta-section">
+					<h2 class="meta-heading">Open Source</h2>
+					{#if info.openSourceInfo.description}
+						<p class="meta-text">{info.openSourceInfo.description}</p>
+					{/if}
+					{#if info.openSourceInfo.repositories?.length}
+						<ul class="repo-list">
+							{#each info.openSourceInfo.repositories as repo}
+								<li class="repo-item">
+									<a href={repo.url} target="_blank" rel="noopener" class="repo-link">
+										<strong>{repo.description || repo.url}</strong>
+										<ExternalLink size={12} strokeWidth={2} style="opacity: 0.5; flex-shrink: 0;" />
+									</a>
+									<div class="meta-tags">
+										{#if repo.platform}
+											<span class="meta-tag">{repo.platform}</span>
+										{/if}
+										{#if repo.type}
+											<span class="meta-tag meta-tag--accent">{repo.type}</span>
+										{/if}
+									</div>
+								</li>
+							{/each}
+						</ul>
+					{/if}
+				</section>
+			{/if}
+
+			{#if info.credits?.length}
+				<section class="meta-section">
+					<h2 class="meta-heading">Credits</h2>
+					{#each groupBySection(info.credits) as [section, credits]}
+						<div class="tech-group">
+							<h3 class="meta-subheading">{section}</h3>
+							<div class="tech-grid">
+								{#each credits as credit}
+									<div class="tech-item">
+										{#if credit.url}
+											<a href={credit.url} target="_blank" rel="noopener" class="tech-name">{credit.name}</a>
+										{:else}
+											<span class="tech-name">{credit.name}</span>
+										{/if}
+										{#if credit.author}
+											<span class="tech-desc">by {credit.author}</span>
+										{/if}
+										{#if credit.license}
+											<span class="tech-desc" style="opacity: 0.5;">
+												{#if credit.license.url}
+													<a href={credit.license.url} target="_blank" rel="noopener">{credit.license.name ?? 'License'}</a>
+												{:else}
+													{credit.license.name}
+												{/if}
+											</span>
+										{/if}
+									</div>
+								{/each}
 							</div>
-						{/each}
-					</section>
-				{/if}
-			</aside>
+						</div>
+					{/each}
+				</section>
+			{/if}
 		</div>
 	{:else}
 		<p style="opacity: 0.6;">No site information available.</p>
@@ -214,18 +210,8 @@
 		color: var(--color-ink-700);
 	}
 
-	.meta-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: var(--space-lg);
+	.meta-content {
 		padding: var(--space-lg) 0;
-		align-items: start;
-	}
-
-	.meta-sidebar {
-		position: sticky;
-		top: 72px;
-		height: max-content;
 	}
 
 	.meta-section {
@@ -251,7 +237,48 @@
 		margin: 0;
 	}
 
-	.meta-list {
+	/* Tech stack: flowing grid instead of stacked cards */
+	.tech-group {
+		margin-bottom: var(--space-md);
+	}
+
+	.tech-grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-xs);
+	}
+
+	.tech-item {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: var(--space-xs) var(--space-sm);
+		border: 1px solid var(--surface-color);
+		background: var(--surface-raised);
+		min-width: 0;
+	}
+
+	.tech-name {
+		font-size: var(--text-sm);
+		font-weight: 600;
+		text-decoration: none;
+		color: inherit;
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-xs);
+	}
+
+	.tech-name:hover {
+		color: var(--color-primary-500);
+	}
+
+	.tech-desc {
+		font-size: var(--text-xs);
+		color: var(--color-ink-600);
+	}
+
+	/* Repositories */
+	.repo-list {
 		list-style: none;
 		padding: 0;
 		margin: 0;
@@ -260,12 +287,12 @@
 		gap: var(--space-xs);
 	}
 
-	.meta-card {
+	.repo-item {
 		padding: var(--space-sm);
 		border: 1px solid var(--surface-color);
 	}
 
-	.meta-card-link {
+	.repo-link {
 		display: flex;
 		align-items: center;
 		gap: var(--space-xs);
@@ -274,10 +301,8 @@
 		font-weight: 600;
 	}
 
-	.meta-card-desc {
-		margin: var(--space-2xs) 0 0;
-		font-size: var(--text-sm);
-		color: var(--color-ink-600);
+	.repo-link:hover {
+		color: var(--color-primary-500);
 	}
 
 	.meta-tags {
@@ -297,16 +322,5 @@
 		background: var(--color-primary-900);
 		color: var(--color-primary-400);
 		border-color: var(--color-primary-800);
-	}
-
-	@media (max-width: 900px) {
-		.meta-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.meta-sidebar {
-			position: static;
-			height: auto;
-		}
 	}
 </style>
