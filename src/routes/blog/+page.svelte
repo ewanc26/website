@@ -162,7 +162,7 @@
     .load-more {
         padding: var(--space-sm) var(--space-lg);
         border: 1px solid var(--surface-color);
-        border-radius: 8px;
+        border-radius: var(--radius-md);
         background: transparent;
         color: inherit;
         cursor: pointer;
