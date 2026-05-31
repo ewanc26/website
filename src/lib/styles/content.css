@@ -40,6 +40,12 @@
 }
 
 /* ── Post row — list item with label + trailing meta ─────────── */
+.post-list, .bare-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 .post-row {
   display: flex;
   justify-content: space-between;
@@ -49,6 +55,7 @@
   border-bottom: 1px dashed var(--surface-color);
   text-decoration: none;
   color: var(--color-ink-950);
+  font-size: var(--text-sm);
   transition:
     background-color var(--duration-fast) var(--ease-out-quart),
     padding-left var(--duration-fast) var(--ease-out-quart),
