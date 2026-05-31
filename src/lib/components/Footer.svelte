@@ -15,8 +15,7 @@
         align-items: center;
         font-size: var(--text-xs);
         color: var(--color-ink-600);
-        max-width: 72rem;
-        margin-inline: auto;
+
     }
 
     .site-footer p {
