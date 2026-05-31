@@ -29,9 +29,6 @@
 							<span class="post-date">{project.description}</span>
 						{/if}
 					</div>
-					{#if project.path}
-						<span class="post-date mono">{project.path}</span>
-					{/if}
 				</a>
 			</li>
 		{/each}
