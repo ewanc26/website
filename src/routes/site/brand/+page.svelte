@@ -116,6 +116,15 @@
     },
   ];
 
+  const proseElements = [
+    { tag: 'Paragraphs', desc: 'Default text flow, 1.75 line-height.' },
+    { tag: 'Headings', desc: '1.25 modular scale, -0.025em tracking.' },
+    { tag: 'Links', desc: 'Primary color, underlined with 35% opacity mix.' },
+    { tag: 'Code', desc: 'JetBrains Mono, accent-600 color, raised background.' },
+    { tag: 'Blockquote', desc: 'Primary-500 left border, italicized text.' },
+    { tag: 'Tables', desc: 'GFM style, responsive overflow, alternating row hover.' },
+  ];
+
   const voiceGuidelines = [
     {
       attribute: 'Technical',
@@ -140,462 +149,439 @@
   description="The full brand language, asset reference, and component primitives for ewancroft.uk."
 />
 
-<main class="shell-wide spec-sheet">
-  <!-- ── Spec Header ──────────────────────────────── -->
-  <header class="spec-header">
+<main class="shell-wide">
+  <header class="page-hd spec-header">
     <div class="spec-meta">
       <span class="meta-tag">FULL BRAND KIT</span>
       <span class="meta-tag">v2.1.0</span>
       <span class="meta-tag">TECHNICAL SPEC</span>
     </div>
-    <div class="header-main">
-      <h1 class="spec-title">Identity & Assets</h1>
-      <p class="spec-abstract">
-        A comprehensive reference of the design primitives, assets, and core principles governing the visual identity of <strong>ewancroft.uk</strong>. Derived from physical precision and technical integrity.
-      </p>
-    </div>
+    <h1 class="page-title">Identity & Assets</h1>
+    <p class="spec-abstract">
+      A comprehensive reference of the design primitives, assets, and core principles governing the visual identity of <strong>ewancroft.uk</strong>. Derived from physical precision and technical integrity.
+    </p>
   </header>
 
-  <nav class="spec-toc">
-    <ul class="toc-list">
-      <li><a href="#identity">01 Identity</a></li>
-      <li><a href="#colour">02 Colour</a></li>
-      <li><a href="#typography">03 Typography</a></li>
-      <li><a href="#geometry">04 Geometry</a></li>
-      <li><a href="#motion">05 Motion</a></li>
-      <li><a href="#iconography">06 Iconography</a></li>
-      <li><a href="#components">07 Components</a></li>
-      <li><a href="#layout">08 Layout</a></li>
-      <li><a href="#voice">09 Voice & Tone</a></li>
-      <li><a href="#manifesto">10 Manifesto</a></li>
-    </ul>
-  </nav>
-
   <div class="spec-grid">
-    <!-- ── [01] Identity ───────────────────────────── -->
-    <section class="spec-section identity" id="identity">
-      <header class="section-hd">
-        <span class="section-num">[01]</span>
-        <h2 class="section-title">Identity</h2>
-      </header>
-      <div class="section-content">
-        <div class="id-card">
-          <div class="id-header">SYSTEM IDENTIFICATION</div>
-          <div class="id-body">
-            <dl class="id-fields">
-              <div>
-                <dt>DOMAIN</dt>
-                <dd>ewancroft.uk</dd>
-              </div>
-              <div>
-                <dt>TAGLINE</dt>
-                <dd>Anglo-Scottish pagan, poet, and programmer.</dd>
-              </div>
-              <div>
-                <dt>PERSONALITY</dt>
-                <dd>Technical · Personal · Exploratory</dd>
-              </div>
-              <div>
-                <dt>AESTHETIC</dt>
-                <dd>Minimalist, systematic, typography-led</dd>
-              </div>
-              <div>
-                <dt>PRIMARY LOGO</dt>
-                <dd>
-                  <div class="logo-sample">
-                    <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="32" height="32" rx="16" fill="var(--color-primary-500)"/>
-                      <path d="M11 21V11H21V13H13V15H19V17H13V19H21V21H11Z" fill="var(--color-canvas-50)"/>
-                    </svg>
-                    <span>Favicon Primary</span>
-                  </div>
-                </dd>
-              </div>
-            </dl>
+    <nav class="spec-toc">
+      <ul class="bare-list toc-list">
+        <li><a href="#identity">01 Identity</a></li>
+        <li><a href="#colour">02 Colour</a></li>
+        <li><a href="#typography">03 Typography</a></li>
+        <li><a href="#prose">04 Prose</a></li>
+        <li><a href="#geometry">05 Geometry</a></li>
+        <li><a href="#motion">06 Motion</a></li>
+        <li><a href="#iconography">07 Iconography</a></li>
+        <li><a href="#components">08 Components</a></li>
+        <li><a href="#layout">09 Layout</a></li>
+        <li><a href="#voice">10 Voice & Tone</a></li>
+        <li><a href="#manifesto">11 Manifesto</a></li>
+      </ul>
+    </nav>
+
+    <div class="spec-content">
+      <!-- ── [01] Identity ───────────────────────────── -->
+      <section class="spec-section identity" id="identity">
+        <header class="section-hd">
+          <span class="section-num">[01]</span>
+          <h2 class="section-title">Identity</h2>
+        </header>
+        <div class="section-content">
+          <div class="id-card">
+            <div class="id-header">SYSTEM IDENTIFICATION</div>
+            <div class="id-body">
+              <dl class="id-fields">
+                <div>
+                  <dt>DOMAIN</dt>
+                  <dd>ewancroft.uk</dd>
+                </div>
+                <div>
+                  <dt>TAGLINE</dt>
+                  <dd>Anglo-Scottish pagan, poet, and programmer.</dd>
+                </div>
+                <div>
+                  <dt>PERSONALITY</dt>
+                  <dd>Technical · Personal · Exploratory</dd>
+                </div>
+                <div>
+                  <dt>AESTHETIC</dt>
+                  <dd>Minimalist, systematic, typography-led</dd>
+                </div>
+                <div>
+                  <dt>PRIMARY LOGO</dt>
+                  <dd>
+                    <div class="logo-sample">
+                      <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" rx="16" fill="var(--color-primary-500)"/>
+                        <path d="M11 21V11H21V13H13V15H19V17H13V19H21V21H11Z" fill="var(--color-canvas-50)"/>
+                      </svg>
+                      <span>Favicon Primary</span>
+                    </div>
+                  </dd>
+                </div>
+              </dl>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ── [02] Colour ─────────────────────────────── -->
-    <section class="spec-section colour" id="colour">
-      <header class="section-hd">
-        <span class="section-num">[02]</span>
-        <h2 class="section-title">Colour Architecture</h2>
-      </header>
-      <div class="section-content">
-        <p class="section-intro">
-          Derived from brand OKLCH hues (140–160°). Neutrals are tinted toward the brand hue (Chroma 0.005–0.01). 
-          Implementation via <code>light-dark()</code> ensures seamless theme transitions.
-        </p>
+      <!-- ── [02] Colour ─────────────────────────────── -->
+      <section class="spec-section colour" id="colour">
+        <header class="section-hd">
+          <span class="section-num">[02]</span>
+          <h2 class="section-title">Colour Architecture</h2>
+        </header>
+        <div class="section-content">
+          <p class="section-intro">
+            Derived from brand OKLCH hues (140–160°). Neutrals are tinted toward the brand hue (Chroma 0.005–0.01). 
+            Implementation via <code>light-dark()</code> ensures seamless theme transitions based on user OS preference.
+          </p>
 
-        <div class="palette-stacks">
-          {#each colorPalettes as palette}
-            <div class="palette-stack">
-              <div class="palette-info">
-                <h3 class="stack-name">{palette.name}</h3>
-                <code class="stack-prefix">--color-{palette.prefix}-*</code>
+          <div class="palette-stacks">
+            {#each colorPalettes as palette}
+              <div class="palette-stack">
+                <div class="palette-info">
+                  <h3 class="stack-name">{palette.name}</h3>
+                  <code class="stack-prefix">--color-{palette.prefix}-*</code>
+                </div>
+                <div class="swatch-grid">
+                  {#each colorSteps as step}
+                    <div class="swatch-item">
+                      <div
+                        class="swatch"
+                        style="background: var(--color-{palette.prefix}-{step});"
+                        title="--color-{palette.prefix}-{step}"
+                      ></div>
+                      <span class="swatch-val">{step}</span>
+                    </div>
+                  {/each}
+                </div>
               </div>
-              <div class="swatch-grid">
-                {#each colorSteps as step}
-                  <div class="swatch-item">
-                    <div
-                      class="swatch"
-                      style="background: var(--color-{palette.prefix}-{step});"
-                      title="--color-{palette.prefix}-{step}"
-                    ></div>
-                    <span class="swatch-val">{step}</span>
+            {/each}
+          </div>
+
+          <div class="spec-sub-section surfaces">
+            <h3 class="sub-title">Semantic Surfaces</h3>
+            <div class="surface-grid">
+              {#each surfaces as s}
+                <div class="surface-card">
+                  <div class="surface-preview" style="background: var({s.token});"></div>
+                  <div class="surface-meta">
+                    <span class="surface-label">{s.label}</span>
+                    <code class="surface-token">{s.token}</code>
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── [03] Typography ─────────────────────────── -->
+      <section class="spec-section typography" id="typography">
+        <header class="section-hd">
+          <span class="section-num">[03]</span>
+          <h2 class="section-title">Typography</h2>
+        </header>
+        <div class="section-content">
+          <p class="section-intro">
+            Variable Inter for all prose; JetBrains Mono for technical strings. Modular scale at ratio 1.25, 
+            fluid via <code>clamp()</code>.
+          </p>
+
+          <div class="type-specimen">
+            <div class="font-primary">
+              <span class="font-meta">SANS / INTER VARIABLE / 400-800</span>
+              <div class="font-display">AaBbCcDdEeFfGg</div>
+            </div>
+            <div class="font-mono">
+              <span class="font-meta">MONO / JETBRAINS MONO / 400</span>
+              <div class="font-display">0123456789!?@#</div>
+            </div>
+          </div>
+
+          <div class="scale-table">
+            <div class="table-hd">
+              <span>TOKEN</span>
+              <span>SAMPLE</span>
+              <span class="hide-mobile">WEIGHT</span>
+            </div>
+            {#each typeScale as step}
+              <div class="table-row">
+                <code class="table-token">{step.token}</code>
+                <div class="table-sample" style="font-size: var({step.token}); font-weight: {step.weight};">
+                  {step.sample}
+                </div>
+                <span class="table-weight hide-mobile">{step.weight}</span>
+              </div>
+            {/each}
+          </div>
+        </div>
+      </section>
+
+      <!-- ── [04] Prose ──────────────────────────────── -->
+      <section class="spec-section prose-spec" id="prose">
+        <header class="section-hd">
+          <span class="section-num">[04]</span>
+          <h2 class="section-title">Prose Styling</h2>
+        </header>
+        <div class="section-content">
+          <p class="section-intro">
+            Scoped under <code>.prose</code> for blog content. All elements are design-token compliant and rely on semantic hierarchy.
+          </p>
+          <div class="prose-grid">
+            {#each proseElements as el}
+              <div class="prose-card">
+                <span class="prose-tag">{el.tag}</span>
+                <p>{el.desc}</p>
+              </div>
+            {/each}
+          </div>
+        </div>
+      </section>
+
+      <!-- ── [05] Geometry ───────────────────────────── -->
+      <section class="spec-section geometry" id="geometry">
+        <header class="section-hd">
+          <span class="section-num">[05]</span>
+          <h2 class="section-title">Geometry</h2>
+        </header>
+        <div class="section-content">
+          <div class="geo-grid">
+            <div class="geo-panel">
+              <h3 class="sub-title">Spacing Scale</h3>
+              <div class="spacing-map">
+                {#each spacingScale as step}
+                  <div class="spacing-entry">
+                    <code class="token">{step.token}</code>
+                    <div class="bar-wrap">
+                      <div class="bar" style="width: {step.size}px;"></div>
+                    </div>
+                    <span class="value">{step.value}</span>
                   </div>
                 {/each}
               </div>
             </div>
-          {/each}
-        </div>
 
-        <div class="spec-sub-section surfaces">
-          <h3 class="sub-title">Semantic Surfaces</h3>
-          <div class="surface-grid">
-            {#each surfaces as s}
-              <div class="surface-card">
-                <div class="surface-preview" style="background: var({s.token});"></div>
-                <div class="surface-meta">
-                  <span class="surface-label">{s.label}</span>
-                  <code class="surface-token">{s.token}</code>
-                </div>
-              </div>
-            {/each}
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── [03] Typography ─────────────────────────── -->
-    <section class="spec-section typography" id="typography">
-      <header class="section-hd">
-        <span class="section-num">[03]</span>
-        <h2 class="section-title">Typography</h2>
-      </header>
-      <div class="section-content">
-        <p class="section-intro">
-          Variable Inter for all prose; JetBrains Mono for technical strings. Modular scale at ratio 1.25, 
-          fluid via <code>clamp()</code>.
-        </p>
-
-        <div class="type-specimen">
-          <div class="font-primary">
-            <span class="font-meta">SANS / INTER VARIABLE / 400-800</span>
-            <div class="font-display">AaBbCcDdEeFfGg</div>
-          </div>
-          <div class="font-mono">
-            <span class="font-meta">MONO / JETBRAINS MONO / 400</span>
-            <div class="font-display">0123456789!?@#</div>
-          </div>
-        </div>
-
-        <div class="scale-table">
-          <div class="table-hd">
-            <span>TOKEN</span>
-            <span>SAMPLE</span>
-            <span class="hide-mobile">WEIGHT</span>
-          </div>
-          {#each typeScale as step}
-            <div class="table-row">
-              <code class="table-token">{step.token}</code>
-              <div class="table-sample" style="font-size: var({step.token}); font-weight: {step.weight};">
-                {step.sample}
-              </div>
-              <span class="table-weight hide-mobile">{step.weight}</span>
-            </div>
-          {/each}
-        </div>
-      </div>
-    </section>
-
-    <!-- ── [04] Geometry ───────────────────────────── -->
-    <section class="spec-section geometry" id="geometry">
-      <header class="section-hd">
-        <span class="section-num">[04]</span>
-        <h2 class="section-title">Geometry</h2>
-      </header>
-      <div class="section-content">
-        <div class="geo-grid">
-          <div class="geo-panel">
-            <h3 class="sub-title">Spacing Scale</h3>
-            <div class="spacing-map">
-              {#each spacingScale as step}
-                <div class="spacing-entry">
-                  <code class="token">{step.token}</code>
-                  <div class="bar-wrap">
-                    <div class="bar" style="width: {step.size}px;"></div>
+            <div class="geo-panel">
+              <h3 class="sub-title">Corner Radii</h3>
+              <div class="radii-map">
+                {#each radiiScale as r}
+                  <div class="radius-entry">
+                    <div class="radius-box" style="border-radius: var({r.token});"></div>
+                    <code class="token">{r.token}</code>
+                    <span class="value">{r.value}</span>
                   </div>
-                  <span class="value">{step.value}</span>
-                </div>
-              {/each}
-            </div>
-          </div>
-
-          <div class="geo-panel">
-            <h3 class="sub-title">Corner Radii</h3>
-            <div class="radii-map">
-              {#each radiiScale as r}
-                <div class="radius-entry">
-                  <div class="radius-box" style="border-radius: var({r.token});"></div>
-                  <code class="token">{r.token}</code>
-                  <span class="value">{r.value}</span>
-                </div>
-              {/each}
+                {/each}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ── [05] Motion ─────────────────────────────── -->
-    <section class="spec-section motion" id="motion">
-      <header class="section-hd">
-        <span class="section-num">[05]</span>
-        <h2 class="section-title">Motion</h2>
-      </header>
-      <div class="section-content">
-        <div class="motion-layout">
-          <div class="motion-tokens">
-            <h3 class="sub-title">Duration</h3>
-            {#each durationScale as d}
+      <!-- ── [06] Motion ─────────────────────────────── -->
+      <section class="spec-section motion" id="motion">
+        <header class="section-hd">
+          <span class="section-num">[06]</span>
+          <h2 class="section-title">Motion</h2>
+        </header>
+        <div class="section-content">
+          <div class="motion-layout">
+            <div class="motion-tokens">
+              <h3 class="sub-title">Duration</h3>
+              {#each durationScale as d}
+                <div class="token-item">
+                  <code class="name">{d.token}</code>
+                  <span class="val">{d.value}</span>
+                </div>
+              {/each}
+            </div>
+            <div class="motion-tokens">
+              <h3 class="sub-title">Easing</h3>
               <div class="token-item">
-                <code class="name">{d.token}</code>
-                <span class="val">{d.value}</span>
+                <code class="name">--ease-out-quart</code>
+                <span class="val">bezier(0.25, 1, 0.5, 1)</span>
+              </div>
+              <div class="token-item">
+                <code class="name">--ease-out-expo</code>
+                <span class="val">bezier(0.16, 1, 0.3, 1)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── [07] Iconography ────────────────────────── -->
+      <section class="spec-section iconography" id="iconography">
+        <header class="section-hd">
+          <span class="section-num">[07]</span>
+          <h2 class="section-title">Iconography</h2>
+        </header>
+        <div class="section-content">
+          <p class="section-intro">
+            System icons are implemented as SVG components with a default size of 16px. They inherit <code>currentColor</code> for seamless integration. Pagan symbols use <code>currentColor</code> for stroke (pentacle) or fill (triskele).
+          </p>
+          <div class="icon-grid">
+            <div class="icon-card">
+              <div class="icon-preview">
+                <Bluesky size={32} />
+              </div>
+              <code class="icon-name">Bluesky.svelte</code>
+            </div>
+            <div class="icon-card">
+              <div class="icon-preview">
+                <Pentacle size={32} />
+              </div>
+              <code class="icon-name">Pentacle.svelte</code>
+            </div>
+            <div class="icon-card">
+              <div class="icon-preview">
+                <Triskele size={32} />
+              </div>
+              <code class="icon-name">Triskele.svelte</code>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── [08] Components ─────────────────────────── -->
+      <section class="spec-section components" id="components">
+        <header class="section-hd">
+          <span class="section-num">[08]</span>
+          <h2 class="section-title">Components</h2>
+        </header>
+        <div class="section-content">
+          <div class="component-demo-stack">
+            <div class="comp-item">
+              <h3 class="sub-title">Panel Primitive</h3>
+              <div class="panel">
+                <div class="panel-head">panel.component</div>
+                <div class="panel-body">
+                  <p>Standard container for technical information and data displays.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="comp-item">
+              <h3 class="sub-title">Interactive Elements</h3>
+              <div class="interactive-demo">
+                <div class="demo-col">
+                  <span class="demo-label">Text Link</span>
+                  <a href="#components">Interactive Link</a>
+                </div>
+                <div class="demo-col">
+                  <span class="demo-label">Primary Button</span>
+                  <button type="button">Action Trigger</button>
+                </div>
+                <div class="demo-col">
+                  <span class="demo-label">Inline Semantics</span>
+                  <div>
+                    <code>code-snippet</code>
+                    <mark>highlight</mark>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comp-item">
+              <h3 class="sub-title">Blockquote</h3>
+              <blockquote>
+                "Every element must earn its place on the screen. If it doesn't serve a functional purpose, it is slop."
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── [09] Layout ─────────────────────────────── -->
+      <section class="spec-section layout" id="layout">
+        <header class="section-hd">
+          <span class="section-num">[09]</span>
+          <h2 class="section-title">Layout Systems</h2>
+        </header>
+        <div class="section-content">
+          <p class="section-intro">
+            Three standardized shells constrain content width and manage vertical rhythm. All layouts are responsive and adapt to container widths.
+          </p>
+          <div class="shell-stack">
+            {#each shells as shell}
+              <div class="shell-viz-row">
+                <div class="shell-info">
+                  <span class="shell-name">{shell.name}</span>
+                  <code class="shell-token">{shell.cls}</code>
+                </div>
+                <div class="shell-bar-wrap">
+                  <div class="shell-bar" style="width: calc({shell.width.includes('+') ? '80%' : (parseInt(shell.width) / 100 * 100) + '%'});">
+                    <span class="shell-val">{shell.width}</span>
+                  </div>
+                </div>
+                <p class="shell-usage-note">{shell.usage}</p>
               </div>
             {/each}
           </div>
-          <div class="motion-tokens">
-            <h3 class="sub-title">Easing</h3>
-            <div class="token-item">
-              <code class="name">--ease-out-quart</code>
-              <span class="val">bezier(0.25, 1, 0.5, 1)</span>
-            </div>
-            <div class="token-item">
-              <code class="name">--ease-out-expo</code>
-              <span class="val">bezier(0.16, 1, 0.3, 1)</span>
-            </div>
-          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ── [06] Iconography ────────────────────────── -->
-    <section class="spec-section iconography" id="iconography">
-      <header class="section-hd">
-        <span class="section-num">[06]</span>
-        <h2 class="section-title">Iconography</h2>
-      </header>
-      <div class="section-content">
-        <p class="section-intro">
-          System icons are implemented as SVG components with a default size of 16px. They inherit <code>currentColor</code> for seamless integration. Pagan symbols use <code>currentColor</code> for stroke (pentacle) or fill (triskele).
-        </p>
-        <div class="icon-grid">
-          <div class="icon-card">
-            <div class="icon-preview">
-              <Bluesky size={32} />
-            </div>
-            <code class="icon-name">Bluesky.svelte</code>
-          </div>
-          <div class="icon-card">
-            <div class="icon-preview">
-              <Pentacle size={32} />
-            </div>
-            <code class="icon-name">Pentacle.svelte</code>
-          </div>
-          <div class="icon-card">
-            <div class="icon-preview">
-              <Triskele size={32} />
-            </div>
-            <code class="icon-name">Triskele.svelte</code>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── [07] Components ─────────────────────────── -->
-    <section class="spec-section components" id="components">
-      <header class="section-hd">
-        <span class="section-num">[07]</span>
-        <h2 class="section-title">Components</h2>
-      </header>
-      <div class="section-content">
-        <div class="component-demo-stack">
-          <div class="comp-item">
-            <h3 class="sub-title">Panel Primitive</h3>
-            <div class="panel">
-              <div class="panel-head">panel.component</div>
-              <div class="panel-body">
-                <p>Standard container for technical information and data displays.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="comp-item">
-            <h3 class="sub-title">Interactive Elements</h3>
-            <div class="interactive-demo">
-              <div class="demo-col">
-                <span class="demo-label">Text Link</span>
-                <a href="#components">Interactive Link</a>
-              </div>
-              <div class="demo-col">
-                <span class="demo-label">Primary Button</span>
-                <button type="button">Action Trigger</button>
-              </div>
-              <div class="demo-col">
-                <span class="demo-label">Inline Semantics</span>
-                <div>
-                  <code>code-snippet</code>
-                  <mark>highlight</mark>
+      <!-- ── [10] Voice & Tone ───────────────────────── -->
+      <section class="spec-section voice" id="voice">
+        <header class="section-hd">
+          <span class="section-num">[10]</span>
+          <h2 class="section-title">Voice & Tone</h2>
+        </header>
+        <div class="section-content">
+          <div class="voice-grid">
+            {#each voiceGuidelines as g}
+              <div class="voice-card">
+                <h3 class="voice-attr">{g.attribute}</h3>
+                <div class="voice-rules">
+                  <div class="rule do">
+                    <span class="rule-label">DO</span>
+                    <p>{g.do}</p>
+                  </div>
+                  <div class="rule dont">
+                    <span class="rule-label">DON'T</span>
+                    <p>{g.dont}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div class="comp-item">
-            <h3 class="sub-title">Blockquote</h3>
-            <blockquote>
-              "Every element must earn its place on the screen. If it doesn't serve a functional purpose, it is slop."
-            </blockquote>
+            {/each}
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ── [08] Layout ─────────────────────────────── -->
-    <section class="spec-section layout" id="layout">
-      <header class="section-hd">
-        <span class="section-num">[08]</span>
-        <h2 class="section-title">Layout Systems</h2>
-      </header>
-      <div class="section-content">
-        <p class="section-intro">
-          Three standardized shells constrain content width and manage vertical rhythm. All layouts are responsive and adapt to container widths.
-        </p>
-        <div class="shell-stack">
-          {#each shells as shell}
-            <div class="shell-viz-row">
-              <div class="shell-info">
-                <span class="shell-name">{shell.name}</span>
-                <code class="shell-token">{shell.cls}</code>
-              </div>
-              <div class="shell-bar-wrap">
-                <div class="shell-bar" style="width: calc({shell.width.includes('+') ? '80%' : (parseInt(shell.width) / 100 * 100) + '%'});">
-                  <span class="shell-val">{shell.width}</span>
+      </section>
+      <!-- ── [11] Manifesto ──────────────────────────── -->
+      <section class="spec-section principles" id="manifesto">
+        <header class="section-hd">
+          <span class="section-num">[11]</span>
+          <h2 class="section-title">Manifesto</h2>
+        </header>
+        <div class="section-content">
+          <div class="manifesto-list">
+            {#each principles as p}
+              <article class="principle-card">
+                <span class="p-num">{p.number}</span>
+                <div class="p-body">
+                  <h3 class="p-name">{p.name}</h3>
+                  <p class="p-desc">{p.description}</p>
                 </div>
-              </div>
-              <p class="shell-usage-note">{shell.usage}</p>
-            </div>
-          {/each}
+              </article>
+            {/each}
+          </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ── [09] Voice & Tone ───────────────────────── -->
-    <section class="spec-section voice" id="voice">
-      <header class="section-hd">
-        <span class="section-num">[09]</span>
-        <h2 class="section-title">Voice & Tone</h2>
-      </header>
-      <div class="section-content">
-        <div class="voice-grid">
-          {#each voiceGuidelines as g}
-            <div class="voice-card">
-              <h3 class="voice-attr">{g.attribute}</h3>
-              <div class="voice-rules">
-                <div class="rule do">
-                  <span class="rule-label">DO</span>
-                  <p>{g.do}</p>
-                </div>
-                <div class="rule dont">
-                  <span class="rule-label">DON'T</span>
-                  <p>{g.dont}</p>
-                </div>
-              </div>
-            </div>
-          {/each}
-        </div>
-      </div>
-    </section>
-
-    <!-- ── [10] Manifesto ──────────────────────────── -->
-    <section class="spec-section principles" id="manifesto">
-      <header class="section-hd">
-        <span class="section-num">[10]</span>
-        <h2 class="section-title">Manifesto</h2>
-      </header>
-      <div class="section-content">
-        <div class="manifesto-list">
-          {#each principles as p}
-            <article class="principle-card">
-              <span class="p-num">{p.number}</span>
-              <div class="p-body">
-                <h3 class="p-name">{p.name}</h3>
-                <p class="p-desc">{p.description}</p>
-              </div>
-            </article>
-          {/each}
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
 </main>
 
 <style>
-  .spec-sheet {
-    padding-top: var(--space-xl);
-    padding-bottom: var(--space-2xl);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xl);
-  }
-
-  /* ── Spec TOC ────────────────────────────────── */
-  .spec-toc {
-    padding: var(--space-md) 0;
-  }
-
-  .toc-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-  }
-
-  .toc-list a {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--color-ink-500);
-    letter-spacing: 0.05em;
-    background: var(--surface-raised);
-    padding: 2px 8px;
-    border: 1px solid var(--surface-color);
-    transition: all var(--duration-fast) var(--ease-out-quart);
-  }
-
-  .toc-list a:hover {
-    background: var(--color-primary-500);
-    color: var(--color-canvas-50);
-    border-color: var(--color-primary-500);
-  }
-
-  /* ── Spec Header ──────────────────────────────── */
+  /* Base Layout */
   .spec-header {
-    padding-bottom: var(--space-lg);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
   }
 
-  .spec-meta {
-    display: flex;
-    gap: var(--space-sm);
+  .page-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    margin: var(--space-sm) 0;
   }
 
   .meta-tag {
@@ -606,51 +592,63 @@
     background: var(--surface-raised);
     padding: 2px 6px;
     border: 1px solid var(--surface-color);
-  }
-
-  .spec-title {
-    font-size: clamp(2.5rem, 8vw, 5rem);
-    font-weight: 800;
-    line-height: 0.9;
-    letter-spacing: -0.04em;
-    margin: 0;
     text-transform: uppercase;
   }
 
-  .spec-abstract {
-    margin: var(--space-md) 0 0;
-    max-width: 60ch;
-    font-size: var(--text-md);
-    color: var(--color-ink-700);
-    line-height: 1.5;
+  .spec-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
   }
 
-  /* ── Spec Grid ────────────────────────────────── */
-  .spec-grid {
+  @media (max-width: 900px) {
+    .spec-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .spec-toc {
+    position: sticky;
+    top: 72px;
+  }
+
+  .bare-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .toc-list a {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-ink-600);
+    text-decoration: none;
+  }
+
+  .toc-list a:hover {
+    color: var(--color-primary-500);
+  }
+
+  .spec-content {
     display: flex;
     flex-direction: column;
     gap: var(--space-2xl);
   }
 
+  /* Section Styling */
   .spec-section {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: var(--space-xl);
-    padding-top: var(--space-lg);
-    scroll-margin-top: var(--space-xl);
-  }
-
-  @media (max-width: 900px) {
-    .spec-section {
-      grid-template-columns: 1fr;
-      gap: var(--space-md);
-    }
+    scroll-margin-top: var(--space-md);
   }
 
   .section-hd {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2xs);
+    margin-bottom: var(--space-md);
   }
 
   .section-num {
@@ -661,22 +659,14 @@
   }
 
   .section-title {
-    font-size: var(--text-sm);
+    font-size: var(--text-md);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     font-weight: 800;
     margin: 0;
-    color: var(--color-ink-950);
   }
 
-  .section-intro {
-    font-size: var(--text-sm);
-    color: var(--color-ink-700);
-    max-width: 65ch;
-    margin: 0 0 var(--space-lg);
-  }
-
-  /* ── [01] Identity ───────────────────────────── */
+  /* Identity */
   .id-card {
     background: var(--surface-raised);
     border: 1px solid var(--surface-color);
@@ -724,7 +714,37 @@
     gap: var(--space-sm);
   }
 
-  /* ── [02] Colour ─────────────────────────────── */
+  /* Prose */
+  .prose-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .prose-card {
+    border: 1px solid var(--surface-color);
+    background: var(--surface-raised);
+    border-radius: var(--radius-sm);
+    padding: var(--space-md);
+  }
+
+  .prose-tag {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--color-primary-500);
+    display: block;
+    margin-bottom: var(--space-xs);
+    text-transform: uppercase;
+  }
+
+  .prose-card p {
+    font-size: var(--text-sm);
+    color: var(--color-ink-700);
+    margin: 0;
+  }
+
+  /* Colour */
   .palette-stacks {
     display: flex;
     flex-direction: column;
@@ -822,7 +842,7 @@
     color: var(--color-ink-500);
   }
 
-  /* ── [03] Typography ─────────────────────────── */
+  /* Typography */
   .type-specimen {
     display: flex;
     flex-direction: column;
@@ -897,7 +917,7 @@
     text-align: right;
   }
 
-  /* ── [04] Geometry ───────────────────────────── */
+  /* Geometry */
   .geo-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -985,7 +1005,7 @@
     color: var(--color-ink-400);
   }
 
-  /* ── [05] Motion ─────────────────────────────── */
+  /* Motion */
   .motion-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1010,7 +1030,7 @@
     color: var(--color-ink-500);
   }
 
-  /* ── [06] Iconography ────────────────────────── */
+  /* Iconography */
   .icon-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -1038,7 +1058,7 @@
     font-family: var(--font-mono);
   }
 
-  /* ── [07] Components ─────────────────────────── */
+  /* Components */
   .component-demo-stack {
     display: flex;
     flex-direction: column;
@@ -1069,7 +1089,7 @@
     text-transform: uppercase;
   }
 
-  /* ── [08] Layout ─────────────────────────────── */
+  /* Layout */
   .shell-stack {
     display: flex;
     flex-direction: column;
@@ -1138,7 +1158,7 @@
     max-width: 150px;
   }
 
-  /* ── [09] Voice & Tone ───────────────────────── */
+  /* Voice & Tone */
   .voice-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1195,7 +1215,7 @@
     color: var(--color-ink-800);
   }
 
-  /* ── [10] Manifesto ──────────────────────────── */
+  /* Manifesto */
   .manifesto-list {
     display: flex;
     flex-direction: column;
@@ -1232,7 +1252,7 @@
     max-width: 60ch;
   }
 
-  /* ── Utils ────────────────────────────────────── */
+  /* Utils */
   @media (max-width: 600px) {
     .hide-mobile {
       display: none;
