@@ -69,7 +69,7 @@
   }
 </script>
 
-<SiteHead title="About" description={profile.description} />
+<SiteHead title="About" description={profile.description} ogType="PROFILE" />
 
 <main class="shell-wide">
   <header class="page-hd about-hero">

@@ -5,7 +5,7 @@
 	let { data } = $props();
 </script>
 
-<SiteHead title="Projects" description={data.publication?.description} />
+<SiteHead title="Projects" description={data.publication?.description} ogType="PROJECTS" />
 
 <main class="shell-wide">
 	<header class="page-hd">

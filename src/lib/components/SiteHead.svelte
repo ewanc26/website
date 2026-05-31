@@ -2,12 +2,12 @@
     import { page } from '$app/state';
     import { SITE } from '$lib/config';
 
-    let { title, description, image }: { title?: string; description?: string; image?: string } = $props();
+    let { title, description, image, ogType }: { title?: string; description?: string; image?: string; ogType?: string } = $props();
 
     const fullTitle = $derived(title ? `${title} — ${SITE.title}` : SITE.title);
     const fullDescription = $derived(description ?? SITE.description);
     const canonicalUrl = $derived(`${page.url.origin}${page.url.pathname}`);
-    const ogImage = $derived(image ?? `${page.url.origin}/og/${encodeURIComponent(title ?? SITE.title)}`);
+    const ogImage = $derived(image ?? `${page.url.origin}/og/${encodeURIComponent(title ?? SITE.title)}${ogType ? `?type=${encodeURIComponent(ogType)}` : ''}`);
 </script>
 
 <svelte:head>
