@@ -223,7 +223,7 @@
   .about-avatar {
     width: 64px;
     height: 64px;
-    border-radius: 4px;
+    border-radius: 8px;
     object-fit: cover;
     flex-shrink: 0;
   }
