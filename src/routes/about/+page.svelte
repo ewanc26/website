@@ -105,17 +105,14 @@
           <h2 class="section-heading">Education</h2>
           <ul class="bare-list">
             {#each sifaEducation as edu}
-              <li class="edu-item">
-                <div class="row-header">
+              <li class="post-row">
+                <div style="display: flex; flex-direction: column;">
                   <strong class="edu-degree">{edu.degree}</strong>
-                  <span class="row-meta">
-                    {formatDate(edu.startedAt)} — {edu.endedAt ? formatDate(edu.endedAt) : 'Present'}
-                  </span>
+                  <span class="edu-institution">{edu.institution}</span>
                 </div>
-                <p class="edu-institution">{edu.institution}</p>
-                {#if edu.description}
-                  <p class="edu-desc">{edu.description}</p>
-                {/if}
+                <span class="row-meta">
+                  {formatDate(edu.startedAt)} — {edu.endedAt ? formatDate(edu.endedAt) : 'Present'}
+                </span>
               </li>
             {/each}
           </ul>
@@ -127,24 +124,19 @@
           <h2 class="section-heading">Projects</h2>
           <ul class="bare-list">
             {#each sifaProjects as project}
-              <li class="project-item">
-                <div class="row-header">
-                  <strong class="project-name">{project.name}</strong>
-                  {#if project.url}
-                    <a
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener"
-                      class="project-link"
-                      aria-label="View {project.name}"
-                    >
-                      <ExternalLink size={12} strokeWidth={2} />
-                    </a>
-                  {/if}
-                </div>
-                {#if project.description}
-                  <p class="project-desc">{project.description}</p>
-                {/if}
+              <li>
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener"
+                  class="post-row"
+                >
+                  <div style="display: flex; flex-direction: column;">
+                    <strong class="project-name">{project.name}</strong>
+                    <span class="project-desc">{project.description}</span>
+                  </div>
+                  <ExternalLink size={14} strokeWidth={2} />
+                </a>
               </li>
             {/each}
           </ul>
@@ -156,10 +148,10 @@
       {#if sifaLanguages.length > 0}
         <section class="sidebar-section">
           <h2 class="section-heading">Languages</h2>
-          <ul class="bare-list lang-list">
+          <ul class="bare-list">
             {#each sifaLanguages as lang}
-              <li class="lang-item">
-                <span class="lang-name">{lang.name}</span>
+              <li class="post-row">
+                <span>{lang.name}</span>
                 <span class="lang-prof">{formatLanguageProficiency(lang.proficiency)}</span>
               </li>
             {/each}
@@ -170,12 +162,12 @@
       {#if sifaExternalAccounts.length > 0}
         <section class="sidebar-section">
           <h2 class="section-heading">Links</h2>
-          <ul class="bare-list link-list">
+          <ul class="bare-list">
             {#each sifaExternalAccounts as account}
               <li>
-                <a href={account.url} target="_blank" rel="noopener" class="link-item">
+                <a href={account.url} target="_blank" rel="noopener" class="post-row">
                   {account.label || account.url.replace('https://', '')}
-                  <ExternalLink size={10} strokeWidth={2} aria-hidden="true" style="opacity: 0.4; flex-shrink: 0;" />
+                  <ExternalLink size={12} strokeWidth={2} />
                 </a>
               </li>
             {/each}
@@ -186,12 +178,12 @@
       {#if links?.cards?.length}
         <section class="sidebar-section">
           <h2 class="section-heading">Elsewhere</h2>
-          <ul class="bare-list link-list">
+          <ul class="bare-list">
             {#each links.cards as card}
               <li>
-                <a href={card.url} target="_blank" rel="noopener" class="link-item">
+                <a href={card.url} target="_blank" rel="noopener" class="post-row">
                   {card.emoji} {card.text}
-                  <ExternalLink size={10} strokeWidth={2} aria-hidden="true" style="opacity: 0.4; flex-shrink: 0;" />
+                  <ExternalLink size={12} strokeWidth={2} />
                 </a>
               </li>
             {/each}
