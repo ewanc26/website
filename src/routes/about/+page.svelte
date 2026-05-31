@@ -216,13 +216,13 @@
 
   .about-hero {
     display: flex;
-    gap: var(--space-lg);
-    align-items: flex-start;
+    gap: var(--space-md);
+    align-items: center;
   }
 
   .about-avatar {
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
     border-radius: 4px;
     object-fit: cover;
     flex-shrink: 0;
@@ -505,15 +505,9 @@
   }
 
   @media (max-width: 560px) {
-    .about-hero {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
     .about-avatar {
-      width: 64px;
-      height: 64px;
+      width: 48px;
+      height: 48px;
     }
   }
 </style>

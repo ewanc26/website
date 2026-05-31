@@ -27,13 +27,13 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-text">
-      <h1 class="hero-title">{profile.displayName ?? profile.handle}</h1>
+      <div class="hero-title-row">
+        {#if profile.avatar}
+          <img src={profile.avatar} alt="" class="hero-avatar" />
+        {/if}
+        <h1 class="hero-title">{profile.displayName ?? profile.handle}</h1>
+      </div>
       <p class="hero-bio">{profile.description}</p>
-    </div>
-    <div class="hero-side">
-      {#if profile.avatar}
-        <img src={profile.avatar} alt="" class="hero-avatar" />
-      {/if}
     </div>
   </section>
 
@@ -135,10 +135,13 @@
   /* Hero */
   .hero {
     padding: var(--space-xl) 0 var(--space-lg);
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: var(--space-lg);
-    align-items: end;
+  }
+
+  .hero-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-sm);
   }
 
   .hero-title {
@@ -146,7 +149,7 @@
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 0.95;
-    margin: 0 0 var(--space-sm);
+    margin: 0;
   }
 
   .hero-bio {
@@ -158,10 +161,11 @@
   }
 
   .hero-avatar {
-    width: 96px;
-    height: 96px;
+    width: 64px;
+    height: 64px;
     border-radius: 4px;
     object-fit: cover;
+    flex-shrink: 0;
   }
 
   /* Status row */
@@ -372,13 +376,9 @@
 
   /* Responsive */
   @media (max-width: 560px) {
-    .hero {
-      grid-template-columns: 1fr;
-    }
-
     .hero-avatar {
-      width: 64px;
-      height: 64px;
+      width: 48px;
+      height: 48px;
     }
 
     .post-row {
