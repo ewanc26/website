@@ -230,10 +230,10 @@
 
 	/* Section Styling */
 	.spec-section { scroll-margin-top: var(--space-md); }
-	.section-hd { margin-bottom: var(--space-sm); }
+	.section-hd { margin-bottom: var(--space-xs); }
 	.section-num { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-primary-500); font-weight: 700; }
 	.section-title { font-size: var(--text-md); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; margin: 0; }
-	.section-intro { font-size: var(--text-sm); color: var(--color-ink-700); max-width: 100%; margin-bottom: var(--space-md); }
+	.section-intro { font-size: var(--text-sm); color: var(--color-ink-700); max-width: 100%; margin-bottom: var(--space-sm); }
 
 	.sidebar-group { margin-bottom: var(--space-md); }
 	.sub-heading { font-size: var(--text-sm); font-weight: 700; margin-bottom: var(--space-xs); color: var(--color-ink-600); }
