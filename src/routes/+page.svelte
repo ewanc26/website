@@ -1,7 +1,6 @@
 <script lang="ts">
   import Now from '$lib/components/Now.svelte';
   import SiteHead from '$lib/components/SiteHead.svelte';
-  import BlueskyPostCard from '$lib/components/layout/main/card/BlueskyPostCard.svelte';
   import { ArrowRight, ExternalLink, Music } from '@lucide/svelte';
   import { normalizeSlug } from '$lib/utils/slugify';
   import type { ProfileData, MusicStatusData, KibunStatusData } from '@ewanc26/atproto';
@@ -51,10 +50,6 @@
       </div>
     {/if}
   </div>
-
-  <section class="home-section">
-    <BlueskyPostCard />
-  </section>
 
   <!-- Writing -->
   <section class="home-section">
