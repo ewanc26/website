@@ -64,27 +64,25 @@
 <SiteHead title="About" description={profile.description} />
 
 <main class="shell-wide">
-  <header class="page-hd">
-    <div class="about-hero">
-      {#if profile.avatar}
-        <img src={profile.avatar} alt="{profile.displayName}'s avatar" class="about-avatar" />
+  <header class="page-hd about-hero">
+    {#if profile.avatar}
+      <img src={profile.avatar} alt="{profile.displayName}'s avatar" class="about-avatar" />
+    {/if}
+    <div class="about-intro">
+      <h1 class="page-title">{profile.displayName ?? profile.handle}</h1>
+      {#if profile.pronouns}
+        <p class="about-pronouns">{profile.pronouns}</p>
       {/if}
-      <div>
-        <h1 class="page-title">{profile.displayName ?? profile.handle}</h1>
-        {#if profile.pronouns}
-          <p class="about-pronouns">{profile.pronouns}</p>
-        {/if}
-        {#if sifaProfile}
-          <p class="about-headline">{sifaProfile.headline}</p>
-        {/if}
-        {#if profile.description}
-          <p class="about-bio">{profile.description}</p>
-        {/if}
-      </div>
+      {#if sifaProfile}
+        <p class="about-headline">{sifaProfile.headline}</p>
+      {/if}
+      {#if profile.description}
+        <p class="about-bio">{profile.description}</p>
+      {/if}
     </div>
   </header>
 
-  <div class="about-grid">
+  <div class="content-grid">
     <div class="about-main">
       {#if sifaSkills.length > 0}
         <section class="about-section">
@@ -105,12 +103,12 @@
       {#if sifaEducation.length > 0}
         <section class="about-section">
           <h2 class="section-heading">Education</h2>
-          <ul class="edu-list">
+          <ul class="bare-list">
             {#each sifaEducation as edu}
               <li class="edu-item">
-                <div class="edu-header">
+                <div class="row-header">
                   <strong class="edu-degree">{edu.degree}</strong>
-                  <span class="edu-dates">
+                  <span class="row-meta">
                     {formatDate(edu.startedAt)} — {edu.endedAt ? formatDate(edu.endedAt) : 'Present'}
                   </span>
                 </div>
@@ -127,13 +125,19 @@
       {#if sifaProjects.length > 0}
         <section class="about-section">
           <h2 class="section-heading">Projects</h2>
-          <ul class="project-list">
+          <ul class="bare-list">
             {#each sifaProjects as project}
               <li class="project-item">
-                <div class="project-header">
+                <div class="row-header">
                   <strong class="project-name">{project.name}</strong>
                   {#if project.url}
-                    <a href={project.url} target="_blank" rel="noopener" class="project-link">
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener"
+                      class="project-link"
+                      aria-label="View {project.name}"
+                    >
                       <ExternalLink size={12} strokeWidth={2} />
                     </a>
                   {/if}
@@ -151,8 +155,8 @@
     <aside class="about-sidebar">
       {#if sifaLanguages.length > 0}
         <section class="sidebar-section">
-          <h2 class="sidebar-heading">Languages</h2>
-          <ul class="lang-list">
+          <h2 class="section-heading">Languages</h2>
+          <ul class="bare-list lang-list">
             {#each sifaLanguages as lang}
               <li class="lang-item">
                 <span class="lang-name">{lang.name}</span>
@@ -165,13 +169,13 @@
 
       {#if sifaExternalAccounts.length > 0}
         <section class="sidebar-section">
-          <h2 class="sidebar-heading">Links</h2>
-          <ul class="link-list">
+          <h2 class="section-heading">Links</h2>
+          <ul class="bare-list link-list">
             {#each sifaExternalAccounts as account}
               <li>
                 <a href={account.url} target="_blank" rel="noopener" class="link-item">
                   {account.label || account.url.replace('https://', '')}
-                  <ExternalLink size={10} strokeWidth={2} style="opacity: 0.4; flex-shrink: 0;" />
+                  <ExternalLink size={10} strokeWidth={2} aria-hidden="true" style="opacity: 0.4; flex-shrink: 0;" />
                 </a>
               </li>
             {/each}
@@ -181,13 +185,13 @@
 
       {#if links?.cards?.length}
         <section class="sidebar-section">
-          <h2 class="sidebar-heading">Elsewhere</h2>
-          <ul class="link-list">
+          <h2 class="section-heading">Elsewhere</h2>
+          <ul class="bare-list link-list">
             {#each links.cards as card}
               <li>
                 <a href={card.url} target="_blank" rel="noopener" class="link-item">
                   {card.emoji} {card.text}
-                  <ExternalLink size={10} strokeWidth={2} style="opacity: 0.4; flex-shrink: 0;" />
+                  <ExternalLink size={10} strokeWidth={2} aria-hidden="true" style="opacity: 0.4; flex-shrink: 0;" />
                 </a>
               </li>
             {/each}
@@ -196,7 +200,7 @@
       {/if}
 
       <section class="sidebar-section">
-        <h2 class="sidebar-heading">Identity</h2>
+        <h2 class="section-heading">Identity</h2>
         <dl class="id-list">
           <dt>DID</dt>
           <dd><code class="id-code">{profile.did}</code></dd>
@@ -211,14 +215,11 @@
 </main>
 
 <style>
-  .page-hd {
-    padding: var(--space-lg) 0;
-  }
-
+  /* Hero */
   .about-hero {
     display: flex;
     gap: var(--space-md);
-    align-items: center;
+    align-items: flex-start;
   }
 
   .about-avatar {
@@ -229,47 +230,39 @@
     flex-shrink: 0;
     aspect-ratio: 1;
     background-color: var(--surface-raised);
+    margin-top: var(--space-xs);
   }
 
-  .page-title {
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    margin: 0;
+  .about-intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
   }
 
   .about-pronouns {
     font-size: var(--text-sm);
     color: var(--color-ink-600);
-    margin: var(--space-xs) 0 0;
+    margin: 0;
   }
 
   .about-headline {
     font-size: var(--text-md);
     color: var(--color-ink-700);
-    margin: var(--space-sm) 0 0;
+    margin: var(--space-xs) 0 0;
   }
 
   .about-bio {
-    margin: var(--space-md) 0 0;
+    margin: var(--space-sm) 0 0;
     line-height: 1.75;
-    max-width: 70ch;
+    max-width: 65ch;
   }
 
-  /* Two-column layout */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: var(--space-lg);
-    padding: var(--space-lg) 0;
-    align-items: start;
-    contain: layout;
-  }
-
+  /* Main content */
   .about-main {
     min-width: 0;
   }
 
+  /* Sidebar */
   .about-sidebar {
     position: sticky;
     top: 72px;
@@ -279,18 +272,30 @@
 
   /* Sections */
   .about-section {
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-xl);
     content-visibility: auto;
     contain-intrinsic-size: auto 200px;
   }
 
-  .section-heading {
-    font-size: var(--text-sm);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+  /* Shared list reset */
+  .bare-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-sm);
+  }
+
+  .row-meta {
+    font-size: var(--text-xs);
     color: var(--color-ink-600);
-    margin: 0 0 var(--space-md);
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   /* Skills */
@@ -320,48 +325,26 @@
     border: 1px solid var(--surface-color);
     border-radius: var(--radius-sm);
     background: var(--surface-raised);
+    color: var(--color-ink-800);
   }
 
   /* Education */
-  .edu-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-
   .edu-item {
-    padding-bottom: var(--space-md);
+    padding: var(--space-sm) 0;
     border-bottom: 1px dashed var(--surface-color);
   }
 
   .edu-item:last-child {
     border-bottom: none;
-    padding-bottom: 0;
-  }
-
-  .edu-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-sm);
   }
 
   .edu-degree {
     font-size: var(--text-md);
-  }
-
-  .edu-dates {
-    font-size: var(--text-xs);
-    color: var(--color-ink-600);
-    white-space: nowrap;
-    flex-shrink: 0;
+    font-weight: 600;
   }
 
   .edu-institution {
-    margin: var(--space-xs) 0 0;
+    margin: var(--space-2xs) 0 0;
     font-size: var(--text-sm);
     color: var(--color-ink-700);
   }
@@ -374,36 +357,28 @@
     line-height: 1.6;
   }
 
-  /* Projects */
-  .project-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-  }
-
+  /* Projects — dashed row, no card border */
   .project-item {
-    padding: var(--space-sm);
-    border: 1px solid var(--surface-color);
-    border-radius: var(--radius-lg);
+    padding: var(--space-sm) 0;
+    border-bottom: 1px dashed var(--surface-color);
   }
 
-  .project-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
+  .project-item:last-child {
+    border-bottom: none;
   }
 
   .project-name {
     font-size: var(--text-md);
+    font-weight: 600;
   }
 
   .project-link {
-    color: var(--color-ink-600);
+    color: var(--color-ink-500);
     display: flex;
     align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: color var(--duration-fast) var(--ease-out-quart);
   }
 
   .project-link:hover {
@@ -411,10 +386,11 @@
   }
 
   .project-desc {
-    margin: var(--space-xs) 0 0;
+    margin: var(--space-2xs) 0 0;
     font-size: var(--text-sm);
     color: var(--color-ink-600);
     line-height: 1.6;
+    max-width: 65ch;
   }
 
   /* Sidebar */
@@ -422,20 +398,8 @@
     margin-bottom: var(--space-lg);
   }
 
-  .sidebar-heading {
-    font-size: var(--text-sm);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-ink-600);
-    margin: 0 0 var(--space-sm);
-  }
-
   /* Languages */
   .lang-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
@@ -446,10 +410,17 @@
     justify-content: space-between;
     align-items: baseline;
     font-size: var(--text-sm);
+    padding: var(--space-2xs) 0;
+    border-bottom: 1px dashed var(--surface-color);
+  }
+
+  .lang-item:last-child {
+    border-bottom: none;
   }
 
   .lang-name {
     font-weight: 600;
+    color: var(--color-ink-900);
   }
 
   .lang-prof {
@@ -457,11 +428,8 @@
     font-size: var(--text-xs);
   }
 
-  /* Links */
+  /* External links */
   .link-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
     display: flex;
     flex-direction: column;
     gap: var(--space-2xs);
@@ -475,13 +443,14 @@
     text-decoration: none;
     color: inherit;
     padding: var(--space-2xs) 0;
+    transition: color var(--duration-fast) var(--ease-out-quart);
   }
 
   .link-item:hover {
     color: var(--color-primary-500);
   }
 
-  /* Identity */
+  /* Identity DL */
   .id-list {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -493,10 +462,13 @@
   .id-list dt {
     color: var(--color-ink-600);
     font-weight: 600;
+    align-self: start;
+    padding-top: 2px;
   }
 
   .id-list dd {
     margin: 0;
+    min-width: 0;
   }
 
   .id-code {
@@ -505,24 +477,15 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: block;
+    max-width: 100%;
   }
 
   /* Responsive */
-  @media (max-width: 900px) {
-    .about-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .about-sidebar {
-      position: static;
-      height: auto;
-    }
-  }
-
   @media (max-width: 560px) {
     .about-avatar {
-      width: 48px;
-      height: 48px;
+      width: 56px;
+      height: 56px;
     }
   }
 </style>
