@@ -1,6 +1,8 @@
 <script lang="ts">
   import SiteHead from '$lib/components/SiteHead.svelte';
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
+  import Pentacle from '$lib/components/icons/Pentacle.svelte';
+  import Triskele from '$lib/components/icons/Triskele.svelte';
 
   const colorPalettes = [
     {
@@ -388,7 +390,7 @@
       </header>
       <div class="section-content">
         <p class="section-intro">
-          System icons are implemented as SVG components with a default size of 16px. They inherit <code>currentColor</code> for seamless integration.
+          System icons are implemented as SVG components with a default size of 16px. They inherit <code>currentColor</code> for seamless integration. Pagan symbols use <code>currentColor</code> for stroke (pentacle) or fill (triskele).
         </p>
         <div class="icon-grid">
           <div class="icon-card">
@@ -396,6 +398,18 @@
               <Bluesky size={32} />
             </div>
             <code class="icon-name">Bluesky.svelte</code>
+          </div>
+          <div class="icon-card">
+            <div class="icon-preview">
+              <Pentacle size={32} />
+            </div>
+            <code class="icon-name">Pentacle.svelte</code>
+          </div>
+          <div class="icon-card">
+            <div class="icon-preview">
+              <Triskele size={32} />
+            </div>
+            <code class="icon-name">Triskele.svelte</code>
           </div>
         </div>
       </div>
