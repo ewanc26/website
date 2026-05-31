@@ -173,9 +173,9 @@
           <ul class="bare-list">
             {#each sifaExternalAccounts as account}
               <li>
-                <a href={account.url} target="_blank" rel="noopener" class="post-row">
+                <a href={account.url} target="_blank" rel="noopener" class="link-row">
                   {account.label || account.url.replace('https://', '')}
-                  <ExternalLink size={12} strokeWidth={2} />
+                  <ExternalLink size={12} strokeWidth={2} class="muted-icon" />
                 </a>
               </li>
             {/each}
@@ -189,9 +189,9 @@
           <ul class="bare-list">
             {#each links.cards as card}
               <li>
-                <a href={card.url} target="_blank" rel="noopener" class="post-row">
+                <a href={card.url} target="_blank" rel="noopener" class="link-row">
                   {card.emoji} {card.text}
-                  <ExternalLink size={12} strokeWidth={2} />
+                  <ExternalLink size={12} strokeWidth={2} class="muted-icon" />
                 </a>
               </li>
             {/each}

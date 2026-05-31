@@ -79,6 +79,42 @@ a.post-row:hover {
   text-decoration-color: var(--color-primary-500);
 }
 
+/* ── Link row — external link with inline icon ──────────────── */
+
+.link-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px dashed var(--surface-color);
+  text-decoration: none;
+  color: var(--color-ink-950);
+  transition:
+    background-color var(--duration-fast) var(--ease-out-quart),
+    padding-left var(--duration-fast) var(--ease-out-quart),
+    padding-right var(--duration-fast) var(--ease-out-quart),
+    margin-left var(--duration-fast) var(--ease-out-quart),
+    margin-right var(--duration-fast) var(--ease-out-quart),
+    color var(--duration-fast) var(--ease-out-quart);
+}
+
+a.link-row {
+  cursor: pointer;
+}
+
+a.link-row:hover {
+  background-color: var(--surface-raised);
+  padding-left: var(--space-sm);
+  padding-right: var(--space-sm);
+  margin-left: calc(-1 * var(--space-sm));
+  margin-right: calc(-1 * var(--space-sm));
+  color: var(--color-primary-500);
+}
+
+.link-row .muted-icon {
+  flex-shrink: 0;
+}
+
 /* ── Section link — "see all" footer link ────────────────────── */
 
 .section-link {
