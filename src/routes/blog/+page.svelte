@@ -81,11 +81,12 @@
     {/each}
 
     {#if hasMore}
-        <div style="text-align: center; padding: var(--space-lg) 0;">
+        <div style="padding: var(--space-lg) 0;">
             <button
                 onclick={loadMore}
                 disabled={loading}
-                class="load-more"
+                class="section-link"
+                style="background: none; border: none; cursor: pointer; font-family: var(--font-family);"
             >
                 {loading ? 'Loading...' : 'Load more'}
             </button>
@@ -108,16 +109,5 @@
         font-weight: 600;
         color: var(--color-ink-700);
         padding: var(--space-sm) 0 var(--space-xs);
-    }
-
-    .load-more {
-        padding: var(--space-sm) var(--space-lg);
-        border: 1px solid var(--surface-color);
-        border-radius: var(--radius-md);
-        background: transparent;
-        color: inherit;
-        cursor: pointer;
-        font-size: var(--text-sm);
-        font-family: var(--font-family);
     }
 </style>
