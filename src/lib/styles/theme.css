@@ -4,50 +4,11 @@
  * theme.css — Global base element styles
  *
  * Every HTML element is intentionally styled here using design tokens
- * from system.css. Follows .impeccable.md: OKLCH green palette,
+ * from tokens.css. Follows .impeccable.md: OKLCH green palette,
  * Variable Inter, 4pt spacing scale, no AI-slop patterns.
  *
  * Prose-scoped overrides (for {@html} blog content) live in prose.css.
  * ================================================================ */
-
-/* ── Design tokens ──────────────────────────────────────────── */
-
-:root {
-  /* Spacing — 4pt scale */
-  --space-2xs: 2px;
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-3: 12px;
-  --space-md: 16px;
-  --space-6: 24px;
-  --space-lg: 32px;
-  --space-12: 48px;
-  --space-xl: 64px;
-  --space-2xl: 96px;
-
-  /* Typography */
-  --font-family: "InterVariable", "Inter", sans-serif;
-  --font-mono:
-    "JetBrains Mono", ui-monospace, "Cascadia Code", "Fira Code", Menlo,
-    monospace;
-
-  /* Type scale — modular 1.25 ratio, fluid */
-  --text-xs: clamp(0.64rem, 0.6vw + 0.5rem, 0.8rem);
-  --text-sm: clamp(0.8rem, 0.75vw + 0.6rem, 1rem);
-  --text-md: clamp(1rem, 1vw + 0.8rem, 1.25rem);
-  --text-lg: clamp(1.25rem, 1.5vw + 1rem, 2rem);
-  --text-xl: clamp(2rem, 2vw + 1.5rem, 3rem);
-
-  /* Surface aliases — border, raised background, input background */
-  --surface-color: var(--color-canvas-200);
-  --surface-raised: var(--color-canvas-100);
-  --surface-sunken: var(--color-canvas-50);
-
-  /* Radii */
-  --radius-sm: 2px;
-  --radius-md: 8px;
-  --radius-lg: 0.5rem;
-}
 
 /* ── Box-sizing reset ───────────────────────────────────────── */
 
