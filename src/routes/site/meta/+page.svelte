@@ -76,9 +76,9 @@
 
 	{#if data.error}
 		<p class="error">{data.error}</p>
-	{#else if info}
-			<div class="spec-content">
-				{#if info.additionalInfo?.purpose}
+	{:else if info}
+		<div class="spec-content">
+			{#if info.additionalInfo?.purpose}
 					<section class="spec-section" id="purpose">
 						<header class="section-hd">
 							<span class="section-num">[01]</span>
@@ -212,7 +212,6 @@
 					</section>
 				{/if}
 			</div>
-		</div>
 	{:else}
 		<p class="empty-state">No site information available.</p>
 	{/if}
