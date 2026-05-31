@@ -155,8 +155,8 @@ a.link-row:hover {
 .post-date {
   font-size: var(--text-xs);
   color: var(--color-ink-600);
-  white-space: nowrap;
-  flex-shrink: 0;
+  /* white-space: nowrap; */
+  /* flex-shrink: 0; */
 }
 
 /* ── Muted icon — reduced opacity decorative icons ────────────── */
