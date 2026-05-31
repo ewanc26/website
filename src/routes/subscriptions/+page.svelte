@@ -76,7 +76,6 @@
 
   /* ── Spec Header ──────────────────────────────── */
   .spec-header {
-    border-bottom: 2px solid var(--color-ink-950);
     padding-bottom: var(--space-lg);
     display: flex;
     flex-direction: column;
@@ -171,7 +170,6 @@
     grid-template-columns: 120px 1fr;
     gap: var(--space-lg);
     padding-bottom: var(--space-lg);
-    border-bottom: 1px dashed var(--surface-color);
   }
 
   @media (max-width: 600px) {
