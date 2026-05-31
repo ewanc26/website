@@ -257,7 +257,7 @@
 	.toc-list a { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-ink-600); text-decoration: none; }
 	.toc-list a:hover { color: var(--color-primary-500); }
 
-	.spec-content { display: flex; flex-direction: column; gap: var(--space-2xl); }
+	.spec-content { display: flex; flex-direction: column; gap: var(--space-xl); }
 
 	/* Section Styling */
 	.spec-section { scroll-margin-top: var(--space-md); }
