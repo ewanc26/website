@@ -50,12 +50,13 @@
 .post-row {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-start;
   gap: var(--space-md);
   padding: var(--space-sm) 0;
   border-bottom: 1px dashed var(--surface-color);
   text-decoration: none;
   color: var(--color-ink-950);
+  min-width: 0;
   transition:
     background-color var(--duration-fast) var(--ease-out-quart),
     padding-left var(--duration-fast) var(--ease-out-quart),
