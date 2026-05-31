@@ -7,6 +7,7 @@
 
 	let { children } = $props();
 
+	/*
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;
 
@@ -17,6 +18,7 @@
 			});
 		});
 	});
+	*/
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
