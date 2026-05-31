@@ -15,10 +15,16 @@
         <h1 style="font-size: var(--text-xl); font-weight: 800; margin-bottom: var(--space-sm);">{data.post.title}</h1>
         <time style="font-size: var(--text-sm); opacity: 0.6;">{new Date(data.post.createdAt).toLocaleDateString()}</time>
     </header>
-    <TableOfContents container=".prose" />
-    <div class="prose">
-        {@html data.post.renderedContent}
+
+    <div class="toc-layout">
+        <div>
+            <TableOfContents container=".prose" />
+        </div>
+        <div class="prose">
+            {@html data.post.renderedContent}
+        </div>
     </div>
+
     <ShareButtons url={page.url.href} title={data.post.title} />
 
     {#if data.comments.length > 0}
@@ -52,3 +58,29 @@
         </footer>
     {/if}
 </article>
+
+<style>
+    .toc-layout {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-lg);
+    }
+
+    @media (min-width: 64rem) {
+        .toc-layout {
+            flex-direction: row;
+            gap: var(--space-xl);
+            align-items: flex-start;
+        }
+
+        .toc-layout > :first-child {
+            flex-shrink: 0;
+            width: 14rem;
+        }
+
+        .toc-layout > :last-child {
+            min-width: 0;
+            flex: 1;
+        }
+    }
+</style>
