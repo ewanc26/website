@@ -3,7 +3,6 @@
 	import { ExternalLink } from '@lucide/svelte';
 
 	let { data } = $props();
-	const { siteInfo, error } = data;
 
 	type Credit = {
 		url?: string;
@@ -52,7 +51,7 @@
 		};
 	};
 
-	const info = siteInfo as SiteInfo | null;
+	const info = $derived(data.siteInfo as SiteInfo | null);
 
 	// Group credits by section
 	function groupBySection<T extends { section?: string }>(items: T[]): Map<string, T[]> {
@@ -74,8 +73,8 @@
 		<p style="margin: 0; opacity: 0.7;">Information about this website, its technology, and the people who made it possible.</p>
 	</header>
 
-	{#if error}
-		<p style="color: var(--color-accent-500);">{error}</p>
+	{#if data.error}
+		<p style="color: var(--color-accent-500);">{data.error}</p>
 	{:else if info}
 		<div style="display: flex; flex-direction: column; gap: var(--space-xl);">
 			{#if info.additionalInfo?.purpose}

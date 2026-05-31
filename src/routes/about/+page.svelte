@@ -2,21 +2,20 @@
   import SiteHead from '$lib/components/SiteHead.svelte';
 
   let { data } = $props();
-  const { profile } = data;
 </script>
 
-<SiteHead title="About" description={profile?.description} />
+<SiteHead title="About" description={data.profile?.description} />
 
 <main>
     <header>
         <h1 style="font-size: var(--text-xl);">About</h1>
     </header>
-    {#if profile}
+    {#if data.profile}
         <section style="margin-top: var(--space-md);">
-            <h2 style="font-size: var(--text-lg);">{profile.displayName}</h2>
-            <p style="font-size: var(--text-sm); opacity: 0.8;">{profile.pronouns}</p>
+            <h2 style="font-size: var(--text-lg);">{data.profile.displayName}</h2>
+            <p style="font-size: var(--text-sm); opacity: 0.8;">{data.profile.pronouns}</p>
             <p style="margin-top: var(--space-md); font-size: var(--text-md); line-height: 1.6;">
-                {profile.description}
+                {data.profile.description}
             </p>
         </section>
     {/if}
