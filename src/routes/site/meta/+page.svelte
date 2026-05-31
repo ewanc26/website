@@ -75,7 +75,7 @@
 	{#if data.error}
 		<p class="error">{data.error}</p>
 	{:else if info}
-		<div class="content-grid">
+		<div class="about-grid">
 			<div class="about-main">
 				{#if info.additionalInfo?.purpose}
 					<section class="about-section">
@@ -204,8 +204,68 @@
 <style>
 	.error { color: var(--color-accent-500); }
 	.empty-state { opacity: 0.6; }
-	.sidebar-group { margin-bottom: var(--space-md); }
-	.meta-list { display: flex; flex-direction: column; gap: var(--space-xs); }
+	
+	/* Layout */
+	.about-grid {
+		display: grid;
+		grid-template-columns: 1fr 280px;
+		gap: var(--space-lg);
+		padding: var(--space-lg) 0;
+		align-items: start;
+	}
+
+	@media (max-width: 900px) {
+		.about-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.about-main {
+		min-width: 0;
+	}
+
+	/* Sidebar */
+	.about-sidebar {
+		position: sticky;
+		top: 72px;
+		height: max-content;
+		min-width: 0;
+	}
+
+	.sidebar-section {
+		margin-bottom: var(--space-lg);
+	}
+
+	.sidebar-group {
+		margin-bottom: var(--space-md);
+	}
+
+	/* Sections */
+	.about-section {
+		margin-bottom: var(--space-xl);
+	}
+
+	.section-heading {
+		font-size: var(--text-md);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-weight: 800;
+		margin-bottom: var(--space-md);
+	}
+
+	.sub-heading {
+		font-size: var(--text-sm);
+		font-weight: 700;
+		margin-bottom: var(--space-xs);
+		color: var(--color-ink-600);
+	}
+
+	.meta-list {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+	}
+
 	.credit-name { font-weight: 600; }
 	.meta-text {
 		white-space: pre-wrap;
