@@ -194,8 +194,6 @@
       <section class="sidebar-section">
         <h2 class="section-heading">Identity</h2>
         <dl class="id-list">
-          <dt>DID</dt>
-          <dd><code class="id-code">{profile.did}</code></dd>
           <dt>Handle</dt>
           <dd><code class="id-code">{profile.handle}</code></dd>
           <dt>PDS</dt>
