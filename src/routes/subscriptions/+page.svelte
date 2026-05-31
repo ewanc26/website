@@ -24,6 +24,9 @@
 							<strong>{sub.name}</strong>
 							<ExternalLink size={12} strokeWidth={2} style="opacity: 0.4; flex-shrink: 0;" />
 						</span>
+						<span style="display: block; margin-top: var(--space-2xs); font-size: var(--text-sm); opacity: 0.5;">
+							by {sub.authorDisplayName ?? sub.authorHandle}
+						</span>
 						{#if sub.description}
 							<p style="margin: var(--space-2xs) 0 0; font-size: var(--text-sm); opacity: 0.7;">{sub.description}</p>
 						{/if}
