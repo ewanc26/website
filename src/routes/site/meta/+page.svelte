@@ -267,6 +267,7 @@
 	.meta-card {
 		padding: var(--space-sm);
 		border: 1px solid var(--surface-color);
+		border-radius: var(--radius-lg);
 	}
 
 	.meta-card-link {
@@ -294,6 +295,7 @@
 		font-size: var(--text-xs);
 		padding: 2px 6px;
 		border: 1px solid var(--surface-color);
+		border-radius: var(--radius-sm);
 		background: var(--surface-raised);
 	}
 

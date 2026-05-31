@@ -186,6 +186,7 @@
     gap: var(--space-xs);
     padding: var(--space-xs) var(--space-sm);
     border: 1px solid var(--surface-color);
+    border-radius: var(--radius-sm);
     background: var(--surface-raised);
     font-size: var(--text-sm);
   }
@@ -274,6 +275,7 @@
   .project-card {
     padding: var(--space-md);
     border: 1px solid var(--surface-color);
+    border-radius: var(--radius-lg);
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
@@ -360,6 +362,7 @@
     gap: var(--space-xs);
     padding: var(--space-xs) var(--space-sm);
     border: 1px solid var(--surface-color);
+    border-radius: var(--radius-sm);
     background: var(--surface-raised);
     font-size: var(--text-sm);
     text-decoration: none;
