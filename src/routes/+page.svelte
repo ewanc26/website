@@ -26,19 +26,14 @@
 <main class="shell-wide">
   <!-- Hero -->
   <section class="hero">
-    {#if profile.banner}
-      <div class="hero-banner">
-        <img src={profile.banner} alt="" class="hero-banner-img" />
-      </div>
-    {/if}
-    <div class="hero-body">
+    <div class="hero-text">
+      <h1 class="hero-title">{profile.displayName ?? profile.handle}</h1>
+      <p class="hero-bio">{profile.description}</p>
+    </div>
+    <div class="hero-side">
       {#if profile.avatar}
         <img src={profile.avatar} alt="" class="hero-avatar" />
       {/if}
-      <div class="hero-text">
-        <h1 class="hero-title">{profile.displayName ?? profile.handle}</h1>
-        <p class="hero-bio">{profile.description}</p>
-      </div>
     </div>
   </section>
 
@@ -139,43 +134,11 @@
 <style>
   /* Hero */
   .hero {
-    padding-bottom: var(--space-lg);
-  }
-
-  .hero-banner {
-    width: calc(100% + var(--space-lg) * 2);
-    margin-left: calc(-1 * var(--space-lg));
-    margin-right: calc(-1 * var(--space-lg));
-    height: 200px;
-    overflow: hidden;
-    border-bottom: 1px solid var(--surface-color);
-  }
-
-  .hero-banner-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .hero-body {
-    display: flex;
-    gap: var(--space-md);
-    align-items: flex-end;
-    margin-top: calc(-1 * var(--space-lg) - 40px);
-    padding: 0 var(--space-lg);
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 4px;
-    object-fit: cover;
-    flex-shrink: 0;
-    border: 3px solid var(--color-canvas-50);
-    background: var(--color-canvas-50);
+    padding: var(--space-xl) 0 var(--space-lg);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-lg);
+    align-items: end;
   }
 
   .hero-title {
@@ -192,6 +155,13 @@
     font-size: var(--text-md);
     max-width: 55ch;
     line-height: 1.6;
+  }
+
+  .hero-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 4px;
+    object-fit: cover;
   }
 
   /* Status row */
@@ -402,21 +372,13 @@
 
   /* Responsive */
   @media (max-width: 560px) {
-    .hero-banner {
-      height: 120px;
-    }
-
-    .hero-body {
-      margin-top: calc(-1 * var(--space-md) - 24px);
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--space-sm);
+    .hero {
+      grid-template-columns: 1fr;
     }
 
     .hero-avatar {
-      width: 56px;
-      height: 56px;
-      border-width: 2px;
+      width: 64px;
+      height: 64px;
     }
 
     .post-row {
