@@ -82,7 +82,7 @@
     </div>
   </header>
 
-  <div class="content-grid">
+  <div class="about-grid">
     <div class="about-main">
       {#if sifaSkills.length > 0}
         <section class="about-section">
@@ -249,7 +249,21 @@
     max-width: 65ch;
   }
 
-  /* Main content */
+  /* Two-column layout */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-lg);
+    padding: var(--space-lg) 0;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .about-main {
     min-width: 0;
   }
