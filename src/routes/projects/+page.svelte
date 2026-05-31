@@ -22,15 +22,15 @@
 	<ul class="post-list">
 		{#each data.projects as project}
 			<li>
-				<a href={project.url} target="_blank" rel="noopener" class="post-row">
-					<div style="display: flex; flex-direction: column;">
+				<a href={project.path ?? '#'} target="_blank" rel="noopener" class="post-row">
+					<div class="project-info">
 						<strong class="post-title">{project.title}</strong>
 						{#if project.description}
-							<span class="post-date" style="color: var(--color-ink-600);">{project.description}</span>
+							<span class="post-date">{project.description}</span>
 						{/if}
 					</div>
 					{#if project.path}
-						<span class="post-date" style="font-family: var(--font-mono);">{project.path}</span>
+						<span class="post-date mono">{project.path}</span>
 					{/if}
 				</a>
 			</li>
@@ -45,5 +45,14 @@
 		margin: 0;
 		display: flex;
 		flex-direction: column;
+	}
+
+	.project-info {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.post-date.mono {
+		font-family: var(--font-mono);
 	}
 </style>
