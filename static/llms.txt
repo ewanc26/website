@@ -1,0 +1,12 @@
+# Ewan Croft
+
+Personal site for Anglo-Scottish pagan, poet, and programmer Ewan Croft.
+
+## Pages
+- [About](/about)
+- [Blog](/blog)
+- [Projects](/projects)
+- [Support](/support)
+- [Subscriptions](/subscriptions)
+- [Site Meta](/site/meta)
+- [Brand Kit](/site/brand)
