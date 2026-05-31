@@ -60,7 +60,7 @@
 
 <SiteHead title={data.blog?.title ?? 'Blog'} description={data.blog?.description} />
 
-<main style="padding-top: var(--space-lg);">
+<div class="page-content" style="padding-top: var(--space-lg);">
     <header style="margin-bottom: var(--space-xl);">
         {#if data.blog}
             <h1 style="font-size: var(--text-xl); font-weight: 800; margin-bottom: var(--space-sm);">{data.blog.title}</h1>
@@ -103,4 +103,4 @@
             </button>
         </div>
     {/if}
-</main>
+</div>

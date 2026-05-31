@@ -10,8 +10,8 @@
 
 <SiteHead title={data.post.title} description={data.blog?.description} />
 
-<article style="padding-top: var(--space-lg);">
-    <header style="margin-bottom: var(--space-xl); max-width: 70ch;">
+<article class="article-page">
+    <header class="article-header">
         <h1 style="font-size: var(--text-xl); font-weight: 800; margin-bottom: var(--space-sm);">{data.post.title}</h1>
         <time style="font-size: var(--text-sm); opacity: 0.6;">{new Date(data.post.createdAt).toLocaleDateString()}</time>
     </header>
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div style="max-width: 70ch;">
+    <div class="article-after">
         <ShareButtons url={page.url.href} title={data.post.title} />
 
         {#if data.comments.length > 0}
@@ -62,6 +62,22 @@
 </article>
 
 <style>
+    .article-page {
+        padding-top: var(--space-lg);
+        /* Wider than standard pages to fit sidebar + prose */
+        max-width: calc(14rem + 70ch + var(--space-xl));
+        margin-inline: auto;
+    }
+
+    .article-header {
+        margin-bottom: var(--space-xl);
+        max-width: 70ch;
+    }
+
+    .article-after {
+        max-width: 70ch;
+    }
+
     .toc-layout {
         display: flex;
         flex-direction: column;

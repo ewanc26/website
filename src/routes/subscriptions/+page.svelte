@@ -7,7 +7,7 @@
 
 <SiteHead title="Subscriptions" description="Publications I read on Standard.site." />
 
-<main style="padding-top: var(--space-lg);">
+<main class="page-content" style="padding-top: var(--space-lg);">
 	<header style="margin-bottom: var(--space-xl);">
 		<h1 style="font-size: var(--text-xl); font-weight: 800; margin-bottom: var(--space-sm);">Subscriptions</h1>
 		<p style="margin: 0; opacity: 0.7;">Publications I read on Standard.site.</p>

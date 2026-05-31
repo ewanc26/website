@@ -2,7 +2,7 @@
     let { data } = $props();
 </script>
 
-<article>
+<article class="page-content" style="padding-top: var(--space-lg);">
     <header style="margin-bottom: var(--space-xl);">
         <h1 style="font-size: var(--text-xl); font-weight: 800; margin-bottom: var(--space-sm);">{data.post.title}</h1>
         <time style="font-size: var(--text-sm); opacity: 0.7;">{new Date(data.post.createdAt).toLocaleDateString()}</time>
