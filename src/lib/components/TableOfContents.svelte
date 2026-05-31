@@ -45,29 +45,63 @@
 </script>
 
 {#if entries.length > 1}
-    <nav aria-label="Table of contents" style="margin-bottom: var(--space-lg);">
+    <nav aria-label="Table of contents" class="toc">
         <h2 style="font-size: var(--text-sm); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-ink-700); margin: 0 0 var(--space-sm);">Contents</h2>
         <ol style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-2xs); border-left: 1px solid var(--surface-color);">
             {#each entries as entry}
                 <li>
                     <a
                         href="#{entry.id}"
-                        style="
-                            display: block;
-                            font-size: var(--text-sm);
-                            text-decoration: none;
-                            color: var(--color-ink-700);
-                            padding: var(--space-2xs) var(--space-sm);
-                            border-left: 2px solid transparent;
-                            margin-left: -1px;
-                            transition: color var(--duration-fast) var(--ease-out-quart), border-color var(--duration-fast) var(--ease-out-quart);
-                            {entry.level === 3 ? 'padding-left: var(--space-md);' : ''}
-                            {entry.level === 4 ? 'padding-left: var(--space-lg);' : ''}
-                            {activeId === entry.id ? 'color: var(--color-primary-500); border-left-color: var(--color-primary-500); font-weight: 600;' : ''}
-                        "
+                        class="toc-link"
+                        class:active={activeId === entry.id}
+                        class:h3={entry.level === 3}
+                        class:h4={entry.level === 4}
                     >{entry.text}</a>
                 </li>
             {/each}
         </ol>
     </nav>
 {/if}
+
+<style>
+    .toc {
+        margin-bottom: var(--space-lg);
+    }
+
+    .toc-link {
+        display: block;
+        font-size: var(--text-sm);
+        text-decoration: none;
+        color: var(--color-ink-700);
+        padding: var(--space-2xs) var(--space-sm);
+        border-left: 2px solid transparent;
+        margin-left: -1px;
+        transition:
+            color var(--duration-fast) var(--ease-out-quart),
+            border-color var(--duration-fast) var(--ease-out-quart);
+    }
+
+    .toc-link.h3 {
+        padding-left: var(--space-md);
+    }
+
+    .toc-link.h4 {
+        padding-left: var(--space-lg);
+    }
+
+    .toc-link.active {
+        color: var(--color-primary-500);
+        border-left-color: var(--color-primary-500);
+        font-weight: 600;
+    }
+
+    @media (min-width: 64rem) {
+        .toc {
+            position: sticky;
+            top: var(--space-lg);
+            max-height: calc(100vh - var(--space-xl));
+            overflow-y: auto;
+            margin-bottom: 0;
+        }
+    }
+</style>
