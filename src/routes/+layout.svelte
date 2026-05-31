@@ -21,10 +21,8 @@
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<div style="min-height: 100vh; display: flex; flex-direction: column;">
-    <Header />
-    <main style="flex: 1;">
-        {@render children()}
-    </main>
-    <Footer />
-</div>
+<Header />
+<main style="flex: 1;">
+	{@render children()}
+</main>
+<Footer />
