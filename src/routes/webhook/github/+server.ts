@@ -27,7 +27,7 @@ export const POST: RequestHandler = async ({ request }) => {
       tier: payload.sponsorship.tier.name,
       privacy: payload.sponsorship.privacy_level,
     });
-  } catch (err) {
+  } catch (err: any) {
     if (err instanceof GitHubWebhookError) {
       console.error("[webhook/github] GitHubWebhookError", {
         status: err.status,
