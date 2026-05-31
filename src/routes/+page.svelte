@@ -172,6 +172,13 @@
     background-color: var(--surface-raised);
   }
 
+  @media (min-width: 900px) {
+    .hero-avatar {
+      width: 128px;
+      height: 128px;
+    }
+  }
+
   /* Status row */
   .status-row {
     display: flex;
