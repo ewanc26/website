@@ -1,6 +1,6 @@
 export const SITE = {
-  title: "Website",
-  description: "A general-purpose site.",
+  title: "ewan croft",
+  description: "Anglo-Scottish pagan, poet, and programmer.",
 };
 
 export const NAV_LINKS = [
