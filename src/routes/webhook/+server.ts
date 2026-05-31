@@ -24,7 +24,7 @@ export const POST: RequestHandler = async ({ request }) => {
       timestamp: payload.timestamp,
       messageId: payload.message_id,
     });
-  } catch (err) {
+  } catch (err: any) {
     if (err instanceof WebhookError) {
       console.error("[webhook] WebhookError", {
         status: err.status,
@@ -50,7 +50,7 @@ export const POST: RequestHandler = async ({ request }) => {
       {
         isSubscriptionPayment: payload.is_subscription_payment,
         isFirstSubscriptionPayment: payload.is_first_subscription_payment,
-        shopItems: payload.shop_items?.map((i) => i.direct_link_code),
+        shopItems: payload.shop_items?.map((i: any) => i.direct_link_code),
       },
     );
     console.log("[webhook] appendEvent success", {
