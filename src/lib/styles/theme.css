@@ -61,16 +61,72 @@ body {
   font-size: var(--text-md);
   line-height: 1.6;
   margin: 0;
-  padding: var(--space-md);
+  overflow-x: clip;
 }
 
-/* Page content — readable line length for standard pages */
-.page-content {
-  max-width: 70ch;
+/* ── Page shells ────────────────────────────────────────────── */
+
+/* Wide shell — home, blog listing, site meta */
+.shell-wide {
+  max-width: 72rem;
   margin-inline: auto;
+  padding: 0 var(--space-lg);
 }
 
-/* Prose content — readable line length */
+/* Prose shell — blog posts (wide enough for TOC sidebar + content) */
+.shell-prose {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: 0 var(--space-lg);
+}
+
+/* Narrow shell — about, projects, subscriptions */
+.shell-narrow {
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: 0 var(--space-lg);
+}
+
+@media (max-width: 560px) {
+  .shell-wide,
+  .shell-prose,
+  .shell-narrow {
+    padding: 0 var(--space-md);
+  }
+}
+
+/* ── Panel primitive ───────────────────────────────────────── */
+
+.panel {
+  background: var(--surface-raised);
+  border: 1px solid var(--surface-color);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--surface-color);
+  font-size: var(--text-xs);
+  color: var(--color-ink-600);
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.panel-body {
+  padding: var(--space-md);
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Prose content ─────────────────────────────────────────── */
+
 .prose {
   max-width: 70ch;
 }

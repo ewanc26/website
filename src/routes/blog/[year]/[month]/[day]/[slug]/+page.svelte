@@ -10,99 +10,217 @@
 
 <SiteHead title={data.post.title} description={data.blog?.description} />
 
-<article class="article-page">
-    <header class="article-header">
-        <h1 style="font-size: var(--text-xl); font-weight: 800; margin-bottom: var(--space-sm);">{data.post.title}</h1>
-        <time style="font-size: var(--text-sm); opacity: 0.6;">{new Date(data.post.createdAt).toLocaleDateString()}</time>
+<main class="shell-prose">
+    <header class="post-hd">
+        <h1 class="post-title">{data.post.title}</h1>
+        <div class="post-meta">
+            <time>{new Date(data.post.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+        </div>
     </header>
 
-    <div class="toc-layout">
-        <aside class="toc-sidebar">
+    <div class="post-layout">
+        <aside class="post-sidebar">
             <TableOfContents container=".prose" />
         </aside>
-        <div class="prose">
-            {@html data.post.renderedContent}
+        <div class="post-body">
+            <article class="prose">
+                {@html data.post.renderedContent}
+            </article>
+
+            <div class="post-after">
+                <ShareButtons url={page.url.href} title={data.post.title} />
+
+                {#if data.comments.length > 0}
+                    <section class="comments-section">
+                        <h2 class="comments-title">
+                            <MessageCircle size={18} strokeWidth={2} />
+                            {data.comments.length} comment{data.comments.length !== 1 ? 's' : ''}
+                        </h2>
+                        <ul class="comment-list">
+                            {#each data.comments as comment}
+                                <li class="comment">
+                                    <div class="comment-head">
+                                        <strong>{comment.authorDisplayName ?? comment.authorHandle}</strong>
+                                        <a href="https://bsky.app/profile/{comment.authorHandle}" target="_blank" rel="noopener" class="comment-handle">@{comment.authorHandle}</a>
+                                        <time class="comment-date">{new Date(comment.createdAt).toLocaleDateString()}</time>
+                                    </div>
+                                    <p class="comment-body">{comment.plaintext}</p>
+                                </li>
+                            {/each}
+                        </ul>
+                    </section>
+                {/if}
+
+                {#if data.blog}
+                    <footer class="post-footer">
+                        <p class="footer-pub">
+                            <a href={data.blog.url} target="_blank" rel="noopener">{data.blog.title}</a>
+                        </p>
+                        <p class="footer-desc">{data.blog.description}</p>
+                        <a href={data.blog.rss} target="_blank" rel="noopener" class="rss-link"><Rss size={14} strokeWidth={2} /> RSS</a>
+                    </footer>
+                {/if}
+            </div>
         </div>
     </div>
-
-    <div class="article-after">
-        <ShareButtons url={page.url.href} title={data.post.title} />
-
-        {#if data.comments.length > 0}
-            <section style="margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: 1px solid var(--surface-color);">
-                <h2 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-md); display: flex; align-items: center; gap: var(--space-xs);">
-                    <MessageCircle size={18} strokeWidth={2} />
-                    {data.comments.length} comment{data.comments.length !== 1 ? 's' : ''}
-                </h2>
-                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-md);">
-                    {#each data.comments as comment}
-                        <li style="padding: var(--space-md) var(--space-3); border: 1px solid var(--surface-color); border-radius: 4px;">
-                            <div style="display: flex; align-items: baseline; gap: var(--space-sm); margin-bottom: var(--space-xs);">
-                                <strong style="font-size: var(--text-sm);">{comment.authorDisplayName ?? comment.authorHandle}</strong>
-                                <a href="https://bsky.app/profile/{comment.authorHandle}" target="_blank" rel="noopener" style="font-size: var(--text-xs); opacity: 0.5; text-decoration: none; color: inherit;">@{comment.authorHandle}</a>
-                                <time style="font-size: var(--text-xs); opacity: 0.4; margin-left: auto;">{new Date(comment.createdAt).toLocaleDateString()}</time>
-                            </div>
-                            <p style="margin: 0; font-size: var(--text-sm); line-height: 1.6; white-space: pre-wrap;">{comment.plaintext}</p>
-                        </li>
-                    {/each}
-                </ul>
-            </section>
-        {/if}
-
-        {#if data.blog}
-            <footer style="margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--surface-color); display: flex; flex-direction: column; gap: var(--space-xs);">
-                <p style="margin: 0; font-size: var(--text-sm); font-weight: 600; color: var(--color-ink-900);">
-                    <a href={data.blog.url} target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">{data.blog.title}</a>
-                </p>
-                <p style="margin: 0; font-size: var(--text-sm); color: var(--color-ink-700);">{data.blog.description}</p>
-                <a href={data.blog.rss} target="_blank" rel="noopener" style="font-size: var(--text-sm); color: var(--color-primary-500); text-decoration: none; display: inline-flex; align-items: center; gap: var(--space-xs); margin-top: var(--space-2xs);"><Rss size={14} strokeWidth={2} /> RSS</a>
-            </footer>
-        {/if}
-    </div>
-</article>
+</main>
 
 <style>
-    .article-page {
+    .post-hd {
+        padding: var(--space-lg) 0;
+        border-bottom: 1px solid var(--surface-color);
+    }
+
+    .post-title {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin: 0 0 var(--space-md);
+    }
+
+    .post-meta {
+        display: flex;
+        gap: var(--space-md);
+        flex-wrap: wrap;
+        font-size: var(--text-xs);
+        color: var(--color-ink-600);
+    }
+
+    /* Two-column layout: sidebar + content */
+    .post-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: var(--space-lg);
+        padding: var(--space-lg) 0;
+        align-items: start;
+    }
+
+    .post-sidebar {
+        position: sticky;
+        top: 72px;
+        height: max-content;
+    }
+
+    .post-body {
+        min-width: 0;
+    }
+
+    .post-after {
+        max-width: 70ch;
+        margin-top: var(--space-lg);
         padding-top: var(--space-lg);
-        /* Wider than standard pages to fit sidebar + prose */
-        max-width: calc(14rem + 70ch + var(--space-xl));
-        margin-inline: auto;
+        border-top: 1px solid var(--surface-color);
     }
 
-    .article-header {
-        margin-bottom: var(--space-xl);
-        max-width: 70ch;
+    /* Comments */
+    .comments-section {
+        margin-top: var(--space-lg);
+        padding-top: var(--space-lg);
+        border-top: 1px solid var(--surface-color);
     }
 
-    .article-after {
-        max-width: 70ch;
+    .comments-title {
+        font-size: var(--text-md);
+        font-weight: 700;
+        margin-bottom: var(--space-md);
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
     }
 
-    .toc-layout {
+    .comment-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
         display: flex;
         flex-direction: column;
-        gap: var(--space-lg);
+        gap: var(--space-sm);
     }
 
-    @media (min-width: 48rem) {
-        .toc-layout {
-            flex-direction: row;
-            gap: var(--space-xl);
-            align-items: flex-start;
+    .comment {
+        padding: var(--space-md);
+        border: 1px solid var(--surface-color);
+    }
+
+    .comment-head {
+        display: flex;
+        align-items: baseline;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-xs);
+    }
+
+    .comment-handle {
+        font-size: var(--text-xs);
+        opacity: 0.5;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .comment-date {
+        font-size: var(--text-xs);
+        opacity: 0.4;
+        margin-left: auto;
+    }
+
+    .comment-body {
+        margin: 0;
+        font-size: var(--text-sm);
+        line-height: 1.6;
+        white-space: pre-wrap;
+    }
+
+    /* Post footer */
+    .post-footer {
+        margin-top: var(--space-lg);
+        padding-top: var(--space-lg);
+        border-top: 1px solid var(--surface-color);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+
+    .footer-pub {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .footer-pub a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .footer-desc {
+        margin: 0;
+        font-size: var(--text-sm);
+        color: var(--color-ink-700);
+    }
+
+    .rss-link {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-xs);
+        margin-top: var(--space-2xs);
+        font-size: var(--text-sm);
+        color: var(--color-primary-500);
+        text-decoration: none;
+    }
+
+    /* Responsive: collapse sidebar on narrow screens */
+    @media (max-width: 900px) {
+        .post-layout {
+            grid-template-columns: 1fr;
         }
 
-        .toc-sidebar {
-            position: sticky;
-            top: var(--space-lg);
-            flex-shrink: 0;
-            width: 14rem;
-            max-height: calc(100vh - var(--space-xl));
-            overflow-y: auto;
+        .post-sidebar {
+            position: static;
+            height: auto;
         }
+    }
 
-        .toc-layout > :last-child {
-            min-width: 0;
-            flex: 1;
+    @media (max-width: 560px) {
+        .post-title {
+            font-size: clamp(1.5rem, 8vw, 2.5rem);
         }
     }
 </style>

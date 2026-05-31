@@ -2,12 +2,26 @@
     let { data } = $props();
 </script>
 
-<article class="page-content" style="padding-top: var(--space-lg);">
-    <header style="margin-bottom: var(--space-xl);">
-        <h1 style="font-size: var(--text-xl); font-weight: 800; margin-bottom: var(--space-sm);">{data.post.title}</h1>
-        <time style="font-size: var(--text-sm); opacity: 0.7;">{new Date(data.post.createdAt).toLocaleDateString()}</time>
+<main class="shell-narrow" style="padding-top: var(--space-lg);">
+    <header class="page-hd">
+        <h1 class="page-title">{data.post.title}</h1>
+        <time style="font-size: var(--text-sm); color: var(--color-ink-600);">{new Date(data.post.createdAt).toLocaleDateString()}</time>
     </header>
-    <div style="font-size: var(--text-md); line-height: 1.6;">
+    <article class="prose" style="padding: var(--space-lg) 0;">
         {@html data.post.content}
-    </div>
-</article>
+    </article>
+</main>
+
+<style>
+    .page-hd {
+        padding-bottom: var(--space-md);
+        border-bottom: 1px solid var(--surface-color);
+    }
+
+    .page-title {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        margin: 0 0 var(--space-sm);
+    }
+</style>

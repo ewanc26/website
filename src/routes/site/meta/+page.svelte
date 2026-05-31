@@ -53,7 +53,6 @@
 
 	const info = $derived(data.siteInfo as SiteInfo | null);
 
-	// Group credits by section
 	function groupBySection<T extends { section?: string }>(items: T[]): Map<string, T[]> {
 		const grouped = new Map<string, T[]>();
 		for (const item of items) {
@@ -67,132 +66,248 @@
 
 <SiteHead title="Site Meta" description="Information about this website, its technology, and the people who made it possible." />
 
-<main class="page-content" style="padding-top: var(--space-lg);">
-	<header style="margin-bottom: var(--space-xl);">
-		<h1 style="font-size: var(--text-xl); font-weight: 800; margin-bottom: var(--space-sm);">Site Meta</h1>
-		<p style="margin: 0; opacity: 0.7;">Information about this website, its technology, and the people who made it possible.</p>
+<main class="shell-wide">
+	<header class="page-hd">
+		<h1 class="page-title">Site Meta</h1>
+		<p class="page-desc">Information about this website, its technology, and the people who made it possible.</p>
 	</header>
 
 	{#if data.error}
 		<p style="color: var(--color-accent-500);">{data.error}</p>
 	{:else if info}
-		<div style="display: flex; flex-direction: column; gap: var(--space-xl);">
-			{#if info.additionalInfo?.purpose}
-				<section>
-					<h2 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-sm);">Purpose</h2>
-					<p style="white-space: pre-wrap; line-height: 1.75;">{info.additionalInfo.purpose}</p>
-				</section>
-			{/if}
+		<div class="meta-grid">
+			<div class="meta-main">
+				{#if info.additionalInfo?.purpose}
+					<section class="meta-section">
+						<h2 class="meta-heading">Purpose</h2>
+						<p class="meta-text">{info.additionalInfo.purpose}</p>
+					</section>
+				{/if}
 
-			{#if info.additionalInfo?.websiteBirthYear}
-				<section>
-					<h2 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-sm);">History</h2>
-					<p style="line-height: 1.75;">This website was first launched in {info.additionalInfo.websiteBirthYear}.</p>
-				</section>
-			{/if}
+				{#if info.additionalInfo?.websiteBirthYear}
+					<section class="meta-section">
+						<h2 class="meta-heading">History</h2>
+						<p class="meta-text">This website was first launched in {info.additionalInfo.websiteBirthYear}.</p>
+					</section>
+				{/if}
 
-			{#if info.privacyStatement}
-				<section>
-					<h2 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-sm);">Privacy</h2>
-					<p style="white-space: pre-wrap; line-height: 1.75;">{info.privacyStatement}</p>
-				</section>
-			{/if}
+				{#if info.privacyStatement}
+					<section class="meta-section">
+						<h2 class="meta-heading">Privacy</h2>
+						<p class="meta-text">{info.privacyStatement}</p>
+					</section>
+				{/if}
 
-			{#if info.technologyStack?.length}
-				<section>
-					<h2 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-md);">Technology Stack</h2>
-					{#each groupBySection(info.technologyStack) as [section, techs]}
-						<div style="margin-bottom: var(--space-md);">
-							<h3 style="font-size: var(--text-md); font-weight: 600; margin-bottom: var(--space-sm); opacity: 0.8;">{section}</h3>
-							<ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-xs);">
-								{#each techs as tech}
-									<li style="padding: var(--space-sm) var(--space-3); border: 1px solid var(--surface-color); border-radius: 4px;">
-										{#if tech.url}
-											<a href={tech.url} target="_blank" rel="noopener" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: var(--space-xs);">
-												<strong>{tech.name}</strong>
-												<ExternalLink size={12} strokeWidth={2} style="opacity: 0.5; flex-shrink: 0;" />
-											</a>
-										{:else}
-											<strong>{tech.name}</strong>
-										{/if}
-										{#if tech.description}
-											<p style="margin: var(--space-2xs) 0 0; font-size: var(--text-sm); opacity: 0.7;">{tech.description}</p>
-										{/if}
+				{#if info.openSourceInfo}
+					<section class="meta-section">
+						<h2 class="meta-heading">Open Source</h2>
+						{#if info.openSourceInfo.description}
+							<p class="meta-text">{info.openSourceInfo.description}</p>
+						{/if}
+						{#if info.openSourceInfo.repositories?.length}
+							<ul class="meta-list">
+								{#each info.openSourceInfo.repositories as repo}
+									<li class="meta-card">
+										<a href={repo.url} target="_blank" rel="noopener" class="meta-card-link">
+											<strong>{repo.description || repo.url}</strong>
+											<ExternalLink size={12} strokeWidth={2} style="opacity: 0.5; flex-shrink: 0;" />
+										</a>
+										<div class="meta-tags">
+											{#if repo.platform}
+												<span class="meta-tag">{repo.platform}</span>
+											{/if}
+											{#if repo.type}
+												<span class="meta-tag meta-tag--accent">{repo.type}</span>
+											{/if}
+										</div>
 									</li>
 								{/each}
 							</ul>
-						</div>
-					{/each}
-				</section>
-			{/if}
+						{/if}
+					</section>
+				{/if}
+			</div>
 
-			{#if info.openSourceInfo}
-				<section>
-					<h2 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-md);">Open Source</h2>
-					{#if info.openSourceInfo.description}
-						<p style="white-space: pre-wrap; line-height: 1.75; margin-bottom: var(--space-md);">{info.openSourceInfo.description}</p>
-					{/if}
-					{#if info.openSourceInfo.repositories?.length}
-						<ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-xs);">
-							{#each info.openSourceInfo.repositories as repo}
-								<li style="padding: var(--space-sm) var(--space-3); border: 1px solid var(--surface-color); border-radius: 4px;">
-									<a href={repo.url} target="_blank" rel="noopener" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: var(--space-xs);">
-										<strong>{repo.description || repo.url}</strong>
-										<ExternalLink size={12} strokeWidth={2} style="opacity: 0.5; flex-shrink: 0;" />
-									</a>
-									<div style="display: flex; gap: var(--space-xs); margin-top: var(--space-2xs);">
-										{#if repo.platform}
-											<span style="font-size: var(--text-xs); padding: 2px 6px; border-radius: 3px; background: var(--surface-raised); border: 1px solid var(--surface-color);">{repo.platform}</span>
-										{/if}
-										{#if repo.type}
-											<span style="font-size: var(--text-xs); padding: 2px 6px; border-radius: 3px; background: var(--color-primary-900); color: var(--color-primary-400); border: 1px solid var(--color-primary-800);">{repo.type}</span>
-										{/if}
-									</div>
-								</li>
-							{/each}
-						</ul>
-					{/if}
-				</section>
-			{/if}
-
-			{#if info.credits?.length}
-				<section>
-					<h2 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-md);">Credits</h2>
-					{#each groupBySection(info.credits) as [section, credits]}
-						<div style="margin-bottom: var(--space-md);">
-							<h3 style="font-size: var(--text-md); font-weight: 600; margin-bottom: var(--space-sm); opacity: 0.8;">{section}</h3>
-							<div style="display: grid; gap: var(--space-sm); grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
-								{#each credits as credit}
-									<div style="padding: var(--space-sm) var(--space-3); border: 1px solid var(--surface-color); border-radius: 4px;">
-										{#if credit.url}
-											<a href={credit.url} target="_blank" rel="noopener" style="text-decoration: none; color: inherit; font-weight: 600;">{credit.name}</a>
-										{:else}
-											<span style="font-weight: 600;">{credit.name}</span>
-										{/if}
-										{#if credit.author}
-											<p style="margin: var(--space-2xs) 0 0; font-size: var(--text-sm); opacity: 0.6;">by {credit.author}</p>
-										{/if}
-										{#if credit.description}
-											<p style="margin: var(--space-2xs) 0 0; font-size: var(--text-sm); opacity: 0.7;">{credit.description}</p>
-										{/if}
-										{#if credit.license}
-											<p style="margin: var(--space-2xs) 0 0; font-size: var(--text-xs); opacity: 0.5;">
-												{#if credit.license.url}
-													<a href={credit.license.url} target="_blank" rel="noopener">{credit.license.name ?? 'License'}</a>
-												{:else}
-													{credit.license.name}
-												{/if}
-											</p>
-										{/if}
-									</div>
-								{/each}
+			<aside class="meta-sidebar">
+				{#if info.technologyStack?.length}
+					<section class="meta-section">
+						<h2 class="meta-heading">Technology Stack</h2>
+						{#each groupBySection(info.technologyStack) as [section, techs]}
+							<div style="margin-bottom: var(--space-md);">
+								<h3 class="meta-subheading">{section}</h3>
+								<ul class="meta-list">
+									{#each techs as tech}
+										<li class="meta-card">
+											{#if tech.url}
+												<a href={tech.url} target="_blank" rel="noopener" class="meta-card-link">
+													<strong>{tech.name}</strong>
+													<ExternalLink size={12} strokeWidth={2} style="opacity: 0.5; flex-shrink: 0;" />
+												</a>
+											{:else}
+												<strong>{tech.name}</strong>
+											{/if}
+											{#if tech.description}
+												<p class="meta-card-desc">{tech.description}</p>
+											{/if}
+										</li>
+									{/each}
+								</ul>
 							</div>
-						</div>
-					{/each}
-				</section>
-			{/if}
+						{/each}
+					</section>
+				{/if}
+
+				{#if info.credits?.length}
+					<section class="meta-section">
+						<h2 class="meta-heading">Credits</h2>
+						{#each groupBySection(info.credits) as [section, credits]}
+							<div style="margin-bottom: var(--space-md);">
+								<h3 class="meta-subheading">{section}</h3>
+								<ul class="meta-list">
+									{#each credits as credit}
+										<li class="meta-card">
+											{#if credit.url}
+												<a href={credit.url} target="_blank" rel="noopener" class="meta-card-link">{credit.name}</a>
+											{:else}
+												<span style="font-weight: 600;">{credit.name}</span>
+											{/if}
+											{#if credit.author}
+												<p class="meta-card-desc">by {credit.author}</p>
+											{/if}
+											{#if credit.license}
+												<p class="meta-card-desc" style="opacity: 0.5;">
+													{#if credit.license.url}
+														<a href={credit.license.url} target="_blank" rel="noopener">{credit.license.name ?? 'License'}</a>
+													{:else}
+														{credit.license.name}
+													{/if}
+												</p>
+											{/if}
+										</li>
+									{/each}
+								</ul>
+							</div>
+						{/each}
+					</section>
+				{/if}
+			</aside>
 		</div>
 	{:else}
 		<p style="opacity: 0.6;">No site information available.</p>
 	{/if}
 </main>
+
+<style>
+	.page-hd {
+		padding: var(--space-lg) 0;
+		border-bottom: 1px solid var(--surface-color);
+	}
+
+	.page-title {
+		font-size: clamp(2rem, 5vw, 3rem);
+		font-weight: 800;
+		letter-spacing: -0.03em;
+		margin: 0 0 var(--space-sm);
+	}
+
+	.page-desc {
+		margin: 0;
+		color: var(--color-ink-700);
+	}
+
+	.meta-grid {
+		display: grid;
+		grid-template-columns: 1fr 320px;
+		gap: var(--space-lg);
+		padding: var(--space-lg) 0;
+		align-items: start;
+	}
+
+	.meta-sidebar {
+		position: sticky;
+		top: 72px;
+		height: max-content;
+	}
+
+	.meta-section {
+		margin-bottom: var(--space-lg);
+	}
+
+	.meta-heading {
+		font-size: var(--text-md);
+		font-weight: 700;
+		margin: 0 0 var(--space-md);
+	}
+
+	.meta-subheading {
+		font-size: var(--text-sm);
+		font-weight: 600;
+		color: var(--color-ink-700);
+		margin: 0 0 var(--space-sm);
+	}
+
+	.meta-text {
+		white-space: pre-wrap;
+		line-height: 1.75;
+		margin: 0;
+	}
+
+	.meta-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+	}
+
+	.meta-card {
+		padding: var(--space-sm);
+		border: 1px solid var(--surface-color);
+	}
+
+	.meta-card-link {
+		display: flex;
+		align-items: center;
+		gap: var(--space-xs);
+		text-decoration: none;
+		color: inherit;
+		font-weight: 600;
+	}
+
+	.meta-card-desc {
+		margin: var(--space-2xs) 0 0;
+		font-size: var(--text-sm);
+		color: var(--color-ink-600);
+	}
+
+	.meta-tags {
+		display: flex;
+		gap: var(--space-xs);
+		margin-top: var(--space-2xs);
+	}
+
+	.meta-tag {
+		font-size: var(--text-xs);
+		padding: 2px 6px;
+		border: 1px solid var(--surface-color);
+		background: var(--surface-raised);
+	}
+
+	.meta-tag--accent {
+		background: var(--color-primary-900);
+		color: var(--color-primary-400);
+		border-color: var(--color-primary-800);
+	}
+
+	@media (max-width: 900px) {
+		.meta-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.meta-sidebar {
+			position: static;
+			height: auto;
+		}
+	}
+</style>
