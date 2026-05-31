@@ -1,0 +1,21 @@
+{
+  "id": "click.croft.tools.tourmaline",
+  "defs": {
+    "main": {
+      "type": "object",
+      "properties": {
+        "sharedToBluesky": {
+          "type": "boolean",
+          "description": "Whether the analysis was shared to Bluesky."
+        },
+        "scrobblesAnalyzed": {
+          "type": "integer",
+          "description": "The number of Teal.fm scrobbles analyzed."
+        }
+      },
+      "description": "Metadata for the Tourmaline tool usage."
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}

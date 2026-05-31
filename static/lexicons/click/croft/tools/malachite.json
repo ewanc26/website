@@ -1,0 +1,21 @@
+{
+  "id": "click.croft.tools.malachite",
+  "defs": {
+    "main": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "The import mode used (e.g. 'lastfm', 'spotify', 'combined', 'deduplicate')."
+        },
+        "recordsImported": {
+          "type": "integer",
+          "description": "The number of records successfully imported or deduplicated."
+        }
+      },
+      "description": "Metadata for the Malachite tool usage."
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}
