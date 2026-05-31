@@ -3,65 +3,54 @@ import type { RequestHandler } from "./$types";
 export const GET: RequestHandler = async ({ params }) => {
   const { slug } = params;
 
-  // Decode the slug — it comes URL-encoded from SiteHead
+  // Decode the slug
   const title = decodeURIComponent(slug);
 
   // Truncate long titles to fit the card
-  const maxChars = 60;
+  const maxChars = 50;
   const displayTitle =
     title.length > maxChars ? title.slice(0, maxChars - 1) + "…" : title;
 
-  // Colours matching the Catppuccin-inspired green palette
-  const bg = "#1a1f1e"; // dark green base (canvas-50 dark mode)
-  const surface = "#2a3230"; // raised surface (canvas-100 dark mode)
-  const border = "#3a4643"; // border (canvas-200 dark mode)
-  const green = "#a6e3a1"; // primary green accent (Catppuccin green)
-  const greenMuted = "#6b8f68"; // muted green for secondary text
-  const text = "#d4e4d8"; // light green-tinted text (ink-900 dark mode)
-  const textMuted = "#8fa893"; // muted text (ink-600 dark mode)
+  // Colours based on site theme (dark mode)
+  const bg = "#1a201c"; // ink-950 dark
+  const surface = "#222a26"; // surface-raised
+  const border = "#3a4643"; // surface-color
+  const primary = "#a6e3a1"; // primary-500 equivalent
+  const text = "#d9e4de"; // ink-50
+  const textMuted = "#a0b0a8"; // ink-500
 
   const svg = `
     <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <style>
           @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 800;
+            src: local('Inter-ExtraBold');
+          }
+          @font-face {
             font-family: 'JetBrains Mono';
-            src: local('JetBrains Mono'), local('JetBrainsMono');
+            src: local('JetBrains Mono');
           }
         </style>
       </defs>
 
       <!-- Background -->
       <rect width="1200" height="630" fill="${bg}" />
+      
+      <!-- Minimalist border card -->
+      <rect x="40" y="40" width="1120" height="550" rx="16" fill="${surface}" stroke="${border}" stroke-width="2" />
 
-      <!-- Terminal chrome bar -->
-      <rect x="0" y="0" width="1200" height="48" fill="${surface}" />
-      <line x1="0" y1="48" x2="1200" y2="48" stroke="${border}" stroke-width="1" />
+      <!-- Content -->
+      <text x="80" y="120" font-family="'JetBrains Mono', monospace" font-size="20" fill="${primary}" letter-spacing="0.1em" text-transform="uppercase">TECHNICAL SPEC</text>
+      
+      <text x="80" y="200" font-family="'Inter', sans-serif" font-size="80" font-weight="800" fill="${text}" letter-spacing="-0.02em">${escapeXml(displayTitle)}</text>
+      
+      <rect x="80" y="240" width="100" height="4" fill="${primary}" />
 
-      <!-- Window dots -->
-      <circle cx="28" cy="24" r="6" fill="#f38ba8" />
-      <circle cx="52" cy="24" r="6" fill="#f9e2af" />
-      <circle cx="76" cy="24" r="6" fill="${green}" />
-
-      <!-- Terminal title in chrome bar -->
-      <text x="600" y="29" font-family="'JetBrains Mono', monospace" font-size="14" fill="${textMuted}" text-anchor="middle">ewancroft.uk</text>
-
-      <!-- Prompt line -->
-      <text x="64" y="120" font-family="'JetBrains Mono', monospace" font-size="24" fill="${greenMuted}">ewan@croft:~$</text>
-
-      <!-- Title -->
-      <text x="64" y="200" font-family="'JetBrains Mono', monospace" font-size="56" font-weight="700" fill="${text}" letter-spacing="-0.02em">${escapeXml(displayTitle)}</text>
-
-      <!-- Cursor blink -->
-      <rect x="64" y="240" width="32" height="8" fill="${green}" opacity="0.8" />
-
-      <!-- Bottom info bar -->
-      <rect x="0" y="570" width="1200" height="60" fill="${surface}" />
-      <line x1="0" y1="570" x2="1200" y2="570" stroke="${border}" stroke-width="1" />
-
-      <!-- Bottom bar content -->
-      <text x="64" y="606" font-family="'JetBrains Mono', monospace" font-size="16" fill="${textMuted}">anglo-scottish pagan poet programmer</text>
-      <text x="1136" y="606" font-family="'JetBrains Mono', monospace" font-size="16" fill="${greenMuted}" text-anchor="end">ewancroft.uk</text>
+      <!-- Footer info -->
+      <text x="80" y="550" font-family="'JetBrains Mono', monospace" font-size="20" fill="${textMuted}">ewancroft.uk</text>
     </svg>
   `.trim();
 
