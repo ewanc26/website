@@ -1,0 +1,281 @@
+/* ================================================================
+ * prose.css — Rendered blog post content
+ *
+ * Scoped under .prose so nothing leaks into the rest of the layout.
+ * All colours, spacing, and type use design tokens from system.css
+ * and theme.css. Elements here are injected via {@html}, so Svelte's
+ * scoped CSS won't reach them — this file is imported globally and
+ * relies on the .prose ancestor class for containment.
+ * ================================================================ */
+
+/* ── Container ──────────────────────────────────────────────── */
+
+.prose {
+  color: var(--color-ink-900);
+  font-size: var(--text-md);
+  line-height: 1.75;
+}
+
+/* ── Paragraphs ─────────────────────────────────────────────── */
+
+.prose p {
+  margin-top: 0;
+  margin-bottom: var(--space-md);
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Headings ───────────────────────────────────────────────── */
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: var(--color-ink-950);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+.prose h1 {
+  font-size: var(--text-xl);
+}
+.prose h2 {
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+.prose h3 {
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+.prose h4 {
+  font-size: var(--text-md);
+  font-weight: 600;
+  opacity: 0.9;
+}
+.prose h5 {
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+.prose h6 {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.prose :is(h1, h2, h3, h4, h5, h6):first-child {
+  margin-top: 0;
+}
+
+/* ── Links ──────────────────────────────────────────────────── */
+
+.prose a {
+  color: var(--color-primary-500);
+  text-decoration: underline;
+  text-decoration-color: color-mix(
+    in oklch,
+    var(--color-primary-500) 35%,
+    transparent
+  );
+  text-underline-offset: 3px;
+  transition:
+    color var(--duration-fast) var(--ease-out-quart),
+    text-decoration-color var(--duration-fast) var(--ease-out-quart);
+}
+
+.prose a:hover {
+  color: var(--color-primary-400);
+  text-decoration-color: var(--color-primary-400);
+}
+
+/* ── Strong & em ────────────────────────────────────────────── */
+
+.prose strong {
+  color: var(--color-ink-950);
+  font-weight: 700;
+}
+
+.prose em {
+  font-style: italic;
+  color: var(--color-ink-800);
+}
+
+/* ── Strikethrough ──────────────────────────────────────────── */
+
+.prose del {
+  text-decoration: line-through;
+  color: var(--color-ink-600);
+}
+
+/* ── Inline code ────────────────────────────────────────────── */
+
+.prose code:not(pre > code) {
+  font-family:
+    "JetBrains Mono", ui-monospace, "Cascadia Code", "Fira Code", Menlo,
+    monospace;
+  font-size: 0.875em;
+  color: var(--color-accent-600);
+  background-color: var(--color-canvas-100);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  border: 1px solid var(--color-canvas-200);
+}
+
+/* ── Code blocks ────────────────────────────────────────────── */
+
+.prose pre {
+  font-family:
+    "JetBrains Mono", ui-monospace, "Cascadia Code", "Fira Code", Menlo,
+    monospace;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--color-ink-800);
+  background-color: var(--color-canvas-100);
+  border: 1px solid var(--color-canvas-200);
+  border-radius: 8px;
+  padding: var(--space-md);
+  overflow-x: auto;
+  margin-top: 0;
+  margin-bottom: var(--space-md);
+}
+
+.prose pre > code {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* ── Blockquotes ────────────────────────────────────────────── */
+
+.prose blockquote {
+  border-left: 3px solid var(--color-primary-500);
+  padding: var(--space-sm) 0 var(--space-sm) var(--space-md);
+  margin: var(--space-md) 0;
+  color: var(--color-ink-700);
+  font-style: italic;
+}
+
+.prose blockquote p {
+  margin-bottom: 0;
+}
+
+.prose blockquote > p:not(:last-child) {
+  margin-bottom: var(--space-sm);
+}
+
+/* ── Lists ──────────────────────────────────────────────────── */
+
+.prose ul,
+.prose ol {
+  margin-top: 0;
+  margin-bottom: var(--space-md);
+  padding-left: var(--space-lg);
+}
+
+.prose li {
+  margin-bottom: var(--space-xs);
+  line-height: 1.7;
+}
+
+.prose li:last-child {
+  margin-bottom: 0;
+}
+
+/* Nested lists */
+.prose li > ul,
+.prose li > ol {
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+
+/* Marker colours */
+.prose ul > li::marker {
+  color: var(--color-primary-500);
+}
+
+.prose ol > li::marker {
+  color: var(--color-ink-600);
+  font-weight: 600;
+}
+
+/* Task list items (GFM) */
+.prose li:has(> input[type="checkbox"]) {
+  list-style: none;
+  margin-left: calc(-1 * var(--space-md));
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+
+.prose input[type="checkbox"] {
+  accent-color: var(--color-primary-500);
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
+/* ── Horizontal rule ────────────────────────────────────────── */
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--color-canvas-200);
+  margin: var(--space-lg) 0;
+}
+
+/* ── Images ─────────────────────────────────────────────────── */
+
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: var(--space-md) 0;
+}
+
+/* ── Tables (GFM) ───────────────────────────────────────────── */
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-md);
+  display: block;
+  overflow-x: auto;
+}
+
+.prose thead {
+  background-color: var(--color-canvas-100);
+}
+
+.prose th {
+  font-weight: 700;
+  text-align: left;
+  color: var(--color-ink-950);
+  padding: var(--space-xs) var(--space-sm);
+  border-bottom: 2px solid var(--color-canvas-300);
+}
+
+.prose td {
+  padding: var(--space-xs) var(--space-sm);
+  border-bottom: 1px solid var(--color-canvas-200);
+  vertical-align: top;
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.prose tbody tr:hover td {
+  background-color: var(--color-canvas-100);
+  transition: background-color var(--duration-fast) var(--ease-out-quart);
+}
