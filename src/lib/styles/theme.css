@@ -32,7 +32,7 @@ body {
 
 /* ── Page shells ────────────────────────────────────────────── */
 
-/* Wide shell — home, blog listing, site meta */
+/* Wide shell — home, blog listing, about, projects, site meta, brand */
 .shell-wide {
   max-width: 72rem;
   margin-inline: auto;
@@ -46,7 +46,7 @@ body {
   padding: 0 var(--space-lg);
 }
 
-/* Narrow shell — about, projects, subscriptions */
+/* Narrow shell — subscriptions, support */
 .shell-narrow {
   max-width: 48rem;
   margin-inline: auto;

@@ -97,7 +97,7 @@
           <h2 class="section-heading">Skills</h2>
           {#each groupSkillsByCategory(sifaSkills) as [category, skills]}
             <div class="skill-group">
-              <h3 class="skill-category">{category}</h3>
+              <h3 class="sub-heading">{category}</h3>
               <ul class="skill-list">
                 {#each skills as skill}
                   <li class="skill-tag">{skill.name}</li>
@@ -114,7 +114,7 @@
           <ul class="bare-list">
             {#each sifaEducation as edu}
               <li class="post-row">
-                <div style="display: flex; flex-direction: column;">
+                <div class="row-stack">
                   <strong class="edu-degree">{edu.degree}</strong>
                   <span class="edu-institution">{edu.institution}</span>
                 </div>
@@ -139,7 +139,7 @@
                   rel="noopener"
                   class="post-row"
                 >
-                  <div style="display: flex; flex-direction: column;">
+                  <div class="row-stack">
                     <strong class="project-name">{project.name}</strong>
                     <span class="project-desc">{project.description}</span>
                   </div>
@@ -206,9 +206,8 @@
           <dd>
             <button 
               type="button" 
-              class="copy-btn" 
+              class="copy-btn copy-btn--compact" 
               onclick={() => copyToClipboard(profile.did, 'did')}
-              style="font-size: var(--text-xs); padding: 2px 6px; border-radius: var(--radius-xs);"
             >
               {copiedIndex === 'did' ? 'Copied' : 'Copy DID'}
             </button>
@@ -300,20 +299,6 @@
     contain-intrinsic-size: auto 200px;
   }
 
-  /* Shared list reset */
-  .bare-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .row-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-sm);
-  }
-
   .row-meta {
     font-size: var(--text-xs);
     color: var(--color-ink-600);
@@ -324,13 +309,6 @@
   /* Skills */
   .skill-group {
     margin-bottom: var(--space-md);
-  }
-
-  .skill-category {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--color-ink-700);
-    margin: 0 0 var(--space-sm);
   }
 
   .skill-list {
@@ -352,15 +330,6 @@
   }
 
   /* Education */
-  .edu-item {
-    padding: var(--space-sm) 0;
-    border-bottom: 1px dashed var(--surface-color);
-  }
-
-  .edu-item:last-child {
-    border-bottom: none;
-  }
-
   .edu-degree {
     font-size: var(--text-md);
     font-weight: 600;
@@ -372,24 +341,7 @@
     color: var(--color-ink-700);
   }
 
-  .edu-desc {
-    margin: var(--space-xs) 0 0;
-    font-size: var(--text-sm);
-    color: var(--color-ink-600);
-    white-space: pre-wrap;
-    line-height: 1.6;
-  }
-
-  /* Projects — dashed row, no card border */
-  .project-item {
-    padding: var(--space-sm) 0;
-    border-bottom: 1px dashed var(--surface-color);
-  }
-
-  .project-item:last-child {
-    border-bottom: none;
-  }
-
+  /* Projects */
   .project-name {
     font-size: var(--text-md);
     font-weight: 600;
@@ -422,55 +374,9 @@
   }
 
   /* Languages */
-  .lang-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-  }
-
-  .lang-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    font-size: var(--text-sm);
-    padding: var(--space-2xs) 0;
-    border-bottom: 1px dashed var(--surface-color);
-  }
-
-  .lang-item:last-child {
-    border-bottom: none;
-  }
-
-  .lang-name {
-    font-weight: 600;
-    color: var(--color-ink-900);
-  }
-
   .lang-prof {
     color: var(--color-ink-600);
     font-size: var(--text-xs);
-  }
-
-  /* External links */
-  .link-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2xs);
-  }
-
-  .link-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    font-size: var(--text-sm);
-    text-decoration: none;
-    color: inherit;
-    padding: var(--space-2xs) 0;
-    transition: color var(--duration-fast) var(--ease-out-quart);
-  }
-
-  .link-item:hover {
-    color: var(--color-primary-500);
   }
 
   /* Identity DL */
@@ -502,6 +408,28 @@
     text-overflow: ellipsis;
     display: block;
     max-width: 100%;
+  }
+
+  /* Copy button */
+  .copy-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-primary-500);
+    background: none;
+    border: 1px solid currentColor;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-out-quart),
+      color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .copy-btn:hover {
+    background: var(--color-primary-500);
+    color: var(--color-canvas-50);
   }
 
   /* Responsive */

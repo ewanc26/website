@@ -32,8 +32,8 @@
 
                 {#if data.comments.length > 0}
                     <section class="comments-section">
-                        <h2 class="comments-title">
-                            <MessageCircle size={18} strokeWidth={2} />
+                        <h2 class="section-heading">
+                            <MessageCircle size={16} strokeWidth={2} />
                             {data.comments.length} comment{data.comments.length !== 1 ? 's' : ''}
                         </h2>
                         <ul class="comment-list">
@@ -120,10 +120,7 @@
         padding-top: var(--space-lg);
     }
 
-    .comments-title {
-        font-size: var(--text-md);
-        font-weight: 700;
-        margin-bottom: var(--space-md);
+    .comments-section .section-heading {
         display: flex;
         align-items: center;
         gap: var(--space-xs);

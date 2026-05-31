@@ -148,7 +148,7 @@
 
   .crypto-card {
     padding: var(--space-md);
-    border: 2px solid var(--surface-color);
+    border: 1px solid var(--surface-color);
     border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;

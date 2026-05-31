@@ -22,7 +22,7 @@
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 <Header />
-<main style="flex: 1;">
+<main class="shell-main">
 	{@render children()}
 </main>
 <Footer />
