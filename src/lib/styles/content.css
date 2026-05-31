@@ -1,0 +1,84 @@
+/* ================================================================
+ * content.css — Content-first shared layout primitives
+ *
+ * Prose-led pages: /blog, /about, /support, /site/brand.
+ * Extracted from blog/+page.svelte and +page.svelte to enforce
+ * visual consistency across all non-index pages.
+ * ================================================================ */
+
+/* ── Page header ─────────────────────────────────────────────── */
+
+.page-hd {
+  padding: var(--space-xl) 0 var(--space-lg);
+}
+
+.page-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 0;
+  color: var(--color-ink-950);
+}
+
+.page-desc {
+  margin: var(--space-sm) 0 0;
+  color: var(--color-ink-700);
+  max-width: 60ch;
+  line-height: 1.65;
+}
+
+/* ── Section heading ─────────────────────────────────────────── */
+
+.section-heading {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-ink-600);
+  margin: 0 0 var(--space-md);
+}
+
+/* ── Post row — list item with label + trailing meta ─────────── */
+
+.post-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px dashed var(--surface-color);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    background-color var(--duration-fast) var(--ease-out-quart),
+    padding-left var(--duration-fast) var(--ease-out-quart),
+    padding-right var(--duration-fast) var(--ease-out-quart),
+    margin-left var(--duration-fast) var(--ease-out-quart),
+    margin-right var(--duration-fast) var(--ease-out-quart);
+}
+
+.post-row:hover {
+  background-color: var(--surface-raised);
+  padding-left: var(--space-sm);
+  padding-right: var(--space-sm);
+  margin-left: calc(-1 * var(--space-sm));
+  margin-right: calc(-1 * var(--space-sm));
+}
+
+/* ── Section link — "see all" footer link ────────────────────── */
+
+.section-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--color-primary-500);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out-quart);
+}
+
+.section-link:hover {
+  color: var(--color-primary-400);
+}

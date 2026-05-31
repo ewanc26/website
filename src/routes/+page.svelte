@@ -25,12 +25,12 @@
 
 <main class="shell-wide">
   <!-- Hero -->
-  <section class="hero">
+  <section class="page-hd">
     {#if profile.avatar}
       <img src={profile.avatar} alt="" class="hero-avatar" />
     {/if}
     <div class="hero-text">
-      <h1 class="hero-title">{profile.displayName ?? profile.handle}</h1>
+      <h1 class="page-title">{profile.displayName ?? profile.handle}</h1>
       <p class="hero-bio">{profile.description}</p>
     </div>
   </section>
@@ -53,7 +53,7 @@
 
   <!-- Writing -->
   <section class="home-section">
-    <h2 class="section-title">{data.blog?.title ?? 'Blog'}</h2>
+    <h2 class="section-heading">{data.blog?.title ?? 'Blog'}</h2>
     <ul class="post-list">
       {#each data.posts as post}
         <li>
@@ -131,7 +131,7 @@
 
 <style>
   /* Hero */
-  .hero {
+  .page-hd {
     padding: var(--space-xl) 0 var(--space-lg);
     display: flex;
     gap: var(--space-lg);
@@ -142,14 +142,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
-  }
-
-  .hero-title {
-    font-size: clamp(2.5rem, 8vw, 5rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 0.95;
-    margin: 0;
   }
 
   .hero-bio {
@@ -211,15 +203,6 @@
     contain-intrinsic-size: auto 300px;
   }
 
-  .section-title {
-    font-size: var(--text-sm);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-ink-600);
-    margin: 0 0 var(--space-md);
-  }
-
   .section-link {
     display: inline-flex;
     align-items: center;
@@ -237,26 +220,6 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-  }
-
-  .post-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-md);
-    padding: var(--space-sm) 0;
-    border-bottom: 1px dashed var(--surface-color);
-    text-decoration: none;
-    color: inherit;
-    transition: background-color var(--duration-fast) var(--ease-out-quart);
-  }
-
-  .post-row:hover {
-    background-color: var(--surface-raised);
-    padding-left: var(--space-sm);
-    padding-right: var(--space-sm);
-    margin-left: calc(-1 * var(--space-sm));
-    margin-right: calc(-1 * var(--space-sm));
   }
 
   .post-title {
@@ -394,11 +357,6 @@
     .hero-avatar {
       width: 48px;
       height: 48px;
-    }
-
-    .post-row {
-      flex-direction: column;
-      gap: var(--space-2xs);
     }
 
     .pub-row {
