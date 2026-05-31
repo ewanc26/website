@@ -141,9 +141,9 @@
 						{#each groupBySection(info.technologyStack) as [section, techs]}
 							<div class="sidebar-group">
 								<h3 class="sub-heading">{section}</h3>
-								<ul class="bare-list meta-list">
+								<div class="tech-grid">
 									{#each techs as tech}
-										<li class="meta-card">
+										<div class="tech-card">
 											<div class="meta-card-row">
 												{#if tech.url}
 													<a href={tech.url} target="_blank" rel="noopener" class="meta-card-link">
@@ -157,9 +157,9 @@
 											{#if tech.description}
 												<p class="meta-card-desc">{tech.description}</p>
 											{/if}
-										</li>
+										</div>
 									{/each}
-								</ul>
+								</div>
 							</div>
 						{/each}
 					</section>
@@ -264,6 +264,18 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xs);
+	}
+
+	.tech-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+		gap: var(--space-xs);
+	}
+
+	.tech-card {
+		padding: var(--space-sm);
+		border: 1px solid var(--surface-color);
+		border-radius: var(--radius-md);
 	}
 
 	.credit-name { font-weight: 600; }
