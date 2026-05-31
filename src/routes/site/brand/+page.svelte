@@ -666,6 +666,8 @@
   .id-card {
     background: var(--surface-raised);
     border: 1px solid var(--surface-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     max-width: 500px;
@@ -756,7 +758,7 @@
   .swatch {
     width: 100%;
     aspect-ratio: 1;
-    border-radius: 2px;
+    border-radius: var(--radius-xs);
   }
 
   .swatch-val {
@@ -775,6 +777,7 @@
   .surface-card {
     border: 1px solid var(--surface-color);
     background: var(--surface-raised);
+    border-radius: var(--radius-sm);
     padding: var(--space-sm);
     display: flex;
     gap: var(--space-sm);
@@ -785,6 +788,7 @@
     width: 48px;
     height: 48px;
     border: 1px solid var(--surface-color);
+    border-radius: var(--radius-xs);
     flex-shrink: 0;
   }
 
@@ -811,6 +815,7 @@
     gap: var(--space-lg);
     background: var(--surface-raised);
     border: 1px solid var(--surface-color);
+    border-radius: var(--radius-lg);
     padding: var(--space-lg);
     margin-bottom: var(--space-xl);
   }
@@ -833,6 +838,8 @@
     display: flex;
     flex-direction: column;
     border: 1px solid var(--surface-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
   }
 
   .table-hd {
