@@ -153,7 +153,7 @@
   <header class="page-hd spec-header">
     <div class="spec-meta">
       <span class="meta-tag">FULL BRAND KIT</span>
-      <span class="meta-tag">v2.1.0</span>
+      <span class="meta-tag">v12.0.0</span>
       <span class="meta-tag">TECHNICAL SPEC</span>
     </div>
     <h1 class="page-title">Identity & Assets</h1>
