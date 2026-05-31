@@ -40,8 +40,4 @@
 		display: flex;
 		flex-direction: column;
 	}
-
-	.post-date.mono {
-		font-family: var(--font-mono);
-	}
 </style>
