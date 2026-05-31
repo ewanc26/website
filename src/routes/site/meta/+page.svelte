@@ -222,7 +222,7 @@
 	.empty-state { opacity: 0.6; }
 
 	/* Base Layout */
-	.spec-header { margin-bottom: var(--space-xl); }
+	.spec-header { margin-bottom: 0; }
 	.page-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin: var(--space-sm) 0; }
 	.spec-abstract { max-width: 100%; font-size: var(--text-md); color: var(--color-ink-700); line-height: 1.5; }
 
