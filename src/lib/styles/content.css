@@ -40,6 +40,7 @@
 }
 
 /* ── Post row — list item with label + trailing meta ─────────── */
+/* ── Post row — list item with label + trailing meta ─────────── */
 .post-row {
   display: flex;
   justify-content: space-between;
@@ -48,6 +49,7 @@
   padding: var(--space-sm) 0;
   border-bottom: 1px dashed var(--surface-color);
   text-decoration: none;
+  color: var(--color-ink-950);
   transition:
     background-color var(--duration-fast) var(--ease-out-quart),
     padding-left var(--duration-fast) var(--ease-out-quart),
@@ -64,7 +66,13 @@
   margin-left: calc(-1 * var(--space-sm));
   margin-right: calc(-1 * var(--space-sm));
   color: var(--color-primary-500);
-  text-decoration-color: var(--color-primary-500);
+}
+
+.post-row:visited {
+  color: var(--color-ink-950);
+}
+.post-row:hover:visited {
+  color: var(--color-primary-500);
 }
 
 /* ── Section link — "see all" footer link ────────────────────── */
