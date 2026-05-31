@@ -32,7 +32,7 @@
         gap: var(--space-xs);
         opacity: 0.6;
     }
-...
+
     .site-footer p {
         margin: 0;
     }
