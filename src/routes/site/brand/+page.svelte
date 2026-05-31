@@ -592,6 +592,7 @@
     background: var(--surface-raised);
     padding: 2px 6px;
     border: 1px solid var(--surface-color);
+    border-radius: var(--radius-sm);
     text-transform: uppercase;
   }
 
