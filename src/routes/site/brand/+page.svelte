@@ -1118,8 +1118,7 @@
 
   .shell-bar {
     height: 100%;
-    background: var(--color-primary-500);
-    opacity: 0.3;
+    background: color-mix(in oklch, var(--color-primary-500) 30%, transparent);
     display: flex;
     align-items: center;
     padding-left: 8px;
