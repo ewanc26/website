@@ -2,7 +2,7 @@
   import { SITE } from '$lib/config';
   import Now from '$lib/components/Now.svelte';
   import SiteHead from '$lib/components/SiteHead.svelte';
-  import { ArrowRight } from '@lucide/svelte';
+  import { ArrowRight, ExternalLink } from '@lucide/svelte';
 
   import { normalizeSlug } from '$lib/utils/slugify';
 
@@ -42,4 +42,25 @@
         </ul>
         <a href="/blog" style="display: inline-flex; align-items: center; gap: var(--space-xs); margin-top: var(--space-md); font-size: var(--text-sm); color: var(--color-primary-500); text-decoration: none;">All posts <ArrowRight size={14} strokeWidth={2} /></a>
     </section>
+
+    {#if data.publications.length > 0}
+        <section style="margin-top: var(--space-xl);">
+            <h2 style="font-size: var(--text-lg); font-weight: 700; margin-bottom: var(--space-md);">Publications</h2>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-sm);">
+                {#each data.publications as pub}
+                    <li>
+                        <a href={pub.url} target="_blank" rel="noopener" style="text-decoration: none; color: inherit; display: block; padding: var(--space-sm) var(--space-3); border: 1px solid var(--surface-color); border-radius: 4px;">
+                            <span style="display: flex; align-items: center; gap: var(--space-xs);">
+                                <strong>{pub.name}</strong>
+                                <ExternalLink size={12} strokeWidth={2} style="opacity: 0.4; flex-shrink: 0;" />
+                            </span>
+                            {#if pub.description}
+                                <p style="margin: var(--space-2xs) 0 0; font-size: var(--text-sm); opacity: 0.7;">{pub.description}</p>
+                            {/if}
+                        </a>
+                    </li>
+                {/each}
+            </ul>
+        </section>
+    {/if}
 </main>
