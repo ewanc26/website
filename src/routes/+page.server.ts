@@ -61,12 +61,12 @@ export const load: PageServerLoad = async ({ fetch }) => {
       : null,
     posts: publicationPosts
       .slice(0, 5)
-      .map(({ title, createdAt, publicationRkey, rkey, uri }) => ({
+      .map(({ title, createdAt, publicationRkey, rkey, url }) => ({
         title,
         createdAt,
         publicationRkey,
         rkey,
-        uri,
+        url,
       })),
     publications: otherPublications,
     projects: sifaProjects.slice(0, 6).map(({ name, description, url }) => ({

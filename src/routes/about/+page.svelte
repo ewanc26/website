@@ -14,14 +14,14 @@
 
   let { data } = $props();
 
-  const profile = data.profile as ProfileData;
-  const links = data.links as LinkData | null;
-  const sifaProfile = data.sifaProfile as SifaProfileData | null;
-  const sifaSkills = data.sifaSkills as SifaSkill[];
-  const sifaEducation = data.sifaEducation as SifaEducation[];
-  const sifaLanguages = data.sifaLanguages as SifaLanguage[];
-  const sifaExternalAccounts = data.sifaExternalAccounts as SifaExternalAccount[];
-  const sifaProjects = data.sifaProjects as SifaProject[];
+  let profile = $derived(data.profile as ProfileData);
+  let links = $derived(data.links as LinkData | null);
+  let sifaProfile = $derived(data.sifaProfile as SifaProfileData | null);
+  let sifaSkills = $derived(data.sifaSkills as SifaSkill[]);
+  let sifaEducation = $derived(data.sifaEducation as SifaEducation[]);
+  let sifaLanguages = $derived(data.sifaLanguages as SifaLanguage[]);
+  let sifaExternalAccounts = $derived(data.sifaExternalAccounts as SifaExternalAccount[]);
+  let sifaProjects = $derived(data.sifaProjects as SifaProject[]);
 
   function formatSkillCategory(uri: string): string {
     const map: Record<string, string> = {
@@ -53,10 +53,11 @@
     return grouped;
   }
 
-  function formatDate(dateStr: string): string {
+  function formatDate(dateStr: string | undefined): string {
+    if (!dateStr) return 'Unknown';
     const [year, month] = dateStr.split('-');
     const monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return `${monthNames[parseInt(month)]} ${year}`;
+    return `${monthNames[parseInt(month)] ?? 'Jan'} ${year}`;
   }
 </script>
 

@@ -51,7 +51,7 @@ export interface SubscriptionPublication {
 export async function fetchSubscriptions(
   fetchFn: typeof fetch = fetch,
 ): Promise<SubscriptionPublication[]> {
-  const agent = await getPDSAgent();
+  const agent = await getPDSAgent(PUBLIC_ATPROTO_DID, fetchFn);
   const allRecords: { uri: string; value: { publication: string } }[] = [];
   let cursor: string | undefined;
 
@@ -74,7 +74,7 @@ export async function fetchSubscriptions(
 
   // Resolve each publication AT URI → DID + rkey, then fetch via DID resolution
   const resolved = await Promise.allSettled(
-    allRecords.map(async (record) => {
+    allRecords.map(async (record): Promise<SubscriptionPublication> => {
       const pubUri = record.value.publication;
       const parts = pubUri.replace("at://", "").split("/");
       const did = parts[0];
@@ -125,7 +125,7 @@ export async function fetchSubscriptions(
         authorDid: did,
         authorHandle,
         authorDisplayName,
-      } satisfies SubscriptionPublication;
+      };
     }),
   );
 
@@ -233,8 +233,8 @@ export async function fetchComments(
 }
 
 export async function fetchBlob(ref: any) {
-  const agent = await getPDSAgent();
+  const agent = await getPDSAgent(PUBLIC_ATPROTO_DID);
   const cid = ref.$link || ref.ref?.$link || ref;
-  const blob = await agent.getBlob({ did: PUBLIC_ATPROTO_DID, cid });
+  const blob = await agent.com.atproto.sync.getBlob({ did: PUBLIC_ATPROTO_DID, cid });
   return new Uint8Array(blob.data);
 }

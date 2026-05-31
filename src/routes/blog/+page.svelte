@@ -5,10 +5,15 @@
 
     let { data } = $props();
 
-    type PostSummary = { title: string; createdAt: string; publicationRkey: string; rkey: string; uri: string };
-    let posts: PostSummary[] = $state(data.posts);
-    let hasMore = $state(data.hasMore);
+    type PostSummary = { title: string; createdAt: string; publicationRkey?: string; rkey: string; url: string };
+    let posts: PostSummary[] = $state([]);
+    let hasMore = $state(false);
     let loading = $state(false);
+
+    $effect.pre(() => {
+        posts = data.posts;
+        hasMore = data.hasMore;
+    });
 
     function getPostUrl(post: PostSummary) {
         const date = new Date(post.createdAt);

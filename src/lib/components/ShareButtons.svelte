@@ -10,18 +10,18 @@
   }
 
   // Construct structured email template
-  const emailSubject = `Check out this post: ${title}`;
-  const emailBody = `I thought you might find this interesting:
+  let emailSubject = $derived(`Check out this post: ${title}`);
+  let emailBody = $derived(`I thought you might find this interesting:
 
 Title: ${title}
 URL: ${url}
 
 ---
-Sent from my website.`;
-  const mailtoLink = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+Sent from my website.`);
+  let mailtoLink = $derived(`mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`);
 
   // Use intent/compose correctly for Bluesky
-  const bskyLink = `https://bsky.app/intent/compose?text=${encodeURIComponent(`${title}\n\n${url}`)}`;
+  let bskyLink = $derived(`https://bsky.app/intent/compose?text=${encodeURIComponent(`${title}\n\n${url}`)}`);
 </script>
 
 <div style="display: flex; gap: var(--space-md); margin-top: var(--space-lg); padding-top: var(--space-md); border-top: 1px solid var(--color-canvas-200);">
