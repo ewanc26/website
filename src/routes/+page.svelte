@@ -26,13 +26,11 @@
 <main class="shell-wide">
   <!-- Hero -->
   <section class="hero">
+    {#if profile.avatar}
+      <img src={profile.avatar} alt="" class="hero-avatar" />
+    {/if}
     <div class="hero-text">
-      <div class="hero-title-row">
-        {#if profile.avatar}
-          <img src={profile.avatar} alt="" class="hero-avatar" />
-        {/if}
-        <h1 class="hero-title">{profile.displayName ?? profile.handle}</h1>
-      </div>
+      <h1 class="hero-title">{profile.displayName ?? profile.handle}</h1>
       <p class="hero-bio">{profile.description}</p>
     </div>
   </section>
@@ -135,15 +133,15 @@
   /* Hero */
   .hero {
     padding: var(--space-xl) 0 var(--space-lg);
-    contain: layout;
+    display: flex;
+    gap: var(--space-lg);
+    align-items: flex-start;
   }
 
-  .hero-title-row {
+  .hero-text {
     display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    margin-bottom: var(--space-sm);
-    min-height: 64px;
+    flex-direction: column;
+    gap: var(--space-sm);
   }
 
   .hero-title {
