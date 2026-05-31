@@ -60,13 +60,11 @@
 
 <main class="shell-wide">
     <header class="page-hd">
-        <div>
-            <h1 class="page-title">{data.blog?.title ?? 'Blog'}</h1>
-            {#if data.blog}
-                <p style="margin: var(--space-sm) 0 0; color: var(--color-ink-700);">{data.blog.description}</p>
-                <a href={data.blog.rss} target="_blank" rel="noopener" class="rss-link"><Rss size={14} strokeWidth={2} /> RSS</a>
-            {/if}
-        </div>
+        <h1 class="page-title">{data.blog?.title ?? 'Blog'}</h1>
+        {#if data.blog}
+            <p class="page-desc">{data.blog.description}</p>
+            <a href={data.blog.rss} target="_blank" rel="noopener" class="section-link"><Rss size={14} strokeWidth={2} /> RSS</a>
+        {/if}
     </header>
 
     {#each groupPosts(posts) as [year, months]}
@@ -96,27 +94,6 @@
 </main>
 
 <style>
-    .page-hd {
-        padding: var(--space-lg) 0;
-    }
-
-    .page-title {
-        font-size: clamp(2rem, 5vw, 3.5rem);
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        margin: 0;
-    }
-
-    .rss-link {
-        display: inline-flex;
-        align-items: center;
-        gap: var(--space-xs);
-        margin-top: var(--space-sm);
-        font-size: var(--text-sm);
-        color: var(--color-primary-500);
-        text-decoration: none;
-    }
-
     .year-head {
         font-family: var(--font-mono);
         color: var(--color-ink-600);
@@ -133,37 +110,6 @@
         padding: var(--space-sm) 0 var(--space-xs);
     }
 
-    .post-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        gap: var(--space-md);
-        padding: var(--space-sm) 0;
-        border-bottom: 1px dashed var(--surface-color);
-        text-decoration: none;
-        color: inherit;
-        transition: background-color var(--duration-fast) var(--ease-out-quart);
-    }
-
-    .post-row:hover {
-        background-color: var(--surface-raised);
-        padding-left: var(--space-sm);
-        padding-right: var(--space-sm);
-        margin-left: calc(-1 * var(--space-sm));
-        margin-right: calc(-1 * var(--space-sm));
-    }
-
-    .post-title {
-        font-weight: 600;
-    }
-
-    .post-date {
-        font-size: var(--text-xs);
-        color: var(--color-ink-600);
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
     .load-more {
         padding: var(--space-sm) var(--space-lg);
         border: 1px solid var(--surface-color);
@@ -173,12 +119,5 @@
         cursor: pointer;
         font-size: var(--text-sm);
         font-family: var(--font-family);
-    }
-
-    @media (max-width: 560px) {
-        .post-row {
-            flex-direction: column;
-            gap: var(--space-2xs);
-        }
     }
 </style>
