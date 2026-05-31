@@ -81,12 +81,11 @@
     {/each}
 
     {#if hasMore}
-        <div style="padding: var(--space-lg) 0;">
+        <div style="padding: var(--space-lg) 0; text-align: center;">
             <button
                 onclick={loadMore}
                 disabled={loading}
-                class="section-link"
-                style="background: none; border: none; cursor: pointer; font-family: var(--font-family);"
+                type="button"
             >
                 {loading ? 'Loading...' : 'Load more'}
             </button>
