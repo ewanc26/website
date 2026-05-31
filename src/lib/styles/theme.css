@@ -258,7 +258,7 @@ mark {
   );
   color: var(--color-ink-950);
   padding: 0.1em 0.25em;
-  border-radius: 3px;
+  border-radius: 8px;
 }
 
 small {
@@ -306,7 +306,7 @@ code {
   color: var(--color-accent-600);
   background-color: var(--surface-raised);
   padding: 0.15em 0.4em;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 1px solid var(--surface-color);
 }
 
@@ -317,7 +317,7 @@ pre {
   color: var(--color-ink-800);
   background-color: var(--surface-raised);
   border: 1px solid var(--surface-color);
-  border-radius: 6px;
+  border-radius: 8px;
   padding: var(--space-md);
   overflow-x: auto;
   margin-top: 0;
@@ -341,7 +341,7 @@ kbd {
   background-color: var(--surface-raised);
   border: 1px solid var(--color-canvas-300);
   border-bottom-width: 2px;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 0.1em 0.4em;
 }
 
@@ -434,7 +434,7 @@ svg:not([class]) {
 }
 
 img {
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 figure {
@@ -517,7 +517,7 @@ select {
   color: var(--color-ink-900);
   background-color: var(--surface-raised);
   border: 1px solid var(--surface-color);
-  border-radius: 4px;
+  border-radius: 8px;
   padding: var(--space-xs) var(--space-sm);
   width: 100%;
   line-height: 1.5;
@@ -558,7 +558,7 @@ input[type="reset"] {
   color: var(--color-canvas-50);
   background-color: var(--color-primary-500);
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: var(--space-xs) var(--space-sm);
   cursor: pointer;
   line-height: 1.5;
@@ -582,7 +582,7 @@ input[type="submit"]:disabled {
 
 fieldset {
   border: 1px solid var(--surface-color);
-  border-radius: 4px;
+  border-radius: 8px;
   padding: var(--space-md);
   margin-bottom: var(--space-md);
 }
@@ -598,7 +598,7 @@ legend {
 
 details {
   border: 1px solid var(--surface-color);
-  border-radius: 4px;
+  border-radius: 8px;
   padding: var(--space-sm) var(--space-md);
   margin-bottom: var(--space-sm);
 }
@@ -617,7 +617,7 @@ summary {
   gap: var(--space-xs);
   margin: calc(-1 * var(--space-sm)) calc(-1 * var(--space-md));
   padding: var(--space-sm) var(--space-md);
-  border-radius: 3px;
+  border-radius: 8px;
   transition: background-color var(--duration-fast) var(--ease-out-quart);
 }
 
