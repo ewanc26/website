@@ -489,7 +489,9 @@
   .id-code {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
-    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Responsive */
