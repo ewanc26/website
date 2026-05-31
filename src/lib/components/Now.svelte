@@ -5,7 +5,7 @@
 </script>
 
 {#if kibunStatus}
-    <div style="margin: var(--space-lg) 0; padding: var(--space-md); border: 1px solid var(--color-accent-200); border-radius: var(--radius-md); background-color: var(--color-canvas-100);">
+    <div style="margin: var(--space-lg) 0; padding: var(--space-md); border: 1px solid var(--color-accent-200); border-radius: var(--radius-lg); background-color: var(--color-canvas-100);">
         <div style="margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-sm);">
             <span style="font-size: var(--text-sm); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary-600);">
                 Current Status
