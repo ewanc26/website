@@ -200,7 +200,6 @@
 <style>
 	.page-hd {
 		padding: var(--space-lg) 0;
-		border-bottom: 1px solid var(--surface-color);
 	}
 
 	.page-title {

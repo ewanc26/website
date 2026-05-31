@@ -93,7 +93,6 @@
 <style>
     .page-hd {
         padding: var(--space-lg) 0;
-        border-bottom: 1px solid var(--surface-color);
     }
 
     .page-title {
@@ -120,7 +119,6 @@
         letter-spacing: 0.1em;
         text-transform: uppercase;
         padding: var(--space-lg) 0 var(--space-sm);
-        border-bottom: 1px solid var(--surface-color);
     }
 
     .month-label {

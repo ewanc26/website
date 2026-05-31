@@ -66,7 +66,6 @@
 <style>
   .hero {
     padding: var(--space-xl) 0 var(--space-lg);
-    border-bottom: 1px solid var(--surface-color);
   }
 
   .hero-title {
@@ -85,7 +84,6 @@
 
   .home-section {
     padding: var(--space-lg) 0;
-    border-bottom: 1px solid var(--surface-color);
   }
 
   .section-title {

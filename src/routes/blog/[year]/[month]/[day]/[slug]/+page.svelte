@@ -68,7 +68,6 @@
 <style>
     .post-hd {
         padding: var(--space-lg) 0;
-        border-bottom: 1px solid var(--surface-color);
     }
 
     .post-title {
@@ -110,14 +109,12 @@
         max-width: 70ch;
         margin-top: var(--space-lg);
         padding-top: var(--space-lg);
-        border-top: 1px solid var(--surface-color);
     }
 
     /* Comments */
     .comments-section {
         margin-top: var(--space-lg);
         padding-top: var(--space-lg);
-        border-top: 1px solid var(--surface-color);
     }
 
     .comments-title {
@@ -174,7 +171,6 @@
     .post-footer {
         margin-top: var(--space-lg);
         padding-top: var(--space-lg);
-        border-top: 1px solid var(--surface-color);
         display: flex;
         flex-direction: column;
         gap: var(--space-xs);
