@@ -7,7 +7,7 @@
     const fullTitle = $derived(title ? `${title} — ${SITE.title}` : SITE.title);
     const fullDescription = $derived(description ?? SITE.description);
     const canonicalUrl = $derived(`${page.url.origin}${page.url.pathname}`);
-    const ogImage = $derived(image ?? `${page.url.origin}/og/${encodeURIComponent(title ?? SITE.title)}${ogType ? `?type=${encodeURIComponent(ogType)}` : ''}`);
+    const ogImage = $derived(image ?? `${page.url.origin}/og/generate?title=${encodeURIComponent(title ?? SITE.title)}${ogType ? `&type=${encodeURIComponent(ogType)}` : ''}`);
 </script>
 
 <svelte:head>
