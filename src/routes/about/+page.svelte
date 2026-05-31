@@ -64,6 +64,11 @@
 
 <main class="shell-wide">
   <header class="page-hd">
+    {#if profile.banner}
+      <div class="about-banner">
+        <img src={profile.banner} alt="" class="about-banner-img" />
+      </div>
+    {/if}
     <div class="about-hero">
       {#if profile.avatar}
         <img src={profile.avatar} alt="{profile.displayName}'s avatar" class="about-avatar" />
@@ -211,13 +216,32 @@
 
 <style>
   .page-hd {
-    padding: var(--space-lg) 0;
+    padding-bottom: var(--space-lg);
+  }
+
+  .about-banner {
+    width: calc(100% + var(--space-lg) * 2);
+    margin-left: calc(-1 * var(--space-lg));
+    margin-right: calc(-1 * var(--space-lg));
+    height: 200px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--surface-color);
+  }
+
+  .about-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .about-hero {
     display: flex;
-    gap: var(--space-lg);
-    align-items: flex-start;
+    gap: var(--space-md);
+    align-items: flex-end;
+    margin-top: calc(-1 * var(--space-lg) - 40px);
+    position: relative;
+    z-index: 1;
   }
 
   .about-avatar {
@@ -226,6 +250,8 @@
     border-radius: 4px;
     object-fit: cover;
     flex-shrink: 0;
+    border: 3px solid var(--color-canvas-50);
+    background: var(--color-canvas-50);
   }
 
   .page-title {
@@ -505,15 +531,21 @@
   }
 
   @media (max-width: 560px) {
+    .about-banner {
+      height: 120px;
+    }
+
     .about-hero {
+      margin-top: calc(-1 * var(--space-md) - 24px);
       flex-direction: column;
-      align-items: center;
-      text-align: center;
+      align-items: flex-start;
+      gap: var(--space-sm);
     }
 
     .about-avatar {
-      width: 64px;
-      height: 64px;
+      width: 56px;
+      height: 56px;
+      border-width: 2px;
     }
   }
 </style>
