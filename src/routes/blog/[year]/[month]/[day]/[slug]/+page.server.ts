@@ -9,6 +9,10 @@ import { error } from "@sveltejs/kit";
 import { normalizeSlug } from "$lib/utils/slugify";
 import { renderMarkdown } from "$lib/utils/markdown";
 import { leafletProvider } from "$lib/providers/leaflet";
+import {
+  serialiseBlocks,
+  type SerialisedBlock,
+} from "$lib/providers/serialise";
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
   const { year, month, day, slug } = params;
@@ -38,31 +42,42 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
     throw error(404, "Post not found");
   }
 
-  let markdown = "";
+  // Serialise Leaflet blocks — replaces BlobRef/CID instances with PDS URLs
+  let blocks: SerialisedBlock[] = [];
+  let renderedContent = "";
+
   if (
     post.content &&
     typeof post.content === "object" &&
     leafletProvider.matches(post.content)
   ) {
+    // Native block rendering: serialise blocks for Svelte components
+    blocks = await serialiseBlocks(post.content, PUBLIC_ATPROTO_DID, fetchBlob);
+
+    // Fallback: also render markdown for search, RSS, and non-JS contexts
     const result = await leafletProvider.toMarkdown(post.content, {
       fetchBlob,
     });
-    markdown = result.markdown;
+    renderedContent = await renderMarkdown(result.markdown);
   } else {
-    markdown =
+    const markdown =
       typeof post.content === "string" ? post.content : post.textContent || "";
+    renderedContent = await renderMarkdown(markdown);
   }
-
-  const renderedContent = await renderMarkdown(markdown);
 
   // Fetch comments via Constellation + Slingshot
   const comments = await fetchComments(post.uri, fetch);
 
+  // Strip raw content before serialisation — it contains BlobRef/CID class
+  // instances that SvelteKit cannot dehydrate across the server boundary.
+  const { content: _content, ...serialisable } = post;
+
   return {
     post: {
-      ...post,
+      ...serialisable,
       createdAt: post.publishedAt,
       renderedContent,
+      blocks,
     },
     blog: blogPublication
       ? {

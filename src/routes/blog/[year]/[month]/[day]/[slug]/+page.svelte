@@ -2,10 +2,14 @@
     import ShareButtons from '$lib/components/ShareButtons.svelte';
     import SiteHead from '$lib/components/SiteHead.svelte';
     import TableOfContents from '$lib/components/TableOfContents.svelte';
+    import LeafletBlocks from '$lib/components/leaflet/LeafletBlocks.svelte';
     import { Rss, MessageCircle } from '@lucide/svelte';
     import { page } from '$app/state';
 
     let { data } = $props();
+
+    /** Use native block rendering when blocks are available. */
+    let useBlocks = $derived(data.post.blocks && data.post.blocks.length > 0);
 </script>
 
 <SiteHead title={data.post.title} description={data.blog?.description} />
@@ -24,7 +28,11 @@
         </aside>
         <div class="post-body">
             <article class="prose">
-                {@html data.post.renderedContent}
+                {#if useBlocks}
+                    <LeafletBlocks blocks={data.post.blocks} />
+                {:else}
+                    {@html data.post.renderedContent}
+                {/if}
             </article>
 
             <div class="post-after">
