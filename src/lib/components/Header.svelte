@@ -1,7 +1,7 @@
 <script lang="ts">
     import { SITE, NAV_LINKS } from '$lib/config';
     import { page } from '$app/state';
-    import { Menu, X } from 'lucide-svelte';
+    import { Menu, X } from '@lucide/svelte';
 
     let isMenuOpen = $state(false);
 </script>
