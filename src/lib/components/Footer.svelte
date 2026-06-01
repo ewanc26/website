@@ -5,8 +5,9 @@
 
 <footer class="site-footer">
     <div class="footer-symbols">
-        <Pentacle size={16} />
-        <Triskele size={16} />
+        <Pentacle size={14} />
+        <span class="symbol-sep"></span>
+        <Triskele size={14} />
     </div>
     <p>&copy; {new Date().getFullYear()} ewan croft</p>
     <nav class="footer-nav">

@@ -3,6 +3,7 @@
     import SiteHead from '$lib/components/SiteHead.svelte';
     import TableOfContents from '$lib/components/TableOfContents.svelte';
     import LeafletBlocks from '$lib/components/leaflet/LeafletBlocks.svelte';
+    import Pentacle from '$lib/components/icons/Pentacle.svelte';
     import { Rss, MessageCircle } from '@lucide/svelte';
     import { page } from '$app/state';
 
@@ -33,6 +34,10 @@
                 {:else}
                     {@html data.post.renderedContent}
                 {/if}
+
+                <div class="post-end-marker">
+                    <Pentacle size={20} />
+                </div>
             </article>
 
             <div class="post-after">

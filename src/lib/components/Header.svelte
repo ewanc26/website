@@ -2,12 +2,16 @@
     import { SITE, NAV_LINKS } from '$lib/config';
     import { page } from '$app/state';
     import { Menu, X } from '@lucide/svelte';
+    import Triskele from './icons/Triskele.svelte';
 
     let isMenuOpen = $state(false);
 </script>
 
 <nav class="nav">
-    <a href="/" class="nav-brand">{SITE.title}</a>
+    <a href="/" class="nav-brand">
+        <Triskele size={14} />
+        {SITE.title}
+    </a>
     
     <button class="menu-toggle" onclick={() => isMenuOpen = !isMenuOpen}>
         {#if isMenuOpen}
