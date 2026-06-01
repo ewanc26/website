@@ -142,6 +142,31 @@
       dont: 'Present every project as a finished, perfect product.',
     },
   ];
+
+  const assets = {
+    favicon: {
+      path: '/favicon.svg',
+      size: '32×32',
+      format: 'SVG',
+      usage: 'Browser tab, bookmarks, shortcuts',
+    },
+    ogImage: {
+      endpoint: '/og/generate',
+      size: '1200×630',
+      format: 'SVG (dynamic)',
+      params: ['title', 'type'],
+      usage: 'Open Graph, Twitter cards',
+    },
+  };
+
+  const ogColours = [
+    { token: 'bg', value: '#1a201c', desc: 'ink-950 dark' },
+    { token: 'surface', value: '#222a26', desc: 'surface-raised' },
+    { token: 'border', value: '#3a4643', desc: 'surface-color' },
+    { token: 'primary', value: '#a6e3a1', desc: 'primary-500' },
+    { token: 'text', value: '#d9e4de', desc: 'ink-50' },
+    { token: 'textMuted', value: '#a0b0a8', desc: 'ink-500' },
+  ];
 </script>
 
 <SiteHead
@@ -176,7 +201,8 @@
         <li><a href="#components">08 Components</a></li>
         <li><a href="#layout">09 Layout</a></li>
         <li><a href="#voice">10 Voice & Tone</a></li>
-        <li><a href="#manifesto">11 Manifesto</a></li>
+        <li><a href=\"#manifesto\">11 Manifesto</a></li>
+        <li><a href=\"#assets\">12 Assets</a></li>
       </ul>
     </nav>
 
@@ -566,6 +592,59 @@
                 </div>
               </article>
             {/each}
+          </div>
+        </div>
+      </section>
+
+      <!-- ── [12] Assets ─────────────────────────────── -->
+      <section class="spec-section assets" id="assets">
+        <header class="section-hd">
+          <span class="section-num">[12]</span>
+          <h2 class="section-title">Assets</h2>
+        </header>
+        <div class="section-content">
+          <p class="section-intro">
+            Core brand assets and dynamic generation endpoints.
+          </p>
+
+          <div class="asset-grid">
+            <div class="asset-card">
+              <h3 class="sub-title">Favicon</h3>
+              <div class="asset-preview favicon-preview">
+                <img src={assets.favicon.path} alt="Favicon" width="32" height="32" />
+              </div>
+              <dl class="asset-meta">
+                <div><dt>PATH</dt><dd><code>{assets.favicon.path}</code></dd></div>
+                <div><dt>SIZE</dt><dd>{assets.favicon.size}</dd></div>
+                <div><dt>FORMAT</dt><dd>{assets.favicon.format}</dd></div>
+              </dl>
+            </div>
+
+            <div class="asset-card og-card">
+              <h3 class="sub-title">Open Graph (Dynamic)</h3>
+              <div class="asset-preview og-preview">
+                <img 
+                  src="{assets.ogImage.endpoint}?title=Brand%20Kit&type=TECHNICAL%20SPEC" 
+                  alt="OG Image Preview" 
+                  class="og-img"
+                />
+              </div>
+              <div class="og-info-grid">
+                <dl class="asset-meta">
+                  <div><dt>ENDPOINT</dt><dd><code>{assets.ogImage.endpoint}</code></dd></div>
+                  <div><dt>SIZE</dt><dd>{assets.ogImage.size}</dd></div>
+                  <div><dt>PARAMS</dt><dd><code>{assets.ogImage.params.join(', ')}</code></dd></div>
+                </dl>
+                <div class="og-colours">
+                  <span class="meta-label">OG COLOUR PALETTE</span>
+                  <div class="og-swatches">
+                    {#each ogColours as c}
+                      <div class="og-swatch" style="background: {c.value};" title="{c.token}: {c.value} ({c.desc})"></div>
+                    {/each}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1252,6 +1331,102 @@
     margin: 0;
     line-height: 1.6;
     max-width: 60ch;
+  }
+
+  /* Assets */
+  .asset-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .asset-card {
+    border: 1px solid var(--surface-color);
+    background: var(--surface-raised);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+  }
+
+  .asset-preview {
+    background: var(--surface-sunken);
+    border: 1px solid var(--surface-color);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-md);
+    overflow: hidden;
+  }
+
+  .favicon-preview {
+    width: 64px;
+    height: 64px;
+  }
+
+  .og-preview {
+    aspect-ratio: 1200 / 630;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .og-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .asset-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+  }
+
+  .asset-meta dt {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--color-ink-500);
+    margin-bottom: 2px;
+  }
+
+  .asset-meta dd {
+    margin: 0;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-ink-950);
+  }
+
+  .og-info-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-xl);
+    align-items: end;
+  }
+
+  .meta-label {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--color-ink-500);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .og-swatches {
+    display: flex;
+    gap: 4px;
+  }
+
+  .og-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid var(--surface-color);
+  }
+
+  @media (max-width: 600px) {
+    .og-info-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   /* Utils */

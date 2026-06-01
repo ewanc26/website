@@ -216,36 +216,3 @@
 		<p class="empty-state">No site information available.</p>
 	{/if}
 </main>
-
-<style>
-	.error { color: var(--color-accent-500); }
-	.empty-state { opacity: 0.6; }
-
-	/* Base Layout */
-	.spec-header { margin-bottom: 0; }
-	.page-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin: var(--space-sm) 0; }
-	.spec-abstract { max-width: 100%; font-size: var(--text-md); color: var(--color-ink-700); line-height: 1.5; }
-
-	.spec-content { display: flex; flex-direction: column; gap: var(--space-lg); }
-
-	/* Section Styling */
-	.spec-section { scroll-margin-top: var(--space-md); }
-	.section-hd { margin-bottom: var(--space-xs); }
-	.section-num { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-primary-500); font-weight: 700; }
-	.section-title { font-size: var(--text-md); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; margin: 0; }
-	.section-intro { font-size: var(--text-sm); color: var(--color-ink-700); max-width: 100%; margin-bottom: var(--space-sm); }
-
-	.sidebar-group { margin-bottom: var(--space-md); }
-	.sub-heading { font-size: var(--text-sm); font-weight: 700; margin-bottom: var(--space-xs); color: var(--color-ink-600); }
-	.meta-list { display: flex; flex-direction: column; gap: var(--space-xs); }
-	.credit-name { font-weight: 600; }
-
-	.meta-card { padding: var(--space-sm); border: 1px solid var(--surface-color); border-radius: var(--radius-md); max-width: 100%; }
-	.meta-card-row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-sm); }
-	.meta-card-link { color: inherit; text-decoration: none; display: inline-flex; align-items: baseline; gap: var(--space-xs); transition: color var(--duration-fast) var(--ease-out-quart); }
-	.meta-card-link:hover { color: var(--color-primary-500); }
-	.meta-card-desc { margin: var(--space-2xs) 0 0; font-size: var(--text-sm); color: var(--color-ink-600); }
-	.meta-tags { display: flex; gap: var(--space-xs); margin-top: var(--space-2xs); }
-	.meta-tag { font-size: var(--text-xs); padding: 2px 6px; border: 1px solid var(--surface-color); border-radius: var(--radius-sm); background: var(--surface-raised); }
-	.meta-tag--accent { background: var(--color-primary-900); color: var(--color-primary-400); border-color: var(--color-primary-800); }
-</style>

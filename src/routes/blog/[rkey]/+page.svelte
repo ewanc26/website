@@ -11,23 +11,3 @@
         {@html data.post.content}
     </article>
 </main>
-
-<style>
-    .rkey-page {
-        padding-top: var(--space-lg);
-    }
-
-    .rkey-hd {
-        padding-bottom: var(--space-md);
-        border-bottom: 1px solid var(--surface-color);
-    }
-
-    .rkey-date {
-        font-size: var(--text-sm);
-        color: var(--color-ink-600);
-    }
-
-    .rkey-prose {
-        padding: var(--space-lg) 0;
-    }
-</style>
