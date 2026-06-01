@@ -2,6 +2,9 @@
 
 Personal site for Anglo-Scottish pagan, poet, and programmer Ewan Croft.
 
+## Design
+The site's visual identity is built on technical integrity, using an OKLCH-based colour system (green-tinted neutrals at 150°) and a modular 4pt spacing scale. Decorative elements feature traditional pagan symbolism (pentacle and triskele).
+
 ## Pages
 - [About](/about)
 - [Blog](/blog)
