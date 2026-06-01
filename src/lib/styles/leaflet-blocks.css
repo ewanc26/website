@@ -1,0 +1,341 @@
+@layer components {
+  /* ================================================================
+   * leaflet-blocks.css — Native Leaflet block rendering
+   *
+   * Styles for LeafletBlocks.svelte and its child components.
+   * Uses the same design tokens as prose.css for visual consistency.
+   * ================================================================ */
+
+  /* ── Text blocks ─────────────────────────────────────────────── */
+
+  .leaflet-text {
+    margin-top: 0;
+    margin-bottom: var(--space-md);
+  }
+
+  .leaflet-text:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Headings ───────────────────────────────────────────────── */
+
+  .leaflet-h1,
+  .leaflet-h2,
+  .leaflet-h3,
+  .leaflet-h4,
+  .leaflet-h5,
+  .leaflet-h6 {
+    color: var(--color-ink-950);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  .leaflet-h1 {
+    font-size: var(--text-xl);
+  }
+  .leaflet-h2 {
+    font-size: var(--text-lg);
+    font-weight: 700;
+  }
+  .leaflet-h3 {
+    font-size: var(--text-md);
+    font-weight: 700;
+  }
+  .leaflet-h4 {
+    font-size: var(--text-md);
+    font-weight: 600;
+    opacity: 0.9;
+  }
+  .leaflet-h5 {
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+  .leaflet-h6 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    opacity: 0.7;
+  }
+
+  :is(
+    .leaflet-h1,
+    .leaflet-h2,
+    .leaflet-h3,
+    .leaflet-h4,
+    .leaflet-h5,
+    .leaflet-h6
+  ):first-child {
+    margin-top: 0;
+  }
+
+  /* ── Blockquote ────────────────────────────────────────────── */
+
+  .leaflet-blockquote {
+    border-left: 3px solid var(--color-primary-500);
+    padding: var(--space-sm) 0 var(--space-sm) var(--space-md);
+    margin: var(--space-md) 0;
+    color: var(--color-ink-700);
+    font-style: italic;
+  }
+
+  /* ── Code blocks ────────────────────────────────────────────── */
+
+  .leaflet-code {
+    font-family:
+      "JetBrains Mono", ui-monospace, "Cascadia Code", "Fira Code", Menlo,
+      monospace;
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    color: var(--color-ink-800);
+    background-color: var(--surface-raised);
+    border: 1px solid var(--surface-color);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    overflow-x: auto;
+    margin: var(--space-md) 0;
+  }
+
+  /* ── Math blocks ────────────────────────────────────────────── */
+
+  .leaflet-math {
+    font-family:
+      "JetBrains Mono", ui-monospace, "Cascadia Code", "Fira Code", Menlo,
+      monospace;
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    color: var(--color-ink-800);
+    background-color: var(--surface-raised);
+    border: 1px solid var(--surface-color);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    overflow-x: auto;
+    margin: var(--space-md) 0;
+  }
+
+  /* ── Horizontal rule ────────────────────────────────────────── */
+
+  .leaflet-hr {
+    border: none;
+    border-top: 1px solid var(--surface-color);
+    margin: var(--space-lg) 0;
+  }
+
+  /* ── Images ─────────────────────────────────────────────────── */
+
+  .leaflet-image {
+    margin: var(--space-md) 0;
+  }
+
+  .leaflet-image img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+  }
+
+  .leaflet-image.full-bleed img {
+    border-radius: 0;
+    max-width: none;
+    width: 100%;
+  }
+
+  .leaflet-image-alt {
+    margin-top: var(--space-xs);
+    font-size: var(--text-xs);
+    color: var(--color-ink-600);
+    text-align: center;
+  }
+
+  /* ── Lists ──────────────────────────────────────────────────── */
+
+  .leaflet-list {
+    margin-top: 0;
+    margin-bottom: var(--space-md);
+    padding-left: var(--space-lg);
+  }
+
+  .leaflet-list.ordered {
+    list-style-type: decimal;
+  }
+
+  .leaflet-list.nested {
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-xs);
+  }
+
+  .leaflet-list-item {
+    margin-bottom: var(--space-xs);
+    line-height: 1.7;
+  }
+
+  .leaflet-list-item:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Checklist items */
+  .leaflet-list-item:has(> input[type="checkbox"]) {
+    list-style: none;
+    margin-left: calc(-1 * var(--space-md));
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+  }
+
+  .leaflet-list-item input[type="checkbox"] {
+    accent-color: var(--color-primary-500);
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+  }
+
+  /* Marker colours */
+  .leaflet-list:not(.ordered) > .leaflet-list-item::marker {
+    color: var(--color-primary-500);
+  }
+
+  .leaflet-list.ordered > .leaflet-list-item::marker {
+    color: var(--color-ink-600);
+    font-weight: 600;
+  }
+
+  /* ── Embeds ─────────────────────────────────────────────────── */
+
+  .leaflet-embed {
+    margin: var(--space-md) 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--surface-color);
+  }
+
+  .leaflet-embed iframe {
+    width: 100%;
+    border: none;
+  }
+
+  /* ── Website card ───────────────────────────────────────────── */
+
+  .leaflet-website-card {
+    display: flex;
+    border: 1px solid var(--surface-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--color-ink-900);
+    margin: var(--space-md) 0;
+    transition:
+      background-color var(--duration-fast) var(--ease-out-quart),
+      border-color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .leaflet-website-card:hover {
+    background-color: var(--surface-raised);
+    border-color: var(--color-primary-500);
+  }
+
+  .website-card-image {
+    width: 120px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .website-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .website-card-body {
+    padding: var(--space-sm) var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    min-width: 0;
+  }
+
+  .website-card-title {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-ink-950);
+  }
+
+  .website-card-desc {
+    font-size: var(--text-xs);
+    color: var(--color-ink-600);
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .website-card-url {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--text-xs);
+    color: var(--color-ink-500);
+  }
+
+  /* ── Button ─────────────────────────────────────────────────── */
+
+  .leaflet-button {
+    margin: var(--space-md) 0;
+  }
+
+  .leaflet-button a {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-lg);
+    background-color: var(--color-primary-500);
+    color: var(--color-ink-950);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--text-sm);
+    transition:
+      background-color var(--duration-fast) var(--ease-out-quart),
+      color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .leaflet-button a:hover {
+    background-color: var(--color-primary-400);
+  }
+
+  /* ── Bluesky post embed ─────────────────────────────────────── */
+
+  .leaflet-bsky-post {
+    margin: var(--space-md) 0;
+    padding: var(--space-md);
+    border: 1px solid var(--surface-color);
+    border-radius: var(--radius-lg);
+    background-color: var(--surface-raised);
+  }
+
+  .bsky-post-link {
+    color: var(--color-primary-500);
+    text-decoration: none;
+    font-size: var(--text-sm);
+  }
+
+  .bsky-post-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Unsupported block placeholder ──────────────────────────── */
+
+  .leaflet-unsupported {
+    margin: var(--space-md) 0;
+    padding: var(--space-sm) var(--space-md);
+    border: 1px dashed var(--surface-color);
+    border-radius: var(--radius-md);
+    font-size: var(--text-xs);
+    color: var(--color-ink-500);
+    text-align: center;
+  }
+
+  .leaflet-unsupported a {
+    color: var(--color-primary-500);
+  }
+}
