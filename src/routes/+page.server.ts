@@ -69,11 +69,14 @@ export const load: PageServerLoad = async ({ fetch }) => {
         url,
       })),
     publications: otherPublications,
-    projects: sifaProjects.slice(0, 6).map(({ name, description, url }) => ({
-      name,
-      description: description ?? "",
-      url: url ?? "",
-    })),
+    projects: sifaProjects
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 6)
+      .map(({ name, description, url }) => ({
+        name,
+        description: description ?? "",
+        url: url ?? "",
+      })),
     links:
       links?.cards
         ?.slice(0, 8)
