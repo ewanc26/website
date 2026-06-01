@@ -121,7 +121,38 @@
 .leaflet-hr {
   border: none;
   border-top: 1px solid var(--surface-color);
+  margin: 0;
+  flex: 1;
+}
+
+.leaflet-hr-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
   margin: var(--space-lg) 0;
+}
+
+.leaflet-hr-symbol {
+  color: var(--color-primary-500);
+  opacity: 0.4;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.leaflet-hr-symbol::before,
+.leaflet-hr-symbol::after {
+  content: "";
+  height: 1px;
+  background: var(--surface-color);
+  width: var(--space-md);
+}
+
+.leaflet-hr-symbol::before {
+  margin-right: var(--space-sm);
+}
+.leaflet-hr-symbol::after {
+  margin-left: var(--space-sm);
 }
 
 /* ── Images ─────────────────────────────────────────────────── */
