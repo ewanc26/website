@@ -629,21 +629,21 @@
   .shell-wide {
     max-width: 72rem;
     margin-inline: auto;
-    padding: 0 var(--space-lg);
+    padding: 0 var(--space-lg) var(--space-2xl);
   }
 
   /* Prose shell — blog posts (wide enough for TOC sidebar + content) */
   .shell-prose {
     max-width: 72rem;
     margin-inline: auto;
-    padding: 0 var(--space-lg);
+    padding: 0 var(--space-lg) var(--space-2xl);
   }
 
   /* Narrow shell — subscriptions, support */
   .shell-narrow {
     max-width: 48rem;
     margin-inline: auto;
-    padding: 0 var(--space-lg);
+    padding: 0 var(--space-lg) var(--space-2xl);
   }
 
   @media (max-width: 560px) {
