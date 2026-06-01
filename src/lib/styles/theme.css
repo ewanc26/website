@@ -102,11 +102,11 @@
   /* ── Links ──────────────────────────────────────────────────── */
 
   a {
-    color: light-dark(var(--color-ink-950), var(--color-canvas-50));
+    color: var(--color-ink-950);
     text-decoration: underline;
     text-decoration-color: color-mix(
       in oklch,
-      light-dark(var(--color-ink-950), var(--color-canvas-50)) 35%,
+      var(--color-ink-950) 35%,
       transparent
     );
     text-underline-offset: 3px;
