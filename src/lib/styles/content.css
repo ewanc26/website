@@ -87,6 +87,12 @@ li.post-row {
   text-decoration-color: var(--color-primary-500);
 }
 
+.post-row .post-title {
+  font-size: var(--text-md);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 /* ── Link row — external link with inline icon ──────────────── */
 
 .link-row {
