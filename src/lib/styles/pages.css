@@ -428,6 +428,14 @@
   padding-top: var(--space-lg);
 }
 
+.post-end-marker {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-xl);
+  opacity: 0.15;
+  color: var(--color-primary-500);
+}
+
 /* Post footer */
 .post-footer {
   margin-top: var(--space-lg);

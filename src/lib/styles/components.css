@@ -26,6 +26,9 @@
   text-decoration: none;
   color: var(--color-ink-950);
   font-size: var(--text-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
 }
 
 .menu-toggle {
@@ -89,8 +92,20 @@
 
 .footer-symbols {
   display: flex;
+  align-items: center;
   gap: var(--space-xs);
-  opacity: 0.6;
+  opacity: 0.4;
+  transition: opacity var(--duration-normal) var(--ease-out-quart);
+}
+
+.footer-symbols:hover {
+  opacity: 0.8;
+}
+
+.symbol-sep {
+  width: 1px;
+  height: 12px;
+  background: var(--surface-color);
 }
 
 .site-footer p {
