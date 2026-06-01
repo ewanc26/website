@@ -25,7 +25,7 @@
 
 <main class="shell-wide">
   <!-- Hero -->
-  <section class="page-hd">
+  <section class="page-hd hero-hd">
     {#if profile.avatar}
       <img src={profile.avatar} alt="" class="hero-avatar" />
     {/if}

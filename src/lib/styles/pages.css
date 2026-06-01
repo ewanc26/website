@@ -11,8 +11,21 @@
 .page-hd {
   padding: var(--space-xl) 0 var(--space-lg);
   display: flex;
-  gap: var(--space-lg);
+  flex-direction: column;
+  gap: var(--space-sm);
   align-items: flex-start;
+}
+
+.hero-hd {
+  flex-direction: row;
+  gap: var(--space-lg);
+}
+
+@media (max-width: 640px) {
+  .hero-hd {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
 }
 
 .hero-text {
