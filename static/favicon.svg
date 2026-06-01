@@ -1,0 +1,12 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill: oklch(17.5% 0.012 150); }
+    .fg { fill: oklch(78.5% 0.095 150); }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: oklch(22% 0.015 150); }
+    }
+  </style>
+  <rect class="bg" width="32" height="32" rx="7"/>
+  <!-- Refined E: Symmetrical bars for better balance -->
+  <path class="fg" d="M7 26V6H25V10H13V14H25V18H13V22H25V26H7Z"/>
+</svg>
