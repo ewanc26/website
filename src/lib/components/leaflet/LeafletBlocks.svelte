@@ -50,6 +50,21 @@
 
   let { blocks }: { blocks: SerialisedBlock[] } = $props();
 
+  /** Track heading slugs for duplicate disambiguation. */
+  const headingCounts = new Map<string, number>();
+
+  /** Generate a heading id matching rehype-slug output. */
+  function headingId(text: string): string {
+    const base = text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-");
+    const count = headingCounts.get(base) ?? 0;
+    headingCounts.set(base, count + 1);
+    return count === 0 ? base : `${base}-${count}`;
+  }
+
   function alignmentClass(alignment?: string): string {
     if (!alignment) return "";
     if (alignment.endsWith("textAlignCenter")) return "text-center";
@@ -89,28 +104,29 @@
 
   {:else if $type === B("header")}
     {@const level = Math.min(Math.max((inner.level as number) ?? 1, 1), 6)}
+    {@const hid = headingId(getPlaintext(inner))}
     {#if level === 1}
-      <h1 class="leaflet-h1{align ? ` ${align}` : ''}">
+      <h1 id={hid} class="leaflet-h1{align ? ` ${align}` : ''}">
         <LeafletFacets plaintext={getPlaintext(inner)} facets={getFacets(inner)} schema={SCHEMA} />
       </h1>
     {:else if level === 2}
-      <h2 class="leaflet-h2{align ? ` ${align}` : ''}">
+      <h2 id={hid} class="leaflet-h2{align ? ` ${align}` : ''}">
         <LeafletFacets plaintext={getPlaintext(inner)} facets={getFacets(inner)} schema={SCHEMA} />
       </h2>
     {:else if level === 3}
-      <h3 class="leaflet-h3{align ? ` ${align}` : ''}">
+      <h3 id={hid} class="leaflet-h3{align ? ` ${align}` : ''}">
         <LeafletFacets plaintext={getPlaintext(inner)} facets={getFacets(inner)} schema={SCHEMA} />
       </h3>
     {:else if level === 4}
-      <h4 class="leaflet-h4{align ? ` ${align}` : ''}">
+      <h4 id={hid} class="leaflet-h4{align ? ` ${align}` : ''}">
         <LeafletFacets plaintext={getPlaintext(inner)} facets={getFacets(inner)} schema={SCHEMA} />
       </h4>
     {:else if level === 5}
-      <h5 class="leaflet-h5{align ? ` ${align}` : ''}">
+      <h5 id={hid} class="leaflet-h5{align ? ` ${align}` : ''}">
         <LeafletFacets plaintext={getPlaintext(inner)} facets={getFacets(inner)} schema={SCHEMA} />
       </h5>
     {:else}
-      <h6 class="leaflet-h6{align ? ` ${align}` : ''}">
+      <h6 id={hid} class="leaflet-h6{align ? ` ${align}` : ''}">
         <LeafletFacets plaintext={getPlaintext(inner)} facets={getFacets(inner)} schema={SCHEMA} />
       </h6>
     {/if}

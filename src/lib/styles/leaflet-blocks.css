@@ -126,6 +126,8 @@
 
   .leaflet-image {
     margin: var(--space-md) 0;
+    width: fit-content;
+    max-width: 100%;
   }
 
   .leaflet-image img {
@@ -133,6 +135,10 @@
     max-width: 100%;
     height: auto;
     border-radius: var(--radius-md);
+  }
+
+  .leaflet-image.full-bleed {
+    width: 100%;
   }
 
   .leaflet-image.full-bleed img {
@@ -145,7 +151,6 @@
     margin-top: var(--space-xs);
     font-size: var(--text-xs);
     color: var(--color-ink-600);
-    text-align: center;
   }
 
   /* ── Lists ──────────────────────────────────────────────────── */

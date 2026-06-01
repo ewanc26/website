@@ -107,11 +107,15 @@
     <h2 class="section-heading">Other ways to help</h2>
     <ul class="bare-list">
       <li class="post-row">
-        <strong>Share</strong>
+        <div class="row-stack">
+          <strong>Share</strong>
+        </div>
         <span class="row-meta">Word of mouth</span>
       </li>
       <li class="post-row">
-        <strong>Contribute</strong>
+        <div class="row-stack">
+          <strong>Contribute</strong>
+        </div>
         <span class="row-meta">Bugs, features, PRs</span>
       </li>
     </ul>

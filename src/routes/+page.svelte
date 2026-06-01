@@ -99,7 +99,7 @@
           <li>
             <a href={pub.url} target="_blank" rel="noopener" class="post-row">
               <span class="post-title">{pub.name}</span>
-              <span class="post-date pub-desc">{pub.description}</span>
+              <span class="row-meta">{pub.description}</span>
             </a>
           </li>
         {/each}
@@ -275,12 +275,6 @@
 
   .link-text {
     white-space: nowrap;
-  }
-
-  /* Publication description alignment */
-  .pub-desc {
-    max-width: 50%;
-    text-align: right;
   }
 
   /* Responsive */
