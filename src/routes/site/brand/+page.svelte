@@ -3,6 +3,7 @@
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
   import Pentacle from '$lib/components/icons/Pentacle.svelte';
   import Triskele from '$lib/components/icons/Triskele.svelte';
+  import favicon from '$lib/assets/favicon.svg';
 
   const colorPalettes = [
     {
@@ -145,7 +146,8 @@
 
   const assets = {
     favicon: {
-      path: '/favicon.svg',
+      path: favicon,
+      publicUrl: '/favicon.svg',
       size: '32×32',
       format: 'SVG',
       usage: 'Browser tab, bookmarks, shortcuts',
@@ -614,7 +616,7 @@
                 <img src={assets.favicon.path} alt="Favicon" width="32" height="32" />
               </div>
               <dl class="asset-meta">
-                <div><dt>PATH</dt><dd><code>{assets.favicon.path}</code></dd></div>
+                <div><dt>PATH</dt><dd><code>{assets.favicon.publicUrl}</code></dd></div>
                 <div><dt>SIZE</dt><dd>{assets.favicon.size}</dd></div>
                 <div><dt>FORMAT</dt><dd>{assets.favicon.format}</dd></div>
               </dl>
