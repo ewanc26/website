@@ -23,7 +23,7 @@
 		{#each data.projects as project}
 			<li>
 				<a href={project.path ?? '#'} target="_blank" rel="noopener" class="post-row">
-					<div class="project-info">
+					<div class="row-stack">
 						<strong class="post-title">{project.title}</strong>
 						{#if project.description}
 							<span class="post-date">{project.description}</span>
@@ -34,10 +34,3 @@
 		{/each}
 	</ul>
 </main>
-
-<style>
-	.project-info {
-		display: flex;
-		flex-direction: column;
-	}
-</style>
