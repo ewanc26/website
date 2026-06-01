@@ -2,6 +2,7 @@
     import Pentacle from '$lib/components/icons/Pentacle.svelte';
     import Triskele from '$lib/components/icons/Triskele.svelte';
     import Bluesky from '$lib/components/icons/Bluesky.svelte';
+    import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 </script>
 
 <footer class="site-footer">
@@ -10,7 +11,7 @@
         <span class="symbol-sep"></span>
         <Triskele size={14} />
         <span class="symbol-sep"></span>
-        <a href="https://bsky.app/profile/did:plc:ofrbh253gwicbkc5nktqepol" aria-label="Bluesky" class="footer-icon-link">
+        <a href="https://bsky.app/profile/{PUBLIC_ATPROTO_DID}" aria-label="Bluesky" class="footer-icon-link">
             <Bluesky size={14} />
         </a>
     </div>
