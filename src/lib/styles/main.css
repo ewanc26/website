@@ -1,7 +1,0 @@
-/* main.css */
-@import "tailwindcss";
-
-@import "./tokens.css";
-@import "./theme.css";
-@import "./system.css";
-@import "./content.css";
