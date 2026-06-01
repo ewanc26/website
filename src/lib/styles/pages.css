@@ -1006,7 +1006,7 @@
 
 .table-hd {
   display: grid;
-  grid-template-columns: 120px 1fr 80px;
+  grid-template-columns: 120px 1fr 80px 40px;
   gap: var(--space-md);
   padding: 8px 16px;
   background: var(--color-ink-950);
@@ -1018,7 +1018,7 @@
 
 .table-row {
   display: grid;
-  grid-template-columns: 120px 1fr 80px;
+  grid-template-columns: 120px 1fr 80px 40px;
   gap: var(--space-md);
   padding: 16px;
   border-bottom: 1px solid var(--surface-color);
