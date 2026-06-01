@@ -1,62 +1,66 @@
 @import "./tokens.css";
 @import "./prose.css";
 
-html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-  width: 100%;
-}
-
-@media (prefers-reduced-motion: reduce) {
+@layer base {
   html {
-    scroll-behavior: auto;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
   }
 
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-/* Accessibility Utilities */
-.skip-to-content {
-  position: absolute;
-  left: -9999px;
-  z-index: 999;
-  padding: 1rem 1.5rem;
-  background-color: var(--color-primary-600);
-  color: white;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: var(--radius-lg);
-}
+@layer utilities {
+  /* Accessibility Utilities */
+  .skip-to-content {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 1rem 1.5rem;
+    background-color: var(--color-primary-600);
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+  }
 
-.skip-to-content:focus {
-  left: 1rem;
-  top: 1rem;
-  outline: 2px solid var(--color-primary-800);
-  outline-offset: 2px;
-}
+  .skip-to-content:focus {
+    left: 1rem;
+    top: 1rem;
+    outline: 2px solid var(--color-primary-800);
+    outline-offset: 2px;
+  }
 
-*:focus-visible {
-  outline: 3px solid var(--color-primary-600);
-  outline-offset: 2px;
-  border-radius: var(--radius-lg);
-}
+  *:focus-visible {
+    outline: 3px solid var(--color-primary-600);
+    outline-offset: 2px;
+    border-radius: var(--radius-lg);
+  }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
 }
 
 /* Keyframes */
@@ -109,5 +113,3 @@ html {
     opacity: 1;
   }
 }
-
-/* View Transitions — smooth crossfade between pages */

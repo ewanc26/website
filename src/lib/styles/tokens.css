@@ -6,202 +6,237 @@
  * values. If you're hardcoding a number, it should be here.
  * ================================================================ */
 
-:root {
-  /* ── Colour palette ──────────────────────────────────────── */
+@layer base {
+  :root {
+    /* ── Colour palette ──────────────────────────────────────── */
 
-  /* Ink — Green-tinted text (150°) */
-  --color-ink-50: light-dark(oklch(17.5% 0.012 150), oklch(97.6% 0.008 150));
-  --color-ink-100: light-dark(oklch(25% 0.022 150), oklch(93.2% 0.017 150));
-  --color-ink-200: light-dark(oklch(38.5% 0.037 150), oklch(85.2% 0.032 150));
-  --color-ink-300: light-dark(oklch(50.5% 0.052 150), oklch(75.2% 0.048 150));
-  --color-ink-400: light-dark(oklch(62% 0.065 150), oklch(65.2% 0.062 150));
-  --color-ink-500: light-dark(oklch(73% 0.078 150), oklch(55.2% 0.078 150));
-  --color-ink-600: light-dark(oklch(78% 0.062 150), oklch(45.2% 0.065 150));
-  --color-ink-700: light-dark(oklch(83.5% 0.048 150), oklch(35.2% 0.052 150));
-  --color-ink-800: light-dark(oklch(89% 0.032 150), oklch(25.2% 0.037 150));
-  --color-ink-900: light-dark(oklch(94.5% 0.017 150), oklch(18.2% 0.022 150));
-  --color-ink-950: light-dark(oklch(97.6% 0.008 150), oklch(12.5% 0.012 150));
+    /* Ink — Green-tinted text (150°) */
+    --color-ink-50: light-dark(oklch(17.5% 0.012 150), oklch(97.6% 0.008 150));
+    --color-ink-100: light-dark(oklch(25% 0.022 150), oklch(93.2% 0.017 150));
+    --color-ink-200: light-dark(oklch(38.5% 0.037 150), oklch(85.2% 0.032 150));
+    --color-ink-300: light-dark(oklch(50.5% 0.052 150), oklch(75.2% 0.048 150));
+    --color-ink-400: light-dark(oklch(62% 0.065 150), oklch(65.2% 0.062 150));
+    --color-ink-500: light-dark(oklch(73% 0.078 150), oklch(55.2% 0.078 150));
+    --color-ink-600: light-dark(oklch(78% 0.062 150), oklch(45.2% 0.065 150));
+    --color-ink-700: light-dark(oklch(83.5% 0.048 150), oklch(35.2% 0.052 150));
+    --color-ink-800: light-dark(oklch(89% 0.032 150), oklch(25.2% 0.037 150));
+    --color-ink-900: light-dark(oklch(94.5% 0.017 150), oklch(18.2% 0.022 150));
+    --color-ink-950: light-dark(oklch(97.6% 0.008 150), oklch(12.5% 0.012 150));
 
-  /* Canvas — Green-tinted backgrounds (150°) */
-  --color-canvas-50: light-dark(oklch(17.8% 0.014 150), oklch(98.6% 0.005 150));
-  --color-canvas-100: light-dark(
-    oklch(25.8% 0.025 150),
-    oklch(96.6% 0.011 150)
-  );
-  --color-canvas-200: light-dark(
-    oklch(39.5% 0.042 150),
-    oklch(92.5% 0.024 150)
-  );
-  --color-canvas-300: light-dark(oklch(52% 0.058 150), oklch(86.5% 0.038 150));
-  --color-canvas-400: light-dark(oklch(64% 0.072 150), oklch(80.5% 0.055 150));
-  --color-canvas-500: light-dark(
-    oklch(75.5% 0.085 150),
-    oklch(75.5% 0.068 150)
-  );
-  --color-canvas-600: light-dark(oklch(80.5% 0.055 150), oklch(64% 0.072 150));
-  --color-canvas-700: light-dark(oklch(86.5% 0.038 150), oklch(52% 0.058 150));
-  --color-canvas-800: light-dark(
-    oklch(92.5% 0.024 150),
-    oklch(39.5% 0.042 150)
-  );
-  --color-canvas-900: light-dark(
-    oklch(96.6% 0.011 150),
-    oklch(25.8% 0.025 150)
-  );
-  --color-canvas-950: light-dark(
-    oklch(98.6% 0.005 150),
-    oklch(17.8% 0.014 150)
-  );
+    /* Canvas — Green-tinted backgrounds (150°) */
+    --color-canvas-50: light-dark(
+      oklch(17.8% 0.014 150),
+      oklch(98.6% 0.005 150)
+    );
+    --color-canvas-100: light-dark(
+      oklch(25.8% 0.025 150),
+      oklch(96.6% 0.011 150)
+    );
+    --color-canvas-200: light-dark(
+      oklch(39.5% 0.042 150),
+      oklch(92.5% 0.024 150)
+    );
+    --color-canvas-300: light-dark(
+      oklch(52% 0.058 150),
+      oklch(86.5% 0.038 150)
+    );
+    --color-canvas-400: light-dark(
+      oklch(64% 0.072 150),
+      oklch(80.5% 0.055 150)
+    );
+    --color-canvas-500: light-dark(
+      oklch(75.5% 0.085 150),
+      oklch(75.5% 0.068 150)
+    );
+    --color-canvas-600: light-dark(
+      oklch(80.5% 0.055 150),
+      oklch(64% 0.072 150)
+    );
+    --color-canvas-700: light-dark(
+      oklch(86.5% 0.038 150),
+      oklch(52% 0.058 150)
+    );
+    --color-canvas-800: light-dark(
+      oklch(92.5% 0.024 150),
+      oklch(39.5% 0.042 150)
+    );
+    --color-canvas-900: light-dark(
+      oklch(96.6% 0.011 150),
+      oklch(25.8% 0.025 150)
+    );
+    --color-canvas-950: light-dark(
+      oklch(98.6% 0.005 150),
+      oklch(17.8% 0.014 150)
+    );
 
-  /* Primary — Green (150°) */
-  --color-primary-50: light-dark(
-    oklch(18.2% 0.018 150),
-    oklch(97.8% 0.012 150)
-  );
-  --color-primary-100: light-dark(
-    oklch(26.5% 0.03 150),
-    oklch(94.8% 0.022 150)
-  );
-  --color-primary-200: light-dark(
-    oklch(40.5% 0.048 150),
-    oklch(89.5% 0.042 150)
-  );
-  --color-primary-300: light-dark(oklch(54% 0.065 150), oklch(79.5% 0.062 150));
-  --color-primary-400: light-dark(
-    oklch(66.5% 0.08 150),
-    oklch(69.5% 0.078 150)
-  );
-  --color-primary-500: light-dark(
-    oklch(78.5% 0.095 150),
-    oklch(59.5% 0.095 150)
-  );
-  --color-primary-600: light-dark(
-    oklch(82.2% 0.078 150),
-    oklch(49.5% 0.08 150)
-  );
-  --color-primary-700: light-dark(
-    oklch(86.5% 0.062 150),
-    oklch(39.5% 0.065 150)
-  );
-  --color-primary-800: light-dark(oklch(91% 0.042 150), oklch(29.5% 0.048 150));
-  --color-primary-900: light-dark(
-    oklch(95.8% 0.022 150),
-    oklch(21.5% 0.03 150)
-  );
-  --color-primary-950: light-dark(oklch(98% 0.012 150), oklch(15.2% 0.018 150));
+    /* Primary — Green (150°) */
+    --color-primary-50: light-dark(
+      oklch(18.2% 0.018 150),
+      oklch(97.8% 0.012 150)
+    );
+    --color-primary-100: light-dark(
+      oklch(26.5% 0.03 150),
+      oklch(94.8% 0.022 150)
+    );
+    --color-primary-200: light-dark(
+      oklch(40.5% 0.048 150),
+      oklch(89.5% 0.042 150)
+    );
+    --color-primary-300: light-dark(
+      oklch(54% 0.065 150),
+      oklch(79.5% 0.062 150)
+    );
+    --color-primary-400: light-dark(
+      oklch(66.5% 0.08 150),
+      oklch(69.5% 0.078 150)
+    );
+    --color-primary-500: light-dark(
+      oklch(78.5% 0.095 150),
+      oklch(59.5% 0.095 150)
+    );
+    --color-primary-600: light-dark(
+      oklch(82.2% 0.078 150),
+      oklch(49.5% 0.08 150)
+    );
+    --color-primary-700: light-dark(
+      oklch(86.5% 0.062 150),
+      oklch(39.5% 0.065 150)
+    );
+    --color-primary-800: light-dark(
+      oklch(91% 0.042 150),
+      oklch(29.5% 0.048 150)
+    );
+    --color-primary-900: light-dark(
+      oklch(95.8% 0.022 150),
+      oklch(21.5% 0.03 150)
+    );
+    --color-primary-950: light-dark(
+      oklch(98% 0.012 150),
+      oklch(15.2% 0.018 150)
+    );
 
-  /* Secondary — Muted green (140°) */
-  --color-secondary-50: light-dark(
-    oklch(18.5% 0.02 140),
-    oklch(97.9% 0.013 140)
-  );
-  --color-secondary-100: light-dark(
-    oklch(26.8% 0.033 140),
-    oklch(95% 0.024 140)
-  );
-  --color-secondary-200: light-dark(
-    oklch(41% 0.052 140),
-    oklch(89.8% 0.045 140)
-  );
-  --color-secondary-300: light-dark(
-    oklch(54.5% 0.07 140),
-    oklch(80.2% 0.065 140)
-  );
-  --color-secondary-400: light-dark(
-    oklch(67% 0.087 140),
-    oklch(70.2% 0.082 140)
-  );
-  --color-secondary-500: light-dark(
-    oklch(79% 0.103 140),
-    oklch(60.2% 0.103 140)
-  );
-  --color-secondary-600: light-dark(
-    oklch(82.8% 0.082 140),
-    oklch(50.2% 0.087 140)
-  );
-  --color-secondary-700: light-dark(
-    oklch(87% 0.065 140),
-    oklch(40.2% 0.07 140)
-  );
-  --color-secondary-800: light-dark(
-    oklch(91.5% 0.045 140),
-    oklch(30.5% 0.052 140)
-  );
-  --color-secondary-900: light-dark(
-    oklch(96% 0.024 140),
-    oklch(22.2% 0.033 140)
-  );
-  --color-secondary-950: light-dark(
-    oklch(98.2% 0.013 140),
-    oklch(15.8% 0.02 140)
-  );
+    /* Secondary — Muted green (140°) */
+    --color-secondary-50: light-dark(
+      oklch(18.5% 0.02 140),
+      oklch(97.9% 0.013 140)
+    );
+    --color-secondary-100: light-dark(
+      oklch(26.8% 0.033 140),
+      oklch(95% 0.024 140)
+    );
+    --color-secondary-200: light-dark(
+      oklch(41% 0.052 140),
+      oklch(89.8% 0.045 140)
+    );
+    --color-secondary-300: light-dark(
+      oklch(54.5% 0.07 140),
+      oklch(80.2% 0.065 140)
+    );
+    --color-secondary-400: light-dark(
+      oklch(67% 0.087 140),
+      oklch(70.2% 0.082 140)
+    );
+    --color-secondary-500: light-dark(
+      oklch(79% 0.103 140),
+      oklch(60.2% 0.103 140)
+    );
+    --color-secondary-600: light-dark(
+      oklch(82.8% 0.082 140),
+      oklch(50.2% 0.087 140)
+    );
+    --color-secondary-700: light-dark(
+      oklch(87% 0.065 140),
+      oklch(40.2% 0.07 140)
+    );
+    --color-secondary-800: light-dark(
+      oklch(91.5% 0.045 140),
+      oklch(30.5% 0.052 140)
+    );
+    --color-secondary-900: light-dark(
+      oklch(96% 0.024 140),
+      oklch(22.2% 0.033 140)
+    );
+    --color-secondary-950: light-dark(
+      oklch(98.2% 0.013 140),
+      oklch(15.8% 0.02 140)
+    );
 
-  /* Accent — Vivid green (160°) */
-  --color-accent-50: light-dark(oklch(18.5% 0.022 160), oklch(98% 0.014 160));
-  --color-accent-100: light-dark(
-    oklch(26.8% 0.036 160),
-    oklch(95.2% 0.026 160)
-  );
-  --color-accent-200: light-dark(oklch(41% 0.058 160), oklch(90% 0.048 160));
-  --color-accent-300: light-dark(
-    oklch(54.5% 0.078 160),
-    oklch(80.8% 0.072 160)
-  );
-  --color-accent-400: light-dark(oklch(67% 0.097 160), oklch(71% 0.092 160));
-  --color-accent-500: light-dark(oklch(79% 0.115 160), oklch(61% 0.115 160));
-  --color-accent-600: light-dark(oklch(82.8% 0.092 160), oklch(51% 0.097 160));
-  --color-accent-700: light-dark(oklch(87% 0.072 160), oklch(41% 0.078 160));
-  --color-accent-800: light-dark(oklch(91.5% 0.048 160), oklch(31% 0.058 160));
-  --color-accent-900: light-dark(oklch(96% 0.026 160), oklch(22.5% 0.036 160));
-  --color-accent-950: light-dark(
-    oklch(98.2% 0.014 160),
-    oklch(16.2% 0.022 160)
-  );
+    /* Accent — Vivid green (160°) */
+    --color-accent-50: light-dark(oklch(18.5% 0.022 160), oklch(98% 0.014 160));
+    --color-accent-100: light-dark(
+      oklch(26.8% 0.036 160),
+      oklch(95.2% 0.026 160)
+    );
+    --color-accent-200: light-dark(oklch(41% 0.058 160), oklch(90% 0.048 160));
+    --color-accent-300: light-dark(
+      oklch(54.5% 0.078 160),
+      oklch(80.8% 0.072 160)
+    );
+    --color-accent-400: light-dark(oklch(67% 0.097 160), oklch(71% 0.092 160));
+    --color-accent-500: light-dark(oklch(79% 0.115 160), oklch(61% 0.115 160));
+    --color-accent-600: light-dark(
+      oklch(82.8% 0.092 160),
+      oklch(51% 0.097 160)
+    );
+    --color-accent-700: light-dark(oklch(87% 0.072 160), oklch(41% 0.078 160));
+    --color-accent-800: light-dark(
+      oklch(91.5% 0.048 160),
+      oklch(31% 0.058 160)
+    );
+    --color-accent-900: light-dark(
+      oklch(96% 0.026 160),
+      oklch(22.5% 0.036 160)
+    );
+    --color-accent-950: light-dark(
+      oklch(98.2% 0.014 160),
+      oklch(16.2% 0.022 160)
+    );
 
-  /* ── Spacing — 4pt scale ─────────────────────────────────── */
-  --space-2xs: 2px;
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-3: 12px;
-  --space-md: 16px;
-  --space-6: 24px;
-  --space-lg: 32px;
-  --space-12: 48px;
-  --space-xl: 64px;
-  --space-2xl: 96px;
+    /* ── Spacing — 4pt scale ─────────────────────────────────── */
+    --space-2xs: 2px;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-3: 12px;
+    --space-md: 16px;
+    --space-6: 24px;
+    --space-lg: 32px;
+    --space-12: 48px;
+    --space-xl: 64px;
+    --space-2xl: 96px;
 
-  /* ── Typography ───────────────────────────────────────────── */
-  --font-family: "InterVariable", "Inter", sans-serif;
-  --font-mono:
-    "JetBrains Mono", ui-monospace, "Cascadia Code", "Fira Code", Menlo,
-    monospace;
+    /* ── Typography ───────────────────────────────────────────── */
+    --font-family: "InterVariable", "Inter", sans-serif;
+    --font-mono:
+      "JetBrains Mono", ui-monospace, "Cascadia Code", "Fira Code", Menlo,
+      monospace;
 
-  /* Type scale — modular 1.25 ratio, fluid */
-  --text-xs: clamp(0.64rem, 0.6vw + 0.5rem, 0.8rem);
-  --text-sm: clamp(0.8rem, 0.75vw + 0.6rem, 1rem);
-  --text-md: clamp(1rem, 1vw + 0.8rem, 1.25rem);
-  --text-lg: clamp(1.25rem, 1.5vw + 1rem, 2rem);
-  --text-xl: clamp(2rem, 2vw + 1.5rem, 3rem);
-  --text-2xl: clamp(2rem, 5vw, 3.5rem);
+    /* Type scale — modular 1.25 ratio, fluid */
+    --text-xs: clamp(0.64rem, 0.6vw + 0.5rem, 0.8rem);
+    --text-sm: clamp(0.8rem, 0.75vw + 0.6rem, 1rem);
+    --text-md: clamp(1rem, 1vw + 0.8rem, 1.25rem);
+    --text-lg: clamp(1.25rem, 1.5vw + 1rem, 2rem);
+    --text-xl: clamp(2rem, 2vw + 1.5rem, 3rem);
+    --text-2xl: clamp(2rem, 5vw, 3.5rem);
 
-  /* ── Surface aliases ──────────────────────────────────────── */
-  --surface-color: var(--color-canvas-200);
-  --surface-raised: var(--color-canvas-100);
-  --surface-sunken: var(--color-canvas-50);
+    /* ── Surface aliases ──────────────────────────────────────── */
+    --surface-color: var(--color-canvas-200);
+    --surface-raised: var(--color-canvas-100);
+    --surface-sunken: var(--color-canvas-50);
 
-  /* ── Radii ────────────────────────────────────────────────── */
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-full: 9999px;
+    /* ── Radii ────────────────────────────────────────────────── */
+    --radius-xs: 4px;
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
 
-  /* ── Animation ───────────────────────────────────────────── */
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --duration-instant: 100ms;
-  --duration-fast: 200ms;
-  --duration-normal: 300ms;
-  --duration-slow: 500ms;
+    /* ── Animation ───────────────────────────────────────────── */
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --duration-instant: 100ms;
+    --duration-fast: 200ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+  }
 }
