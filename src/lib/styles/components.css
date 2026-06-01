@@ -110,6 +110,19 @@
 
 .site-footer p {
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.footer-icon-link {
+  display: flex;
+  color: var(--color-ink-600);
+  transition: color var(--duration-fast) var(--ease-out-quart);
+}
+
+.footer-icon-link:hover {
+  color: var(--color-primary-500);
 }
 
 .footer-nav {
