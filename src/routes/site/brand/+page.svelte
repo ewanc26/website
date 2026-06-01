@@ -4,7 +4,7 @@
   import Pentacle from '$lib/components/icons/Pentacle.svelte';
   import Triskele from '$lib/components/icons/Triskele.svelte';
   import favicon from '$lib/assets/favicon.svg';
-  import { Copy, Check } from 'lucide-svelte';
+  import { Copy, Check } from '@lucide/svelte';
 
   let copiedIndex = $state<string | null>(null);
 
