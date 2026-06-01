@@ -690,3 +690,11 @@
     max-width: 70ch;
   }
 }
+
+/* ── Utilities ──────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .hide-mobile {
+    display: none;
+  }
+}
