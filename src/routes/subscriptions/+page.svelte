@@ -1,7 +1,25 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import SiteHead from '$lib/components/SiteHead.svelte';
+  import type { SubscriptionPublication, RecommendationItem } from '$lib/services/atproto/fetch';
 
-  let { data } = $props();
+  let subscriptions = $state<SubscriptionPublication[] | null>(null);
+  let recommendations = $state<RecommendationItem[] | null>(null);
+
+  onMount(async () => {
+    try {
+      const [subsRes, recsRes] = await Promise.all([
+        fetch('/api/subscriptions'),
+        fetch('/api/recommendations')
+      ]);
+      subscriptions = await subsRes.json();
+      recommendations = await recsRes.json();
+    } catch (e) {
+      console.error("Failed to load subscriptions/recommendations", e);
+      subscriptions = [];
+      recommendations = [];
+    }
+  });
 </script>
 
 <SiteHead title="Subscriptions" description="Publications I read on Standard.site." />
@@ -17,11 +35,13 @@
   <section class="sub-section">
     <h2 class="section-heading">Active Index</h2>
     
-    {#if data.subscriptions.length === 0}
+    {#if subscriptions === null}
+      <p class="empty-mono">LOADING...</p>
+    {:else if subscriptions.length === 0}
       <p class="empty-mono">NULL_SET</p>
     {:else}
       <ul class="bare-list">
-        {#each data.subscriptions as sub}
+        {#each subscriptions as sub}
           <li>
             <a href={sub.url} target="_blank" rel="noopener" class="post-row">
               <div class="row-stack">
@@ -39,11 +59,13 @@
   <section class="sub-section">
       <h2 class="section-heading">Recommendations</h2>
 
-      {#if data.recommendations.length === 0}
+      {#if recommendations === null}
+          <p class="empty-mono">LOADING...</p>
+      {:else if recommendations.length === 0}
           <p class="empty-mono">NULL_SET</p>
       {:else}
           <ul class="bare-list">
-              {#each data.recommendations as rec}
+              {#each recommendations as rec}
                   <li>
                       <a href={rec.url} target="_blank" rel="noopener" class="post-row">
                           <div class="row-stack">
@@ -59,7 +81,7 @@
           </ul>
       {/if}
   </section>
-  </main>
+</main>
 
 <style>
   .sub-section {
