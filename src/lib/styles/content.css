@@ -82,7 +82,6 @@
   color: var(--color-ink-950);
   min-width: 0;
   transition:
-    background-color var(--duration-fast) var(--ease-out-quart),
     padding-left var(--duration-fast) var(--ease-out-quart),
     padding-right var(--duration-fast) var(--ease-out-quart),
     margin-left var(--duration-fast) var(--ease-out-quart),
@@ -99,11 +98,6 @@ li.post-row {
 }
 
 .post-row:hover {
-  background-color: var(--surface-raised);
-  padding-left: var(--space-sm);
-  padding-right: var(--space-sm);
-  margin-left: calc(-1 * var(--space-sm));
-  margin-right: calc(-1 * var(--space-sm));
   color: var(--color-primary-500);
   text-decoration-color: var(--color-primary-500);
 }
@@ -125,7 +119,6 @@ li.post-row {
   text-decoration: none;
   color: var(--color-ink-950);
   transition:
-    background-color var(--duration-fast) var(--ease-out-quart),
     padding-left var(--duration-fast) var(--ease-out-quart),
     padding-right var(--duration-fast) var(--ease-out-quart),
     margin-left var(--duration-fast) var(--ease-out-quart),
