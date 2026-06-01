@@ -201,8 +201,8 @@
         <li><a href="#components">08 Components</a></li>
         <li><a href="#layout">09 Layout</a></li>
         <li><a href="#voice">10 Voice & Tone</a></li>
-        <li><a href=\"#manifesto\">11 Manifesto</a></li>
-        <li><a href=\"#assets\">12 Assets</a></li>
+        <li><a href="#manifesto">11 Manifesto</a></li>
+        <li><a href="#assets">12 Assets</a></li>
       </ul>
     </nav>
 

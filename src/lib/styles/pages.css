@@ -371,7 +371,7 @@
   padding: var(--space-lg) 0;
 }
 
-.post-title {
+.post-hd .post-title {
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 800;
   letter-spacing: -0.03em;
