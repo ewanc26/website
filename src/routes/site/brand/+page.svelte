@@ -4,6 +4,15 @@
   import Pentacle from '$lib/components/icons/Pentacle.svelte';
   import Triskele from '$lib/components/icons/Triskele.svelte';
   import favicon from '$lib/assets/favicon.svg';
+  import { Copy, Check } from 'lucide-svelte';
+
+  let copiedIndex = $state<string | null>(null);
+
+  function copyCode(code: string, id: string) {
+    navigator.clipboard.writeText(code);
+    copiedIndex = id;
+    setTimeout(() => (copiedIndex = null), 2000);
+  }
 
   const colorPalettes = [
     {
@@ -334,6 +343,7 @@
               <span>TOKEN</span>
               <span>SAMPLE</span>
               <span class="hide-mobile">WEIGHT</span>
+              <span></span>
             </div>
             {#each typeScale as step}
               <div class="table-row">
@@ -342,6 +352,18 @@
                   {step.sample}
                 </div>
                 <span class="table-weight hide-mobile">{step.weight}</span>
+                <button
+                  type="button"
+                  class="copy-btn copy-btn--compact"
+                  aria-label="Copy token {step.token}"
+                  onclick={() => copyCode(step.token, step.token)}
+                >
+                  {#if copiedIndex === step.token}
+                    <Check size={12} strokeWidth={2.5} aria-hidden="true" />
+                  {:else}
+                    <Copy size={12} strokeWidth={2} aria-hidden="true" />
+                  {/if}
+                </button>
               </div>
             {/each}
           </div>
