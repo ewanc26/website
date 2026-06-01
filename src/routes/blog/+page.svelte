@@ -96,21 +96,3 @@
         </div>
     {/if}
 </main>
-
-<style>
-    .year-head {
-        font-family: var(--font-mono);
-        color: var(--color-ink-600);
-        font-size: var(--text-xs);
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        padding: var(--space-lg) 0 var(--space-sm);
-    }
-
-    .month-label {
-        font-size: var(--text-sm);
-        font-weight: 600;
-        color: var(--color-ink-700);
-        padding: var(--space-sm) 0 var(--space-xs);
-    }
-</style>

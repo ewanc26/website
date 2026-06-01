@@ -1,4 +1,6 @@
 @import "tailwindcss";
 @import "../lib/styles/theme.css";
 @import "../lib/styles/content.css";
+@import "../lib/styles/components.css";
+@import "../lib/styles/pages.css";
 @import "../lib/styles/leaflet-blocks.css";

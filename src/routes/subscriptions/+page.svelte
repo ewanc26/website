@@ -82,29 +82,3 @@
       {/if}
   </section>
 </main>
-
-<style>
-  .sub-section {
-    margin-bottom: var(--space-xl);
-  }
-
-  .empty-mono {
-    color: var(--color-ink-500);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-  }
-
-  .sub-name {
-    font-weight: 600;
-  }
-
-  .sub-author {
-    font-size: var(--text-xs);
-    color: var(--color-ink-600);
-  }
-
-  .sub-handle {
-    font-size: var(--text-xs);
-    color: var(--color-ink-500);
-  }
-</style>
