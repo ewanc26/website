@@ -18,6 +18,8 @@
   import LeafletWebsiteCard from "./LeafletWebsiteCard.svelte";
   import LeafletButton from "./LeafletButton.svelte";
   import LeafletBskyPost from "./LeafletBskyPost.svelte";
+  import Pentacle from "../icons/Pentacle.svelte";
+  import Triskele from "../icons/Triskele.svelte";
 
   import type { FacetSchema } from "$lib/providers/facets";
   import type { SerialisedBlock } from "$lib/providers/serialise";
@@ -143,7 +145,16 @@
     <LeafletMath tex={(inner.tex as string) ?? ""} />
 
   {:else if $type === B("horizontalRule")}
-    <hr class="leaflet-hr" />
+    <div class="leaflet-hr-wrap">
+      <hr class="leaflet-hr" />
+      <div class="leaflet-hr-symbol">
+        {#if i % 2 === 0}
+          <Pentacle size={12} />
+        {:else}
+          <Triskele size={12} />
+        {/if}
+      </div>
+    </div>
 
   {:else if $type === B("image")}
     {@const ar = getAspectRatio(inner)}
