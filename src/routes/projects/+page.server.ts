@@ -7,8 +7,10 @@ import {
 
 export const load: PageServerLoad = async ({ fetch }) => {
   const [{ documents }, { publications }] = await Promise.all([
-    fetchDocuments(PUBLIC_ATPROTO_DID, fetch),
-    fetchPublications(PUBLIC_ATPROTO_DID, fetch),
+    fetchDocuments(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ documents: [] })),
+    fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
+      publications: [],
+    })),
   ]);
 
   const docsPublication = publications.find(
