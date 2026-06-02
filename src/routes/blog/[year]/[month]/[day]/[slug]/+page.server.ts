@@ -35,16 +35,33 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
     const date = new Date(d.publishedAt);
     const y = date.getFullYear().toString();
     const m = (date.getMonth() + 1).toString().padStart(2, "0");
-    const da = date.getDate().toString().padStart(2, "0");
+    const dStr = date.getDate().toString().padStart(2, "0");
     const docSlug = normalizeSlug(d.title);
-    return y === year && m === month && da === day && docSlug === slug;
+    return y === year && m === month && dStr === day && docSlug === slug;
   });
 
   if (!post) {
     throw error(404, "Post not found");
   }
 
-  // Serialise Leaflet blocks — replaces BlobRef/CID instances with PDS URLs
+  // Generate a clean text excerpt string by removing common markdown markup indicators
+  const cleanExcerpt = (text: string) => {
+    return text
+      .replace(/[#*`_~\[\]()\-]/g, "") // Strip structural formatting tokens
+      .replace(/\s+/g, " ")            // Normalize duplicate spaces and line breaks
+      .trim();
+  };
+
+  // Build the strict fallback chain for description strings
+  let metaDescription = post.description ?? "";
+  if (!metaDescription && post.textContent) {
+    const excerpt = cleanExcerpt(post.textContent);
+    metaDescription = excerpt.length > 155 ? excerpt.slice(0, 152) + "..." : excerpt;
+  }
+  if (!metaDescription) {
+    metaDescription = `Read ${post.title} on the blog.`;
+  }
+
   let blocks: SerialisedBlock[] = [];
   let renderedContent = "";
 
@@ -53,10 +70,7 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
     typeof post.content === "object" &&
     leafletProvider.matches(post.content)
   ) {
-    // Native block rendering: serialise blocks for Svelte components
     blocks = await serialiseBlocks(post.content, PUBLIC_ATPROTO_DID, fetchBlob);
-
-    // Fallback: also render markdown for search, RSS, and non-JS contexts
     const result = await leafletProvider.toMarkdown(post.content, {
       fetchBlob,
     });
@@ -67,11 +81,7 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
     renderedContent = await renderMarkdown(markdown);
   }
 
-  // Fetch comments via Constellation + Slingshot
   const comments = await fetchComments(post.uri, fetch);
-
-  // Strip raw content before serialisation — it contains BlobRef/CID class
-  // instances that SvelteKit cannot dehydrate across the server boundary.
   const { content: _content, ...serialisable } = post;
 
   return {
@@ -79,6 +89,7 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
       ...serialisable,
       createdAt: post.publishedAt,
       renderedContent,
+      metaDescription,
       blocks,
     },
     blog: blogPublication
