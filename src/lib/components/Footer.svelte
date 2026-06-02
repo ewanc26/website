@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Pentacle from "$lib/components/icons/Pentacle.svelte";
-  import Triskele from "$lib/components/icons/Triskele.svelte";
   import Bluesky from "$lib/components/icons/Bluesky.svelte";
   import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 </script>
