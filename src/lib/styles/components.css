@@ -90,7 +90,7 @@
   color: var(--color-ink-600);
 }
 
-.footer-symbols {
+.footer-pagan-symbols {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
@@ -98,8 +98,18 @@
   transition: opacity var(--duration-normal) var(--ease-out-quart);
 }
 
-.footer-symbols:hover {
+.footer-pagan-symbols:hover {
   opacity: 0.8;
+}
+
+.footer-copyright {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.footer-copyright p {
+  margin: 0;
 }
 
 .symbol-sep {
