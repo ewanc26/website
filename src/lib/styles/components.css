@@ -123,7 +123,10 @@
 }
 
 .footer-icon-link {
-  display: flex;
+  display: inline-flex;
+  align-items: flex-end;
+  vertical-align: text-bottom;
+  height: 1em;
   color: var(--color-ink-600);
   transition: color var(--duration-fast) var(--ease-out-quart);
 }
