@@ -1,24 +1,31 @@
 <script lang="ts">
-    import Pentacle from '$lib/components/icons/Pentacle.svelte';
-    import Triskele from '$lib/components/icons/Triskele.svelte';
-    import Bluesky from '$lib/components/icons/Bluesky.svelte';
-    import { PUBLIC_ATPROTO_DID } from '$env/static/public';
+  import Pentacle from "$lib/components/icons/Pentacle.svelte";
+  import Triskele from "$lib/components/icons/Triskele.svelte";
+  import Bluesky from "$lib/components/icons/Bluesky.svelte";
+  import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 </script>
 
 <footer class="site-footer">
-    <div class="footer-symbols">
-        <Pentacle size={14} />
-        <span class="symbol-sep"></span>
-        <Triskele size={14} />
-        <span class="symbol-sep"></span>
-        <a href="https://bsky.app/profile/{PUBLIC_ATPROTO_DID}" aria-label="Bluesky" class="footer-icon-link">
-            <Bluesky size={14} />
-        </a>
-    </div>
+  <div class="footer-pagan-symbols">
+    <Pentacle size={14} />
+    <span class="symbol-sep"></span>
+    <Triskele size={14} />
+  </div>
+  <div class="footer-copyright">
     <p>&copy; {new Date().getFullYear()} ewan croft</p>
-    <nav class="footer-nav">
-        <a href="mailto:contact@ewancroft.uk" class="footer-link">contact@ewancroft.uk</a>
-        <a href="/site/brand" class="footer-link">brand</a>
-        <a href="/site/meta" class="footer-link">site meta</a>
-    </nav>
+    <a
+      href="https://bsky.app/profile/{PUBLIC_ATPROTO_DID}"
+      aria-label="Bluesky"
+      class="footer-icon-link"
+    >
+      <Bluesky size={14} />
+    </a>
+  </div>
+  <nav class="footer-nav">
+    <a href="mailto:contact@ewancroft.uk" class="footer-link"
+      >contact@ewancroft.uk</a
+    >
+    <a href="/site/brand" class="footer-link">brand</a>
+    <a href="/site/meta" class="footer-link">site meta</a>
+  </nav>
 </footer>
