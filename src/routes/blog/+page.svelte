@@ -1,6 +1,7 @@
 <script lang="ts">
     import { normalizeSlug } from '$lib/utils/slugify';
     import SiteHead from '$lib/components/SiteHead.svelte';
+    import EmptyState from '$lib/components/EmptyState.svelte';
     import { Rss } from '@lucide/svelte';
 
     let { data } = $props();
@@ -67,32 +68,39 @@
         {/if}
     </header>
 
-    {#each groupPosts(posts) as [year, months]}
-        <div class="year-head">{year}</div>
-        {#each months as [month, monthPosts]}
-            <div class="month-label">{formatMonth(month)}</div>
-            <ul class="post-list">
-                {#each monthPosts as post}
-                    <li>
-                        <a href={getPostUrl(post)} class="post-row">
-                            <span class="post-title">{post.title}</span>
-                            <time class="post-date">{new Date(post.createdAt).toLocaleDateString()}</time>
-                        </a>
-                    </li>
-                {/each}
-            </ul>
+    {#if posts.length > 0}
+        {#each groupPosts(posts) as [year, months]}
+            <div class="year-head">{year}</div>
+            {#each months as [month, monthPosts]}
+                <div class="month-label">{formatMonth(month)}</div>
+                <ul class="post-list">
+                    {#each monthPosts as post}
+                        <li>
+                            <a href={getPostUrl(post)} class="post-row">
+                                <span class="post-title">{post.title}</span>
+                                <time class="post-date">{new Date(post.createdAt).toLocaleDateString()}</time>
+                            </a>
+                        </li>
+                    {/each}
+                </ul>
+            {/each}
         {/each}
-    {/each}
 
-    {#if hasMore}
-        <div class="load-more">
-            <button
-                onclick={loadMore}
-                disabled={loading}
-                type="button"
-            >
-                {loading ? 'Loading...' : 'Load more'}
-            </button>
-        </div>
+        {#if hasMore}
+            <div class="load-more">
+                <button
+                    onclick={loadMore}
+                    disabled={loading}
+                    type="button"
+                >
+                    {loading ? 'Loading...' : 'Load more'}
+                </button>
+            </div>
+        {/if}
+    {:else}
+        <EmptyState
+            title="No posts available"
+            description="Unable to load blog posts at the moment. The publishing service may be temporarily unavailable. Please try again later."
+        />
     {/if}
 </main>

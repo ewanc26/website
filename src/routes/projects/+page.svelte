@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SiteHead from '$lib/components/SiteHead.svelte';
+	import EmptyState from '$lib/components/EmptyState.svelte';
 	import { ExternalLink } from '@lucide/svelte';
 
 	let { data } = $props();
@@ -33,4 +34,11 @@
 			</li>
 		{/each}
 	</ul>
+
+	{#if data.projects.length === 0}
+		<EmptyState
+			title="No projects available"
+			description="Unable to load projects at the moment. The service may be temporarily unavailable. Please try again later."
+		/>
+	{/if}
 </main>
