@@ -24,4 +24,16 @@
             {/each}
         </ul>
     </section>
+{:else}
+    <section class="comments-section">
+        <h2 class="section-heading">
+            <MessageCircle size={16} strokeWidth={2} />
+            Comments
+        </h2>
+        <EmptyState
+            title="No comments yet"
+            description="Be the first to share your thoughts on this post."
+            icon={false}
+        />
+    </section>
 {/if}
