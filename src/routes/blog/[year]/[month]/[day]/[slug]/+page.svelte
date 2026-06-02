@@ -14,7 +14,7 @@
     let useBlocks = $derived(data.post.blocks && data.post.blocks.length > 0);
 </script>
 
-<SiteHead title={data.post.title} description={data.blog?.description} />
+<SiteHead title={data.post.title} description={data.post.metaDescription} />
 
 <main class="shell-prose">
     <header class="post-hd">
@@ -26,67 +26,61 @@
 
     <div class="post-layout">
         <aside class="post-sidebar">
-            <TableOfContents container=".prose" />
+            <TableOfContents container=\".prose\" />
         </aside>
         <div class="post-body">
-            <article class="prose">
+            <article class=\"prose\">
                 {#if useBlocks}
                     <LeafletBlocks blocks={data.post.blocks} />
                 {:else}
                     {@html data.post.renderedContent}
                 {/if}
-
-                <div class="post-end-marker">
-                    <Pentacle size={20} />
-                </div>
             </article>
 
-            <div class="post-after">
-                <ShareButtons url={page.url.href} title={data.post.title} />
+            <ShareButtons title={data.post.title} />
 
-                <section class="comments-section">
-                    {#if data.comments.length > 0}
-                        <h2 class="section-heading">
-                            <MessageCircle size={16} strokeWidth={2} />
-                            {data.comments.length} comment{data.comments.length !== 1 ? 's' : ''}
-                        </h2>
-                        <ul class="comment-list">
-                            {#each data.comments as comment}
-                                <li class="comment">
-                                    <div class="comment-head">
-                                        <strong>{comment.authorDisplayName ?? comment.authorHandle}</strong>
-                                        <a href="https://bsky.app/profile/{comment.authorHandle}" target="_blank" rel="noopener" class="comment-handle">@{comment.authorHandle}</a>
-                                        <time class="comment-date">{new Date(comment.createdAt).toLocaleDateString()}</time>
-                                    </div>
-                                    <p class="comment-body">{comment.plaintext}</p>
-                                </li>
-                            {/each}
-                        </ul>
-                    {:else}
-                        <h2 class="section-heading">
-                            <MessageCircle size={16} strokeWidth={2} />
-                            Comments
-                        </h2>
-                        <EmptyState
-                            title="No comments yet"
-                            description="Be the first to share your thoughts on this post."
-                            icon={false}
-                        />
-                    {/if}
-                </section>
-
-                {#if data.blog}
-                    <footer class="post-footer">
-                        <p class="footer-pub">
-                            <a href={data.blog.url} target="_blank" rel="noopener">{data.blog.title}</a>
-                        </p>
-                        <p class="footer-desc">{data.blog.description}</p>
-                        <a href={data.blog.rss} target="_blank" rel="noopener" class="rss-link"><Rss size={14} strokeWidth={2} /> RSS</a>
-                    </footer>
+            <section class=\"comments-section\">
+                {#if data.comments && data.comments.length > 0}
+                    <h2 class=\"section-heading\">
+                        <MessageCircle size={16} strokeWidth={2} />
+                        Comments ({data.comments.length})
+                    </h2>
+                    <ul class=\"comment-list\">
+                        {#each data.comments as comment}
+                            <li class=\"comment-item\">
+                                <div class=\"comment-meta\">
+                                    {#if comment.authorDisplayName}
+                                        <span class=\"comment-author\">{comment.authorDisplayName}</span>
+                                    {/if}
+                                    <a href=\"https://bsky.app/profile/{comment.authorDid}\" target=\"_blank\" rel=\"noopener\" class=\"comment-handle\">@{comment.authorHandle}</a>
+                                    <time class=\"comment-date\">{new Date(comment.createdAt).toLocaleDateString()}</time>
+                                </div>
+                                <p class=\"comment-body\">{comment.plaintext}</p>
+                            </li>
+                        {/each}
+                    </ul>
+                {:else}
+                    <h2 class=\"section-heading\">
+                        <MessageCircle size={16} strokeWidth={2} />
+                        Comments
+                    </h2>
+                    <EmptyState
+                        title=\"No comments yet\"
+                        description=\"Be the first to share your thoughts on this post.\"
+                        icon={false}
+                    />
                 {/if}
-            </div>
+            </section>
+
+            {#if data.blog}
+                <footer class=\"post-footer\">
+                    <p class=\"footer-pub\">
+                        <a href={data.blog.url} target=\"_blank\" rel=\"noopener\">{data.blog.title}</a>
+                    </p>
+                    <p class=\"footer-desc\">{data.blog.description}</p>
+                    <a href={data.blog.rss} target=\"_blank\" rel=\"noopener\" class=\"rss-link\"><Rss size={14} strokeWidth={2} /> RSS</a>
+                </footer>
+            {/if}
         </div>
     </div>
 </main>
-
-
