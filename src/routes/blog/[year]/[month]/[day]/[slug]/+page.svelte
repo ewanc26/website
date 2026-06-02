@@ -2,6 +2,7 @@
     import ShareButtons from '$lib/components/ShareButtons.svelte';
     import SiteHead from '$lib/components/SiteHead.svelte';
     import TableOfContents from '$lib/components/TableOfContents.svelte';
+    import EmptyState from '$lib/components/EmptyState.svelte';
     import LeafletBlocks from '$lib/components/leaflet/LeafletBlocks.svelte';
     import Pentacle from '$lib/components/icons/Pentacle.svelte';
     import { Rss, MessageCircle } from '@lucide/svelte';
@@ -43,8 +44,8 @@
             <div class="post-after">
                 <ShareButtons url={page.url.href} title={data.post.title} />
 
-                {#if data.comments.length > 0}
-                    <section class="comments-section">
+                <section class="comments-section">
+                    {#if data.comments.length > 0}
                         <h2 class="section-heading">
                             <MessageCircle size={16} strokeWidth={2} />
                             {data.comments.length} comment{data.comments.length !== 1 ? 's' : ''}
@@ -61,8 +62,18 @@
                                 </li>
                             {/each}
                         </ul>
-                    </section>
-                {/if}
+                    {:else}
+                        <h2 class="section-heading">
+                            <MessageCircle size={16} strokeWidth={2} />
+                            Comments
+                        </h2>
+                        <EmptyState
+                            title="No comments yet"
+                            description="Be the first to share your thoughts on this post."
+                            icon={false}
+                        />
+                    {/if}
+                </section>
 
                 {#if data.blog}
                     <footer class="post-footer">
