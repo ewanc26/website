@@ -17,8 +17,10 @@ import {
 export const load: PageServerLoad = async ({ params, fetch }) => {
   const { year, month, day, slug } = params;
   const [{ documents }, { publications }] = await Promise.all([
-    fetchDocuments(PUBLIC_ATPROTO_DID, fetch),
-    fetchPublications(PUBLIC_ATPROTO_DID, fetch),
+    fetchDocuments(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ documents: [] })),
+    fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
+      publications: [],
+    })),
   ]);
 
   const blogPublication = publications.find(

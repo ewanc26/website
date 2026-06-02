@@ -5,7 +5,11 @@ import { error } from "@sveltejs/kit";
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
   const { rkey } = params;
-  const { posts } = await fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch);
+  const { posts } = await fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch).catch(
+    () => ({
+      posts: [],
+    }),
+  );
 
   // Attempt to find post by rkey (some structures use .url as at://.../rkey)
   const post = posts.find((p) => p.rkey === rkey || p.url.endsWith(`/${rkey}`));

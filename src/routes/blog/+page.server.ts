@@ -9,8 +9,10 @@ const PAGE_SIZE = 20;
 
 export const load: PageServerLoad = async ({ fetch }) => {
   const [{ posts }, { publications }] = await Promise.all([
-    fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch),
-    fetchPublications(PUBLIC_ATPROTO_DID, fetch),
+    fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ posts: [] })),
+    fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
+      publications: [],
+    })),
   ]);
 
   const blogPublication = publications.find(

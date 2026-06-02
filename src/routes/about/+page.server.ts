@@ -22,7 +22,13 @@ export const load: PageServerLoad = async () => {
     sifaExternalAccounts,
     sifaProjects,
   ] = await Promise.all([
-    fetchProfile(PUBLIC_ATPROTO_DID),
+    fetchProfile(PUBLIC_ATPROTO_DID).catch(() => ({
+      displayName: "",
+      description: "",
+      avatar: "",
+      banner: "",
+      did: PUBLIC_ATPROTO_DID,
+    })),
     fetchLinks(PUBLIC_ATPROTO_DID).catch(() => null),
     fetchSifaProfile(PUBLIC_ATPROTO_DID).catch(() => null),
     fetchSifaSkills(PUBLIC_ATPROTO_DID).catch(() => []),

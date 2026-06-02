@@ -23,10 +23,18 @@ export const load: PageServerLoad = async ({ fetch }) => {
     sifaProjects,
     links,
   ] = await Promise.all([
-    fetchKibunStatus(PUBLIC_ATPROTO_DID, fetch),
-    fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch),
-    fetchPublications(PUBLIC_ATPROTO_DID, fetch),
-    fetchProfile(PUBLIC_ATPROTO_DID, fetch),
+    fetchKibunStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
+    fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ posts: [] })),
+    fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
+      publications: [],
+    })),
+    fetchProfile(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
+      displayName: "",
+      description: "",
+      avatar: "",
+      banner: "",
+      did: PUBLIC_ATPROTO_DID,
+    })),
     fetchMusicStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
     fetchSifaProjects(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
     fetchLinks(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
