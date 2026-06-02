@@ -6,13 +6,7 @@
 </script>
 
 <footer class="site-footer">
-  <div class="footer-pagan-symbols">
-    <Pentacle size={14} />
-    <span class="symbol-sep"></span>
-    <Triskele size={14} />
-  </div>
-  <div class="footer-copyright">
-    <p>&copy; {new Date().getFullYear()} ewan croft</p>
+  <div class="footer-left">
     <a
       href="https://bsky.app/profile/{PUBLIC_ATPROTO_DID}"
       aria-label="Bluesky"
@@ -20,6 +14,9 @@
     >
       <Bluesky size={14} />
     </a>
+  </div>
+  <div class="footer-copyright">
+    <p>&copy; {new Date().getFullYear()} ewan croft</p>
   </div>
   <nav class="footer-nav">
     <a href="mailto:contact@ewancroft.uk" class="footer-link"

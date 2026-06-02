@@ -90,16 +90,17 @@
   color: var(--color-ink-600);
 }
 
-.footer-pagan-symbols {
+.footer-left {
   display: flex;
   align-items: center;
-  gap: var(--space-xs);
-  opacity: 0.4;
-  transition: opacity var(--duration-normal) var(--ease-out-quart);
+  gap: var(--space-sm);
 }
 
-.footer-pagan-symbols:hover {
-  opacity: 0.8;
+.footer-group-sep {
+  width: 1px;
+  height: 14px;
+  background: var(--surface-color);
+  opacity: 0.6;
 }
 
 .footer-copyright {
