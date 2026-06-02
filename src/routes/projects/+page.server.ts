@@ -5,6 +5,8 @@ import {
   PUBLIC_LEAFLET_DOCS_PUBLICATION,
 } from "$env/static/public";
 
+const PAGE_SIZE = 20;
+
 export const load: PageServerLoad = async ({ fetch }) => {
   const [{ documents }, { publications }] = await Promise.all([
     fetchDocuments(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ documents: [] })),
@@ -16,14 +18,25 @@ export const load: PageServerLoad = async ({ fetch }) => {
   const docsPublication = publications.find(
     (p) => p.rkey === PUBLIC_LEAFLET_DOCS_PUBLICATION,
   );
+
   const projectDocs = documents
     .filter((d) => d.publicationRkey === PUBLIC_LEAFLET_DOCS_PUBLICATION)
-    .map(({ title, description, path, publishedAt }) => ({
+    .sort(
+      (a, b) =>
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+    );
+
+  const allProjectsFlat = projectDocs.map(
+    ({ title, description, path, publishedAt }) => ({
       title,
       description: description ?? "",
       path,
       publishedAt,
-    }));
+    }),
+  );
+
+  const initial = allProjectsFlat.slice(0, PAGE_SIZE);
+  const remaining = allProjectsFlat.length - PAGE_SIZE;
 
   return {
     publication: docsPublication
@@ -33,6 +46,9 @@ export const load: PageServerLoad = async ({ fetch }) => {
           url: docsPublication.url,
         }
       : null,
-    projects: projectDocs,
+    projects: initial,
+    total: allProjectsFlat.length,
+    hasMore: remaining > 0,
+    pageSize: PAGE_SIZE,
   };
 };
