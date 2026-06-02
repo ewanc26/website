@@ -1,6 +1,7 @@
 <script lang="ts">
   import Now from '$lib/components/Now.svelte';
   import SiteHead from '$lib/components/SiteHead.svelte';
+  import EmptyState from '$lib/components/EmptyState.svelte';
   import { ArrowRight, ExternalLink, Music } from '@lucide/svelte';
   import { normalizeSlug } from '$lib/utils/slugify';
   import type { ProfileData, MusicStatusData, KibunStatusData } from '@ewanc26/atproto';
@@ -54,23 +55,30 @@
   <!-- Writing -->
   <section class="home-section">
     <h2 class="section-heading">{data.blog?.title ?? 'Blog'}</h2>
-    <ul class="post-list">
-      {#each data.posts as post}
-        <li>
-          <a href={getBlogUrl(post)} class="post-row">
-            <span class="post-title">{post.title}</span>
-            <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</time>
-          </a>
-        </li>
-      {/each}
-    </ul>
-    <a href="/blog" class="section-link">All posts <ArrowRight size={14} strokeWidth={2} /></a>
+    {#if data.posts.length > 0}
+      <ul class="post-list">
+        {#each data.posts as post}
+          <li>
+            <a href={getBlogUrl(post)} class="post-row">
+              <span class="post-title">{post.title}</span>
+              <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</time>
+            </a>
+          </li>
+        {/each}
+      </ul>
+      <a href="/blog" class="section-link">All posts <ArrowRight size={14} strokeWidth={2} /></a>
+    {:else}
+      <EmptyState
+        title="Blog unavailable"
+        description="Unable to load blog posts at the moment. The publishing service may be temporarily unavailable. Please try again later."
+      />
+    {/if}
   </section>
 
   <!-- Projects -->
-  {#if data.projects.length > 0}
-    <section class="home-section">
-      <h2 class="section-heading">Projects</h2>
+  <section class="home-section">
+    <h2 class="section-heading">Projects</h2>
+    {#if data.projects.length > 0}
       <div class="project-grid">
         {#each data.projects as project}
           <div class="project-card">
@@ -87,13 +95,18 @@
         {/each}
       </div>
       <a href="/projects" class="section-link">All projects <ArrowRight size={14} strokeWidth={2} /></a>
-    </section>
-  {/if}
+    {:else}
+      <EmptyState
+        title="Projects unavailable"
+        description="Unable to load project data at the moment. The service may be temporarily unavailable."
+      />
+    {/if}
+  </section>
 
   <!-- Publications -->
-  {#if data.publications.length > 0}
-    <section class="home-section">
-      <h2 class="section-heading">Publications</h2>
+  <section class="home-section">
+    <h2 class="section-heading">Publications</h2>
+    {#if data.publications.length > 0}
       <ul class="post-list">
         {#each data.publications as pub}
           <li>
@@ -104,13 +117,18 @@
           </li>
         {/each}
       </ul>
-    </section>
-  {/if}
+    {:else}
+      <EmptyState
+        title="Publications unavailable"
+        description="Unable to load publications at the moment. Please try again later."
+      />
+    {/if}
+  </section>
 
   <!-- Links -->
-  {#if data.links.length > 0}
-    <section class="home-section">
-      <h2 class="section-heading">Elsewhere</h2>
+  <section class="home-section">
+    <h2 class="section-heading">Elsewhere</h2>
+    {#if data.links.length > 0}
       <div class="link-grid">
         {#each data.links as link}
           <a href={link.url} target="_blank" rel="noopener" class="link-chip">
@@ -122,7 +140,12 @@
           </a>
         {/each}
       </div>
-    </section>
-  {/if}
+    {:else}
+      <EmptyState
+        title="Links unavailable"
+        description="Unable to load links at the moment. Please try again later."
+      />
+    {/if}
+  </section>
 </main>
 

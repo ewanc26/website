@@ -1,5 +1,6 @@
 <script lang="ts">
   import SiteHead from '$lib/components/SiteHead.svelte';
+  import EmptyState from '$lib/components/EmptyState.svelte';
   import { ExternalLink } from '@lucide/svelte';
   import type {
     ProfileData,
@@ -106,6 +107,14 @@
             </div>
           {/each}
         </section>
+      {:else}
+        <section class="about-section">
+          <EmptyState
+            title="Skills"
+            description="Unable to load skills at the moment. Please try again later."
+            icon={false}
+          />
+        </section>
       {/if}
 
       {#if sifaEducation.length > 0}
@@ -124,6 +133,14 @@
               </li>
             {/each}
           </ul>
+        </section>
+      {:else}
+        <section class="about-section">
+          <EmptyState
+            title="Education"
+            description="Unable to load education information at the moment. Please try again later."
+            icon={false}
+          />
         </section>
       {/if}
 
@@ -149,6 +166,14 @@
             {/each}
           </ul>
         </section>
+      {:else}
+        <section class="about-section">
+          <EmptyState
+            title="Projects"
+            description="Unable to load projects at the moment. Please try again later."
+            icon={false}
+          />
+        </section>
       {/if}
     </div>
 
@@ -165,6 +190,14 @@
             {/each}
           </ul>
         </section>
+      {:else}
+        <section class="sidebar-section">
+          <EmptyState
+            title="Languages"
+            description="Unable to load languages at the moment. Please try again later."
+            icon={false}
+          />
+        </section>
       {/if}
 
       {#if sifaExternalAccounts.length > 0}
@@ -180,6 +213,14 @@
               </li>
             {/each}
           </ul>
+        </section>
+      {:else}
+        <section class="sidebar-section">
+          <EmptyState
+            title="Links"
+            description="Unable to load links at the moment. Please try again later."
+            icon={false}
+          />
         </section>
       {/if}
 

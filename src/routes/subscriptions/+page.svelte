@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import SiteHead from '$lib/components/SiteHead.svelte';
+  import EmptyState from '$lib/components/EmptyState.svelte';
   import type { SubscriptionPublication, RecommendationItem } from '$lib/services/atproto/fetch';
 
   let subscriptions = $state<SubscriptionPublication[] | null>(null);
@@ -38,7 +39,11 @@
     {#if subscriptions === null}
       <p class="empty-mono">LOADING...</p>
     {:else if subscriptions.length === 0}
-      <p class="empty-mono">NULL_SET</p>
+      <EmptyState
+        title="No subscriptions"
+        description="Unable to load subscriptions at the moment. The service may be temporarily unavailable."
+        icon={false}
+      />
     {:else}
       <ul class="bare-list">
         {#each subscriptions as sub}
@@ -62,7 +67,11 @@
       {#if recommendations === null}
           <p class="empty-mono">LOADING...</p>
       {:else if recommendations.length === 0}
-          <p class="empty-mono">NULL_SET</p>
+          <EmptyState
+            title="No recommendations"
+            description="Unable to load recommendations at the moment. The service may be temporarily unavailable."
+            icon={false}
+          />
       {:else}
           <ul class="bare-list">
               {#each recommendations as rec}
