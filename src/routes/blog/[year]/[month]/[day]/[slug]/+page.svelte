@@ -72,14 +72,16 @@
                             <a href={data.blog.url} target="_blank" rel="noopener">{data.blog.title}</a>
                         </p>
                         <p class="footer-desc">{data.blog.description}</p>
-                        <div style="display: flex; gap: 1rem; align-items: center; margin-top: 0.5rem; font-size: 0.8em;">
-                            <span style="color: var(--color-ink-600);">via</span>
-                            <a href="https://standard.site" target="_blank" rel="noopener" aria-label="Standard.site" style="display: flex; align-items: center; gap: 0.25rem; font-weight: 600;">
-                                <StandardSite size={14} /> Standard.site
-                            </a>
-                            <a href="https://leaflet.pub" target="_blank" rel="noopener" aria-label="Leaflet" style="display: flex; align-items: center; gap: 0.25rem; font-weight: 600;">
-                                <Leaflet size={14} /> Leaflet
-                            </a>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.8em;">
+                            <div style="display: flex; gap: 1rem; align-items: center;">
+                                <span style="color: var(--color-ink-600);">via</span>
+                                <a href="https://standard.site" target="_blank" rel="noopener" aria-label="Standard.site" style="display: flex; align-items: center; gap: 0.25rem; font-weight: 600;">
+                                    <StandardSite size={14} /> Standard.site
+                                </a>
+                                <a href="https://leaflet.pub" target="_blank" rel="noopener" aria-label="Leaflet" style="display: flex; align-items: center; gap: 0.25rem; font-weight: 600;">
+                                    <Leaflet size={14} /> Leaflet
+                                </a>
+                            </div>
                             <a href={data.blog.rss} target="_blank" rel="noopener" class="rss-link" style="display: flex; align-items: center; gap: 0.25rem; font-weight: 600;">
                                 <Rss size={14} strokeWidth={2} /> RSS
                             </a>
