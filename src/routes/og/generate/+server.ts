@@ -53,9 +53,9 @@ export const GET: RequestHandler = async ({ url }) => {
       </g>
 
       <!-- Content -->
-      <text x="80" y="120" font-family="'JetBrains Mono', monospace" font-size="20" fill="${primary}" letter-spacing="0.1em" text-transform="uppercase">${escapeXml(typeParam)}</text>
-      
-      <text x="80" y="200" font-family="'Inter', sans-serif" font-size="80" font-weight="800" fill="${text}" letter-spacing="-0.02em">${escapeXml(displayTitle)}</text>
+      ${typeParam && typeParam !== "TECHNICAL SPEC" ? `<text x="80" y="120" font-family="'JetBrains Mono', monospace" font-size="20" fill="${primary}" letter-spacing="0.1em" text-transform="uppercase">${escapeXml(typeParam)}</text>` : ""}
+
+      <text x="80" y="${typeParam && typeParam !== "TECHNICAL SPEC" ? "200" : "160"}" font-family="'Inter', sans-serif" font-size="80" font-weight="800" fill="${text}" letter-spacing="-0.02em">${escapeXml(displayTitle)}</text>
       
       <rect x="80" y="240" width="100" height="4" fill="${primary}" />
 
