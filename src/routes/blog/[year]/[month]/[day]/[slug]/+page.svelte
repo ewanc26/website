@@ -22,7 +22,9 @@
         <h1 class="post-title">{data.post.title}</h1>
         <div class="post-meta" style="display: flex; flex-direction: column; gap: var(--space-xs);">
             <time>{new Date(data.post.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
-            <ShareButtons url={page.url.href} title={data.post.title} />
+            <div style="margin-top: 0.25rem;">
+                <ShareButtons url={page.url.href} title={data.post.title} />
+            </div>
         </div>
     </header>
 
