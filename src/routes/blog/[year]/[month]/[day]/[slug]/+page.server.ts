@@ -41,6 +41,7 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
   if (!post) {
     throw error(404, "Post not found");
   }
+  console.log("POST:", JSON.stringify(post, null, 2));
 
   // Serialise Leaflet blocks — replaces BlobRef/CID instances with PDS URLs
   let blocks: SerialisedBlock[] = [];
