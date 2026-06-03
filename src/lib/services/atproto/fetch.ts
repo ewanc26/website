@@ -9,6 +9,9 @@ import {
 } from "@ewanc26/atproto";
 import { resolveDid } from "./did";
 import { getPDSAgent } from "./agents";
+import { getCache, setCache } from "$lib/utils/cache";
+
+const CACHE_TTL_MS = 1000 * 60 * 5; // 5 minutes
 
 export async function fetchKibunStatus(fetchFn?: typeof fetch) {
   return _fetchKibunStatus(PUBLIC_ATPROTO_DID, fetchFn);
@@ -44,19 +47,17 @@ export interface SubscriptionPublication {
   authorDisplayName?: string;
 }
 
-/**
- * Fetch subscriptions and resolve each publication record.
- * Each subscription points to an AT URI for a publication on another DID's PDS,
- * so we resolve the DID → PDS → fetch the publication record + author profile.
- */
 export async function fetchSubscriptions(
   fetchFn: typeof fetch = fetch,
 ): Promise<SubscriptionPublication[]> {
+  const cacheKey = "subscriptions";
+  const cached = getCache<SubscriptionPublication[]>(cacheKey);
+  if (cached) return cached;
+
   const agent = await getPDSAgent(PUBLIC_ATPROTO_DID, fetchFn);
   const allRecords: { uri: string; value: { publication: string } }[] = [];
   let cursor: string | undefined;
 
-  // Paginate through all subscription records
   do {
     const resp = await agent.com.atproto.repo.listRecords({
       repo: PUBLIC_ATPROTO_DID,
@@ -73,7 +74,6 @@ export async function fetchSubscriptions(
     cursor = resp.data.cursor;
   } while (cursor);
 
-  // Resolve each publication AT URI → DID + rkey, then fetch via DID resolution
   const resolved = await Promise.allSettled(
     allRecords.map(async (record): Promise<SubscriptionPublication> => {
       const pubUri = record.value.publication;
@@ -81,18 +81,15 @@ export async function fetchSubscriptions(
       const did = parts[0];
       const rkey = parts[parts.length - 1];
 
-      // Resolve DID to find PDS and handle
       const didDoc = await resolveDid(did, fetchFn);
       const pdsUrl = didDoc.service?.[0]?.serviceEndpoint;
       if (!pdsUrl) throw new Error(`No PDS for ${did}`);
 
-      // Extract handle from alsoKnownAs
       const handleEntry: string | undefined = didDoc.alsoKnownAs?.find(
         (a: string) => a.startsWith("at://"),
       );
       const authorHandle = handleEntry ? handleEntry.replace("at://", "") : did;
 
-      // Fetch the publication record from their PDS
       const pubRes = await fetchFn(
         `${pdsUrl}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(did)}&collection=site.standard.publication&rkey=${rkey}`,
       );
@@ -100,7 +97,6 @@ export async function fetchSubscriptions(
       const pubData = await pubRes.json();
       const value = pubData.value;
 
-      // Fetch the author's profile for displayName
       let authorDisplayName: string | undefined;
       try {
         const profileRes = await fetchFn(
@@ -110,9 +106,7 @@ export async function fetchSubscriptions(
           const profileData = await profileRes.json();
           authorDisplayName = profileData.value?.displayName;
         }
-      } catch {
-        // Profile fetch is best-effort
-      }
+      } catch {}
 
       return {
         uri: pubUri,
@@ -126,12 +120,15 @@ export async function fetchSubscriptions(
     }),
   );
 
-  return resolved
+  const data = resolved
     .filter(
       (r): r is PromiseFulfilledResult<SubscriptionPublication> =>
         r.status === "fulfilled",
     )
     .map((r) => r.value);
+
+  setCache(cacheKey, data, CACHE_TTL_MS);
+  return data;
 }
 
 export interface RecommendationItem {
@@ -146,6 +143,10 @@ export interface RecommendationItem {
 export async function fetchRecommendations(
   fetchFn: typeof fetch = fetch,
 ): Promise<RecommendationItem[]> {
+  const cacheKey = "recommendations";
+  const cached = getCache<RecommendationItem[]>(cacheKey);
+  if (cached) return cached;
+
   const agent = await getPDSAgent(PUBLIC_ATPROTO_DID, fetchFn);
   const allRecords: { uri: string; value: { document: string } }[] = [];
   let cursor: string | undefined;
@@ -200,12 +201,15 @@ export async function fetchRecommendations(
     }),
   );
 
-  return resolved
+  const data = resolved
     .filter(
       (r): r is PromiseFulfilledResult<RecommendationItem> =>
         r.status === "fulfilled",
     )
     .map((r) => r.value);
+
+  setCache(cacheKey, data, CACHE_TTL_MS);
+  return data;
 }
 
 export interface LeafletComment {
@@ -221,15 +225,14 @@ export interface LeafletComment {
 const CONSTELLATION = "https://constellation.microcosm.blue";
 const SLINGSHOT = "https://slingshot.microcosm.blue";
 
-/**
- * Fetch leaflet comments on a document using Constellation (backlink index)
- * and Slingshot (record cache). Resolves author DIDs to handles + display names.
- */
 export async function fetchComments(
   subjectUri: string,
   fetchFn: typeof fetch = fetch,
 ): Promise<LeafletComment[]> {
-  // 1. Find all pub.leaflet.comment records linking to this document
+  const cacheKey = `comments:${subjectUri}`;
+  const cached = getCache<LeafletComment[]>(cacheKey);
+  if (cached) return cached;
+
   const backlinksRes = await fetchFn(
     `${CONSTELLATION}/xrpc/blue.microcosm.links.getBacklinks?subject=${encodeURIComponent(subjectUri)}&source=pub.leaflet.comment:subject&limit=100`,
   );
@@ -238,7 +241,6 @@ export async function fetchComments(
 
   if (!backlinks.records?.length) return [];
 
-  // 2. Fetch each comment record via Slingshot and resolve author identity
   const comments = await Promise.allSettled(
     backlinks.records.map(async (ref: { did: string; rkey: string }) => {
       const recordRes = await fetchFn(
@@ -248,7 +250,6 @@ export async function fetchComments(
       const recordData = await recordRes.json();
       const value = recordData.value;
 
-      // Resolve DID → handle + displayName
       const didDoc = await resolveDid(ref.did, fetchFn);
       let authorHandle = ref.did;
       let authorDisplayName: string | undefined;
@@ -259,7 +260,6 @@ export async function fetchComments(
         );
         authorHandle = handleEntry ? handleEntry.replace("at://", "") : ref.did;
 
-        // Best-effort profile fetch for displayName
         const pdsUrl = didDoc.service?.[0]?.serviceEndpoint;
         if (pdsUrl) {
           try {
@@ -270,9 +270,7 @@ export async function fetchComments(
               const profileData = await profileRes.json();
               authorDisplayName = profileData.value?.displayName;
             }
-          } catch {
-            // best-effort
-          }
+          } catch {}
         }
       }
 
@@ -288,7 +286,7 @@ export async function fetchComments(
     }),
   );
 
-  return comments
+  const data = comments
     .filter(
       (r): r is PromiseFulfilledResult<LeafletComment> =>
         r.status === "fulfilled",
@@ -298,6 +296,9 @@ export async function fetchComments(
       (a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
+
+  setCache(cacheKey, data, CACHE_TTL_MS);
+  return data;
 }
 
 export async function fetchBlob(ref: any) {
