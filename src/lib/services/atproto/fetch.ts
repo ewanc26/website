@@ -7,6 +7,7 @@ import {
   fetchPublications as _fetchPublications,
   fetchSiteInfo as _fetchSiteInfo,
 } from "@ewanc26/atproto";
+import { resolveDid } from "./did";
 import { getPDSAgent } from "./agents";
 
 export async function fetchKibunStatus(fetchFn?: typeof fetch) {
@@ -81,11 +82,7 @@ export async function fetchSubscriptions(
       const rkey = parts[parts.length - 1];
 
       // Resolve DID to find PDS and handle
-      const didRes = await fetchFn(
-        `https://plc.directory/${encodeURIComponent(did)}`,
-      );
-      if (!didRes.ok) throw new Error(`DID resolution failed for ${did}`);
-      const didDoc = await didRes.json();
+      const didDoc = await resolveDid(did, fetchFn);
       const pdsUrl = didDoc.service?.[0]?.serviceEndpoint;
       if (!pdsUrl) throw new Error(`No PDS for ${did}`);
 
@@ -176,11 +173,7 @@ export async function fetchRecommendations(
       const did = parts[0];
       const rkey = parts[parts.length - 1];
 
-      const didRes = await fetchFn(
-        `https://plc.directory/${encodeURIComponent(did)}`,
-      );
-      if (!didRes.ok) throw new Error(`DID resolution failed for ${did}`);
-      const didDoc = await didRes.json();
+      const didDoc = await resolveDid(did, fetchFn);
       const pdsUrl = didDoc.service?.[0]?.serviceEndpoint;
       if (!pdsUrl) throw new Error(`No PDS for ${did}`);
 
@@ -256,14 +249,11 @@ export async function fetchComments(
       const value = recordData.value;
 
       // Resolve DID → handle + displayName
-      const didRes = await fetchFn(
-        `https://plc.directory/${encodeURIComponent(ref.did)}`,
-      );
+      const didDoc = await resolveDid(ref.did, fetchFn);
       let authorHandle = ref.did;
       let authorDisplayName: string | undefined;
 
-      if (didRes.ok) {
-        const didDoc = await didRes.json();
+      if (didDoc) {
         const handleEntry: string | undefined = didDoc.alsoKnownAs?.find(
           (a: string) => a.startsWith("at://"),
         );
