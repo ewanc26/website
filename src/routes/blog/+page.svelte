@@ -117,5 +117,10 @@
         border-radius: var(--radius-md);
         background: var(--surface-raised);
         box-sizing: border-box;
+        transition: border-color var(--duration-fast) var(--ease-out-quart);
+    }
+    .blog-search:focus {
+        outline: none;
+        border-color: var(--color-primary-500);
     }
 </style>
