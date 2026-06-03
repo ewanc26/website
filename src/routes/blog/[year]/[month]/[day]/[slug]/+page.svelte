@@ -4,6 +4,8 @@
     import TableOfContents from '$lib/components/TableOfContents.svelte';
     import LeafletBlocks from '$lib/components/leaflet/LeafletBlocks.svelte';
     import Pentacle from '$lib/components/icons/Pentacle.svelte';
+    import Leaflet from '$lib/components/icons/Leaflet.svelte';
+    import StandardSite from '$lib/components/icons/StandardSite.svelte';
     import { Rss, MessageCircle } from '@lucide/svelte';
     import { page } from '$app/state';
 
@@ -70,7 +72,11 @@
                             <a href={data.blog.url} target="_blank" rel="noopener">{data.blog.title}</a>
                         </p>
                         <p class="footer-desc">{data.blog.description}</p>
-                        <a href={data.blog.rss} target="_blank" rel="noopener" class="rss-link"><Rss size={14} strokeWidth={2} /> RSS</a>
+                        <div style="display: flex; gap: 1rem; align-items: center; margin-top: 0.5rem;">
+                            <a href="https://standard.site" target="_blank" rel="noopener" aria-label="Standard.site"><StandardSite size={18} /></a>
+                            <a href="https://leaflet.pub" target="_blank" rel="noopener" aria-label="Leaflet"><Leaflet size={18} /></a>
+                            <a href={data.blog.rss} target="_blank" rel="noopener" class="rss-link"><Rss size={14} strokeWidth={2} /> RSS</a>
+                        </div>
                     </footer>
                 {/if}
             </div>

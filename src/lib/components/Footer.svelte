@@ -1,5 +1,6 @@
 <script lang="ts">
     import Bluesky from '$lib/components/icons/Bluesky.svelte';
+    import Eurosky from '$lib/components/icons/Eurosky.svelte';
     import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 </script>
 
@@ -7,6 +8,10 @@
     <div class="footer-symbols">
         <a href="https://bsky.app/profile/{PUBLIC_ATPROTO_DID}" aria-label="Bluesky" class="footer-icon-link">
             <Bluesky size={14} />
+        </a>
+        <span class="symbol-sep"></span>
+        <a href="https://eurosky.tech" aria-label="Eurosky" class="footer-icon-link">
+            <Eurosky size={14} />
         </a>
     </div>
     <p>&copy; {new Date().getFullYear()} ewan croft</p>
