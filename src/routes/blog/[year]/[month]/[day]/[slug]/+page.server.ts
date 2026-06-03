@@ -1,6 +1,6 @@
 import type { PageServerLoad } from "./$types";
 import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
-import { fetchBlob, fetchComments } from "$lib/services/atproto/fetch";
+import { fetchBlob, fetchComments } from "$lib/services/atproto";
 import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
@@ -8,11 +8,11 @@ import {
 import { error } from "@sveltejs/kit";
 import { normalizeSlug } from "$lib/utils/slugify";
 import { renderMarkdown } from "$lib/utils/markdown";
-import { leafletProvider } from "$lib/providers/leaflet";
 import {
+  leafletProvider,
   serialiseBlocks,
   type SerialisedBlock,
-} from "$lib/providers/serialise";
+} from "$lib/providers";
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
   const { year, month, day, slug } = params;
