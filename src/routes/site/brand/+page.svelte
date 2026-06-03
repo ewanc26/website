@@ -181,6 +181,13 @@
     { token: 'text', value: '#d9e4de', desc: 'ink-50' },
     { token: 'textMuted', value: '#a0b0a8', desc: 'ink-500' },
   ];
+
+  const ogPreviews = [
+    { title: 'Brand Kit', type: 'BRAND_KIT', desc: 'Technical Spec' },
+    { title: 'About', type: 'ABOUT', desc: 'Profile' },
+    { title: 'The Pentacle and the Triskele', type: 'BLOG', desc: 'Blog Post' },
+    { title: 'Projects', type: 'PROJECTS', desc: 'Projects Index' },
+  ];
 </script>
 
 <SiteHead
@@ -667,19 +674,21 @@
 
             <div class="asset-card og-card">
               <h3 class="sub-title">Open Graph (Dynamic)</h3>
-              <div class="asset-preview og-preview">
-                <img 
-                  src="{assets.ogImage.endpoint}?title=Brand%20Kit&type=TECHNICAL%20SPEC" 
-                  alt="OG Image Preview" 
-                  class="og-img"
-                />
-              </div>
               <div class="og-info-grid">
-                <dl class="asset-meta">
-                  <div><dt>ENDPOINT</dt><dd><code>{assets.ogImage.endpoint}</code></dd></div>
-                  <div><dt>SIZE</dt><dd>{assets.ogImage.size}</dd></div>
-                  <div><dt>PARAMS</dt><dd><code>{assets.ogImage.params.join(', ')}</code></dd></div>
-                </dl>
+                <div class="og-previews">
+                  {#each ogPreviews as preview}
+                    <div style="margin-bottom: 1rem;">
+                      <span class="meta-label">{preview.desc}</span>
+                      <div class="asset-preview og-preview">
+                        <img
+                          src="{assets.ogImage.endpoint}?title={encodeURIComponent(preview.title)}&type={encodeURIComponent(preview.type)}"
+                          alt="OG Image: {preview.desc}"
+                          class="og-img"
+                        />
+                      </div>
+                    </div>
+                  {/each}
+                </div>
                 <div class="og-colours">
                   <span class="meta-label">OG COLOUR PALETTE</span>
                   <div class="og-swatches">
