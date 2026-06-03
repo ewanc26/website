@@ -20,6 +20,9 @@
 <main class="shell-prose">
     <header class="post-hd">
         <h1 class="post-title">{data.post.title}</h1>
+        {#if data.post.description}
+            <p class="post-desc" style="font-size: 1.25em; color: var(--color-ink-700); margin-top: -1rem; margin-bottom: 1.5rem;">{data.post.description}</p>
+        {/if}
         <div class="post-meta" style="display: flex; flex-direction: column; gap: var(--space-xs);">
             <time>{new Date(data.post.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
             <div style="margin-top: 0.25rem;">
