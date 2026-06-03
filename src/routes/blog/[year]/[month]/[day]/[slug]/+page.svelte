@@ -15,7 +15,7 @@
     let useBlocks = $derived(data.post.blocks && data.post.blocks.length > 0);
 </script>
 
-<SiteHead title={data.post.title} description={data.blog?.description} />
+<SiteHead title={data.post.title} description={data.post.description} ogType="BLOG" />
 
 <main class="shell-prose">
     <header class="post-hd">
