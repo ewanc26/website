@@ -162,7 +162,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--color-ink-700);
-  margin: 0 0 var(--space-sm);
+  margin: 0 0 var(--space-md);
 }
 
 .toc ol {
@@ -223,7 +223,6 @@
 
 .comments-section {
   margin-top: var(--space-lg);
-  padding-top: var(--space-lg);
 }
 
 .comments-section .section-heading {
@@ -279,8 +278,7 @@
 .share-bar {
   display: flex;
   gap: var(--space-md);
-  margin-top: var(--space-lg);
-  padding-top: var(--space-md);
+  margin-top: var(--space-md);
 }
 
 .share-link {
