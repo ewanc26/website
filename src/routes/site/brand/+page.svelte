@@ -3,6 +3,9 @@
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
   import Pentacle from '$lib/components/icons/Pentacle.svelte';
   import Triskele from '$lib/components/icons/Triskele.svelte';
+  import Eurosky from '$lib/components/icons/Eurosky.svelte';
+  import Leaflet from '$lib/components/icons/Leaflet.svelte';
+  import StandardSite from '$lib/components/icons/StandardSite.svelte';
   import favicon from '$lib/assets/favicon.svg';
   import { Copy, Check } from '@lucide/svelte';
 
@@ -478,6 +481,24 @@
                 <Bluesky size={32} />
               </div>
               <code class="icon-name">Bluesky.svelte</code>
+            </div>
+            <div class="icon-card">
+              <div class="icon-preview">
+                <Eurosky size={32} />
+              </div>
+              <code class="icon-name">Eurosky.svelte</code>
+            </div>
+            <div class="icon-card">
+              <div class="icon-preview">
+                <Leaflet size={32} />
+              </div>
+              <code class="icon-name">Leaflet.svelte</code>
+            </div>
+            <div class="icon-card">
+              <div class="icon-preview">
+                <StandardSite size={32} />
+              </div>
+              <code class="icon-name">StandardSite.svelte</code>
             </div>
             <div class="icon-card">
               <div class="icon-preview">
