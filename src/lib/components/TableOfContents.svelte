@@ -10,7 +10,6 @@
     }
 
     let entries: TocEntry[] = $state([]);
-    let activeId: string = $state('');
     let mounted = $state(false);
 
     onMount(() => {
@@ -24,25 +23,6 @@
             text: h.textContent ?? '',
             level: parseInt(h.tagName[1]),
         }));
-
-        if (entries.length === 0) return;
-
-        const observer = new IntersectionObserver(
-            (observed) => {
-                for (const entry of observed) {
-                    if (entry.isIntersecting) {
-                        activeId = entry.target.id;
-                    }
-                }
-            },
-            { rootMargin: '-100px 0px -80% 0px', threshold: 0 },
-        );
-
-        for (const h of headings) {
-            if (h.id) observer.observe(h);
-        }
-
-        return () => observer.disconnect();
     });
 </script>
 
@@ -68,7 +48,6 @@
                     <a
                         href="#{entry.id}"
                         class="toc-link"
-                        class:active={activeId === entry.id}
                         class:h3={entry.level === 3}
                         class:h4={entry.level === 4}
                     >{entry.text}</a>
