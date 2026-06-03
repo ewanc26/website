@@ -56,7 +56,7 @@
     }
 </script>
 
-<SiteHead title={data.blog?.title ?? 'Blog'} description={data.blog?.description} />
+<SiteHead title={data.blog?.title ?? 'Blog'} description={data.blog?.description} ogType="BLOG" />
 
 <main class="shell-wide">
     <header class="page-hd">

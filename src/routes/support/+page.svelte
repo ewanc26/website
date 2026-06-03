@@ -33,6 +33,7 @@
 <SiteHead
   title="Support"
   description="Support my open-source work via Ko-fi, GitHub Sponsors, or cryptocurrency."
+  ogType="SUPPORT"
 />
 
 <main class="shell-narrow">
