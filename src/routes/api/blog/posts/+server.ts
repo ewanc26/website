@@ -23,12 +23,13 @@ export const GET: RequestHandler = async ({ url }) => {
 
   const page = publicationPosts
     .slice(offset, offset + limit)
-    .map(({ title, createdAt, publicationRkey, rkey, url }) => ({
+    .map(({ title, createdAt, publicationRkey, rkey, url, tags }) => ({
       title,
       createdAt,
       publicationRkey,
       rkey,
       url,
+      tags: tags || [],
     }));
 
   return json({

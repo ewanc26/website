@@ -25,6 +25,13 @@
         {/if}
         <div class="post-meta" style="display: flex; flex-direction: column; gap: var(--space-xs);">
             <time>{new Date(data.post.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+            {#if data.post.tags && data.post.tags.length > 0}
+                <div class="meta-tags" style="margin-top: 0.25rem;">
+                    {#each data.post.tags as tag}
+                        <span class="meta-tag">{tag}</span>
+                    {/each}
+                </div>
+            {/if}
             <div style="margin-top: 0.25rem;">
                 <ShareButtons url={page.url.href} title={data.post.title} />
             </div>
