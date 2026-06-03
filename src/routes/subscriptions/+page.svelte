@@ -22,7 +22,7 @@
   });
 </script>
 
-<SiteHead title="Subscriptions" description="Publications I read on Standard.site." />
+<SiteHead title="Subscriptions" description="Publications I read on Standard.site." ogType="SUBSCRIPTIONS" />
 
 <main class="shell-narrow">
   <header class="page-hd">
