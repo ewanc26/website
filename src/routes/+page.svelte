@@ -46,7 +46,7 @@
     {/if}
     {#if musicStatus}
       <div class="status-chip">
-        <!-- <Music size={14} strokeWidth={2} class="muted-icon" /> -->
+        <Music size={14} strokeWidth={2} class="muted-icon" />
         <span class="status-text">{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(', ')}</span>
       </div>
     {/if}

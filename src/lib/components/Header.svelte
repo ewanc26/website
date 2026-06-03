@@ -1,7 +1,7 @@
 <script lang="ts">
     import { SITE, NAV_LINKS } from '$lib/config';
     import { page } from '$app/state';
-    import { Menu, X } from '@lucide/svelte';
+    import { X } from '@lucide/svelte';
     import Triskele from './icons/Triskele.svelte';
 
     let isMenuOpen = $state(false);
@@ -17,7 +17,7 @@
         {#if isMenuOpen}
             <X />
         {:else}
-            <Menu />
+            <span class="hamburger"></span>
         {/if}
     </button>
 
