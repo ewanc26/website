@@ -35,7 +35,7 @@
                     }
                 }
             },
-            { rootMargin: '-80px 0px -70% 0px', threshold: 0 },
+            { rootMargin: '-100px 0px -80% 0px', threshold: 0 },
         );
 
         for (const h of headings) {
