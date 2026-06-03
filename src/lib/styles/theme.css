@@ -22,8 +22,8 @@
   /* ── Base ───────────────────────────────────────────────────── */
 
   body {
-    background-color: var(--color-canvas-50);
-    color: var(--color-ink-900);
+    background-color: var(--color-background-50);
+    color: var(--color-text-900);
     font-family: var(--font-family);
     font-size: var(--text-md);
     line-height: 1.6;
@@ -39,7 +39,7 @@
   h4,
   h5,
   h6 {
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     font-family: var(--font-family);
     line-height: 1.2;
     margin-top: var(--space-lg);
@@ -69,7 +69,7 @@
     font-size: var(--text-md);
     font-weight: 600;
     letter-spacing: -0.01em;
-    color: var(--color-ink-900);
+    color: var(--color-text-900);
   }
 
   h5 {
@@ -81,7 +81,7 @@
   h6 {
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
   }
 
   :is(h1, h2, h3, h4, h5, h6):first-child {
@@ -102,11 +102,11 @@
   /* ── Links ──────────────────────────────────────────────────── */
 
   a {
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     text-decoration: underline;
     text-decoration-color: color-mix(
       in oklch,
-      var(--color-ink-950) 35%,
+      var(--color-text-950) 35%,
       transparent
     );
     text-underline-offset: 3px;
@@ -131,25 +131,25 @@
   strong,
   b {
     font-weight: 700;
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
   }
 
   em,
   i {
     font-style: italic;
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
   }
 
   del,
   s {
     text-decoration: line-through;
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
   }
 
   ins {
     text-decoration: underline;
     text-decoration-color: var(--color-primary-500);
-    color: var(--color-ink-900);
+    color: var(--color-text-900);
   }
 
   mark {
@@ -158,14 +158,14 @@
       var(--color-accent-500) 22%,
       transparent
     );
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     padding: 0.1em 0.25em;
     border-radius: var(--radius-sm);
   }
 
   small {
     font-size: var(--text-xs);
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
   }
 
   sub,
@@ -185,14 +185,14 @@
 
   abbr[title] {
     text-decoration: underline dotted;
-    text-decoration-color: var(--color-ink-600);
+    text-decoration-color: var(--color-text-600);
     text-underline-offset: 2px;
     cursor: help;
   }
 
   cite {
     font-style: italic;
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
   }
 
   dfn {
@@ -216,7 +216,7 @@
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     line-height: 1.7;
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
     background-color: var(--surface-raised);
     border: 1px solid var(--surface-color);
     border-radius: var(--radius-md);
@@ -239,9 +239,9 @@
   kbd {
     font-family: var(--font-mono);
     font-size: 0.82em;
-    color: var(--color-ink-900);
+    color: var(--color-text-900);
     background-color: var(--surface-raised);
-    border: 1px solid var(--color-canvas-300);
+    border: 1px solid var(--color-background-300);
     border-bottom-width: 2px;
     border-radius: var(--radius-sm);
     padding: 0.1em 0.4em;
@@ -251,7 +251,7 @@
   var {
     font-family: var(--font-mono);
     font-size: 0.875em;
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
   }
 
   /* ── Blockquote ─────────────────────────────────────────────── */
@@ -260,7 +260,7 @@
     border-left: 3px solid var(--color-primary-500);
     padding: var(--space-sm) 0 var(--space-sm) var(--space-md);
     margin: var(--space-md) 0;
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     font-style: italic;
   }
 
@@ -297,7 +297,7 @@
   }
 
   ol > li::marker {
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     font-weight: 600;
   }
 
@@ -307,14 +307,14 @@
 
   dt {
     font-weight: 700;
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     margin-bottom: var(--space-2xs);
   }
 
   dd {
     margin-left: var(--space-lg);
     margin-bottom: var(--space-sm);
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
   }
 
   /* ── Thematic break ─────────────────────────────────────────── */
@@ -346,7 +346,7 @@
   figcaption {
     margin-top: var(--space-xs);
     font-size: var(--text-sm);
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     text-align: center;
   }
 
@@ -374,7 +374,7 @@
   th {
     font-weight: 700;
     text-align: left;
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     padding: var(--space-xs) var(--space-sm);
     border-bottom: 2px solid var(--surface-color);
   }
@@ -396,7 +396,7 @@
 
   caption {
     font-size: var(--text-sm);
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     margin-bottom: var(--space-xs);
     text-align: left;
   }
@@ -407,7 +407,7 @@
     display: block;
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--color-ink-900);
+    color: var(--color-text-900);
     margin-bottom: var(--space-2xs);
   }
 
@@ -416,7 +416,7 @@
   select {
     font-family: var(--font-family);
     font-size: var(--text-sm);
-    color: var(--color-ink-900);
+    color: var(--color-text-900);
     background-color: var(--surface-raised);
     border: 1px solid var(--surface-color);
     border-radius: var(--radius-md);
@@ -433,12 +433,12 @@
   select:focus {
     outline: none;
     border-color: var(--color-primary-500);
-    background-color: var(--color-canvas-50);
+    background-color: var(--color-background-50);
   }
 
   input::placeholder,
   textarea::placeholder {
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
   }
 
   textarea {
@@ -457,7 +457,7 @@
     font-family: var(--font-family);
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--color-canvas-50);
+    color: var(--color-background-50);
     background-color: var(--color-primary-500);
     border: 1px solid transparent;
     border-radius: var(--radius-md);
@@ -492,7 +492,7 @@
   legend {
     font-size: var(--text-sm);
     font-weight: 700;
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     padding: 0 var(--space-xs);
   }
 
@@ -511,7 +511,7 @@
 
   summary {
     font-weight: 600;
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     cursor: pointer;
     list-style: none;
     display: flex;
@@ -531,7 +531,7 @@
     content: "▶";
     display: inline-block;
     font-size: 0.7em;
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     transition: transform var(--duration-fast) var(--ease-out-quart);
     flex-shrink: 0;
   }
@@ -558,19 +558,19 @@
 
   address {
     font-style: normal;
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
   }
 
   time {
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
   }
 
   /* ── Misc ───────────────────────────────────────────────────── */
 
   /* Dialogs */
   dialog {
-    background-color: var(--color-canvas-50);
-    color: var(--color-ink-900);
+    background-color: var(--color-background-50);
+    color: var(--color-text-900);
     border: 1px solid var(--surface-color);
     border-radius: var(--radius-lg);
     padding: var(--space-lg);
@@ -618,7 +618,7 @@
   output {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
-    color: var(--color-ink-900);
+    color: var(--color-text-900);
   }
 }
 
@@ -672,7 +672,7 @@
     padding: 8px 14px;
     border-bottom: 1px solid var(--surface-color);
     font-size: var(--text-xs);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     text-transform: lowercase;
     letter-spacing: 0.02em;
     flex-shrink: 0;

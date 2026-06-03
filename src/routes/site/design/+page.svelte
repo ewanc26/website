@@ -197,7 +197,7 @@
   ogType="DESIGN"
 />
 
-<main class="shell-wide">
+<main class="shell-wide design-page">
   <header class="page-hd spec-header">
     <div class="spec-meta">
       <span class="meta-tag">DESIGN SYSTEM</span>

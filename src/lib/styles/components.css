@@ -16,7 +16,7 @@
     gap: var(--space-md);
     padding: var(--space-md) var(--space-lg);
     border-bottom: 1px solid var(--surface-color);
-    background: var(--color-canvas-50);
+    background: var(--color-background-50);
     position: sticky;
     top: 0;
     z-index: 10;
@@ -26,7 +26,7 @@
   .nav-brand {
     font-weight: 700;
     text-decoration: none;
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     font-size: var(--text-md);
     display: flex;
     align-items: center;
@@ -38,7 +38,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
   }
 
   .nav-links {
@@ -48,7 +48,7 @@
 
   .nav-link {
     text-decoration: none;
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     transition: color var(--duration-fast) var(--ease-out-quart);
   }
 
@@ -69,7 +69,7 @@
       left: 0;
       width: 100%;
       flex-direction: column;
-      background: var(--color-canvas-50);
+      background: var(--color-background-50);
       padding: var(--space-md);
       border-bottom: 1px solid var(--surface-color);
       gap: var(--space-sm);
@@ -89,7 +89,7 @@
     justify-content: space-between;
     align-items: center;
     font-size: var(--text-xs);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
   }
 
   .footer-symbols {
@@ -110,7 +110,7 @@
 
   .footer-icon-link {
     display: flex;
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     opacity: 0.4;
     transition:
       color var(--duration-fast) var(--ease-out-quart),
@@ -129,7 +129,7 @@
   }
 
   .footer-link {
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     text-decoration: none;
     white-space: nowrap;
   }
@@ -163,7 +163,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     margin: 0 0 var(--space-md);
   }
 
@@ -181,7 +181,7 @@
     display: block;
     font-size: var(--text-sm);
     text-decoration: none;
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     padding: var(--space-2xs) var(--space-sm);
     border-left: 2px solid transparent;
     margin-left: -1px;
@@ -284,7 +284,7 @@
   }
 
   .share-link {
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -296,7 +296,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -310,7 +310,7 @@
     padding: var(--space-md);
     border: 1px solid var(--color-accent-200);
     border-radius: var(--radius-lg);
-    background-color: var(--color-canvas-100);
+    background-color: var(--color-background-100);
   }
 
   .now-header {
@@ -342,14 +342,14 @@
     margin: 0;
     font-size: var(--text-md);
     font-weight: 500;
-    color: var(--color-ink-900);
+    color: var(--color-text-900);
   }
 
   .now-date {
     margin-top: var(--space-sm);
     font-size: var(--text-sm);
     opacity: 0.7;
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
   }
 
   /* ── Project list ────────────────────────────────────────────── */
