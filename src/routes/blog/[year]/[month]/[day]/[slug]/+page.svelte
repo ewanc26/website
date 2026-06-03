@@ -73,9 +73,18 @@
                         </p>
                         <p class="footer-desc">{data.blog.description}</p>
                         <div style="display: flex; gap: 1rem; align-items: center; margin-top: 0.5rem;">
-                            <a href="https://standard.site" target="_blank" rel="noopener" aria-label="Standard.site"><StandardSite size={18} /></a>
-                            <a href="https://leaflet.pub" target="_blank" rel="noopener" aria-label="Leaflet"><Leaflet size={18} /></a>
-                            <a href={data.blog.rss} target="_blank" rel="noopener" class="rss-link"><Rss size={14} strokeWidth={2} /> RSS</a>
+                            <a href="https://standard.site" target="_blank" rel="noopener" aria-label="Standard.site" style="display: flex; align-items: center; gap: 0.25rem;">
+                                <StandardSite size={18} />
+                                <span style="font-size: 0.8em; font-weight: 600;">Standard.site</span>
+                            </a>
+                            <a href="https://leaflet.pub" target="_blank" rel="noopener" aria-label="Leaflet" style="display: flex; align-items: center; gap: 0.25rem;">
+                                <Leaflet size={18} />
+                                <span style="font-size: 0.8em; font-weight: 600;">Leaflet</span>
+                            </a>
+                            <a href={data.blog.rss} target="_blank" rel="noopener" class="rss-link" style="display: flex; align-items: center; gap: 0.25rem;">
+                                <Rss size={14} strokeWidth={2} /> 
+                                <span style="font-size: 0.8em; font-weight: 600;">RSS</span>
+                            </a>
                         </div>
                     </footer>
                 {/if}
