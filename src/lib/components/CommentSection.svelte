@@ -1,5 +1,6 @@
 <script lang="ts">
     import { MessageCircle } from '@lucide/svelte';
+    import EmptyState from '$lib/components/EmptyState.svelte';
     import type { LeafletComment } from '$lib/services/atproto/fetch';
 
     let { comments }: { comments: LeafletComment[] } = $props();

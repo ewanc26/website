@@ -1,7 +1,8 @@
 import type { PageServerLoad } from "./$types";
 import { fetchBlogPosts } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
+import { normalizeSlug } from "$lib/utils/slugify";
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
   const { rkey } = params;
@@ -17,17 +18,11 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
     throw error(404, "Post not found");
   }
 
-  // Fallback chain: Explicit description -> Clean slice of text content -> Default fallback string
-  const descriptionFallback = post.description 
-    ? post.description 
-    : (post.textContent ? post.textContent.slice(0, 155).trim() + "..." : "Read the full post on the blog.");
+  const date = new Date(post.createdAt);
+  const y = date.getFullYear();
+  const m = (date.getMonth() + 1).toString().padStart(2, "0");
+  const d = date.getDate().toString().padStart(2, "0");
+  const slug = normalizeSlug(post.title);
 
-  return {
-    post: {
-      title: post.title,
-      description: descriptionFallback,
-      createdAt: post.createdAt,
-      content: post.content
-    }
-  };
+  throw redirect(301, `/blog/${y}/${m}/${d}/${slug}`);
 };

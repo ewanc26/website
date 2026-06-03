@@ -1,4 +1,7 @@
 @import "tailwindcss";
+
+@layer theme, base, components, utilities;
+
 @import "../lib/styles/theme.css";
 @import "../lib/styles/content.css";
 @import "../lib/styles/components.css";

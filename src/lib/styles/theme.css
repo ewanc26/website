@@ -693,8 +693,10 @@
 
 /* ── Utilities ──────────────────────────────────────────────── */
 
-@media (max-width: 600px) {
-  .hide-mobile {
-    display: none;
+@layer utilities {
+  @media (max-width: 600px) {
+    .hide-mobile {
+      display: none;
+    }
   }
 }

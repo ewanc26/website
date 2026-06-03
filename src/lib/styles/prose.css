@@ -166,6 +166,16 @@
     font-style: italic;
   }
 
+  .prose blockquote + blockquote {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .prose blockquote:has(+ blockquote) {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
   .prose blockquote p {
     margin-bottom: 0;
   }

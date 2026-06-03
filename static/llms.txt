@@ -8,7 +8,7 @@ The site's visual identity is built on technical integrity, using an OKLCH-based
 ## Pages
 - [About](/about)
 - [Blog](/blog)
-- [Projects](/projects)
+- [Projects](https://docs.ewancroft.uk)
 - [Support](/support)
 - [Subscriptions](/subscriptions)
 - [Site Meta](/site/meta)

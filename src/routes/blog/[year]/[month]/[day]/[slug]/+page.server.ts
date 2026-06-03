@@ -1,6 +1,6 @@
 import type { PageServerLoad } from "./$types";
 import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
-import { fetchBlob, fetchComments } from "$lib/services/atproto/fetch";
+import { fetchBlob, fetchComments } from "$lib/services/atproto";
 import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
@@ -8,11 +8,11 @@ import {
 import { error } from "@sveltejs/kit";
 import { normalizeSlug } from "$lib/utils/slugify";
 import { renderMarkdown } from "$lib/utils/markdown";
-import { leafletProvider } from "$lib/providers/leaflet";
 import {
+  leafletProvider,
   serialiseBlocks,
   type SerialisedBlock,
-} from "$lib/providers/serialise";
+} from "$lib/providers";
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
   const { year, month, day, slug } = params;
@@ -43,12 +43,13 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
   if (!post) {
     throw error(404, "Post not found");
   }
+  console.log("POST:", JSON.stringify(post, null, 2));
 
   // Generate a clean text excerpt string by removing common markdown markup indicators
   const cleanExcerpt = (text: string) => {
     return text
       .replace(/[#*`_~\[\]()\-]/g, "") // Strip structural formatting tokens
-      .replace(/\s+/g, " ")            // Normalize duplicate spaces and line breaks
+      .replace(/\s+/g, " ") // Normalize duplicate spaces and line breaks
       .trim();
   };
 
@@ -56,7 +57,8 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
   let metaDescription = post.description ?? "";
   if (!metaDescription && post.textContent) {
     const excerpt = cleanExcerpt(post.textContent);
-    metaDescription = excerpt.length > 155 ? excerpt.slice(0, 152) + "..." : excerpt;
+    metaDescription =
+      excerpt.length > 155 ? excerpt.slice(0, 152) + "..." : excerpt;
   }
   if (!metaDescription) {
     metaDescription = `Read ${post.title} on the blog.`;
