@@ -425,7 +425,6 @@
 .post-after {
   max-width: 70ch;
   margin-top: var(--space-lg);
-  padding-top: var(--space-lg);
 }
 
 .post-end-marker {

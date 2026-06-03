@@ -82,6 +82,16 @@
   font-style: italic;
 }
 
+.leaflet-blockquote + .leaflet-blockquote {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.leaflet-blockquote:has(+ .leaflet-blockquote) {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
 /* ── Code blocks ────────────────────────────────────────────── */
 
 .leaflet-code {
