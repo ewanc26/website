@@ -94,12 +94,6 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  opacity: 0.4;
-  transition: opacity var(--duration-normal) var(--ease-out-quart);
-}
-
-.footer-symbols:hover {
-  opacity: 0.8;
 }
 
 .symbol-sep {
@@ -115,11 +109,15 @@
 .footer-icon-link {
   display: flex;
   color: var(--color-ink-600);
-  transition: color var(--duration-fast) var(--ease-out-quart);
+  opacity: 0.4;
+  transition:
+    color var(--duration-fast) var(--ease-out-quart),
+    opacity var(--duration-fast) var(--ease-out-quart);
 }
 
 .footer-icon-link:hover {
   color: var(--color-primary-500);
+  opacity: 1;
 }
 
 .footer-nav {
