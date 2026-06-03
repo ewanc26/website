@@ -296,7 +296,7 @@
             {/each}
           </div>
 
-          <div class="spec-sub-section surfaces">
+          <div class="spec-sub-section surfaces" style="margin-top: var(--space-xl);">
             <h3 class="sub-title" id="semantic-surfaces">Semantic Surfaces</h3>
             <div class="surface-grid">
               {#each surfaces as s}
