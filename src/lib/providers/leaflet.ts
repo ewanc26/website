@@ -3,14 +3,14 @@ import {
   phrasingToFacets,
   type Facet,
   type FacetSchema,
-} from "./facets.ts";
-import {
   imageBlobSrc,
   mdastToMarkdown,
   parseMarkdown,
   resolveMarkdownImage,
-} from "./mdast.ts";
-import type { ContentProvider, ReadCtx, WriteCtx } from "./types.ts";
+  type ContentProvider,
+  type ReadCtx,
+  type WriteCtx,
+} from ".";
 import type {
   List,
   ListItem as MdListItem,

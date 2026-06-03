@@ -1,8 +1,12 @@
 <script lang="ts">
   import SiteHead from '$lib/components/SiteHead.svelte';
+  import TableOfContents from '$lib/components/TableOfContents.svelte';
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
   import Pentacle from '$lib/components/icons/Pentacle.svelte';
   import Triskele from '$lib/components/icons/Triskele.svelte';
+  import Eurosky from '$lib/components/icons/Eurosky.svelte';
+  import Leaflet from '$lib/components/icons/Leaflet.svelte';
+  import StandardSite from '$lib/components/icons/StandardSite.svelte';
   import favicon from '$lib/assets/favicon.svg';
   import { Copy, Check } from '@lucide/svelte';
 
@@ -178,19 +182,26 @@
     { token: 'text', value: '#d9e4de', desc: 'ink-50' },
     { token: 'textMuted', value: '#a0b0a8', desc: 'ink-500' },
   ];
+
+  const ogPreviews = [
+    { title: 'Design', type: 'DESIGN', desc: 'Technical Spec' },
+    { title: 'About', type: 'ABOUT', desc: 'Profile' },
+    { title: 'The Pentacle and the Triskele', type: 'BLOG', desc: 'Blog Post' },
+    { title: 'Projects', type: 'PROJECTS', desc: 'Projects Index' },
+  ];
 </script>
 
 <SiteHead
-  title="Brand Kit"
-  description="The full brand language, asset reference, and component primitives for ewancroft.uk."
-  ogType="BRAND KIT"
+  title="Design"
+  description="The full design language, asset reference, and component primitives for ewancroft.uk."
+  ogType="DESIGN"
 />
 
 <main class="shell-wide">
   <header class="page-hd spec-header">
     <div class="spec-meta">
-      <span class="meta-tag">FULL BRAND KIT</span>
-      <span class="meta-tag">v12.0.0</span>
+      <span class="meta-tag">DESIGN SYSTEM</span>
+      <span class="meta-tag">v12.1.0</span>
       <span class="meta-tag">TECHNICAL SPEC</span>
     </div>
     <h1 class="page-title">Identity & Assets</h1>
@@ -201,20 +212,7 @@
 
   <div class="spec-grid">
     <nav class="spec-toc">
-      <ul class="bare-list toc-list">
-        <li><a href="#identity">01 Identity</a></li>
-        <li><a href="#colour">02 Colour</a></li>
-        <li><a href="#typography">03 Typography</a></li>
-        <li><a href="#prose">04 Prose</a></li>
-        <li><a href="#geometry">05 Geometry</a></li>
-        <li><a href="#motion">06 Motion</a></li>
-        <li><a href="#iconography">07 Iconography</a></li>
-        <li><a href="#components">08 Components</a></li>
-        <li><a href="#layout">09 Layout</a></li>
-        <li><a href="#voice">10 Voice & Tone</a></li>
-        <li><a href="#manifesto">11 Manifesto</a></li>
-        <li><a href="#assets">12 Assets</a></li>
-      </ul>
+      <TableOfContents container=".spec-content" />
     </nav>
 
     <div class="spec-content">
@@ -222,7 +220,7 @@
       <section class="spec-section identity" id="identity">
         <header class="section-hd">
           <span class="section-num">[01]</span>
-          <h2 class="section-title">Identity</h2>
+          <h2 class="section-title" id="identity">Identity</h2>
         </header>
         <div class="section-content">
           <div class="id-card">
@@ -267,7 +265,7 @@
       <section class="spec-section colour" id="colour">
         <header class="section-hd">
           <span class="section-num">[02]</span>
-          <h2 class="section-title">Colour Architecture</h2>
+          <h2 class="section-title" id="colour">Colour Architecture</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -279,7 +277,7 @@
             {#each colorPalettes as palette}
               <div class="palette-stack">
                 <div class="palette-info">
-                  <h3 class="stack-name">{palette.name}</h3>
+                  <h3 class="stack-name" id="palette-{palette.name.toLowerCase()}">{palette.name}</h3>
                   <code class="stack-prefix">--color-{palette.prefix}-*</code>
                 </div>
                 <div class="swatch-grid">
@@ -298,8 +296,8 @@
             {/each}
           </div>
 
-          <div class="spec-sub-section surfaces">
-            <h3 class="sub-title">Semantic Surfaces</h3>
+          <div class="spec-sub-section surfaces" style="margin-top: var(--space-lg);">
+            <h3 class="sub-title" id="semantic-surfaces">Semantic Surfaces</h3>
             <div class="surface-grid">
               {#each surfaces as s}
                 <div class="surface-card">
@@ -319,7 +317,7 @@
       <section class="spec-section typography" id="typography">
         <header class="section-hd">
           <span class="section-num">[03]</span>
-          <h2 class="section-title">Typography</h2>
+          <h2 class="section-title" id="typography">Typography</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -374,7 +372,7 @@
       <section class="spec-section prose-spec" id="prose">
         <header class="section-hd">
           <span class="section-num">[04]</span>
-          <h2 class="section-title">Prose Styling</h2>
+          <h2 class="section-title" id="prose">Prose Styling</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -395,12 +393,12 @@
       <section class="spec-section geometry" id="geometry">
         <header class="section-hd">
           <span class="section-num">[05]</span>
-          <h2 class="section-title">Geometry</h2>
+          <h2 class="section-title" id="geometry">Geometry</h2>
         </header>
         <div class="section-content">
           <div class="geo-grid">
             <div class="geo-panel">
-              <h3 class="sub-title">Spacing Scale</h3>
+              <h3 class="sub-title" id="spacing-scale">Spacing Scale</h3>
               <div class="spacing-map">
                 {#each spacingScale as step}
                   <div class="spacing-entry">
@@ -415,7 +413,7 @@
             </div>
 
             <div class="geo-panel">
-              <h3 class="sub-title">Corner Radii</h3>
+              <h3 class="sub-title" id="corner-radii">Corner Radii</h3>
               <div class="radii-map">
                 {#each radiiScale as r}
                   <div class="radius-entry">
@@ -434,12 +432,12 @@
       <section class="spec-section motion" id="motion">
         <header class="section-hd">
           <span class="section-num">[06]</span>
-          <h2 class="section-title">Motion</h2>
+          <h2 class="section-title" id="motion">Motion</h2>
         </header>
         <div class="section-content">
           <div class="motion-layout">
             <div class="motion-tokens">
-              <h3 class="sub-title">Duration</h3>
+              <h3 class="sub-title" id="duration">Duration</h3>
               {#each durationScale as d}
                 <div class="token-item">
                   <code class="name">{d.token}</code>
@@ -448,7 +446,7 @@
               {/each}
             </div>
             <div class="motion-tokens">
-              <h3 class="sub-title">Easing</h3>
+              <h3 class="sub-title" id="easing">Easing</h3>
               <div class="token-item">
                 <code class="name">--ease-out-quart</code>
                 <span class="val">bezier(0.25, 1, 0.5, 1)</span>
@@ -466,7 +464,7 @@
       <section class="spec-section iconography" id="iconography">
         <header class="section-hd">
           <span class="section-num">[07]</span>
-          <h2 class="section-title">Iconography</h2>
+          <h2 class="section-title" id="iconography">Iconography</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -478,6 +476,24 @@
                 <Bluesky size={32} />
               </div>
               <code class="icon-name">Bluesky.svelte</code>
+            </div>
+            <div class="icon-card">
+              <div class="icon-preview">
+                <Eurosky size={32} />
+              </div>
+              <code class="icon-name">Eurosky.svelte</code>
+            </div>
+            <div class="icon-card">
+              <div class="icon-preview">
+                <Leaflet size={32} />
+              </div>
+              <code class="icon-name">Leaflet.svelte</code>
+            </div>
+            <div class="icon-card">
+              <div class="icon-preview">
+                <StandardSite size={32} />
+              </div>
+              <code class="icon-name">StandardSite.svelte</code>
             </div>
             <div class="icon-card">
               <div class="icon-preview">
@@ -499,12 +515,12 @@
       <section class="spec-section components" id="components">
         <header class="section-hd">
           <span class="section-num">[08]</span>
-          <h2 class="section-title">Components</h2>
+          <h2 class="section-title" id="components">Components</h2>
         </header>
         <div class="section-content">
           <div class="component-demo-stack">
             <div class="comp-item">
-              <h3 class="sub-title">Panel Primitive</h3>
+              <h3 class="sub-title" id="panel-primitive">Panel Primitive</h3>
               <div class="panel">
                 <div class="panel-head">panel.component</div>
                 <div class="panel-body">
@@ -514,7 +530,7 @@
             </div>
 
             <div class="comp-item">
-              <h3 class="sub-title">Interactive Elements</h3>
+              <h3 class="sub-title" id="interactive-elements">Interactive Elements</h3>
               <div class="interactive-demo">
                 <div class="demo-col">
                   <span class="demo-label">Text Link</span>
@@ -535,7 +551,7 @@
             </div>
 
             <div class="comp-item">
-              <h3 class="sub-title">Blockquote</h3>
+              <h3 class="sub-title" id="blockquote">Blockquote</h3>
               <blockquote>
                 "Every element must earn its place on the screen. If it doesn't serve a functional purpose, it is slop."
               </blockquote>
@@ -548,7 +564,7 @@
       <section class="spec-section layout" id="layout">
         <header class="section-hd">
           <span class="section-num">[09]</span>
-          <h2 class="section-title">Layout Systems</h2>
+          <h2 class="section-title" id="layout">Layout Systems</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -577,13 +593,13 @@
       <section class="spec-section voice" id="voice">
         <header class="section-hd">
           <span class="section-num">[10]</span>
-          <h2 class="section-title">Voice & Tone</h2>
+          <h2 class="section-title" id="voice">Voice & Tone</h2>
         </header>
         <div class="section-content">
           <div class="voice-grid">
             {#each voiceGuidelines as g}
               <div class="voice-card">
-                <h3 class="voice-attr">{g.attribute}</h3>
+                <h3 class="voice-attr" id="voice-{g.attribute.toLowerCase()}">{g.attribute}</h3>
                 <div class="voice-rules">
                   <div class="rule do">
                     <span class="rule-label">DO</span>
@@ -603,7 +619,7 @@
       <section class="spec-section principles" id="manifesto">
         <header class="section-hd">
           <span class="section-num">[11]</span>
-          <h2 class="section-title">Manifesto</h2>
+          <h2 class="section-title" id="manifesto">Manifesto</h2>
         </header>
         <div class="section-content">
           <div class="manifesto-list">
@@ -611,7 +627,7 @@
               <article class="principle-card">
                 <span class="p-num">{p.number}</span>
                 <div class="p-body">
-                  <h3 class="p-name">{p.name}</h3>
+                  <h3 class="p-name" id="principle-{p.number}">{p.name}</h3>
                   <p class="p-desc">{p.description}</p>
                 </div>
               </article>
@@ -624,7 +640,7 @@
       <section class="spec-section assets" id="assets">
         <header class="section-hd">
           <span class="section-num">[12]</span>
-          <h2 class="section-title">Assets</h2>
+          <h2 class="section-title" id="assets">Assets</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -633,7 +649,7 @@
 
           <div class="asset-grid">
             <div class="asset-card">
-              <h3 class="sub-title">Favicon</h3>
+              <h3 class="sub-title" id="favicon">Favicon</h3>
               <div class="asset-preview favicon-preview">
                 <img src={assets.favicon.path} alt="Favicon" width="32" height="32" />
               </div>
@@ -645,20 +661,22 @@
             </div>
 
             <div class="asset-card og-card">
-              <h3 class="sub-title">Open Graph (Dynamic)</h3>
-              <div class="asset-preview og-preview">
-                <img 
-                  src="{assets.ogImage.endpoint}?title=Brand%20Kit&type=TECHNICAL%20SPEC" 
-                  alt="OG Image Preview" 
-                  class="og-img"
-                />
-              </div>
+              <h3 class="sub-title" id="open-graph">Open Graph (Dynamic)</h3>
               <div class="og-info-grid">
-                <dl class="asset-meta">
-                  <div><dt>ENDPOINT</dt><dd><code>{assets.ogImage.endpoint}</code></dd></div>
-                  <div><dt>SIZE</dt><dd>{assets.ogImage.size}</dd></div>
-                  <div><dt>PARAMS</dt><dd><code>{assets.ogImage.params.join(', ')}</code></dd></div>
-                </dl>
+                <div class="og-previews">
+                  {#each ogPreviews as preview}
+                    <div style="margin-bottom: 1rem;">
+                      <span class="meta-label">{preview.desc}</span>
+                      <div class="asset-preview og-preview">
+                        <img
+                          src="{assets.ogImage.endpoint}?title={encodeURIComponent(preview.title)}&type={encodeURIComponent(preview.type)}&subtitle={encodeURIComponent(preview.desc)}"
+                          alt="OG Image: {preview.desc}"
+                          class="og-img"
+                        />
+                      </div>
+                    </div>
+                  {/each}
+                </div>
                 <div class="og-colours">
                   <span class="meta-label">OG COLOUR PALETTE</span>
                   <div class="og-swatches">

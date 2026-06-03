@@ -6,7 +6,7 @@ export const SITE = {
 export const NAV_LINKS = [
   { label: "About", url: "/about" },
   { label: "Blog", url: "/blog" },
-  { label: "Projects", url: "/projects" },
+  { label: "Projects", url: "https://docs.ewancroft.uk" },
   { label: "Support", url: "/support" },
   { label: "Subscriptions", url: "/subscriptions" },
   { label: "Meta", url: "/site/meta" },

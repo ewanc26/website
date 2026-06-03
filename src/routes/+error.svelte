@@ -21,10 +21,10 @@
           : 'The system encountered an unhandled exception while attempting to build this view.'}
       </p>
 
-      {#if $page.error?.stack}
+      {#if ($page.error as any)?.stack}
         <details class="error-details">
           <summary>EXCEPTION_TRACE</summary>
-          <pre><code>{$page.error.stack}</code></pre>
+          <pre><code>{($page.error as any).stack}</code></pre>
         </details>
       {/if}
 
