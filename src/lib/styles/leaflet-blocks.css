@@ -28,7 +28,7 @@
   .leaflet-h4,
   .leaflet-h5,
   .leaflet-h6 {
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     font-weight: 800;
     letter-spacing: -0.025em;
     line-height: 1.2;
@@ -79,7 +79,7 @@
     border-left: 3px solid var(--color-primary-500);
     padding: var(--space-sm) 0 var(--space-sm) var(--space-md);
     margin: var(--space-md) 0;
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     font-style: italic;
   }
 
@@ -101,7 +101,7 @@
       monospace;
     font-size: var(--text-sm);
     line-height: 1.7;
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
     background-color: var(--surface-raised);
     border: 1px solid var(--surface-color);
     border-radius: var(--radius-md);
@@ -118,7 +118,7 @@
       monospace;
     font-size: var(--text-sm);
     line-height: 1.7;
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
     background-color: var(--surface-raised);
     border: 1px solid var(--surface-color);
     border-radius: var(--radius-md);
@@ -194,7 +194,7 @@
   .leaflet-image-alt {
     margin-top: var(--space-xs);
     font-size: var(--text-xs);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
   }
 
   /* ── Lists ──────────────────────────────────────────────────── */
@@ -245,7 +245,7 @@
   }
 
   .leaflet-list.ordered > .leaflet-list-item::marker {
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     font-weight: 600;
   }
 
@@ -271,7 +271,7 @@
     border-radius: var(--radius-lg);
     overflow: hidden;
     text-decoration: none;
-    color: var(--color-ink-900);
+    color: var(--color-text-900);
     margin: var(--space-md) 0;
     transition:
       background-color var(--duration-fast) var(--ease-out-quart),
@@ -306,16 +306,17 @@
   .website-card-title {
     font-size: var(--text-sm);
     font-weight: 700;
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
   }
 
   .website-card-desc {
     font-size: var(--text-xs);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     margin: 0;
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -325,7 +326,7 @@
     align-items: center;
     gap: var(--space-xs);
     font-size: var(--text-xs);
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
   }
 
   /* ── Button ─────────────────────────────────────────────────── */
@@ -338,7 +339,7 @@
     display: inline-block;
     padding: var(--space-sm) var(--space-lg);
     background-color: var(--color-primary-500);
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     border-radius: var(--radius-md);
     text-decoration: none;
     font-weight: 600;
@@ -380,7 +381,7 @@
     border: 1px dashed var(--surface-color);
     border-radius: var(--radius-md);
     font-size: var(--text-xs);
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
     text-align: center;
   }
 

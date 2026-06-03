@@ -12,7 +12,7 @@
   /* ── Container ──────────────────────────────────────────────── */
 
   .prose {
-    color: var(--color-ink-900);
+    color: var(--color-text-900);
     font-size: var(--text-md);
     line-height: 1.75;
   }
@@ -36,7 +36,7 @@
   .prose h4,
   .prose h5,
   .prose h6 {
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     font-weight: 800;
     letter-spacing: -0.025em;
     line-height: 1.2;
@@ -98,20 +98,20 @@
   /* ── Strong & em ────────────────────────────────────────────── */
 
   .prose strong {
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     font-weight: 700;
   }
 
   .prose em {
     font-style: italic;
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
   }
 
   /* ── Strikethrough ──────────────────────────────────────────── */
 
   .prose del {
     text-decoration: line-through;
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
   }
 
   /* ── Inline code ────────────────────────────────────────────── */
@@ -136,7 +136,7 @@
       monospace;
     font-size: var(--text-sm);
     line-height: 1.7;
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
     background-color: var(--surface-raised);
     border: 1px solid var(--surface-color);
     border-radius: var(--radius-md);
@@ -162,7 +162,7 @@
     border-left: 3px solid var(--color-primary-500);
     padding: var(--space-sm) 0 var(--space-sm) var(--space-md);
     margin: var(--space-md) 0;
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     font-style: italic;
   }
 
@@ -215,7 +215,7 @@
   }
 
   .prose ol > li::marker {
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     font-weight: 600;
   }
 
@@ -271,7 +271,7 @@
   .prose th {
     font-weight: 700;
     text-align: left;
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     padding: var(--space-xs) var(--space-sm);
     border-bottom: 2px solid var(--surface-color);
   }

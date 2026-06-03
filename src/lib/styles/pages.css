@@ -37,7 +37,7 @@
 
   .hero-bio {
     margin: 0;
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     font-size: var(--text-md);
     max-width: 55ch;
     line-height: 1.6;
@@ -84,7 +84,7 @@
   }
 
   .status-text {
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
   }
 
   /* Home sections */
@@ -118,7 +118,7 @@
   .project-desc {
     margin: 0;
     font-size: var(--text-sm);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -205,13 +205,13 @@
 
   .about-pronouns {
     font-size: var(--text-sm);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     margin: 0;
   }
 
   .about-headline {
     font-size: var(--text-md);
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     margin: var(--space-xs) 0 0;
   }
 
@@ -275,7 +275,7 @@
     border: 1px solid var(--surface-color);
     border-radius: var(--radius-sm);
     background: var(--surface-raised);
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
   }
 
   /* Education */
@@ -287,7 +287,7 @@
   .edu-institution {
     margin: var(--space-2xs) 0 0;
     font-size: var(--text-sm);
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
   }
 
   /* Sidebar sections */
@@ -297,7 +297,7 @@
 
   /* Languages */
   .lang-prof {
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     font-size: var(--text-xs);
   }
 
@@ -311,7 +311,7 @@
   }
 
   .id-list dt {
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     font-weight: 600;
     align-self: start;
     padding-top: 2px;
@@ -351,7 +351,7 @@
 
   .copy-btn:hover {
     background: var(--color-primary-500);
-    color: var(--color-canvas-50);
+    color: var(--color-background-50);
   }
 
   @media (max-width: 560px) {
@@ -365,7 +365,7 @@
 
   .year-head {
     font-family: var(--font-mono);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     font-size: var(--text-xs);
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -375,7 +375,7 @@
   .month-label {
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     padding: var(--space-sm) 0 var(--space-xs);
   }
 
@@ -398,7 +398,7 @@
     gap: var(--space-md);
     flex-wrap: wrap;
     font-size: var(--text-xs);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
   }
 
   /* Two-column layout: sidebar + content */
@@ -458,7 +458,7 @@
   .footer-desc {
     margin: 0;
     font-size: var(--text-sm);
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
   }
 
   .rss-link {
@@ -501,7 +501,7 @@
 
   .rkey-date {
     font-size: var(--text-sm);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
   }
 
   .rkey-prose {
@@ -515,7 +515,7 @@
   }
 
   .empty-mono {
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
   }
@@ -526,12 +526,12 @@
 
   .sub-author {
     font-size: var(--text-xs);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
   }
 
   .sub-handle {
     font-size: var(--text-xs);
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
   }
 
   /* ── Support page ────────────────────────────────────────────── */
@@ -541,7 +541,7 @@
   }
 
   .section-note {
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     font-size: var(--text-sm);
     margin: 0 0 var(--space-md);
   }
@@ -579,7 +579,7 @@
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     font-weight: 700;
-    color: var(--color-ink-900);
+    color: var(--color-text-900);
   }
 
   .pref-tag {
@@ -594,7 +594,7 @@
   .crypto-addr {
     font-family: var(--font-mono);
     font-size: 11px;
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     word-break: break-all;
     background: var(--surface-sunken);
     padding: var(--space-sm);
@@ -622,7 +622,7 @@
   .spec-abstract {
     max-width: 100%;
     font-size: var(--text-md);
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     line-height: 1.5;
   }
 
@@ -653,7 +653,7 @@
   }
   .section-intro {
     font-size: var(--text-sm);
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     max-width: 100%;
     margin-bottom: var(--space-sm);
   }
@@ -696,7 +696,7 @@
   .meta-card-desc {
     margin: var(--space-2xs) 0 0;
     font-size: var(--text-sm);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
   }
   .meta-tags {
     display: flex;
@@ -718,7 +718,7 @@
 
   /* ── Brand Kit page ─────────────────────────────────────────── */
 
-  .spec-header {
+  .design-page .spec-header {
     margin-bottom: var(--space-xl);
   }
 
@@ -726,7 +726,7 @@
     font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.1em;
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
     background: var(--surface-raised);
     padding: 2px 6px;
     border: 1px solid var(--surface-color);
@@ -761,7 +761,7 @@
   .toc-list a {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     text-decoration: none;
   }
 
@@ -769,7 +769,7 @@
     color: var(--color-primary-500);
   }
 
-  .spec-content {
+  .design-page .spec-content {
     display: flex;
     flex-direction: column;
     gap: var(--space-2xl);
@@ -779,7 +779,7 @@
     scroll-margin-top: 100px;
   }
 
-  .section-hd {
+  .design-page .section-hd {
     margin-bottom: var(--space-md);
   }
 
@@ -809,8 +809,8 @@
   }
 
   .id-header {
-    background: var(--color-ink-950);
-    color: var(--color-canvas-50);
+    background: var(--color-text-950);
+    color: var(--color-background-50);
     font-size: 10px;
     font-weight: 800;
     padding: 4px 12px;
@@ -828,7 +828,7 @@
   .id-fields dt {
     font-size: 10px;
     font-family: var(--font-mono);
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
     margin-bottom: 2px;
   }
 
@@ -836,7 +836,7 @@
     margin: 0;
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
   }
 
   .logo-sample {
@@ -870,7 +870,7 @@
 
   .prose-card p {
     font-size: var(--text-sm);
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     margin: 0;
   }
 
@@ -902,7 +902,7 @@
 
   .stack-prefix {
     font-size: 10px;
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
   }
 
   .swatch-grid {
@@ -927,7 +927,7 @@
   .swatch-val {
     font-size: 9px;
     font-family: var(--font-mono);
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
   }
 
   .surface-grid {
@@ -968,7 +968,7 @@
 
   .surface-token {
     font-size: 10px;
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
   }
 
   .type-specimen {
@@ -985,14 +985,14 @@
   .font-meta {
     font-family: var(--font-mono);
     font-size: 10px;
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
     display: block;
     margin-bottom: var(--space-xs);
   }
 
   .font-display {
     font-size: clamp(1.5rem, 5vw, 3rem);
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     line-height: 1;
   }
 
@@ -1009,8 +1009,8 @@
     grid-template-columns: 120px 1fr 80px 40px;
     gap: var(--space-md);
     padding: 8px 16px;
-    background: var(--color-ink-950);
-    color: var(--color-canvas-50);
+    background: var(--color-text-950);
+    color: var(--color-background-50);
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 0.1em;
@@ -1031,17 +1031,17 @@
 
   .table-token {
     font-size: 10px;
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
   }
 
   .table-sample {
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
   }
 
   .table-weight {
     font-family: var(--font-mono);
     font-size: 10px;
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
     text-align: right;
   }
 
@@ -1072,7 +1072,7 @@
   .spacing-entry .token {
     width: 100px;
     font-size: 10px;
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
   }
 
   .bar-wrap {
@@ -1088,7 +1088,7 @@
   .spacing-entry .value {
     font-size: 10px;
     font-family: var(--font-mono);
-    color: var(--color-ink-600);
+    color: var(--color-text-600);
     width: 40px;
     text-align: right;
   }
@@ -1115,12 +1115,12 @@
 
   .radius-entry .token {
     font-size: 9px;
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
   }
 
   .radius-entry .value {
     font-size: 9px;
-    color: var(--color-ink-400);
+    color: var(--color-text-400);
   }
 
   .motion-layout {
@@ -1138,13 +1138,13 @@
 
   .token-item .name {
     font-size: var(--text-xs);
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
   }
 
   .token-item .val {
     font-size: 10px;
     font-family: var(--font-mono);
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
   }
 
   .icon-grid {
@@ -1165,12 +1165,12 @@
   }
 
   .icon-preview {
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
   }
 
   .icon-name {
     font-size: 9px;
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
     font-family: var(--font-mono);
   }
 
@@ -1200,7 +1200,7 @@
   .demo-label {
     font-size: 9px;
     font-family: var(--font-mono);
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
     text-transform: uppercase;
   }
 
@@ -1236,7 +1236,7 @@
 
   .shell-token {
     font-size: 10px;
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
   }
 
   .shell-bar-wrap {
@@ -1261,13 +1261,13 @@
   .shell-val {
     font-size: 9px;
     font-family: var(--font-mono);
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
     font-weight: 700;
   }
 
   .shell-usage-note {
     font-size: 11px;
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
     margin: 0;
     max-width: 150px;
   }
@@ -1288,8 +1288,8 @@
   }
 
   .voice-attr {
-    background: var(--color-ink-950);
-    color: var(--color-canvas-50);
+    background: var(--color-text-950);
+    color: var(--color-background-50);
     padding: 8px 16px;
     font-size: var(--text-sm);
     text-transform: uppercase;
@@ -1329,7 +1329,7 @@
     font-size: var(--text-xs);
     margin: 0;
     line-height: 1.5;
-    color: var(--color-ink-800);
+    color: var(--color-text-800);
   }
 
   .manifesto-list {
@@ -1362,7 +1362,7 @@
 
   .p-desc {
     font-size: var(--text-sm);
-    color: var(--color-ink-700);
+    color: var(--color-text-700);
     margin: 0;
     line-height: 1.6;
     max-width: 60ch;
@@ -1419,7 +1419,7 @@
   .asset-meta dt {
     font-size: 10px;
     font-family: var(--font-mono);
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
     margin-bottom: 2px;
   }
 
@@ -1427,7 +1427,7 @@
     margin: 0;
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--color-ink-950);
+    color: var(--color-text-950);
   }
 
   .og-info-grid {
@@ -1440,7 +1440,7 @@
   .meta-label {
     font-size: 10px;
     font-family: var(--font-mono);
-    color: var(--color-ink-500);
+    color: var(--color-text-500);
     display: block;
     margin-bottom: 8px;
   }

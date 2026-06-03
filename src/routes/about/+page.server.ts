@@ -12,40 +12,44 @@ import {
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 
 export const load: PageServerLoad = async () => {
-  const [
-    profile,
-    links,
-    sifaProfile,
-    sifaSkills,
-    sifaEducation,
-    sifaLanguages,
-    sifaExternalAccounts,
-    sifaProjects,
-  ] = await Promise.all([
-    fetchProfile(PUBLIC_ATPROTO_DID).catch(() => ({
-      displayName: "",
-      description: "",
-      avatar: "",
-      banner: "",
-      did: PUBLIC_ATPROTO_DID,
-    })),
-    fetchLinks(PUBLIC_ATPROTO_DID).catch(() => null),
-    fetchSifaProfile(PUBLIC_ATPROTO_DID).catch(() => null),
-    fetchSifaSkills(PUBLIC_ATPROTO_DID).catch(() => []),
-    fetchSifaEducation(PUBLIC_ATPROTO_DID).catch(() => []),
-    fetchSifaLanguages(PUBLIC_ATPROTO_DID).catch(() => []),
-    fetchSifaExternalAccounts(PUBLIC_ATPROTO_DID).catch(() => []),
-    fetchSifaProjects(PUBLIC_ATPROTO_DID).catch(() => []),
-  ]);
+  const profilePromise = fetchProfile(PUBLIC_ATPROTO_DID).catch(() => ({
+    displayName: "",
+    description: "",
+    avatar: "",
+    banner: "",
+    did: PUBLIC_ATPROTO_DID,
+  }));
+
+  const linksPromise = fetchLinks(PUBLIC_ATPROTO_DID).catch(() => null);
+  const sifaProfilePromise = fetchSifaProfile(PUBLIC_ATPROTO_DID).catch(
+    () => null,
+  );
+  const sifaSkillsPromise = fetchSifaSkills(PUBLIC_ATPROTO_DID).catch(() => []);
+  const sifaEducationPromise = fetchSifaEducation(PUBLIC_ATPROTO_DID).catch(
+    () => [],
+  );
+  const sifaLanguagesPromise = fetchSifaLanguages(PUBLIC_ATPROTO_DID).catch(
+    () => [],
+  );
+  const sifaExternalAccountsPromise = fetchSifaExternalAccounts(
+    PUBLIC_ATPROTO_DID,
+  ).catch(() => []);
+  const sifaProjectsPromise = fetchSifaProjects(PUBLIC_ATPROTO_DID).catch(
+    () => [],
+  );
+
+  const profile = await profilePromise;
 
   return {
     profile,
-    links,
-    sifaProfile,
-    sifaSkills,
-    sifaEducation,
-    sifaLanguages,
-    sifaExternalAccounts,
-    sifaProjects,
+    lazy: {
+      links: linksPromise,
+      sifaProfile: sifaProfilePromise,
+      sifaSkills: sifaSkillsPromise,
+      sifaEducation: sifaEducationPromise,
+      sifaLanguages: sifaLanguagesPromise,
+      sifaExternalAccounts: sifaExternalAccountsPromise,
+      sifaProjects: sifaProjectsPromise,
+    },
   };
 };

@@ -1,11 +1,10 @@
 <script lang="ts">
   import SiteHead from '$lib/components/SiteHead.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
   import { ExternalLink } from '@lucide/svelte';
   import type {
     ProfileData,
-    LinkData,
-    SifaProfileData,
     SifaSkill,
     SifaEducation,
     SifaLanguage,
@@ -16,22 +15,8 @@
   let { data } = $props();
 
   let profile = $derived(data.profile as ProfileData);
-  let links = $derived(data.links as LinkData | null);
-  let sifaProfile = $derived(data.sifaProfile as SifaProfileData | null);
-  let sifaSkills = $derived(data.sifaSkills as SifaSkill[]);
-  let sifaEducation = $derived(data.sifaEducation as SifaEducation[]);
-  let sifaLanguages = $derived(data.sifaLanguages as SifaLanguage[]);
-  let sifaExternalAccounts = $derived(data.sifaExternalAccounts as SifaExternalAccount[]);
-  let sifaProjects = $derived(data.sifaProjects as SifaProject[]);
 
-  let copiedIndex = $state<'did' | null>(null);
-
-  async function copyToClipboard(text: string, id: 'did') {
-    await navigator.clipboard.writeText(text);
-    copiedIndex = id;
-    setTimeout(() => (copiedIndex = null), 2000);
-  }
-
+  // Helper functions remain same
   function formatSkillCategory(uri: string): string {
     const map: Record<string, string> = {
       'id.sifa.defs#technical': 'Technical',
@@ -68,6 +53,14 @@
     const monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return `${monthNames[parseInt(month)] ?? 'Jan'} ${year}`;
   }
+
+  let copiedIndex = $state<'did' | null>(null);
+
+  async function copyToClipboard(text: string, id: 'did') {
+    await navigator.clipboard.writeText(text);
+    copiedIndex = id;
+    setTimeout(() => (copiedIndex = null), 2000);
+  }
 </script>
 
 <SiteHead title="About" description={profile.description} ogType="ABOUT" />
@@ -82,9 +75,13 @@
       {#if profile.pronouns}
         <p class="about-pronouns">{profile.pronouns}</p>
       {/if}
-      {#if sifaProfile}
-        <p class="about-headline">{sifaProfile.headline}</p>
-      {/if}
+      {#await data.lazy.sifaProfile}
+        <LoadingSkeleton />
+      {:then sifaProfile}
+        {#if sifaProfile}
+          <p class="about-headline">{sifaProfile.headline}</p>
+        {/if}
+      {/await}
       {#if profile.description}
         <p class="about-bio">{profile.description}</p>
       {/if}
@@ -93,152 +90,168 @@
 
   <div class="about-grid">
     <div class="about-main">
-      {#if sifaSkills.length > 0}
-        <section class="about-section">
-          <h2 class="section-heading">Skills</h2>
-          {#each groupSkillsByCategory(sifaSkills) as [category, skills]}
-            <div class="skill-group">
-              <h3 class="sub-heading">{category}</h3>
-              <ul class="skill-list">
-                {#each skills as skill}
-                  <li class="skill-tag">{skill.name}</li>
-                {/each}
-              </ul>
-            </div>
-          {/each}
-        </section>
-      {:else}
-        <section class="about-section">
-          <EmptyState
-            title="Skills"
-            description="Unable to load skills at the moment. Please try again later."
-            icon={false}
-          />
-        </section>
-      {/if}
-
-      {#if sifaEducation.length > 0}
-        <section class="about-section">
-          <h2 class="section-heading">Education</h2>
-          <ul class="bare-list">
-            {#each sifaEducation as edu}
-              <li class="post-row">
-                <div class="row-stack">
-                  <strong class="edu-degree">{edu.degree}</strong>
-                  <span class="edu-institution">{edu.institution}</span>
-                </div>
-                <span class="row-meta">
-                  {formatDate(edu.startedAt)} — {edu.endedAt ? formatDate(edu.endedAt) : 'Present'}
-                </span>
-              </li>
+      <section class="about-section">
+        <h2 class="section-heading">Skills</h2>
+        {#await data.lazy.sifaSkills}
+          <LoadingSkeleton count={3} />
+        {:then sifaSkills}
+          {#if sifaSkills && sifaSkills.length > 0}
+            {#each groupSkillsByCategory(sifaSkills) as [category, skills]}
+              <div class="skill-group">
+                <h3 class="sub-heading">{category}</h3>
+                <ul class="skill-list">
+                  {#each skills as skill}
+                    <li class="skill-tag">{skill.name}</li>
+                  {/each}
+                </ul>
+              </div>
             {/each}
-          </ul>
-        </section>
-      {:else}
-        <section class="about-section">
-          <EmptyState
-            title="Education"
-            description="Unable to load education information at the moment. Please try again later."
-            icon={false}
-          />
-        </section>
-      {/if}
+          {:else}
+            <EmptyState
+              title="Skills"
+              description="Unable to load skills at the moment. Please try again later."
+              icon={false}
+            />
+          {/if}
+        {/await}
+      </section>
 
-      {#if sifaProjects.length > 0}
-        <section class="about-section">
-          <h2 class="section-heading">Projects</h2>
-          <ul class="bare-list">
-            {#each sifaProjects as project}
-              <li>
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener"
-                  class="post-row"
-                >
+      <section class="about-section">
+        <h2 class="section-heading">Education</h2>
+        {#await data.lazy.sifaEducation}
+          <LoadingSkeleton count={2} />
+        {:then sifaEducation}
+          {#if sifaEducation && sifaEducation.length > 0}
+            <ul class="bare-list">
+              {#each sifaEducation as edu}
+                <li class="post-row">
                   <div class="row-stack">
-                    <strong class="project-name">{project.name}</strong>
-                    <span class="project-desc">{project.description}</span>
+                    <strong class="edu-degree">{edu.degree}</strong>
+                    <span class="edu-institution">{edu.institution}</span>
                   </div>
-                  <ExternalLink size={14} strokeWidth={2} />
-                </a>
-              </li>
-            {/each}
-          </ul>
-        </section>
-      {:else}
-        <section class="about-section">
-          <EmptyState
-            title="Projects"
-            description="Unable to load projects at the moment. Please try again later."
-            icon={false}
-          />
-        </section>
-      {/if}
+                  <span class="row-meta">
+                    {formatDate(edu.startedAt)} — {edu.endedAt ? formatDate(edu.endedAt) : 'Present'}
+                  </span>
+                </li>
+              {/each}
+            </ul>
+          {:else}
+            <EmptyState
+              title="Education"
+              description="Unable to load education information at the moment. Please try again later."
+              icon={false}
+            />
+          {/if}
+        {/await}
+      </section>
+
+      <section class="about-section">
+        <h2 class="section-heading">Projects</h2>
+        {#await data.lazy.sifaProjects}
+          <LoadingSkeleton count={3} />
+        {:then sifaProjects}
+          {#if sifaProjects && sifaProjects.length > 0}
+            <ul class="bare-list">
+              {#each sifaProjects as project}
+                <li>
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener"
+                    class="post-row"
+                  >
+                    <div class="row-stack">
+                      <strong class="project-name">{project.name}</strong>
+                      <span class="project-desc">{project.description}</span>
+                    </div>
+                    <ExternalLink size={14} strokeWidth={2} />
+                  </a>
+                </li>
+              {/each}
+            </ul>
+          {:else}
+            <EmptyState
+              title="Projects"
+              description="Unable to load projects at the moment. Please try again later."
+              icon={false}
+            />
+          {/if}
+        {/await}
+      </section>
     </div>
 
     <aside class="about-sidebar">
-      {#if sifaLanguages.length > 0}
-        <section class="sidebar-section">
-          <h2 class="section-heading">Languages</h2>
-          <ul class="bare-list">
-            {#each sifaLanguages as lang}
-              <li class="post-row">
-                <span>{lang.name}</span>
-                <span class="lang-prof">{formatLanguageProficiency(lang.proficiency)}</span>
-              </li>
-            {/each}
-          </ul>
-        </section>
-      {:else}
-        <section class="sidebar-section">
-          <EmptyState
-            title="Languages"
-            description="Unable to load languages at the moment. Please try again later."
-            icon={false}
-          />
-        </section>
-      {/if}
+      <section class="sidebar-section">
+        <h2 class="section-heading">Languages</h2>
+        {#await data.lazy.sifaLanguages}
+          <LoadingSkeleton count={2} />
+        {:then sifaLanguages}
+          {#if sifaLanguages && sifaLanguages.length > 0}
+            <ul class="bare-list">
+              {#each sifaLanguages as lang}
+                <li class="post-row">
+                  <span>{lang.name}</span>
+                  <span class="lang-prof">{formatLanguageProficiency(lang.proficiency)}</span>
+                </li>
+              {/each}
+            </ul>
+          {:else}
+            <EmptyState
+              title="Languages"
+              description="Unable to load languages at the moment. Please try again later."
+              icon={false}
+            />
+          {/if}
+        {/await}
+      </section>
 
-      {#if sifaExternalAccounts.length > 0}
-        <section class="sidebar-section">
-          <h2 class="section-heading">Links</h2>
-          <ul class="bare-list">
-            {#each sifaExternalAccounts as account}
-              <li>
-                <a href={account.url} target="_blank" rel="noopener" class="link-row">
-                  {account.label || account.url.replace('https://', '')}
-                  <ExternalLink size={12} strokeWidth={2} class="muted-icon" />
-                </a>
-              </li>
-            {/each}
-          </ul>
-        </section>
-      {:else}
-        <section class="sidebar-section">
-          <EmptyState
-            title="Links"
-            description="Unable to load links at the moment. Please try again later."
-            icon={false}
-          />
-        </section>
-      {/if}
+      <section class="sidebar-section">
+        <h2 class="section-heading">Links</h2>
+        {#await data.lazy.sifaExternalAccounts}
+          <LoadingSkeleton count={3} />
+        {:then sifaExternalAccounts}
+          {#if sifaExternalAccounts && sifaExternalAccounts.length > 0}
+            <ul class="bare-list">
+              {#each sifaExternalAccounts as account}
+                <li>
+                  <a href={account.url} target="_blank" rel="noopener" class="link-row">
+                    {account.label || account.url.replace('https://', '')}
+                    <ExternalLink size={12} strokeWidth={2} class="muted-icon" />
+                  </a>
+                </li>
+              {/each}
+            </ul>
+          {:else}
+            <EmptyState
+              title="Links"
+              description="Unable to load links at the moment. Please try again later."
+              icon={false}
+            />
+          {/if}
+        {/await}
+      </section>
 
-      {#if links?.cards?.length}
+      {#await data.lazy.links}
         <section class="sidebar-section">
-          <h2 class="section-heading">Elsewhere</h2>
-          <ul class="bare-list">
-            {#each links.cards as card}
-              <li>
-                <a href={card.url} target="_blank" rel="noopener" class="link-row">
-                  {card.emoji} {card.text}
-                  <ExternalLink size={12} strokeWidth={2} class="muted-icon" />
-                </a>
-              </li>
-            {/each}
-          </ul>
+          <LoadingSkeleton count={3} />
         </section>
-      {/if}
+      {:then links}
+        {#if links?.cards?.length}
+          <section class="sidebar-section">
+            <h2 class="section-heading">Elsewhere</h2>
+            <ul class="bare-list">
+              {#each links.cards as card}
+                <li>
+                  <a href={card.url} target="_blank" rel="noopener" class="link-row">
+                    {card.emoji} {card.text}
+                    <ExternalLink size={12} strokeWidth={2} class="muted-icon" />
+                  </a>
+                </li>
+              {/each}
+            </ul>
+          </section>
+        {/if}
+      {/await}
 
       <section class="sidebar-section">
         <h2 class="section-heading">Identity</h2>
