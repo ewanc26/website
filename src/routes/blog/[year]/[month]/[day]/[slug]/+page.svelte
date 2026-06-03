@@ -20,8 +20,9 @@
 <main class="shell-prose">
     <header class="post-hd">
         <h1 class="post-title">{data.post.title}</h1>
-        <div class="post-meta">
+        <div class="post-meta" style="display: flex; flex-direction: column; gap: var(--space-xs);">
             <time>{new Date(data.post.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+            <ShareButtons url={page.url.href} title={data.post.title} />
         </div>
     </header>
 
@@ -43,8 +44,6 @@
             </article>
 
             <div class="post-after">
-                <ShareButtons url={page.url.href} title={data.post.title} />
-
                 {#if data.comments.length > 0}
                     <section class="comments-section">
                         <h2 class="section-heading">

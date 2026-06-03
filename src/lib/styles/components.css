@@ -281,7 +281,6 @@
   gap: var(--space-md);
   margin-top: var(--space-lg);
   padding-top: var(--space-md);
-  border-top: 1px solid var(--color-canvas-200);
 }
 
 .share-link {
