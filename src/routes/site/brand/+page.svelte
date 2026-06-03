@@ -277,7 +277,7 @@
             {#each colorPalettes as palette}
               <div class="palette-stack">
                 <div class="palette-info">
-                  <h3 class="stack-name">{palette.name}</h3>
+                  <h3 class="stack-name" id="palette-{palette.name.toLowerCase()}">{palette.name}</h3>
                   <code class="stack-prefix">--color-{palette.prefix}-*</code>
                 </div>
                 <div class="swatch-grid">
@@ -599,7 +599,7 @@
           <div class="voice-grid">
             {#each voiceGuidelines as g}
               <div class="voice-card">
-                <h3 class="voice-attr">{g.attribute}</h3>
+                <h3 class="voice-attr" id="voice-{g.attribute.toLowerCase()}">{g.attribute}</h3>
                 <div class="voice-rules">
                   <div class="rule do">
                     <span class="rule-label">DO</span>
@@ -627,7 +627,7 @@
               <article class="principle-card">
                 <span class="p-num">{p.number}</span>
                 <div class="p-body">
-                  <h3 class="p-name">{p.name}</h3>
+                  <h3 class="p-name" id="principle-{p.number}">{p.name}</h3>
                   <p class="p-desc">{p.description}</p>
                 </div>
               </article>
