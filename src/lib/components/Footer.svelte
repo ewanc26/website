@@ -16,7 +16,7 @@
     <p>&copy; {new Date().getFullYear()} ewan croft</p>
     <nav class="footer-nav">
         <a href="mailto:contact@ewancroft.uk" class="footer-link">contact@ewancroft.uk</a>
-        <a href="/site/brand" class="footer-link">brand</a>
+        <a href="/site/design" class="footer-link">design</a>
         <a href="/site/meta" class="footer-link">site meta</a>
     </nav>
 </footer>
