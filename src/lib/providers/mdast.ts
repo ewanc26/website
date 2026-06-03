@@ -15,7 +15,7 @@ import { getBlobCidString, type BlobRef } from "@atproto/lex";
 import type { Image, Root, RootContent } from "mdast";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
-import type { WriteCtx } from "./types.ts";
+import type { WriteCtx } from "./types";
 
 const processor = remark().use(remarkGfm);
 
