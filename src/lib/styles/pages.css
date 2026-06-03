@@ -431,7 +431,7 @@
 .post-end-marker {
   display: flex;
   justify-content: center;
-  margin-top: var(--space-xl);
+  margin-top: var(--space-md);
   opacity: 0.15;
   color: var(--color-primary-500);
 }
