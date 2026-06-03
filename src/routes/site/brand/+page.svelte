@@ -1,5 +1,6 @@
 <script lang="ts">
   import SiteHead from '$lib/components/SiteHead.svelte';
+  import TableOfContents from '$lib/components/TableOfContents.svelte';
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
   import Pentacle from '$lib/components/icons/Pentacle.svelte';
   import Triskele from '$lib/components/icons/Triskele.svelte';
@@ -211,20 +212,7 @@
 
   <div class="spec-grid">
     <nav class="spec-toc">
-      <ul class="bare-list toc-list">
-        <li><a href="#identity">01 Identity</a></li>
-        <li><a href="#colour">02 Colour</a></li>
-        <li><a href="#typography">03 Typography</a></li>
-        <li><a href="#prose">04 Prose</a></li>
-        <li><a href="#geometry">05 Geometry</a></li>
-        <li><a href="#motion">06 Motion</a></li>
-        <li><a href="#iconography">07 Iconography</a></li>
-        <li><a href="#components">08 Components</a></li>
-        <li><a href="#layout">09 Layout</a></li>
-        <li><a href="#voice">10 Voice & Tone</a></li>
-        <li><a href="#manifesto">11 Manifesto</a></li>
-        <li><a href="#assets">12 Assets</a></li>
-      </ul>
+      <TableOfContents container=".spec-content" />
     </nav>
 
     <div class="spec-content">
