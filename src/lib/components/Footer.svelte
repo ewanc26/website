@@ -9,7 +9,6 @@
         <a href="https://bsky.app/profile/{PUBLIC_ATPROTO_DID}" aria-label="Bluesky" class="footer-icon-link">
             <Bluesky size={14} />
         </a>
-        <span class="symbol-sep"></span>
         <a href="https://eurosky.tech" aria-label="Eurosky" class="footer-icon-link">
             <Eurosky size={14} />
         </a>
