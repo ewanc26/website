@@ -86,7 +86,7 @@
           </div>
         {/each}
       </div>
-      <a href="/projects" class="section-link">All projects <ArrowRight size={14} strokeWidth={2} /></a>
+      <a href="https://docs.ewancroft.uk" target="_blank" rel="noopener" class="section-link">All projects <ArrowRight size={14} strokeWidth={2} /></a>
     </section>
   {/if}
 
