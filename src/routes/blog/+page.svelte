@@ -116,5 +116,6 @@
         border: 1px solid var(--surface-color);
         border-radius: var(--radius-md);
         background: var(--surface-raised);
+        box-sizing: border-box;
     }
 </style>
