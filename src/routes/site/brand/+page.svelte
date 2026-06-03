@@ -681,7 +681,7 @@
                       <span class="meta-label">{preview.desc}</span>
                       <div class="asset-preview og-preview">
                         <img
-                          src="{assets.ogImage.endpoint}?title={encodeURIComponent(preview.title)}&type={encodeURIComponent(preview.type)}"
+                          src="{assets.ogImage.endpoint}?title={encodeURIComponent(preview.title)}&type={encodeURIComponent(preview.type)}&subtitle={encodeURIComponent(preview.desc)}"
                           alt="OG Image: {preview.desc}"
                           class="og-img"
                         />
