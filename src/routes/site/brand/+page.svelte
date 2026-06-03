@@ -220,7 +220,7 @@
       <section class="spec-section identity" id="identity">
         <header class="section-hd">
           <span class="section-num">[01]</span>
-          <h2 class="section-title">Identity</h2>
+          <h2 class="section-title" id="identity">Identity</h2>
         </header>
         <div class="section-content">
           <div class="id-card">
@@ -265,7 +265,7 @@
       <section class="spec-section colour" id="colour">
         <header class="section-hd">
           <span class="section-num">[02]</span>
-          <h2 class="section-title">Colour Architecture</h2>
+          <h2 class="section-title" id="colour">Colour Architecture</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -297,7 +297,7 @@
           </div>
 
           <div class="spec-sub-section surfaces">
-            <h3 class="sub-title">Semantic Surfaces</h3>
+            <h3 class="sub-title" id="semantic-surfaces">Semantic Surfaces</h3>
             <div class="surface-grid">
               {#each surfaces as s}
                 <div class="surface-card">
@@ -317,7 +317,7 @@
       <section class="spec-section typography" id="typography">
         <header class="section-hd">
           <span class="section-num">[03]</span>
-          <h2 class="section-title">Typography</h2>
+          <h2 class="section-title" id="typography">Typography</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -372,7 +372,7 @@
       <section class="spec-section prose-spec" id="prose">
         <header class="section-hd">
           <span class="section-num">[04]</span>
-          <h2 class="section-title">Prose Styling</h2>
+          <h2 class="section-title" id="prose">Prose Styling</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -393,12 +393,12 @@
       <section class="spec-section geometry" id="geometry">
         <header class="section-hd">
           <span class="section-num">[05]</span>
-          <h2 class="section-title">Geometry</h2>
+          <h2 class="section-title" id="geometry">Geometry</h2>
         </header>
         <div class="section-content">
           <div class="geo-grid">
             <div class="geo-panel">
-              <h3 class="sub-title">Spacing Scale</h3>
+              <h3 class="sub-title" id="spacing-scale">Spacing Scale</h3>
               <div class="spacing-map">
                 {#each spacingScale as step}
                   <div class="spacing-entry">
@@ -413,7 +413,7 @@
             </div>
 
             <div class="geo-panel">
-              <h3 class="sub-title">Corner Radii</h3>
+              <h3 class="sub-title" id="corner-radii">Corner Radii</h3>
               <div class="radii-map">
                 {#each radiiScale as r}
                   <div class="radius-entry">
@@ -432,12 +432,12 @@
       <section class="spec-section motion" id="motion">
         <header class="section-hd">
           <span class="section-num">[06]</span>
-          <h2 class="section-title">Motion</h2>
+          <h2 class="section-title" id="motion">Motion</h2>
         </header>
         <div class="section-content">
           <div class="motion-layout">
             <div class="motion-tokens">
-              <h3 class="sub-title">Duration</h3>
+              <h3 class="sub-title" id="duration">Duration</h3>
               {#each durationScale as d}
                 <div class="token-item">
                   <code class="name">{d.token}</code>
@@ -446,7 +446,7 @@
               {/each}
             </div>
             <div class="motion-tokens">
-              <h3 class="sub-title">Easing</h3>
+              <h3 class="sub-title" id="easing">Easing</h3>
               <div class="token-item">
                 <code class="name">--ease-out-quart</code>
                 <span class="val">bezier(0.25, 1, 0.5, 1)</span>
@@ -464,7 +464,7 @@
       <section class="spec-section iconography" id="iconography">
         <header class="section-hd">
           <span class="section-num">[07]</span>
-          <h2 class="section-title">Iconography</h2>
+          <h2 class="section-title" id="iconography">Iconography</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -515,12 +515,12 @@
       <section class="spec-section components" id="components">
         <header class="section-hd">
           <span class="section-num">[08]</span>
-          <h2 class="section-title">Components</h2>
+          <h2 class="section-title" id="components">Components</h2>
         </header>
         <div class="section-content">
           <div class="component-demo-stack">
             <div class="comp-item">
-              <h3 class="sub-title">Panel Primitive</h3>
+              <h3 class="sub-title" id="panel-primitive">Panel Primitive</h3>
               <div class="panel">
                 <div class="panel-head">panel.component</div>
                 <div class="panel-body">
@@ -530,7 +530,7 @@
             </div>
 
             <div class="comp-item">
-              <h3 class="sub-title">Interactive Elements</h3>
+              <h3 class="sub-title" id="interactive-elements">Interactive Elements</h3>
               <div class="interactive-demo">
                 <div class="demo-col">
                   <span class="demo-label">Text Link</span>
@@ -551,7 +551,7 @@
             </div>
 
             <div class="comp-item">
-              <h3 class="sub-title">Blockquote</h3>
+              <h3 class="sub-title" id="blockquote">Blockquote</h3>
               <blockquote>
                 "Every element must earn its place on the screen. If it doesn't serve a functional purpose, it is slop."
               </blockquote>
@@ -564,7 +564,7 @@
       <section class="spec-section layout" id="layout">
         <header class="section-hd">
           <span class="section-num">[09]</span>
-          <h2 class="section-title">Layout Systems</h2>
+          <h2 class="section-title" id="layout">Layout Systems</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -593,7 +593,7 @@
       <section class="spec-section voice" id="voice">
         <header class="section-hd">
           <span class="section-num">[10]</span>
-          <h2 class="section-title">Voice & Tone</h2>
+          <h2 class="section-title" id="voice">Voice & Tone</h2>
         </header>
         <div class="section-content">
           <div class="voice-grid">
@@ -619,7 +619,7 @@
       <section class="spec-section principles" id="manifesto">
         <header class="section-hd">
           <span class="section-num">[11]</span>
-          <h2 class="section-title">Manifesto</h2>
+          <h2 class="section-title" id="manifesto">Manifesto</h2>
         </header>
         <div class="section-content">
           <div class="manifesto-list">
@@ -640,7 +640,7 @@
       <section class="spec-section assets" id="assets">
         <header class="section-hd">
           <span class="section-num">[12]</span>
-          <h2 class="section-title">Assets</h2>
+          <h2 class="section-title" id="assets">Assets</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -649,7 +649,7 @@
 
           <div class="asset-grid">
             <div class="asset-card">
-              <h3 class="sub-title">Favicon</h3>
+              <h3 class="sub-title" id="favicon">Favicon</h3>
               <div class="asset-preview favicon-preview">
                 <img src={assets.favicon.path} alt="Favicon" width="32" height="32" />
               </div>
@@ -661,7 +661,7 @@
             </div>
 
             <div class="asset-card og-card">
-              <h3 class="sub-title">Open Graph (Dynamic)</h3>
+              <h3 class="sub-title" id="open-graph">Open Graph (Dynamic)</h3>
               <div class="og-info-grid">
                 <div class="og-previews">
                   {#each ogPreviews as preview}
