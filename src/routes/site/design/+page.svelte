@@ -184,7 +184,7 @@
   ];
 
   const ogPreviews = [
-    { title: 'Brand Kit', type: 'BRAND_KIT', desc: 'Technical Spec' },
+    { title: 'Design', type: 'DESIGN', desc: 'Technical Spec' },
     { title: 'About', type: 'ABOUT', desc: 'Profile' },
     { title: 'The Pentacle and the Triskele', type: 'BLOG', desc: 'Blog Post' },
     { title: 'Projects', type: 'PROJECTS', desc: 'Projects Index' },
@@ -192,15 +192,15 @@
 </script>
 
 <SiteHead
-  title="Brand Kit"
-  description="The full brand language, asset reference, and component primitives for ewancroft.uk."
-  ogType="BRAND_KIT"
+  title="Design"
+  description="The full design language, asset reference, and component primitives for ewancroft.uk."
+  ogType="DESIGN"
 />
 
 <main class="shell-wide">
   <header class="page-hd spec-header">
     <div class="spec-meta">
-      <span class="meta-tag">FULL BRAND KIT</span>
+      <span class="meta-tag">DESIGN SYSTEM</span>
       <span class="meta-tag">v12.0.0</span>
       <span class="meta-tag">TECHNICAL SPEC</span>
     </div>
