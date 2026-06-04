@@ -473,7 +473,7 @@
           <h3 class="sub-title" id="iconography-pagan-seasonal">07.2 Pagan & Seasonal Symbols</h3>
           
           <h4 class="mini-title" id="iconography-pagan-symbols">
-            <span class="section-num">[07.2.1]</span> Pagan Symbols
+            <span class="section-num">07.2.1</span> Pagan Symbols
           </h4>
           <p class="section-intro">Pagan symbols use <code>currentColor</code> for stroke (pentacle) or fill (triskele).</p>
           <div class="icon-grid">
@@ -482,7 +482,7 @@
           </div>
 
           <h4 class="mini-title" id="iconography-wheel">
-            <span class="section-num">[07.2.2]</span> Wheel of the Year
+            <span class="section-num">07.2.2</span> Wheel of the Year
           </h4>
           <p class="section-intro">Seasonal symbols used in the site background. These icons wax and wane in prominence as the year turns, following the 8 Sabbats. Styled with a 1.5pt Lucide-style stroke.</p>
           <div class="icon-grid">
