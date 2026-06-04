@@ -1,12 +1,6 @@
 import chroma from "chroma-js";
 
 /**
- * @typedef {Object} OKLCH
- * @property {number} l
- * @property {number} c
- * @property {number} h
- */
-/**
  * @typedef {Object} ModeColors
  * @property {number[]} light
  * @property {number[]} dark
@@ -40,8 +34,6 @@ import chroma from "chroma-js";
 export const baseline = {
   text: {
     50: { light: [0.967, 0.012, 133.22], dark: [0.168, 0.019, 137.9] },
-    //... rest of the structure is fine, just need the type above
-
     100: { light: [0.935, 0.026, 136.26], dark: [0.235, 0.036, 136.87] },
     200: { light: [0.871, 0.053, 136.42], dark: [0.357, 0.063, 137.05] },
     300: { light: [0.806, 0.08, 136.59], dark: [0.47, 0.088, 137.13] },
@@ -108,7 +100,6 @@ export const baseline = {
 };
 
 /**
- * Sabbat hue offsets relative to Ostara (Spring Equinox, Mar 21).
  * @typedef {Object} Sabbat
  * @property {string} name
  * @property {number} month
@@ -121,7 +112,12 @@ export const baseline = {
 const sabbats = [
   { name: "imbolc", month: 2, day: 1, rotation: -45 },
   { name: "ostara", month: 3, day: 21, rotation: 0 },
-  // ...
+  { name: "beltane", month: 5, day: 1, rotation: 45 },
+  { name: "litha", month: 6, day: 21, rotation: 90 },
+  { name: "lughnasadh", month: 8, day: 1, rotation: 135 },
+  { name: "mabon", month: 9, day: 21, rotation: 180 },
+  { name: "samhain", month: 10, day: 31, rotation: 225 },
+  { name: "yule", month: 12, day: 21, rotation: 270 },
 ];
 
 /**
@@ -165,6 +161,7 @@ export function getHueRotation(now) {
 export function getCurrentPrimaryShade(step = 400) {
   const now = new Date();
   const rotation = getHueRotation(now);
+  // @ts-ignore
   const data = baseline.primary[step] || baseline.primary[400];
   const [l, c, hBase] = data.light;
   return chroma.oklch(l, c, (hBase + rotation) % 360).hex();
