@@ -116,6 +116,9 @@
   .icon-wrap {
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .label {
@@ -126,6 +129,7 @@
     margin-top: 1rem;
     font-weight: 500;
     line-height: 1.2;
+    width: 100%;
   }
 
   .waning {
