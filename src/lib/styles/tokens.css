@@ -10,137 +10,156 @@
 
 @theme {
   /* ── Tailwind v4 Theme Configuration ──────────────────────── */
-  --color-text-50: rgb(var(--text-50));
-  --color-text-100: rgb(var(--text-100));
-  --color-text-200: rgb(var(--text-200));
-  --color-text-300: rgb(var(--text-300));
-  --color-text-400: rgb(var(--text-400));
-  --color-text-500: rgb(var(--text-500));
-  --color-text-600: rgb(var(--text-600));
-  --color-text-700: rgb(var(--text-700));
-  --color-text-800: rgb(var(--text-800));
-  --color-text-900: rgb(var(--text-900));
-  --color-text-950: rgb(var(--text-950));
+  --color-text-50: var(--text-50);
+  --color-text-100: var(--text-100);
+  --color-text-200: var(--text-200);
+  --color-text-300: var(--text-300);
+  --color-text-400: var(--text-400);
+  --color-text-500: var(--text-500);
+  --color-text-600: var(--text-600);
+  --color-text-700: var(--text-700);
+  --color-text-800: var(--text-800);
+  --color-text-900: var(--text-900);
+  --color-text-950: var(--text-950);
+  --color-ink-50: var(--color-text-50);
+  --color-ink-100: var(--color-text-100);
+  --color-ink-200: var(--color-text-200);
+  --color-ink-300: var(--color-text-300);
+  --color-ink-400: var(--color-text-400);
+  --color-ink-500: var(--color-text-500);
+  --color-ink-600: var(--color-text-600);
+  --color-ink-700: var(--color-text-700);
+  --color-ink-800: var(--color-text-800);
+  --color-ink-900: var(--color-text-900);
+  --color-ink-950: var(--color-text-950);
 
-  --color-background-50: rgb(var(--background-50));
-  --color-background-100: rgb(var(--background-100));
-  --color-background-200: rgb(var(--background-200));
-  --color-background-300: rgb(var(--background-300));
-  --color-background-400: rgb(var(--background-400));
-  --color-background-500: rgb(var(--background-500));
-  --color-background-600: rgb(var(--background-600));
-  --color-background-700: rgb(var(--background-700));
-  --color-background-800: rgb(var(--background-800));
-  --color-background-900: rgb(var(--background-900));
-  --color-background-950: rgb(var(--background-950));
+  --color-background-50: var(--background-50);
+  --color-background-100: var(--background-100);
+  --color-background-200: var(--background-200);
+  --color-background-300: var(--background-300);
+  --color-background-400: var(--background-400);
+  --color-background-500: var(--background-500);
+  --color-background-600: var(--background-600);
+  --color-background-700: var(--background-700);
+  --color-background-800: var(--background-800);
+  --color-background-900: var(--background-900);
+  --color-background-950: var(--background-950);
+  --color-canvas-50: var(--color-background-50);
+  --color-canvas-100: var(--color-background-100);
+  --color-canvas-200: var(--color-background-200);
+  --color-canvas-300: var(--color-background-300);
+  --color-canvas-400: var(--color-background-400);
+  --color-canvas-500: var(--color-background-500);
+  --color-canvas-600: var(--color-background-600);
+  --color-canvas-700: var(--color-background-700);
+  --color-canvas-800: var(--color-background-800);
+  --color-canvas-900: var(--color-background-900);
+  --color-canvas-950: var(--color-background-950);
 
-  --color-primary-50: rgb(var(--primary-50));
-  --color-primary-100: rgb(var(--primary-100));
-  --color-primary-200: rgb(var(--primary-200));
-  --color-primary-300: rgb(var(--primary-300));
-  --color-primary-400: rgb(var(--primary-400));
-  --color-primary-500: rgb(var(--primary-500));
-  --color-primary-600: rgb(var(--primary-600));
-  --color-primary-700: rgb(var(--primary-700));
-  --color-primary-800: rgb(var(--primary-800));
-  --color-primary-900: rgb(var(--primary-900));
-  --color-primary-950: rgb(var(--primary-950));
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
 
-  --color-secondary-50: rgb(var(--secondary-50));
-  --color-secondary-100: rgb(var(--secondary-100));
-  --color-secondary-200: rgb(var(--secondary-200));
-  --color-secondary-300: rgb(var(--secondary-300));
-  --color-secondary-400: rgb(var(--secondary-400));
-  --color-secondary-500: rgb(var(--secondary-500));
-  --color-secondary-600: rgb(var(--secondary-600));
-  --color-secondary-700: rgb(var(--secondary-700));
-  --color-secondary-800: rgb(var(--secondary-800));
-  --color-secondary-900: rgb(var(--secondary-900));
-  --color-secondary-950: rgb(var(--secondary-950));
+  --color-secondary-50: var(--secondary-50);
+  --color-secondary-100: var(--secondary-100);
+  --color-secondary-200: var(--secondary-200);
+  --color-secondary-300: var(--secondary-300);
+  --color-secondary-400: var(--secondary-400);
+  --color-secondary-500: var(--secondary-500);
+  --color-secondary-600: var(--secondary-600);
+  --color-secondary-700: var(--secondary-700);
+  --color-secondary-800: var(--secondary-800);
+  --color-secondary-900: var(--secondary-900);
+  --color-secondary-950: var(--secondary-950);
 
-  --color-accent-50: rgb(var(--accent-50));
-  --color-accent-100: rgb(var(--accent-100));
-  --color-accent-200: rgb(var(--accent-200));
-  --color-accent-300: rgb(var(--accent-300));
-  --color-accent-400: rgb(var(--accent-400));
-  --color-accent-500: rgb(var(--accent-500));
-  --color-accent-600: rgb(var(--accent-600));
-  --color-accent-700: rgb(var(--accent-700));
-  --color-accent-800: rgb(var(--accent-800));
-  --color-accent-900: rgb(var(--accent-900));
-  --color-accent-950: rgb(var(--accent-950));
+  --color-accent-50: var(--accent-50);
+  --color-accent-100: var(--accent-100);
+  --color-accent-200: var(--accent-200);
+  --color-accent-300: var(--accent-300);
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+  --color-accent-700: var(--accent-700);
+  --color-accent-800: var(--accent-800);
+  --color-accent-900: var(--accent-900);
+  --color-accent-950: var(--accent-950);
 }
 
 @layer base {
   :root {
-    /* ── Light Mode Color Engine (RGB Channels) ────────────────── */
-    --text-50: 245 253 232;
-    --text-100: 235 250 209;
-    --text-200: 215 245 163;
-    --text-300: 195 240 117;
-    --text-400: 175 236 70;
-    --text-500: 155 231 24;
-    --text-600: 124 185 19;
-    --text-700: 93 138 15;
-    --text-800: 62 92 10;
-    --text-900: 31 46 5;
-    --text-950: 16 23 2;
+    /* ── Color Palette ────────────────────────────────────────── */
+    --text-50: light-dark(rgb(241 246 238), rgb(11 17 9));
+    --text-100: light-dark(rgb(226 238 221), rgb(22 34 17));
+    --text-200: light-dark(rgb(197 221 187), rgb(44 68 34));
+    --text-300: light-dark(rgb(168 204 153), rgb(66 102 51));
+    --text-400: light-dark(rgb(140 187 119), rgb(89 136 68));
+    --text-500: light-dark(rgb(111 170 85), rgb(111 170 85));
+    --text-600: light-dark(rgb(89 136 68), rgb(140 187 119));
+    --text-700: light-dark(rgb(66 102 51), rgb(168 204 153));
+    --text-800: light-dark(rgb(44 68 34), rgb(197 221 187));
+    --text-900: light-dark(rgb(22 34 17), rgb(226 238 221));
+    --text-950: light-dark(rgb(11 17 9), rgb(241 246 238));
 
-    --background-50: 245 252 233;
-    --background-100: 234 248 211;
-    --background-200: 214 241 167;
-    --background-300: 193 234 123;
-    --background-400: 173 227 79;
-    --background-500: 152 221 34;
-    --background-600: 122 176 28;
-    --background-700: 91 132 21;
-    --background-800: 61 88 14;
-    --background-900: 30 44 7;
-    --background-950: 15 22 3;
+    --background-50: light-dark(rgb(239 249 236), rgb(10 19 6));
+    --background-100: light-dark(rgb(224 242 217), rgb(19 39 12));
+    --background-200: light-dark(rgb(193 230 179), rgb(39 77 25));
+    --background-300: light-dark(rgb(162 217 140), rgb(58 116 37));
+    --background-400: light-dark(rgb(131 204 102), rgb(78 154 50));
+    --background-500: light-dark(rgb(100 191 64), rgb(97 193 62));
+    --background-600: light-dark(rgb(80 153 51), rgb(129 205 101));
+    --background-700: light-dark(rgb(60 115 38), rgb(160 218 139));
+    --background-800: light-dark(rgb(40 77 25), rgb(192 230 178));
+    --background-900: light-dark(rgb(20 38 13), rgb(223 243 216));
+    --background-950: light-dark(rgb(10 19 6), rgb(239 249 236));
 
-    /* Shifted Primary to be darker for legibility on light backgrounds */
-    --primary-50: 245 252 232;
-    --primary-100: 235 250 209;
-    --primary-200: 215 245 163;
-    --primary-300: 195 240 117;
-    --primary-400: 155 230 25;
-    --primary-500: 93 138 15;
-    --primary-600: 62 92 10;
-    --primary-700: 46 69 7;
-    --primary-800: 31 46 5;
-    --primary-900: 23 34 3;
-    --primary-950: 15 23 3;
+    --primary-50: light-dark(rgb(240 247 237), rgb(10 18 8));
+    --primary-100: light-dark(rgb(225 240 219), rgb(21 36 15));
+    --primary-200: light-dark(rgb(194 224 184), rgb(41 71 31));
+    --primary-300: light-dark(rgb(164 209 148), rgb(62 107 46));
+    --primary-400: light-dark(rgb(134 194 112), rgb(83 143 61));
+    --primary-500: light-dark(rgb(104 179 77), rgb(104 179 77));
+    --primary-600: light-dark(rgb(83 143 61), rgb(134 194 112));
+    --primary-700: light-dark(rgb(62 107 46), rgb(164 209 148));
+    --primary-800: light-dark(rgb(41 71 31), rgb(194 224 184));
+    --primary-900: light-dark(rgb(21 36 15), rgb(225 240 219));
+    --primary-950: light-dark(rgb(10 18 8), rgb(240 247 237));
 
-    /* Shifted Secondary to be darker for legibility on light backgrounds */
-    --secondary-50: 236 252 232;
-    --secondary-100: 216 249 210;
-    --secondary-200: 178 243 165;
-    --secondary-300: 139 237 120;
-    --secondary-400: 62 226 29;
-    --secondary-500: 37 135 18;
-    --secondary-600: 25 90 12;
-    --secondary-700: 18 67 9;
-    --secondary-800: 12 45 6;
-    --secondary-900: 9 34 4;
-    --secondary-950: 6 23 3;
+    --secondary-50: light-dark(rgb(240 248 237), rgb(10 18 7));
+    --secondary-100: light-dark(rgb(224 241 218), rgb(20 37 14));
+    --secondary-200: light-dark(rgb(194 226 182), rgb(41 73 29));
+    --secondary-300: light-dark(rgb(163 212 145), rgb(61 110 43));
+    --secondary-400: light-dark(rgb(132 198 108), rgb(81 147 57));
+    --secondary-500: light-dark(rgb(101 184 71), rgb(101 184 71));
+    --secondary-600: light-dark(rgb(81 147 57), rgb(132 198 108));
+    --secondary-700: light-dark(rgb(61 110 43), rgb(163 212 145));
+    --secondary-800: light-dark(rgb(41 73 29), rgb(194 226 182));
+    --secondary-900: light-dark(rgb(20 37 14), rgb(224 241 218));
+    --secondary-950: light-dark(rgb(10 18 7), rgb(240 248 237));
 
-    /* Shifted Accent to be darker for legibility on light backgrounds */
-    --accent-50: 232 252 237;
-    --accent-100: 209 250 219;
-    --accent-200: 164 244 184;
-    --accent-300: 118 239 148;
-    --accent-400: 27 228 77;
-    --accent-500: 16 137 46;
-    --accent-600: 11 91 31;
-    --accent-700: 8 68 23;
-    --accent-800: 5 46 15;
-    --accent-900: 4 34 11;
-    --accent-950: 3 23 8;
+    --accent-50: light-dark(rgb(239 248 236), rgb(10 19 7));
+    --accent-100: light-dark(rgb(224 241 218), rgb(20 37 14));
+    --accent-200: light-dark(rgb(193 228 180), rgb(40 75 27));
+    --accent-300: light-dark(rgb(162 214 143), rgb(60 112 41));
+    --accent-400: light-dark(rgb(131 201 105), rgb(80 150 54));
+    --accent-500: light-dark(rgb(100 187 68), rgb(100 187 68));
+    --accent-600: light-dark(rgb(80 150 54), rgb(131 201 105));
+    --accent-700: light-dark(rgb(60 112 41), rgb(162 214 143));
+    --accent-800: light-dark(rgb(40 75 27), rgb(193 228 180));
+    --accent-900: light-dark(rgb(20 37 14), rgb(224 241 218));
+    --accent-950: light-dark(rgb(10 19 7), rgb(239 248 236));
 
     /* ── Surface aliases mapping ──────────────────────────────── */
-    --surface-color: var(--color-background-200);
-    --surface-raised: var(--color-background-100);
-    --surface-sunken: var(--color-background-50);
+    --surface-color: var(--background-200);
+    --surface-raised: var(--background-100);
+    --surface-sunken: var(--background-50);
 
     /* ── Spacing — 4pt scale ─────────────────────────────────── */
     --space-2xs: 2px;
@@ -183,71 +202,5 @@
     --duration-fast: 200ms;
     --duration-normal: 300ms;
     --duration-slow: 500ms;
-  }
-
-  /* ── Dark Mode Toggle ───────────────────────────────────────── */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --text-50: 16 23 2;
-      --text-100: 31 46 5;
-      --text-200: 62 92 10;
-      --text-300: 93 138 15;
-      --text-400: 124 185 19;
-      --text-500: 155 231 24;
-      --text-600: 175 236 70;
-      --text-700: 195 240 117;
-      --text-800: 215 245 163;
-      --text-900: 235 250 209;
-      --text-950: 245 253 232;
-
-      --background-50: 15 22 3;
-      --background-100: 30 44 7;
-      --background-200: 61 88 14;
-      --background-300: 91 132 21;
-      --background-400: 122 176 28;
-      --background-500: 152 221 34;
-      --background-600: 173 227 79;
-      --background-700: 193 234 123;
-      --background-800: 214 241 167;
-      --background-900: 234 248 211;
-      --background-950: 245 252 233;
-
-      /* Neon brightness is retained for dark mode for glowing contrast */
-      --primary-50: 15 23 3;
-      --primary-100: 31 46 5;
-      --primary-200: 62 92 10;
-      --primary-300: 93 138 15;
-      --primary-400: 124 184 20;
-      --primary-500: 155 230 25;
-      --primary-600: 175 235 71;
-      --primary-700: 195 240 117;
-      --primary-800: 215 245 163;
-      --primary-900: 235 250 209;
-      --primary-950: 245 252 232;
-
-      --secondary-50: 6 23 3;
-      --secondary-100: 12 45 6;
-      --secondary-200: 25 90 12;
-      --secondary-300: 37 135 18;
-      --secondary-400: 50 181 23;
-      --secondary-500: 62 226 29;
-      --secondary-600: 101 232 74;
-      --secondary-700: 139 237 120;
-      --secondary-800: 178 243 165;
-      --secondary-900: 216 249 210;
-      --secondary-950: 236 252 232;
-
-      --accent-50: 3 23 8;
-      --accent-100: 5 46 15;
-      --accent-200: 11 91 31;
-      --accent-300: 16 137 46;
-      --accent-400: 21 183 62;
-      --accent-500: 27 228 77;
-      --accent-600: 72 234 113;
-      --accent-700: 118 239 148;
-      --accent-800: 164 244 184;
-      --accent-900: 209 250 219;
-      --accent-950: 232 252 237;
-    }
   }
 }
