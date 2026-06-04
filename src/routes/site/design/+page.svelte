@@ -85,19 +85,18 @@
     { name: 'Narrow Shell', cls: '.shell-narrow', width: '48rem', usage: 'Subscriptions, support' },
   ];
 
-  const sabbats_test = [];
-    { name: 'Imbolg', paths: ['M10 10h4v4h-4z', 'M14 10h8', 'M14 14v8', 'M10 14H2', 'M10 10V2'] },
-    { name: 'Earrach', paths: ['M12 22c5 0 8-3 8-7s-3-7-8-7-8 3-8 7 3 7 8 7Z', 'M10 8c0-3-1-6 1-6s2 3 2 6', 'M12 8c0-3-1-6 1-6s2 3 2 6', 'M16 22l1-2', 'M8 22l-1-2'] },
-    { name: 'Bealltainn', paths: ['M12 2v20', 'M12 5l7 3', 'M12 5l-7 3', 'M12 10l7 3', 'M12 10l-7 3', 'M12 15l7 3', 'M12 15l-7 3'] },
-    { name: 'Samhradh', paths: ['M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0', 'M12 2v2', 'M12 20v2', 'M2 12h2', 'M20 12h2', 'm19 5-1.5 1.5', 'm19 19-1.5-1.5', 'm5 19 1.5-1.5', 'm5 5 1.5 1.5'] },
-    { name: 'Lùnastal', paths: ['M12 22V2', 'M12 6l4-2 M12 6l-4-2', 'M12 10l4-2 M12 10l-4-2', 'M12 14l4-2 M12 14l-4-2'] },
-    { name: 'Foghar', paths: ['M12 22V19', 'M12 19c3-1 5-4 5-8 0-4-3-7-5-9-2 2-5 5-5 9 0 4 2 7 5 8Z', 'M12 15l2-2 M12 12l2-2 M12 9l2-2', 'M12 15l-2-2 M12 12l-2-2 M12 9l-2-2'] },
-    { name: 'Samhainn', paths: ['M12 21a8 8 0 0 1-8-8c0-3 2-5 2-5h12s2 2 2 5a8 8 0 0 1-8 8z', 'M9 21v2', 'M15 21v2', 'M4 11h16', 'M7 8a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2'] },
-    { name: 'Geamhradh', paths: ['M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0', 'M12 3v18', 'M3 12h18'] }
+  const sabbatsComponents = [
+    { name: 'Imbolc', component: Imbolc },
+    { name: 'Ostara', component: Ostara },
+    { name: 'Beltane', component: Beltane },
+    { name: 'Litha', component: Litha },
+    { name: 'Lughnasadh', component: Lughnasadh },
+    { name: 'Mabon', component: Mabon },
+    { name: 'Samhain', component: Samhain },
+    { name: 'Yule', component: Yule }
   ];
 
   const principles = [
-    {
       number: '01',
       name: 'Systematic colour',
       description:
