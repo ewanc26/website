@@ -24,7 +24,7 @@
   type ActiveState = {
     prev: typeof sabbats[0];
     next: typeof sabbats[0];
-    progress: number; // 0 to 1
+    progress: number;
   };
 
   let state = $state<ActiveState | null>(null);
@@ -48,46 +48,58 @@
           progress: (now.getTime() - allSabbats[i].date.getTime()) / (allSabbats[i+1].date.getTime() - allSabbats[i].date.getTime())
         };
         break;
-      function updateState() {
-        // ... logic remains same ...
       }
+    }
+  }
 
-      onMount(() => {
-        updateState();
-        const interval = setInterval(updateState, 1000 * 60 * 60); 
-        return () => clearInterval(interval);
-      });
-      </script>
+  onMount(() => {
+    updateState();
+    const interval = setInterval(updateState, 1000 * 60 * 60); 
+    return () => clearInterval(interval);
+  });
+</script>
 
-      {#snippet RenderIcon(Component, size, strokeWidth)}
-      <Component {size} {strokeWidth} />
-      {/snippet}
-
-      {#if state}
-      <div class="sabbat-bg-container" aria-hidden="true">
-        <!-- Waning (Left) -->
-        <div 
-          class="sabbat-icon waning" 
-          style="opacity: {(1 - state.progress) * 0.15}; transform: scale({1.2 - state.progress * 0.3});"
-        >
-          <div class="icon-wrap">
-            {@render RenderIcon(state.prev.component, 150, 1.5)}
-          </div>
-          <span class="label">{state.prev.name}</span>
-        </div>
-
-        <!-- Waxing (Right) -->
-        <div 
-          class="sabbat-icon waxing" 
-          style="opacity: {state.progress * 0.15}; transform: scale({0.9 + state.progress * 0.3});"
-        >
-          <div class="icon-wrap">
-            {@render RenderIcon(state.next.component, 150, 1.5)}
-          </div>
-          <span class="label">{state.next.name}</span>
-        </div>
+{#if state}
+  <div class="sabbat-bg-container" aria-hidden="true">
+    <!-- Waning (Left) -->
+    <div 
+      class="sabbat-icon waning" 
+      style="opacity: {(1 - state.progress) * 0.15}; transform: scale({1.2 - state.progress * 0.3});"
+    >
+      <div class="icon-wrap">
+        {#if state.prev.name === 'Imbolc'}<Imbolc size={150} strokeWidth={1.5} />
+        {:else if state.prev.name === 'Ostara'}<Ostara size={150} strokeWidth={1.5} />
+        {:else if state.prev.name === 'Beltane'}<Beltane size={150} strokeWidth={1.5} />
+        {:else if state.prev.name === 'Litha'}<Litha size={150} strokeWidth={1.5} />
+        {:else if state.prev.name === 'Lughnasadh'}<Lughnasadh size={150} strokeWidth={1.5} />
+        {:else if state.prev.name === 'Mabon'}<Mabon size={150} strokeWidth={1.5} />
+        {:else if state.prev.name === 'Samhain'}<Samhain size={150} strokeWidth={1.5} />
+        {:else if state.prev.name === 'Yule'}<Yule size={150} strokeWidth={1.5} />
+        {/if}
       </div>
-      {/if}
+      <span class="label">{state.prev.name}</span>
+    </div>
+
+    <!-- Waxing (Right) -->
+    <div 
+      class="sabbat-icon waxing" 
+      style="opacity: {state.progress * 0.15}; transform: scale({0.9 + state.progress * 0.3});"
+    >
+      <div class="icon-wrap">
+        {#if state.next.name === 'Imbolc'}<Imbolc size={150} strokeWidth={1.5} />
+        {:else if state.next.name === 'Ostara'}<Ostara size={150} strokeWidth={1.5} />
+        {:else if state.next.name === 'Beltane'}<Beltane size={150} strokeWidth={1.5} />
+        {:else if state.next.name === 'Litha'}<Litha size={150} strokeWidth={1.5} />
+        {:else if state.next.name === 'Lughnasadh'}<Lughnasadh size={150} strokeWidth={1.5} />
+        {:else if state.next.name === 'Mabon'}<Mabon size={150} strokeWidth={1.5} />
+        {:else if state.next.name === 'Samhain'}<Samhain size={150} strokeWidth={1.5} />
+        {:else if state.next.name === 'Yule'}<Yule size={150} strokeWidth={1.5} />
+        {/if}
+      </div>
+      <span class="label">{state.next.name}</span>
+    </div>
+  </div>
+{/if}
 
 <style>
   .sabbat-bg-container {
