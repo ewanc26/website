@@ -652,30 +652,7 @@
 
             <div class="asset-card og-card">
               <h3 class="sub-title" id="open-graph">Open Graph (Dynamic)</h3>
-              <div class="og-info-grid">
-                <div class="og-previews">
-                  {#each ogPreviews as preview}
-                    <div class="og-preview-item">
-                      <span class="meta-label">{preview.desc}</span>
-                      <div class="asset-preview og-preview" style="background: #111;">
-                        <img
-                          src="{assets.ogImage.endpoint}?title={encodeURIComponent(preview.title)}&type={encodeURIComponent(preview.type)}&subtitle={encodeURIComponent(preview.desc)}"
-                          alt="OG Image: {preview.desc}"
-                          class="og-img"
-                        />
-                      </div>
-                    </div>
-                  {/each}
-                </div>
-                <div class="og-colours">
-                  <span class="meta-label">OG COLOUR PALETTE</span>
-                  <div class="og-swatches">
-                    {#each ogColours as c}
-                      <div class="og-swatch" style="background: {c.value};" title="{c.token}: {c.value} ({c.desc})"></div>
-                    {/each}
-                  </div>
-                </div>
-              </div>
+              <p class="section-intro">OG images use <code>getHueRotation()</code> to dynamically apply the current seasonal palette. They are force-rendered in dark mode for consistency.</p>
             </div>
           </div>
         </div>
