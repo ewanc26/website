@@ -640,9 +640,6 @@
           <div class="asset-grid">
             <div class="asset-card">
               <h3 class="sub-title" id="favicon">Favicon</h3>
-              <div class="asset-preview favicon-preview">
-                <img src={assets.favicon.path} alt="Favicon" width="32" height="32" />
-              </div>
               <dl class="asset-meta">
                 <div><dt>PATH</dt><dd><code>{assets.favicon.publicUrl}</code></dd></div>
                 <div><dt>SIZE</dt><dd>{assets.favicon.size}</dd></div>
