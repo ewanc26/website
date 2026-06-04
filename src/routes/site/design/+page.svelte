@@ -19,39 +19,19 @@
   }
 
   const colorPalettes = [
-    {
-      name: 'Ink',
-      prefix: 'ink',
-      description: 'Text and foreground elements. Green-tinted neutrals at 150°.',
-    },
-    {
-      name: 'Canvas',
-      prefix: 'canvas',
-      description: 'Backgrounds and surfaces. Green-tinted at 150°.',
-    },
-    {
-      name: 'Primary',
-      prefix: 'primary',
-      description: 'Brand green. Interactive elements and links. 150°.',
-    },
-    {
-      name: 'Secondary',
-      prefix: 'secondary',
-      description: 'Muted green for visited states and secondary accents. 140°.',
-    },
-    {
-      name: 'Accent',
-      prefix: 'accent',
-      description: 'Vivid green for highlights and inline code. 160°.',
-    },
+    { name: 'Ink', prefix: 'ink', basePrefix: 'text', description: 'Text and foreground elements. Neutrals tinted toward the current primary hue.' },
+    { name: 'Canvas', prefix: 'canvas', basePrefix: 'background', description: 'Backgrounds and surfaces. Subtle tint from the current primary hue.' },
+    { name: 'Primary', prefix: 'primary', basePrefix: 'primary', description: 'Main brand hue. Interpolates through the Sabbat cycle.' },
+    { name: 'Secondary', prefix: 'secondary', basePrefix: 'secondary', description: 'Complementary hue for visited states and secondary elements.' },
+    { name: 'Accent', prefix: 'accent', basePrefix: 'accent', description: 'Vivid highlight hue for emphasis and inline markers.' },
   ];
 
   const colorSteps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
 
   const surfaces = [
-    { token: '--surface-sunken', label: 'sunken', alias: '--color-canvas-50' },
-    { token: '--surface-color', label: 'base', alias: '--color-canvas-200' },
-    { token: '--surface-raised', label: 'raised', alias: '--color-canvas-100' },
+    { token: '--surface-sunken', label: 'sunken' },
+    { token: '--surface-color', label: 'base' },
+    { token: '--surface-raised', label: 'raised' },
   ];
 
   const typeScale = [
@@ -97,12 +77,23 @@
     { name: 'Narrow Shell', cls: '.shell-narrow', width: '48rem', usage: 'Subscriptions, support' },
   ];
 
+  const sabbats = [
+    { name: 'Imbolg', paths: ['M10 10h4v4h-4z', 'M14 10h8', 'M14 14v8', 'M10 14H2', 'M10 10V2'] },
+    { name: 'Earrach', paths: ['M12 22c5 0 8-3 8-7s-3-7-8-7-8 3-8 7 3 7 8 7Z', 'M10 8c0-3-1-6 1-6s2 3 2 6', 'M12 8c0-3-1-6 1-6s2 3 2 6', 'M16 22l1-2', 'M8 22l-1-2'] },
+    { name: 'Bealltainn', paths: ['M12 2v20', 'M12 5l7 3', 'M12 5l-7 3', 'M12 10l7 3', 'M12 10l-7 3', 'M12 15l7 3', 'M12 15l-7 3'] },
+    { name: 'Samhradh', paths: ['M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0', 'M12 2v2', 'M12 20v2', 'M2 12h2', 'M20 12h2', 'm19 5-1.5 1.5', 'm19 19-1.5-1.5', 'm5 19 1.5-1.5', 'm5 5 1.5 1.5'] },
+    { name: 'Lùnastal', paths: ['M12 22V2', 'M12 6l4-2 M12 6l-4-2', 'M12 10l4-2 M12 10l-4-2', 'M12 14l4-2 M12 14l-4-2'] },
+    { name: 'Foghar', paths: ['M12 22V19', 'M12 19c3-1 5-4 5-8 0-4-3-7-5-9-2 2-5 5-5 9 0 4 2 7 5 8Z', 'M12 15l2-2 M12 12l2-2 M12 9l2-2', 'M12 15l-2-2 M12 12l-2-2 M12 9l-2-2'] },
+    { name: 'Samhainn', paths: ['M12 21a8 8 0 0 1-8-8c0-3 2-5 2-5h12s2 2 2 5a8 8 0 0 1-8 8z', 'M9 21v2', 'M15 21v2', 'M4 11h16', 'M7 8a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2'] },
+    { name: 'Geamhradh', paths: ['M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0', 'M12 3v18', 'M3 12h18'] }
+  ];
+
   const principles = [
     {
       number: '01',
       name: 'Systematic colour',
       description:
-        'OKLCH throughout — brand-hue-tinted neutrals (140–160°), no pure black or white, no AI-standard palettes. Every shade is derived and purposeful.',
+        'OKLCH throughout — neutrals are tinted toward a dynamic brand hue that interpolates through the Sabbat cycle. No pure black or white. Every shade is derived and purposeful.',
     },
     {
       number: '02',
@@ -204,7 +195,7 @@
       <span class="meta-tag">v12.1.0</span>
       <span class="meta-tag">TECHNICAL SPEC</span>
     </div>
-    <h1 class="page-title">Identity & Assets</h1>
+    <h1 class="page-title">Identity &amp; Assets</h1>
     <p class="spec-abstract">
       A comprehensive reference of the design primitives, assets, and core principles governing the visual identity of <strong>ewancroft.uk</strong>. Derived from physical precision and technical integrity.
     </p>
@@ -220,7 +211,7 @@
       <section class="spec-section identity" id="identity">
         <header class="section-hd">
           <span class="section-num">[01]</span>
-          <h2 class="section-title" id="identity">Identity</h2>
+          <h2 class="section-title">Identity</h2>
         </header>
         <div class="section-content">
           <div class="id-card">
@@ -265,11 +256,12 @@
       <section class="spec-section colour" id="colour">
         <header class="section-hd">
           <span class="section-num">[02]</span>
-          <h2 class="section-title" id="colour">Colour Architecture</h2>
+          <h2 class="section-title">Colour Architecture</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
-            Derived from brand OKLCH hues (140–160°). Neutrals are tinted toward the brand hue (Chroma 0.005–0.01). 
+            Derived from dynamic brand OKLCH hues that interpolate between Sabbat base points throughout the year.
+            Neutrals are tinted toward the current brand hue (Chroma 0.005–0.012).
             Implementation via <code>light-dark()</code> ensures seamless theme transitions based on user OS preference.
           </p>
 
@@ -285,7 +277,7 @@
                     <div class="swatch-item">
                       <div
                         class="swatch"
-                        style="background: var(--color-{palette.prefix}-{step});"
+                        style="background: var(--{palette.basePrefix}-{step});"
                         title="--color-{palette.prefix}-{step}"
                       ></div>
                       <span class="swatch-val">{step}</span>
@@ -296,7 +288,7 @@
             {/each}
           </div>
 
-          <div class="spec-sub-section surfaces" style="margin-top: var(--space-lg);">
+          <div class="spec-sub-section surfaces">
             <h3 class="sub-title" id="semantic-surfaces">Semantic Surfaces</h3>
             <div class="surface-grid">
               {#each surfaces as s}
@@ -317,11 +309,11 @@
       <section class="spec-section typography" id="typography">
         <header class="section-hd">
           <span class="section-num">[03]</span>
-          <h2 class="section-title" id="typography">Typography</h2>
+          <h2 class="section-title">Typography</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
-            Variable Inter for all prose; JetBrains Mono for technical strings. Modular scale at ratio 1.25, 
+            Variable Inter for all prose; JetBrains Mono for technical strings. Modular scale at ratio 1.25,
             fluid via <code>clamp()</code>.
           </p>
 
@@ -372,7 +364,7 @@
       <section class="spec-section prose-spec" id="prose">
         <header class="section-hd">
           <span class="section-num">[04]</span>
-          <h2 class="section-title" id="prose">Prose Styling</h2>
+          <h2 class="section-title">Prose Styling</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -393,7 +385,7 @@
       <section class="spec-section geometry" id="geometry">
         <header class="section-hd">
           <span class="section-num">[05]</span>
-          <h2 class="section-title" id="geometry">Geometry</h2>
+          <h2 class="section-title">Geometry</h2>
         </header>
         <div class="section-content">
           <div class="geo-grid">
@@ -432,7 +424,7 @@
       <section class="spec-section motion" id="motion">
         <header class="section-hd">
           <span class="section-num">[06]</span>
-          <h2 class="section-title" id="motion">Motion</h2>
+          <h2 class="section-title">Motion</h2>
         </header>
         <div class="section-content">
           <div class="motion-layout">
@@ -464,58 +456,55 @@
       <section class="spec-section iconography" id="iconography">
         <header class="section-hd">
           <span class="section-num">[07]</span>
-          <h2 class="section-title" id="iconography">Iconography</h2>
+          <h2 class="section-title">Iconography</h2>
         </header>
         <div class="section-content">
-          <p class="section-intro">
-            System icons are implemented as SVG components with a default size of 16px. They inherit <code>currentColor</code> for seamless integration. Pagan symbols use <code>currentColor</code> for stroke (pentacle) or fill (triskele).
-          </p>
+          <h3 class="sub-title" id="iconography-system">
+            <span class="section-num">[07.1]</span> System Icons
+          </h3>
+          <p class="section-intro">System icons are implemented as SVG components with a default size of 16px. They inherit <code>currentColor</code> for seamless integration.</p>
           <div class="icon-grid">
-            <div class="icon-card">
-              <div class="icon-preview">
-                <Bluesky size={32} />
+            <div class="icon-card"><div class="icon-preview"><Bluesky size={32} /></div><code class="icon-name">Bluesky.svelte</code></div>
+            <div class="icon-card"><div class="icon-preview"><Eurosky size={32} /></div><code class="icon-name">Eurosky.svelte</code></div>
+            <div class="icon-card"><div class="icon-preview"><Leaflet size={32} /></div><code class="icon-name">Leaflet.svelte</code></div>
+            <div class="icon-card"><div class="icon-preview"><StandardSite size={32} /></div><code class="icon-name">StandardSite.svelte</code></div>
+          </div>
+
+          <h3 class="sub-title" id="iconography-pagan-seasonal">07.2 Pagan & Seasonal Symbols</h3>
+          
+          <h4 class="mini-title" id="iconography-pagan-symbols">
+            <span class="section-num">[07.2.1]</span> Pagan Symbols
+          </h4>
+          <p class="section-intro">Pagan symbols use <code>currentColor</code> for stroke (pentacle) or fill (triskele).</p>
+          <div class="icon-grid">
+            <div class="icon-card"><div class="icon-preview"><Pentacle size={32} /></div><code class="icon-name">Pentacle.svelte</code></div>
+            <div class="icon-card"><div class="icon-preview"><Triskele size={32} /></div><code class="icon-name">Triskele.svelte</code></div>
+          </div>
+
+          <h4 class="mini-title" id="iconography-wheel">
+            <span class="section-num">[07.2.2]</span> Wheel of the Year
+          </h4>
+          <p class="section-intro">Seasonal symbols used in the site background. These icons wax and wane in prominence as the year turns, following the 8 Sabbats. Styled with a 1.5pt Lucide-style stroke.</p>
+          <div class="icon-grid">
+            {#each sabbats as sabbat}
+              <div class="icon-card">
+                <div class="icon-preview">
+                  <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    {#each sabbat.paths as path}<path d={path} />{/each}
+                  </svg>
+                </div>
+                <code class="icon-name">{sabbat.name} ({sabbat.english})</code>
               </div>
-              <code class="icon-name">Bluesky.svelte</code>
-            </div>
-            <div class="icon-card">
-              <div class="icon-preview">
-                <Eurosky size={32} />
-              </div>
-              <code class="icon-name">Eurosky.svelte</code>
-            </div>
-            <div class="icon-card">
-              <div class="icon-preview">
-                <Leaflet size={32} />
-              </div>
-              <code class="icon-name">Leaflet.svelte</code>
-            </div>
-            <div class="icon-card">
-              <div class="icon-preview">
-                <StandardSite size={32} />
-              </div>
-              <code class="icon-name">StandardSite.svelte</code>
-            </div>
-            <div class="icon-card">
-              <div class="icon-preview">
-                <Pentacle size={32} />
-              </div>
-              <code class="icon-name">Pentacle.svelte</code>
-            </div>
-            <div class="icon-card">
-              <div class="icon-preview">
-                <Triskele size={32} />
-              </div>
-              <code class="icon-name">Triskele.svelte</code>
-            </div>
+            {/each}
           </div>
         </div>
       </section>
 
-      <!-- ── [08] Components ─────────────────────────── -->
+      <!-- ── [09] Components ─────────────────────────── -->
       <section class="spec-section components" id="components">
         <header class="section-hd">
-          <span class="section-num">[08]</span>
-          <h2 class="section-title" id="components">Components</h2>
+          <span class="section-num">[09]</span>
+          <h2 class="section-title">Components</h2>
         </header>
         <div class="section-content">
           <div class="component-demo-stack">
@@ -560,11 +549,11 @@
         </div>
       </section>
 
-      <!-- ── [09] Layout ─────────────────────────────── -->
+      <!-- ── [08] Layout ─────────────────────────────── -->
       <section class="spec-section layout" id="layout">
         <header class="section-hd">
-          <span class="section-num">[09]</span>
-          <h2 class="section-title" id="layout">Layout Systems</h2>
+          <span class="section-num">[08]</span>
+          <h2 class="section-title">Layout Systems</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -589,11 +578,11 @@
         </div>
       </section>
 
-      <!-- ── [10] Voice & Tone ───────────────────────── -->
+      <!-- ── [09] Voice & Tone ───────────────────────── -->
       <section class="spec-section voice" id="voice">
         <header class="section-hd">
-          <span class="section-num">[10]</span>
-          <h2 class="section-title" id="voice">Voice & Tone</h2>
+          <span class="section-num">[09]</span>
+          <h2 class="section-title">Voice &amp; Tone</h2>
         </header>
         <div class="section-content">
           <div class="voice-grid">
@@ -615,11 +604,12 @@
           </div>
         </div>
       </section>
-      <!-- ── [11] Manifesto ──────────────────────────── -->
+
+      <!-- ── [10] Manifesto ──────────────────────────── -->
       <section class="spec-section principles" id="manifesto">
         <header class="section-hd">
-          <span class="section-num">[11]</span>
-          <h2 class="section-title" id="manifesto">Manifesto</h2>
+          <span class="section-num">[10]</span>
+          <h2 class="section-title">Manifesto</h2>
         </header>
         <div class="section-content">
           <div class="manifesto-list">
@@ -636,11 +626,11 @@
         </div>
       </section>
 
-      <!-- ── [12] Assets ─────────────────────────────── -->
+      <!-- ── [11] Assets ─────────────────────────────── -->
       <section class="spec-section assets" id="assets">
         <header class="section-hd">
-          <span class="section-num">[12]</span>
-          <h2 class="section-title" id="assets">Assets</h2>
+          <span class="section-num">[11]</span>
+          <h2 class="section-title">Assets</h2>
         </header>
         <div class="section-content">
           <p class="section-intro">
@@ -665,7 +655,7 @@
               <div class="og-info-grid">
                 <div class="og-previews">
                   {#each ogPreviews as preview}
-                    <div style="margin-bottom: 1rem;">
+                    <div class="og-preview-item">
                       <span class="meta-label">{preview.desc}</span>
                       <div class="asset-preview og-preview">
                         <img
