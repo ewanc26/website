@@ -750,6 +750,8 @@
   .spec-toc {
     position: sticky;
     top: 72px;
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
   }
 
   .toc-list {
@@ -796,6 +798,19 @@
     letter-spacing: 0.05em;
     font-weight: 800;
     margin: 0;
+  }
+  /* Utility colour classes for global use */
+  .bg-primary-500 {
+    background-color: var(--color-primary-500);
+  }
+  .bg-canvas-50 {
+    background-color: var(--color-canvas-50);
+  }
+  .text-primary-500 {
+    color: var(--color-primary-500);
+  }
+  .text-ink-500 {
+    color: var(--color-ink-500);
   }
 
   .id-card {
@@ -928,6 +943,10 @@
     font-size: 9px;
     font-family: var(--font-mono);
     color: var(--color-text-500);
+  }
+
+  .spec-sub-section.surfaces {
+    margin-top: var(--space-lg);
   }
 
   .surface-grid {
@@ -1443,6 +1462,10 @@
     color: var(--color-text-500);
     display: block;
     margin-bottom: 8px;
+  }
+
+  .og-preview-item {
+    margin-bottom: var(--space-md);
   }
 
   .og-swatches {
