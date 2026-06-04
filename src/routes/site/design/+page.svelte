@@ -657,7 +657,7 @@
                   {#each ogPreviews as preview}
                     <div class="og-preview-item">
                       <span class="meta-label">{preview.desc}</span>
-                      <div class="asset-preview og-preview">
+                      <div class="asset-preview og-preview" style="background: #111;">
                         <img
                           src="{assets.ogImage.endpoint}?title={encodeURIComponent(preview.title)}&type={encodeURIComponent(preview.type)}&subtitle={encodeURIComponent(preview.desc)}"
                           alt="OG Image: {preview.desc}"
