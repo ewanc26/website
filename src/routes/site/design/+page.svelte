@@ -460,13 +460,23 @@
         </header>
         <div class="section-content">
           <p class="section-intro">System icons are implemented as SVG components (16px, <code>currentColor</code>). Pagan and seasonal symbols use <code>currentColor</code> for stroke or fill.</p>
+          
+          <h3 class="sub-title" id="iconography-system">System Icons</h3>
           <div class="icon-grid">
             <div class="icon-card"><div class="icon-preview"><Bluesky size={32} /></div><code class="icon-name">Bluesky.svelte</code></div>
             <div class="icon-card"><div class="icon-preview"><Eurosky size={32} /></div><code class="icon-name">Eurosky.svelte</code></div>
             <div class="icon-card"><div class="icon-preview"><Leaflet size={32} /></div><code class="icon-name">Leaflet.svelte</code></div>
             <div class="icon-card"><div class="icon-preview"><StandardSite size={32} /></div><code class="icon-name">StandardSite.svelte</code></div>
+          </div>
+
+          <h3 class="sub-title" id="iconography-pagan">Pagan Symbols</h3>
+          <div class="icon-grid">
             <div class="icon-card"><div class="icon-preview"><Pentacle size={32} /></div><code class="icon-name">Pentacle.svelte</code></div>
             <div class="icon-card"><div class="icon-preview"><Triskele size={32} /></div><code class="icon-name">Triskele.svelte</code></div>
+          </div>
+
+          <h3 class="sub-title" id="iconography-wheel">Wheel of the Year</h3>
+          <div class="icon-grid">
             {#each sabbats as sabbat}
               <div class="icon-card">
                 <div class="icon-preview">
