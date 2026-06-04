@@ -4,7 +4,7 @@
  * theme.css — Global base element styles
  *
  * Every HTML element is intentionally styled here using design tokens
- * from tokens.css. Follows .impeccable.md: OKLCH green palette,
+ * from tokens.css. Follows .impeccable.md: OKLCH dynamic palette,
  * Variable Inter, 4pt spacing scale, no AI-slop patterns.
  *
  * Prose-scoped overrides (for {@html} blog content) live in prose.css.
@@ -578,7 +578,7 @@
   }
 
   dialog::backdrop {
-    background-color: oklch(10% 0.01 150 / 0.5);
+    background-color: color-mix(in oklch, var(--ink-950) 50%, transparent);
     backdrop-filter: blur(2px);
   }
 

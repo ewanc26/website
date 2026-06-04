@@ -62,25 +62,25 @@
 {#if state}
   <div class="sabbat-bg-container" aria-hidden="true">
     <!-- Waning (Left) -->
+    {@const PrevIcon = state.prev.component}
     <div 
       class="sabbat-icon waning" 
       style="opacity: {(1 - state.progress) * 0.15}; transform: scale({1.2 - state.progress * 0.3});"
     >
       <div class="icon-wrap">
-        {@const Icon = state.prev.component}
-        <Icon size="100%" strokeWidth={1.5} />
+        <PrevIcon size={150} strokeWidth={1.5} />
       </div>
       <span class="label">{state.prev.name}</span>
     </div>
 
     <!-- Waxing (Right) -->
+    {@const NextIcon = state.next.component}
     <div 
       class="sabbat-icon waxing" 
       style="opacity: {state.progress * 0.15}; transform: scale({0.9 + state.progress * 0.3});"
     >
       <div class="icon-wrap">
-        {@const Icon = state.next.component}
-        <Icon size="100%" strokeWidth={1.5} />
+        <NextIcon size={150} strokeWidth={1.5} />
       </div>
       <span class="label">{state.next.name}</span>
     </div>

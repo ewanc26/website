@@ -80,39 +80,58 @@ export const baseline = {
   },
 };
 
+/**
+ * Sabbat hue offsets relative to Ostara (Spring Equinox, Mar 21).
+ * @typedef {Object} Sabbat
+ * @property {string} name
+ * @property {number} month
+ * @property {number} day
+ * @property {number} rotation
+ * @property {Date} [date]
+ */
+
+/** @type {Sabbat[]} */
 const sabbats = [
   { name: "imbolc", month: 2, day: 1, rotation: -45 },
   { name: "ostara", month: 3, day: 21, rotation: 0 },
-  { name: "beltane", month: 5, day: 1, rotation: 45 },
-  { name: "litha", month: 6, day: 21, rotation: 90 },
-  { name: "lughnasadh", month: 8, day: 1, rotation: 135 },
-  { name: "mabon", month: 9, day: 21, rotation: 180 },
-  { name: "samhain", month: 10, day: 31, rotation: 225 },
-  { name: "yule", month: 12, day: 21, rotation: 270 },
+  // ...
 ];
 
+/**
+ * Interpolates the hue rotation based on the current date.
+ * @param {Date} now
+ * @returns {number} Hue rotation in degrees
+ */
 export function getHueRotation(now) {
   const year = now.getFullYear();
+  /** @param {Sabbat} s @param {number} y @returns {Date} */
   const getSabbatDate = (s, y) => new Date(y, s.month - 1, s.day);
   const allSabbats = [
     ...sabbats.map((s) => ({ ...s, date: getSabbatDate(s, year - 1) })),
     ...sabbats.map((s) => ({ ...s, date: getSabbatDate(s, year) })),
     ...sabbats.map((s) => ({ ...s, date: getSabbatDate(s, year + 1) })),
-  ].sort((a, b) => a.date - b.date);
+  ].sort((a, b) => (a.date?.getTime() || 0) - (b.date?.getTime() || 0));
 
   let prev = allSabbats[0],
     next = allSabbats[1];
   for (let i = 0; i < allSabbats.length - 1; i++) {
-    if (now >= allSabbats[i].date && now < allSabbats[i + 1].date) {
+    if (
+      now >= (allSabbats[i].date || new Date()) &&
+      now < (allSabbats[i + 1].date || new Date())
+    ) {
       prev = allSabbats[i];
       next = allSabbats[i + 1];
       break;
     }
   }
+
+  const prevDate = prev.date?.getTime() || 0;
+  const nextDate = next.date?.getTime() || 0;
+
   return (
     prev.rotation +
     (next.rotation - prev.rotation) *
-      ((now - prev.date) / (next.date - prev.date))
+      ((now.getTime() - prevDate) / (nextDate - prevDate))
   );
 }
 

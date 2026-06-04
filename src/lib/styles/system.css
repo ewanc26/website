@@ -86,13 +86,14 @@
 
 @keyframes live-pulse {
   0% {
-    box-shadow: 0 0 0 0 oklch(72% 0.19 160 / 0.4);
+    box-shadow: 0 0 0 0
+      color-mix(in oklch, var(--color-primary-500) 40%, transparent);
   }
   70% {
-    box-shadow: 0 0 0 6px oklch(72% 0.19 160 / 0);
+    box-shadow: 0 0 0 6px transparent;
   }
   100% {
-    box-shadow: 0 0 0 0 oklch(72% 0.19 160 / 0);
+    box-shadow: 0 0 0 0 transparent;
   }
 }
 
