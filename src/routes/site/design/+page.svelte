@@ -485,9 +485,6 @@
 
           <h3 class="sub-title" id="iconography-wheel">Wheel of the Year</h3>
   // Helper to map names to components for dynamic rendering
-  const getComponent = (name: string) => {
-    return sabbatsComponents.find(s => s.name === name)?.component;
-  };
   
   // ... elsewhere in the template:
           <div class="icon-grid">
