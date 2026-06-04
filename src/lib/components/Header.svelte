@@ -1,7 +1,7 @@
 <script lang="ts">
     import { SITE, NAV_LINKS } from '$lib/config';
     import { page } from '$app/state';
-    import { X } from '@lucide/svelte';
+    import { X, Menu } from '@lucide/svelte';
     import Triskele from './icons/Triskele.svelte';
 import { dev } from '$app/environment';
 
@@ -14,11 +14,11 @@ import { dev } from '$app/environment';
 {SITE.title}{#if dev}<span class="dev-chip">DEV</span>{/if}
     </a>
     
-    <button class="menu-toggle" onclick={() => isMenuOpen = !isMenuOpen}>
+    <button class="menu-toggle" onclick={() => isMenuOpen = !isMenuOpen} aria-label="Toggle menu">
         {#if isMenuOpen}
             <X />
         {:else}
-            <span class="hamburger"></span>
+            <Menu />
         {/if}
     </button>
 

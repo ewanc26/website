@@ -39,6 +39,11 @@
     border: none;
     cursor: pointer;
     color: var(--color-text-950);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .nav-links {
@@ -50,6 +55,7 @@
     text-decoration: none;
     color: var(--color-text-600);
     transition: color var(--duration-fast) var(--ease-out-quart);
+    padding: var(--space-sm) 0; /* Add touch target area */
   }
 
   .nav-link:hover,
@@ -59,7 +65,7 @@
 
   @media (max-width: 560px) {
     .menu-toggle {
-      display: block;
+      display: flex;
     }
 
     .nav-links {
@@ -116,6 +122,10 @@
     transition:
       color var(--duration-fast) var(--ease-out-quart),
       opacity var(--duration-fast) var(--ease-out-quart);
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
   }
 
   .footer-icon-link:hover {
@@ -127,10 +137,7 @@
     color: var(--color-text-600);
     text-decoration: none;
     white-space: nowrap;
-  }
-
-  .footer-link:hover {
-    color: var(--color-primary-700);
+    padding: var(--space-sm); /* Touch target */
   }
 
   @media (max-width: 640px) {

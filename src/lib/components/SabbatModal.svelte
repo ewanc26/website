@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { X } from '@lucide/svelte';
   let { sabbat, onClose } = $props();
 </script>
 
@@ -7,7 +8,9 @@
     <div class="modal-content">
       <header class="modal-header">
         <h2 class="modal-title">{sabbat.name}</h2>
-        <button onclick={onClose} class="close-btn" aria-label="Close">×</button>
+        <button onclick={onClose} class="close-btn" aria-label="Close">
+          <X size={20} />
+        </button>
       </header>
       <div class="modal-body">
         {#each sabbat.description.split('\n\n') as paragraph}
@@ -50,9 +53,19 @@
   .close-btn {
     background: none;
     border: none;
-    font-size: 1.5rem;
     cursor: pointer;
     color: var(--color-text-700);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-right: -10px; /* Offset to align with modal padding */
+  }
+
+  .close-btn:hover {
+    color: var(--color-primary-500);
   }
 
   .modal-body p {

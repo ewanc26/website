@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { Info } from '@lucide/svelte';
   import { getCurrentSabbat, type Sabbat } from '$lib/utils/sabbats';
   import SabbatModal from './SabbatModal.svelte';
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
@@ -45,7 +46,9 @@
       <span class="sabbat-label">
         <SabbatIcon size={14} />
         {currentSabbat.name}
-        <button onclick={() => showModal = true} class="info-btn" aria-label="More info about {currentSabbat.name}">?</button>
+        <button onclick={() => showModal = true} class="info-btn" aria-label="More info about {currentSabbat.name}">
+          <Info size={14} />
+        </button>
       </span>
     {/if}
     <div class="footer-symbols">
@@ -80,20 +83,16 @@
   }
   .info-btn {
     background: none;
-    border: 1px solid var(--color-text-600);
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    font-size: 10px;
+    border: none;
     cursor: pointer;
     color: var(--color-text-600);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
+    padding: 10px; /* Expands touch area */
+    flex-shrink: 0;
   }
   .info-btn:hover {
     color: var(--color-primary-500);
-    border-color: var(--color-primary-500);
   }
 </style>
