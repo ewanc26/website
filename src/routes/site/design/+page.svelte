@@ -471,16 +471,16 @@
           
           <h3 class="sub-title" id="iconography-system">System Icons</h3>
           <div class="icon-grid">
-            <div class="icon-card"><div class="icon-preview"><Bluesky size={32} /></div><code class="icon-name">Bluesky.svelte</code></div>
-            <div class="icon-card"><div class="icon-preview"><Eurosky size={32} /></div><code class="icon-name">Eurosky.svelte</code></div>
-            <div class="icon-card"><div class="icon-preview"><Leaflet size={32} /></div><code class="icon-name">Leaflet.svelte</code></div>
-            <div class="icon-card"><div class="icon-preview"><StandardSite size={32} /></div><code class="icon-name">StandardSite.svelte</code></div>
+            <div class="icon-card"><div class="icon-preview"><Bluesky size={32} /></div><code class="icon-name">Bluesky</code></div>
+            <div class="icon-card"><div class="icon-preview"><Eurosky size={32} /></div><code class="icon-name">Eurosky</code></div>
+            <div class="icon-card"><div class="icon-preview"><Leaflet size={32} /></div><code class="icon-name">Leaflet</code></div>
+            <div class="icon-card"><div class="icon-preview"><StandardSite size={32} /></div><code class="icon-name">StandardSite</code></div>
           </div>
 
           <h3 class="sub-title" id="iconography-pagan">Pagan Symbols</h3>
           <div class="icon-grid">
-            <div class="icon-card"><div class="icon-preview"><Pentacle size={32} /></div><code class="icon-name">Pentacle.svelte</code></div>
-            <div class="icon-card"><div class="icon-preview"><Triskele size={32} /></div><code class="icon-name">Triskele.svelte</code></div>
+            <div class="icon-card"><div class="icon-preview"><Pentacle size={32} /></div><code class="icon-name">Pentacle</code></div>
+            <div class="icon-card"><div class="icon-preview"><Triskele size={32} /></div><code class="icon-name">Triskele</code></div>
           </div>
 
           <h3 class="sub-title" id="iconography-wheel">Wheel of the Year</h3>
