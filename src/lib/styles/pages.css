@@ -633,7 +633,7 @@
   }
 
   .spec-section {
-    scroll-margin-top: 100px;
+    scroll-margin-top: 120px;
   }
   .section-hd {
     margin-bottom: var(--space-xs);
@@ -778,7 +778,7 @@
   }
 
   .spec-section {
-    scroll-margin-top: 100px;
+    scroll-margin-top: 120px;
   }
 
   .design-page .section-hd {
