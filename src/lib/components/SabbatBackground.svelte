@@ -56,7 +56,6 @@
     <div 
       class="sabbat-icon waning" 
       style="opacity: {(1 - state.progress) * 0.15}; transform: scale({1.2 - state.progress * 0.4});"
-      title="Waning: {state.prev.name} ({state.prev.english})"
     >
       <svg 
         viewBox="0 0 24 24" 
@@ -73,13 +72,13 @@
         {/each}
       </svg>
       <span class="label">{state.prev.name}</span>
-      </div>
+    </div>
 
-      <!-- Waxing (Right) -->
-      <div 
+    <!-- Waxing (Right) -->
+    <div 
       class="sabbat-icon waxing" 
       style="opacity: {state.progress * 0.15}; transform: scale({0.9 + state.progress * 0.3});"
-      >
+    >
       <svg 
         viewBox="0 0 24 24" 
         width="100%" 
@@ -95,7 +94,6 @@
         {/each}
       </svg>
       <span class="label">{state.next.name}</span>
-      </div>
     </div>
   </div>
 {/if}
