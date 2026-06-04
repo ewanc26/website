@@ -48,42 +48,46 @@
           progress: (now.getTime() - allSabbats[i].date.getTime()) / (allSabbats[i+1].date.getTime() - allSabbats[i].date.getTime())
         };
         break;
+      function updateState() {
+        // ... logic remains same ...
       }
-    }
-  }
 
-  onMount(() => {
-    updateState();
-    const interval = setInterval(updateState, 1000 * 60 * 60); 
-    return () => clearInterval(interval);
-  });
-</script>
+      onMount(() => {
+        updateState();
+        const interval = setInterval(updateState, 1000 * 60 * 60); 
+        return () => clearInterval(interval);
+      });
+      </script>
 
-{#if state}
-  <div class="sabbat-bg-container" aria-hidden="true">
-    <!-- Waning (Left) -->
-    <div 
-      class="sabbat-icon waning" 
-      style="opacity: {(1 - state.progress) * 0.15}; transform: scale({1.2 - state.progress * 0.3});"
-    >
-      <div class="icon-wrap">
-        <svelte:component this={state.prev.component} size={150} strokeWidth={1.5} />
+      {#snippet RenderIcon(Component, size, strokeWidth)}
+      <Component {size} {strokeWidth} />
+      {/snippet}
+
+      {#if state}
+      <div class="sabbat-bg-container" aria-hidden="true">
+        <!-- Waning (Left) -->
+        <div 
+          class="sabbat-icon waning" 
+          style="opacity: {(1 - state.progress) * 0.15}; transform: scale({1.2 - state.progress * 0.3});"
+        >
+          <div class="icon-wrap">
+            {@render RenderIcon(state.prev.component, 150, 1.5)}
+          </div>
+          <span class="label">{state.prev.name}</span>
+        </div>
+
+        <!-- Waxing (Right) -->
+        <div 
+          class="sabbat-icon waxing" 
+          style="opacity: {state.progress * 0.15}; transform: scale({0.9 + state.progress * 0.3});"
+        >
+          <div class="icon-wrap">
+            {@render RenderIcon(state.next.component, 150, 1.5)}
+          </div>
+          <span class="label">{state.next.name}</span>
+        </div>
       </div>
-      <span class="label">{state.prev.name}</span>
-    </div>
-
-    <!-- Waxing (Right) -->
-    <div 
-      class="sabbat-icon waxing" 
-      style="opacity: {state.progress * 0.15}; transform: scale({0.9 + state.progress * 0.3});"
-    >
-      <div class="icon-wrap">
-        <svelte:component this={state.next.component} size={150} strokeWidth={1.5} />
-      </div>
-      <span class="label">{state.next.name}</span>
-    </div>
-  </div>
-{/if}
+      {/if}
 
 <style>
   .sabbat-bg-container {
