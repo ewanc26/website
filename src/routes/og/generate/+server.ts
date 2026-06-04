@@ -26,16 +26,21 @@ export const GET: RequestHandler = async ({ url }) => {
 
   const getSeasonalColor = (scale: keyof typeof baseline, step: number) => {
     const data = (baseline[scale] as any)[step];
-    const [l, c, hBase] = data.light;
+    // Always use dark mode values for OG images
+    const [l, c, hBase] = data.dark;
     const h = (hBase + rotation) % 360;
     return chroma.oklch(l, c, h).hex();
   };
 
-  // Colours based on site theme, with dynamic Sabbat-interpolated primary
+  // Colours based on site theme (forced dark mode), with dynamic Sabbat-interpolated primary
   const bg = getSeasonalColor("background", 950);
   const surface = getSeasonalColor("background", 100);
   const border = getSeasonalColor("background", 400);
-  const primary = getCurrentPrimaryShade(500);
+
+  // Use dark mode values explicitly for primary and text
+  const primary = chroma
+    .oklch(...(baseline.primary[500].dark as [number, number, number]))
+    .hex();
   const text = getSeasonalColor("text", 50);
   const textMuted = getSeasonalColor("text", 500);
 
