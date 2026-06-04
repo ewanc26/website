@@ -11,19 +11,38 @@ import {
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 
 export const load: PageServerLoad = async ({ fetch }) => {
-  const profile = await fetchProfile(PUBLIC_ATPROTO_DID, fetch);
+  const [
+    profile,
+    kibunStatus,
+    musicStatus,
+    postsData,
+    sifaProjects,
+    publicationsData,
+    links,
+  ] = await Promise.all([
+    fetchProfile(PUBLIC_ATPROTO_DID, fetch),
+    fetchKibunStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
+    fetchMusicStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
+    fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ posts: [] })),
+    fetchSifaProjects(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
+    fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
+      publications: [],
+    })),
+    fetchLinks(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ cards: [] })),
+  ]);
 
   return {
     profile,
-    kibunStatus: fetchKibunStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
-    musicStatus: fetchMusicStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
-    posts: fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch)
-      .then((d) => d.posts)
-      .catch(() => []),
-    sifaProjects: fetchSifaProjects(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
-    publications: fetchPublications(PUBLIC_ATPROTO_DID, fetch)
-      .then((d) => d.publications)
-      .catch(() => []),
-    links: fetchLinks(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
+    kibunStatus,
+    musicStatus,
+    posts: (postsData?.posts ?? []).map((p: any) => ({
+      title: p.title,
+      createdAt: p.createdAt,
+      publicationRkey: p.publicationRkey,
+      rkey: p.rkey,
+    })),
+    sifaProjects,
+    publications: publicationsData?.publications ?? [],
+    links,
   };
 };
