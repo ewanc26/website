@@ -540,10 +540,10 @@
         </div>
       </section>
 
-      <!-- ── [09] Layout ─────────────────────────────── -->
-      <section class="spec-section layout" id="layout">
+      <!-- ── [12] Assets ─────────────────────────────── -->
+      <section class="spec-section assets" id="assets">
         <header class="section-hd">
-          <span class="section-num">[09]</span>
+          <span class="section-num">[12]</span>
           <h2 class="section-title">Layout Systems</h2>
         </header>
         <div class="section-content">
