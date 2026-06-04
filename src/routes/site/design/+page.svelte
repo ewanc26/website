@@ -97,6 +97,7 @@
   ];
 
   const principles = [
+    {
       number: '01',
       name: 'Systematic colour',
       description:
