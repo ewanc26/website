@@ -25,7 +25,7 @@ export const GET: RequestHandler = async ({ url }) => {
   const rotation = getHueRotation(now);
 
   const getSeasonalColor = (scale: keyof typeof baseline, step: number) => {
-    const data = baseline[scale][step];
+    const data = (baseline[scale] as any)[step];
     const [l, c, hBase] = data.light;
     const h = (hBase + rotation) % 360;
     return chroma.oklch(l, c, h).hex();

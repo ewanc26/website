@@ -6,15 +6,42 @@ import chroma from "chroma-js";
  * @property {number} c
  * @property {number} h
  */
+/**
+ * @typedef {Object} ModeColors
+ * @property {number[]} light
+ * @property {number[]} dark
+ */
 
 /**
- * Baseline palette (Green) converted from the user's RGB values.
- * Precisely preserves L and C for both light and dark modes to maintain A11Y contrast.
- * Reference date: Ostara (March 21)
+ * @typedef {Object} Scale
+ * @property {ModeColors} 50
+ * @property {ModeColors} 100
+ * @property {ModeColors} 200
+ * @property {ModeColors} 300
+ * @property {ModeColors} 400
+ * @property {ModeColors} 500
+ * @property {ModeColors} 600
+ * @property {ModeColors} 700
+ * @property {ModeColors} 800
+ * @property {ModeColors} 900
+ * @property {ModeColors} 950
  */
+
+/**
+ * @typedef {Object} Baseline
+ * @property {Scale} text
+ * @property {Scale} background
+ * @property {Scale} primary
+ * @property {Scale} secondary
+ * @property {Scale} accent
+ */
+
+/** @type {Baseline} */
 export const baseline = {
   text: {
     50: { light: [0.967, 0.012, 133.22], dark: [0.168, 0.019, 137.9] },
+    //... rest of the structure is fine, just need the type above
+
     100: { light: [0.935, 0.026, 136.26], dark: [0.235, 0.036, 136.87] },
     200: { light: [0.871, 0.053, 136.42], dark: [0.357, 0.063, 137.05] },
     300: { light: [0.806, 0.08, 136.59], dark: [0.47, 0.088, 137.13] },
