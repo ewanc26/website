@@ -64,10 +64,11 @@
     <!-- Waning (Left) -->
     <div 
       class="sabbat-icon waning" 
-      style="opacity: {(1 - state.progress) * 0.15}; transform: scale({1.2 - state.progress * 0.4});"
+      style="opacity: {(1 - state.progress) * 0.15}; transform: scale({1.2 - state.progress * 0.3});"
     >
       <div class="icon-wrap">
-        <svelte:component this={state.prev.component} size="100%" strokeWidth={1.5} />
+        {@const Icon = state.prev.component}
+        <Icon size="100%" strokeWidth={1.5} />
       </div>
       <span class="label">{state.prev.name}</span>
     </div>
@@ -78,7 +79,8 @@
       style="opacity: {state.progress * 0.15}; transform: scale({0.9 + state.progress * 0.3});"
     >
       <div class="icon-wrap">
-        <svelte:component this={state.next.component} size="100%" strokeWidth={1.5} />
+        {@const Icon = state.next.component}
+        <Icon size="100%" strokeWidth={1.5} />
       </div>
       <span class="label">{state.next.name}</span>
     </div>
