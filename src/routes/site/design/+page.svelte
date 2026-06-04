@@ -7,6 +7,14 @@
   import Eurosky from '$lib/components/icons/Eurosky.svelte';
   import Leaflet from '$lib/components/icons/Leaflet.svelte';
   import StandardSite from '$lib/components/icons/StandardSite.svelte';
+  import Imbolc from '$lib/components/icons/sabbats/Imbolc.svelte';
+  import Ostara from '$lib/components/icons/sabbats/Ostara.svelte';
+  import Beltane from '$lib/components/icons/sabbats/Beltane.svelte';
+  import Litha from '$lib/components/icons/sabbats/Litha.svelte';
+  import Lughnasadh from '$lib/components/icons/sabbats/Lughnasadh.svelte';
+  import Mabon from '$lib/components/icons/sabbats/Mabon.svelte';
+  import Samhain from '$lib/components/icons/sabbats/Samhain.svelte';
+  import Yule from '$lib/components/icons/sabbats/Yule.svelte';
   import favicon from '$lib/assets/favicon.svg';
   import { Copy, Check } from '@lucide/svelte';
 
@@ -77,7 +85,7 @@
     { name: 'Narrow Shell', cls: '.shell-narrow', width: '48rem', usage: 'Subscriptions, support' },
   ];
 
-  const sabbats = [
+  const sabbats_test = [];
     { name: 'Imbolg', paths: ['M10 10h4v4h-4z', 'M14 10h8', 'M14 14v8', 'M10 14H2', 'M10 10V2'] },
     { name: 'Earrach', paths: ['M12 22c5 0 8-3 8-7s-3-7-8-7-8 3-8 7 3 7 8 7Z', 'M10 8c0-3-1-6 1-6s2 3 2 6', 'M12 8c0-3-1-6 1-6s2 3 2 6', 'M16 22l1-2', 'M8 22l-1-2'] },
     { name: 'Bealltainn', paths: ['M12 2v20', 'M12 5l7 3', 'M12 5l-7 3', 'M12 10l7 3', 'M12 10l-7 3', 'M12 15l7 3', 'M12 15l-7 3'] },
@@ -477,12 +485,10 @@
 
           <h3 class="sub-title" id="iconography-wheel">Wheel of the Year</h3>
           <div class="icon-grid">
-            {#each sabbats as sabbat}
+            {#each sabbatsComponents as sabbat}
               <div class="icon-card">
                 <div class="icon-preview">
-                  <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    {#each sabbat.paths as path}<path d={path} />{/each}
-                  </svg>
+                  <svelte:component this={sabbat.component} size={48} strokeWidth={1.5} />
                 </div>
                 <code class="icon-name">{sabbat.name}</code>
               </div>
