@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { Info } from '@lucide/svelte';
+  import { WolfToggle } from '$lib/components/layout';
   import { getCurrentSabbat, type Sabbat } from '$lib/utils/sabbats';
   import SabbatModal from './SabbatModal.svelte';
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
@@ -58,6 +59,7 @@
       <a href="https://eurosky.tech" aria-label="Eurosky" class="footer-icon-link">
         <Eurosky size={14} />
       </a>
+      <WolfToggle />
     </div>
   </div>
 

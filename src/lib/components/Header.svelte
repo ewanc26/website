@@ -3,7 +3,6 @@
     import { page } from '$app/state';
     import { X, Menu } from '@lucide/svelte';
     import Triskele from './icons/Triskele.svelte';
-    import { WolfToggle } from '$lib/components/layout';
 import { dev } from '$app/environment';
 
     let isMenuOpen = $state(false);
@@ -15,16 +14,13 @@ import { dev } from '$app/environment';
 {SITE.title}{#if dev}<span class="dev-chip">DEV</span>{/if}
     </a>
     
-    <div class="nav-actions">
-        <WolfToggle />
-        <button class="menu-toggle" onclick={() => isMenuOpen = !isMenuOpen} aria-label="Toggle menu">
-            {#if isMenuOpen}
-                <X />
-            {:else}
-                <Menu />
-            {/if}
-        </button>
-    </div>
+    <button class="menu-toggle" onclick={() => isMenuOpen = !isMenuOpen} aria-label="Toggle menu">
+        {#if isMenuOpen}
+            <X />
+        {:else}
+            <Menu />
+        {/if}
+    </button>
 
     <div class="nav-links" class:open={isMenuOpen}>
         {#each NAV_LINKS as link}
