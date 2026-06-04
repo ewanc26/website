@@ -1,9 +1,10 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
-    .bg { fill: oklch(17.5% 0.012 150); }
-    .fg { fill: oklch(78.5% 0.095 150); }
+    /* Baseline colors derived from Ostara/baseline green */
+    .bg { fill: oklch(23.5% 0.036 136.87); }
+    .fg { fill: oklch(69.5% 0.157 138.19); }
     @media (prefers-color-scheme: dark) {
-      .bg { fill: oklch(22% 0.015 150); }
+      .bg { fill: oklch(93.5% 0.026 136.58); }
     }
   </style>
   <rect class="bg" width="32" height="32" rx="7"/>
