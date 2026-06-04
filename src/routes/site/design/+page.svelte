@@ -487,11 +487,16 @@
   // Helper to map names to components for dynamic rendering
   
   // ... elsewhere in the template:
+{#snippet RenderIcon(Component, size, strokeWidth)}
+  <Component {size} {strokeWidth} />
+{/snippet}
+
+<!-- ... -->
           <div class="icon-grid">
             {#each sabbatsComponents as sabbat}
               <div class="icon-card">
                 <div class="icon-preview">
-                  <svelte:component this={sabbat.component} size={48} strokeWidth={1.5} />
+                  {@render RenderIcon(sabbat.component, 48, 1.5)}
                 </div>
                 <code class="icon-name">{sabbat.name}</code>
               </div>
