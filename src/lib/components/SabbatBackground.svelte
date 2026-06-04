@@ -72,15 +72,14 @@
           <path d={path} />
         {/each}
       </svg>
-      <span class="label">{state.prev.name}<br /><small>({state.prev.english})</small></span>
-    </div>
+      <span class="label">{state.prev.name}</span>
+      </div>
 
-    <!-- Waxing (Right) -->
-    <div 
+      <!-- Waxing (Right) -->
+      <div 
       class="sabbat-icon waxing" 
-      style="opacity: {state.progress * 0.15}; transform: scale({0.8 + state.progress * 0.4});"
-      title="Waxing: {state.next.name} ({state.next.english})"
-    >
+      style="opacity: {state.progress * 0.15}; transform: scale({0.9 + state.progress * 0.3});"
+      >
       <svg 
         viewBox="0 0 24 24" 
         width="100%" 
@@ -95,7 +94,8 @@
           <path d={path} />
         {/each}
       </svg>
-      <span class="label">{state.next.name}<br /><small>({state.next.english})</small></span>
+      <span class="label">{state.next.name}</span>
+      </div>
     </div>
   </div>
 {/if}
@@ -138,12 +138,6 @@
     line-height: 1.2;
   }
 
-  .label small {
-    display: block;
-    font-size: 0.75rem;
-    opacity: 0.7;
-  }
-
   .waning {
     left: 15%;
     margin-left: calc(-1 * min(15vw, 200px));
@@ -162,7 +156,6 @@
       filter: blur(1px);
     }
     .label { font-size: 0.8rem; }
-    .label small { font-size: 0.6rem; }
     .waning { left: 20%; margin-left: -20vw; }
     .waxing { right: 20%; margin-right: -20vw; }
   }
