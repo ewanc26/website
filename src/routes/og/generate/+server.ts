@@ -1,4 +1,10 @@
 import type { RequestHandler } from "./$types";
+import {
+  getCurrentPrimaryShade,
+  baseline,
+  getHueRotation,
+} from "$lib/server/theme";
+import chroma from "chroma-js";
 
 export const GET: RequestHandler = async ({ url }) => {
   const title = url.searchParams.get("title") ?? "ewan croft";
@@ -15,13 +21,23 @@ export const GET: RequestHandler = async ({ url }) => {
   const displayTitle =
     title.length > maxChars ? title.slice(0, maxChars - 1) + "…" : title;
 
-  // Colours based on site theme (dark mode)
-  const bg = "#1a201c"; // ink-950 dark
-  const surface = "#222a26"; // surface-raised
-  const border = "#3a4643"; // surface-color
-  const primary = "#a6e3a1"; // primary-500 equivalent
-  const text = "#d9e4de"; // ink-50
-  const textMuted = "#a0b0a8"; // ink-500
+  const now = new Date();
+  const rotation = getHueRotation(now);
+
+  const getSeasonalColor = (scale: keyof typeof baseline, step: number) => {
+    const data = baseline[scale][step];
+    const [l, c, hBase] = data.light;
+    const h = (hBase + rotation) % 360;
+    return chroma.oklch(l, c, h).hex();
+  };
+
+  // Colours based on site theme, with dynamic Sabbat-interpolated primary
+  const bg = getSeasonalColor("background", 950);
+  const surface = getSeasonalColor("background", 100);
+  const border = getSeasonalColor("background", 400);
+  const primary = getCurrentPrimaryShade(500);
+  const text = getSeasonalColor("text", 50);
+  const textMuted = getSeasonalColor("text", 500);
 
   const svg = `
     <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">

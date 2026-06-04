@@ -12,7 +12,7 @@ import chroma from "chroma-js";
  * Precisely preserves L and C for both light and dark modes to maintain A11Y contrast.
  * Reference date: Ostara (March 21)
  */
-const baseline = {
+export const baseline = {
   text: {
     50: { light: [0.967, 0.012, 133.22], dark: [0.168, 0.019, 137.9] },
     100: { light: [0.935, 0.026, 136.26], dark: [0.235, 0.036, 136.87] },
@@ -91,7 +91,7 @@ const sabbats = [
   { name: "yule", month: 12, day: 21, rotation: 270 },
 ];
 
-function getHueRotation(now) {
+export function getHueRotation(now) {
   const year = now.getFullYear();
   const getSabbatDate = (s, y) => new Date(y, s.month - 1, s.day);
   const allSabbats = [
