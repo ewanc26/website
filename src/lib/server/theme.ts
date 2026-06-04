@@ -154,8 +154,9 @@ export function getDynamicThemeCSS(): string {
   Object.entries(baseline).forEach(([name, shades]) => {
     css += `    /* ── ${name.toUpperCase()} (Rotated ${rotation.toFixed(1)}°) ── */\n`;
     Object.entries(shades).forEach(([step, modes]) => {
-      const [lL, lC, lH] = modes.light;
-      const [dL, dC, dH] = modes.dark;
+      const typedModes = modes as ModeColors;
+      const [lL, lC, lH] = typedModes.light;
+      const [dL, dC, dH] = typedModes.dark;
 
       const lightValue = `oklch(${(lL * 100).toFixed(2)}% ${lC.toFixed(4)} ${((lH + rotation) % 360).toFixed(2)})`;
       const darkValue = `oklch(${(dL * 100).toFixed(2)}% ${dC.toFixed(4)} ${((dH + rotation) % 360).toFixed(2)})`;

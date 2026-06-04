@@ -487,20 +487,15 @@
   // Helper to map names to components for dynamic rendering
   
   // ... elsewhere in the template:
-{#snippet RenderIcon(Component, size, strokeWidth)}
-  <Component {size} {strokeWidth} />
-{/snippet}
-
-<!-- ... -->
           <div class="icon-grid">
-            {#each sabbatsComponents as sabbat}
-              <div class="icon-card">
-                <div class="icon-preview">
-                  {@render RenderIcon(sabbat.component, 48, 1.5)}
-                </div>
-                <code class="icon-name">{sabbat.name}</code>
-              </div>
-            {/each}
+            <div class="icon-card"><div class="icon-preview"><Imbolc size={48} strokeWidth={1.5} /></div><code class="icon-name">Imbolc</code></div>
+            <div class="icon-card"><div class="icon-preview"><Ostara size={48} strokeWidth={1.5} /></div><code class="icon-name">Ostara</code></div>
+            <div class="icon-card"><div class="icon-preview"><Beltane size={48} strokeWidth={1.5} /></div><code class="icon-name">Beltane</code></div>
+            <div class="icon-card"><div class="icon-preview"><Litha size={48} strokeWidth={1.5} /></div><code class="icon-name">Litha</code></div>
+            <div class="icon-card"><div class="icon-preview"><Lughnasadh size={48} strokeWidth={1.5} /></div><code class="icon-name">Lughnasadh</code></div>
+            <div class="icon-card"><div class="icon-preview"><Mabon size={48} strokeWidth={1.5} /></div><code class="icon-name">Mabon</code></div>
+            <div class="icon-card"><div class="icon-preview"><Samhain size={48} strokeWidth={1.5} /></div><code class="icon-name">Samhain</code></div>
+            <div class="icon-card"><div class="icon-preview"><Yule size={48} strokeWidth={1.5} /></div><code class="icon-name">Yule</code></div>
           </div>
         </div>
       </section>
