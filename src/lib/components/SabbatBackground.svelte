@@ -1,15 +1,24 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  
+  import Imbolc from '$lib/components/icons/sabbats/Imbolc.svelte';
+  import Ostara from '$lib/components/icons/sabbats/Ostara.svelte';
+  import Beltane from '$lib/components/icons/sabbats/Beltane.svelte';
+  import Litha from '$lib/components/icons/sabbats/Litha.svelte';
+  import Lughnasadh from '$lib/components/icons/sabbats/Lughnasadh.svelte';
+  import Mabon from '$lib/components/icons/sabbats/Mabon.svelte';
+  import Samhain from '$lib/components/icons/sabbats/Samhain.svelte';
+  import Yule from '$lib/components/icons/sabbats/Yule.svelte';
 
   const sabbats = [
-    { name: 'Imbolc', month: 2, day: 1, paths: ['M9 21h6', 'M12 21v-9a3 3 0 0 1 3-3', 'M12 21v-9a3 3 0 0 0-3-3', 'M12 7V3'] },
-    { name: 'Ostara', month: 3, day: 21, paths: ['M12 22C17.5 22 21 17 21 11C21 5 17.5 2 12 2C6.5 2 3 5 3 11C3 17 6.5 22 12 22Z', 'M10 8c0-3-1-6 1-6s2 3 2 6', 'M12 8c0-3-1-6 1-6s2 3 2 6', 'M16 22l1-2', 'M8 22l-1-2'] },
-    { name: 'Beltane', month: 5, day: 1, paths: ['M12 2v20', 'M12 5l7 3', 'M12 5l-7 3', 'M12 10l7 3', 'M12 10l-7 3', 'M12 15l7 3', 'M12 15l-7 3'] },
-    { name: 'Litha', month: 6, day: 21, paths: ['M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0', 'M12 2v2', 'M12 20v2', 'M2 12h2', 'M20 12h2', 'm19.07 4.93-1.41 1.41', 'm19.07 19.07-1.41-1.41', 'm4.93 19.07 1.41-1.41', 'm4.93 4.93 1.41-1.41'] },
-    { name: 'Lughnasadh', month: 8, day: 1, paths: ['M7 20h10', 'M12 20V10', 'M12 10a4 4 0 0 1 4 4', 'M12 10a4 4 0 0 0-4 4'] },
-    { name: 'Mabon', month: 9, day: 21, paths: ['M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.47 10-10 10Z', 'M17 21l-4.3-4.3'] },
-    { name: 'Samhain', month: 10, day: 31, paths: ['M12 2C7.03 2 3 6.03 3 11c0 3.28 2.05 6.13 5 7.42V20c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2v-1.58c2.95-1.29 5-4.14 5-7.42 0-4.97-4.03-9-9-9Z', 'M9 14h.01', 'M15 14h.01'] },
-    { name: 'Yule', month: 12, day: 21, paths: ['M12 2v20', 'M2 12h20', 'm20 4-16 16', 'm4 4 16 16'] }
+    { name: 'Imbolc', month: 2, day: 1, component: Imbolc },
+    { name: 'Ostara', month: 3, day: 21, component: Ostara },
+    { name: 'Beltane', month: 5, day: 1, component: Beltane },
+    { name: 'Litha', month: 6, day: 21, component: Litha },
+    { name: 'Lughnasadh', month: 8, day: 1, component: Lughnasadh },
+    { name: 'Mabon', month: 9, day: 21, component: Mabon },
+    { name: 'Samhain', month: 10, day: 31, component: Samhain },
+    { name: 'Yule', month: 12, day: 21, component: Yule }
   ];
 
   type ActiveState = {
@@ -57,20 +66,9 @@
       class="sabbat-icon waning" 
       style="opacity: {(1 - state.progress) * 0.15}; transform: scale({1.2 - state.progress * 0.4});"
     >
-      <svg 
-        viewBox="0 0 24 24" 
-        width="100%" 
-        height="100%" 
-        fill="none" 
-        stroke="currentColor" 
-        stroke-width="1.5" 
-        stroke-linecap="round" 
-        stroke-linejoin="round"
-      >
-        {#each state.prev.paths as path}
-          <path d={path} />
-        {/each}
-      </svg>
+      <div class="icon-wrap">
+        <svelte:component this={state.prev.component} size="100%" strokeWidth={1.5} />
+      </div>
       <span class="label">{state.prev.name}</span>
     </div>
 
@@ -79,20 +77,9 @@
       class="sabbat-icon waxing" 
       style="opacity: {state.progress * 0.15}; transform: scale({0.9 + state.progress * 0.3});"
     >
-      <svg 
-        viewBox="0 0 24 24" 
-        width="100%" 
-        height="100%" 
-        fill="none" 
-        stroke="currentColor" 
-        stroke-width="1.5" 
-        stroke-linecap="round" 
-        stroke-linejoin="round"
-      >
-        {#each state.next.paths as path}
-          <path d={path} />
-        {/each}
-      </svg>
+      <div class="icon-wrap">
+        <svelte:component this={state.next.component} size="100%" strokeWidth={1.5} />
+      </div>
       <span class="label">{state.next.name}</span>
     </div>
   </div>
@@ -124,6 +111,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+  
+  .icon-wrap {
+    width: 100%;
+    height: 100%;
   }
 
   .label {
