@@ -13,6 +13,9 @@
         {#each sabbat.description.split('\n\n') as paragraph}
           <p>{paragraph}</p>
         {/each}
+        <p class="modal-footer">
+          <a href="https://en.wikipedia.org/wiki/Wheel_of_the_Year#Festivals" target="_blank" rel="noopener noreferrer">Learn more about the Wheel of the Year</a>
+        </p>
       </div>
     </div>
   {/if}
@@ -56,5 +59,10 @@
     line-height: 1.6;
     margin-bottom: var(--space-md);
     color: var(--color-text-800);
+  }
+
+  .modal-footer {
+    font-size: var(--text-xs);
+    margin-top: var(--space-md);
   }
 </style>

@@ -1,5 +1,5 @@
 import chroma from "chroma-js";
-import { type Sabbat, sabbats } from "$lib/utils/sabbats";
+import { type Sabbat, sabbats, getCurrentSabbat } from "$lib/utils/sabbats";
 
 export interface ModeColors {
   light: [number, number, number];
@@ -130,22 +130,33 @@ export function getCurrentPrimaryShade(step = 400): string {
 
 export function getDynamicThemeCSS(): string {
   const now = new Date();
-  const rotation = getHueRotation(now);
+  const currentSabbat = getCurrentSabbat();
+  const colors = currentSabbat.colors;
+
+  // Use the first Sabbat color as base hue
+  const baseColor = colors.length > 0 ? chroma(colors[0]) : chroma("#68b34d");
+  const targetHue = baseColor.get("oklch.h");
+
   let css = "  :root {\n";
 
   Object.entries(baseline).forEach(([name, shades]) => {
-    css += `    /* ── ${name.toUpperCase()} (Rotated ${rotation.toFixed(1)}°) ── */\n`;
+    css += `    /* ── ${name.toUpperCase()} (Based on ${currentSabbat.name}) ── */\n`;
     Object.entries(shades as Scale).forEach(([step, modes]) => {
       const [lL, lC, lH] = modes.light;
       const [dL, dC, dH] = modes.dark;
 
-      const lightValue = `oklch(${(lL * 100).toFixed(2)}% ${lC.toFixed(4)} ${((lH + rotation) % 360).toFixed(2)})`;
-      const darkValue = `oklch(${(dL * 100).toFixed(2)}% ${dC.toFixed(4)} ${((dH + rotation) % 360).toFixed(2)})`;
+      // Use targetHue instead of adding rotation to baseline
+      const lightValue = `oklch(${(lL * 100).toFixed(2)}% ${lC.toFixed(4)} ${targetHue.toFixed(2)})`;
+      const darkValue = `oklch(${(dL * 100).toFixed(2)}% ${dC.toFixed(4)} ${targetHue.toFixed(2)})`;
 
       css += `    --${name}-${step}: light-dark(${lightValue}, ${darkValue});\n`;
     });
     css += "\n";
   });
+
+  // Add specific Sabbat color overrides if needed
+  css += `    /* ── Sabbat-Specific Overrides ── */\n`;
+  css += `    --color-sabbat-primary: ${colors.length > 0 ? colors[0] : "#68b34d"};\n`;
 
   css += "    /* ── Aliases ── */\n";
   [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].forEach((step) => {
