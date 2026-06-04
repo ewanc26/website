@@ -484,9 +484,6 @@
           </div>
 
           <h3 class="sub-title" id="iconography-wheel">Wheel of the Year</h3>
-  // Helper to map names to components for dynamic rendering
-  
-  // ... elsewhere in the template:
           <div class="icon-grid">
             <div class="icon-card"><div class="icon-preview"><Imbolc size={48} strokeWidth={1.5} /></div><code class="icon-name">Imbolc</code></div>
             <div class="icon-card"><div class="icon-preview"><Ostara size={48} strokeWidth={1.5} /></div><code class="icon-name">Ostara</code></div>
