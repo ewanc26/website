@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { getCurrentSabbat, type Sabbat } from '$lib/server/theme';
+  import { getCurrentSabbat, type Sabbat } from '$lib/utils/sabbats';
   import SabbatModal from './SabbatModal.svelte';
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
   import Eurosky from '$lib/components/icons/Eurosky.svelte';
