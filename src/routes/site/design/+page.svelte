@@ -459,33 +459,14 @@
           <h2 class="section-title">Iconography</h2>
         </header>
         <div class="section-content">
-          <h3 class="sub-title" id="iconography-system">
-            <span class="section-num">[07.1]</span> System Icons
-          </h3>
-          <p class="section-intro">System icons are implemented as SVG components with a default size of 16px. They inherit <code>currentColor</code> for seamless integration.</p>
+          <p class="section-intro">System icons are implemented as SVG components (16px, <code>currentColor</code>). Pagan and seasonal symbols use <code>currentColor</code> for stroke or fill.</p>
           <div class="icon-grid">
             <div class="icon-card"><div class="icon-preview"><Bluesky size={32} /></div><code class="icon-name">Bluesky.svelte</code></div>
             <div class="icon-card"><div class="icon-preview"><Eurosky size={32} /></div><code class="icon-name">Eurosky.svelte</code></div>
             <div class="icon-card"><div class="icon-preview"><Leaflet size={32} /></div><code class="icon-name">Leaflet.svelte</code></div>
             <div class="icon-card"><div class="icon-preview"><StandardSite size={32} /></div><code class="icon-name">StandardSite.svelte</code></div>
-          </div>
-
-          <h3 class="sub-title" id="iconography-pagan-seasonal">07.2 Pagan & Seasonal Symbols</h3>
-          
-          <h4 class="mini-title" id="iconography-pagan-symbols">
-            <span class="section-num">07.2.1</span> Pagan Symbols
-          </h4>
-          <p class="section-intro">Pagan symbols use <code>currentColor</code> for stroke (pentacle) or fill (triskele).</p>
-          <div class="icon-grid">
             <div class="icon-card"><div class="icon-preview"><Pentacle size={32} /></div><code class="icon-name">Pentacle.svelte</code></div>
             <div class="icon-card"><div class="icon-preview"><Triskele size={32} /></div><code class="icon-name">Triskele.svelte</code></div>
-          </div>
-
-          <h4 class="mini-title" id="iconography-wheel">
-            <span class="section-num">07.2.2</span> Wheel of the Year
-          </h4>
-          <p class="section-intro">Seasonal symbols used in the site background. These icons wax and wane in prominence as the year turns, following the 8 Sabbats. Styled with a 1.5pt Lucide-style stroke.</p>
-          <div class="icon-grid">
             {#each sabbats as sabbat}
               <div class="icon-card">
                 <div class="icon-preview">
@@ -493,17 +474,17 @@
                     {#each sabbat.paths as path}<path d={path} />{/each}
                   </svg>
                 </div>
-                <code class="icon-name">{sabbat.name} ({sabbat.english})</code>
+                <code class="icon-name">{sabbat.name}</code>
               </div>
             {/each}
           </div>
         </div>
       </section>
 
-      <!-- ── [09] Components ─────────────────────────── -->
+      <!-- ── [08] Components ─────────────────────────── -->
       <section class="spec-section components" id="components">
         <header class="section-hd">
-          <span class="section-num">[09]</span>
+          <span class="section-num">[08]</span>
           <h2 class="section-title">Components</h2>
         </header>
         <div class="section-content">
@@ -549,10 +530,10 @@
         </div>
       </section>
 
-      <!-- ── [08] Layout ─────────────────────────────── -->
+      <!-- ── [09] Layout ─────────────────────────────── -->
       <section class="spec-section layout" id="layout">
         <header class="section-hd">
-          <span class="section-num">[08]</span>
+          <span class="section-num">[09]</span>
           <h2 class="section-title">Layout Systems</h2>
         </header>
         <div class="section-content">
@@ -578,10 +559,10 @@
         </div>
       </section>
 
-      <!-- ── [09] Voice & Tone ───────────────────────── -->
+      <!-- ── [10] Voice & Tone ───────────────────────── -->
       <section class="spec-section voice" id="voice">
         <header class="section-hd">
-          <span class="section-num">[09]</span>
+          <span class="section-num">[10]</span>
           <h2 class="section-title">Voice &amp; Tone</h2>
         </header>
         <div class="section-content">
@@ -605,10 +586,10 @@
         </div>
       </section>
 
-      <!-- ── [10] Manifesto ──────────────────────────── -->
+      <!-- ── [11] Manifesto ──────────────────────────── -->
       <section class="spec-section principles" id="manifesto">
         <header class="section-hd">
-          <span class="section-num">[10]</span>
+          <span class="section-num">[11]</span>
           <h2 class="section-title">Manifesto</h2>
         </header>
         <div class="section-content">
@@ -626,10 +607,10 @@
         </div>
       </section>
 
-      <!-- ── [11] Assets ─────────────────────────────── -->
+      <!-- ── [12] Assets ─────────────────────────────── -->
       <section class="spec-section assets" id="assets">
         <header class="section-hd">
-          <span class="section-num">[11]</span>
+          <span class="section-num">[12]</span>
           <h2 class="section-title">Assets</h2>
         </header>
         <div class="section-content">
