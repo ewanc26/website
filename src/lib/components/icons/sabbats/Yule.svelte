@@ -1,19 +1,12 @@
 <script lang="ts">
+  import svg from '$lib/assets/pagan/wheel/yule.svg?raw';
   let { size = 24, strokeWidth = 2, ...props } = $props();
 </script>
 
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  {size}
-  {size}
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  {strokeWidth}
-  stroke-linecap="round"
-  stroke-linejoin="round"
+<div 
+  style="width: {size}px; height: {size}px; display: inline-flex;"
+  class="icon-wrapper"
   {...props}
 >
-  <circle cx="12" cy="12" r="9" />
-  <path d="M12 3v18M3 12h18" />
-</svg>
+  {@html svg.replace('<svg', `<svg width="${size}" height="${size}" stroke-width="${strokeWidth}"`)}
+</div>
