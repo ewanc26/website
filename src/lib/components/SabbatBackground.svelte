@@ -10,6 +10,8 @@
   import Samhain from '$lib/components/icons/sabbats/Samhain.svelte';
   import Yule from '$lib/components/icons/sabbats/Yule.svelte';
 
+  let { simulatedDate = $bindable(null) } = $props();
+
   const sabbats = [
     { name: 'Imbolc', month: 2, day: 1, component: Imbolc },
     { name: 'Ostara', month: 3, day: 21, component: Ostara },
@@ -30,7 +32,7 @@
   let state = $state<ActiveState | null>(null);
 
   function updateState() {
-    const now = new Date();
+    const now = simulatedDate || new Date();
     const year = now.getFullYear();
     const getSabbatDate = (s: typeof sabbats[0], y: number) => new Date(y, s.month - 1, s.day);
 
@@ -51,6 +53,10 @@
       }
     }
   }
+
+  $effect(() => {
+    updateState();
+  });
 
   onMount(() => {
     updateState();
