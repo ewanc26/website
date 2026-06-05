@@ -34,14 +34,13 @@
   }
 
   .menu-toggle {
-    display: none;
     background: none;
     border: none;
     cursor: pointer;
     color: var(--color-text-950);
     width: 44px;
     height: 44px;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
   }
@@ -156,6 +155,7 @@
   /* ── Table of Contents ───────────────────────────────────────── */
 
   .toc {
+    margin-top: var(--space-xl);
     margin-bottom: var(--space-lg);
   }
 
