@@ -33,7 +33,7 @@
   let SabbatIcon = $derived(currentSabbat ? SabbatIcons[currentSabbat.name] : null);
 
   onMount(() => {
-    currentSabbat = getCurrentSabbat();
+    currentSabbat = getCurrentSabbat(new Date());
   });
 </script>
 
