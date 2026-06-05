@@ -31,5 +31,13 @@ import { dev } from '$app/environment';
                 onclick={() => isMenuOpen = false}
             >{link.label}</a>
         {/each}
+        {#if dev}
+            <a
+                href="/testing"
+                class="nav-link"
+                class:active={page.url.pathname === '/testing'}
+                onclick={() => isMenuOpen = false}
+            >Testing</a>
+        {/if}
     </div>
 </nav>
