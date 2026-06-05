@@ -1,9 +1,11 @@
 <script lang="ts">
     import { sabbatTimeTest } from './tests/sabbat-time.test';
     import type { TestResult } from './tests/types';
+    import SabbatBackground from '$lib/components/SabbatBackground.svelte';
 
     let { data } = $props();
     let results = $state<Record<string, TestResult>>({});
+    let simulatedDate = $state<Date | null>(null);
 
     const tests = [sabbatTimeTest];
 
@@ -15,6 +17,11 @@
 
 <h1>Testing Suite</h1>
 <p>{data.message}</p>
+
+<section style="margin-top: 2rem;">
+    <h2>Time Simulation</h2>
+    <input type="date" bind:value={simulatedDate} oninput={(e) => simulatedDate = new Date(e.currentTarget.value + 'T00:00:00Z')} />
+</section>
 
 <section style="margin-top: 2rem;">
     <h2>Test Runner</h2>
@@ -35,3 +42,4 @@
     </div>
 </section>
 
+<SabbatBackground bind:simulatedDate />
