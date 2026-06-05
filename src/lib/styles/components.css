@@ -155,7 +155,6 @@
   /* ── Table of Contents ───────────────────────────────────────── */
 
   .toc {
-    margin-top: var(--space-xl);
     margin-bottom: var(--space-lg);
   }
 
