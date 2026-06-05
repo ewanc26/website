@@ -54,7 +54,8 @@
 
   onMount(() => {
     updateState();
-    const interval = setInterval(updateState, 1000 * 60 * 60); 
+    // Check every minute instead of every hour for better responsiveness
+    const interval = setInterval(updateState, 1000 * 60); 
     return () => clearInterval(interval);
   });
 </script>
