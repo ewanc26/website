@@ -83,8 +83,7 @@ export const sabbats: Sabbat[] = [
   },
 ];
 
-export function getCurrentSabbat(): Sabbat {
-  const now = new Date();
+export function getCurrentSabbat(now: Date = new Date()): Sabbat {
   const year = now.getFullYear();
   const getSabbatDate = (s: Sabbat, y: number) =>
     new Date(y, s.month - 1, s.day);
