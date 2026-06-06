@@ -10,13 +10,19 @@ let wasmInitialized = false;
 async function ensureWasm() {
   if (wasmInitialized) return;
   try {
-    await initWasm(wasmModule as unknown as WebAssembly.Module);
+    if (typeof wasmModule === "string") {
+      const response = await read(wasmModule);
+      await initWasm(await response.arrayBuffer());
+    } else {
+      await initWasm(wasmModule as unknown as WebAssembly.Module);
+    }
     wasmInitialized = true;
   } catch (err: any) {
     if (err.message?.includes("Already initialized")) {
       wasmInitialized = true;
       return;
     }
+    console.error("Failed to initialize WASM:", err);
     throw err;
   }
 }
@@ -25,8 +31,13 @@ import interUrl from "$lib/fonts/Inter-ExtraBold.ttf";
 import monoUrl from "$lib/fonts/JetBrainsMono-Regular.ttf";
 
 const loadFont = async (url: string) => {
-  const response = await read(url);
-  return await response.arrayBuffer();
+  try {
+    const response = await read(url);
+    return await response.arrayBuffer();
+  } catch (err) {
+    console.error(`Failed to load font from ${url}:`, err);
+    throw err;
+  }
 };
 
 export const GET: RequestHandler = async ({ url, setHeaders }) => {
