@@ -19,6 +19,10 @@
   let publications = $state<any>(null);
   let links = $state<any>(null);
 
+  let shuffledProjects = $derived(
+    sifaProjects ? [...sifaProjects].sort(() => Math.random() - 0.5).slice(0, 6) : []
+  );
+
   onMount(async () => {
     // Fetch remaining data in parallel
     fetch('/api/home').then(r => r.json()).then(d => {
@@ -105,7 +109,7 @@
       <LoadingSkeleton count={2} />
     {:else if sifaProjects && sifaProjects.length > 0}
         <div class="project-grid">
-          {#each sifaProjects.sort(() => Math.random() - 0.5).slice(0, 6) as project}
+          {#each shuffledProjects as project}
             <div class="project-card">
               <strong class="project-name">{project.name}</strong>
               {#if project.description}
