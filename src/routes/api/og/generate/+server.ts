@@ -25,15 +25,18 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
       slug: url.searchParams.get("slug") ?? "/",
     });
 
-    const resvg = new Resvg(svg, {
+    const resvgOptions = {
       font: {
         fontBuffers: [interFont, monoFont],
         loadSystemFonts: false,
         defaultFontFamily: "Inter",
       },
       fitTo: { mode: "width", value: 1200 },
-    });
+    };
 
+    console.log("Resvg Options:", JSON.stringify(resvgOptions));
+
+    const resvg = new Resvg(svg, resvgOptions);
     const pngData = resvg.render();
 
     setHeaders({
