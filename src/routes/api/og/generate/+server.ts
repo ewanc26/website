@@ -1,23 +1,50 @@
 import type { RequestHandler } from "./$types";
 import { Resvg } from "@resvg/resvg-js";
+import { buildOgSvg } from "$lib/og";
+import { read } from "$app/server";
 
-export const GET: RequestHandler = async ({ setHeaders }) => {
-  // Test: Can we render a simple shape?
-  const svg = `
-    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100" height="100" fill="red" />
-    </svg>
-  `.trim();
+// Import fonts as Vite URLs
+import interUrl from "$lib/fonts/Inter-ExtraBold.ttf";
+import monoUrl from "$lib/fonts/JetBrainsMono-Regular.ttf";
 
-  const resvg = new Resvg(svg, {
-    fitTo: { mode: "width", value: 100 },
-  });
+const loadFont = async (url: string) => {
+  const response = await read(url);
+  return await response.arrayBuffer();
+};
 
-  const pngData = resvg.render();
+export const GET: RequestHandler = async ({ url, setHeaders }) => {
+  try {
+    const [interFont, monoFont] = await Promise.all([
+      loadFont(interUrl),
+      loadFont(monoUrl),
+    ]);
 
-  setHeaders({
-    "Content-Type": "image/png",
-  });
+    const svg = buildOgSvg({
+      title: url.searchParams.get("title") ?? "ewancroft.uk",
+      subtitle: url.searchParams.get("subtitle") ?? "software engineer",
+      slug: url.searchParams.get("slug") ?? "/",
+    });
 
-  return new Response(pngData.asPng());
+    const resvg = new Resvg(svg, {
+      font: {
+        fontBuffers: [interFont, monoFont],
+        loadSystemFonts: false,
+        defaultFontFamily: "Inter",
+      },
+      fitTo: { mode: "width", value: 1200 },
+    });
+
+    const pngData = resvg.render();
+
+    setHeaders({
+      "Content-Type": "image/png",
+      "Cache-Control":
+        "public, max-age=86400, s-maxage=31536000, stale-while-revalidate",
+    });
+
+    return new Response(pngData.asPng());
+  } catch (e) {
+    console.error("OG Generation Error:", e);
+    return new Response("Error generating image", { status: 500 });
+  }
 };
