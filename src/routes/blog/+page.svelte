@@ -90,7 +90,7 @@
                         <li>
                             <a href={getPostUrl(post)} class="post-row">
                                 <span class="post-title">{post.title}</span>
-                                <time class="post-date">{new Date(post.createdAt).toLocaleDateString()}</time>
+                                <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
                             </a>
                         </li>
                     {/each}

@@ -15,7 +15,15 @@
     let useBlocks = $derived(data.post.blocks && data.post.blocks.length > 0);
 </script>
 
-<SiteHead title={data.post.title} description={data.post.description} ogType="BLOG" />
+<SiteHead
+    title={data.post.title}
+    description={data.post.metaDescription}
+    type="article"
+    ogType="BLOG"
+    publishedTime={data.post.createdAt}
+    tags={data.post.tags}
+    author="https://ewancroft.uk/about"
+/>
 
 <main class="shell-prose">
     <header class="post-hd">
@@ -68,7 +76,7 @@
                                     <div class="comment-head">
                                         <strong>{comment.authorDisplayName ?? comment.authorHandle}</strong>
                                         <a href="https://bsky.app/profile/{comment.authorHandle}" target="_blank" rel="noopener" class="comment-handle">@{comment.authorHandle}</a>
-                                        <time class="comment-date">{new Date(comment.createdAt).toLocaleDateString()}</time>
+                                        <time class="comment-date">{new Date(comment.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
                                     </div>
                                     <p class="comment-body">{comment.plaintext}</p>
                                 </li>

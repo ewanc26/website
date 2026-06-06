@@ -1,8 +1,10 @@
 import type { RequestHandler } from "./$types";
+import { Resvg } from "@resvg/resvg-js";
 import {
   getCurrentPrimaryShade,
   baseline,
   getHueRotation,
+  getTargetHue,
 } from "$lib/server/theme";
 import chroma from "chroma-js";
 
@@ -22,27 +24,26 @@ export const GET: RequestHandler = async ({ url }) => {
     title.length > maxChars ? title.slice(0, maxChars - 1) + "…" : title;
 
   const now = new Date();
-  const rotation = getHueRotation(now);
+  const targetHue = getTargetHue(now);
 
   const getSeasonalColor = (scale: keyof typeof baseline, step: number) => {
     const data = (baseline[scale] as any)[step];
-    // Always use dark mode values for OG images
-    const [l, c, hBase] = data.dark;
-    const h = (hBase + rotation) % 360;
-    return chroma.oklch(l, c, h).hex();
+    // Force dark mode values for OG images (50 is dark, 950 is light)
+    const [l, c] = data.dark;
+    return chroma.oklch(l, c, targetHue).hex();
   };
 
-  // Colours based on site theme (forced dark mode), with dynamic Sabbat-interpolated primary
-  const bg = getSeasonalColor("background", 950);
+  // Colours based on site theme (forced dark mode)
+  // Aligned with surface tokens: sunken (50), raised (100), base (200)
+  const bg = getSeasonalColor("background", 50);
   const surface = getSeasonalColor("background", 100);
-  const border = getSeasonalColor("background", 400);
+  const border = getSeasonalColor("background", 200);
 
   // Use dark mode values explicitly for primary and text
-  const primary = chroma
-    .oklch(...(baseline.primary[500].dark as [number, number, number]))
-    .hex();
-  const text = getSeasonalColor("text", 50);
-  const textMuted = getSeasonalColor("text", 500);
+  const primaryData = baseline.primary[500].dark;
+  const primary = chroma.oklch(primaryData[0], primaryData[1], targetHue).hex();
+  const text = getSeasonalColor("text", 950);
+  const textMuted = getSeasonalColor("text", 700);
 
   const svg = `
     <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
@@ -78,7 +79,7 @@ export const GET: RequestHandler = async ({ url }) => {
       <!-- Content -->
       ${typeParam && typeParam !== "TECHNICAL SPEC" ? `<text x="80" y="120" font-family="'JetBrains Mono', monospace" font-size="20" fill="${primary}" letter-spacing="0.1em" text-transform="uppercase">${escapeXml(typeParam)}</text>` : ""}
 
-      <text x="80" y="${typeParam && typeParam !== "TECHNICAL SPEC" ? "200" : "160"}" font-family="'Inter', sans-serif" font-size="${fontSize}" font-weight="800" fill="${text}" letter-spacing="-0.02em">${escapeXml(displayTitle)}</text>
+      <text x="80" y="${typeParam && typeParam !== "TECHNICAL SPEC" ? "200" : "160"}" font-family="'Inter', sans-serif" font-size="${fontSize}" font-weight="800" fill="${text}" letter-spacing="-0.03em">${escapeXml(displayTitle)}</text>
       
       ${subtitle ? `<text x="80" y="${typeParam && typeParam !== "TECHNICAL SPEC" ? "280" : "240"}" font-family="'Inter', sans-serif" font-size="40" font-weight="400" fill="${textMuted}">${escapeXml(subtitle)}</text>` : ""}
 
@@ -89,9 +90,13 @@ export const GET: RequestHandler = async ({ url }) => {
     </svg>
   `.trim();
 
-  return new Response(svg, {
+  const resvg = new Resvg(svg, { fitTo: { mode: "width", value: 1200 } });
+  const pngData = resvg.render();
+  const pngBuffer = pngData.asPng();
+
+  return new Response(new Uint8Array(pngBuffer), {
     headers: {
-      "Content-Type": "image/svg+xml",
+      "Content-Type": "image/png",
       "Cache-Control": "public, max-age=3600, s-maxage=3600",
     },
   });

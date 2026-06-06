@@ -1,6 +1,15 @@
 <script lang="ts">
   import { X } from '@lucide/svelte';
   let { sabbat, onClose } = $props();
+
+  const sabbatDate = $derived.by(() => {
+    if (!sabbat) return null;
+    const now = new Date();
+    const thisYear = now.getFullYear();
+    const candidate = new Date(thisYear, sabbat.month - 1, sabbat.day);
+    const date = candidate < now ? new Date(thisYear + 1, sabbat.month - 1, sabbat.day) : candidate;
+    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  });
 </script>
 
 <dialog open={!!sabbat} onclose={onClose} class="sabbat-modal">
@@ -12,6 +21,9 @@
           <X size={20} />
         </button>
       </header>
+      {#if sabbatDate}
+        <p class="modal-date">{sabbatDate}</p>
+      {/if}
       <div class="modal-body">
         {#each sabbat.description.split('\n\n') as paragraph}
           <p>{paragraph}</p>
@@ -48,6 +60,13 @@
   .modal-title {
     font-size: var(--text-lg);
     margin: 0;
+  }
+
+  .modal-date {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-600);
+    margin: 0 0 var(--space-md);
   }
 
   .close-btn {
