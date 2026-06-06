@@ -26,7 +26,7 @@ export const GET: RequestHandler = async ({ url }) => {
       slug: url.searchParams.get("slug") ?? "/",
     });
 
-    console.log("SVG Payload:", svg);
+    console.log("SVG Length:", svg.length);
 
     const resvg = new Resvg(svg, {
       font: {
