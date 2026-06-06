@@ -3,13 +3,17 @@ import { Resvg } from "@resvg/resvg-js";
 import { baseline, getTargetHues } from "$lib/server/theme";
 import chroma from "chroma-js";
 import { readFileSync } from "fs";
-import path from "path";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Load fonts at startup
+// The fonts have been moved to src/lib/assets/fonts to be bundled
 const loadFont = (relativePath: string) =>
-  readFileSync(path.resolve(`./static/assets/fonts/${relativePath}`)).toString(
-    "base64",
-  );
+  readFileSync(
+    join(__dirname, `../../../lib/assets/fonts/${relativePath}`),
+  ).toString("base64");
 
 const interFont = loadFont("Inter-4.1/extras/ttf/Inter-ExtraBold.ttf");
 const monoFont = loadFont(
