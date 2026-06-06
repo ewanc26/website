@@ -86,7 +86,7 @@ export const baseline: Baseline = {
   },
 };
 
-export function getHueRotation(now: Date): number {
+function getSabbatContext(now: Date) {
   const year = now.getFullYear();
   const getSabbatDate = (s: Sabbat, y: number) =>
     new Date(y, s.month - 1, s.day);
@@ -111,12 +111,19 @@ export function getHueRotation(now: Date): number {
 
   const prevDate = prev.date?.getTime() || 0;
   const nextDate = next.date?.getTime() || 0;
+  const progress = (now.getTime() - prevDate) / (nextDate - prevDate);
 
-  return (
-    prev.rotation +
-    (next.rotation - prev.rotation) *
-      ((now.getTime() - prevDate) / (nextDate - prevDate))
-  );
+  return { prev, next, progress };
+}
+
+export function getHueRotation(now: Date): number {
+  const { prev, next, progress } = getSabbatContext(now);
+
+  let diff = next.rotation - prev.rotation;
+  while (diff > 180) diff -= 360;
+  while (diff < -180) diff += 360;
+
+  return prev.rotation + diff * progress;
 }
 
 export function getCurrentPrimaryShade(step = 400): string {
@@ -128,22 +135,40 @@ export function getCurrentPrimaryShade(step = 400): string {
   return chroma.oklch(l, c, (hBase + rotation) % 360).hex();
 }
 
+export function getTargetHue(now: Date): number {
+  const { prev, next, progress } = getSabbatContext(now);
+
+  const getSabbatHue = (s: Sabbat) => {
+    for (const color of s.colors) {
+      const c = chroma(color);
+      if (c.get("oklch.c") > 0.01) return c.get("oklch.h");
+    }
+    return 135;
+  };
+
+  const prevHue = getSabbatHue(prev);
+  const nextHue = getSabbatHue(next);
+
+  let hueDiff = nextHue - prevHue;
+  while (hueDiff > 180) hueDiff -= 360;
+  while (hueDiff < -180) hueDiff += 360;
+
+  return (prevHue + hueDiff * progress + 360) % 360;
+}
+
 export function getDynamicThemeCSS(): string {
   const now = new Date();
-  const currentSabbat = getCurrentSabbat();
-  const colors = currentSabbat.colors;
-
-  // Use the first Sabbat color as base hue
-  const baseColor = colors.length > 0 ? chroma(colors[0]) : chroma("#68b34d");
-  const targetHue = baseColor.get("oklch.h");
+  const { prev, next, progress } = getSabbatContext(now);
+  const currentSabbat = getCurrentSabbat(now);
+  const targetHue = getTargetHue(now);
 
   let css = "  :root {\n";
 
   Object.entries(baseline).forEach(([name, shades]) => {
-    css += `    /* ── ${name.toUpperCase()} (Based on ${currentSabbat.name}) ── */\n`;
+    css += `    /* ── ${name.toUpperCase()} (Transitioning from ${prev.name} to ${next.name}) ── */\n`;
     Object.entries(shades as Scale).forEach(([step, modes]) => {
-      const [lL, lC, lH] = modes.light;
-      const [dL, dC, dH] = modes.dark;
+      const [lL, lC] = modes.light;
+      const [dL, dC] = modes.dark;
 
       // Use targetHue instead of adding rotation to baseline
       const lightValue = `oklch(${(lL * 100).toFixed(2)}% ${lC.toFixed(4)} ${targetHue.toFixed(2)})`;
@@ -154,7 +179,8 @@ export function getDynamicThemeCSS(): string {
     css += "\n";
   });
 
-  // Add specific Sabbat color overrides if needed
+  // Add specific Sabbat color overrides
+  const colors = currentSabbat.colors;
   css += `    /* ── Sabbat-Specific Overrides ── */\n`;
   css += `    --color-sabbat-primary: ${colors.length > 0 ? colors[0] : "#68b34d"};\n`;
 

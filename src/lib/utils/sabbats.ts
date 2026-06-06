@@ -16,7 +16,7 @@ export const sabbats: Sabbat[] = [
     rotation: -45,
     colors: ["#FFD700", "#FFFFFF"], // Gold, White
     description:
-      "Imbolc marks the first stirrings of spring, a time of purification and honoring the return of light. It is a period for setting intentions for the coming year and preparing for the awakening of the earth.\n\nTraditionally celebrated with fire and cleansing rituals, this festival bridges the gap between deep winter and the sprouting of new life. It encourages us to look inward and cultivate the quiet energy needed to bring our goals to fruition.",
+      "Imbolc marks the first stirrings of spring, a time of purification and honouring the return of light. It is a period for setting intentions for the coming year and preparing for the awakening of the earth.\n\nTraditionally celebrated with fire and cleansing rituals, this festival bridges the gap between deep winter and the sprouting of new life. It encourages us to look inward and cultivate the quiet energy needed to bring our goals to fruition.",
   },
   {
     name: "Ostara",
@@ -34,7 +34,7 @@ export const sabbats: Sabbat[] = [
     rotation: 45,
     colors: ["#FF0000", "#90EE90"], // Red, Light Green
     description:
-      "Beltane honors the peak of spring and the union of the god and goddess, symbolizing fertility, passion, and the full blooming of life. The fires of Beltane are traditionally lit to celebrate the warmth of the sun and the abundance of the coming summer.\n\nThis Sabbat is an invitation to celebrate your own passions, vitality, and creativity. It is a time for outward action, community, and stepping fully into the warmth and energy of the season.",
+      "Beltane honours the peak of spring and the union of the god and goddess, symbolising fertility, passion, and the full blooming of life. The fires of Beltane are traditionally lit to celebrate the warmth of the sun and the abundance of the coming summer.\n\nThis Sabbat is an invitation to celebrate your own passions, vitality, and creativity. It is a time for outward action, community, and stepping fully into the warmth and energy of the season.",
   },
   {
     name: "Litha",
@@ -43,7 +43,7 @@ export const sabbats: Sabbat[] = [
     rotation: 90,
     colors: ["#90EE90", "#FFFF00"], // Light Green, Yellow
     description:
-      "Litha, the Summer Solstice, represents the longest day of the year and the height of the sun's power. It is a celebration of light, community, and the abundance that comes from the peak of growth and warmth.\n\nWhile we honor this pinnacle of external energy, it is also a reminder that the cycle will inevitably turn toward darkness. It is a time to be present, to give gratitude for the fruits of our efforts, and to enjoy the radiance of the season.",
+      "Litha, the Summer Solstice, represents the longest day of the year and the height of the sun's power. It is a celebration of light, community, and the abundance that comes from the peak of growth and warmth.\n\nWhile we honour this pinnacle of external energy, it is also a reminder that the cycle will inevitably turn toward darkness. It is a time to be present, to give gratitude for the fruits of our efforts, and to enjoy the radiance of the season.",
   },
   {
     name: "Lughnasadh",
@@ -70,7 +70,7 @@ export const sabbats: Sabbat[] = [
     rotation: 225,
     colors: ["#000000", "#FFA500"], // Black, Orange
     description:
-      "Samhain marks the end of the harvest and the start of the darker half of the year, often called the witches' new year. The veil between the physical and spiritual worlds is at its thinnest, making it a powerful time for honoring ancestors and reflecting on the cycle of life and death.\n\nIt is a Sabbat for introspection, deep listening, and releasing the old to make space for future growth during the quiet winter months. We honor the darkness not as an end, but as a necessary space for gestation and renewal.",
+      "Samhain marks the end of the harvest and the start of the darker half of the year, often called the witches' new year. The veil between the physical and spiritual worlds is at its thinnest, making it a powerful time for honouring ancestors and reflecting on the cycle of life and death.\n\nIt is a Sabbat for introspection, deep listening, and releasing the old to make space for future growth during the quiet winter months. We honour the darkness not as an end, but as a necessary space for gestation and renewal.",
   },
   {
     name: "Yule",
@@ -79,7 +79,7 @@ export const sabbats: Sabbat[] = [
     rotation: 270,
     colors: ["#FF0000", "#FFD700", "#006400"], // Red, Gold, Dark Green
     description:
-      "Yule, the Winter Solstice, is the longest night of the year, a moment of profound stillness and the turning point where the light begins its slow return. It is a time of hope, quiet celebration, and honoring the resilience of life in the midst of cold.\n\nEven in the depths of winter, the promise of spring remains. Yule encourages us to find warmth in community and reflection, nurturing our inner spark so it can grow stronger as the days begin to lengthen again.",
+      "Yule, the Winter Solstice, is the longest night of the year, a moment of profound stillness and the turning point where the light begins its slow return. It is a time of hope, quiet celebration, and honouring the resilience of life in the midst of cold.\n\nEven in the depths of winter, the promise of spring remains. Yule encourages us to find warmth in community and reflection, nurturing our inner spark so it can grow stronger as the days begin to lengthen again.",
   },
 ];
 
