@@ -2,6 +2,7 @@
 
 @layer theme, base, components, utilities;
 
+@import "../lib/styles/fonts.css";
 @import "../lib/styles/theme.css";
 @import "../lib/styles/content.css";
 @import "../lib/styles/components.css";

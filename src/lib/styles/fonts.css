@@ -1,0 +1,23 @@
+/* ================================================================
+ * fonts.css — Global font-face definitions
+ *
+ * Ensures Inter and JetBrains Mono are reliably loaded from
+ * local assets regardless of the host environment.
+ * ================================================================ */
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/assets/fonts/Inter-4.1/web/InterVariable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/JetBrainsMono-2.304/fonts/webfonts/JetBrainsMono-Regular.woff2")
+    format("woff2");
+}
