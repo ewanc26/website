@@ -1,15 +1,6 @@
 import type { RequestHandler } from "./$types";
-import { Resvg, initWasm } from "@resvg/resvg-wasm";
+import { Resvg } from "@resvg/resvg-js";
 import { buildOgSvg } from "$lib/og";
-// Note: This import assumes Vite handles WASM imports correctly
-import wasmModule from "@resvg/resvg-wasm/index_bg.wasm?module";
-
-let wasmInitialized = false;
-async function ensureWasm() {
-  if (wasmInitialized) return;
-  await initWasm(wasmModule as unknown as WebAssembly.Module);
-  wasmInitialized = true;
-}
 
 const fetchFont = async (url: string) => {
   const response = await fetch(url);
@@ -24,8 +15,6 @@ const MONO_URL =
 
 export const GET: RequestHandler = async ({ url }) => {
   try {
-    await ensureWasm();
-
     const [interFont, monoFont] = await Promise.all([
       fetchFont(INTER_URL),
       fetchFont(MONO_URL),

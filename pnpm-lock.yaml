@@ -65,9 +65,6 @@ importers:
       "@resvg/resvg-js":
         specifier: ^2.6.2
         version: 2.6.2
-      "@resvg/resvg-wasm":
-        specifier: ^2.6.2
-        version: 2.6.2
       "@sveltejs/adapter-auto":
         specifier: ^7.0.1
         version: 7.0.1(@sveltejs/kit@2.61.1(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.55.10)(vite@8.0.14(@types/node@25.9.1)(jiti@2.7.0)))(svelte@5.55.10)(typescript@6.0.3)(vite@8.0.14(@types/node@25.9.1)(jiti@2.7.0)))
@@ -765,13 +762,6 @@ packages:
     resolution:
       {
         integrity: sha512-C7c51Nn4yTxXFKvgh2txJFNweaVcfUPQxwEUFw4aWsCmfiBDJsTSwviIF8EcwjQ6k8bPyMWCl1vw4BdxE569Cg==,
-      }
-    engines: { node: ">= 10" }
-
-  "@resvg/resvg-wasm@2.6.2":
-    resolution:
-      {
-        integrity: sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw==,
       }
     engines: { node: ">= 10" }
 
@@ -3364,8 +3354,6 @@ snapshots:
       "@resvg/resvg-js-win32-x64-msvc": 2.6.2
 
   "@resvg/resvg-wasm@2.4.0": {}
-
-  "@resvg/resvg-wasm@2.6.2": {}
 
   "@rolldown/binding-android-arm64@1.0.2":
     optional: true
