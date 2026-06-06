@@ -1,4 +1,5 @@
 import type { PageServerLoad } from "./$types";
+import type { Config } from "@sveltejs/adapter-vercel";
 import { fetchDocuments } from "@ewanc26/atproto";
 import {
   PUBLIC_ATPROTO_DID,
@@ -7,7 +8,12 @@ import {
 import { error } from "@sveltejs/kit";
 import { renderMarkdown } from "$lib/markdown";
 
-export const load: PageServerLoad = async ({ params, fetch }) => {
+export const config: Config = { maxDuration: 60 };
+
+export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
+  setHeaders({
+    "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+  });
   const { slug } = params;
   const { documents } = await fetchDocuments(PUBLIC_ATPROTO_DID, fetch).catch(
     () => ({

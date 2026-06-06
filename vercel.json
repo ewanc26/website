@@ -1,5 +1,8 @@
 {
   "installCommand": "pnpm install",
+  "functions": {
+    "**": { "maxDuration": 60 }
+  },
   "rewrites": [
     { "source": "/favicon.ico", "destination": "/favicon.svg" },
     { "source": "/sitemap.xml.gz", "destination": "/sitemap.xml" }
