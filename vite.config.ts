@@ -7,4 +7,5 @@ export default defineConfig({
   ssr: {
     noExternal: ["@lucide/svelte"],
   },
+  assetsInclude: ["**/*.wasm"],
 });

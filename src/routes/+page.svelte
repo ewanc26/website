@@ -45,7 +45,7 @@
   }
 </script>
 
-<SiteHead />
+<SiteHead ogType="HOME" />
 
 <main class="shell-wide">
   <!-- Hero -->

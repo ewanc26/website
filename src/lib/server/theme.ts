@@ -204,3 +204,21 @@ export function getDynamicThemeCSS(): string {
   css += "  }\n";
   return css;
 }
+
+export function getOgThemeColors() {
+  const now = new Date();
+  const [primaryHue, accentHue] = getTargetHues(now);
+
+  const getShade = (name: keyof Baseline, step: string, hue: number) => {
+    const data = (baseline[name] as any)[step];
+    const [dL, dC] = data.dark;
+    return chroma.oklch(dL, dC, hue).hex();
+  };
+
+  return {
+    bg: getShade("background", "950", primaryHue),
+    fg: getShade("text", "50", primaryHue),
+    accent: getShade("primary", "400", primaryHue),
+    typeFg: getShade("accent", "500", accentHue),
+  };
+}

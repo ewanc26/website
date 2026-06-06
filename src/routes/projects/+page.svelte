@@ -61,6 +61,7 @@
 <SiteHead
   title={data.publication?.title ?? "Projects"}
   description={data.publication?.description}
+  ogType="PROJECTS"
 />
 
 <main class="shell-wide">
