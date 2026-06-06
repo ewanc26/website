@@ -29,9 +29,7 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
     did: PUBLIC_ATPROTO_DID,
   }));
 
-  const linksPromise = fetchLinks(PUBLIC_ATPROTO_DID, fetch).catch(
-    () => null,
-  );
+  const linksPromise = fetchLinks(PUBLIC_ATPROTO_DID, fetch).catch(() => null);
   const sifaProfilePromise = fetchSifaProfile(PUBLIC_ATPROTO_DID, fetch).catch(
     () => null,
   );
