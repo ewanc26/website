@@ -4,7 +4,7 @@ import { baseline, getTargetHues } from "$lib/server/theme";
 import chroma from "chroma-js";
 
 // Cache fonts in memory
-let fontCache: Record<string, string> = {};
+let fontCache: Record<string, ArrayBuffer> = {};
 
 // Load fonts from public URL to avoid filesystem issues
 const fetchFont = async (url: string) => {
@@ -12,9 +12,8 @@ const fetchFont = async (url: string) => {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch font: ${url}`);
   const arrayBuffer = await response.arrayBuffer();
-  const base64 = Buffer.from(arrayBuffer).toString("base64");
-  fontCache[url] = base64;
-  return base64;
+  fontCache[url] = arrayBuffer;
+  return arrayBuffer;
 };
 
 // Use public URLs (these will be served by the site itself or a CDN)
@@ -69,22 +68,9 @@ export const GET: RequestHandler = async ({ url }) => {
 
   const svg = `
     <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <style>
-          @font-face {
-            font-family: 'Inter';
-            src: url('data:font/ttf;base64,${interFont}');
-          }
-          @font-face {
-            font-family: 'JetBrains Mono';
-            src: url('data:font/ttf;base64,${monoFont}');
-          }
-        </style>
-      </defs>
-
       <!-- Background -->
       <rect width="1200" height="630" fill="${bg}" />
-      
+
       <!-- Minimalist border card -->
       <rect x="40" y="40" width="1120" height="550" rx="16" fill="${surface}" stroke="${border}" stroke-width="2" />
 
@@ -99,7 +85,7 @@ export const GET: RequestHandler = async ({ url }) => {
       <!-- Content -->
       ${
         typeParam && typeParam !== "TECHNICAL SPEC"
-          ? `<text x="80" y="120" font-family="'JetBrains Mono', monospace" font-size="20" fill="${primary}" letter-spacing="0.1em" text-transform="uppercase">${escapeXml(
+          ? `<text x="80" y="120" font-family="JetBrains Mono" font-size="20" fill="${primary}" letter-spacing="0.1em" text-transform="uppercase">${escapeXml(
               typeParam,
             )}</text>`
           : ""
@@ -107,15 +93,15 @@ export const GET: RequestHandler = async ({ url }) => {
 
       <text x="80" y="${
         typeParam && typeParam !== "TECHNICAL SPEC" ? "200" : "160"
-      }" font-family="'Inter', sans-serif" font-size="${fontSize}" font-weight="800" fill="${text}" letter-spacing="-0.03em">${escapeXml(
+      }" font-family="Inter" font-size="${fontSize}" font-weight="800" fill="${text}" letter-spacing="-0.03em">${escapeXml(
         displayTitle,
       )}</text>
-      
+
       ${
         subtitle
           ? `<text x="80" y="${
               typeParam && typeParam !== "TECHNICAL SPEC" ? "280" : "240"
-            }" font-family="'Inter', sans-serif" font-size="40" font-weight="400" fill="${textMuted}">${escapeXml(
+            }" font-family="Inter" font-size="40" font-weight="400" fill="${textMuted}">${escapeXml(
               subtitle,
             )}</text>`
           : ""
@@ -130,11 +116,16 @@ export const GET: RequestHandler = async ({ url }) => {
       }" width="100" height="4" fill="${primary}" />
 
       <!-- Footer info -->
-      <text x="80" y="550" font-family="'JetBrains Mono', monospace" font-size="20" fill="${textMuted}">ewancroft.uk</text>
+      <text x="80" y="550" font-family="JetBrains Mono" font-size="20" fill="${textMuted}">ewancroft.uk</text>
     </svg>
   `.trim();
 
-  const resvg = new Resvg(svg, { fitTo: { mode: "width", value: 1200 } });
+  const resvg = new Resvg(svg, {
+    font: {
+      fontBuffers: [interFont, monoFont],
+    },
+    fitTo: { mode: "width", value: 1200 },
+  });
   const pngData = resvg.render();
   const pngBuffer = pngData.asPng();
 
