@@ -1,4 +1,3 @@
-import { writable } from "svelte/store";
 import { browser } from "$app/environment";
 
 // Refined English onomatopoeic wolf/canine sounds
@@ -29,35 +28,6 @@ const wolfSounds = [
 let originalTexts = new Map<Node, string>();
 let wordCounter = 0;
 let wordToSoundMap = new Map<string, string>();
-
-function createWolfModeStore() {
-  const { subscribe, set, update } = writable(false);
-
-  return {
-    subscribe,
-    toggle: () => {
-      update((value) => {
-        const newValue = !value;
-        if (browser) {
-          if (newValue) {
-            enableWolfMode();
-          } else {
-            disableWolfMode();
-          }
-        }
-        return newValue;
-      });
-    },
-    enable: () => {
-      set(true);
-      if (browser) enableWolfMode();
-    },
-    disable: () => {
-      set(false);
-      if (browser) disableWolfMode();
-    },
-  };
-}
 
 function getWolfSoundByPosition(position: number): string {
   // Use modulo to cycle through wolf sounds based on word position
@@ -242,4 +212,21 @@ function disableWolfMode() {
   wordCounter = 0;
 }
 
-export const wolfMode = createWolfModeStore();
+export const wolfMode = {
+  value: $state(false),
+  toggle() {
+    this.value = !this.value;
+    if (browser) {
+      if (this.value) enableWolfMode();
+      else disableWolfMode();
+    }
+  },
+  enable() {
+    this.value = true;
+    if (browser) enableWolfMode();
+  },
+  disable() {
+    this.value = false;
+    if (browser) disableWolfMode();
+  },
+};

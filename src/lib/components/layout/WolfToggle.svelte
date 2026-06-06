@@ -1,16 +1,6 @@
 <script lang="ts">
 	import { wolfMode } from '$lib/stores/wolfMode';
 
-	let isWolfMode = $state(false);
-
-	// Subscribe to store changes
-	$effect(() => {
-		const unsubscribe = wolfMode.subscribe((value) => {
-			isWolfMode = value;
-		});
-		return unsubscribe;
-	});
-
 	function toggleWolfMode() {
 		wolfMode.toggle();
 	}
@@ -19,10 +9,10 @@
 <button
 	onclick={toggleWolfMode}
 	class="footer-link"
-	aria-label={isWolfMode ? 'Disable wolf mode' : 'Enable wolf mode'}
+	aria-label={wolfMode.value ? 'Disable wolf mode' : 'Enable wolf mode'}
 	type="button"
 >
-	{isWolfMode ? 'normal' : 'awoo'}
+	{wolfMode.value ? 'normal' : 'awoo'}
 </button>
 
 <style>
