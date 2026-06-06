@@ -135,42 +135,54 @@ export function getCurrentPrimaryShade(step = 400): string {
   return chroma.oklch(l, c, (hBase + rotation) % 360).hex();
 }
 
-export function getTargetHue(now: Date): number {
+export function getTargetHues(now: Date) {
   const { prev, next, progress } = getSabbatContext(now);
 
-  const getSabbatHue = (s: Sabbat) => {
-    for (const color of s.colors) {
-      const c = chroma(color);
-      if (c.get("oklch.c") > 0.01) return c.get("oklch.h");
-    }
-    return 135;
+  const getSabbatHues = (s: Sabbat) => {
+    const colorful = s.colors
+      .map((c) => chroma(c))
+      .filter((c) => c.get("oklch.c") > 0.01)
+      .map((c) => c.get("oklch.h"));
+
+    if (colorful.length === 0) return [135, 135, 135];
+    if (colorful.length === 1) return [colorful[0], colorful[0], colorful[0]];
+    if (colorful.length === 2) return [colorful[0], colorful[1], colorful[1]];
+    return [colorful[0], colorful[1], colorful[2]];
   };
 
-  const prevHue = getSabbatHue(prev);
-  const nextHue = getSabbatHue(next);
+  const prevHues = getSabbatHues(prev);
+  const nextHues = getSabbatHues(next);
 
-  let hueDiff = nextHue - prevHue;
-  while (hueDiff > 180) hueDiff -= 360;
-  while (hueDiff < -180) hueDiff += 360;
-
-  return (prevHue + hueDiff * progress + 360) % 360;
+  return prevHues.map((prevHue, i) => {
+    const nextHue = nextHues[i];
+    let hueDiff = nextHue - prevHue;
+    while (hueDiff > 180) hueDiff -= 360;
+    while (hueDiff < -180) hueDiff += 360;
+    return (prevHue + hueDiff * progress + 360) % 360;
+  });
 }
 
 export function getDynamicThemeCSS(): string {
   const now = new Date();
   const { prev, next, progress } = getSabbatContext(now);
   const currentSabbat = getCurrentSabbat(now);
-  const targetHue = getTargetHue(now);
+  const [primaryHue, accentHue, secondaryHue] = getTargetHues(now);
 
   let css = "  :root {\n";
 
   Object.entries(baseline).forEach(([name, shades]) => {
     css += `    /* ── ${name.toUpperCase()} (Transitioning from ${prev.name} to ${next.name}) ── */\n`;
+    const targetHue =
+      name === "accent"
+        ? accentHue
+        : name === "secondary"
+          ? secondaryHue
+          : primaryHue;
+
     Object.entries(shades as Scale).forEach(([step, modes]) => {
       const [lL, lC] = modes.light;
       const [dL, dC] = modes.dark;
 
-      // Use targetHue instead of adding rotation to baseline
       const lightValue = `oklch(${(lL * 100).toFixed(2)}% ${lC.toFixed(4)} ${targetHue.toFixed(2)})`;
       const darkValue = `oklch(${(dL * 100).toFixed(2)}% ${dC.toFixed(4)} ${targetHue.toFixed(2)})`;
 
