@@ -3,10 +3,9 @@ import { Resvg, initWasm } from "@resvg/resvg-wasm";
 import satori from "satori";
 import { getOgTemplate } from "$lib/og";
 import { read } from "$app/server";
-// Assuming this module is available via Vite
+import { getOgThemeColors } from "$lib/server/theme";
 import wasmModule from "@resvg/resvg-wasm/index_bg.wasm?module";
 
-// Initialize WASM
 let wasmInitialized = false;
 async function ensureWasm() {
   if (wasmInitialized) return;
@@ -22,7 +21,6 @@ async function ensureWasm() {
   }
 }
 
-// Import fonts as Vite URLs
 import interUrl from "$lib/fonts/Inter-ExtraBold.ttf";
 import monoUrl from "$lib/fonts/JetBrainsMono-Regular.ttf";
 
@@ -40,12 +38,15 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
       loadFont(monoUrl),
     ]);
 
+    const theme = getOgThemeColors();
+
     const svg = await satori(
       getOgTemplate({
         title: url.searchParams.get("title") ?? "ewancroft.uk",
         subtitle: url.searchParams.get("subtitle") ?? "software engineer",
         slug: url.searchParams.get("slug") ?? "/",
         type: url.searchParams.get("type"),
+        theme,
       }),
       {
         width: 1200,

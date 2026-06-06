@@ -7,16 +7,17 @@ export type OgEntry = {
   subtitle: string;
   slug: string;
   type?: string | null;
+  theme: {
+    bg: string;
+    fg: string;
+    accent: string;
+    typeFg: string;
+  };
 };
 
 // Satori uses a JSX-like object structure for defining the layout
 export const getOgTemplate = (entry: OgEntry) => {
-  const { title, subtitle, type } = entry;
-
-  // Dark mode design tokens
-  const BG = "#0a1306";
-  const FG = "#f1f6ee";
-  const ACCENT = "#64bb44";
+  const { title, subtitle, type, theme } = entry;
 
   const children = [];
 
@@ -27,7 +28,7 @@ export const getOgTemplate = (entry: OgEntry) => {
       props: {
         style: {
           fontSize: "20px",
-          color: ACCENT,
+          color: theme.typeFg,
           fontFamily: "JetBrains Mono",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
@@ -42,14 +43,18 @@ export const getOgTemplate = (entry: OgEntry) => {
     {
       type: "h1",
       props: {
-        style: { fontSize: "80px", fontWeight: 800, marginBottom: "20px" },
+        style: {
+          fontSize: "80px",
+          fontWeight: 800,
+          marginBottom: "20px",
+        },
         children: title,
       },
     },
     {
       type: "p",
       props: {
-        style: { fontSize: "40px", color: ACCENT },
+        style: { fontSize: "40px", color: theme.accent },
         children: subtitle,
       },
     },
@@ -60,6 +65,7 @@ export const getOgTemplate = (entry: OgEntry) => {
           marginTop: "auto",
           fontSize: "20px",
           fontFamily: "JetBrains Mono",
+          color: theme.fg,
         },
         children: "ewancroft.uk",
       },
@@ -74,10 +80,10 @@ export const getOgTemplate = (entry: OgEntry) => {
         flexDirection: "column",
         width: "100%",
         height: "100%",
-        backgroundColor: BG,
+        backgroundColor: theme.bg,
         padding: "80px",
         justifyContent: "center",
-        color: FG,
+        color: theme.fg,
       },
       children,
     },
