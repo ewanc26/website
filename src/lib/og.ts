@@ -1,5 +1,5 @@
 /**
- * Shared OG-image template.
+ * OG-image template using Satori-compatible structure.
  */
 
 export type OgEntry = {
@@ -8,28 +8,55 @@ export type OgEntry = {
   slug: string;
 };
 
-export function buildOgSvg(entry: OgEntry): string {
-  const { title, subtitle, slug } = entry;
+// Satori uses a JSX-like object structure for defining the layout
+export const getOgTemplate = (entry: OgEntry) => {
+  const { title, subtitle } = entry;
 
-  // Dark mode design tokens adapted to project
+  // Dark mode design tokens
   const BG = "#0a1306";
   const FG = "#f1f6ee";
   const ACCENT = "#64bb44";
 
-  return `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
-      <rect width="1200" height="630" fill="${BG}" />
-      
-      <text x="100" y="300" font-family="Inter" font-size="80" font-weight="800" fill="${FG}">${escape(title)}</text>
-      <text x="100" y="380" font-family="Inter" font-size="40" fill="${ACCENT}">${escape(subtitle)}</text>
-      
-      <text x="100" y="550" font-family="JetBrains Mono" font-size="20" fill="${FG}">ewancroft.uk</text>
-    </svg>`;
-}
-
-function escape(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
+  return {
+    type: "div",
+    props: {
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+        backgroundColor: BG,
+        padding: "80px",
+        justifyContent: "center",
+        color: FG,
+      },
+      children: [
+        {
+          type: "h1",
+          props: {
+            style: { fontSize: "80px", fontWeight: 800, marginBottom: "20px" },
+            children: title,
+          },
+        },
+        {
+          type: "p",
+          props: {
+            style: { fontSize: "40px", color: ACCENT },
+            children: subtitle,
+          },
+        },
+        {
+          type: "div",
+          props: {
+            style: {
+              marginTop: "auto",
+              fontSize: "20px",
+              fontFamily: "JetBrains Mono",
+            },
+            children: "ewancroft.uk",
+          },
+        },
+      ],
+    },
+  };
+};
