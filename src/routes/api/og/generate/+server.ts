@@ -2,25 +2,33 @@ import type { RequestHandler } from "./$types";
 import { Resvg } from "@resvg/resvg-js";
 import { baseline, getTargetHues } from "$lib/server/theme";
 import chroma from "chroma-js";
-import { readFileSync } from "fs";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// Cache fonts in memory
+let fontCache: Record<string, string> = {};
 
-// Load fonts at startup
-// The fonts have been moved to src/lib/assets/fonts to be bundled
-const loadFont = (relativePath: string) =>
-  readFileSync(
-    join(__dirname, `../../../lib/assets/fonts/${relativePath}`),
-  ).toString("base64");
+// Load fonts from public URL to avoid filesystem issues
+const fetchFont = async (url: string) => {
+  if (fontCache[url]) return fontCache[url];
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to fetch font: ${url}`);
+  const arrayBuffer = await response.arrayBuffer();
+  const base64 = Buffer.from(arrayBuffer).toString("base64");
+  fontCache[url] = base64;
+  return base64;
+};
 
-const interFont = loadFont("Inter-4.1/extras/ttf/Inter-ExtraBold.ttf");
-const monoFont = loadFont(
-  "JetBrainsMono-2.304/fonts/ttf/JetBrainsMono-Regular.ttf",
-);
+// Use public URLs (these will be served by the site itself or a CDN)
+const INTER_URL =
+  "https://ewancroft.uk/assets/fonts/Inter-4.1/extras/ttf/Inter-ExtraBold.ttf";
+const MONO_URL =
+  "https://ewancroft.uk/assets/fonts/JetBrainsMono-2.304/fonts/ttf/JetBrainsMono-Regular.ttf";
 
 export const GET: RequestHandler = async ({ url }) => {
+  const [interFont, monoFont] = await Promise.all([
+    fetchFont(INTER_URL),
+    fetchFont(MONO_URL),
+  ]);
+
   const title = url.searchParams.get("title") ?? "ewancroft.uk";
   const subtitle = url.searchParams.get("subtitle");
   const typeParam = url.searchParams.get("type") ?? "";
@@ -89,13 +97,37 @@ export const GET: RequestHandler = async ({ url }) => {
       </g>
 
       <!-- Content -->
-      ${typeParam && typeParam !== "TECHNICAL SPEC" ? `<text x="80" y="120" font-family="'JetBrains Mono', monospace" font-size="20" fill="${primary}" letter-spacing="0.1em" text-transform="uppercase">${escapeXml(typeParam)}</text>` : ""}
+      ${
+        typeParam && typeParam !== "TECHNICAL SPEC"
+          ? `<text x="80" y="120" font-family="'JetBrains Mono', monospace" font-size="20" fill="${primary}" letter-spacing="0.1em" text-transform="uppercase">${escapeXml(
+              typeParam,
+            )}</text>`
+          : ""
+      }
 
-      <text x="80" y="${typeParam && typeParam !== "TECHNICAL SPEC" ? "200" : "160"}" font-family="'Inter', sans-serif" font-size="${fontSize}" font-weight="800" fill="${text}" letter-spacing="-0.03em">${escapeXml(displayTitle)}</text>
+      <text x="80" y="${
+        typeParam && typeParam !== "TECHNICAL SPEC" ? "200" : "160"
+      }" font-family="'Inter', sans-serif" font-size="${fontSize}" font-weight="800" fill="${text}" letter-spacing="-0.03em">${escapeXml(
+        displayTitle,
+      )}</text>
       
-      ${subtitle ? `<text x="80" y="${typeParam && typeParam !== "TECHNICAL SPEC" ? "280" : "240"}" font-family="'Inter', sans-serif" font-size="40" font-weight="400" fill="${textMuted}">${escapeXml(subtitle)}</text>` : ""}
+      ${
+        subtitle
+          ? `<text x="80" y="${
+              typeParam && typeParam !== "TECHNICAL SPEC" ? "280" : "240"
+            }" font-family="'Inter', sans-serif" font-size="40" font-weight="400" fill="${textMuted}">${escapeXml(
+              subtitle,
+            )}</text>`
+          : ""
+      }
 
-      <rect x="80" y="${subtitle ? "320" : typeParam && typeParam !== "TECHNICAL SPEC" ? "240" : "200"}" width="100" height="4" fill="${primary}" />
+      <rect x="80" y="${
+        subtitle
+          ? "320"
+          : typeParam && typeParam !== "TECHNICAL SPEC"
+            ? "240"
+            : "200"
+      }" width="100" height="4" fill="${primary}" />
 
       <!-- Footer info -->
       <text x="80" y="550" font-family="'JetBrains Mono', monospace" font-size="20" fill="${textMuted}">ewancroft.uk</text>
