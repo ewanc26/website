@@ -1,8 +1,26 @@
 import type { RequestHandler } from "./$types";
-import { Resvg } from "@resvg/resvg-js";
+import { Resvg, initWasm } from "@resvg/resvg-wasm";
 import satori from "satori";
 import { getOgTemplate } from "$lib/og";
 import { read } from "$app/server";
+// Assuming this module is available via Vite
+import wasmModule from "@resvg/resvg-wasm/index_bg.wasm?module";
+
+// Initialize WASM
+let wasmInitialized = false;
+async function ensureWasm() {
+  if (wasmInitialized) return;
+  try {
+    await initWasm(wasmModule as unknown as WebAssembly.Module);
+    wasmInitialized = true;
+  } catch (err: any) {
+    if (err.message?.includes("Already initialized")) {
+      wasmInitialized = true;
+      return;
+    }
+    throw err;
+  }
+}
 
 // Import fonts as Vite URLs
 import interUrl from "$lib/fonts/Inter-ExtraBold.ttf";
@@ -15,6 +33,8 @@ const loadFont = async (url: string) => {
 
 export const GET: RequestHandler = async ({ url, setHeaders }) => {
   try {
+    await ensureWasm();
+
     const [interFont, monoFont] = await Promise.all([
       loadFont(interUrl),
       loadFont(monoUrl),
