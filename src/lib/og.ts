@@ -43,11 +43,7 @@ export const getOgTemplate = (entry: OgEntry) => {
     {
       type: "h1",
       props: {
-        style: {
-          fontSize: "80px",
-          fontWeight: 800,
-          marginBottom: "20px",
-        },
+        style: { fontSize: "80px", fontWeight: 800, marginBottom: "20px" },
         children: title,
       },
     },
@@ -70,6 +66,34 @@ export const getOgTemplate = (entry: OgEntry) => {
         children: "ewancroft.uk",
       },
     },
+    // Pentacle Icon
+    {
+      type: "svg",
+      props: {
+        width: "100",
+        height: "100",
+        viewBox: "0 0 12 12",
+        style: {
+          position: "absolute",
+          bottom: "80px",
+          right: "80px",
+          opacity: "0.1",
+        },
+        children: [
+          {
+            type: "path",
+            props: {
+              d: "M11 6A5 5 0 1 0 1 6a5 5 0 0 0 10 0ZM6 1l2.936 9.048-7.692-5.595h9.512l-7.692 5.595Z",
+              stroke: theme.accent,
+              fill: "none",
+              strokeWidth: "0.6",
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+            },
+          },
+        ],
+      },
+    },
   );
 
   return {
@@ -84,6 +108,7 @@ export const getOgTemplate = (entry: OgEntry) => {
         padding: "80px",
         justifyContent: "center",
         color: theme.fg,
+        position: "relative",
       },
       children,
     },
