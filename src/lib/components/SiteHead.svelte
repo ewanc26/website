@@ -27,13 +27,13 @@
         author?: string;
     } = $props();
 
-    const fullTitle = $derived(title ? `${title} — ${SITE.title}` : SITE.title);
+    const fullTitle = $derived(title ? `${title} — ${SITE.title}` : SITE.ogTitle);
     const fullDescription = $derived(description ?? SITE.description);
-    const canonicalUrl = $derived(`${page.url.origin}${page.url.pathname}`);
+    const canonicalUrl = $derived(new URL(page.url.pathname, page.url.origin).href);
     
     // OG Image generation with fallback to absolute static asset if needed
-    const ogImage = $derived(image ?? `${page.url.origin}/api/og/generate?title=${encodeURIComponent(title ?? SITE.title)}${ogType ? `&type=${encodeURIComponent(ogType)}` : ''}${description ? `&subtitle=${encodeURIComponent(description)}` : ''}`);
-    const ogImageAlt = $derived(title ? `OpenGraph image for ${title}` : `OpenGraph image for ${SITE.title}`);
+    const ogImage = $derived(image ?? new URL(`/api/og/generate?title=${encodeURIComponent(title ?? SITE.ogTitle)}${ogType ? `&type=${encodeURIComponent(ogType)}` : ''}${description ? `&subtitle=${encodeURIComponent(description)}` : ''}`, page.url.origin).href);
+    const ogImageAlt = $derived(title ? `OpenGraph image for ${title}` : `OpenGraph image for ${SITE.ogTitle}`);
 </script>
 
 <svelte:head>
