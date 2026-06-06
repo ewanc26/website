@@ -1,39 +1,22 @@
 import type { RequestHandler } from "./$types";
-import { Resvg, initWasm } from "@resvg/resvg-wasm";
+import { Resvg } from "@resvg/resvg-js";
 import { buildOgSvg } from "$lib/og";
 import { read } from "$app/server";
-import wasmModule from "@resvg/resvg-wasm/index_bg.wasm?module";
 
-let wasmInitialized = false;
-async function ensureWasm() {
-  if (wasmInitialized) return;
-  try {
-    await initWasm(wasmModule as unknown as WebAssembly.Module);
-    wasmInitialized = true;
-  } catch (err: any) {
-    if (err.message?.includes("Already initialized")) {
-      wasmInitialized = true;
-      return;
-    }
-    throw err;
-  }
-}
+// Import fonts as Vite URLs
+import interUrl from "$lib/fonts/Inter-ExtraBold.ttf";
+import monoUrl from "$lib/fonts/JetBrainsMono-Regular.ttf";
 
-const fetchFont = async (url: string) => {
+const loadFont = async (url: string) => {
   const response = await read(url);
   return await response.arrayBuffer();
 };
 
-import interUrl from "$lib/fonts/Inter-ExtraBold.ttf";
-import monoUrl from "$lib/fonts/JetBrainsMono-Regular.ttf";
-
 export const GET: RequestHandler = async ({ url, setHeaders }) => {
   try {
-    await ensureWasm();
-
     const [interFont, monoFont] = await Promise.all([
-      fetchFont(interUrl),
-      fetchFont(monoUrl),
+      loadFont(interUrl),
+      loadFont(monoUrl),
     ]);
 
     const svg = buildOgSvg({
@@ -53,18 +36,20 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
 
     const pngData = resvg.render();
 
-    // Cache control: no-store in dev, long-lived in production
-    const isDev = import.meta.env.DEV;
     setHeaders({
       "Content-Type": "image/png",
-      "Cache-Control": isDev
+      "Cache-Control": import.meta.env.DEV
         ? "no-store"
         : "public, max-age=86400, s-maxage=31536000, stale-while-revalidate",
     });
 
     return new Response(pngData.asPng());
   } catch (e) {
-    console.error("OG Generation Error:", e);
+    if (e instanceof Error) {
+      console.error("OG Generation Error:", e.message, e.stack);
+    } else {
+      console.error("OG Generation Error:", e);
+    }
     return new Response("Error generating image", { status: 500 });
   }
 };
