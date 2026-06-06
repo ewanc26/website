@@ -44,7 +44,7 @@
     line-height: 1.2;
     margin-top: var(--space-lg);
     margin-bottom: var(--space-sm);
-    scroll-margin-top: var(--space-lg);
+    scroll-margin-top: var(--space-2xl);
   }
 
   h1 {
