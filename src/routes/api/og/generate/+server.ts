@@ -1,21 +1,28 @@
 import type { RequestHandler } from "./$types";
 import { Resvg } from "@resvg/resvg-js";
 import { buildOgSvg } from "$lib/og";
+import { readFileSync } from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-// Pre-load fonts by fetching them at build time / startup (serverless)
-// This is reliable because it uses a fully qualified URL.
-let fontCache: Record<string, ArrayBuffer> = {};
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const fetchFont = async (url: string) => {
-  if (fontCache[url]) return fontCache[url];
-  const response = await fetch(url);
-  if (!response.ok)
-    throw new Error(
-      `Failed to fetch font: ${url} (status: ${response.status})`,
-    );
-  const arrayBuffer = await response.arrayBuffer();
-  fontCache[url] = arrayBuffer;
-  return arrayBuffer;
+// Load fonts with fallback to local file
+const loadFont = async (url: string, localPath: string) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const buffer = await response.arrayBuffer();
+    if (buffer.byteLength === 0) throw new Error("Empty buffer");
+    console.log(`Successfully fetched font from: ${url}`);
+    return buffer;
+  } catch (e) {
+    console.error(`Failed to fetch font from ${url}:`, e);
+    // Fallback
+    const p = path.resolve(__dirname, `../../../lib/assets/fonts/${localPath}`);
+    console.log(`Attempting fallback read from: ${p}`);
+    return readFileSync(p).buffer;
+  }
 };
 
 const INTER_URL =
@@ -26,8 +33,11 @@ const MONO_URL =
 export const GET: RequestHandler = async ({ url }) => {
   try {
     const [interFont, monoFont] = await Promise.all([
-      fetchFont(INTER_URL),
-      fetchFont(MONO_URL),
+      loadFont(INTER_URL, "Inter-4.1/extras/ttf/Inter-ExtraBold.ttf"),
+      loadFont(
+        MONO_URL,
+        "JetBrainsMono-2.304/fonts/ttf/JetBrainsMono-Regular.ttf",
+      ),
     ]);
 
     const title = url.searchParams.get("title") ?? "ewancroft.uk";
@@ -36,11 +46,10 @@ export const GET: RequestHandler = async ({ url }) => {
 
     const svg = buildOgSvg({ title, subtitle, slug });
 
-    // Important: Resvg needs to know about the font families
     const resvg = new Resvg(svg, {
       font: {
         fontBuffers: [interFont, monoFont],
-        loadSystemFonts: false, // Don't rely on system fonts
+        defaultFontFamily: "Inter",
       },
       fitTo: { mode: "width", value: 1200 },
     });
