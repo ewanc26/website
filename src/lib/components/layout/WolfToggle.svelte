@@ -1,18 +1,14 @@
 <script lang="ts">
 	import { wolfMode } from '$lib/stores/wolfMode';
-
-	function toggleWolfMode() {
-		wolfMode.toggle();
-	}
 </script>
 
 <button
-	onclick={toggleWolfMode}
+	onclick={() => wolfMode.toggle()}
 	class="footer-link"
-	aria-label={wolfMode.value ? 'Disable wolf mode' : 'Enable wolf mode'}
+	aria-label={$wolfMode ? 'Disable wolf mode' : 'Enable wolf mode'}
 	type="button"
 >
-	{wolfMode.value ? 'normal' : 'awoo'}
+	{$wolfMode ? 'normal' : 'awoo'}
 </button>
 
 <style>
