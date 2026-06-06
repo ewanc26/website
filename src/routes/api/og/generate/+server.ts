@@ -45,6 +45,7 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
         title: url.searchParams.get("title") ?? "ewancroft.uk",
         subtitle: url.searchParams.get("subtitle") ?? "software engineer",
         slug: url.searchParams.get("slug") ?? "/",
+        type: url.searchParams.get("type"),
       }),
       {
         width: 1200,
