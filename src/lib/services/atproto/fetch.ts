@@ -1,4 +1,5 @@
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { mapWithConcurrency } from "$lib/utils/promise";
 import {
   fetchKibunStatus as _fetchKibunStatus,
   fetchBlogPosts as _fetchBlogPosts,
@@ -74,8 +75,9 @@ export async function fetchSubscriptions(
     cursor = resp.data.cursor;
   } while (cursor);
 
-  const resolved = await Promise.allSettled(
-    allRecords.map(async (record): Promise<SubscriptionPublication> => {
+  const resolved = await mapWithConcurrency(
+    allRecords,
+    async (record): Promise<SubscriptionPublication> => {
       const pubUri = record.value.publication;
       const parts = pubUri.replace("at://", "").split("/");
       const did = parts[0];
@@ -117,7 +119,8 @@ export async function fetchSubscriptions(
         authorHandle,
         authorDisplayName,
       };
-    }),
+    },
+    5,
   );
 
   const data = resolved
@@ -167,8 +170,9 @@ export async function fetchRecommendations(
     cursor = resp.data.cursor;
   } while (cursor);
 
-  const resolved = await Promise.allSettled(
-    allRecords.map(async (record): Promise<RecommendationItem> => {
+  const resolved = await mapWithConcurrency(
+    allRecords,
+    async (record): Promise<RecommendationItem> => {
       const docUri = record.value.document;
       const parts = docUri.replace("at://", "").split("/");
       const did = parts[0];
@@ -198,7 +202,8 @@ export async function fetchRecommendations(
         authorDid: did,
         authorHandle,
       };
-    }),
+    },
+    5,
   );
 
   const data = resolved
@@ -241,8 +246,9 @@ export async function fetchComments(
 
   if (!backlinks.records?.length) return [];
 
-  const comments = await Promise.allSettled(
-    backlinks.records.map(async (ref: { did: string; rkey: string }) => {
+  const comments = await mapWithConcurrency(
+    backlinks.records,
+    async (ref: { did: string; rkey: string }) => {
       const recordRes = await fetchFn(
         `${SLINGSHOT}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(ref.did)}&collection=pub.leaflet.comment&rkey=${ref.rkey}`,
       );
@@ -282,8 +288,9 @@ export async function fetchComments(
         authorHandle,
         authorDisplayName,
         reply: value.reply,
-      } satisfies LeafletComment;
-    }),
+      } as LeafletComment;
+    },
+    5,
   );
 
   const data = comments

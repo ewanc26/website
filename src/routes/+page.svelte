@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import SiteHead from '$lib/components/SiteHead.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
@@ -10,6 +11,25 @@
   let { data } = $props();
 
   let profile = $derived(data.profile as ProfileData);
+
+  let kibunStatus = $state<any>(null);
+  let musicStatus = $state<any>(null);
+  let posts = $state<any>(null);
+  let sifaProjects = $state<any>(null);
+  let publications = $state<any>(null);
+  let links = $state<any>(null);
+
+  onMount(async () => {
+    // Fetch remaining data in parallel
+    fetch('/api/home').then(r => r.json()).then(d => {
+        kibunStatus = d.kibunStatus;
+        musicStatus = d.musicStatus;
+        posts = d.posts;
+        sifaProjects = d.sifaProjects;
+        publications = d.publications;
+        links = d.links;
+    }).catch(e => console.error("Failed to load home data", e));
+  });
 
   function getBlogUrl(post: any) {
     const date = new Date(post.createdAt);
@@ -35,48 +55,30 @@
     </div>
   </section>
 
-  {#await data.kibunStatus}
-    <LoadingSkeleton />
-  {:then kibunStatus}
-    {#await data.musicStatus}
-      <LoadingSkeleton />
-    {:then musicStatus}
-      <!-- Status row -->
-      <div class="status-row">
-        {#if kibunStatus}
-          <div class="status-chip">
-            <span class="status-emoji">{kibunStatus.emoji}</span>
-            <span class="status-text">{kibunStatus.text}</span>
-          </div>
-        {/if}
-        {#if musicStatus}
-          <div class="status-chip">
-            <Music size={14} strokeWidth={2} class="muted-icon" />
-            <span class="status-text">{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(', ')}</span>
-          </div>
-        {/if}
-      </div>
-    {:catch}
+  <!-- Status row -->
+  {#if kibunStatus !== null || musicStatus !== null}
+    <div class="status-row">
       {#if kibunStatus}
-        <div class="status-row">
-          <div class="status-chip">
-            <span class="status-emoji">{kibunStatus.emoji}</span>
-            <span class="status-text">{kibunStatus.text}</span>
-          </div>
+        <div class="status-chip">
+          <span class="status-emoji">{kibunStatus.emoji}</span>
+          <span class="status-text">{kibunStatus.text}</span>
         </div>
       {/if}
-    {/await}
-  {:catch}
-    <!-- status unavailable -->
-  {/await}
+      {#if musicStatus}
+        <div class="status-chip">
+          <Music size={14} strokeWidth={2} class="muted-icon" />
+          <span class="status-text">{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(', ')}</span>
+        </div>
+      {/if}
+    </div>
+  {/if}
 
   <!-- Writing -->
   <section class="home-section">
     <h2 class="section-heading">Blog</h2>
-    {#await data.posts}
+    {#if posts === null}
       <LoadingSkeleton count={3} />
-    {:then posts}
-      {#if Array.isArray(posts) && posts.length > 0}
+    {:else if Array.isArray(posts) && posts.length > 0}
         <ul class="post-list">
           {#each posts.filter(p => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION).slice(0, 5) as post}
             <li>
@@ -88,30 +90,22 @@
           {/each}
         </ul>
         <a href="/blog" class="section-link">All posts <ArrowRight size={14} strokeWidth={2} /></a>
-      {:else}
+    {:else}
         <EmptyState
           title="Blog unavailable"
           description="Unable to load blog posts at the moment. The publishing service may be temporarily unavailable. Please try again later."
         />
-      {/if}
-    {:catch}
-      <EmptyState
-        title="Blog unavailable"
-        description="Unable to load blog posts at the moment. The publishing service may be temporarily unavailable. Please try again later."
-      />
-    {/await}
-
+    {/if}
   </section>
 
   <!-- Projects -->
   <section class="home-section">
     <h2 class="section-heading">Projects</h2>
-    {#await data.sifaProjects}
+    {#if sifaProjects === null}
       <LoadingSkeleton count={2} />
-    {:then projects}
-      {#if projects && projects.length > 0}
+    {:else if sifaProjects && sifaProjects.length > 0}
         <div class="project-grid">
-          {#each projects.sort(() => Math.random() - 0.5).slice(0, 6) as project}
+          {#each sifaProjects.sort(() => Math.random() - 0.5).slice(0, 6) as project}
             <div class="project-card">
               <strong class="project-name">{project.name}</strong>
               {#if project.description}
@@ -126,29 +120,22 @@
           {/each}
         </div>
         <a href="https://docs.ewancroft.uk" target="_blank" rel="noopener" class="section-link">All projects <ArrowRight size={14} strokeWidth={2} /></a>
-      {:else}
+    {:else}
         <EmptyState
           title="Projects unavailable"
           description="Unable to load project data at the moment. The service may be temporarily unavailable."
         />
-      {/if}
-    {:catch}
-      <EmptyState
-        title="Projects unavailable"
-        description="Unable to load project data at the moment. The service may be temporarily unavailable."
-      />
-    {/await}
+    {/if}
   </section>
 
   <!-- Publications -->
   <section class="home-section">
     <h2 class="section-heading">Publications</h2>
-    {#await data.publications}
+    {#if publications === null}
       <LoadingSkeleton count={2} />
-    {:then publications}
-      {#if publications && publications.length > 0}
+    {:else if publications && publications.length > 0}
         <ul class="post-list">
-          {#each publications.filter(p => p.rkey !== PUBLIC_LEAFLET_BLOG_PUBLICATION) as pub}
+          {#each publications.filter((p: any) => p.rkey !== PUBLIC_LEAFLET_BLOG_PUBLICATION) as pub}
             <li>
               <a href={pub.url} target="_blank" rel="noopener" class="post-row">
                 <span class="post-title">{pub.name}</span>
@@ -157,27 +144,20 @@
             </li>
           {/each}
         </ul>
-      {:else}
+    {:else}
         <EmptyState
           title="Publications unavailable"
           description="Unable to load publications at the moment. Please try again later."
         />
-      {/if}
-    {:catch}
-      <EmptyState
-        title="Publications unavailable"
-        description="Unable to load publications at the moment. Please try again later."
-      />
-    {/await}
+    {/if}
   </section>
 
   <!-- Links -->
   <section class="home-section">
     <h2 class="section-heading">Elsewhere</h2>
-    {#await data.links}
+    {#if links === null}
       <LoadingSkeleton count={2} />
-    {:then links}
-      {#if links && links.cards && links.cards.length > 0}
+    {:else if links && links.cards && links.cards.length > 0}
         <div class="link-grid">
           {#each links.cards.slice(0, 8) as link}
             <a href={link.url} target="_blank" rel="noopener" class="link-chip">
@@ -189,17 +169,11 @@
             </a>
           {/each}
         </div>
-      {:else}
+    {:else}
         <EmptyState
           title="Links unavailable"
           description="Unable to load links at the moment. Please try again later."
         />
-      {/if}
-    {:catch}
-      <EmptyState
-        title="Links unavailable"
-        description="Unable to load links at the moment. Please try again later."
-      />
-    {/await}
+    {/if}
   </section>
 </main>
