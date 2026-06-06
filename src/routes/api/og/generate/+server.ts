@@ -1,12 +1,20 @@
 import type { RequestHandler } from "./$types";
 import { Resvg } from "@resvg/resvg-js";
-import {
-  getCurrentPrimaryShade,
-  baseline,
-  getHueRotation,
-  getTargetHues,
-} from "$lib/server/theme";
+import { baseline, getTargetHues } from "$lib/server/theme";
 import chroma from "chroma-js";
+import { readFileSync } from "fs";
+import path from "path";
+
+// Load fonts at startup
+const loadFont = (relativePath: string) =>
+  readFileSync(path.resolve(`./static/assets/fonts/${relativePath}`)).toString(
+    "base64",
+  );
+
+const interFont = loadFont("Inter-4.1/extras/ttf/Inter-ExtraBold.ttf");
+const monoFont = loadFont(
+  "JetBrainsMono-2.304/fonts/ttf/JetBrainsMono-Regular.ttf",
+);
 
 export const GET: RequestHandler = async ({ url }) => {
   const title = url.searchParams.get("title") ?? "ewancroft.uk";
@@ -53,13 +61,11 @@ export const GET: RequestHandler = async ({ url }) => {
         <style>
           @font-face {
             font-family: 'Inter';
-            font-style: normal;
-            font-weight: 800;
-            src: local('Inter-ExtraBold');
+            src: url('data:font/ttf;base64,${interFont}');
           }
           @font-face {
             font-family: 'JetBrains Mono';
-            src: local('JetBrains Mono');
+            src: url('data:font/ttf;base64,${monoFont}');
           }
         </style>
       </defs>
