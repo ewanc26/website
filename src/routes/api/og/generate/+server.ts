@@ -7,7 +7,7 @@ import path from "path";
 
 // Load fonts at startup
 const loadFont = (relativePath: string) =>
-  readFileSync(path.resolve(`./assets/fonts/${relativePath}`)).toString(
+  readFileSync(path.resolve(`./static/assets/fonts/${relativePath}`)).toString(
     "base64",
   );
 
