@@ -11,7 +11,9 @@ async function ensureWasm() {
   if (wasmInitialized) return;
   try {
     if (typeof wasmModule === "string") {
-      const response = await read(wasmModule);
+      // Strip any query parameters (like ?module or ?url) that Vite might append
+      const assetPath = wasmModule.split("?")[0];
+      const response = await read(assetPath);
       await initWasm(await response.arrayBuffer());
     } else {
       await initWasm(wasmModule as unknown as WebAssembly.Module);
@@ -22,7 +24,7 @@ async function ensureWasm() {
       wasmInitialized = true;
       return;
     }
-    console.error("Failed to initialize WASM:", err);
+    console.error("Failed to initialize WASM at path:", wasmModule, err);
     throw err;
   }
 }
