@@ -18,6 +18,7 @@
 <SiteHead
     title={data.post.title}
     description={data.post.metaDescription}
+    ogSubtitle={data.post.description}
     type="article"
     ogType="BLOG"
     publishedTime={data.post.createdAt}

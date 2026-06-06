@@ -193,6 +193,7 @@
 <SiteHead
   title="Design"
   description="The full design language, asset reference, and component primitives for ewancroft.uk."
+  ogSubtitle="Design system and brand kit."
   ogType="DESIGN"
 />
 

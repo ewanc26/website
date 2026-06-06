@@ -33,6 +33,7 @@
 <SiteHead
   title="Support"
   description="Support my open-source work via Ko-fi, GitHub Sponsors, or cryptocurrency."
+  ogSubtitle="Ko-fi, GitHub Sponsors, and cryptocurrency."
   ogType="SUPPORT"
 />
 

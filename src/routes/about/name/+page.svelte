@@ -15,6 +15,7 @@
 <SiteHead
 	title={data.post.title}
 	description={data.post.metaDescription}
+	ogSubtitle={data.post.description}
 	ogType="ABOUT"
 />
 
