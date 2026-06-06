@@ -5,6 +5,7 @@
     let {
         title,
         description,
+        ogSubtitle,
         image,
         ogType,
         type = 'website',
@@ -14,6 +15,12 @@
     }: {
         title?: string;
         description?: string;
+        /**
+         * Short subtitle shown in the generated OG image.
+         * Prefer this over `description` for OG images — it should be ≤60 chars.
+         * Falls back to a truncated `description` if omitted.
+         */
+        ogSubtitle?: string;
         image?: string;
         /** Label shown in the generated OG image (e.g. 'BLOG', 'ABOUT'). */
         ogType?: string;
@@ -30,9 +37,19 @@
     const fullTitle = $derived(title ? `${title} — ${SITE.title}` : SITE.ogTitle);
     const fullDescription = $derived(description ?? SITE.description);
     const canonicalUrl = $derived(new URL(page.url.pathname, page.url.origin).href);
+
+    // Resolve the subtitle for the OG image: prefer explicit ogSubtitle, then
+    // fall back to description — clamped to 150 chars (~3 lines at 40px).
+    const ogImageSubtitle = $derived.by(() => {
+        const raw = ogSubtitle ?? description;
+        if (!raw) return undefined;
+        return raw.length > 150 ? raw.slice(0, 147) + '…' : raw;
+    });
     
     // OG Image generation with fallback to absolute static asset if needed
-    const ogImage = $derived(image ?? new URL(`/api/og/generate?title=${encodeURIComponent(title ?? SITE.ogTitle)}${ogType ? `&type=${encodeURIComponent(ogType)}` : ''}${description ? `&subtitle=${encodeURIComponent(description)}` : ''}`, page.url.origin).href);
+    // Use the short SITE.title ("Ewan Croft") as the image fallback, not the
+    // long ogTitle — the OG image renders at 80px and needs to stay concise.
+    const ogImage = $derived(image ?? new URL(`/api/og/generate?title=${encodeURIComponent(title ?? SITE.title)}${ogType ? `&type=${encodeURIComponent(ogType)}` : ''}${ogImageSubtitle ? `&subtitle=${encodeURIComponent(ogImageSubtitle)}` : ''}`, page.url.origin).href);
     const ogImageAlt = $derived(title ? `OpenGraph image for ${title}` : `OpenGraph image for ${SITE.ogTitle}`);
 </script>
 

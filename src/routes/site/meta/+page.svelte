@@ -64,7 +64,7 @@
 	}
 </script>
 
-<SiteHead title="Site Meta" description="Information about this website, its technology, and the people who made it possible." ogType="SITE_META" />
+<SiteHead title="Site Meta" description="Information about this website, its technology, and the people who made it possible." ogSubtitle="Tech stack, credits, and open-source info." ogType="SITE_META" />
 
 <main class="shell-wide">
 	<header class="page-hd spec-header">
