@@ -1,6 +1,15 @@
 import type { RequestHandler } from "./$types";
-import { Resvg } from "@resvg/resvg-js";
+import { Resvg, initWasm } from "@resvg/resvg-wasm";
 import { buildOgSvg } from "$lib/og";
+// Note: This import assumes Vite handles WASM imports correctly
+import wasmModule from "@resvg/resvg-wasm/index_bg.wasm?module";
+
+let wasmInitialized = false;
+async function ensureWasm() {
+  if (wasmInitialized) return;
+  await initWasm(wasmModule as unknown as WebAssembly.Module);
+  wasmInitialized = true;
+}
 
 const fetchFont = async (url: string) => {
   const response = await fetch(url);
@@ -15,6 +24,8 @@ const MONO_URL =
 
 export const GET: RequestHandler = async ({ url }) => {
   try {
+    await ensureWasm();
+
     const [interFont, monoFont] = await Promise.all([
       fetchFont(INTER_URL),
       fetchFont(MONO_URL),
@@ -25,8 +36,6 @@ export const GET: RequestHandler = async ({ url }) => {
       subtitle: url.searchParams.get("subtitle") ?? "software engineer",
       slug: url.searchParams.get("slug") ?? "/",
     });
-
-    console.log("SVG Length:", svg.length);
 
     const resvg = new Resvg(svg, {
       font: {
@@ -41,7 +50,7 @@ export const GET: RequestHandler = async ({ url }) => {
       headers: { "Content-Type": "image/png" },
     });
   } catch (e) {
-    console.error("Error:", e);
+    console.error("OG Generation Error:", e);
     return new Response("Error", { status: 500 });
   }
 };

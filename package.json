@@ -14,6 +14,7 @@
   "devDependencies": {
     "@lucide/svelte": "^1.17.0",
     "@resvg/resvg-js": "^2.6.2",
+    "@resvg/resvg-wasm": "^2.6.2",
     "@sveltejs/adapter-auto": "^7.0.1",
     "@sveltejs/adapter-vercel": "^6.3.3",
     "@sveltejs/kit": "^2.57.0",
