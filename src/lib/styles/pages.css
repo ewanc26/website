@@ -322,6 +322,16 @@
     min-width: 0;
   }
 
+  .id-link {
+    color: var(--color-primary-500);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .id-link:hover {
+    text-decoration: underline;
+  }
+
   .id-code {
     font-family: var(--font-mono);
     font-size: var(--text-xs);

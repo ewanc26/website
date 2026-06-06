@@ -270,6 +270,8 @@
           <dd><code class="id-code">{profile.handle}</code></dd>
           <dt>PDS</dt>
           <dd><code class="id-code">eurosky.social</code></dd>
+          <dt>Name</dt>
+          <dd><a href="/about/name" class="id-link">About my name &rarr;</a></dd>
         </dl>
       </section>
     </aside>
