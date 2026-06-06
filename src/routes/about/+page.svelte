@@ -2,7 +2,7 @@
   import SiteHead from '$lib/components/SiteHead.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
-  import { ExternalLink } from '@lucide/svelte';
+  import { ExternalLink, ArrowRight } from '@lucide/svelte';
   import type {
     ProfileData,
     SifaSkill,
@@ -271,7 +271,7 @@
           <dt>PDS</dt>
           <dd><code class="id-code">eurosky.social</code></dd>
           <dt>Name</dt>
-          <dd><a href="/about/name" class="id-link">About my name &rarr;</a></dd>
+          <dd><a href="/about/name" class="id-link">About my name <ArrowRight size={14} /></a></dd>
         </dl>
       </section>
     </aside>
