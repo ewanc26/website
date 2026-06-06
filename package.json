@@ -44,6 +44,7 @@
     "remark-gfm": "^4.0.1",
     "remark-html": "^16.0.1",
     "remark-rehype": "^11.1.2",
+    "satori": "^0.26.0",
     "unified": "^11.0.5"
   }
 }
