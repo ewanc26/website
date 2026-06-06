@@ -3,7 +3,12 @@
 Personal site for Anglo-Scottish pagan, poet, and programmer Ewan Croft.
 
 ## Design
-The site's visual identity is built on technical integrity, using an OKLCH-based colour system (green-tinted neutrals at 150°) and a modular 4pt spacing scale. Decorative elements feature traditional pagan symbolism (pentacle and triskele).
+The site's visual identity is built on technical integrity, using a dynamic OKLCH-based colour system. The theme interpolates between multiple seasonal hues associated with the eight Sabbats of the Wheel of the Year (e.g., Red and Gold for Yule). Neutrals are tinted toward the current primary brand hue. It uses a modular 4pt spacing scale and Variable Inter typography. Decorative elements feature traditional pagan symbolism (pentacle and triskele).
+
+## Technical Features
+- **Dynamic Theme Engine**: Real-time hue interpolation based on Sabbat cycles.
+- **OpenGraph Generator**: Dynamic 1200x630 PNG image generation at `/api/og/generate`.
+- **ATProto Integration**: Blog and status updates powered by the AT Protocol (Bluesky).
 
 ## Pages
 - [About](/about)
@@ -12,4 +17,4 @@ The site's visual identity is built on technical integrity, using an OKLCH-based
 - [Support](/support)
 - [Subscriptions](/subscriptions)
 - [Site Meta](/site/meta)
-- [Brand Kit](/site/brand)
+- [Design Spec](/site/design)
