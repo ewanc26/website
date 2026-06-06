@@ -2,6 +2,9 @@ import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { fetchBlogPosts } from "$lib/services/atproto/fetch";
 import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
+import type { Config } from "@sveltejs/adapter-vercel";
+
+export const config: Config = { maxDuration: 30 };
 
 export const GET: RequestHandler = async ({ url }) => {
   const offset = Math.max(
@@ -32,8 +35,12 @@ export const GET: RequestHandler = async ({ url }) => {
       tags: tags || [],
     }));
 
-  return json({
-    posts: page,
-    total: publicationPosts.length,
-  });
+  return json(
+    { posts: page, total: publicationPosts.length },
+    {
+      headers: {
+        "Cache-Control": "public, s-maxage=120, stale-while-revalidate=300",
+      },
+    },
+  );
 };

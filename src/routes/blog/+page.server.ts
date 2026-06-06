@@ -1,4 +1,5 @@
 import type { PageServerLoad } from "./$types";
+import type { Config } from "@sveltejs/adapter-vercel";
 import { fetchBlogPosts, fetchPublications } from "@ewanc26/atproto";
 import {
   PUBLIC_ATPROTO_DID,
@@ -7,7 +8,12 @@ import {
 
 const PAGE_SIZE = 20;
 
-export const load: PageServerLoad = async ({ fetch }) => {
+export const config: Config = { maxDuration: 30 };
+
+export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
+  setHeaders({
+    "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+  });
   const [{ posts }, { publications }] = await Promise.all([
     fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ posts: [] })),
     fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
