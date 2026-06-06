@@ -1,6 +1,9 @@
 <script lang="ts">
+    import SiteHead from '$lib/components/SiteHead.svelte';
     let { data } = $props();
 </script>
+
+<SiteHead title={data.project.title} ogType="PROJECT" />
 
 <main class="shell-narrow rkey-page">
     <header class="page-hd rkey-hd">
