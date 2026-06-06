@@ -216,9 +216,9 @@ export function getOgThemeColors() {
   };
 
   return {
-    bg: getShade("background", "950", primaryHue),
-    fg: getShade("text", "50", primaryHue),
-    accent: getShade("primary", "400", primaryHue),
+    bg: getShade("background", "50", primaryHue),
+    fg: getShade("text", "950", primaryHue),
+    accent: getShade("primary", "500", primaryHue),
     typeFg: getShade("accent", "500", accentHue),
   };
 }
