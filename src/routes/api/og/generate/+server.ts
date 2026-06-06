@@ -4,12 +4,12 @@ import {
   getCurrentPrimaryShade,
   baseline,
   getHueRotation,
-  getTargetHue,
+  getTargetHues,
 } from "$lib/server/theme";
 import chroma from "chroma-js";
 
 export const GET: RequestHandler = async ({ url }) => {
-  const title = url.searchParams.get("title") ?? "ewan croft";
+  const title = url.searchParams.get("title") ?? "ewancroft.uk";
   const subtitle = url.searchParams.get("subtitle");
   const typeParam = url.searchParams.get("type") ?? "";
 
@@ -24,13 +24,13 @@ export const GET: RequestHandler = async ({ url }) => {
     title.length > maxChars ? title.slice(0, maxChars - 1) + "…" : title;
 
   const now = new Date();
-  const targetHue = getTargetHue(now);
+  const [primaryHue] = getTargetHues(now);
 
   const getSeasonalColor = (scale: keyof typeof baseline, step: number) => {
     const data = (baseline[scale] as any)[step];
     // Force dark mode values for OG images (50 is dark, 950 is light)
     const [l, c] = data.dark;
-    return chroma.oklch(l, c, targetHue).hex();
+    return chroma.oklch(l, c, primaryHue).hex();
   };
 
   // Colours based on site theme (forced dark mode)
@@ -41,7 +41,9 @@ export const GET: RequestHandler = async ({ url }) => {
 
   // Use dark mode values explicitly for primary and text
   const primaryData = baseline.primary[500].dark;
-  const primary = chroma.oklch(primaryData[0], primaryData[1], targetHue).hex();
+  const primary = chroma
+    .oklch(primaryData[0], primaryData[1], primaryHue)
+    .hex();
   const text = getSeasonalColor("text", 950);
   const textMuted = getSeasonalColor("text", 700);
 
