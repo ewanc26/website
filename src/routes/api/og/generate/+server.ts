@@ -1,23 +1,24 @@
 import type { RequestHandler } from "./$types";
 import { Resvg } from "@resvg/resvg-js";
 import { buildOgSvg } from "$lib/og";
+import { read } from "$app/server";
 
-const fetchFont = async (url: string) => {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+// 1. Import fonts as Vite URLs.
+// This forces Vercel to include them in the serverless bundle, avoiding ENOENT.
+import interUrl from "$lib/fonts/Inter-ExtraBold.ttf";
+import monoUrl from "$lib/fonts/JetBrainsMono-Regular.ttf";
+
+// Helper to reliably load the asset buffer via SvelteKit
+const loadFont = async (url: string) => {
+  const response = await read(url);
   return await response.arrayBuffer();
 };
 
-const INTER_URL =
-  "https://ewancroft.uk/assets/fonts/Inter-4.1/extras/ttf/Inter-ExtraBold.ttf";
-const MONO_URL =
-  "https://ewancroft.uk/assets/fonts/JetBrainsMono-2.304/fonts/ttf/JetBrainsMono-Regular.ttf";
-
-export const GET: RequestHandler = async ({ url }) => {
+export const GET: RequestHandler = async ({ url, setHeaders }) => {
   try {
     const [interFont, monoFont] = await Promise.all([
-      fetchFont(INTER_URL),
-      fetchFont(MONO_URL),
+      loadFont(interUrl),
+      loadFont(monoUrl),
     ]);
 
     const svg = buildOgSvg({
@@ -29,17 +30,28 @@ export const GET: RequestHandler = async ({ url }) => {
     const resvg = new Resvg(svg, {
       font: {
         fontBuffers: [interFont, monoFont],
+        // 2. Disable system fonts. This ensures your output is 100% predictable
+        // and doesn't rely on Vercel's underlying OS fonts.
+        loadSystemFonts: false,
+        // 3. Make sure this string EXACTLY matches the internal name of your base font
         defaultFontFamily: "Inter",
       },
       fitTo: { mode: "width", value: 1200 },
     });
 
     const pngData = resvg.render();
-    return new Response(pngData.asPng(), {
-      headers: { "Content-Type": "image/png" },
+
+    // 4. Critical: Cache your OG images!
+    // Social crawlers hit these endpoints repeatedly.
+    setHeaders({
+      "Content-Type": "image/png",
+      "Cache-Control":
+        "public, max-age=86400, s-maxage=31536000, stale-while-revalidate",
     });
+
+    return new Response(pngData.asPng());
   } catch (e) {
     console.error("OG Generation Error:", e);
-    return new Response("Error", { status: 500 });
+    return new Response("Error generating image", { status: 500 });
   }
 };
