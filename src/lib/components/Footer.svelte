@@ -32,6 +32,8 @@
 
   let SabbatIcon = $derived(currentSabbat ? SabbatIcons[currentSabbat.name] : null);
 
+  // Easter egg #4 — Mōnandæg footer label (client-side, respects local timezone)
+
   onMount(() => {
     currentSabbat = getCurrentSabbat(new Date());
   });
