@@ -1,11 +1,15 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import NotFoundEgg from '$lib/components/ostara-eggs/NotFoundEgg.svelte';
   // If your project uses the standard SvelteKit page store reactive rune:
   // import { page } from '$app/state'; 
 </script>
 
 <main class="shell-narrow error-layout">
-  <div class="panel error-card">
+  {#if $page.status === 404}
+    <NotFoundEgg />
+  {:else}
+    <div class="panel error-card">
     <div class="panel-head">
       <span class="error-badge">STATUS // {$page.status}</span>
     </div>
@@ -34,6 +38,7 @@
       </div>
     </div>
   </div>
+  {/if}
 </main>
 
 <style>
