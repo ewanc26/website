@@ -9,6 +9,7 @@ export const SITE = {
 };
 
 export const NAV_LINKS = [
+  { label: "Home", url: "/" },
   { label: "About", url: "/about" },
   { label: "Blog", url: "/blog" },
   { label: "Projects", url: "https://docs.ewancroft.uk" },
