@@ -33,7 +33,7 @@
             <p class="post-desc" style="font-size: 1.25em; color: var(--color-ink-700); margin-top: -1rem; margin-bottom: 1.5rem;">{data.post.description}</p>
         {/if}
         <div class="post-meta" style="display: flex; flex-direction: column; gap: var(--space-xs);">
-            <time>{new Date(data.post.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+            <time>{new Date(data.post.createdAt).toLocaleDateString('en-gb', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
             {#if data.post.tags && data.post.tags.length > 0}
                 <div class="meta-tags" style="margin-top: 0.25rem;">
                     {#each data.post.tags as tag}
@@ -77,7 +77,7 @@
                                     <div class="comment-head">
                                         <strong>{comment.authorDisplayName ?? comment.authorHandle}</strong>
                                         <a href="https://bsky.app/profile/{comment.authorHandle}" target="_blank" rel="noopener" class="comment-handle">@{comment.authorHandle}</a>
-                                        <time class="comment-date">{new Date(comment.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+                                        <time class="comment-date">{new Date(comment.createdAt).toLocaleDateString('en-gb', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
                                     </div>
                                     <p class="comment-body">{comment.plaintext}</p>
                                 </li>

@@ -14,7 +14,7 @@
             <p class="now-text">{kibunStatus.text}</p>
         </div>
         <div class="now-date">
-            {new Date(kibunStatus.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}
+            {new Date(kibunStatus.createdAt).toLocaleDateString('en-gb', { year: 'numeric', month: 'long', day: 'numeric' })}
         </div>
     </div>
 {/if}
