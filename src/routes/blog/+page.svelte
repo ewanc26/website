@@ -66,11 +66,11 @@
 <SiteHead title={data.blog?.title ?? 'Blog'} description={data.blog?.description} ogType="BLOG" />
 
 <main class="shell-wide">
-    <header class="page-hd">
+    <header class="page-hd animate-in">
         <h1 class="page-title">{data.blog?.title ?? 'Blog'}</h1>
         {#if data.blog}
             <p class="page-desc">{data.blog.description}</p>
-            <a href={data.blog.rss} target="_blank" rel="noopener" class="section-link"><Rss size={14} strokeWidth={2} /> RSS</a>
+            <a href={data.blog.rss} target="_blank" rel="noopener" class="section-link hover-lift active-press"><Rss size={14} strokeWidth={2} /> RSS</a>
         {/if}
         <input 
             type="search" 
@@ -81,14 +81,14 @@
     </header>
 
     {#if filteredPosts.length > 0}
-        {#each groupPosts(filteredPosts) as [year, months]}
-            <div class="year-head">{year}</div>
+        {#each groupPosts(filteredPosts) as [year, months], i}
+            <div class="year-head animate-in" style="animation-delay: {100 + i * 100}ms">{year}</div>
             {#each Array.from(months.entries()).sort((a, b) => b[0] - a[0]) as [month, monthPosts]}
                 <div class="month-label">{formatMonth(month)}</div>
-                <ul class="post-list">
+                <ul class="post-list animate-in stagger-1">
                     {#each monthPosts as post}
                         <li>
-                            <a href={getPostUrl(post)} class="post-row">
+                            <a href={getPostUrl(post)} class="post-row hover-lift active-press">
                                 <span class="post-title">{post.title}</span>
                                 <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-gb', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
                             </a>
@@ -99,11 +99,12 @@
         {/each}
 
         {#if hasMore}
-            <div class="load-more">
+            <div class="load-more animate-in stagger-2">
                 <button
                     onclick={loadMore}
                     disabled={loading}
                     type="button"
+                    class="active-press"
                 >
                     {loading ? 'Loading...' : 'Load more'}
                 </button>

@@ -49,7 +49,7 @@
 
 <main class="shell-wide">
   <!-- Hero -->
-  <section class="page-hd hero-hd">
+  <section class="page-hd hero-hd hero-reveal">
     {#if profile.avatar}
       <img src={profile.avatar} alt="" class="hero-avatar" />
     {/if}
@@ -61,15 +61,15 @@
 
   <!-- Status row -->
   {#if kibunStatus !== null || musicStatus !== null}
-    <div class="status-row">
+    <div class="status-row animate-in stagger-1">
       {#if kibunStatus}
-        <div class="status-chip">
+        <div class="status-chip hover-lift active-press">
           <span class="status-emoji">{kibunStatus.emoji}</span>
           <span class="status-text">{kibunStatus.text}</span>
         </div>
       {/if}
       {#if musicStatus}
-        <div class="status-chip">
+        <div class="status-chip hover-lift active-press">
           <Music size={14} strokeWidth={2} class="muted-icon" />
           <span class="status-text">{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(', ')}</span>
         </div>
@@ -78,7 +78,7 @@
   {/if}
 
   <!-- Writing -->
-  <section class="home-section">
+  <section class="home-section animate-in stagger-2">
     <h2 class="section-heading">Blog</h2>
     {#if posts === null}
       <LoadingSkeleton count={3} />
@@ -86,7 +86,7 @@
         <ul class="post-list">
           {#each posts.filter(p => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION).slice(0, 5) as post}
             <li>
-              <a href={getBlogUrl(post)} class="post-row">
+              <a href={getBlogUrl(post)} class="post-row hover-lift active-press">
                 <span class="post-title">{post.title}</span>
                 <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-gb', { day: 'numeric', month: 'short', year: 'numeric' })}</time>
               </a>
@@ -103,14 +103,14 @@
   </section>
 
   <!-- Projects -->
-  <section class="home-section">
+  <section class="home-section animate-in stagger-3">
     <h2 class="section-heading">Projects</h2>
     {#if sifaProjects === null}
       <LoadingSkeleton count={2} />
     {:else if sifaProjects && sifaProjects.length > 0}
         <div class="project-grid">
           {#each shuffledProjects as project}
-            <div class="project-card">
+            <div class="project-card hover-lift active-press">
               <strong class="project-name">{project.name}</strong>
               {#if project.description}
                 <p class="project-desc">{project.description}</p>
@@ -133,7 +133,7 @@
   </section>
 
   <!-- Publications -->
-  <section class="home-section">
+  <section class="home-section animate-in stagger-4">
     <h2 class="section-heading">Publications</h2>
     {#if publications === null}
       <LoadingSkeleton count={2} />
@@ -141,7 +141,7 @@
         <ul class="post-list">
           {#each publications.filter((p: any) => p.rkey !== PUBLIC_LEAFLET_BLOG_PUBLICATION) as pub}
             <li>
-              <a href={pub.url} target="_blank" rel="noopener" class="post-row">
+              <a href={pub.url} target="_blank" rel="noopener" class="post-row hover-lift active-press">
                 <span class="post-title">{pub.name}</span>
                 <span class="row-meta">{pub.description}</span>
               </a>
@@ -157,14 +157,14 @@
   </section>
 
   <!-- Links -->
-  <section class="home-section">
+  <section class="home-section animate-in stagger-5">
     <h2 class="section-heading">Elsewhere</h2>
     {#if links === null}
       <LoadingSkeleton count={2} />
     {:else if links && links.cards && links.cards.length > 0}
         <div class="link-grid">
           {#each links.cards.slice(0, 8) as link}
-            <a href={link.url} target="_blank" rel="noopener" class="link-chip">
+            <a href={link.url} target="_blank" rel="noopener" class="link-chip hover-lift active-press">
               {#if link.emoji}
                 <span class="link-emoji">{link.emoji}</span>
               {/if}

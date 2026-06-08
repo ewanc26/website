@@ -70,7 +70,7 @@
   <div class="sabbat-bg-container" aria-hidden="true">
     <!-- Waning (Left) -->
     <div 
-      class="sabbat-icon waning" 
+      class="sabbat-icon waning parallax-slow" 
       style="opacity: {(1 - state.progress) * 0.15}; transform: scale({1.2 - state.progress * 0.3});"
     >
       <div class="icon-wrap">
@@ -89,7 +89,7 @@
 
     <!-- Waxing (Right) -->
     <div 
-      class="sabbat-icon waxing" 
+      class="sabbat-icon waxing parallax-slow" 
       style="opacity: {state.progress * 0.15}; transform: scale({0.9 + state.progress * 0.3});"
     >
       <div class="icon-wrap">

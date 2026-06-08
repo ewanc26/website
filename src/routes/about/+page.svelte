@@ -66,7 +66,7 @@
 <SiteHead title="About" description={profile.description} ogType="ABOUT" />
 
 <main class="shell-wide">
-  <header class="page-hd about-hero">
+  <header class="page-hd about-hero hero-reveal">
     {#if profile.avatar}
       <img src={profile.avatar} alt="{profile.displayName}'s avatar" class="about-avatar" />
     {/if}
@@ -89,7 +89,7 @@
   </header>
 
   <div class="about-grid">
-    <div class="about-main">
+    <div class="about-main animate-in stagger-1">
       <section class="about-section">
         <h2 class="section-heading">Skills</h2>
         {#await data.lazy.sifaSkills}
@@ -180,7 +180,7 @@
       </section>
     </div>
 
-    <aside class="about-sidebar">
+    <aside class="about-sidebar animate-in stagger-2">
       <section class="sidebar-section">
         <h2 class="section-heading">Languages</h2>
         {#await data.lazy.sifaLanguages}

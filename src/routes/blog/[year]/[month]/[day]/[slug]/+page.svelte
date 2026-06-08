@@ -27,7 +27,7 @@
 />
 
 <main class="shell-prose">
-    <header class="post-hd">
+    <header class="post-hd hero-reveal">
         <h1 class="post-title">{data.post.title}</h1>
         {#if data.post.description}
             <p class="post-desc" style="font-size: 1.25em; color: var(--color-ink-700); margin-top: -1rem; margin-bottom: 1.5rem;">{data.post.description}</p>
@@ -47,7 +47,7 @@
         </div>
     </header>
 
-    <div class="post-layout">
+    <div class="post-layout animate-in stagger-1">
         <aside class="post-sidebar">
             <TableOfContents container=".prose" />
         </aside>

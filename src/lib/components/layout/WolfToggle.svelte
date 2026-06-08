@@ -4,7 +4,7 @@
 
 <button
 	onclick={() => wolfMode.toggle()}
-	class="footer-link"
+	class="footer-link active-press"
 	aria-label={$wolfMode ? 'Disable wolf mode' : 'Enable wolf mode'}
 	type="button"
 >
@@ -21,6 +21,7 @@
     padding: var(--space-sm); /* Touch target */
     font-size: var(--text-xs);
     cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-out-quart);
   }
   .footer-link:hover {
     color: var(--color-primary-700);
