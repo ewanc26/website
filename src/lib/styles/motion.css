@@ -1,0 +1,118 @@
+@import "./tokens.css";
+
+/* ================================================================
+ * motion.css — Global animation and transition system
+ *
+ * Follows .impeccable.md and animate skill: exponential easing,
+ * staggered entrances, purposeful state changes.
+ * ================================================================ */
+
+@layer utilities {
+  /* ── Entrance Animations ────────────────────────────────────── */
+
+  .animate-in {
+    animation: fade-slide-up var(--duration-slow) var(--ease-out-expo) both;
+  }
+
+  /* Staggered delays — 4pt scale (approx) */
+  .stagger-1 {
+    animation-delay: 100ms;
+  }
+  .stagger-2 {
+    animation-delay: 200ms;
+  }
+  .stagger-3 {
+    animation-delay: 300ms;
+  }
+  .stagger-4 {
+    animation-delay: 400ms;
+  }
+  .stagger-5 {
+    animation-delay: 500ms;
+  }
+
+  /* ── Interaction Feedbacks ──────────────────────────────────── */
+
+  /* Confident scale on hover */
+  .hover-lift {
+    transition: transform var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Decisive feedback on click */
+  .active-press:active {
+    transform: scale(0.98);
+    transition: transform var(--duration-instant) var(--ease-out-quint);
+  }
+
+  /* ── State Transitions ──────────────────────────────────────── */
+
+  .fade-enter {
+    animation: fade-in var(--duration-normal) var(--ease-out-quart) both;
+  }
+
+  .fade-exit {
+    animation: fade-in var(--duration-fast) var(--ease-out-quart) reverse both;
+  }
+
+  /* ── Signature Moments ──────────────────────────────────────── */
+
+  /* Dramatic entrance for hero text */
+  .hero-reveal {
+    animation: hero-reveal var(--duration-slow) var(--ease-out-expo) both;
+  }
+
+  /* Parallax helper for background elements */
+  .parallax-slow {
+    transform: translateY(calc(var(--scroll-y, 0) * 0.1px));
+    will-change: transform;
+  }
+}
+
+/* ── Keyframes ───────────────────────────────────────────────── */
+
+@keyframes hero-reveal {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(var(--space-lg));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-md));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes seasonal-sweep {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
