@@ -212,7 +212,7 @@
 
   <div class="spec-grid">
     <nav class="spec-toc">
-      <TableOfContents container=".spec-content" />
+      <TableOfContents container=".spec-content" selector="h2" />
     </nav>
 
     <div class="spec-content">
@@ -547,10 +547,10 @@
         </div>
       </section>
 
-      <!-- ── [12] Assets ─────────────────────────────── -->
-      <section class="spec-section assets" id="assets">
+      <!-- ── [09] Layout ──────────────────────────────── -->
+      <section class="spec-section layout" id="layout">
         <header class="section-hd">
-          <span class="section-num">[12]</span>
+          <span class="section-num">[09]</span>
           <h2 class="section-title">Layout Systems</h2>
         </header>
         <div class="section-content">

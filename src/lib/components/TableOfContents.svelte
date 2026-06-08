@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
 
-    let { container }: { container: string } = $props();
+    let { container, selector = 'h2, h3, h4' }: { container: string; selector?: string } = $props();
 
     interface TocEntry {
         id: string;
@@ -12,17 +12,39 @@
     let entries: TocEntry[] = $state([]);
     let mounted = $state(false);
 
+    /** Slug-ify heading text, disambiguating duplicates. Matches LeafletBlocks headingId(). */
+    function makeSlug(text: string, seen: Map<string, number>): string {
+        const base = text
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-');
+        const count = seen.get(base) ?? 0;
+        seen.set(base, count + 1);
+        return count === 0 ? base : `${base}-${count}`;
+    }
+
     onMount(() => {
         mounted = true;
         const el = document.querySelector(container);
         if (!el) return;
 
-        const headings = el.querySelectorAll('h2, h3, h4');
-        entries = Array.from(headings).map((h) => ({
-            id: h.id,
-            text: h.textContent ?? '',
-            level: parseInt(h.tagName[1]),
-        }));
+        const headings = el.querySelectorAll(selector);
+        const seen = new Map<string, number>();
+
+        entries = Array.from(headings).map((h) => {
+            if (!h.id) {
+                h.id = makeSlug(h.textContent ?? '', seen);
+            } else {
+                const base = h.id.replace(/-\d+$/, '');
+                seen.set(base, (seen.get(base) ?? 0) + 1);
+            }
+            return {
+                id: h.id,
+                text: h.textContent ?? '',
+                level: parseInt(h.tagName[1]),
+            };
+        });
     });
 </script>
 
