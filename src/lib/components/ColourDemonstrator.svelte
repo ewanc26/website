@@ -77,11 +77,13 @@
   </div>
   
   <div class="controls">
-    <label>
-      Date: {simulatedDate.toLocaleDateString('en-gb')}
-      <input type="range" min={new Date(2026, 0, 1).getTime()} max={new Date(2027, 0, 1).getTime()} 
-             value={simulatedDate.getTime()} oninput={(e) => simulatedDate = new Date(Number(e.currentTarget.value))} />
-    </label>
+    <div class="slider-container" class:hidden={isAnimating}>
+      <label>
+        Date: {simulatedDate.toLocaleDateString('en-gb')}
+        <input type="range" min={new Date(2026, 0, 1).getTime()} max={new Date(2027, 0, 1).getTime()} 
+               value={simulatedDate.getTime()} oninput={(e) => simulatedDate = new Date(Number(e.currentTarget.value))} />
+      </label>
+    </div>
     <button onclick={() => isAnimating = !isAnimating}>
       {isAnimating ? 'Stop' : 'Animate'}
     </button>
@@ -116,5 +118,17 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.2);
   }
   .controls { display: flex; flex-direction: column; gap: var(--space-xs); }
+  .slider-container {
+    transition: opacity var(--duration-normal) var(--ease-out-quart), visibility var(--duration-normal);
+    opacity: 1;
+    visibility: visible;
+  }
+  .slider-container.hidden {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    margin: 0;
+    pointer-events: none;
+  }
   .status { font-family: var(--font-mono); font-size: var(--text-xs); margin: 0; color: var(--color-text-600); }
 </style>
