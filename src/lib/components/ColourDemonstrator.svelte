@@ -119,9 +119,11 @@
   }
   .controls { display: flex; flex-direction: column; gap: var(--space-xs); }
   .slider-container {
-    transition: opacity var(--duration-normal) var(--ease-out-quart), visibility var(--duration-normal);
+    transition: opacity var(--duration-normal) var(--ease-out-quart), visibility var(--duration-normal), height var(--duration-normal) var(--ease-out-quart);
     opacity: 1;
     visibility: visible;
+    height: auto;
+    overflow: hidden;
   }
   .slider-container.hidden {
     opacity: 0;
