@@ -74,7 +74,7 @@
     <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:site_name" content={SITE.title} />
-    <meta property="og:locale" content="en_GB" />
+    <meta property="og:locale" content="en_gb" />
 
     <!-- Article-specific Open Graph -->
     {#if type === 'article'}

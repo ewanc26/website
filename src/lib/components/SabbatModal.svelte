@@ -8,7 +8,7 @@
     const thisYear = now.getFullYear();
     const candidate = new Date(thisYear, sabbat.month - 1, sabbat.day);
     const date = candidate < now ? new Date(thisYear + 1, sabbat.month - 1, sabbat.day) : candidate;
-    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    return date.toLocaleDateString('en-gb', { day: 'numeric', month: 'long', year: 'numeric' });
   });
 </script>
 

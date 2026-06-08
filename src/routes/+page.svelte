@@ -88,7 +88,7 @@
             <li>
               <a href={getBlogUrl(post)} class="post-row">
                 <span class="post-title">{post.title}</span>
-                <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</time>
+                <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-gb', { day: 'numeric', month: 'short', year: 'numeric' })}</time>
               </a>
             </li>
           {/each}
