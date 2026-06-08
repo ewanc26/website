@@ -17,6 +17,7 @@
   import Yule from '$lib/components/icons/sabbats/Yule.svelte';
   import favicon from '$lib/assets/favicon.svg';
   import { Copy, Check } from '@lucide/svelte';
+  import ColourDemonstrator from '$lib/components/ColourDemonstrator.svelte';
 
   let copiedIndex = $state<string | null>(null);
 
@@ -296,6 +297,9 @@
               </div>
             {/each}
           </div>
+
+          <h3 class="sub-title" id="colour-demonstrator">Colour Demonstrator</h3>
+          <ColourDemonstrator />
 
           <div class="spec-sub-section surfaces">
             <h3 class="sub-title" id="semantic-surfaces">Semantic Surfaces</h3>
@@ -624,10 +628,10 @@
         </div>
       </section>
 
-      <!-- ── [12] Assets ─────────────────────────────── -->
+      <!-- ── [13] Assets ─────────────────────────────── -->
       <section class="spec-section assets" id="assets">
         <header class="section-hd">
-          <span class="section-num">[12]</span>
+          <span class="section-num">[13]</span>
           <h2 class="section-title">Assets</h2>
         </header>
         <div class="section-content">
