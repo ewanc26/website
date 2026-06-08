@@ -3,8 +3,8 @@
  */
 
 export type OgEntry = {
-  title: string;
-  subtitle: string;
+  title: string | null;
+  subtitle: string | null;
   slug: string;
   type?: string | null;
   theme: {
@@ -39,21 +39,29 @@ export const getOgTemplate = (entry: OgEntry) => {
     });
   }
 
-  children.push(
-    {
+  // Only render title when provided
+  if (title) {
+    children.push({
       type: "h1",
       props: {
         style: { fontSize: "80px", fontWeight: 800, marginBottom: "20px" },
         children: title,
       },
-    },
-    {
+    });
+  }
+
+  // Only render subtitle when one was actually provided
+  if (subtitle) {
+    children.push({
       type: "p",
       props: {
         style: { fontSize: "40px", color: theme.accent },
         children: subtitle,
       },
-    },
+    });
+  }
+
+  children.push(
     {
       type: "div",
       props: {
