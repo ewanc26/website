@@ -47,9 +47,14 @@
     });
     
     // OG Image generation with fallback to absolute static asset if needed
-    // Use the short SITE.title ("Ewan Croft") as the image fallback, not the
-    // long ogTitle — the OG image renders at 80px and needs to stay concise.
-    const ogImage = $derived(image ?? new URL(`/api/og/generate?title=${encodeURIComponent(title ?? SITE.title)}${ogType ? `&type=${encodeURIComponent(ogType)}` : ''}${ogImageSubtitle ? `&subtitle=${encodeURIComponent(ogImageSubtitle)}` : ''}`, page.url.origin).href);
+    const ogImage = $derived.by(() => {
+        if (image) return image;
+        const params = new URLSearchParams();
+        if (title) params.set('title', title);
+        if (ogType) params.set('type', ogType);
+        if (ogImageSubtitle) params.set('subtitle', ogImageSubtitle);
+        return new URL(`/api/og/generate?${params.toString()}`, page.url.origin).href;
+    });
     const ogImageAlt = $derived(title ? `OpenGraph image for ${title}` : `OpenGraph image for ${SITE.ogTitle}`);
 </script>
 

@@ -42,6 +42,8 @@ const loadFont = async (url: string) => {
   }
 };
 
+import { SITE } from "$lib/config";
+
 export const GET: RequestHandler = async ({ url, setHeaders }) => {
   try {
     await ensureWasm();
@@ -53,12 +55,46 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
 
     const theme = getOgThemeColors();
 
+    const title = url.searchParams.get("title");
+    const subtitle = url.searchParams.get("subtitle");
+    const type = url.searchParams.get("type");
+
+    let finalTitle = title;
+    if (!finalTitle && type) {
+      switch (type.toUpperCase()) {
+        case "HOME":
+          finalTitle = SITE.title;
+          break;
+        case "BLOG":
+          finalTitle = "Blog";
+          break;
+        case "ABOUT":
+          finalTitle = "About";
+          break;
+        case "SUPPORT":
+          finalTitle = "Support";
+          break;
+        case "SUBSCRIPTIONS":
+          finalTitle = "Subscriptions";
+          break;
+        case "SITE_META":
+          finalTitle = "Site Metadata";
+          break;
+        case "TECHNICAL SPEC":
+          finalTitle = "Technical Specification";
+          break;
+        case "DESIGN":
+          finalTitle = "Design";
+          break;
+      }
+    }
+
     const svg = await satori(
       getOgTemplate({
-        title: url.searchParams.get("title") ?? "ewancroft.uk",
-        subtitle: url.searchParams.get("subtitle") ?? "software engineer",
+        title: finalTitle,
+        subtitle,
         slug: url.searchParams.get("slug") ?? "/",
-        type: url.searchParams.get("type"),
+        type,
         theme,
       }),
       {
