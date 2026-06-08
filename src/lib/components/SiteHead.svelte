@@ -1,6 +1,7 @@
 <script lang="ts">
     import { page } from '$app/state';
     import { SITE } from '$lib/config';
+    import { PUBLIC_ATPROTO_DID, PUBLIC_LEAFLET_BLOG_PUBLICATION } from '$env/static/public';
 
     let {
         title,
@@ -12,6 +13,7 @@
         publishedTime,
         tags,
         author,
+        documentRkey,
     }: {
         title?: string;
         description?: string;
@@ -32,11 +34,23 @@
         tags?: string[];
         /** Author URL, used for article:author. */
         author?: string;
+        /** The rkey of the site.standard.document record for this page. */
+        documentRkey?: string;
     } = $props();
 
     const fullTitle = $derived(title ? `${title} — ${SITE.title}` : SITE.ogTitle);
     const fullDescription = $derived(description ?? SITE.description);
     const canonicalUrl = $derived(new URL(page.url.pathname, page.url.origin).href);
+
+    // Standard.site discovery and verification
+    // Publication hint is for the site-wide discovery, typically root and blog index.
+    const isRoot = $derived(!title);
+    const publicationAtUri = $derived((isRoot || ogType === 'BLOG') && PUBLIC_ATPROTO_DID && PUBLIC_LEAFLET_BLOG_PUBLICATION 
+        ? `at://${PUBLIC_ATPROTO_DID}/site.standard.publication/${PUBLIC_LEAFLET_BLOG_PUBLICATION}` 
+        : undefined);
+    const documentAtUri = $derived(documentRkey && PUBLIC_ATPROTO_DID 
+        ? `at://${PUBLIC_ATPROTO_DID}/site.standard.document/${documentRkey}` 
+        : undefined);
 
     // Resolve the subtitle for the OG image: prefer explicit ogSubtitle, then
     // fall back to description — clamped to 150 chars (~3 lines at 40px).
@@ -62,6 +76,14 @@
     <title>{fullTitle}</title>
     <meta name="description" content={fullDescription} />
     <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Standard.site -->
+    {#if publicationAtUri}
+        <link rel="site.standard.publication" href={publicationAtUri} />
+    {/if}
+    {#if documentAtUri}
+        <link rel="site.standard.document" href={documentAtUri} />
+    {/if}
 
     <!-- Open Graph / Facebook / AI Search -->
     <meta property="og:type" content={type} />

@@ -24,6 +24,7 @@
     publishedTime={data.post.createdAt}
     tags={data.post.tags}
     author="https://ewancroft.uk/about"
+    documentRkey={data.post.rkey}
 />
 
 <main class="shell-prose">
