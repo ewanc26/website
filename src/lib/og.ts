@@ -15,6 +15,43 @@ export type OgEntry = {
   };
 };
 
+/**
+ * Derive font size directly from the canvas geometry rather than bucketing.
+ *
+ * Canvas: 1200×630, padding: 80px each side → 1040px usable width.
+ * Avg bold char width ≈ 0.6 × font-size → chars_per_line ≈ 1040 / (size * 0.6)
+ *
+ * Solve for size that fits `length` chars across `maxLines` lines:
+ *   size = (usableWidth * maxLines) / (length * avgCharRatio)
+ *        = (1040 * maxLines) / (length * 0.6)
+ *
+ * Clamped to [min, max] so extreme strings don't produce absurd values.
+ */
+const USABLE_WIDTH = 1040;
+const AVG_CHAR_RATIO = 0.6;
+
+const dynamicFontSize = (
+  text: string,
+  maxLines: number,
+  min: number,
+  max: number,
+): number =>
+  Math.max(
+    min,
+    Math.min(
+      max,
+      Math.round((USABLE_WIDTH * maxLines) / (text.length * AVG_CHAR_RATIO)),
+    ),
+  );
+
+// Title: up to 3 lines, 38–80px
+const getTitleFontSize = (title: string): number =>
+  dynamicFontSize(title, 3, 38, 80);
+
+// Subtitle: up to 2 lines, 24–40px
+const getSubtitleFontSize = (subtitle: string): number =>
+  dynamicFontSize(subtitle, 2, 24, 40);
+
 // Satori uses a JSX-like object structure for defining the layout
 export const getOgTemplate = (entry: OgEntry) => {
   const { title, subtitle, type, theme } = entry;
@@ -44,7 +81,16 @@ export const getOgTemplate = (entry: OgEntry) => {
     children.push({
       type: "h1",
       props: {
-        style: { fontSize: "80px", fontWeight: 800, marginBottom: "20px" },
+        style: {
+          fontSize: `${getTitleFontSize(title)}px`,
+          fontWeight: 800,
+          marginBottom: "20px",
+          display: "-webkit-box",
+          "-webkit-line-clamp": "3",
+          "-webkit-box-orient": "vertical",
+          overflow: "hidden",
+          lineHeight: 1.15,
+        },
         children: title,
       },
     });
@@ -55,7 +101,15 @@ export const getOgTemplate = (entry: OgEntry) => {
     children.push({
       type: "p",
       props: {
-        style: { fontSize: "40px", color: theme.accent },
+        style: {
+          fontSize: `${getSubtitleFontSize(subtitle)}px`,
+          color: theme.accent,
+          display: "-webkit-box",
+          "-webkit-line-clamp": "2",
+          "-webkit-box-orient": "vertical",
+          overflow: "hidden",
+          lineHeight: 1.4,
+        },
         children: subtitle,
       },
     });
