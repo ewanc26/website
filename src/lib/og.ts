@@ -30,6 +30,23 @@ export type OgEntry = {
 const USABLE_WIDTH = 1040;
 const AVG_CHAR_RATIO = 0.6;
 
+/**
+ * Truncate `text` so it fits within `maxLines` lines at `fontSize`,
+ * appending a unicode ellipsis if shortened. This is a pre-render
+ * safeguard because Satori's -webkit-line-clamp hard-clips without
+ * adding an ellipsis.
+ */
+const truncateToFit = (
+  text: string,
+  fontSize: number,
+  maxLines: number,
+): string => {
+  const charsPerLine = Math.floor(USABLE_WIDTH / (fontSize * AVG_CHAR_RATIO));
+  const maxChars = charsPerLine * maxLines;
+  if (text.length <= maxChars) return text;
+  return text.slice(0, maxChars - 1).trimEnd() + "\u2026";
+};
+
 const dynamicFontSize = (
   text: string,
   maxLines: number,
@@ -98,11 +115,13 @@ export const getOgTemplate = (entry: OgEntry) => {
 
   // Only render subtitle when one was actually provided
   if (subtitle) {
+    const subtitleFontSize = getSubtitleFontSize(subtitle);
+    const displaySubtitle = truncateToFit(subtitle, subtitleFontSize, 2);
     children.push({
       type: "p",
       props: {
         style: {
-          fontSize: `${getSubtitleFontSize(subtitle)}px`,
+          fontSize: `${subtitleFontSize}px`,
           color: theme.accent,
           display: "-webkit-box",
           "-webkit-line-clamp": "2",
@@ -110,7 +129,7 @@ export const getOgTemplate = (entry: OgEntry) => {
           overflow: "hidden",
           lineHeight: 1.4,
         },
-        children: subtitle,
+        children: displaySubtitle,
       },
     });
   }
