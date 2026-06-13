@@ -5,7 +5,7 @@ export const SITE = {
   ogTitle: "Ewan Croft — Anglo-Scottish Pagan, Poet, and Programmer",
   description:
     PUBLIC_SITE_DESCRIPTION ||
-    "The personal website of Ewan Croft — an Anglo-Scottish pagan, poet, and software engineer. Exploring the intersections of tradition, technology, and creativity.",
+    "Ewan Croft is an Anglo-Scottish pagan, poet, and programmer exploring the intersections of tradition and technology.",
 };
 
 export const NAV_LINKS = [
