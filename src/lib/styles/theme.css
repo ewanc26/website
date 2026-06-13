@@ -41,7 +41,7 @@
   h6 {
     color: var(--color-text-950);
     font-family: var(--font-family);
-    line-height: 1.2;
+    line-height: 1.1;
     margin-top: var(--space-lg);
     margin-bottom: var(--space-sm);
     scroll-margin-top: var(--space-2xl);
@@ -49,14 +49,14 @@
 
   h1 {
     font-size: var(--text-xl);
-    font-weight: 800;
-    letter-spacing: -0.03em;
+    font-weight: 900;
+    letter-spacing: -0.04em;
   }
 
   h2 {
     font-size: var(--text-lg);
-    font-weight: 700;
-    letter-spacing: -0.025em;
+    font-weight: 800;
+    letter-spacing: -0.03em;
   }
 
   h3 {
