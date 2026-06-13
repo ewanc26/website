@@ -45,7 +45,7 @@
   /* Decisive feedback on click */
   .active-press:active {
     transform: scale(0.98);
-    transition: transform var(--duration-instant) var(--ease-out-quint);
+    transition: transform var(--duration-instant) var(--ease-out-quart);
   }
 
   /* ── State Transitions ──────────────────────────────────────── */
