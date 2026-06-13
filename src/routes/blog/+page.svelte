@@ -69,8 +69,10 @@
     <header class="page-hd animate-in">
         <h1 class="page-title">{data.blog?.title ?? 'Blog'}</h1>
         {#if data.blog}
-            <p class="page-desc">{data.blog.description}</p>
-            <a href={data.blog.rss} target="_blank" rel="noopener" class="section-link hover-lift active-press"><Rss size={14} strokeWidth={2} /> RSS</a>
+            <div class="page-hd-meta">
+                <p class="page-desc">{data.blog.description}</p>
+                <a href={data.blog.rss} target="_blank" rel="noopener" class="section-link hover-lift active-press"><Rss size={14} strokeWidth={2} /> RSS</a>
+            </div>
         {/if}
         <input 
             type="search" 
@@ -85,10 +87,10 @@
             <div class="year-head animate-in" style="animation-delay: {100 + i * 100}ms">{year}</div>
             {#each Array.from(months.entries()).sort((a, b) => b[0] - a[0]) as [month, monthPosts]}
                 <div class="month-label">{formatMonth(month)}</div>
-                <ul class="post-list animate-in stagger-1">
+                <ul class="post-list post-list--dense animate-in stagger-1">
                     {#each monthPosts as post}
                         <li>
-                            <a href={getPostUrl(post)} class="post-row hover-lift active-press">
+                            <a href={getPostUrl(post)} class="post-row post-row--product hover-lift active-press">
                                 <span class="post-title">{post.title}</span>
                                 <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-gb', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
                             </a>
@@ -118,6 +120,12 @@
     {/if}
 </main>
 <style>
+    .page-hd-meta {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--space-md);
+    }
     .blog-search {
         margin-top: var(--space-md);
         width: 100%;
@@ -127,9 +135,25 @@
         background: var(--surface-raised);
         box-sizing: border-box;
         transition: border-color var(--duration-fast) var(--ease-out-quart);
+        font-size: var(--text-sm);
     }
     .blog-search:focus {
         outline: none;
         border-color: var(--color-primary-500);
+    }
+    .post-list--dense {
+        gap: var(--space-2xs);
+    }
+    .post-row--product {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--text-sm);
+        border-radius: var(--radius-sm);
+        border-bottom: none;
+        background: var(--surface-raised);
+        border: 1px solid transparent;
+    }
+    .post-row--product:hover {
+        border-color: var(--surface-color);
+        background: var(--color-background-50);
     }
 </style>
