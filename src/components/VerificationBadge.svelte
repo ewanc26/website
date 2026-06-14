@@ -1,6 +1,5 @@
 <script lang="ts">
-  export let verified = false;
-  export let label = "Verified";
+  let { verified = false, label = "Verified" } = $props();
 </script>
 
 {#if verified}
