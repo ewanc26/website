@@ -3,6 +3,7 @@
   import SiteHead from '$lib/components/SiteHead.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
+  import VerificationBadge from '../components/VerificationBadge.svelte';
   import { ArrowRight, ExternalLink, Music } from '@lucide/svelte';
   import { normalizeSlug } from '$lib/utils/slugify';
   import type { ProfileData } from '@ewanc26/atproto';
@@ -54,7 +55,10 @@
       <img src={profile.avatar} alt="" class="hero-avatar" />
     {/if}
     <div class="hero-text">
-      <h1 class="page-title">{profile.displayName ?? profile.handle}</h1>
+      <h1 class="page-title">
+        {profile.displayName ?? profile.handle}
+        <VerificationBadge />
+      </h1>
       <p class="hero-bio">{profile.description}</p>
     </div>
   </section>
