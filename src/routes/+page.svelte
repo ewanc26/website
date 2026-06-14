@@ -57,7 +57,7 @@
     <div class="hero-text">
       <h1 class="page-title">
         {profile.displayName ?? profile.handle}
-        <VerificationBadge />
+        <VerificationBadge verified={true} />
       </h1>
       <p class="hero-bio">{profile.description}</p>
     </div>
