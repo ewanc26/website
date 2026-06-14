@@ -87,6 +87,21 @@
     color: var(--color-text-700);
   }
 
+  /* Now-playing chip — slimmer padding to accommodate cover art */
+  .status-chip--music {
+    padding: var(--space-xs) var(--space-sm) var(--space-xs) var(--space-xs);
+  }
+
+  .now-playing-art {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-xs);
+    object-fit: cover;
+    flex-shrink: 0;
+    aspect-ratio: 1;
+    background-color: var(--surface-sunken);
+  }
+
   /* Home sections */
   .home-section {
     padding: var(--space-lg) 0;

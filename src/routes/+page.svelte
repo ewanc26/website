@@ -69,8 +69,18 @@
         </div>
       {/if}
       {#if musicStatus}
-        <div class="status-chip hover-lift active-press">
-          <Music size={14} strokeWidth={2} class="muted-icon" />
+        <div class="status-chip status-chip--music hover-lift active-press">
+          {#if musicStatus.artworkUrl}
+            <img
+              src={musicStatus.artworkUrl}
+              alt=""
+              class="now-playing-art"
+              loading="lazy"
+              decoding="async"
+            />
+          {:else}
+            <Music size={14} strokeWidth={2} class="muted-icon" />
+          {/if}
           <span class="status-text">{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(', ')}</span>
         </div>
       {/if}
