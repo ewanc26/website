@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { X } from '@lucide/svelte';
+  import BaseModal from './BaseModal.svelte';
   let { sabbat, onClose } = $props();
 
   const sabbatDate = $derived.by(() => {
@@ -12,56 +12,28 @@
   });
 </script>
 
-<dialog open={!!sabbat} onclose={onClose} class="sabbat-modal">
+<BaseModal 
+  title={sabbat?.name ?? ""}
+  open={!!sabbat}
+  onClose={onClose}
+>
   {#if sabbat}
-    <div class="modal-content">
-      <header class="modal-header">
-        <h2 class="modal-title">{sabbat.name}</h2>
-        <button onclick={onClose} class="close-btn" aria-label="Close">
-          <X size={20} />
-        </button>
-      </header>
-      {#if sabbatDate}
-        <p class="modal-date">{sabbatDate}</p>
-      {/if}
-      <div class="modal-body">
-        {#each sabbat.description.split('\n\n') as paragraph}
-          <p>{paragraph}</p>
-        {/each}
-        <p class="modal-footer">
-          <a href="https://en.wikipedia.org/wiki/Wheel_of_the_Year#Festivals" target="_blank" rel="noopener noreferrer">Learn more about the Wheel of the Year</a>
-        </p>
-      </div>
+    {#if sabbatDate}
+      <p class="modal-date">{sabbatDate}</p>
+    {/if}
+    <div class="modal-body">
+      {#each sabbat.description.split('\n\n') as paragraph}
+        <p>{paragraph}</p>
+      {/each}
     </div>
+
+    {#snippet footer()}
+      <a href="https://en.wikipedia.org/wiki/Wheel_of_the_Year#Festivals" target="_blank" rel="noopener noreferrer">Learn more about the Wheel of the Year</a>
+    {/snippet}
   {/if}
-</dialog>
+</BaseModal>
 
 <style>
-  .sabbat-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: min(90vw, 500px);
-    background: var(--color-background-50);
-    border: 1px solid var(--surface-color);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg);
-    z-index: 2000;
-  }
-
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--space-md);
-  }
-
-  .modal-title {
-    font-size: var(--text-lg);
-    margin: 0;
-  }
-
   .modal-date {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
@@ -69,32 +41,8 @@
     margin: 0 0 var(--space-md);
   }
 
-  .close-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--color-text-700);
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    margin-right: -10px; /* Offset to align with modal padding */
-  }
-
-  .close-btn:hover {
-    color: var(--color-primary-500);
-  }
-
   .modal-body p {
-    line-height: 1.6;
     margin-bottom: var(--space-md);
     color: var(--color-text-800);
-  }
-
-  .modal-footer {
-    font-size: var(--text-xs);
-    margin-top: var(--space-md);
   }
 </style>
