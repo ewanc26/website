@@ -125,8 +125,7 @@
   align-items: center;
   justify-content: center;
   margin-left: 0.25em;
-  /* Use baseline alignment, and rely on flex to center the icon */
-  vertical-align: baseline;
+  vertical-align: middle;
 
   /* Reset button chrome */
   background: none;
@@ -148,9 +147,10 @@
 }
 
 .verification-icon {
-  /* Use line-height unit for perfect scaling with text */
-  width: 2.5lh;
-  height: 2.5lh;
+  /* 1em tracks the inherited font-size, so the badge stays
+     proportionate whether it's inside an h1 or a <p> */
+  width: 1em;
+  height: 1em;
   flex-shrink: 0;
 }
 
