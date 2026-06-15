@@ -3,7 +3,7 @@
   import SiteHead from '$lib/components/SiteHead.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
-  import VerificationBadge from '../components/VerificationBadge.svelte';
+  import VerificationBadge from '$lib/components/VerificationBadge.svelte';
   import { ArrowRight, ExternalLink, Music } from '@lucide/svelte';
   import { normalizeSlug } from '$lib/utils/slugify';
   import type { ProfileData } from '@ewanc26/atproto';
@@ -57,7 +57,7 @@
     <div class="hero-text">
       <h1 class="page-title">
         {profile.displayName ?? profile.handle}
-        <VerificationBadge verified={true} />
+        <VerificationBadge verified={true} verifiers={data.verifications} />
       </h1>
       <p class="hero-bio">{profile.description}</p>
     </div>

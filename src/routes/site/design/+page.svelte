@@ -18,7 +18,10 @@
   import favicon from '$lib/assets/favicon.svg';
   import { Copy, Check } from '@lucide/svelte';
   import ColourDemonstrator from '$lib/components/ColourDemonstrator.svelte';
+  import VerifierCard from '$lib/components/VerifierCard.svelte';
+  import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 
+  let { data } = $props();
   let copiedIndex = $state<string | null>(null);
 
   function copyCode(code: string, id: string) {
@@ -510,6 +513,16 @@
         </header>
         <div class="section-content">
           <div class="component-demo-stack">
+            <div class="comp-item">
+              <h3 class="sub-title" id="verifier-card-demo">Verifier Card (Live Profile Data and image fallback example)</h3>
+              <VerifierCard 
+                did={data.profile.did}
+                name={data.profile.displayName ?? data.profile.handle}
+                handle={data.profile.handle}
+                date="2026-06-15"
+              />
+            </div>
+
             <div class="comp-item">
               <h3 class="sub-title" id="panel-primitive">Panel Primitive</h3>
               <div class="panel">
