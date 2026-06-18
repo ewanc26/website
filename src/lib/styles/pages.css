@@ -443,8 +443,38 @@
     position: sticky;
     top: 104px; /* Slightly lower to provide margin from header */
     height: max-content;
+    max-height: calc(100vh - 104px - var(--space-lg));
+    overflow-y: auto;
     min-width: 0;
     contain-intrinsic-size: auto 150px;
+
+    /* Overlay-style scrollbar: invisible until hovered/focused */
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+
+  .post-sidebar:hover,
+  .post-sidebar:focus-within {
+    scrollbar-color: var(--color-text-400) transparent;
+  }
+
+  .post-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .post-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .post-sidebar::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: var(--radius-full);
+    transition: background-color var(--duration-normal) var(--ease-out-quart);
+  }
+
+  .post-sidebar:hover::-webkit-scrollbar-thumb,
+  .post-sidebar:focus-within::-webkit-scrollbar-thumb {
+    background-color: var(--color-text-400);
   }
 
   .post-body {
