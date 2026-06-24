@@ -32,6 +32,7 @@
     "@ewanc26/atproto": "latest",
     "@ewanc26/supporters": "latest",
     "@resvg/resvg-wasm": "latest",
+    "atmentions": "github:pixeline/atmentions",
     "chroma-js": "latest",
     "dompurify": "latest",
     "marked": "latest",

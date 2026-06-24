@@ -3,6 +3,7 @@
     import SiteHead from '$lib/components/SiteHead.svelte';
     import TableOfContents from '$lib/components/TableOfContents.svelte';
     import LeafletBlocks from '$lib/components/leaflet/LeafletBlocks.svelte';
+    import AtMentions from '$lib/components/AtMentions.svelte';
     import Pentacle from '$lib/components/icons/Pentacle.svelte';
     import Leaflet from '$lib/components/icons/Leaflet.svelte';
     import StandardSite from '$lib/components/icons/StandardSite.svelte';
@@ -44,6 +45,9 @@
             {/if}
             <div style="margin-top: 0.25rem;">
                 <ShareButtons url={page.url.href} title={data.post.title} />
+            </div>
+            <div style="margin-top: 0.25rem;">
+                <AtMentions url={page.url.href} aturi={data.post.uri} variant="default" />
             </div>
         </div>
     </header>
