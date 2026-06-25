@@ -1,3 +1,12 @@
+/**
+ * Client-side markdown renderer.
+ *
+ * Used in the browser for Live Markdown preview rather than the
+ * server-side remark pipeline. Converts raw text to sanitised HTML
+ * using marked + DOMPurify. Falls back to unsanitised output during
+ * SSR (hydration catches up).
+ */
+
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 

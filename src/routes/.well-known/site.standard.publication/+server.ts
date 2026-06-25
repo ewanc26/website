@@ -1,3 +1,12 @@
+/**
+ * GET /.well-known/site.standard.publication
+ *
+ * Standard.site publication discovery endpoint.
+ * Returns the AT Protocol URI for the blog publication record,
+ * enabling Standard.site ecosystem tools to link back to the
+ * canonical publication source.
+ */
+
 import type { RequestHandler } from "./$types";
 import {
   PUBLIC_ATPROTO_DID,

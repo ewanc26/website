@@ -1,3 +1,11 @@
+/**
+ * Homepage server load.
+ *
+ * Fetches the AT Protocol profile and any cross-account verifications
+ * (Bluesky social verification records pointing at this DID).
+ * Cache is short (~1 min) so the profile reflects recent changes.
+ */
+
 import type { PageServerLoad } from "./$types";
 import type { Config } from "@sveltejs/adapter-vercel";
 import { fetchProfile } from "@ewanc26/atproto";

@@ -1,8 +1,9 @@
 <script lang="ts">
   /**
-   * Render a Leaflet iframe/embed block.
+   * LeafletEmbed — rendered iframe embed from a Leaflet document.
+   * Supports explicit height or an aspect-ratio based sizing with
+   * a 16:9 fallback for unmeasured embeds.
    */
-
   let { url, height, aspectRatio }: {
     url: string;
     height?: number;

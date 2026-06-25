@@ -1,3 +1,11 @@
+/**
+ * Blog index server load.
+ *
+ * Groups posts by year → month and returns an initial page for client-side
+ * pagination. Uses a flat slice for the first load so the initial render
+ * is fast regardless of the total post count.
+ */
+
 import type { PageServerLoad } from "./$types";
 import type { Config } from "@sveltejs/adapter-vercel";
 import { fetchBlogPosts, fetchPublications } from "@ewanc26/atproto";

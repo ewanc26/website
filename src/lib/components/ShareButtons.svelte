@@ -1,4 +1,9 @@
 <script lang="ts">
+  /**
+   * ShareButtons — share bar for blog posts.
+   * Bluesky intent link, clipboard copy, structured email template.
+   * Bluesky is the primary channel; email covers the rest.
+   */
   import { Link2, Mail } from '@lucide/svelte';
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
 

@@ -1,4 +1,11 @@
 <script lang="ts">
+    /**
+     * TableOfContents — generates a linked outline from headings.
+     *
+     * Queries the given `container` for headings matching `selector`,
+     * slug-ifies each heading id (disambiguating duplicates), and
+     * renders a navigable list. SSR-safe: shows a skeleton before mount.
+     */
     import { onMount } from 'svelte';
 
     let { container, selector = 'h2, h3, h4' }: { container: string; selector?: string } = $props();

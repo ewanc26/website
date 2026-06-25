@@ -1,3 +1,14 @@
+/**
+ * Seasonal colour theme engine.
+ *
+ * The entire site's colour palette is derived from the current Sabbat
+ * position on the Wheel of the Year. This module interpolates between
+ * Sabbat hue rotations using OKLCH colour space via chroma-js.
+ *
+ * The generated CSS is injected server-side in the SvelteKit handle hook
+ * so the theme is present before any client JS runs.
+ */
+
 import chroma from "chroma-js";
 import { type Sabbat, sabbats, getCurrentSabbat } from "$lib/utils/sabbats";
 

@@ -1,18 +1,13 @@
 <script lang="ts">
   /**
-   * VerificationBadge.svelte
+   * VerificationBadge — clickable seal with modal explanation.
    *
-   * Clickable "seal" badge — opens a small modal explaining what the
-   * mark means and who/what backs it, mirroring the structure/styling
-   * of SabbatModal.svelte (dialog + modal-content + modal-header).
+   * Renders as an inline SVG badge inside a heading (h1) that opens
+   * a BaseModal listing verifiers. The modal's font must be explicitly
+   * reset because it inherits the parent h1's oversized styling.
    *
-   * Note: this component renders inside an <h1>, so the modal needs an
-   * explicit font reset — otherwise its text inherits the page-title's
-   * huge, bold styling via normal CSS cascade.
-   *
-   * Edit `verifiedBy` / the body copy below to point at whatever you
-   * want this to actually claim (DID, PDS, a specific attestation, etc).
-   */
+   * Verifiers are fetched server-side from Constellation backlinks
+   * pointing at this DID (app.bsky.graph.verification).
   import { X } from '@lucide/svelte';
   import BaseModal from './BaseModal.svelte';
   import VerifierCard from './VerifierCard.svelte';

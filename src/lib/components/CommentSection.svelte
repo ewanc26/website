@@ -1,4 +1,10 @@
 <script lang="ts">
+    /**
+     * CommentSection — Leaflet comment feed for blog posts.
+     * Displays a list of comments from the AT Protocol network
+     * (fetched via Constellation backlinks). Supports display
+     * name, handle, and relative dating.
+     */
     import { MessageCircle } from '@lucide/svelte';
     import EmptyState from '$lib/components/EmptyState.svelte';
     import type { LeafletComment } from '$lib/services/atproto/fetch';

@@ -1,8 +1,9 @@
 <script lang="ts">
   /**
-   * Render a Leaflet website card block (link preview).
+   * LeafletWebsiteCard — rendered link preview from a Leaflet document.
+   * Shows a thumbnail, title, description, and the hostname extracted
+   * from the destination URL.
    */
-
   import { ExternalLink } from "@lucide/svelte";
 
   let { src, title, description, previewImageSrc }: {

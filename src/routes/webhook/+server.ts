@@ -1,3 +1,11 @@
+/**
+ * POST /webhook — Ko-fi webhook receiver.
+ *
+ * Parses Ko-fi donation/subscription events and persists them to
+ * the AT Protocol PDS using @ewanc26/supporters. Private donations
+ * are silently accepted (200) but not recorded.
+ */
+
 import { json } from "@sveltejs/kit";
 import { env } from "$env/dynamic/private";
 import { parseWebhook, WebhookError, appendEvent } from "@ewanc26/supporters";

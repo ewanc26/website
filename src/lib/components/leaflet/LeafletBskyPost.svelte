@@ -1,9 +1,10 @@
 <script lang="ts">
   /**
-   * Render a Leaflet Bluesky post embed block.
-   * Uses the Bluesky embed URL for a lightweight embed.
+   * LeafletBskyPost — rendered Bluesky post embed from a Leaflet document.
+   * Converts the at:// URI into a bsky.app profile/post URL and links
+   * to it. Uses the configured clientHost to support custom PDS
+   * front-ends.
    */
-
   let { postRef, clientHost }: {
     postRef: { uri: string; cid: string };
     clientHost?: string;

@@ -1,4 +1,9 @@
 <script lang="ts">
+  /**
+   * Now — displays the author's current Kibun status.
+   * Shows emoji + text + date in a subtle card. When no status
+   * is set, collapses silently.
+   */
   import type { KibunStatusData } from '$lib/services/atproto/types';
 
   let { kibunStatus }: { kibunStatus: KibunStatusData | null } = $props();

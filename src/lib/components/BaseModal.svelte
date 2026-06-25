@@ -1,15 +1,23 @@
 <script lang="ts">
+  /**
+   * BaseModal — generic portal-based dialog.
+   *
+   * Accepts a `children` snippet for body content and an optional
+   * `footer` snippet for action buttons. Renders into document.body
+   * via a Svelte use:portal action to avoid z-index and overflow
+   * issues from deep DOM nesting.
+   */
   import { X } from '@lucide/svelte';
   import type { Snippet } from 'svelte';
   import { onMount } from 'svelte';
 
-  let { 
-    title, 
-    open, 
-    onClose, 
+  let {
+    title,
+    open,
+    onClose,
     children,
     footer
-  }: { 
+  }: {
     title: string, 
     open: boolean, 
     onClose: () => void, 

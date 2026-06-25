@@ -1,4 +1,10 @@
 <script lang="ts">
+  /**
+   * LoadingSkeleton — shimmer placeholder for async content.
+   * Renders `count` animated skeleton bars that appear while
+   * data is being fetched. Matches the site's surface color
+   * tokens so the transition to real content is seamless.
+   */
   interface Props {
     count?: number;
   }

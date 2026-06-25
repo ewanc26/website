@@ -1,4 +1,10 @@
 <script lang="ts">
+  /**
+   * ErrorDisplay — standalone error page component.
+   * Used by route error boundaries and within pages that need
+   * to surface API failures with a status code, title, and
+   * optional technical details panel.
+   */
   import { AlertCircle } from '@lucide/svelte';
 
   interface Props {

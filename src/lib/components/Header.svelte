@@ -1,4 +1,10 @@
 <script lang="ts">
+    /**
+     * Header — site navigation bar.
+     * Includes the brand logo (Triskele icon + name), nav links,
+     * a mobile hamburger menu, and the Mōnandæg moon-day indicator.
+     * DEV environment gets a visible development chip.
+     */
     import { SITE, NAV_LINKS } from '$lib/config';
     import { page } from '$app/state';
     import { X, Menu } from '@lucide/svelte';

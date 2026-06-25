@@ -1,4 +1,10 @@
-// src/lib/utils/promise.ts
+/**
+ * Map an async function over an array with a concurrency cap.
+ * Uses a fixed-size worker pool instead of Promise.all on every slice,
+ * which is fairer for mixed-latency tasks and avoids thundering
+ * the downstream service.
+ */
+
 export async function mapWithConcurrency<T, R>(
   items: T[],
   fn: (item: T) => Promise<R>,

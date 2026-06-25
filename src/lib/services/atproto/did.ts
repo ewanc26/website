@@ -1,5 +1,11 @@
-// In-process DID cache — avoids duplicate resolutions within a single request
-// and benefits warm Vercel function instances.
+/**
+ * DID resolution with in-process cache.
+ *
+ * Resolves did:plc and did:web DIDs to their DID documents,
+ * caching results for 1 hour to avoid redundant network calls
+ * within the same Vercel function instance.
+ */
+
 const DID_CACHE = new Map<string, { doc: any; ts: number }>();
 const DID_CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
 
@@ -15,6 +21,11 @@ function fetchWithAbort(
   );
 }
 
+/**
+ * Resolve a DID to its DID document.
+ * Supports did:plc (PLC directory) and did:web (/.well-known/did.json).
+ * Uses AbortController with an 8-second timeout.
+ */
 export async function resolveDid(
   did: string,
   fetchFn: typeof fetch = fetch,

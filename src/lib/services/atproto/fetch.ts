@@ -1,3 +1,15 @@
+/**
+ * AT Protocol data fetching layer.
+ *
+ * Thin wrappers around @ewanc26/atproto library calls plus heavier
+ * fetch functions for subscriptions, comments, and recommendations
+ * that stitch together DID resolution, PDS queries, and Constellation
+ * backlinks.
+ *
+ * All fetch functions accept an optional `fetch` override so SvelteKit's
+ * server-side request context (cookies, caching) is respected.
+ */
+
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 import { mapWithConcurrency } from "$lib/utils/promise";
 import {
@@ -11,6 +23,8 @@ import {
 import { resolveDid } from "./did";
 import { getPDSAgent } from "./agents";
 import { getCache, setCache } from "$lib/utils/cache";
+
+// ── Simple wrappers (delegate to @ewanc26/atproto) ──────
 
 const CACHE_TTL_MS = 1000 * 60 * 5; // 5 minutes
 
@@ -37,6 +51,8 @@ export async function fetchPublications(fetchFn?: typeof fetch) {
 export async function fetchSiteInfo(fetchFn?: typeof fetch) {
   return _fetchSiteInfo(PUBLIC_ATPROTO_DID, fetchFn);
 }
+
+// ── Subscriptions & Recommendations ────────────────────
 
 export interface SubscriptionPublication {
   uri: string;
@@ -216,6 +232,8 @@ export async function fetchRecommendations(
   setCache(cacheKey, data, CACHE_TTL_MS);
   return data;
 }
+
+// ── Comments ──────────────────────────────────────────
 
 export interface LeafletComment {
   uri: string;

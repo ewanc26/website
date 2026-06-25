@@ -1,3 +1,11 @@
+/**
+ * sabbats.ts — The Wheel of the Year.
+ *
+ * Defines the eight Neopagan Sabbats with dates, descriptions,
+ * colour palettes, and hue rotations for the dynamic seasonal theme.
+ * All visual transitions across the site are anchored to these dates.
+ */
+
 export interface Sabbat {
   name: string;
   month: number;
@@ -83,6 +91,10 @@ export const sabbats: Sabbat[] = [
   },
 ];
 
+/**
+ * Return the Sabbat whose date range contains `now`.
+ * Used by the site chrome to display the current seasonal icon.
+ */
 export function getCurrentSabbat(now: Date = new Date()): Sabbat {
   const year = now.getFullYear();
   const getSabbatDate = (s: Sabbat, y: number) =>

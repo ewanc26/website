@@ -1,4 +1,8 @@
 <script lang="ts">
+	/**
+	 * WolfToggle — footer toggle for the wolf-mode Easter egg.
+	 * Reads the wolfMode store and displays "awoo" or "normal".
+	 */
 	import { wolfMode } from '$lib/stores/wolfMode';
 </script>
 

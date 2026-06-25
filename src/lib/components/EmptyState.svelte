@@ -1,4 +1,9 @@
 <script lang="ts">
+  /**
+   * EmptyState — universal placeholder for empty data states.
+   * Shows an icon (optional), title, and description.
+   * Used across home, blog, projects, subscriptions, and comments.
+   */
   import { AlertCircle } from '@lucide/svelte';
 
   interface Props {

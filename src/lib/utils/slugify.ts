@@ -1,3 +1,8 @@
+/**
+ * Convert a title to a URL-friendly slug.
+ * Lowercases, replaces non-alphanumeric runs with hyphens,
+ * strips leading/trailing hyphens. Matches Leaflet's slug logic.
+ */
 export function normalizeSlug(title: string): string {
   return title
     .toLowerCase()

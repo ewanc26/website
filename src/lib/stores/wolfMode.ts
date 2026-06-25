@@ -1,3 +1,14 @@
+/**
+ * wolfMode — replaces visible text with canine onomatopoeia.
+ *
+ * An Easter egg: every word on the page becomes "awoo" / "yip" / "grr" etc.
+ * Numbers, punctuation, abbreviations, and navigation elements are preserved
+ * so the page remains functional.
+ *
+ * The same word always maps to the same sound within a session for
+ * a consistent reading experience.
+ */
+
 import { browser } from "$app/environment";
 import { writable } from "svelte/store";
 
@@ -25,7 +36,8 @@ const wolfSounds = [
   "huff",
 ];
 
-// Store original text content
+// ── State: original text + word→sound mapping ──────────────
+
 let originalTexts = new Map<Node, string>();
 let wordCounter = 0;
 let wordToSoundMap = new Map<string, string>();
@@ -182,6 +194,8 @@ function walkTextNodes(node: Node, callback: (textNode: Text) => void) {
   }
 }
 
+// ── Transform & Revert ────────────────────────────────────
+
 function enableWolfMode() {
   originalTexts.clear();
   wordToSoundMap.clear();
@@ -212,6 +226,8 @@ function disableWolfMode() {
   wordToSoundMap.clear();
   wordCounter = 0;
 }
+
+// ── Public API ────────────────────────────────────────────
 
 const wolfStore = writable(false);
 

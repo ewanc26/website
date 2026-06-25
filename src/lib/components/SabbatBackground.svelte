@@ -1,6 +1,14 @@
 <script lang="ts">
+  /**
+   * SabbatBackground — fading seasonal icons behind the page.
+   *
+   * Renders two large Sabbat symbols (waning previous, waxing next)
+   * at fixed positions. Opacity and scale lerp with the seasonal
+   * progress, creating a slow visual transition that matches the
+   * dynamic colour scheme.
+   */
   import { onMount } from 'svelte';
-  
+
   import Imbolc from '$lib/components/icons/sabbats/Imbolc.svelte';
   import Ostara from '$lib/components/icons/sabbats/Ostara.svelte';
   import Beltane from '$lib/components/icons/sabbats/Beltane.svelte';

@@ -1,5 +1,10 @@
 /**
- * Generates a deterministic 8x8 blocky SVG avatar based on a seed (DID).
+ * Deterministic identicon from any string seed.
+ *
+ * Generates a symmetrical 8x8 block grid coloured by a hash of the
+ * input — useful for DIDs and handles that have no profile image set.
+ * Mirrors the left half across the vertical axis for the classic
+ * identicon look.
  */
 export function getPlaceholderAvatar(seed: string): string {
   // Simple deterministic hash function

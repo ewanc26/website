@@ -1,3 +1,13 @@
+/**
+ * About page server load.
+ *
+ * Fetches all profile data (AT Protocol profile, SIFA skills/education/
+ * languages/external accounts/projects) concurrently with per-call error
+ * fallbacks so a single upstream failure doesn't blank the page.
+ * The SIFA data uses SvelteKit streaming (lazy promise) to unblock
+ * the initial shell render.
+ */
+
 import type { PageServerLoad } from "./$types";
 import type { Config } from "@sveltejs/adapter-vercel";
 import {

@@ -1,3 +1,11 @@
+/**
+ * POST /webhook/github — GitHub Sponsors webhook receiver.
+ *
+ * Handles sponsorship lifecycle events (created, cancelled, tier changes).
+ * Respects sponsor privacy and skips pending/transitional states that
+ * should not produce records.
+ */
+
 import { json } from "@sveltejs/kit";
 import { env } from "$env/dynamic/private";
 import {

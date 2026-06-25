@@ -1,4 +1,10 @@
 <script lang="ts">
+  /**
+   * Footer — site-wide footer.
+   * Shows the current Sabbat name with an info modal trigger,
+   * social links (Bluesky, Eurosky), the wolf mode toggle,
+   * copyright, and quick links to contact/design/meta pages.
+   */
   import { onMount } from 'svelte';
   import { Info } from '@lucide/svelte';
   import { WolfToggle } from '$lib/components/layout';

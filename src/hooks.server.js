@@ -1,3 +1,11 @@
+/**
+ * Server-side hooks.
+ *
+ * The sole hook injects the dynamic Sabbat-driven theme CSS into every page
+ * via transformPageChunk, so the seasonal colour palette is present before
+ * any client JavaScript runs.
+ */
+
 import { getDynamicThemeCSS } from "$lib/server/theme";
 
 /** @type {import('@sveltejs/kit').Handle} */

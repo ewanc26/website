@@ -1,3 +1,8 @@
+/**
+ * Site-wide constants and configuration.
+ * Single source of truth for nav structure and metadata defaults.
+ */
+
 import { PUBLIC_SITE_TITLE, PUBLIC_SITE_DESCRIPTION } from "$env/static/public";
 
 export const SITE = {
