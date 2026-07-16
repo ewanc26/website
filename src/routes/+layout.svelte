@@ -9,6 +9,7 @@
 	import MondayEgg from '$lib/components/ostara-eggs/MondayEgg.svelte';
 	import IdleEgg from '$lib/components/ostara-eggs/IdleEgg.svelte';
 	import ThreeToast from '$lib/components/ostara-eggs/ThreeToast.svelte';
+	import BlogArchiveEggs from '$lib/components/ostara-eggs/BlogArchiveEggs.svelte';
 	import './layout.css';
 
 	let { children } = $props();
@@ -40,6 +41,7 @@
 <MondayEgg />
 <IdleEgg />
 <ThreeToast />
+<BlogArchiveEggs />
 <a class="skip-to-content" href="#main-content">Skip to content</a>
 <Header />
 {#if dev}<span class="dev-chip">DEV</span>{/if}
