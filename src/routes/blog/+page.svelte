@@ -74,9 +74,11 @@
                 <a href={data.blog.rss} target="_blank" rel="noopener" class="section-link hover-lift active-press"><Rss size={14} strokeWidth={2} /> RSS</a>
             </div>
         {/if}
-        <input 
+        <label for="blog-search" class="sr-only">Search posts</label>
+        <input
+            id="blog-search"
             type="search" 
-            placeholder="Search posts or tags..." 
+            placeholder="Search by title or tag"
             bind:value={searchQuery}
             class="blog-search"
         />
@@ -129,7 +131,7 @@
     .blog-search {
         margin-top: var(--space-md);
         width: 100%;
-        padding: var(--space-xs) var(--space-sm);
+        padding: var(--space-sm) var(--space-3);
         border: 1px solid var(--surface-color);
         border-radius: var(--radius-md);
         background: var(--surface-raised);
@@ -138,7 +140,6 @@
         font-size: var(--text-sm);
     }
     .blog-search:focus {
-        outline: none;
         border-color: var(--color-primary-500);
     }
     .post-list--dense {
@@ -155,5 +156,12 @@
     .post-row--product:hover {
         border-color: var(--surface-color);
         background: var(--color-background-50);
+    }
+    @media (max-width: 560px) {
+        .page-hd-meta {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
     }
 </style>

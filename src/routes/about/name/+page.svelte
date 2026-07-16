@@ -23,7 +23,7 @@
 	<header class="post-hd">
 		<h1 class="post-title">{data.post.title}</h1>
 		{#if data.post.description}
-			<p class="post-desc" style="font-size: 1.25em; color: var(--color-ink-700); margin-top: -1rem; margin-bottom: 1.5rem;">{data.post.description}</p>
+			<p class="post-deck">{data.post.description}</p>
 		{/if}
 	</header>
 
@@ -48,15 +48,15 @@
 			<div class="post-after">
 				{#if data.blog}
 					<footer class="post-footer">
-						<div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.8em;">
-							<div style="display: flex; gap: 1rem; align-items: center;">
-								<span style="color: var(--color-ink-600);">via</span>
+						<div class="post-provenance">
+							<div class="post-provenance-row">
+								<span class="post-provenance-label">via</span>
 								<a
 									href="https://standard.site"
 									target="_blank"
 									rel="noopener"
 									aria-label="Standard.site"
-									style="display: flex; align-items: center; gap: 0.25rem; font-weight: 600;"
+									class="post-provenance-link"
 								>
 									<StandardSite size={14} /> Standard.site
 								</a>
@@ -65,7 +65,7 @@
 									target="_blank"
 									rel="noopener"
 									aria-label="Leaflet"
-									style="display: flex; align-items: center; gap: 0.25rem; font-weight: 600;"
+									class="post-provenance-link"
 								>
 									<Leaflet size={14} /> Leaflet
 								</a>

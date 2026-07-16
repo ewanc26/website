@@ -4,14 +4,17 @@
    * Bluesky intent link, clipboard copy, structured email template.
    * Bluesky is the primary channel; email covers the rest.
    */
-  import { Link2, Mail } from '@lucide/svelte';
+  import { Check, Link2, Mail } from '@lucide/svelte';
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
 
   let { url, title } = $props<{ url: string, title: string }>();
 
-  function copyToClipboard() {
-    navigator.clipboard.writeText(url);
-    alert('Link copied to clipboard!');
+  let copied = $state(false);
+
+  async function copyToClipboard() {
+    await navigator.clipboard.writeText(url);
+    copied = true;
+    setTimeout(() => (copied = false), 2000);
   }
 
   // Construct structured email template
@@ -33,8 +36,18 @@ Sent from my website.`);
   <a href={bskyLink} target="_blank" rel="noopener" class="share-link">
     <Bluesky size={16} /> Bluesky
   </a>
-  <button onclick={copyToClipboard} type="button" class="share-btn">
-    <Link2 size={16} /> Copy Link
+  <button
+    onclick={copyToClipboard}
+    type="button"
+    class="share-btn"
+    class:share-btn--copied={copied}
+    aria-live="polite"
+  >
+    {#if copied}
+      <Check size={16} aria-hidden="true" /> Copied
+    {:else}
+      <Link2 size={16} aria-hidden="true" /> Copy link
+    {/if}
   </button>
   <a href={mailtoLink} class="share-link">
     <Mail size={16} /> Email

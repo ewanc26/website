@@ -77,6 +77,8 @@
     border-radius: var(--radius-sm);
     background: var(--surface-raised);
     font-size: var(--text-sm);
+    max-width: 100%;
+    min-width: 0;
   }
 
   .status-emoji {
@@ -90,6 +92,13 @@
   /* Now-playing chip — slimmer padding to accommodate cover art */
   .status-chip--music {
     padding: var(--space-xs) var(--space-sm) var(--space-xs) var(--space-xs);
+  }
+
+  .status-chip--music .status-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .now-playing-art {
@@ -211,6 +220,10 @@
     .hero-avatar {
       width: 48px;
       height: 48px;
+    }
+
+    .project-grid {
+      grid-template-columns: 1fr;
     }
   }
 
@@ -442,12 +455,30 @@
     margin: 0 0 var(--space-md);
   }
 
+  .post-deck {
+    max-width: 60ch;
+    margin: 0 0 var(--space-6);
+    color: var(--color-text-700);
+    font-size: var(--text-lg);
+    line-height: 1.45;
+    text-wrap: balance;
+  }
+
   .post-meta {
     display: flex;
     gap: var(--space-md);
     flex-wrap: wrap;
     font-size: var(--text-xs);
     color: var(--color-text-600);
+  }
+
+  .post-meta--stacked {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .post-meta-group {
+    margin-top: var(--space-xs);
   }
 
   /* Two-column layout: sidebar + content */
@@ -524,6 +555,34 @@
     gap: var(--space-xs);
   }
 
+  .post-provenance {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+    font-size: var(--text-xs);
+  }
+
+  .post-provenance-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm) var(--space-md);
+  }
+
+  .post-provenance-label {
+    color: var(--color-text-600);
+  }
+
+  .post-provenance-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    min-height: 28px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
   .footer-pub {
     margin: 0;
     font-weight: 600;
@@ -562,8 +621,13 @@
   }
 
   @media (max-width: 560px) {
-    .post-title {
+    .post-hd .post-title {
       font-size: clamp(1.5rem, 8vw, 2.5rem);
+    }
+
+    .post-deck {
+      font-size: var(--text-md);
+      text-wrap: pretty;
     }
   }
 
@@ -637,6 +701,12 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--space-md);
+  }
+
+  @media (max-width: 560px) {
+    .crypto-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .crypto-card {

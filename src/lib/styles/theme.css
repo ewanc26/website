@@ -431,7 +431,6 @@
   input:focus,
   textarea:focus,
   select:focus {
-    outline: none;
     border-color: var(--color-primary-500);
     background-color: var(--color-background-50);
   }

@@ -96,7 +96,7 @@
     box-shadow: inset 0 -2px var(--color-primary-500);
   }
 
-  @media (max-width: 560px) {
+  @media (max-width: 800px) {
     .nav {
       padding: 0 var(--space-md);
     }
@@ -165,7 +165,7 @@
   .footer-icon-link {
     display: flex;
     color: var(--color-text-600);
-    opacity: 0.4;
+    opacity: 0.65;
     transition:
       color var(--duration-fast) var(--ease-out-quart),
       opacity var(--duration-fast) var(--ease-out-quart);
@@ -196,6 +196,11 @@
 
     .footer-section {
       justify-content: center;
+    }
+
+    .footer-right {
+      flex-wrap: wrap;
+      gap: var(--space-xs) var(--space-sm);
     }
   }
 
@@ -326,28 +331,47 @@
 
   .share-bar {
     display: flex;
-    gap: var(--space-md);
+    flex-wrap: wrap;
+    gap: var(--space-xs);
     margin-top: var(--space-md);
   }
 
-  .share-link {
+  .share-link,
+  .share-btn {
     color: var(--color-text-700);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 4px;
+    justify-content: center;
+    gap: var(--space-xs);
     text-decoration: none;
     font-size: var(--text-sm);
+    line-height: 1;
+    min-height: 36px;
+    padding: var(--space-sm) var(--space-3);
+    border: 1px solid var(--surface-color);
+    border-radius: var(--radius-sm);
+    background: var(--surface-raised);
+    transition:
+      color var(--duration-fast) var(--ease-out-quart),
+      border-color var(--duration-fast) var(--ease-out-quart),
+      background-color var(--duration-fast) var(--ease-out-quart);
   }
 
   .share-btn {
-    background: none;
-    border: none;
     cursor: pointer;
-    color: var(--color-text-700);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: var(--text-sm);
+    font-weight: 500;
+  }
+
+  .share-link:hover,
+  .share-btn:hover {
+    color: var(--color-primary-700);
+    border-color: var(--color-primary-500);
+    background: var(--color-background-50);
+  }
+
+  .share-btn--copied {
+    color: var(--color-primary-700);
+    border-color: var(--color-primary-500);
   }
 
   /* ── Now card ────────────────────────────────────────────────── */

@@ -32,21 +32,21 @@
     <header class="post-hd hero-reveal">
         <h1 class="post-title">{data.post.title}</h1>
         {#if data.post.description}
-            <p class="post-desc" style="font-size: 1.25em; color: var(--color-ink-700); margin-top: -1rem; margin-bottom: 1.5rem;">{data.post.description}</p>
+            <p class="post-deck">{data.post.description}</p>
         {/if}
-        <div class="post-meta" style="display: flex; flex-direction: column; gap: var(--space-xs);">
+        <div class="post-meta post-meta--stacked">
             <time>{new Date(data.post.createdAt).toLocaleDateString('en-gb', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
             {#if data.post.tags && data.post.tags.length > 0}
-                <div class="meta-tags" style="margin-top: 0.25rem;">
+                <div class="meta-tags post-meta-group">
                     {#each data.post.tags as tag}
                         <span class="meta-tag">{tag}</span>
                     {/each}
                 </div>
             {/if}
-            <div style="margin-top: 0.25rem;">
+            <div class="post-meta-group">
                 <ShareButtons url={page.url.href} title={data.post.title} />
             </div>
-            <div style="margin-top: 0.25rem;">
+            <div class="post-meta-group">
                 <AtMentions url={page.url.href} aturi={data.post.uri} variant="default" />
             </div>
         </div>
@@ -97,17 +97,17 @@
                             <a href={data.blog.url} target="_blank" rel="noopener">{data.blog.title}</a>
                         </p>
                         <p class="footer-desc">{data.blog.description}</p>
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.8em;">
-                            <div style="display: flex; gap: 1rem; align-items: center;">
-                                <span style="color: var(--color-ink-600);">via</span>
-                                <a href="https://standard.site" target="_blank" rel="noopener" aria-label="Standard.site" style="display: flex; align-items: center; gap: 0.25rem; font-weight: 600;">
+                        <div class="post-provenance">
+                            <div class="post-provenance-row">
+                                <span class="post-provenance-label">via</span>
+                                <a href="https://standard.site" target="_blank" rel="noopener" aria-label="Standard.site" class="post-provenance-link">
                                     <StandardSite size={14} /> Standard.site
                                 </a>
-                                <a href="https://leaflet.pub" target="_blank" rel="noopener" aria-label="Leaflet" style="display: flex; align-items: center; gap: 0.25rem; font-weight: 600;">
+                                <a href="https://leaflet.pub" target="_blank" rel="noopener" aria-label="Leaflet" class="post-provenance-link">
                                     <Leaflet size={14} /> Leaflet
                                 </a>
                             </div>
-                            <a href={data.blog.rss} target="_blank" rel="noopener" class="rss-link" style="display: flex; align-items: center; gap: 0.25rem; font-weight: 600;">
+                            <a href={data.blog.rss} target="_blank" rel="noopener" class="rss-link post-provenance-link">
                                 <Rss size={14} strokeWidth={2} /> RSS
                             </a>
                         </div>
