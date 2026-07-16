@@ -227,5 +227,6 @@
 
   .shell-main {
     flex: 1;
+    view-transition-name: page-content;
   }
 }
