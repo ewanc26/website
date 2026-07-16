@@ -8,6 +8,7 @@
    *
    * Verifiers are fetched server-side from Constellation backlinks
    * pointing at this DID (app.bsky.graph.verification).
+   */
   import { X } from '@lucide/svelte';
   import BaseModal from './BaseModal.svelte';
   import VerifierCard from './VerifierCard.svelte';

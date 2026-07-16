@@ -32,17 +32,35 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<span class="te-wrap" onclick={handleClick}>
+<button
+	type="button"
+	class="te-wrap"
+	aria-label="Activate triskele"
+	onclick={handleClick}
+>
 	<span class="te-icon" class:te-spinning={spinning}>
 		<Triskele {size} />
 	</span>
-</span>
+</button>
 
 <style>
-	/* display: contents — no box, no layout impact; click events still bubble */
 	.te-wrap {
-		display: contents;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		line-height: 1;
+		cursor: pointer;
+	}
+
+	.te-wrap:focus-visible {
+		outline: 2px solid var(--color-primary-500);
+		outline-offset: 3px;
+		border-radius: var(--radius-xs);
 	}
 
 	.te-icon {

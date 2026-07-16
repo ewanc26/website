@@ -56,7 +56,7 @@
   </div>
 {/if}
 
-<script module>
+<script module lang="ts">
   function portal(node: HTMLElement, target: HTMLElement) {
     target.appendChild(node);
     return {
