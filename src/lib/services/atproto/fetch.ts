@@ -253,6 +253,7 @@ export interface AtBacklink {
   authorDid: string;
   authorHandle: string;
   authorDisplayName?: string;
+  authorAvatarUrl?: string;
   url: string;
 }
 
@@ -362,30 +363,24 @@ async function fetchBacklinkRefs(
 async function resolveBacklinkAuthor(did: string, fetchFn: typeof fetch) {
   let authorHandle = did;
   let authorDisplayName: string | undefined;
+  let authorAvatarUrl: string | undefined;
 
   try {
-    const didDoc = await resolveDid(did, fetchFn);
-    const handleEntry: string | undefined = didDoc.alsoKnownAs?.find(
-      (entry: string) => entry.startsWith("at://"),
-    );
-    authorHandle = handleEntry?.replace("at://", "") ?? did;
-
-    const pdsUrl =
-      didDoc.service?.find(
-        (service: { id?: string }) => service.id === "#atproto_pds",
-      )?.serviceEndpoint ?? didDoc.service?.[0]?.serviceEndpoint;
-    if (pdsUrl) {
-      const profileRes = await fetchFn(
-        `${pdsUrl}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(did)}&collection=app.bsky.actor.profile&rkey=self`,
+    const profile = await _fetchProfile(did, fetchFn);
+    authorHandle = profile.handle || did;
+    authorDisplayName = profile.displayName || undefined;
+    authorAvatarUrl = profile.avatar || undefined;
+  } catch {
+    try {
+      const didDoc = await resolveDid(did, fetchFn);
+      const handleEntry: string | undefined = didDoc.alsoKnownAs?.find(
+        (entry: string) => entry.startsWith("at://"),
       );
-      if (profileRes.ok) {
-        const profileData = await profileRes.json();
-        authorDisplayName = profileData.value?.displayName;
-      }
-    }
-  } catch {}
+      authorHandle = handleEntry?.replace("at://", "") ?? did;
+    } catch {}
+  }
 
-  return { authorHandle, authorDisplayName };
+  return { authorHandle, authorDisplayName, authorAvatarUrl };
 }
 
 export async function fetchBacklinks(
@@ -431,24 +426,46 @@ export async function fetchBacklinks(
       if (!recordRes.ok) throw new Error(`Backlink not found: ${ref.rkey}`);
       const recordData = await recordRes.json();
       const value = recordData.value ?? {};
-      const { authorHandle, authorDisplayName } = await resolveBacklinkAuthor(
-        ref.did,
-        fetchFn,
-      );
+      const { authorHandle, authorDisplayName, authorAvatarUrl } =
+        await resolveBacklinkAuthor(ref.did, fetchFn);
       const uri = `at://${ref.did}/${ref.collection}/${ref.rkey}`;
 
       let url = uri;
       if (ref.collection === "app.bsky.feed.post") {
         url = `https://bsky.app/profile/${authorHandle}/post/${ref.rkey}`;
-      } else if (
-        typeof value.site === "string" &&
-        !value.site.startsWith("at://")
-      ) {
-        const base = value.site.startsWith("http")
-          ? value.site
-          : `https://${value.site}`;
-        const path = value.path || `/${ref.rkey}`;
-        url = `${base.replace(/\/$/, "")}/${String(path).replace(/^\//, "")}`;
+      } else if (typeof value.site === "string") {
+        let base: string | undefined;
+        if (value.site.startsWith("at://")) {
+          const [siteDid, siteCollection, siteRkey] = value.site
+            .slice(5)
+            .split("/");
+          if (siteDid && siteCollection && siteRkey) {
+            try {
+              const siteRes = await fetchFn(
+                `${SLINGSHOT}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(siteDid)}&collection=${encodeURIComponent(siteCollection)}&rkey=${encodeURIComponent(siteRkey)}`,
+                { headers: { Accept: "application/json" } },
+              );
+              if (siteRes.ok) {
+                const siteRecord = await siteRes.json();
+                const siteUrl = siteRecord.value?.url;
+                if (typeof siteUrl === "string") {
+                  base = siteUrl.startsWith("http")
+                    ? siteUrl
+                    : `https://${siteUrl}`;
+                }
+              }
+            } catch {}
+          }
+        } else {
+          base = value.site.startsWith("http")
+            ? value.site
+            : `https://${value.site}`;
+        }
+
+        if (base) {
+          const path = value.path || `/${ref.rkey}`;
+          url = `${base.replace(/\/$/, "")}/${String(path).replace(/^\//, "")}`;
+        }
       }
 
       return {
@@ -460,6 +477,7 @@ export async function fetchBacklinks(
         authorDid: ref.did,
         authorHandle,
         authorDisplayName,
+        authorAvatarUrl,
         url,
       };
     },

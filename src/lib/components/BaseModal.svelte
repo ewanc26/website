@@ -35,7 +35,16 @@
   <!-- svelte-ignore -->
   <div use:portal={portalElement} class="portal-wrapper">
     <div class="backdrop" role="presentation" onclick={onClose}></div>
-    <dialog {open} class="base-modal">
+    <dialog
+      {open}
+      class="base-modal"
+      aria-modal="true"
+      aria-label={title}
+      oncancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+    >
       <div class="modal-content">
         <header class="modal-header">
           <h2 class="modal-title">{title}</h2>
@@ -88,6 +97,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: min(90vw, 420px);
+    max-height: min(86vh, 760px);
     background: var(--color-background-50);
     border: 1px solid var(--surface-color);
     border-radius: var(--radius-lg);
@@ -128,6 +138,9 @@
   .modal-body {
     color: var(--color-text-800);
     line-height: 1.6;
+    max-height: calc(min(86vh, 760px) - 112px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   .modal-footer {

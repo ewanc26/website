@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import BacklinkAvatars from '$lib/components/BacklinkAvatars.svelte';
 	import SabbatBackground from '$lib/components/SabbatBackground.svelte';
 	import WolfPawTrail from '$lib/components/WolfPawTrail.svelte';
 	import SeasonalThemeUpdater from '$lib/components/SeasonalThemeUpdater.svelte';
@@ -50,4 +51,5 @@
 <div class="shell-main" id="main-content" tabindex="-1">
 	{@render children()}
 </div>
+<BacklinkAvatars />
 <Footer />

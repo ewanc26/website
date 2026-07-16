@@ -1,11 +1,7 @@
 import type { PageServerLoad } from "./$types";
 import type { Config } from "@sveltejs/adapter-vercel";
 import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
-import {
-  fetchBacklinks,
-  fetchBlob,
-  fetchComments,
-} from "$lib/services/atproto";
+import { fetchBlob, fetchComments } from "$lib/services/atproto";
 import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
@@ -21,12 +17,7 @@ import {
 
 export const config: Config = { maxDuration: 60 };
 
-export const load: PageServerLoad = async ({
-  params,
-  fetch,
-  setHeaders,
-  url,
-}) => {
+export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
   // Long cache — posts don’t change often; Vercel CDN takes the burden off the
   // cold function for repeated visitors.
   setHeaders({
@@ -98,13 +89,7 @@ export const load: PageServerLoad = async ({
     renderedContent = await renderMarkdown(markdown);
   }
 
-  const canonicalUrl = new URL(url);
-  canonicalUrl.search = "";
-  canonicalUrl.hash = "";
-  const [comments, backlinks] = await Promise.all([
-    fetchComments(post.uri, fetch),
-    fetchBacklinks([post.uri, post.url, canonicalUrl.href], fetch),
-  ]);
+  const comments = await fetchComments(post.uri, fetch);
   const { content: _content, ...serialisable } = post;
 
   return {
@@ -124,6 +109,5 @@ export const load: PageServerLoad = async ({
         }
       : null,
     comments,
-    backlinks,
   };
 };
