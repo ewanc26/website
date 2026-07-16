@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { blueskyPostUrl } from "$lib/utils/bluesky";
+
   /**
    * LeafletBskyPost — rendered Bluesky post embed from a Leaflet document.
    * Converts the at:// URI into a bsky.app profile/post URL and links
@@ -10,18 +12,7 @@
     clientHost?: string;
   } = $props();
 
-  const BSKY_HOST = "bsky.app";
-
-  function getEmbedUrl(): string {
-    const host = clientHost?.replace(/\/$/, "") || `https://${BSKY_HOST}`;
-    // at-uri: at://did:.../app.bsky.feed.post/rkey
-    const parts = postRef.uri.replace("at://", "").split("/");
-    const did = parts[0];
-    const rkey = parts[parts.length - 1];
-    return `${host}/profile/${did}/post/${rkey}`;
-  }
-
-  let embedUrl = $derived(getEmbedUrl());
+  let embedUrl = $derived(blueskyPostUrl(postRef.uri, clientHost));
 </script>
 
 <div class="leaflet-bsky-post">
