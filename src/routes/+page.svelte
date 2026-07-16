@@ -16,13 +16,12 @@
   let kibunStatus = $state<any>(null);
   let musicStatus = $state<any>(null);
   let posts = $state<any>(null);
-  let sifaProjects = $state<any>(null);
+  let githubProjects = $state<any>(null);
+  let githubUsername = $state('ewanc26');
   let publications = $state<any>(null);
   let links = $state<any>(null);
 
-  let shuffledProjects = $derived(
-    sifaProjects ? [...sifaProjects].sort(() => Math.random() - 0.5).slice(0, 6) : []
-  );
+  let pinnedProjects = $derived(githubProjects ? githubProjects.slice(0, 6) : []);
 
   onMount(async () => {
     // Fetch remaining data in parallel
@@ -30,7 +29,8 @@
         kibunStatus = d.kibunStatus;
         musicStatus = d.musicStatus;
         posts = d.posts;
-        sifaProjects = d.sifaProjects;
+        githubProjects = d.githubProjects;
+        githubUsername = d.githubUsername;
         publications = d.publications;
         links = d.links;
     }).catch(e => console.error("Failed to load home data", e));
@@ -128,11 +128,11 @@
       <h2 class="section-heading">Projects</h2>
       <p class="home-section-note">Tools and experiments</p>
     </div>
-    {#if sifaProjects === null}
+    {#if githubProjects === null}
       <LoadingSkeleton count={2} />
-    {:else if sifaProjects && sifaProjects.length > 0}
+    {:else if githubProjects && githubProjects.length > 0}
         <div class="project-grid">
-          {#each shuffledProjects as project}
+          {#each pinnedProjects as project}
             {#if project.url}
               <a href={project.url} target="_blank" rel="noopener" class="project-card project-card--link hover-lift active-press">
                 <strong class="project-name">{project.name}</strong>
@@ -153,7 +153,7 @@
             {/if}
           {/each}
         </div>
-        <a href="https://docs.ewancroft.uk" target="_blank" rel="noopener" class="section-link">All projects <ArrowRight size={14} strokeWidth={2} /></a>
+        <a href={`https://github.com/${githubUsername}?tab=repositories`} target="_blank" rel="noopener" class="section-link">All repositories <ArrowRight size={14} strokeWidth={2} /></a>
     {:else}
         <EmptyState
           title="Projects unavailable"

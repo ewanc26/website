@@ -2,7 +2,7 @@
  * About page server load.
  *
  * Fetches all profile data (AT Protocol profile, SIFA skills/education/
- * languages/external accounts/projects) concurrently with per-call error
+ * languages/external accounts and pinned GitHub projects concurrently with per-call error
  * fallbacks so a single upstream failure doesn't blank the page.
  * The SIFA data uses SvelteKit streaming (lazy promise) to unblock
  * the initial shell render.
@@ -18,13 +18,15 @@ import {
   fetchSifaEducation,
   fetchSifaLanguages,
   fetchSifaExternalAccounts,
-  fetchSifaProjects,
 } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { env } from "$env/dynamic/private";
+import { fetchPinnedGitHubProjects } from "$lib/services/github";
 
 export const config: Config = { maxDuration: 30 };
 
 export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
+  const githubUsername = env.GITHUB_USERNAME || "ewanc26";
   setHeaders({
     "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600",
   });
@@ -58,9 +60,10 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
     PUBLIC_ATPROTO_DID,
     fetch,
   ).catch(() => []);
-  const sifaProjectsPromise = fetchSifaProjects(
-    PUBLIC_ATPROTO_DID,
+  const githubProjectsPromise = fetchPinnedGitHubProjects(
+    githubUsername,
     fetch,
+    env.GITHUB_TOKEN,
   ).catch(() => []);
 
   const profile = await profilePromise;
@@ -74,7 +77,7 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
       sifaEducation: sifaEducationPromise,
       sifaLanguages: sifaLanguagesPromise,
       sifaExternalAccounts: sifaExternalAccountsPromise,
-      sifaProjects: sifaProjectsPromise,
+      githubProjects: githubProjectsPromise,
     },
   };
 };

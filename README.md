@@ -7,7 +7,7 @@ A personal website and blog built with [SvelteKit](https://kit.svelte.dev/), fea
 - **Blog System**: Markdown-based blog posts with automatic date-based routing
 - **AT Protocol Integration**: Fetch and display Bluesky posts and profiles
 - **Content Rendering**: Custom Leaflet components for flexible content blocks (code, embeds, images, math)
-- **Project Showcase**: Display and manage project listings
+- **Project Showcase**: Display pinned repositories from a GitHub profile
 - **Social Features**: Comment sections, share buttons, and recommendation system
 - **API Endpoints**: REST API for blog posts, recommendations, and subscriptions
 - **Webhooks**: GitHub webhook support for CI/CD integration
@@ -90,6 +90,9 @@ ATPROTO_PASSWORD=your_password
 
 # Other configuration
 PUBLIC_SITE_URL=https://your-domain.com
+GITHUB_USERNAME=your_github_username
+# Optional; public profile parsing is used when this is unset
+GITHUB_TOKEN=github_token_with_public_repository_read_access
 ```
 
 ## Configuration

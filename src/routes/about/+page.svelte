@@ -147,12 +147,12 @@
 
       <section class="about-section">
         <h2 class="section-heading">Projects</h2>
-        {#await data.lazy.sifaProjects}
+        {#await data.lazy.githubProjects}
           <LoadingSkeleton count={3} />
-        {:then sifaProjects}
-          {#if sifaProjects && sifaProjects.length > 0}
+        {:then githubProjects}
+          {#if githubProjects && githubProjects.length > 0}
             <ul class="bare-list">
-              {#each sifaProjects as project}
+              {#each githubProjects as project}
                 <li>
                   <a
                     href={project.url}

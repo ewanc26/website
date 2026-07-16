@@ -4,25 +4,29 @@ import {
   fetchBlogPosts,
   fetchPublications,
   fetchMusicStatus,
-  fetchSifaProjects,
   fetchLinks,
 } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { env } from "$env/dynamic/private";
+import { fetchPinnedGitHubProjects } from "$lib/services/github";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ fetch }) => {
+  const githubUsername = env.GITHUB_USERNAME || "ewanc26";
   const [
     kibunStatus,
     musicStatus,
     postsData,
-    sifaProjects,
+    githubProjects,
     publicationsData,
     links,
   ] = await Promise.all([
     fetchKibunStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
     fetchMusicStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
     fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ posts: [] })),
-    fetchSifaProjects(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
+    fetchPinnedGitHubProjects(githubUsername, fetch, env.GITHUB_TOKEN).catch(
+      () => [],
+    ),
     fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
       publications: [],
     })),
@@ -38,7 +42,8 @@ export const GET: RequestHandler = async ({ fetch }) => {
       publicationRkey: p.publicationRkey,
       rkey: p.rkey,
     })),
-    sifaProjects,
+    githubProjects,
+    githubUsername,
     publications: publicationsData?.publications ?? [],
     links,
   });
