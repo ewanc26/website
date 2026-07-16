@@ -7,7 +7,7 @@
     import Pentacle from '$lib/components/icons/Pentacle.svelte';
     import Leaflet from '$lib/components/icons/Leaflet.svelte';
     import StandardSite from '$lib/components/icons/StandardSite.svelte';
-    import { Rss, MessageCircle } from '@lucide/svelte';
+    import { ExternalLink, Link2, Rss, MessageCircle } from '@lucide/svelte';
     import { page } from '$app/state';
 
     let { data } = $props();
@@ -85,6 +85,35 @@
                                         <time class="comment-date">{new Date(comment.createdAt).toLocaleDateString('en-gb', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
                                     </div>
                                     <p class="comment-body">{comment.plaintext}</p>
+                                </li>
+                            {/each}
+                        </ul>
+                    </section>
+                {/if}
+
+                {#if data.backlinks.length > 0}
+                    <section class="backlinks-section" aria-labelledby="backlinks-heading">
+                        <h2 class="section-heading" id="backlinks-heading">
+                            <Link2 size={16} strokeWidth={2} />
+                            {data.backlinks.length} backlink{data.backlinks.length !== 1 ? 's' : ''}
+                        </h2>
+                        <p class="backlinks-intro">Posts and articles elsewhere on the AT Protocol network that link here.</p>
+                        <ul class="backlink-list">
+                            {#each data.backlinks as backlink}
+                                <li class="backlink">
+                                    <div class="backlink-head">
+                                        <div>
+                                            <strong>{backlink.authorDisplayName ?? backlink.authorHandle}</strong>
+                                            <a href="https://bsky.app/profile/{backlink.authorHandle}" target="_blank" rel="noopener noreferrer" class="comment-handle">@{backlink.authorHandle}</a>
+                                        </div>
+                                        {#if backlink.createdAt}
+                                            <time class="comment-date">{new Date(backlink.createdAt).toLocaleDateString('en-gb', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+                                        {/if}
+                                    </div>
+                                    <p class="comment-body">{backlink.text}</p>
+                                    <a class="backlink-source" href={backlink.url} target="_blank" rel="noopener noreferrer">
+                                        View source <ExternalLink size={13} strokeWidth={2} />
+                                    </a>
                                 </li>
                             {/each}
                         </ul>

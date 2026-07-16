@@ -1,7 +1,11 @@
 import type { PageServerLoad } from "./$types";
 import type { Config } from "@sveltejs/adapter-vercel";
 import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
-import { fetchBlob, fetchComments } from "$lib/services/atproto";
+import {
+  fetchBacklinks,
+  fetchBlob,
+  fetchComments,
+} from "$lib/services/atproto";
 import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
@@ -17,7 +21,12 @@ import {
 
 export const config: Config = { maxDuration: 60 };
 
-export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
+export const load: PageServerLoad = async ({
+  params,
+  fetch,
+  setHeaders,
+  url,
+}) => {
   // Long cache — posts don’t change often; Vercel CDN takes the burden off the
   // cold function for repeated visitors.
   setHeaders({
@@ -51,8 +60,6 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
   if (!post) {
     throw error(404, "Post not found");
   }
-  console.log("POST:", JSON.stringify(post, null, 2));
-
   // Generate a clean text excerpt string by removing common markdown markup indicators
   const cleanExcerpt = (text: string) => {
     return text
@@ -91,7 +98,13 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
     renderedContent = await renderMarkdown(markdown);
   }
 
-  const comments = await fetchComments(post.uri, fetch);
+  const canonicalUrl = new URL(url);
+  canonicalUrl.search = "";
+  canonicalUrl.hash = "";
+  const [comments, backlinks] = await Promise.all([
+    fetchComments(post.uri, fetch),
+    fetchBacklinks([post.uri, post.url, canonicalUrl.href], fetch),
+  ]);
   const { content: _content, ...serialisable } = post;
 
   return {
@@ -111,5 +124,6 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
         }
       : null,
     comments,
+    backlinks,
   };
 };
