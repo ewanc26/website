@@ -76,7 +76,7 @@
         <p class="about-pronouns">{profile.pronouns}</p>
       {/if}
       {#await data.lazy.sifaProfile}
-        <LoadingSkeleton />
+        <LoadingSkeleton label="Loading profile details" />
       {:then sifaProfile}
         {#if sifaProfile}
           <p class="about-headline">{sifaProfile.headline}</p>
@@ -93,7 +93,7 @@
       <section class="about-section">
         <h2 class="section-heading">Skills</h2>
         {#await data.lazy.sifaSkills}
-          <LoadingSkeleton count={3} />
+          <LoadingSkeleton count={3} label="Loading skills" />
         {:then sifaSkills}
           {#if sifaSkills && sifaSkills.length > 0}
             {#each groupSkillsByCategory(sifaSkills) as [category, skills]}
@@ -119,7 +119,7 @@
       <section class="about-section">
         <h2 class="section-heading">Education</h2>
         {#await data.lazy.sifaEducation}
-          <LoadingSkeleton count={2} />
+          <LoadingSkeleton count={2} label="Loading education" />
         {:then sifaEducation}
           {#if sifaEducation && sifaEducation.length > 0}
             <ul class="bare-list">
@@ -148,7 +148,7 @@
       <section class="about-section">
         <h2 class="section-heading">Projects</h2>
         {#await data.lazy.githubProjects}
-          <LoadingSkeleton count={3} />
+          <LoadingSkeleton count={3} label="Loading projects" />
         {:then githubProjects}
           {#if githubProjects && githubProjects.length > 0}
             <ul class="bare-list">
@@ -196,7 +196,7 @@
       <section class="sidebar-section">
         <h2 class="section-heading">Languages</h2>
         {#await data.lazy.sifaLanguages}
-          <LoadingSkeleton count={2} />
+          <LoadingSkeleton count={2} label="Loading languages" />
         {:then sifaLanguages}
           {#if sifaLanguages && sifaLanguages.length > 0}
             <ul class="bare-list">
@@ -220,7 +220,7 @@
       <section class="sidebar-section">
         <h2 class="section-heading">Links</h2>
         {#await data.lazy.sifaExternalAccounts}
-          <LoadingSkeleton count={3} />
+          <LoadingSkeleton count={3} label="Loading accounts" />
         {:then sifaExternalAccounts}
           {#if sifaExternalAccounts && sifaExternalAccounts.length > 0}
             <ul class="bare-list">
@@ -245,7 +245,7 @@
 
       {#await data.lazy.links}
         <section class="sidebar-section">
-          <LoadingSkeleton count={3} />
+          <LoadingSkeleton count={3} label="Loading additional links" />
         </section>
       {:then links}
         {#if links?.cards?.length}

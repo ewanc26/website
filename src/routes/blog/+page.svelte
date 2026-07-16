@@ -2,6 +2,7 @@
     import { normalizeSlug } from '$lib/utils/slugify';
     import SiteHead from '$lib/components/SiteHead.svelte';
     import EmptyState from '$lib/components/EmptyState.svelte';
+    import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
     import { Rss } from '@lucide/svelte';
 
     let { data } = $props();
@@ -54,9 +55,12 @@
         loading = true;
         try {
             const res = await fetch(`/api/blog/posts?offset=${posts.length}&limit=${data.pageSize}`);
+            if (!res.ok) throw new Error(`Blog API returned ${res.status}`);
             const result = await res.json();
             posts = [...posts, ...result.posts];
             hasMore = posts.length < result.total;
+        } catch (error) {
+            console.error('Failed to load more posts', error);
         } finally {
             loading = false;
         }
@@ -116,14 +120,17 @@
 
         {#if hasMore}
             <div class="load-more animate-in stagger-2">
-                <button
-                    onclick={loadMore}
-                    disabled={loading}
-                    type="button"
-                    class="active-press"
-                >
-                    {loading ? 'Loading...' : 'Load more'}
-                </button>
+                {#if loading}
+                    <LoadingSkeleton count={2} label="Loading more posts" />
+                {:else}
+                    <button
+                        onclick={loadMore}
+                        type="button"
+                        class="active-press"
+                    >
+                        Load more
+                    </button>
+                {/if}
             </div>
         {/if}
     {:else if searchQuery}

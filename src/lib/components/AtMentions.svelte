@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
 
 	interface Props {
 		url: string;
@@ -11,11 +12,14 @@
 	let { url, aturi, variant = 'default', class: className = '' }: Props = $props();
 
 	let ready = $state(false);
+	let failed = $state(false);
 
 	onMount(() => {
 		// Import registers the <atmentions-reactions> custom element automatically.
 		import('atmentions').then(() => {
 			ready = true;
+		}).catch(() => {
+			failed = true;
 		});
 	});
 </script>
@@ -32,5 +36,7 @@
 			data-aturi={aturi || undefined}
 			variant={variant}
 		></atmentions-reactions>
+	{:else if !failed}
+		<LoadingSkeleton label="Loading reactions" />
 	{/if}
 </div>

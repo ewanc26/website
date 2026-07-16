@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import SiteHead from '$lib/components/SiteHead.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
   import type { SubscriptionPublication, RecommendationItem } from '$lib/services/atproto/fetch';
 
   let subscriptions = $state<SubscriptionPublication[] | null>(null);
@@ -13,6 +14,9 @@
         fetch('/api/subscriptions'),
         fetch('/api/recommendations')
       ]);
+      if (!subsRes.ok || !recsRes.ok) {
+        throw new Error(`Subscription APIs returned ${subsRes.status}/${recsRes.status}`);
+      }
       subscriptions = await subsRes.json();
       recommendations = await recsRes.json();
     } catch (e) {
@@ -33,11 +37,11 @@
     </p>
   </header>
 
-  <section class="sub-section">
+  <section class="sub-section" aria-busy={subscriptions === null}>
     <h2 class="section-heading">Active Index</h2>
     
     {#if subscriptions === null}
-      <p class="empty-mono">LOADING...</p>
+      <LoadingSkeleton count={3} label="Loading subscriptions" />
     {:else if subscriptions.length === 0}
       <EmptyState
         title="No subscriptions"
@@ -61,11 +65,11 @@
     {/if}
   </section>
 
-  <section class="sub-section">
+  <section class="sub-section" aria-busy={recommendations === null}>
       <h2 class="section-heading">Recommendations</h2>
 
       {#if recommendations === null}
-          <p class="empty-mono">LOADING...</p>
+          <LoadingSkeleton count={3} label="Loading recommendations" />
       {:else if recommendations.length === 0}
           <EmptyState
             title="No recommendations"

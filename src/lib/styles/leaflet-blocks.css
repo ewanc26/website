@@ -252,6 +252,7 @@
   /* ── Embeds ─────────────────────────────────────────────────── */
 
   .leaflet-embed {
+    position: relative;
     margin: var(--space-md) 0;
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -259,8 +260,19 @@
   }
 
   .leaflet-embed iframe {
+    display: block;
     width: 100%;
     border: none;
+  }
+
+  .leaflet-embed-loading {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    padding: var(--space-md);
+    background: var(--surface-raised);
   }
 
   /* ── Website card ───────────────────────────────────────────── */

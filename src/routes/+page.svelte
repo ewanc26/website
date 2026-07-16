@@ -20,20 +20,32 @@
   let githubUsername = $state('ewanc26');
   let publications = $state<any>(null);
   let links = $state<any>(null);
+  let homeLoading = $state(true);
 
   let pinnedProjects = $derived(githubProjects ? githubProjects.slice(0, 6) : []);
 
   onMount(async () => {
-    // Fetch remaining data in parallel
-    fetch('/api/home').then(r => r.json()).then(d => {
-        kibunStatus = d.kibunStatus;
-        musicStatus = d.musicStatus;
-        posts = d.posts;
-        githubProjects = d.githubProjects;
-        githubUsername = d.githubUsername;
-        publications = d.publications;
-        links = d.links;
-    }).catch(e => console.error("Failed to load home data", e));
+    try {
+      const response = await fetch('/api/home');
+      if (!response.ok) throw new Error(`Home API returned ${response.status}`);
+
+      const d = await response.json();
+      kibunStatus = d.kibunStatus;
+      musicStatus = d.musicStatus;
+      posts = d.posts;
+      githubProjects = d.githubProjects;
+      githubUsername = d.githubUsername ?? githubUsername;
+      publications = d.publications;
+      links = d.links;
+    } catch (e) {
+      console.error("Failed to load home data", e);
+      posts = [];
+      githubProjects = [];
+      publications = [];
+      links = { cards: [] };
+    } finally {
+      homeLoading = false;
+    }
   });
 
   function getBlogUrl(post: any) {
@@ -64,7 +76,11 @@
   </section>
 
   <!-- Status row -->
-  {#if kibunStatus !== null || musicStatus !== null}
+  {#if homeLoading}
+    <div class="status-row animate-in stagger-1" aria-busy="true">
+      <LoadingSkeleton label="Loading current status" />
+    </div>
+  {:else if kibunStatus !== null || musicStatus !== null}
     <div class="status-row animate-in stagger-1">
       {#if kibunStatus}
         <div class="status-chip">
@@ -92,13 +108,13 @@
   {/if}
 
   <!-- Writing -->
-  <section class="home-section animate-in stagger-2">
+  <section class="home-section animate-in stagger-2" aria-busy={posts === null}>
     <div class="home-section-hd">
       <h2 class="section-heading">Blog</h2>
       <p class="home-section-note">Recent writing</p>
     </div>
     {#if posts === null}
-      <LoadingSkeleton count={3} />
+      <LoadingSkeleton count={3} label="Loading recent posts" />
     {:else if Array.isArray(posts) && posts.length > 0}
         <ul class="post-list home-post-list">
           {#each posts.filter(p => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION).slice(0, 5) as post, i}
@@ -123,13 +139,13 @@
   </section>
 
   <!-- Projects -->
-  <section class="home-section animate-in stagger-3">
+  <section class="home-section animate-in stagger-3" aria-busy={githubProjects === null}>
     <div class="home-section-hd">
       <h2 class="section-heading">Projects</h2>
       <p class="home-section-note">Pinned on GitHub</p>
     </div>
     {#if githubProjects === null}
-      <LoadingSkeleton count={2} />
+      <LoadingSkeleton count={2} label="Loading pinned projects" />
     {:else if githubProjects && githubProjects.length > 0}
         <div class="project-grid">
           {#each pinnedProjects as project}
@@ -175,13 +191,13 @@
   </section>
 
   <!-- Publications -->
-  <section class="home-section animate-in stagger-4">
+  <section class="home-section animate-in stagger-4" aria-busy={publications === null}>
     <div class="home-section-hd">
       <h2 class="section-heading">Publications</h2>
       <p class="home-section-note">Longer-running collections</p>
     </div>
     {#if publications === null}
-      <LoadingSkeleton count={2} />
+      <LoadingSkeleton count={2} label="Loading publications" />
     {:else if publications && publications.length > 0}
         <ul class="post-list">
           {#each publications.filter((p: any) => p.rkey !== PUBLIC_LEAFLET_BLOG_PUBLICATION) as pub}
@@ -202,13 +218,13 @@
   </section>
 
   <!-- Links -->
-  <section class="home-section animate-in stagger-5">
+  <section class="home-section animate-in stagger-5" aria-busy={links === null}>
     <div class="home-section-hd">
       <h2 class="section-heading">Elsewhere</h2>
       <p class="home-section-note">Other places to find me</p>
     </div>
     {#if links === null}
-      <LoadingSkeleton count={2} />
+      <LoadingSkeleton count={2} label="Loading external links" />
     {:else if links && links.cards && links.cards.length > 0}
         <div class="link-grid">
           {#each links.cards.slice(0, 8) as link}
