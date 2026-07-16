@@ -1,11 +1,11 @@
 # Website
 
-A personal website and blog built with [SvelteKit](https://kit.svelte.dev/), featuring ATProto (Bluesky) integration, markdown-based blog posts, and dynamic content rendering.
+A personal website and blog built with [SvelteKit](https://kit.svelte.dev/), featuring AT Protocol (Bluesky) integration, markdown-based blog posts, and dynamic content rendering.
 
 ## Features
 
 - **Blog System**: Markdown-based blog posts with automatic date-based routing
-- **ATProto Integration**: Fetch and display BlueSky posts and profiles
+- **AT Protocol Integration**: Fetch and display Bluesky posts and profiles
 - **Content Rendering**: Custom Leaflet components for flexible content blocks (code, embeds, images, math)
 - **Project Showcase**: Display and manage project listings
 - **Social Features**: Comment sections, share buttons, and recommendation system
@@ -21,7 +21,7 @@ A personal website and blog built with [SvelteKit](https://kit.svelte.dev/), fea
 - **Styling**: Tailwind CSS
 - **Package Manager**: pnpm
 - **Markdown**: MDAST-based markdown processing
-- **Social**: ATProto SDK for BlueSky integration
+- **Social**: AT Protocol SDK for Bluesky integration
 
 ## Project Structure
 
@@ -33,7 +33,7 @@ src/
 │   │   └── icons/          # SVG icon components
 │   ├── providers/          # Data processing (facets, markdown, etc.)
 │   ├── services/
-│   │   └── atproto/        # Bluesky/ATProto API integration
+│   │   └── atproto/        # Bluesky/AT Protocol API integration
 │   ├── styles/             # Global CSS and design tokens
 │   └── utils/              # Utility functions
 └── routes/
@@ -84,7 +84,7 @@ pnpm run preview
 Create a `.env.local` file in the root directory:
 
 ```env
-# ATProto/Bluesky configuration (if applicable)
+# AT Protocol/Bluesky configuration (if applicable)
 ATPROTO_USERNAME=your_username
 ATPROTO_PASSWORD=your_password
 
