@@ -71,7 +71,10 @@
         {#if data.blog}
             <div class="page-hd-meta">
                 <p class="page-desc">{data.blog.description}</p>
-                <a href={data.blog.rss} target="_blank" rel="noopener" class="section-link hover-lift active-press"><Rss size={14} strokeWidth={2} /> RSS</a>
+                <div class="page-hd-actions">
+                    <span class="archive-count">{data.total} posts</span>
+                    <a href={data.blog.rss} target="_blank" rel="noopener" class="section-link hover-lift active-press"><Rss size={14} strokeWidth={2} /> RSS</a>
+                </div>
             </div>
         {/if}
         <label for="blog-search" class="sr-only">Search posts</label>
@@ -93,7 +96,16 @@
                     {#each monthPosts as post}
                         <li>
                             <a href={getPostUrl(post)} class="post-row post-row--product hover-lift active-press">
-                                <span class="post-title">{post.title}</span>
+                                <span class="row-stack post-summary">
+                                    <span class="post-title">{post.title}</span>
+                                    {#if post.tags.length > 0}
+                                        <span class="post-tags" aria-label={`Tags: ${post.tags.slice(0, 3).join(', ')}`}>
+                                            {#each post.tags.slice(0, 3) as tag}
+                                                <span class="post-tag">{tag}</span>
+                                            {/each}
+                                        </span>
+                                    {/if}
+                                </span>
                                 <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-gb', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
                             </a>
                         </li>
@@ -114,6 +126,12 @@
                 </button>
             </div>
         {/if}
+    {:else if searchQuery}
+        <EmptyState
+            title="No matching posts"
+            description="Try a different title or tag."
+            icon={false}
+        />
     {:else}
         <EmptyState
             title="No posts available"
@@ -127,6 +145,20 @@
         align-items: baseline;
         justify-content: space-between;
         gap: var(--space-md);
+    }
+    .page-hd-actions {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        gap: var(--space-sm);
+    }
+    .archive-count {
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        color: var(--color-text-600);
+    }
+    .page-hd-actions .section-link {
+        margin-top: 0;
     }
     .blog-search {
         margin-top: var(--space-md);
@@ -157,8 +189,34 @@
         border-color: var(--surface-color);
         background: var(--color-background-50);
     }
+    .post-summary {
+        min-width: 0;
+        gap: var(--space-2xs);
+    }
+    .post-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2xs);
+        font-family: var(--font-mono);
+        font-size: 0.625rem;
+        line-height: 1.4;
+        color: var(--color-text-600);
+    }
+    .post-tag + .post-tag::before {
+        content: '\00b7';
+        margin-right: var(--space-2xs);
+        color: var(--color-text-400);
+    }
+    .post-date {
+        flex-shrink: 0;
+    }
     @media (max-width: 560px) {
         .page-hd-meta {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+        .post-row--product {
             align-items: flex-start;
             flex-direction: column;
             gap: var(--space-xs);
