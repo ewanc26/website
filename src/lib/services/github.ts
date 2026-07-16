@@ -54,6 +54,10 @@ function decodeHtml(value: string): string {
     .trim();
 }
 
+function normalizeLanguageColor(value?: string): string | undefined {
+  return value && /^#[\da-f]{6}$/i.test(value) ? value : undefined;
+}
+
 async function fetchPinnedWithGraphQL(
   username: string,
   token: string,
@@ -85,7 +89,7 @@ async function fetchPinnedWithGraphQL(
       description: repository.description ?? "",
       url: repository.url,
       language: repository.primaryLanguage?.name,
-      languageColor: repository.primaryLanguage?.color,
+      languageColor: normalizeLanguageColor(repository.primaryLanguage?.color),
     }),
   );
 }
@@ -130,6 +134,9 @@ async function fetchPinnedFromProfile(
     const language = item.match(
       /<span\b[^>]*itemprop="programmingLanguage"[^>]*>([\s\S]*?)<\/span>/i,
     );
+    const languageColor = item.match(
+      /class="[^"]*\brepo-language-color\b[^"]*"[^>]*style="[^"]*background-color:\s*(#[\da-f]{6})/i,
+    );
 
     return [
       {
@@ -137,6 +144,7 @@ async function fetchPinnedFromProfile(
         description: description ? decodeHtml(description[1]) : "",
         url: `https://github.com/${path}`,
         language: language ? decodeHtml(language[1]) : undefined,
+        languageColor: normalizeLanguageColor(languageColor?.[1]),
       },
     ];
   });

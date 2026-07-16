@@ -164,7 +164,19 @@
                       <strong class="project-name">{project.name}</strong>
                       <span class="project-desc">{project.description}</span>
                     </div>
-                    <ExternalLink size={14} strokeWidth={2} />
+                    <span class="project-row-meta">
+                      {#if project.language}
+                        <span class="project-language">
+                          <span
+                            class="project-language-dot"
+                            style:background-color={project.languageColor ?? 'var(--color-text-400)'}
+                            aria-hidden="true"
+                          ></span>
+                          {project.language}
+                        </span>
+                      {/if}
+                      <ExternalLink size={14} strokeWidth={2} />
+                    </span>
                   </a>
                 </li>
               {/each}

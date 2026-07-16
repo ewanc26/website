@@ -126,7 +126,7 @@
   <section class="home-section animate-in stagger-3">
     <div class="home-section-hd">
       <h2 class="section-heading">Projects</h2>
-      <p class="home-section-note">Tools and experiments</p>
+      <p class="home-section-note">Pinned on GitHub</p>
     </div>
     {#if githubProjects === null}
       <LoadingSkeleton count={2} />
@@ -139,8 +139,20 @@
                 {#if project.description}
                   <p class="project-desc">{project.description}</p>
                 {/if}
-                <span class="project-link">
-                  View <ExternalLink size={10} strokeWidth={2} />
+                <span class="project-card-meta">
+                  {#if project.language}
+                    <span class="project-language">
+                      <span
+                        class="project-language-dot"
+                        style:background-color={project.languageColor ?? 'var(--color-text-400)'}
+                        aria-hidden="true"
+                      ></span>
+                      {project.language}
+                    </span>
+                  {/if}
+                  <span class="project-link">
+                    GitHub <ExternalLink size={10} strokeWidth={2} />
+                  </span>
                 </span>
               </a>
             {:else}

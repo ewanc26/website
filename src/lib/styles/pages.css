@@ -219,14 +219,46 @@
     overflow: hidden;
   }
 
-  .project-link {
+  .project-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-top: auto;
+  }
+
+  .project-language {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    color: var(--color-text-600);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+  }
+
+  .project-language-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .project-link,
+  .project-row-meta {
     display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
-    margin-top: auto;
+  }
+
+  .project-link {
+    margin-left: auto;
     font-size: var(--text-sm);
     color: var(--color-primary-500);
     text-decoration: none;
+  }
+
+  .project-row-meta {
+    flex-shrink: 0;
   }
 
   /* Links grid */
