@@ -15,6 +15,51 @@ export type OgEntry = {
   };
 };
 
+export const OG_DEFAULT_TITLES: Record<string, string> = {
+  BLOG: "Blog",
+  ARTICLE: "Article",
+  ABOUT: "About",
+  SUPPORT: "Support",
+  SUBSCRIPTIONS: "Subscriptions",
+  SITE_META: "Site Metadata",
+  DESIGN: "Design",
+};
+
+const MAX_TITLE_LENGTH = 180;
+const MAX_SUBTITLE_LENGTH = 180;
+
+export const cleanOgText = (
+  value: string | null | undefined,
+  maxLength: number,
+): string | null => {
+  if (!value) return null;
+  const cleaned = value
+    .replace(/[\u0000-\u001f\u007f]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!cleaned) return null;
+  return cleaned.length > maxLength
+    ? `${cleaned.slice(0, maxLength - 1).trimEnd()}\u2026`
+    : cleaned;
+};
+
+export const normalizeOgType = (
+  value: string | null | undefined,
+): string | null => {
+  const cleaned = cleanOgText(value, 32);
+  if (!cleaned) return null;
+  return cleaned.toUpperCase().replace(/[-_\s]+/g, " ");
+};
+
+export const getDefaultOgTitle = (value: string | null): string | null => {
+  if (!value) return null;
+  const key = value
+    .trim()
+    .toUpperCase()
+    .replace(/[-\s]+/g, "_");
+  return OG_DEFAULT_TITLES[key] ?? null;
+};
+
 /**
  * Derive font size directly from the canvas geometry rather than bucketing.
  *
@@ -69,46 +114,57 @@ const getTitleFontSize = (title: string): number =>
 const getSubtitleFontSize = (subtitle: string): number =>
   dynamicFontSize(subtitle, 2, 24, 40);
 
+const displayPath = (slug: string): string => {
+  const path = cleanOgText(slug, 80) ?? "/";
+  if (path === "/") return "ewancroft.uk";
+  const compactPath = path.length > 48 ? `${path.slice(0, 47)}\u2026` : path;
+  return `ewancroft.uk${compactPath.startsWith("/") ? "" : "/"}${compactPath}`;
+};
+
 // Satori uses a JSX-like object structure for defining the layout
 export const getOgTemplate = (entry: OgEntry) => {
-  const { title, subtitle, type, theme } = entry;
+  const title = cleanOgText(entry.title, MAX_TITLE_LENGTH);
+  const subtitle = cleanOgText(entry.subtitle, MAX_SUBTITLE_LENGTH);
+  const type = normalizeOgType(entry.type);
+  const { theme } = entry;
 
   const children = [];
 
-  // Conditionally render type badge
-  if (type && type !== "TECHNICAL SPEC") {
+  if (type) {
     children.push({
       type: "div",
       props: {
         style: {
-          fontSize: "20px",
+          fontSize: "19px",
           color: theme.typeFg,
           fontFamily: "JetBrains Mono",
           textTransform: "uppercase",
-          letterSpacing: "0.1em",
-          marginBottom: "20px",
+          letterSpacing: "0",
+          marginBottom: "24px",
         },
-        children: type,
+        children: `// ${type}`,
       },
     });
   }
 
   // Only render title when provided
   if (title) {
+    const titleFontSize = getTitleFontSize(title);
+    const displayTitle = truncateToFit(title, titleFontSize, 3);
     children.push({
       type: "h1",
       props: {
         style: {
-          fontSize: `${getTitleFontSize(title)}px`,
+          fontSize: `${titleFontSize}px`,
           fontWeight: 800,
-          marginBottom: "20px",
+          margin: "0 0 20px 0",
           display: "-webkit-box",
           "-webkit-line-clamp": "3",
           "-webkit-box-orient": "vertical",
           overflow: "hidden",
           lineHeight: 1.15,
         },
-        children: title,
+        children: displayTitle,
       },
     });
   }
@@ -122,7 +178,8 @@ export const getOgTemplate = (entry: OgEntry) => {
       props: {
         style: {
           fontSize: `${subtitleFontSize}px`,
-          color: theme.accent,
+          color: theme.typeFg,
+          margin: "0",
           display: "-webkit-box",
           "-webkit-line-clamp": "2",
           "-webkit-box-orient": "vertical",
@@ -144,21 +201,21 @@ export const getOgTemplate = (entry: OgEntry) => {
           fontFamily: "JetBrains Mono",
           color: theme.fg,
         },
-        children: "ewancroft.uk",
+        children: displayPath(entry.slug),
       },
     },
     // Pentacle Icon
     {
       type: "svg",
       props: {
-        width: "100",
-        height: "100",
+        width: "160",
+        height: "160",
         viewBox: "0 0 12 12",
         style: {
           position: "absolute",
-          bottom: "80px",
-          right: "80px",
-          opacity: "0.1",
+          bottom: "54px",
+          right: "64px",
+          opacity: "0.13",
         },
         children: [
           {
@@ -186,12 +243,27 @@ export const getOgTemplate = (entry: OgEntry) => {
         width: "100%",
         height: "100%",
         backgroundColor: theme.bg,
-        padding: "80px",
+        padding: "72px 80px 64px",
         justifyContent: "center",
         color: theme.fg,
         position: "relative",
       },
-      children,
+      children: [
+        {
+          type: "div",
+          props: {
+            style: {
+              position: "absolute",
+              top: "0",
+              left: "0",
+              width: "100%",
+              height: "8px",
+              backgroundColor: theme.accent,
+            },
+          },
+        },
+        ...children,
+      ],
     },
   };
 };

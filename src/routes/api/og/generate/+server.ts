@@ -1,33 +1,34 @@
 import type { RequestHandler } from "./$types";
 import { Resvg, initWasm } from "@resvg/resvg-wasm";
 import satori from "satori";
-import { getOgTemplate } from "$lib/og";
+import { cleanOgText, getDefaultOgTitle, getOgTemplate } from "$lib/og";
 import { read } from "$app/server";
 import { getOgThemeColors } from "$lib/server/theme";
-import wasmModule from "@resvg/resvg-wasm/index_bg.wasm?module";
+import wasmUrl from "@resvg/resvg-wasm/index_bg.wasm?url";
 
-let wasmInitialized = false;
-async function ensureWasm() {
-  if (wasmInitialized) return;
-  try {
-    if (typeof wasmModule === "string") {
-      // Strip any query parameters (like ?module or ?url) that Vite might append
-      const assetPath = wasmModule.split("?")[0];
-      const response = await read(assetPath);
-      await initWasm(await response.arrayBuffer());
-    } else {
-      await initWasm(wasmModule as unknown as WebAssembly.Module);
-    }
-    wasmInitialized = true;
-  } catch (err: any) {
-    if (err.message?.includes("Already initialized")) {
-      wasmInitialized = true;
-      return;
-    }
-    console.error("Failed to initialize WASM at path:", wasmModule, err);
-    throw err;
-  }
-}
+let wasmInitialization: Promise<void> | undefined;
+const ensureWasm = () => {
+  wasmInitialization ??= read(wasmUrl)
+    .arrayBuffer()
+    .then(async (buffer) => {
+      try {
+        await initWasm(buffer);
+      } catch (error) {
+        if (
+          error instanceof Error &&
+          error.message.includes("Already initialized")
+        ) {
+          return;
+        }
+        throw error;
+      }
+    })
+    .catch((error) => {
+      wasmInitialization = undefined;
+      throw error;
+    });
+  return wasmInitialization;
+};
 
 import interUrl from "$lib/fonts/Inter-ExtraBold.ttf";
 import monoUrl from "$lib/fonts/JetBrainsMono-Regular.ttf";
@@ -42,58 +43,35 @@ const loadFont = async (url: string) => {
   }
 };
 
+let fonts: Promise<[ArrayBuffer, ArrayBuffer]> | undefined;
+const loadFonts = () =>
+  (fonts ??= Promise.all([loadFont(interUrl), loadFont(monoUrl)]).catch(
+    (error) => {
+      fonts = undefined;
+      throw error;
+    },
+  ));
+
 import { SITE } from "$lib/config";
 
 export const GET: RequestHandler = async ({ url, setHeaders }) => {
   try {
     await ensureWasm();
 
-    const [interFont, monoFont] = await Promise.all([
-      loadFont(interUrl),
-      loadFont(monoUrl),
-    ]);
+    const [interFont, monoFont] = await loadFonts();
 
     const theme = getOgThemeColors();
 
-    const title = url.searchParams.get("title");
-    const subtitle = url.searchParams.get("subtitle");
+    const title = cleanOgText(url.searchParams.get("title"), 180);
+    const subtitle = cleanOgText(url.searchParams.get("subtitle"), 180);
     const type = url.searchParams.get("type");
-
-    let finalTitle = title;
-    if (!finalTitle && type) {
-      switch (type.toUpperCase()) {
-        case "HOME":
-          finalTitle = SITE.title;
-          break;
-        case "BLOG":
-          finalTitle = "Blog";
-          break;
-        case "ABOUT":
-          finalTitle = "About";
-          break;
-        case "SUPPORT":
-          finalTitle = "Support";
-          break;
-        case "SUBSCRIPTIONS":
-          finalTitle = "Subscriptions";
-          break;
-        case "SITE_META":
-          finalTitle = "Site Metadata";
-          break;
-        case "TECHNICAL SPEC":
-          finalTitle = "Technical Specification";
-          break;
-        case "DESIGN":
-          finalTitle = "Design";
-          break;
-      }
-    }
+    const finalTitle = title ?? getDefaultOgTitle(type) ?? SITE.title;
 
     const svg = await satori(
       getOgTemplate({
         title: finalTitle,
         subtitle,
-        slug: url.searchParams.get("slug") ?? "/",
+        slug: cleanOgText(url.searchParams.get("slug"), 100) ?? "/",
         type,
         theme,
       }),
@@ -127,10 +105,10 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
       "Content-Type": "image/png",
       "Cache-Control": import.meta.env.DEV
         ? "no-store"
-        : "public, max-age=86400, s-maxage=31536000, stale-while-revalidate",
+        : "public, max-age=86400, s-maxage=2592000, stale-while-revalidate=604800",
     });
 
-    return new Response(pngData.asPng());
+    return new Response(Uint8Array.from(pngData.asPng()).buffer);
   } catch (e) {
     console.error("OG Generation Error:", e);
     return new Response("Error generating image", { status: 500 });

@@ -169,10 +169,10 @@
       usage: 'Browser tab, bookmarks, shortcuts',
     },
     ogImage: {
-      endpoint: '/og/generate',
+      endpoint: '/api/og/generate',
       size: '1200×630',
-      format: 'SVG (dynamic)',
-      params: ['title', 'type'],
+      format: 'PNG (dynamic)',
+      params: ['title', 'subtitle', 'type', 'slug'],
       usage: 'Open Graph, Twitter cards',
     },
   };

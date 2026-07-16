@@ -62,14 +62,17 @@
     
     // OG Image generation with fallback to absolute static asset if needed
     const ogImage = $derived.by(() => {
-        if (image) return image;
+        if (image) return new URL(image, page.url.origin).href;
         const params = new URLSearchParams();
         if (title) params.set('title', title);
         if (ogType) params.set('type', ogType);
         if (ogImageSubtitle) params.set('subtitle', ogImageSubtitle);
+        params.set('slug', page.url.pathname);
         return new URL(`/api/og/generate?${params.toString()}`, page.url.origin).href;
     });
-    const ogImageAlt = $derived(title ? `OpenGraph image for ${title}` : `OpenGraph image for ${SITE.ogTitle}`);
+    const ogImageAlt = $derived(
+        `Social preview for ${title ?? SITE.title}${ogType ? `, labelled ${ogType.replaceAll('_', ' ').toLowerCase()}` : ''}.`
+    );
 </script>
 
 <svelte:head>
@@ -91,12 +94,13 @@
     <meta property="og:description" content={fullDescription} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
+    {#if ogImage.startsWith('https://')}<meta property="og:image:secure_url" content={ogImage} />{/if}
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:site_name" content={SITE.title} />
-    <meta property="og:locale" content="en_gb" />
+    <meta property="og:locale" content="en_GB" />
 
     <!-- Article-specific Open Graph -->
     {#if type === 'article'}

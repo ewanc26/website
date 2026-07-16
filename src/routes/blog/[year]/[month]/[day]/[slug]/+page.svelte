@@ -21,7 +21,7 @@
     description={data.post.metaDescription}
     ogSubtitle={data.post.description}
     type="article"
-    ogType="BLOG"
+    ogType="ARTICLE"
     publishedTime={data.post.createdAt}
     tags={data.post.tags}
     author="https://ewancroft.uk/about"
