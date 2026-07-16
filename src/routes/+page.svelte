@@ -93,15 +93,21 @@
 
   <!-- Writing -->
   <section class="home-section animate-in stagger-2">
-    <h2 class="section-heading">Blog</h2>
+    <div class="home-section-hd">
+      <h2 class="section-heading">Blog</h2>
+      <p class="home-section-note">Recent writing</p>
+    </div>
     {#if posts === null}
       <LoadingSkeleton count={3} />
     {:else if Array.isArray(posts) && posts.length > 0}
-        <ul class="post-list">
-          {#each posts.filter(p => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION).slice(0, 5) as post}
+        <ul class="post-list home-post-list">
+          {#each posts.filter(p => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION).slice(0, 5) as post, i}
             <li>
               <a href={getBlogUrl(post)} class="post-row hover-lift active-press">
-                <span class="post-title">{post.title}</span>
+                <span class="row-stack post-copy">
+                  {#if i === 0}<span class="home-row-label">Latest</span>{/if}
+                  <span class="post-title">{post.title}</span>
+                </span>
                 <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-gb', { day: 'numeric', month: 'short', year: 'numeric' })}</time>
               </a>
             </li>
@@ -118,7 +124,10 @@
 
   <!-- Projects -->
   <section class="home-section animate-in stagger-3">
-    <h2 class="section-heading">Projects</h2>
+    <div class="home-section-hd">
+      <h2 class="section-heading">Projects</h2>
+      <p class="home-section-note">Tools and experiments</p>
+    </div>
     {#if sifaProjects === null}
       <LoadingSkeleton count={2} />
     {:else if sifaProjects && sifaProjects.length > 0}
@@ -155,7 +164,10 @@
 
   <!-- Publications -->
   <section class="home-section animate-in stagger-4">
-    <h2 class="section-heading">Publications</h2>
+    <div class="home-section-hd">
+      <h2 class="section-heading">Publications</h2>
+      <p class="home-section-note">Longer-running collections</p>
+    </div>
     {#if publications === null}
       <LoadingSkeleton count={2} />
     {:else if publications && publications.length > 0}
@@ -179,7 +191,10 @@
 
   <!-- Links -->
   <section class="home-section animate-in stagger-5">
-    <h2 class="section-heading">Elsewhere</h2>
+    <div class="home-section-hd">
+      <h2 class="section-heading">Elsewhere</h2>
+      <p class="home-section-note">Other places to find me</p>
+    </div>
     {#if links === null}
       <LoadingSkeleton count={2} />
     {:else if links && links.cards && links.cards.length > 0}
