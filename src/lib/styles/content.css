@@ -197,6 +197,11 @@
     color: var(--color-text-600);
   }
 
+  .post-date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
   /* ── Muted icon — reduced opacity decorative icons ────────────── */
 
   .muted-icon {

@@ -207,9 +207,6 @@
         margin-right: var(--space-2xs);
         color: var(--color-text-400);
     }
-    .post-date {
-        flex-shrink: 0;
-    }
     @media (max-width: 560px) {
         .page-hd-meta {
             align-items: flex-start;
