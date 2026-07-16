@@ -117,3 +117,20 @@
     opacity: 1;
   }
 }
+
+@supports selector(::view-transition-old(root)) {
+  ::view-transition-old(root) {
+    animation: vt-fade-out var(--duration-fast) var(--ease-out-quart) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: vt-fade-in var(--duration-normal) var(--ease-out-expo) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}

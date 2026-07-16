@@ -21,12 +21,11 @@
 </script>
 
 <div class="leaflet-embed" aria-busy={!loaded}>
-  {#if !loaded}
-    <div class="leaflet-embed-loading">
-      <LoadingSkeleton count={3} label="Loading embedded content" />
-    </div>
-  {/if}
+  <div class="leaflet-embed-loading" class:is-loaded={loaded} aria-hidden={loaded}>
+    <LoadingSkeleton count={3} label="Loading embedded content" />
+  </div>
   <iframe
+    class:is-loaded={loaded}
     src={url}
     {height}
     style="aspect-ratio: {ratio}"

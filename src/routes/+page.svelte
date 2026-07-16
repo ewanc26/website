@@ -81,7 +81,7 @@
       <LoadingSkeleton label="Loading current status" />
     </div>
   {:else if kibunStatus !== null || musicStatus !== null}
-    <div class="status-row animate-in stagger-1">
+    <div class="status-row content-reveal">
       {#if kibunStatus}
         <div class="status-chip">
           <span class="status-emoji">{kibunStatus.emoji}</span>
@@ -116,7 +116,7 @@
     {#if posts === null}
       <LoadingSkeleton count={3} label="Loading recent posts" />
     {:else if Array.isArray(posts) && posts.length > 0}
-        <ul class="post-list home-post-list">
+        <ul class="post-list home-post-list content-reveal-list">
           {#each posts.filter(p => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION).slice(0, 5) as post, i}
             <li>
               <a href={getBlogUrl(post)} class="post-row hover-lift active-press">
@@ -147,7 +147,7 @@
     {#if githubProjects === null}
       <LoadingSkeleton count={2} label="Loading pinned projects" />
     {:else if githubProjects && githubProjects.length > 0}
-        <div class="project-grid">
+        <div class="project-grid content-reveal-list">
           {#each pinnedProjects as project}
             {#if project.url}
               <a href={project.url} target="_blank" rel="noopener" class="project-card project-card--link hover-lift active-press">
@@ -199,7 +199,7 @@
     {#if publications === null}
       <LoadingSkeleton count={2} label="Loading publications" />
     {:else if publications && publications.length > 0}
-        <ul class="post-list">
+        <ul class="post-list content-reveal-list">
           {#each publications.filter((p: any) => p.rkey !== PUBLIC_LEAFLET_BLOG_PUBLICATION) as pub}
             <li>
               <a href={pub.url} target="_blank" rel="noopener" class="post-row publication-row hover-lift active-press">
@@ -226,7 +226,7 @@
     {#if links === null}
       <LoadingSkeleton count={2} label="Loading external links" />
     {:else if links && links.cards && links.cards.length > 0}
-        <div class="link-grid">
+        <div class="link-grid content-reveal-list">
           {#each links.cards.slice(0, 8) as link}
             <a href={link.url} target="_blank" rel="noopener" class="link-chip hover-lift active-press">
               {#if link.emoji}

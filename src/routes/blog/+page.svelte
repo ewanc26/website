@@ -96,7 +96,7 @@
             <div class="year-head animate-in" style="animation-delay: {100 + i * 100}ms">{year}</div>
             {#each Array.from(months.entries()).sort((a, b) => b[0] - a[0]) as [month, monthPosts]}
                 <div class="month-label">{formatMonth(month)}</div>
-                <ul class="post-list post-list--dense animate-in stagger-1">
+                <ul class="post-list post-list--dense content-reveal-list">
                     {#each monthPosts as post}
                         <li>
                             <a href={getPostUrl(post)} class="post-row post-row--product hover-lift active-press">

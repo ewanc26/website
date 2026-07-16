@@ -23,6 +23,7 @@
 <style>
   .loading-skeleton-group {
     width: 100%;
+    animation: skeleton-enter var(--duration-fast) var(--ease-out-quart) both;
   }
 
   .loading-skeleton {
@@ -34,8 +35,16 @@
     margin: var(--space-xs) 0;
   }
 
+  .loading-skeleton:nth-child(3n + 2) {
+    width: 91%;
+  }
+
+  .loading-skeleton:nth-child(3n) {
+    width: 76%;
+  }
+
   .skeleton-pulse {
-    width: 100%;
+    width: 60%;
     height: 100%;
     background: linear-gradient(
       90deg,
@@ -43,16 +52,25 @@
       var(--surface-raised) 50%,
       var(--surface-color) 100%
     );
-    background-size: 200% 100%;
-    animation: pulse 1.5s infinite linear;
+    animation: skeleton-sweep 1.6s infinite var(--ease-out-quart);
+    will-change: transform;
   }
 
-  @keyframes pulse {
-    0% {
-      background-position: 200% 0;
+  @keyframes skeleton-enter {
+    from {
+      opacity: 0;
     }
-    100% {
-      background-position: -200% 0;
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes skeleton-sweep {
+    from {
+      transform: translateX(-120%);
+    }
+    to {
+      transform: translateX(280%);
     }
   }
 

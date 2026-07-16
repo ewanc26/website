@@ -263,6 +263,12 @@
     display: block;
     width: 100%;
     border: none;
+    opacity: 0;
+    transition: opacity var(--duration-normal) var(--ease-out-quart);
+  }
+
+  .leaflet-embed iframe.is-loaded {
+    opacity: 1;
   }
 
   .leaflet-embed-loading {
@@ -273,6 +279,17 @@
     align-items: center;
     padding: var(--space-md);
     background: var(--surface-raised);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: none;
+    transition:
+      opacity var(--duration-normal) var(--ease-out-quart),
+      visibility 0s linear var(--duration-normal);
+  }
+
+  .leaflet-embed-loading.is-loaded {
+    opacity: 0;
+    visibility: hidden;
   }
 
   /* ── Website card ───────────────────────────────────────────── */

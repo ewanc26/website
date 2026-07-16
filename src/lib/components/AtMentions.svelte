@@ -32,6 +32,7 @@
 >
 	{#if ready}
 		<atmentions-reactions
+			class="content-reveal"
 			data-url={url}
 			data-aturi={aturi || undefined}
 			variant={variant}

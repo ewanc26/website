@@ -79,7 +79,7 @@
         <LoadingSkeleton label="Loading profile details" />
       {:then sifaProfile}
         {#if sifaProfile}
-          <p class="about-headline">{sifaProfile.headline}</p>
+          <p class="about-headline content-reveal">{sifaProfile.headline}</p>
         {/if}
       {/await}
       {#if profile.description}
@@ -97,7 +97,7 @@
         {:then sifaSkills}
           {#if sifaSkills && sifaSkills.length > 0}
             {#each groupSkillsByCategory(sifaSkills) as [category, skills]}
-              <div class="skill-group">
+              <div class="skill-group content-reveal">
                 <h3 class="sub-heading">{category}</h3>
                 <ul class="skill-list">
                   {#each skills as skill}
@@ -122,7 +122,7 @@
           <LoadingSkeleton count={2} label="Loading education" />
         {:then sifaEducation}
           {#if sifaEducation && sifaEducation.length > 0}
-            <ul class="bare-list">
+            <ul class="bare-list content-reveal-list">
               {#each sifaEducation as edu}
                 <li class="post-row">
                   <div class="row-stack">
@@ -151,7 +151,7 @@
           <LoadingSkeleton count={3} label="Loading projects" />
         {:then githubProjects}
           {#if githubProjects && githubProjects.length > 0}
-            <ul class="bare-list">
+            <ul class="bare-list content-reveal-list">
               {#each githubProjects as project}
                 <li>
                   <a
@@ -199,7 +199,7 @@
           <LoadingSkeleton count={2} label="Loading languages" />
         {:then sifaLanguages}
           {#if sifaLanguages && sifaLanguages.length > 0}
-            <ul class="bare-list">
+            <ul class="bare-list content-reveal-list">
               {#each sifaLanguages as lang}
                 <li class="post-row">
                   <span>{lang.name}</span>
@@ -223,7 +223,7 @@
           <LoadingSkeleton count={3} label="Loading accounts" />
         {:then sifaExternalAccounts}
           {#if sifaExternalAccounts && sifaExternalAccounts.length > 0}
-            <ul class="bare-list">
+            <ul class="bare-list content-reveal-list">
               {#each sifaExternalAccounts as account}
                 <li>
                   <a href={account.url} target="_blank" rel="noopener" class="link-row">
@@ -251,7 +251,7 @@
         {#if links?.cards?.length}
           <section class="sidebar-section">
             <h2 class="section-heading">Elsewhere</h2>
-            <ul class="bare-list">
+            <ul class="bare-list content-reveal-list">
               {#each links.cards as card}
                 <li>
                   <a href={card.url} target="_blank" rel="noopener" class="link-row">

@@ -49,7 +49,7 @@
         icon={false}
       />
     {:else}
-      <ul class="bare-list">
+      <ul class="bare-list content-reveal-list">
         {#each subscriptions as sub}
           <li>
             <a href={sub.url} target="_blank" rel="noopener" class="post-row">
@@ -77,7 +77,7 @@
             icon={false}
           />
       {:else}
-          <ul class="bare-list">
+          <ul class="bare-list content-reveal-list">
               {#each recommendations as rec}
                   <li>
                       <a href={rec.url} target="_blank" rel="noopener" class="post-row">
