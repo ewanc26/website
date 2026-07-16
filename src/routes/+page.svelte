@@ -174,9 +174,9 @@
         <ul class="post-list">
           {#each publications.filter((p: any) => p.rkey !== PUBLIC_LEAFLET_BLOG_PUBLICATION) as pub}
             <li>
-              <a href={pub.url} target="_blank" rel="noopener" class="post-row hover-lift active-press">
+              <a href={pub.url} target="_blank" rel="noopener" class="post-row publication-row hover-lift active-press">
                 <span class="post-title">{pub.name}</span>
-                <span class="row-meta">{pub.description}</span>
+                <span class="row-meta publication-description">{pub.description}</span>
               </a>
             </li>
           {/each}
