@@ -5,6 +5,7 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import SabbatBackground from '$lib/components/SabbatBackground.svelte';
+	import WolfPawTrail from '$lib/components/WolfPawTrail.svelte';
 	import MondayEgg from '$lib/components/ostara-eggs/MondayEgg.svelte';
 	import IdleEgg from '$lib/components/ostara-eggs/IdleEgg.svelte';
 	import ThreeToast from '$lib/components/ostara-eggs/ThreeToast.svelte';
@@ -35,6 +36,7 @@
 <svelte:head><link rel="icon" href="/favicon.svg" /></svelte:head>
 
 <SabbatBackground />
+<WolfPawTrail />
 <MondayEgg />
 <IdleEgg />
 <ThreeToast />
