@@ -283,6 +283,17 @@
     .about-grid {
       grid-template-columns: 1fr;
     }
+
+    .about-grid .about-sidebar {
+      position: static;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-lg);
+    }
+
+    .about-grid .about-sidebar .sidebar-section {
+      margin-bottom: 0;
+    }
   }
 
   .about-main {
@@ -420,6 +431,16 @@
     .about-avatar {
       width: 56px;
       height: 56px;
+    }
+
+    .about-sidebar {
+      grid-template-columns: 1fr;
+    }
+
+    .about-main .post-row,
+    .sub-section .post-row {
+      flex-direction: column;
+      gap: var(--space-xs);
     }
   }
 
@@ -675,6 +696,7 @@
   .sub-handle {
     font-size: var(--text-xs);
     color: var(--color-text-500);
+    overflow-wrap: anywhere;
   }
 
   /* ── Support page ────────────────────────────────────────────── */
@@ -716,6 +738,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
+    background: color-mix(in oklch, var(--surface-raised) 55%, transparent);
   }
 
   .crypto-header {

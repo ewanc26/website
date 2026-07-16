@@ -37,7 +37,7 @@
   ogType="SUPPORT"
 />
 
-<main class="shell-narrow">
+<main class="shell-narrow support">
   <header class="page-hd">
     <h1 class="page-title">Support</h1>
     <p class="page-desc">

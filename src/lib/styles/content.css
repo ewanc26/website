@@ -105,7 +105,7 @@
     cursor: default;
   }
 
-  .post-row:hover {
+  a.post-row:hover {
     background-color: var(--surface-raised);
     padding-left: var(--space-sm);
     padding-right: var(--space-sm);
