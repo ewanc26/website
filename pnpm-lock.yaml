@@ -92,6 +92,9 @@ importers:
       "@types/node":
         specifier: latest
         version: 26.0.0
+      prettier:
+        specifier: 3.8.3
+        version: 3.8.3
       svelte:
         specifier: latest
         version: 5.56.3

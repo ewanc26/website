@@ -21,6 +21,7 @@
     "@types/chroma-js": "latest",
     "@types/mdast": "latest",
     "@types/node": "latest",
+    "prettier": "3.8.3",
     "svelte": "latest",
     "svelte-check": "latest",
     "tailwindcss": "latest",
