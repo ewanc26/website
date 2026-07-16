@@ -50,36 +50,38 @@
 {/if}
 
 <footer class="site-footer">
-  <div class="footer-section footer-left">
-    {#if currentSabbat && SabbatIcon}
-      <span class="sabbat-label">
-        <SabbatIcon size={14} />
-        {currentSabbat.name}
-        <button onclick={() => showModal = true} class="info-btn" aria-label="More info about {currentSabbat.name}">
-          <Info size={14} />
-        </button>
-      </span>
-    {/if}
-    <div class="footer-symbols">
-      <a href="https://bsky.app/profile/{PUBLIC_ATPROTO_DID}" aria-label="Bluesky" class="footer-icon-link">
-        <Bluesky size={14} />
-      </a>
-      <a href="https://eurosky.tech" aria-label="Eurosky" class="footer-icon-link">
-        <Eurosky size={14} />
-      </a>
-      <WolfToggle />
+  <div class="footer-inner">
+    <div class="footer-section footer-left">
+      {#if currentSabbat && SabbatIcon}
+        <span class="sabbat-label">
+          <SabbatIcon size={14} />
+          {currentSabbat.name}
+          <button onclick={() => showModal = true} class="info-btn" aria-label="More info about {currentSabbat.name}">
+            <Info size={14} />
+          </button>
+        </span>
+      {/if}
+      <div class="footer-symbols">
+        <a href="https://bsky.app/profile/{PUBLIC_ATPROTO_DID}" aria-label="Bluesky" class="footer-icon-link">
+          <Bluesky size={14} />
+        </a>
+        <a href="https://eurosky.tech" aria-label="Eurosky" class="footer-icon-link">
+          <Eurosky size={14} />
+        </a>
+        <WolfToggle />
+      </div>
     </div>
-  </div>
 
-  <div class="footer-section footer-center">
-    <p>&copy; {new Date().getFullYear()} ewan croft</p>
-  </div>
+    <div class="footer-section footer-center">
+      <p>&copy; {new Date().getFullYear()} ewan croft</p>
+    </div>
 
-  <nav class="footer-section footer-right">
-    <a href="mailto:contact@ewancroft.uk" class="footer-link">contact@ewancroft.uk</a>
-    <a href="/site/design" class="footer-link">design</a>
-    <a href="/site/meta" class="footer-link">site meta</a>
-  </nav>
+    <nav class="footer-section footer-right" aria-label="Footer navigation">
+      <a href="mailto:contact@ewancroft.uk" class="footer-link">contact@ewancroft.uk</a>
+      <a href="/site/design" class="footer-link">design</a>
+      <a href="/site/meta" class="footer-link">site meta</a>
+    </nav>
+  </div>
 </footer>
 
 <style>

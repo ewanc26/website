@@ -27,26 +27,28 @@
 @layer utilities {
   /* Accessibility Utilities */
   .skip-to-content {
-    position: absolute;
-    left: -9999px;
+    position: fixed;
+    left: var(--space-md);
+    top: var(--space-md);
+    transform: translateY(calc(-100% - var(--space-lg)));
     z-index: 999;
-    padding: 1rem 1.5rem;
-    background-color: var(--color-primary-600);
-    color: white;
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--color-text-950);
+    color: var(--color-background-50);
     font-weight: 600;
     text-decoration: none;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-sm);
+    transition: transform var(--duration-fast) var(--ease-out-quart);
   }
 
   .skip-to-content:focus {
-    left: 1rem;
-    top: 1rem;
-    outline: 2px solid var(--color-primary-800);
+    transform: translateY(0);
+    outline: 3px solid var(--color-primary-500);
     outline-offset: 2px;
   }
 
   *:focus-visible {
-    outline: 3px solid var(--color-primary-600);
+    outline: 3px solid var(--color-primary-500);
     outline-offset: 2px;
     border-radius: var(--radius-lg);
   }

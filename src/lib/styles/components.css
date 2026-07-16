@@ -10,11 +10,7 @@
   /* ── Navigation ─────────────────────────────────────────────── */
 
   .nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-md);
-    padding: var(--space-md) var(--space-lg);
+    padding: 0 var(--space-lg);
     border-bottom: 1px solid var(--surface-color);
     background: var(--color-background-50);
     position: sticky;
@@ -23,14 +19,40 @@
     font-size: var(--text-sm);
   }
 
+  .nav-inner {
+    width: 100%;
+    max-width: 72rem;
+    min-height: 68px;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    position: relative;
+  }
+
   .nav-brand {
     font-weight: 700;
-    text-decoration: none;
     color: var(--color-text-950);
     font-size: var(--text-md);
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-xs);
+  }
+
+  .nav-brand-icon button {
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .nav-brand-home {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .nav-brand-home:hover {
+    color: var(--color-primary-700);
+    text-decoration: none;
   }
 
   .moon-day-label {
@@ -61,16 +83,28 @@
   .nav-link {
     text-decoration: none;
     color: var(--color-text-600);
-    transition: color var(--duration-fast) var(--ease-out-quart);
-    padding: var(--space-sm) 0; /* Add touch target area */
+    padding: var(--space-sm) 0;
+    box-shadow: inset 0 -2px transparent;
+    transition:
+      color var(--duration-fast) var(--ease-out-quart),
+      box-shadow var(--duration-fast) var(--ease-out-quart);
   }
 
   .nav-link:hover,
   .nav-link.active {
     color: var(--color-primary-700);
+    box-shadow: inset 0 -2px var(--color-primary-500);
   }
 
   @media (max-width: 560px) {
+    .nav {
+      padding: 0 var(--space-md);
+    }
+
+    .nav-inner {
+      min-height: 60px;
+    }
+
     .menu-toggle {
       display: flex;
     }
@@ -98,6 +132,12 @@
   .site-footer {
     border-top: 1px solid var(--surface-color);
     padding: var(--space-lg);
+  }
+
+  .footer-inner {
+    max-width: 72rem;
+    width: 100%;
+    margin-inline: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -148,11 +188,10 @@
   }
 
   @media (max-width: 640px) {
-    .site-footer {
+    .footer-inner {
       flex-direction: column;
       align-items: center;
       gap: var(--space-lg);
-      padding: var(--space-lg);
     }
 
     .footer-section {

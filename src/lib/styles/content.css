@@ -59,6 +59,16 @@
     letter-spacing: 0.05em;
     color: var(--color-text-600);
     margin: 0 0 var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .section-heading::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: var(--surface-color);
   }
 
   /* ── Post row — list item with label + trailing meta ─────────── */
@@ -96,6 +106,11 @@
   }
 
   .post-row:hover {
+    background-color: var(--surface-raised);
+    padding-left: var(--space-sm);
+    padding-right: var(--space-sm);
+    margin-left: calc(-1 * var(--space-sm));
+    margin-right: calc(-1 * var(--space-sm));
     color: var(--color-primary-500);
     text-decoration-color: var(--color-primary-500);
   }

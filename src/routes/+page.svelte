@@ -67,13 +67,13 @@
   {#if kibunStatus !== null || musicStatus !== null}
     <div class="status-row animate-in stagger-1">
       {#if kibunStatus}
-        <div class="status-chip hover-lift active-press">
+        <div class="status-chip">
           <span class="status-emoji">{kibunStatus.emoji}</span>
           <span class="status-text">{kibunStatus.text}</span>
         </div>
       {/if}
       {#if musicStatus}
-        <div class="status-chip status-chip--music hover-lift active-press">
+        <div class="status-chip status-chip--music">
           {#if musicStatus.artworkUrl}
             <img
               src={musicStatus.artworkUrl}
@@ -124,17 +124,24 @@
     {:else if sifaProjects && sifaProjects.length > 0}
         <div class="project-grid">
           {#each shuffledProjects as project}
-            <div class="project-card hover-lift active-press">
-              <strong class="project-name">{project.name}</strong>
-              {#if project.description}
-                <p class="project-desc">{project.description}</p>
-              {/if}
-              {#if project.url}
-                <a href={project.url} target="_blank" rel="noopener" class="project-link">
+            {#if project.url}
+              <a href={project.url} target="_blank" rel="noopener" class="project-card project-card--link hover-lift active-press">
+                <strong class="project-name">{project.name}</strong>
+                {#if project.description}
+                  <p class="project-desc">{project.description}</p>
+                {/if}
+                <span class="project-link">
                   View <ExternalLink size={10} strokeWidth={2} />
-                </a>
-              {/if}
-            </div>
+                </span>
+              </a>
+            {:else}
+              <div class="project-card">
+                <strong class="project-name">{project.name}</strong>
+                {#if project.description}
+                  <p class="project-desc">{project.description}</p>
+                {/if}
+              </div>
+            {/if}
           {/each}
         </div>
         <a href="https://docs.ewancroft.uk" target="_blank" rel="noopener" class="section-link">All projects <ArrowRight size={14} strokeWidth={2} /></a>

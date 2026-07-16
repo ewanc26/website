@@ -38,9 +38,10 @@
 <MondayEgg />
 <IdleEgg />
 <ThreeToast />
+<a class="skip-to-content" href="#main-content">Skip to content</a>
 <Header />
 {#if dev}<span class="dev-chip">DEV</span>{/if}
-<main class="shell-main">
+<div class="shell-main" id="main-content" tabindex="-1">
 	{@render children()}
-</main>
+</div>
 <Footer />
