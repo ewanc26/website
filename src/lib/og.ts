@@ -2,11 +2,14 @@
  * OG-image template using Satori-compatible structure.
  */
 
+import { getMoonPhaseGeometry } from "$lib/utils/moonPhase";
+
 export type OgEntry = {
   title: string | null;
   subtitle: string | null;
   slug: string;
   type?: string | null;
+  moonPhase: number;
   theme: {
     bg: string;
     fg: string;
@@ -127,6 +130,49 @@ export const getOgTemplate = (entry: OgEntry) => {
   const subtitle = cleanOgText(entry.subtitle, MAX_SUBTITLE_LENGTH);
   const type = normalizeOgType(entry.type);
   const { theme } = entry;
+  const moon = getMoonPhaseGeometry(entry.moonPhase);
+
+  const moonChildren: Array<Record<string, unknown>> = [
+    {
+      type: "circle",
+      props: {
+        cx: "12",
+        cy: "12",
+        r: "9",
+        fill: theme.accent,
+        opacity: "0.14",
+      },
+    },
+  ];
+
+  if (moon.isFull) {
+    moonChildren.push({
+      type: "circle",
+      props: { cx: "12", cy: "12", r: "9", fill: theme.accent },
+    });
+  } else if (moon.path) {
+    moonChildren.push({
+      type: "path",
+      props: {
+        d: moon.path,
+        fill: theme.accent,
+        fillRule: moon.isGibbous ? "evenodd" : "nonzero",
+      },
+    });
+  }
+
+  moonChildren.push({
+    type: "circle",
+    props: {
+      cx: "12",
+      cy: "12",
+      r: "9",
+      fill: "none",
+      stroke: theme.accent,
+      strokeWidth: "1",
+      opacity: moon.isNew ? "0.8" : "0.3",
+    },
+  });
 
   const children = [];
 
@@ -142,7 +188,7 @@ export const getOgTemplate = (entry: OgEntry) => {
           letterSpacing: "0",
           marginBottom: "24px",
         },
-        children: `// ${type}`,
+        children: type,
       },
     });
   }
@@ -249,6 +295,21 @@ export const getOgTemplate = (entry: OgEntry) => {
         position: "relative",
       },
       children: [
+        {
+          type: "svg",
+          props: {
+            width: "210",
+            height: "210",
+            viewBox: "0 0 24 24",
+            style: {
+              position: "absolute",
+              top: "48px",
+              right: "58px",
+              opacity: "0.11",
+            },
+            children: moonChildren,
+          },
+        },
         {
           type: "div",
           props: {

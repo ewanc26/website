@@ -7,6 +7,7 @@
   import Eurosky from '$lib/components/icons/Eurosky.svelte';
   import Leaflet from '$lib/components/icons/Leaflet.svelte';
   import StandardSite from '$lib/components/icons/StandardSite.svelte';
+  import MoonPhase from '$lib/components/icons/MoonPhase.svelte';
   import Imbolc from '$lib/components/icons/sabbats/Imbolc.svelte';
   import Ostara from '$lib/components/icons/sabbats/Ostara.svelte';
   import Beltane from '$lib/components/icons/sabbats/Beltane.svelte';
@@ -19,6 +20,7 @@
   import { Copy, Check } from '@lucide/svelte';
   import ColourDemonstrator from '$lib/components/ColourDemonstrator.svelte';
   import VerifierCard from '$lib/components/VerifierCard.svelte';
+  import { getMoonPhaseName } from '$lib/utils/moonPhase';
   import { PUBLIC_ATPROTO_DID } from '$env/static/public';
 
   let { data } = $props();
@@ -99,6 +101,15 @@
     { name: 'Samhain', component: Samhain },
     { name: 'Yule', component: Yule }
   ];
+
+  const lunarCycle = Array.from({ length: 28 }, (_, index) => {
+    const phase = index / 28;
+    return {
+      day: index + 1,
+      phase,
+      name: getMoonPhaseName(phase).name,
+    };
+  });
 
   const principles = [
     {
@@ -182,11 +193,19 @@
   ];
 
   const ogPreviews = [
-    { title: 'Design', type: 'DESIGN', desc: 'Technical Spec' },
-    { title: 'About', type: 'ABOUT', desc: 'Profile' },
-    { title: 'The Pentacle and the Triskele', type: 'BLOG', desc: 'Blog Post' },
-    { title: 'Projects', type: 'PROJECTS', desc: 'Projects Index' },
-  ];
+    { title: 'Design', type: 'DESIGN', desc: 'Technical specification', slug: '/site/design' },
+    { title: 'About Ewan Croft', type: 'ABOUT', desc: 'Identity, work, and presence on the open web', slug: '/about' },
+    { title: 'The Pentacle and the Triskele', type: 'ARTICLE', desc: 'Notes on two symbols used throughout the website', slug: '/blog/pentacle-and-triskele' },
+    { title: 'Selected Projects', type: 'PROJECTS', desc: 'Open-source software and experiments', slug: '/projects' },
+  ].map((preview) => ({
+    ...preview,
+    url: `/api/og/generate?${new URLSearchParams({
+      title: preview.title,
+      subtitle: preview.desc,
+      type: preview.type,
+      slug: preview.slug,
+    })}`,
+  }));
 </script>
 
 <SiteHead
@@ -463,7 +482,7 @@
           <h2 class="section-title">Iconography</h2>
         </header>
         <div class="section-content">
-          <p class="section-intro">System icons are implemented as SVG components (16px, <code>currentColor</code>). Pagan and seasonal symbols use <code>currentColor</code> for stroke or fill.</p>
+          <p class="section-intro">System icons are implemented as SVG components (16px, <code>currentColor</code>). Pagan, seasonal, and lunar symbols use <code>currentColor</code> for stroke or fill, keeping them consistent across themes.</p>
           
           <h3 class="sub-title" id="iconography-system">System Icons</h3>
           <div class="icon-grid">
@@ -477,6 +496,17 @@
           <div class="icon-grid">
             <div class="icon-card"><div class="icon-preview"><Pentacle size={32} /></div><code class="icon-name">Pentacle</code></div>
             <div class="icon-card"><div class="icon-preview"><Triskele size={32} /></div><code class="icon-name">Triskele</code></div>
+          </div>
+
+          <h3 class="sub-title" id="iconography-lunar">Lunar Phases</h3>
+          <p class="component-note">A continuous SVG terminator sampled here across a 28-day visual cycle. The footer renders the live astronomical phase and pairs it with the nearest conventional phase name.</p>
+          <div class="lunar-cycle-grid">
+            {#each lunarCycle as step}
+              <div class="lunar-phase-sample" title="Day {step.day}: {step.name}">
+                <div class="icon-preview"><MoonPhase phase={step.phase} size={28} /></div>
+                <code class="icon-name">{String(step.day).padStart(2, '0')}</code>
+              </div>
+            {/each}
           </div>
 
           <h3 class="sub-title" id="iconography-wheel">Wheel of the Year</h3>
@@ -689,7 +719,42 @@
 
             <div class="asset-card og-card">
               <h3 class="sub-title" id="open-graph">Open Graph (Dynamic)</h3>
-              <p class="section-intro">OG images use <code>getHueRotation()</code> to dynamically apply the current seasonal palette. They are force-rendered in dark mode for consistency.</p>
+              <p class="section-intro">These are final 1200×630 PNGs rendered by the production endpoint. They use the current seasonal palette, continuous lunar phase, and pentacle mark.</p>
+              <div class="og-render-grid">
+                {#each ogPreviews as preview}
+                  <figure class="og-render">
+                    <a href={preview.url} target="_blank" rel="noopener" aria-label="Open full-size {preview.title} OpenGraph image">
+                      <img
+                        src={preview.url}
+                        alt="OpenGraph preview for {preview.title}"
+                        width="1200"
+                        height="630"
+                        loading="lazy"
+                        class="og-img"
+                      />
+                    </a>
+                    <figcaption>
+                      <strong>{preview.title}</strong>
+                      <code>{preview.type}</code>
+                    </figcaption>
+                  </figure>
+                {/each}
+              </div>
+              <div class="og-info-grid">
+                <dl class="asset-meta">
+                  <div><dt>ENDPOINT</dt><dd><code>{assets.ogImage.endpoint}</code></dd></div>
+                  <div><dt>SIZE</dt><dd>{assets.ogImage.size}</dd></div>
+                  <div><dt>FORMAT</dt><dd>{assets.ogImage.format}</dd></div>
+                </dl>
+                <div>
+                  <span class="meta-label">SEASONAL PALETTE</span>
+                  <div class="og-swatches">
+                    {#each ogColours as colour}
+                      <span class="og-swatch" style:background={colour.value} title="{colour.token}: {colour.desc}"></span>
+                    {/each}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import satori from "satori";
 import { cleanOgText, getDefaultOgTitle, getOgTemplate } from "$lib/og";
 import { read } from "$app/server";
 import { getOgThemeColors } from "$lib/server/theme";
+import { getMoonIllumination } from "$lib/utils/moonPhase";
 import wasmUrl from "@resvg/resvg-wasm/index_bg.wasm?url";
 
 let wasmInitialization: Promise<void> | undefined;
@@ -73,6 +74,7 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
         subtitle,
         slug: cleanOgText(url.searchParams.get("slug"), 100) ?? "/",
         type,
+        moonPhase: getMoonIllumination(new Date()).phase,
         theme,
       }),
       {

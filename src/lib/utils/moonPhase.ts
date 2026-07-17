@@ -105,6 +105,73 @@ export function getMoonIllumination(date = new Date()) {
   };
 }
 
+const MOON_PHASES = [
+  "New moon",
+  "Waxing crescent",
+  "First quarter",
+  "Waxing gibbous",
+  "Full moon",
+  "Waning gibbous",
+  "Last quarter",
+  "Waning crescent",
+] as const;
+
+export function getMoonPhaseName(phase: number) {
+  const normalizedPhase = ((phase % 1) + 1) % 1;
+  const index =
+    Math.floor(normalizedPhase * MOON_PHASES.length + 0.5) % MOON_PHASES.length;
+
+  return {
+    name: MOON_PHASES[index],
+    index,
+  };
+}
+
+/** Build the illuminated SVG silhouette for any point in the lunar cycle. */
+export function getMoonPhaseGeometry(phase: number) {
+  const normalizedPhase = ((phase % 1) + 1) % 1;
+  const radius = Number(
+    (9 * Math.abs(Math.cos(normalizedPhase * Math.PI * 2))).toFixed(3),
+  );
+  const isNew = normalizedPhase < 0.0001 || normalizedPhase > 0.9999;
+  const isFull = Math.abs(normalizedPhase - 0.5) < 0.0001;
+  const isGibbous = normalizedPhase > 0.25 && normalizedPhase < 0.75;
+
+  if (isNew || isFull) {
+    return { normalizedPhase, isNew, isFull, isGibbous, path: "" };
+  }
+
+  const circle = "M12 3a9 9 0 1 1 0 18 9 9 0 1 1 0-18Z";
+  let path: string;
+
+  if (normalizedPhase <= 0.25) {
+    path = `M12 3a9 9 0 0 1 0 18 ${radius} 9 0 0 0 0-18Z`;
+  } else if (normalizedPhase < 0.5) {
+    const shadow = `M12 3a9 9 0 0 0 0 18 ${radius} 9 0 0 1 0-18Z`;
+    path = `${circle}${shadow}`;
+  } else if (normalizedPhase < 0.75) {
+    const shadow = `M12 3a9 9 0 0 1 0 18 ${radius} 9 0 0 0 0-18Z`;
+    path = `${circle}${shadow}`;
+  } else {
+    path = `M12 3a9 9 0 0 0 0 18 ${radius} 9 0 0 1 0-18Z`;
+  }
+
+  return { normalizedPhase, isNew, isFull, isGibbous, path };
+}
+
+/** Return the nearest of the eight conventional lunar phases. */
+export function getMoonPhase(date = new Date()) {
+  const { phase, fraction } = getMoonIllumination(date);
+  const normalizedPhase = ((phase % 1) + 1) % 1;
+  const conventionalPhase = getMoonPhaseName(normalizedPhase);
+
+  return {
+    ...conventionalPhase,
+    fraction,
+    phase: normalizedPhase,
+  };
+}
+
 /** Treat the roughly one-day period above 99% illumination as visibly full. */
 export function isVisiblyFullMoon(date = new Date()) {
   return getMoonIllumination(date).fraction >= 0.99;

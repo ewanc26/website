@@ -99,7 +99,9 @@
 
   .home-ornament {
     display: flex;
+    align-items: center;
     justify-content: center;
+    gap: var(--space-md);
     padding: var(--space-lg) 0 var(--space-md);
     color: var(--color-primary-500);
     opacity: 0.55;
@@ -1609,6 +1611,39 @@
     font-family: var(--font-mono);
   }
 
+  .lunar-cycle-grid {
+    display: grid;
+    grid-template-columns: repeat(14, minmax(0, 1fr));
+    gap: var(--space-2xs);
+    padding: var(--space-xs);
+    border-radius: var(--radius-md);
+    background: var(--surface-raised);
+  }
+
+  .lunar-phase-sample {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-3) var(--space-xs);
+    border-radius: var(--radius-sm);
+    background: var(--surface-sunken);
+    color: var(--color-text-950);
+  }
+
+  @media (max-width: 900px) {
+    .lunar-cycle-grid {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .lunar-cycle-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
   .component-demo-stack {
     display: flex;
     flex-direction: column;
@@ -1904,6 +1939,43 @@
     display: block;
   }
 
+  .og-render-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-md);
+    margin: var(--space-lg) 0;
+  }
+
+  .og-render {
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--surface-color);
+    border-radius: var(--radius-md);
+    background: var(--surface-sunken);
+  }
+
+  .og-render a {
+    display: block;
+  }
+
+  .og-render figcaption {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding: var(--space-3);
+    color: var(--color-text-700);
+    font-size: var(--text-xs);
+  }
+
+  .og-render figcaption strong {
+    overflow: hidden;
+    color: var(--color-text-950);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .asset-meta {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -1957,6 +2029,10 @@
   }
 
   @media (max-width: 600px) {
+    .og-render-grid {
+      grid-template-columns: 1fr;
+    }
+
     .og-info-grid {
       grid-template-columns: 1fr;
     }

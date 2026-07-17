@@ -5,6 +5,7 @@
   import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
   import VerificationBadge from '$lib/components/VerificationBadge.svelte';
   import Triskele from '$lib/components/icons/Triskele.svelte';
+  import Pentacle from '$lib/components/icons/Pentacle.svelte';
   import { ArrowRight, ExternalLink, Music } from '@lucide/svelte';
   import { normalizeSlug } from '$lib/utils/slugify';
   import type { ProfileData } from '@ewanc26/atproto';
@@ -114,7 +115,9 @@
   {/if}
 
   <div class="home-ornament" aria-hidden="true">
+    <Pentacle size={11} />
     <Triskele size={18} />
+    <Pentacle size={11} />
   </div>
 
   <!-- Writing -->

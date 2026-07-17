@@ -9,9 +9,12 @@
   import { Info } from '@lucide/svelte';
   import { WolfToggle } from '$lib/components/layout';
   import { getCurrentSabbat, type Sabbat } from '$lib/utils/sabbats';
+  import { getMoonPhase } from '$lib/utils/moonPhase';
   import SabbatModal from './SabbatModal.svelte';
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
   import Eurosky from '$lib/components/icons/Eurosky.svelte';
+  import MoonPhase from '$lib/components/icons/MoonPhase.svelte';
+  import Pentacle from '$lib/components/icons/Pentacle.svelte';
   import Beltane from '$lib/components/icons/sabbats/Beltane.svelte';
   import Imbolc from '$lib/components/icons/sabbats/Imbolc.svelte';
   import Litha from '$lib/components/icons/sabbats/Litha.svelte';
@@ -37,6 +40,7 @@
   };
 
   let currentSabbat = $state<Sabbat | null>(null);
+  let currentMoonPhase = $state<ReturnType<typeof getMoonPhase> | null>(null);
   let showModal = $state(false);
 
   let SabbatIcon = $derived(currentSabbat ? SabbatIcons[currentSabbat.name] : null);
@@ -56,6 +60,13 @@
 
   onMount(() => {
     currentSabbat = getCurrentSabbat(new Date());
+    currentMoonPhase = getMoonPhase(new Date());
+
+    const moonTimer = setInterval(() => {
+      currentMoonPhase = getMoonPhase(new Date());
+    }, 60 * 60 * 1000);
+
+    return () => clearInterval(moonTimer);
   });
 </script>
 
@@ -65,16 +76,24 @@
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-section footer-left">
-      {#if currentSabbat && SabbatIcon}
-        <span class="sabbat-label">
-          <SabbatIcon size={14} />
-          {currentSabbat.name}
-          <button onclick={() => showModal = true} class="info-btn" aria-label="More info about {currentSabbat.name}">
-            <Info size={14} />
-          </button>
-        </span>
-      {/if}
+    <div class="footer-top">
+      <div class="footer-context" aria-label="Seasonal context">
+        {#if currentSabbat && SabbatIcon}
+          <span class="sabbat-label">
+            <SabbatIcon size={14} />
+            {currentSabbat.name}
+            <button onclick={() => showModal = true} class="info-btn" aria-label="More info about {currentSabbat.name}">
+              <Info size={14} />
+            </button>
+          </span>
+        {/if}
+        {#if currentMoonPhase}
+          <span class="lunar-label" aria-label="Moon phase: {currentMoonPhase.name}" title={currentMoonPhase.name}>
+            <MoonPhase phase={currentMoonPhase.phase} size={16} />
+            <span>{currentMoonPhase.name}</span>
+          </span>
+        {/if}
+      </div>
       <div class="footer-symbols">
         <a href="https://bsky.app/profile/{PUBLIC_ATPROTO_DID}" aria-label="Bluesky" class="footer-icon-link">
           <Bluesky size={14} />
@@ -86,21 +105,20 @@
       </div>
     </div>
 
-    <div class="footer-section footer-center">
-      <p>&copy; {copyrightYears} ewan croft</p>
+    <div class="footer-bottom">
+      <p class="footer-copyright"><Pentacle size={12} /> &copy; {copyrightYears} ewan croft</p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href={`mailto:${contactEmail}`} class="footer-link">{contactEmail}</a>
+        {#if primaryRepository}
+          <a href={primaryRepository.url} rel="noopener" class="footer-link">source</a>
+        {/if}
+        {#if projectLicense?.url}
+          <a href={projectLicense.url} rel="license noopener" class="footer-link">{projectLicense.name ?? 'license'}</a>
+        {/if}
+        <a href="/site/design" class="footer-link">design</a>
+        <a href="/site/meta" class="footer-link">site meta &amp; privacy</a>
+      </nav>
     </div>
-
-    <nav class="footer-section footer-right" aria-label="Footer navigation">
-      <a href={`mailto:${contactEmail}`} class="footer-link">{contactEmail}</a>
-      {#if primaryRepository}
-        <a href={primaryRepository.url} rel="noopener" class="footer-link">source</a>
-      {/if}
-      {#if projectLicense?.url}
-        <a href={projectLicense.url} rel="license noopener" class="footer-link">{projectLicense.name ?? 'license'}</a>
-      {/if}
-      <a href="/site/design" class="footer-link">design</a>
-      <a href="/site/meta" class="footer-link">site meta &amp; privacy</a>
-    </nav>
   </div>
 </footer>
 
@@ -111,7 +129,19 @@
     color: var(--color-text-600);
     display: flex;
     align-items: center;
+    flex-shrink: 0;
     gap: var(--space-xs);
+    white-space: nowrap;
+  }
+  .lunar-label {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: var(--space-xs);
+    color: var(--color-text-500);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    white-space: nowrap;
   }
   .info-btn {
     background: none;
@@ -121,7 +151,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px; /* Expands touch area */
+    width: var(--control-size);
+    height: var(--control-size);
+    padding: 0;
     flex-shrink: 0;
   }
   .info-btn:hover {

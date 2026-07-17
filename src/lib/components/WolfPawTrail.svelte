@@ -1,16 +1,112 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { wolfMode } from '$lib/stores/wolfMode';
 
-	const prints = [
-		{ left: 4, top: 84, size: 42, rotation: -24, delay: 0 },
-		{ left: 13, top: 70, size: 36, rotation: 18, delay: 90 },
-		{ left: 8, top: 53, size: 40, rotation: -18, delay: 180 },
-		{ left: 18, top: 38, size: 34, rotation: 22, delay: 270 },
-		{ left: 12, top: 21, size: 38, rotation: -14, delay: 360 },
-		{ left: 23, top: 7, size: 32, rotation: 20, delay: 450 },
-		{ left: 91, top: 76, size: 34, rotation: 26, delay: 180 },
-		{ left: 84, top: 61, size: 30, rotation: -18, delay: 270 }
-	];
+	let trailElement = $state<HTMLDivElement | null>(null);
+
+	onMount(() => {
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const finePointer = window.matchMedia('(pointer: fine)');
+		const spacing = 64;
+		const lateralOffset = 11;
+		const maximumPrints = 10;
+		let lastX: number | null = null;
+		let lastY: number | null = null;
+		let distanceSincePrint = 0;
+		let step = 0;
+
+		const addPrint = (x: number, y: number, rotation: number) => {
+			if (!trailElement) return;
+
+			const paw = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+			const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+			const size = step % 2 === 0 ? 36 : 32;
+			const transform = `translate3d(-50%, -50%, 0) rotate(${rotation}deg)`;
+
+			paw.classList.add('paw');
+			paw.setAttribute('viewBox', '0 0 55.965061 67.624741');
+			paw.style.left = `${x}px`;
+			paw.style.top = `${y}px`;
+			paw.style.width = `${size}px`;
+			use.setAttribute('href', '#wolf-paw-print');
+			paw.append(use);
+			trailElement.append(paw);
+
+			while (trailElement.childElementCount > maximumPrints) {
+				trailElement.firstElementChild?.remove();
+			}
+
+			const animation = paw.animate(
+				[
+					{ opacity: 0, transform: `${transform} scale(0.78)` },
+					{ opacity: 1, transform: `${transform} scale(1)`, offset: 0.16 },
+					{ opacity: 0.72, transform: `${transform} scale(1)`, offset: 0.68 },
+					{ opacity: 0, transform: `${transform} scale(0.94)` }
+				],
+				{ duration: 1900, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
+			);
+
+			animation.onfinish = () => paw.remove();
+			step += 1;
+		};
+
+		const handlePointerMove = (event: PointerEvent) => {
+			if (reducedMotion.matches || !finePointer.matches || event.pointerType === 'touch') return;
+
+			if (lastX === null || lastY === null) {
+				lastX = event.clientX;
+				lastY = event.clientY;
+				return;
+			}
+
+			let startX = lastX;
+			let startY = lastY;
+			let deltaX = event.clientX - startX;
+			let deltaY = event.clientY - startY;
+			let segmentLength = Math.hypot(deltaX, deltaY);
+
+			while (segmentLength > 0 && distanceSincePrint + segmentLength >= spacing) {
+				const travel = spacing - distanceSincePrint;
+				const ratio = travel / segmentLength;
+				const centreX = startX + deltaX * ratio;
+				const centreY = startY + deltaY * ratio;
+				const directionX = deltaX / segmentLength;
+				const directionY = deltaY / segmentLength;
+				const side = step % 2 === 0 ? -1 : 1;
+				const printX = centreX - directionY * lateralOffset * side;
+				const printY = centreY + directionX * lateralOffset * side;
+				const rotation = Math.atan2(directionY, directionX) * (180 / Math.PI) + 90 + side * 6;
+
+				addPrint(printX, printY, rotation);
+				startX = centreX;
+				startY = centreY;
+				deltaX = event.clientX - startX;
+				deltaY = event.clientY - startY;
+				segmentLength = Math.hypot(deltaX, deltaY);
+				distanceSincePrint = 0;
+			}
+
+			distanceSincePrint += segmentLength;
+			lastX = event.clientX;
+			lastY = event.clientY;
+		};
+
+		const resetTrail = () => {
+			lastX = null;
+			lastY = null;
+			distanceSincePrint = 0;
+		};
+
+		window.addEventListener('pointermove', handlePointerMove, { passive: true });
+		window.addEventListener('blur', resetTrail);
+		document.documentElement.addEventListener('pointerleave', resetTrail);
+
+		return () => {
+			window.removeEventListener('pointermove', handlePointerMove);
+			window.removeEventListener('blur', resetTrail);
+			document.documentElement.removeEventListener('pointerleave', resetTrail);
+		};
+	});
 </script>
 
 <!--
@@ -37,21 +133,7 @@
 	</defs>
 </svg>
 
-<div class="paw-trail" class:wolf-active={$wolfMode} aria-hidden="true">
-	{#each prints as print, index}
-		<svg
-			class="paw"
-			class:secondary={index > 5}
-			viewBox="0 0 55.965061 67.624741"
-			style:left={`${print.left}%`}
-			style:top={`${print.top}%`}
-			style:width={`${print.size}px`}
-			style:--paw-rotation={`${print.rotation}deg`}
-			style:--paw-delay={`${print.delay}ms`}
-		>
-			<use href="#wolf-paw-print" />
-		</svg>
-	{/each}
+<div class="paw-trail" class:wolf-active={$wolfMode} bind:this={trailElement} aria-hidden="true">
 </div>
 
 <style>
@@ -77,25 +159,13 @@
 		opacity: 0.15;
 	}
 
-	.paw {
+	.paw-trail :global(.paw) {
 		position: absolute;
 		height: auto;
 		fill: currentColor;
 		filter: blur(0.2px);
 		transform-origin: center;
-		animation: paw-arrive 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-		animation-delay: var(--paw-delay);
-	}
-
-	@keyframes paw-arrive {
-		from {
-			opacity: 0;
-			transform: translateY(10px) rotate(var(--paw-rotation)) scale(0.82);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0) rotate(var(--paw-rotation)) scale(1);
-		}
+		will-change: transform, opacity;
 	}
 
 	@media (max-width: 700px) {
@@ -107,10 +177,6 @@
 			opacity: 0.11;
 		}
 
-		.paw:nth-child(even),
-		.paw.secondary {
-			display: none;
-		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -118,9 +184,5 @@
 			transition: none;
 		}
 
-		.paw {
-			animation: none;
-			transform: rotate(var(--paw-rotation));
-		}
 	}
 </style>
