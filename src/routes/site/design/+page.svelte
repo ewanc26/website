@@ -22,6 +22,7 @@
   import VerifierCard from '$lib/components/VerifierCard.svelte';
   import { getMoonPhaseName } from '$lib/utils/moonPhase';
   import { PUBLIC_ATPROTO_DID } from '$env/static/public';
+  import packageInfo from '../../../../package.json';
 
   let { data } = $props();
   let copiedIndex = $state<string | null>(null);
@@ -219,7 +220,7 @@
   <header class="page-hd spec-header">
     <div class="spec-meta">
       <span class="meta-tag">DESIGN SYSTEM</span>
-      <span class="meta-tag">v12.2.0</span>
+      <span class="meta-tag">v{packageInfo.version}</span>
       <span class="meta-tag">TECHNICAL SPEC</span>
     </div>
     <h1 class="page-title">Identity &amp; Assets</h1>
