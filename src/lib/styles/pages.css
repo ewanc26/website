@@ -314,9 +314,10 @@
   }
 
   .link-chip {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(10rem, 0.7fr) minmax(0, 1.3fr) auto;
     align-items: center;
-    gap: var(--space-xs);
+    gap: var(--space-md);
     padding: var(--space-3);
     border-radius: var(--radius-sm);
     font-size: var(--text-sm);
@@ -334,10 +335,27 @@
     font-size: 1.1em;
   }
 
+  .link-label {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: var(--space-xs);
+  }
+
   .link-text {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .link-url {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--color-text-500);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   @media (max-width: 560px) {
@@ -370,6 +388,20 @@
 
     .link-grid {
       grid-template-columns: minmax(0, 1fr);
+    }
+
+    .link-chip {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-2xs) var(--space-sm);
+    }
+
+    .link-url {
+      grid-column: 1;
+    }
+
+    .link-chip > .muted-icon {
+      grid-column: 2;
+      grid-row: 1 / span 2;
     }
   }
 
@@ -1002,6 +1034,11 @@
   .sidebar-group {
     margin-bottom: var(--space-md);
   }
+
+  .meta-list + .sidebar-group {
+    margin-top: var(--space-lg);
+  }
+
   .meta-list {
     display: flex;
     flex-direction: column;
@@ -1939,8 +1976,7 @@
   ) {
     transition:
       background-color var(--duration-fast) var(--ease-out-quart),
-      color var(--duration-fast) var(--ease-out-quart),
-      transform var(--duration-fast) var(--ease-out-quart);
+      color var(--duration-fast) var(--ease-out-quart);
   }
 
   :is(
@@ -1959,20 +1995,5 @@
       var(--surface-sunken)
     );
     color: var(--color-text-950);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    :is(
-      a.post-row,
-      a.link-row,
-      .project-card--link,
-      .project-item,
-      .link-chip,
-      .crypto-card:has(button),
-      .comment:has(a),
-      .meta-card:has(a)
-    ):hover {
-      transform: translateY(calc(-1 * var(--space-2xs)));
-    }
   }
 }

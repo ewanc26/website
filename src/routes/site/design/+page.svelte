@@ -538,7 +538,7 @@
                   </a>
                   <div class="project-card">
                     <strong class="project-name">Static row</strong>
-                    <p class="project-desc">No highlight or lift when the row has no action.</p>
+                    <p class="project-desc">No highlight when the row has no action.</p>
                     <span class="project-card-meta"><span class="project-language">DATA</span></span>
                   </div>
                 </div>
@@ -557,7 +557,7 @@
                   </div>
                   <div>
                     <dt>Motion</dt>
-                    <dd>2px lift over 200ms; removed for reduced motion</dd>
+                    <dd>No positional movement; state changes use colour only</dd>
                   </div>
                 </dl>
               </div>

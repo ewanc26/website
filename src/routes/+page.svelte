@@ -128,7 +128,7 @@
         <ul class="post-list home-post-list content-reveal-list">
           {#each posts.filter(p => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION).slice(0, 5) as post, i}
             <li>
-              <a href={getBlogUrl(post)} class="post-row hover-lift active-press">
+              <a href={getBlogUrl(post)} class="post-row active-press">
                 <span class="row-stack post-copy">
                   {#if i === 0}<span class="home-row-label">Latest</span>{/if}
                   <span class="post-title">{post.title}</span>
@@ -158,7 +158,7 @@
         <div class="project-grid content-reveal-list">
           {#each pinnedProjects as project}
             {#if project.url}
-              <a href={project.url} target="_blank" rel="noopener" class="project-card project-card--link hover-lift active-press">
+              <a href={project.url} target="_blank" rel="noopener" class="project-card project-card--link active-press">
                 <strong class="project-name">{project.name}</strong>
                 {#if project.description}
                   <p class="project-desc">{project.description}</p>
@@ -209,7 +209,7 @@
         <ul class="post-list content-reveal-list">
           {#each publications.filter((p: any) => p.rkey !== PUBLIC_LEAFLET_BLOG_PUBLICATION) as pub}
             <li>
-              <a href={pub.url} target="_blank" rel="noopener" class="post-row publication-row hover-lift active-press">
+              <a href={pub.url} target="_blank" rel="noopener" class="post-row publication-row active-press">
                 <span class="post-title">{pub.name}</span>
                 <span class="row-meta publication-description">{pub.description}</span>
               </a>
@@ -234,11 +234,14 @@
     {:else if links && links.cards && links.cards.length > 0}
         <div class="link-grid content-reveal-list">
           {#each links.cards.slice(0, 8) as link}
-            <a href={link.url} target="_blank" rel="noopener" class="link-chip hover-lift active-press">
-              {#if link.emoji}
-                <span class="link-emoji">{link.emoji}</span>
-              {/if}
-              <span class="link-text">{link.text}</span>
+            <a href={link.url} target="_blank" rel="noopener" class="link-chip active-press">
+              <span class="link-label">
+                {#if link.emoji}
+                  <span class="link-emoji">{link.emoji}</span>
+                {/if}
+                <span class="link-text">{link.text}</span>
+              </span>
+              <span class="link-url">{link.url}</span>
               <ExternalLink size={10} strokeWidth={2} class="muted-icon" />
             </a>
           {/each}

@@ -77,7 +77,7 @@
                 <p class="page-desc">{data.blog.description}</p>
                 <div class="page-hd-actions">
                     <span class="archive-count">{data.total} posts</span>
-                    <a href={data.blog.rss} target="_blank" rel="noopener" class="section-link hover-lift active-press"><Rss size={14} strokeWidth={2} /> RSS</a>
+                    <a href={data.blog.rss} target="_blank" rel="noopener" class="section-link active-press"><Rss size={14} strokeWidth={2} /> RSS</a>
                 </div>
             </div>
         {/if}

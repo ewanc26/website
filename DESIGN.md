@@ -25,7 +25,7 @@ Port of the visual system for ewancroft.uk.
 - Use a raised parent surface with a 4px inset to group compact rows.
 - Use the Selected Projects row anatomy across UI collections: a clear label, supporting detail, and trailing metadata where relevant.
 - Actionable rows share a primary-tinted hover and keyboard-focus highlight. Static rows do not imply interactivity.
-- Apply the brief quart-eased lift only to actionable rows, and remove it when reduced motion is preferred.
+- Keep rows spatially stable on hover and focus; communicate state through colour rather than positional movement.
 - Keep prose lists semantic and unstyled; this pattern is for navigational and data indexes.
 
 ## Anti-references
