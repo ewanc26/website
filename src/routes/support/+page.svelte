@@ -18,6 +18,11 @@
       label: 'BTC',
       coin: 'Bitcoin',
       address: 'bc1qp3l6e9pjc5jan7ulpd58av8wfdtyhrchj84clh'
+    },
+    {
+      label: 'ZEC',
+      coin: 'Zcash',
+      address: 'u1xqmjwwpua38ay8esa4cxncxz79vj3dwq0k37nwzvz6w9aptrua6x2z0km287e8d5m87x956garz65a4432fl7cfn8j0uw9v085fx0372'
     }
   ];
 
