@@ -173,6 +173,17 @@
     --space-xl: 64px;
     --space-2xl: 96px;
 
+    /* ── Layout geometry ──────────────────────────────────────────── */
+    --shell-wide: 72rem;
+    --shell-narrow: 48rem;
+    --measure-prose: 70ch;
+    --measure-copy: 60ch;
+    --control-size: 44px;
+    --nav-height: 68px;
+    --nav-height-compact: 60px;
+    --icon-sm: 16px;
+    --icon-md: 24px;
+
     /* ── Typography ───────────────────────────────────────────── */
     --font-family: "InterVariable", "Inter", sans-serif;
     --font-mono:
@@ -186,6 +197,7 @@
     --text-lg: clamp(1.25rem, 1.5vw + 1rem, 2rem);
     --text-xl: clamp(2rem, 2vw + 1.5rem, 3rem);
     --text-2xl: clamp(2rem, 5vw, 3.5rem);
+    --text-micro: 0.625rem;
 
     /* ── Radii ────────────────────────────────────────────────── */
     --radius-xs: 4px;

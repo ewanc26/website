@@ -23,10 +23,8 @@
 <nav class="nav" aria-label="Primary navigation">
     <div class="nav-inner">
         <div class="nav-brand">
-            <span class="nav-brand-icon">
-                <TriskeleEgg size={14} />
-            </span>
             <a href="/" class="nav-brand-home" aria-label="{SITE.title}, home">
+                <img class="nav-logo" src="/favicon.svg" alt="" />
                 <span class="nav-brand-name">
                     {SITE.title}
                     {#if isMoonDay}
@@ -35,6 +33,9 @@
                     {#if dev}<span class="dev-chip"><br />DEV</span>{/if}
                 </span>
             </a>
+            <span class="nav-brand-icon">
+                <TriskeleEgg size={12} />
+            </span>
         </div>
 
         <button

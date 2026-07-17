@@ -102,31 +102,26 @@
 
   const principles = [
     {
-      number: '01',
       name: 'Systematic colour',
       description:
         'OKLCH throughout — neutrals are tinted toward a dynamic brand hue that interpolates through the Sabbat cycle. No pure black or white. Every shade is derived and purposeful.',
     },
     {
-      number: '02',
       name: 'Purposeful spacing',
       description:
         'Every gap, padding, and margin derives from the 4pt scale with semantic token names. No magic numbers anywhere in the codebase.',
     },
     {
-      number: '03',
       name: 'Typography as hierarchy',
       description:
         'Strict 1.25 modular scale with fluid clamp() sizing. Narrow columns — 65–75ch — and line-height that scales inversely with size.',
     },
     {
-      number: '04',
       name: 'Functional interactivity',
       description:
-        'Motion reserved for state changes only. Transitions are brief and purposeful — never decorative. Respects prefers-reduced-motion.',
+        'Actionable editorial rows share the same primary-tinted hover and keyboard-focus state. Motion is brief, communicates state, and is removed when reduced motion is preferred.',
     },
     {
-      number: '05',
       name: 'Anti-slop',
       description:
         'Absolute ban on AI-typical patterns — no side-stripe borders, no gradient text, no hollow card aesthetics, no generic colour choices.',
@@ -205,7 +200,7 @@
   <header class="page-hd spec-header">
     <div class="spec-meta">
       <span class="meta-tag">DESIGN SYSTEM</span>
-      <span class="meta-tag">v12.1.0</span>
+      <span class="meta-tag">v12.2.0</span>
       <span class="meta-tag">TECHNICAL SPEC</span>
     </div>
     <h1 class="page-title">Identity &amp; Assets</h1>
@@ -220,10 +215,9 @@
     </nav>
 
     <div class="spec-content">
-      <!-- ── [01] Identity ───────────────────────────── -->
+      <!-- Identity -->
       <section class="spec-section identity" id="identity">
         <header class="section-hd">
-          <span class="section-num">[01]</span>
           <h2 class="section-title">Identity</h2>
         </header>
         <div class="section-content">
@@ -265,10 +259,9 @@
         </div>
       </section>
 
-      <!-- ── [02] Colour ─────────────────────────────── -->
+      <!-- Colour -->
       <section class="spec-section colour" id="colour">
         <header class="section-hd">
-          <span class="section-num">[02]</span>
           <h2 class="section-title">Colour Architecture</h2>
         </header>
         <div class="section-content">
@@ -321,10 +314,9 @@
         </div>
       </section>
 
-      <!-- ── [03] Typography ─────────────────────────── -->
+      <!-- Typography -->
       <section class="spec-section typography" id="typography">
         <header class="section-hd">
-          <span class="section-num">[03]</span>
           <h2 class="section-title">Typography</h2>
         </header>
         <div class="section-content">
@@ -376,10 +368,9 @@
         </div>
       </section>
 
-      <!-- ── [04] Prose ──────────────────────────────── -->
+      <!-- Prose -->
       <section class="spec-section prose-spec" id="prose">
         <header class="section-hd">
-          <span class="section-num">[04]</span>
           <h2 class="section-title">Prose Styling</h2>
         </header>
         <div class="section-content">
@@ -397,10 +388,9 @@
         </div>
       </section>
 
-      <!-- ── [05] Geometry ───────────────────────────── -->
+      <!-- Geometry -->
       <section class="spec-section geometry" id="geometry">
         <header class="section-hd">
-          <span class="section-num">[05]</span>
           <h2 class="section-title">Geometry</h2>
         </header>
         <div class="section-content">
@@ -436,10 +426,9 @@
         </div>
       </section>
 
-      <!-- ── [06] Motion ─────────────────────────────── -->
+      <!-- Motion -->
       <section class="spec-section motion" id="motion">
         <header class="section-hd">
-          <span class="section-num">[06]</span>
           <h2 class="section-title">Motion</h2>
         </header>
         <div class="section-content">
@@ -468,10 +457,9 @@
         </div>
       </section>
 
-      <!-- ── [07] Iconography ────────────────────────── -->
+      <!-- Iconography -->
       <section class="spec-section iconography" id="iconography">
         <header class="section-hd">
-          <span class="section-num">[07]</span>
           <h2 class="section-title">Iconography</h2>
         </header>
         <div class="section-content">
@@ -505,10 +493,9 @@
         </div>
       </section>
 
-      <!-- ── [08] Components ─────────────────────────── -->
+      <!-- Components -->
       <section class="spec-section components" id="components">
         <header class="section-hd">
-          <span class="section-num">[08]</span>
           <h2 class="section-title">Components</h2>
         </header>
         <div class="section-content">
@@ -530,6 +517,49 @@
                 <div class="panel-body">
                   <p>Standard container for technical information and data displays.</p>
                 </div>
+              </div>
+            </div>
+
+            <div class="comp-item">
+              <h3 class="sub-title" id="editorial-index">Editorial Index</h3>
+              <p class="component-note">
+                The default collection pattern for projects, posts, profiles, links, support options, and site metadata. A raised parent surface groups compact inset rows; only actionable rows receive the shared hover and keyboard-focus treatment.
+              </p>
+              <div class="editorial-demo">
+                <div class="editorial-demo-meta">
+                  <span class="meta-tag">DEFAULT UI LIST</span>
+                  <code>.project-grid / .post-list / .meta-list</code>
+                </div>
+                <div class="project-grid editorial-demo-list">
+                  <a href="#editorial-index" class="project-card project-card--link">
+                    <strong class="project-name">Interactive row</strong>
+                    <p class="project-desc">Primary-tinted hover and keyboard-focus state.</p>
+                    <span class="project-card-meta"><span class="project-language">LINK</span></span>
+                  </a>
+                  <div class="project-card">
+                    <strong class="project-name">Static row</strong>
+                    <p class="project-desc">No highlight or lift when the row has no action.</p>
+                    <span class="project-card-meta"><span class="project-language">DATA</span></span>
+                  </div>
+                </div>
+                <dl class="editorial-anatomy">
+                  <div>
+                    <dt>Container</dt>
+                    <dd><code>--surface-raised</code> with a <code>--space-xs</code> inset</dd>
+                  </div>
+                  <div>
+                    <dt>Row</dt>
+                    <dd><code>--space-3</code> padding and <code>--radius-sm</code> corners</dd>
+                  </div>
+                  <div>
+                    <dt>Highlight</dt>
+                    <dd>12% primary mixed into the sunken surface</dd>
+                  </div>
+                  <div>
+                    <dt>Motion</dt>
+                    <dd>2px lift over 200ms; removed for reduced motion</dd>
+                  </div>
+                </dl>
               </div>
             </div>
 
@@ -564,10 +594,9 @@
         </div>
       </section>
 
-      <!-- ── [09] Layout ──────────────────────────────── -->
+      <!-- Layout -->
       <section class="spec-section layout" id="layout">
         <header class="section-hd">
-          <span class="section-num">[09]</span>
           <h2 class="section-title">Layout Systems</h2>
         </header>
         <div class="section-content">
@@ -593,10 +622,9 @@
         </div>
       </section>
 
-      <!-- ── [10] Voice & Tone ───────────────────────── -->
+      <!-- Voice & Tone -->
       <section class="spec-section voice" id="voice">
         <header class="section-hd">
-          <span class="section-num">[10]</span>
           <h2 class="section-title">Voice &amp; Tone</h2>
         </header>
         <div class="section-content">
@@ -620,19 +648,17 @@
         </div>
       </section>
 
-      <!-- ── [11] Manifesto ──────────────────────────── -->
+      <!-- Manifesto -->
       <section class="spec-section principles" id="manifesto">
         <header class="section-hd">
-          <span class="section-num">[11]</span>
           <h2 class="section-title">Manifesto</h2>
         </header>
         <div class="section-content">
           <div class="manifesto-list">
             {#each principles as p}
               <article class="principle-card">
-                <span class="p-num">{p.number}</span>
                 <div class="p-body">
-                  <h3 class="p-name" id="principle-{p.number}">{p.name}</h3>
+                  <h3 class="p-name">{p.name}</h3>
                   <p class="p-desc">{p.description}</p>
                 </div>
               </article>
@@ -641,10 +667,9 @@
         </div>
       </section>
 
-      <!-- ── [13] Assets ─────────────────────────────── -->
+      <!-- Assets -->
       <section class="spec-section assets" id="assets">
         <header class="section-hd">
-          <span class="section-num">[13]</span>
           <h2 class="section-title">Assets</h2>
         </header>
         <div class="section-content">

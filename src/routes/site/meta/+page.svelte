@@ -6,23 +6,6 @@
 	let { data } = $props();
 
 	const info = $derived(data.siteInfo as NormalizedSiteInfo | null);
-	const visibleSections = $derived.by(() => {
-		if (!info) return [];
-		return [
-			info.additionalInfo?.purpose ? 'purpose' : undefined,
-			info.additionalInfo?.websiteBirthYear ? 'history' : undefined,
-			info.privacyStatement || info.additionalInfo?.analytics ? 'privacy' : undefined,
-			info.openSourceInfo ? 'open-source' : undefined,
-			info.technologyStack.length ? 'tech-stack' : undefined,
-			info.additionalInfo?.deployment || info.additionalInfo?.sectionLicense.length ? 'operations' : undefined,
-			info.credits.length ? 'credits' : undefined,
-		].filter((section): section is string => Boolean(section));
-	});
-
-	function sectionNumber(id: string): string {
-		const index = visibleSections.indexOf(id);
-		return `[${String(index + 1).padStart(2, '0')}]`;
-	}
 
 	function groupBySection<T extends { section?: string }>(items: T[]): Map<string, T[]> {
 		const grouped = new Map<string, T[]>();
@@ -50,7 +33,6 @@
 			{#if info.additionalInfo?.purpose}
 					<section class="spec-section" id="purpose">
 						<header class="section-hd">
-							<span class="section-num">{sectionNumber('purpose')}</span>
 							<h2 class="section-title">Purpose</h2>
 						</header>
 						<p class="section-intro">{info.additionalInfo.purpose}</p>
@@ -60,7 +42,6 @@
 				{#if info.additionalInfo?.websiteBirthYear}
 					<section class="spec-section" id="history">
 						<header class="section-hd">
-							<span class="section-num">{sectionNumber('history')}</span>
 							<h2 class="section-title">History</h2>
 						</header>
 						<p class="section-intro">This website was first launched in {info.additionalInfo.websiteBirthYear}.</p>
@@ -70,7 +51,6 @@
 				{#if info.privacyStatement || info.additionalInfo?.analytics}
 					<section class="spec-section" id="privacy">
 						<header class="section-hd">
-							<span class="section-num">{sectionNumber('privacy')}</span>
 							<h2 class="section-title">Privacy</h2>
 						</header>
 						{#if info.privacyStatement}<p class="section-intro">{info.privacyStatement}</p>{/if}
@@ -98,7 +78,6 @@
 				{#if info.openSourceInfo}
 					<section class="spec-section" id="open-source">
 						<header class="section-hd">
-							<span class="section-num">{sectionNumber('open-source')}</span>
 							<h2 class="section-title">Open Source</h2>
 						</header>
 						{#if info.openSourceInfo.description}
@@ -172,7 +151,6 @@
 				{#if info.technologyStack?.length}
 					<section class="spec-section" id="tech-stack">
 						<header class="section-hd">
-							<span class="section-num">{sectionNumber('tech-stack')}</span>
 							<h2 class="section-title">Technology Stack</h2>
 						</header>
 						{#each groupBySection(info.technologyStack) as [section, techs]}
@@ -205,7 +183,6 @@
 				{#if info.additionalInfo?.deployment || info.additionalInfo?.sectionLicense.length}
 					<section class="spec-section" id="operations">
 						<header class="section-hd">
-							<span class="section-num">{sectionNumber('operations')}</span>
 							<h2 class="section-title">Operations &amp; licensing</h2>
 						</header>
 						<div class="meta-list">
@@ -238,7 +215,6 @@
 				{#if info.credits?.length}
 					<section class="spec-section" id="credits">
 						<header class="section-hd">
-							<span class="section-num">{sectionNumber('credits')}</span>
 							<h2 class="section-title">Credits</h2>
 						</header>
 						{#each groupBySection(info.credits) as [section, credits]}

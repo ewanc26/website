@@ -68,12 +68,16 @@
       <img src={profile.avatar} alt="" class="hero-avatar" />
     {/if}
     <div class="hero-text">
-      <p class="hero-kicker">Personal index</p>
       <h1 class="page-title">
         {profile.displayName ?? profile.handle}
         <VerificationBadge verified={true} verifiers={data.verifications} />
       </h1>
       <p class="hero-bio">{profile.description}</p>
+      <div class="hero-meta" aria-label="Profile metadata">
+        <span>@{profile.handle}</span>
+        <span>AT Protocol</span>
+        <span>Personal web</span>
+      </div>
     </div>
   </section>
 
@@ -116,7 +120,6 @@
   <!-- Writing -->
   <section class="home-section animate-in stagger-2" aria-busy={posts === null}>
     <div class="home-section-hd">
-      <p class="home-section-kicker">01 / Journal</p>
       <h2 class="home-section-title">Recent writing</h2>
     </div>
     {#if posts === null}
@@ -147,7 +150,6 @@
   <!-- Projects -->
   <section class="home-section animate-in stagger-3" aria-busy={githubProjects === null}>
     <div class="home-section-hd">
-      <p class="home-section-kicker">02 / Workshop</p>
       <h2 class="home-section-title">Selected projects</h2>
     </div>
     {#if githubProjects === null}
@@ -199,7 +201,6 @@
   <!-- Publications -->
   <section class="home-section animate-in stagger-4" aria-busy={publications === null}>
     <div class="home-section-hd">
-      <p class="home-section-kicker">03 / Editions</p>
       <h2 class="home-section-title">Publications</h2>
     </div>
     {#if publications === null}
@@ -226,7 +227,6 @@
   <!-- Links -->
   <section class="home-section animate-in stagger-5" aria-busy={links === null}>
     <div class="home-section-hd">
-      <p class="home-section-kicker">04 / Network</p>
       <h2 class="home-section-title">Elsewhere</h2>
     </div>
     {#if links === null}

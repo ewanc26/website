@@ -14,19 +14,17 @@
 		bottom: 4.5rem;
 		left: 50%;
 		transform: translateX(-50%);
-		background: color-mix(in oklch, var(--color-background-50) 88%, transparent);
+		background: var(--surface-raised);
 		border: 1px solid var(--color-text-200);
 		color: var(--color-text-800);
 		font-family: var(--font-mono);
 		font-size: var(--text-xs, 0.75rem);
 		letter-spacing: 0.02em;
-		padding: 0.5rem 1.25rem;
-		border-radius: var(--radius-md, 6px);
+		padding: var(--space-sm) var(--space-6);
+		border-radius: var(--radius-md);
 		z-index: 9999;
 		white-space: nowrap;
 		pointer-events: none;
-		backdrop-filter: blur(8px);
-		-webkit-backdrop-filter: blur(8px);
 		animation:
 			tt-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
 			tt-out 0.3s ease-in forwards 2.7s;

@@ -243,15 +243,12 @@
   }
 
   .backlink-avatar {
-    transition:
-      transform var(--duration-fast) var(--ease-out-quart),
-      box-shadow var(--duration-fast) var(--ease-out-quart);
+    transition: opacity var(--duration-fast) var(--ease-out-quart);
   }
 
   .backlink-trigger:hover .backlink-avatar {
     z-index: 20 !important;
-    transform: translateY(-3px) scale(1.08);
-    box-shadow: 0 4px 12px oklch(0% 0 0 / 0.18);
+    opacity: 0.72;
   }
 
   .backlink-avatar img {

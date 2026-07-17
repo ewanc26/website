@@ -626,21 +626,21 @@
 
   /* Wide shell — home, blog listing, about, projects, site meta, brand */
   .shell-wide {
-    max-width: 72rem;
+    max-width: var(--shell-wide);
     margin-inline: auto;
     padding: 0 var(--space-lg) var(--space-xl);
   }
 
   /* Prose shell — blog posts (wide enough for TOC sidebar + content) */
   .shell-prose {
-    max-width: 72rem;
+    max-width: var(--shell-wide);
     margin-inline: auto;
     padding: 0 var(--space-lg) var(--space-xl);
   }
 
   /* Narrow shell — subscriptions, support */
   .shell-narrow {
-    max-width: 48rem;
+    max-width: var(--shell-narrow);
     margin-inline: auto;
     padding: 0 var(--space-lg) var(--space-xl);
   }
@@ -668,7 +668,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-xs);
-    padding: 8px 14px;
+    padding: var(--space-sm) var(--space-3);
     border-bottom: 1px solid var(--surface-color);
     font-size: var(--text-xs);
     color: var(--color-text-600);
@@ -686,7 +686,7 @@
   /* ── Prose content ─────────────────────────────────────────── */
 
   .prose {
-    max-width: 70ch;
+    max-width: var(--measure-prose);
   }
 }
 

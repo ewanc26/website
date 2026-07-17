@@ -180,11 +180,10 @@
 		z-index: 9999;
 		display: grid;
 		gap: 0.15rem;
-		padding: 0.75rem 1rem;
-		border-left: 2px solid var(--color-primary-500);
-		background: color-mix(in oklch, var(--color-background-50) 90%, transparent);
+		padding: var(--space-3) var(--space-md);
+		border: 1px solid var(--surface-color);
+		background: var(--surface-raised);
 		color: var(--color-text-600);
-		backdrop-filter: blur(10px);
 		pointer-events: none;
 		animation:
 			archive-in 350ms ease-out both,

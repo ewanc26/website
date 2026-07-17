@@ -46,20 +46,18 @@
 <style>
 	.idle-toast {
 		position: fixed;
-		bottom: 2rem;
-		right: 2rem;
+		bottom: var(--space-lg);
+		right: var(--space-lg);
 		max-width: 14rem;
-		background: color-mix(in oklch, var(--color-background-50) 88%, transparent);
+		background: var(--surface-raised);
 		border: 1px solid var(--color-text-200);
 		color: var(--color-text-700);
 		font-size: var(--text-sm, 0.875rem);
 		line-height: 1.5;
-		padding: 0.75rem 1rem;
-		border-radius: var(--radius-md, 6px);
+		padding: var(--space-3) var(--space-md);
+		border-radius: var(--radius-md);
 		z-index: 9999;
 		pointer-events: none;
-		backdrop-filter: blur(8px);
-		-webkit-backdrop-filter: blur(8px);
 		animation:
 			ie-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
 			ie-out 0.4s ease-in forwards 9.6s;

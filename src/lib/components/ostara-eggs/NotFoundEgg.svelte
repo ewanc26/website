@@ -32,7 +32,7 @@
 		border: 1px solid var(--surface-color, color-mix(in oklch, currentColor 12%, transparent));
 		border-radius: var(--radius-lg, 8px);
 		overflow: hidden;
-		box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.04);
+		background: var(--surface-raised, Canvas);
 	}
 
 	.egg-panel-head {

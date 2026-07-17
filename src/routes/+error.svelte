@@ -11,7 +11,7 @@
   {:else}
     <div class="panel error-card">
     <div class="panel-head">
-      <span class="error-badge">STATUS // {$page.status}</span>
+      <span class="error-badge">STATUS {$page.status}</span>
     </div>
     
     <div class="panel-body">
@@ -53,7 +53,7 @@
   .error-card {
     width: 100%;
     border-radius: var(--radius-lg);
-    box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.04);
+    background: var(--surface-raised);
   }
 
   .panel-body {

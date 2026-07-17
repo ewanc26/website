@@ -93,29 +93,33 @@
 
     {#if filteredPosts.length > 0}
         {#each groupPosts(filteredPosts) as [year, months], i}
-            <div class="year-head animate-in" style="animation-delay: {100 + i * 100}ms">{year}</div>
-            {#each Array.from(months.entries()).sort((a, b) => b[0] - a[0]) as [month, monthPosts]}
-                <div class="month-label">{formatMonth(month)}</div>
-                <ul class="post-list post-list--dense content-reveal-list">
-                    {#each monthPosts as post}
-                        <li>
-                            <a href={getPostUrl(post)} class="post-row post-row--product hover-lift active-press">
-                                <span class="row-stack post-summary">
-                                    <span class="post-title">{post.title}</span>
-                                    {#if post.tags.length > 0}
-                                        <span class="post-tags" aria-label={`Tags: ${post.tags.slice(0, 3).join(', ')}`}>
-                                            {#each post.tags.slice(0, 3) as tag}
-                                                <span class="post-tag">{tag}</span>
-                                            {/each}
+            <section class="archive-year animate-in" style="animation-delay: {100 + i * 100}ms">
+                <h2 class="year-head">{year}</h2>
+                {#each Array.from(months.entries()).sort((a, b) => b[0] - a[0]) as [month, monthPosts]}
+                    <section class="month-group">
+                        <h3 class="month-label">{formatMonth(month)}</h3>
+                        <ul class="post-list post-list--dense content-reveal-list">
+                            {#each monthPosts as post}
+                                <li>
+                                    <a href={getPostUrl(post)} class="post-row post-row--product active-press">
+                                        <span class="row-stack post-summary">
+                                            <span class="post-title">{post.title}</span>
+                                            {#if post.tags.length > 0}
+                                                <span class="post-tags" aria-label={`Tags: ${post.tags.slice(0, 3).join(', ')}`}>
+                                                    {#each post.tags.slice(0, 3) as tag}
+                                                        <span class="post-tag">{tag}</span>
+                                                    {/each}
+                                                </span>
+                                            {/if}
                                         </span>
-                                    {/if}
-                                </span>
-                                <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-gb', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
-                            </a>
-                        </li>
-                    {/each}
-                </ul>
-            {/each}
+                                        <time class="post-date">{new Date(post.createdAt).toLocaleDateString('en-gb', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+                                    </a>
+                                </li>
+                            {/each}
+                        </ul>
+                    </section>
+                {/each}
+            </section>
         {/each}
 
         {#if hasMore}
@@ -184,17 +188,31 @@
     .post-list--dense {
         gap: var(--space-2xs);
     }
+    .archive-year + .archive-year {
+        margin-top: var(--space-xl);
+    }
+    .month-group {
+        display: grid;
+        grid-template-columns: 8rem minmax(0, 1fr);
+        gap: var(--space-lg);
+        align-items: start;
+        padding: var(--space-md) 0;
+    }
     .post-row--product {
-        padding: var(--space-xs) var(--space-sm);
+        padding: var(--space-3);
         font-size: var(--text-sm);
         border-radius: var(--radius-sm);
         border-bottom: none;
-        background: var(--surface-raised);
+        background: transparent;
         border: 1px solid transparent;
     }
     .post-row--product:hover {
-        border-color: var(--surface-color);
-        background: var(--color-background-50);
+        border-color: transparent;
+        background: color-mix(
+            in oklch,
+            var(--color-primary-500) 12%,
+            var(--surface-sunken)
+        );
     }
     .post-summary {
         min-width: 0;
@@ -223,6 +241,10 @@
         .post-row--product {
             align-items: flex-start;
             flex-direction: column;
+            gap: var(--space-xs);
+        }
+        .month-group {
+            grid-template-columns: minmax(0, 1fr);
             gap: var(--space-xs);
         }
     }
