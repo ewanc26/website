@@ -83,7 +83,7 @@
 		<div class="happy-mac" aria-hidden="true">
 			<img src="/assets/happy-mac.svg" alt="" />
 		</div>
-		<span class="archive-status">M4 MINI // CUBE OF COMPUTING // 67 DAYS LATER</span>
+		<span class="archive-status">M4 MINI · CUBE OF COMPUTING · 67 DAYS LATER</span>
 	</div>
 {/if}
 

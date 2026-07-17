@@ -5,7 +5,7 @@
 
 <div class="egg-panel">
 	<div class="egg-panel-head">
-		<span class="egg-badge">STATUS // 404</span>
+		<span class="egg-badge">STATUS 404</span>
 	</div>
 	<div class="egg-panel-body">
 		<h1 class="egg-title">Nowhere, for now.</h1>
