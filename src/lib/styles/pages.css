@@ -1013,6 +1013,14 @@
   .meta-card-link:hover {
     color: var(--color-primary-500);
   }
+  .meta-inline {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin: 0 0 var(--space-sm);
+    font-size: var(--text-sm);
+  }
   .meta-card-desc {
     margin: var(--space-2xs) 0 0;
     font-size: var(--text-sm);

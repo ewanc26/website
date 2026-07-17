@@ -21,6 +21,9 @@
   import Samhain from '$lib/components/icons/sabbats/Samhain.svelte';
   import Yule from '$lib/components/icons/sabbats/Yule.svelte';
   import { PUBLIC_ATPROTO_DID } from '$env/static/public';
+  import type { NormalizedSiteInfo } from '$lib/services/atproto/siteInfo';
+
+  let { siteInfo = null }: { siteInfo?: NormalizedSiteInfo | null } = $props();
 
   const SabbatIcons: Record<string, any> = {
     Beltane,
@@ -37,6 +40,17 @@
   let showModal = $state(false);
 
   let SabbatIcon = $derived(currentSabbat ? SabbatIcons[currentSabbat.name] : null);
+  const currentYear = new Date().getFullYear();
+  let birthYear = $derived(siteInfo?.additionalInfo?.websiteBirthYear);
+  let copyrightYears = $derived(
+    birthYear && birthYear < currentYear ? `${birthYear}–${currentYear}` : `${currentYear}`
+  );
+  let primaryRepository = $derived(
+    siteInfo?.openSourceInfo?.repositories.find((repository) => repository.type === 'primary')
+      ?? siteInfo?.openSourceInfo?.repositories[0]
+  );
+  let projectLicense = $derived(siteInfo?.openSourceInfo?.license);
+  let contactEmail = $derived(siteInfo?.additionalInfo?.contact?.email ?? 'contact@ewancroft.uk');
 
   // Easter egg #4 — Mōnandæg footer label (client-side, respects local timezone)
 
@@ -73,13 +87,19 @@
     </div>
 
     <div class="footer-section footer-center">
-      <p>&copy; {new Date().getFullYear()} ewan croft</p>
+      <p>&copy; {copyrightYears} ewan croft</p>
     </div>
 
     <nav class="footer-section footer-right" aria-label="Footer navigation">
-      <a href="mailto:contact@ewancroft.uk" class="footer-link">contact@ewancroft.uk</a>
+      <a href={`mailto:${contactEmail}`} class="footer-link">{contactEmail}</a>
+      {#if primaryRepository}
+        <a href={primaryRepository.url} rel="noopener" class="footer-link">source</a>
+      {/if}
+      {#if projectLicense?.url}
+        <a href={projectLicense.url} rel="license noopener" class="footer-link">{projectLicense.name ?? 'license'}</a>
+      {/if}
       <a href="/site/design" class="footer-link">design</a>
-      <a href="/site/meta" class="footer-link">site meta</a>
+      <a href="/site/meta" class="footer-link">site meta &amp; privacy</a>
     </nav>
   </div>
 </footer>

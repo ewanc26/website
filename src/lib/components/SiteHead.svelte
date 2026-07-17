@@ -2,6 +2,7 @@
     import { page } from '$app/state';
     import { SITE } from '$lib/config';
     import { PUBLIC_ATPROTO_DID, PUBLIC_LEAFLET_BLOG_PUBLICATION } from '$env/static/public';
+    import type { NormalizedSiteInfo } from '$lib/services/atproto/siteInfo';
 
     let {
         title,
@@ -38,9 +39,21 @@
         documentRkey?: string;
     } = $props();
 
+    const siteInfo = $derived(page.data.siteInfo as NormalizedSiteInfo | null | undefined);
     const fullTitle = $derived(title ? `${title} — ${SITE.title}` : SITE.ogTitle);
-    const fullDescription = $derived(description ?? SITE.description);
+    const fullDescription = $derived(
+        description ?? siteInfo?.additionalInfo?.purpose ?? SITE.description
+    );
     const canonicalUrl = $derived(new URL(page.url.pathname, page.url.origin).href);
+    const projectLicense = $derived(siteInfo?.openSourceInfo?.license);
+    const pageLicense = $derived.by(() => {
+        if (page.url.pathname.startsWith('/blog')) {
+            return siteInfo?.additionalInfo?.sectionLicense.find(
+                (license) => license.section?.toLowerCase() === 'blog'
+            ) ?? projectLicense;
+        }
+        return projectLicense;
+    });
 
     // Standard.site discovery and verification
     // Publication hint is for the site-wide discovery, typically root and blog index.
@@ -79,6 +92,9 @@
     <title>{fullTitle}</title>
     <meta name="description" content={fullDescription} />
     <link rel="canonical" href={canonicalUrl} />
+    {#if pageLicense?.url}
+        <link rel="license" href={pageLicense.url} title={pageLicense.name} />
+    {/if}
 
     <!-- Standard.site -->
     {#if publicationAtUri}

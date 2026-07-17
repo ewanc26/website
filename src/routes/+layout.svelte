@@ -14,7 +14,7 @@
 	import BlogArchiveEggs from '$lib/components/ostara-eggs/BlogArchiveEggs.svelte';
 	import './layout.css';
 
-	let { children } = $props();
+	let { data, children } = $props();
 
 	onMount(() => {
 		const handleScroll = () => {
@@ -52,4 +52,4 @@
 	{@render children()}
 </div>
 <BacklinkAvatars />
-<Footer />
+<Footer siteInfo={data.siteInfo} />
