@@ -4,6 +4,7 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
   import VerificationBadge from '$lib/components/VerificationBadge.svelte';
+  import Triskele from '$lib/components/icons/Triskele.svelte';
   import { ArrowRight, ExternalLink, Music } from '@lucide/svelte';
   import { normalizeSlug } from '$lib/utils/slugify';
   import type { ProfileData } from '@ewanc26/atproto';
@@ -60,13 +61,14 @@
 
 <SiteHead ogType="HOME" />
 
-<main class="shell-wide">
+<main class="shell-wide home-page">
   <!-- Hero -->
   <section class="page-hd hero-hd hero-reveal">
     {#if profile.avatar}
       <img src={profile.avatar} alt="" class="hero-avatar" />
     {/if}
     <div class="hero-text">
+      <p class="hero-kicker">Personal index</p>
       <h1 class="page-title">
         {profile.displayName ?? profile.handle}
         <VerificationBadge verified={true} verifiers={data.verifications} />
@@ -107,11 +109,15 @@
     </div>
   {/if}
 
+  <div class="home-ornament" aria-hidden="true">
+    <Triskele size={18} />
+  </div>
+
   <!-- Writing -->
   <section class="home-section animate-in stagger-2" aria-busy={posts === null}>
     <div class="home-section-hd">
-      <h2 class="section-heading">Blog</h2>
-      <p class="home-section-note">Recent writing</p>
+      <p class="home-section-kicker">01 / Journal</p>
+      <h2 class="home-section-title">Recent writing</h2>
     </div>
     {#if posts === null}
       <LoadingSkeleton count={3} label="Loading recent posts" />
@@ -141,8 +147,8 @@
   <!-- Projects -->
   <section class="home-section animate-in stagger-3" aria-busy={githubProjects === null}>
     <div class="home-section-hd">
-      <h2 class="section-heading">Projects</h2>
-      <p class="home-section-note">Pinned on GitHub</p>
+      <p class="home-section-kicker">02 / Workshop</p>
+      <h2 class="home-section-title">Selected projects</h2>
     </div>
     {#if githubProjects === null}
       <LoadingSkeleton count={2} label="Loading pinned projects" />
@@ -193,8 +199,8 @@
   <!-- Publications -->
   <section class="home-section animate-in stagger-4" aria-busy={publications === null}>
     <div class="home-section-hd">
-      <h2 class="section-heading">Publications</h2>
-      <p class="home-section-note">Longer-running collections</p>
+      <p class="home-section-kicker">03 / Editions</p>
+      <h2 class="home-section-title">Publications</h2>
     </div>
     {#if publications === null}
       <LoadingSkeleton count={2} label="Loading publications" />
@@ -220,8 +226,8 @@
   <!-- Links -->
   <section class="home-section animate-in stagger-5" aria-busy={links === null}>
     <div class="home-section-hd">
-      <h2 class="section-heading">Elsewhere</h2>
-      <p class="home-section-note">Other places to find me</p>
+      <p class="home-section-kicker">04 / Network</p>
+      <h2 class="home-section-title">Elsewhere</h2>
     </div>
     {#if links === null}
       <LoadingSkeleton count={2} label="Loading external links" />

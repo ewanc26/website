@@ -59,16 +59,8 @@
     letter-spacing: 0.05em;
     color: var(--color-text-600);
     margin: 0 0 var(--space-md);
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-  }
-
-  .section-heading::after {
-    content: "";
-    height: 1px;
-    flex: 1;
-    background: var(--surface-color);
+    padding-left: var(--space-sm);
+    border-left: 2px solid var(--color-primary-500);
   }
 
   /* ── Post row — list item with label + trailing meta ─────────── */
@@ -77,6 +69,9 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
   }
 
   .post-row {
@@ -85,7 +80,7 @@
     align-items: flex-start;
     gap: var(--space-md);
     padding: var(--space-sm) 0;
-    border-bottom: 1px dashed var(--surface-color);
+    border-radius: var(--radius-sm);
     text-decoration: none;
     color: var(--color-text-950);
     min-width: 0;
@@ -94,6 +89,7 @@
       padding-right var(--duration-fast) var(--ease-out-quart),
       margin-left var(--duration-fast) var(--ease-out-quart),
       margin-right var(--duration-fast) var(--ease-out-quart),
+      background-color var(--duration-fast) var(--ease-out-quart),
       color var(--duration-fast) var(--ease-out-quart);
   }
 
@@ -128,7 +124,7 @@
     align-items: baseline;
     gap: var(--space-xs);
     padding: var(--space-sm) 0;
-    border-bottom: 1px dashed var(--surface-color);
+    border-radius: var(--radius-sm);
     text-decoration: none;
     color: var(--color-text-950);
     transition:
@@ -136,6 +132,7 @@
       padding-right var(--duration-fast) var(--ease-out-quart),
       margin-left var(--duration-fast) var(--ease-out-quart),
       margin-right var(--duration-fast) var(--ease-out-quart),
+      background-color var(--duration-fast) var(--ease-out-quart),
       color var(--duration-fast) var(--ease-out-quart);
   }
 
