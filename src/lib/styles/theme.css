@@ -628,28 +628,28 @@
   .shell-wide {
     max-width: var(--shell-wide);
     margin-inline: auto;
-    padding: 0 var(--space-lg) var(--space-xl);
+    padding: 0 clamp(var(--space-md), 4vw, var(--space-lg)) var(--space-xl);
   }
 
   /* Prose shell — blog posts (wide enough for TOC sidebar + content) */
   .shell-prose {
     max-width: var(--shell-wide);
     margin-inline: auto;
-    padding: 0 var(--space-lg) var(--space-xl);
+    padding: 0 clamp(var(--space-md), 4vw, var(--space-lg)) var(--space-xl);
   }
 
   /* Narrow shell — subscriptions, support */
   .shell-narrow {
     max-width: var(--shell-narrow);
     margin-inline: auto;
-    padding: 0 var(--space-lg) var(--space-xl);
+    padding: 0 clamp(var(--space-md), 4vw, var(--space-lg)) var(--space-xl);
   }
 
   @media (max-width: 560px) {
     .shell-wide,
     .shell-prose,
     .shell-narrow {
-      padding: 0 var(--space-md) var(--space-12);
+      padding-bottom: var(--space-12);
     }
   }
 

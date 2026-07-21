@@ -84,4 +84,6 @@
             {/each}
         </ol>
     </nav>
+{:else}
+    <div class="toc-sentinel"></div>
 {/if}

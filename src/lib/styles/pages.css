@@ -26,6 +26,7 @@
   @media (max-width: 640px) {
     .hero-hd {
       flex-direction: column;
+      align-items: flex-start;
       gap: var(--space-md);
     }
   }
@@ -162,11 +163,17 @@
   }
 
   .home-section-hd {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-xs);
+    display: grid;
+    grid-template-columns: auto minmax(var(--space-xl), 1fr);
+    align-items: center;
+    gap: var(--space-md);
     margin-bottom: var(--space-lg);
+  }
+
+  .home-section-hd::after {
+    content: "";
+    height: 1px;
+    background: linear-gradient(90deg, var(--surface-color), transparent);
   }
 
   .home-section-title {
@@ -360,6 +367,28 @@
     white-space: nowrap;
   }
 
+  @media (max-width: 720px) {
+    .project-card {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: var(--space-xs) var(--space-md);
+    }
+
+    .project-desc {
+      grid-column: 1 / -1;
+    }
+
+    .project-card-meta {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .link-chip {
+      grid-template-columns: minmax(8rem, 0.8fr) minmax(0, 1.2fr) auto;
+      gap: var(--space-sm);
+    }
+  }
+
   @media (max-width: 560px) {
     .hero-avatar {
       width: 48px;
@@ -373,6 +402,12 @@
     .project-card {
       grid-template-columns: minmax(0, 1fr);
       gap: var(--space-xs);
+    }
+
+    .project-desc,
+    .project-card-meta {
+      grid-column: 1;
+      grid-row: auto;
     }
 
     .home-section-hd {
@@ -389,7 +424,7 @@
     }
 
     .link-grid {
-      grid-template-columns: minmax(0, 1fr);
+      padding: var(--space-2xs);
     }
 
     .link-chip {
@@ -756,6 +791,13 @@
     color: var(--color-primary-500);
   }
 
+  .post-layout:has(.toc-sentinel) {
+    grid-template-columns: 1fr;
+  }
+  .post-layout:has(.toc-sentinel) .post-sidebar {
+    display: none;
+  }
+
   /* Post footer */
   .post-footer {
     margin-top: var(--space-lg);
@@ -827,6 +869,10 @@
     .post-sidebar {
       position: static;
       height: auto;
+    }
+
+    .post-layout:has(.toc-sentinel) .post-sidebar {
+      display: none;
     }
   }
 
@@ -1152,6 +1198,13 @@
     top: 72px;
     max-height: calc(100vh - 72px);
     overflow-y: auto;
+  }
+
+  .spec-grid:has(.toc-sentinel) {
+    grid-template-columns: 1fr;
+  }
+  .spec-grid:has(.toc-sentinel) .spec-toc {
+    display: none;
   }
 
   .toc-list {

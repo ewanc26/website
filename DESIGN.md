@@ -7,6 +7,7 @@ Port of the visual system for ewancroft.uk.
 - **Palette**: Dynamic OKLCH, predominantly neutral/earthy with primary green accents.
 - **Typography**: Inter (Variable) for UI/Prose, JetBrains Mono for Code/Utility.
 - **Spacing**: 4pt modular scale (4px, 8px, 12px, 16px, 32px, 64px, 96px).
+- **Page gutters**: Fluid from 16px on phones to 32px on wide layouts; avoid breakpoint jumps that reduce usable width as the viewport grows.
 - **Motion**: Snap-to-standard `cubic-bezier(0.25, 1, 0.5, 1)` (Quart) for transitions; `expo` for entrances.
 
 ## Register: Brand
@@ -26,6 +27,7 @@ Port of the visual system for ewancroft.uk.
 - Use the Selected Projects row anatomy across UI collections: a clear label, supporting detail, and trailing metadata where relevant.
 - Actionable rows share a primary-tinted hover and keyboard-focus highlight. Static rows do not imply interactivity.
 - Keep rows spatially stable on hover and focus; communicate state through colour rather than positional movement.
+- On tablet and mobile widths, collapse row columns before labels, descriptions, or metadata become cramped; preserve the same raised parent and inset-row hierarchy.
 - Keep prose lists semantic and unstyled; this pattern is for navigational and data indexes.
 
 ## Anti-references

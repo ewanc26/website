@@ -10,7 +10,7 @@
   /* ── Navigation ─────────────────────────────────────────────── */
 
   .nav {
-    padding: 0 var(--space-lg);
+    padding: 0 clamp(var(--space-md), 4vw, var(--space-lg));
     border-bottom: 1px solid var(--surface-color);
     background: var(--color-background-50);
     position: sticky;
@@ -117,12 +117,23 @@
   }
 
   @media (max-width: 800px) {
-    .nav {
-      padding: 0 var(--space-md);
-    }
-
     .nav-inner {
       min-height: var(--nav-height-compact);
+    }
+
+    .nav-brand {
+      min-width: 0;
+    }
+
+    .nav-brand-home {
+      min-width: 0;
+    }
+
+    .nav-brand-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .menu-toggle {
@@ -132,18 +143,33 @@
     .nav-links {
       display: none;
       position: absolute;
-      top: 100%;
+      top: calc(100% + var(--space-xs));
       left: 0;
       width: 100%;
       flex-direction: column;
-      background: var(--color-background-50);
-      padding: var(--space-md);
-      border-bottom: 1px solid var(--surface-color);
-      gap: var(--space-sm);
+      align-items: stretch;
+      gap: var(--space-2xs);
+      padding: var(--space-xs);
+      border: 1px solid var(--surface-color);
+      border-radius: var(--radius-md);
+      background: var(--surface-raised);
     }
 
     .nav-links.open {
       display: flex;
+    }
+
+    .nav-link {
+      width: 100%;
+      padding: var(--space-sm) var(--space-3);
+      border-radius: var(--radius-sm);
+      box-shadow: none;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: var(--surface-sunken);
+      box-shadow: none;
     }
   }
 
@@ -151,7 +177,7 @@
 
   .site-footer {
     border-top: 1px solid var(--surface-color);
-    padding: var(--space-lg);
+    padding: var(--space-lg) clamp(var(--space-md), 4vw, var(--space-lg));
   }
 
   .footer-inner {
