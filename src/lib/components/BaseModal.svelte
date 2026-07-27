@@ -26,8 +26,18 @@
   } = $props();
 
   let portalElement = $state<HTMLElement | null>(null);
+  let dialogElement = $state<HTMLDialogElement | null>(null);
+
   onMount(() => {
     portalElement = document.body;
+  });
+
+  $effect(() => {
+    if (open) {
+      dialogElement?.showModal();
+    } else {
+      dialogElement?.close();
+    }
   });
 </script>
 
@@ -36,9 +46,8 @@
   <div use:portal={portalElement} class="portal-wrapper">
     <div class="backdrop" role="presentation" onclick={onClose}></div>
     <dialog
-      {open}
+      bind:this={dialogElement}
       class="base-modal"
-      aria-modal="true"
       aria-label={title}
       oncancel={(event) => {
         event.preventDefault();
