@@ -270,9 +270,10 @@
         <dl class="id-list">
           <dt>DID</dt>
           <dd>
-            <button 
-              type="button" 
-              class="copy-btn copy-btn--compact" 
+            <button
+              type="button"
+              class="copy-btn copy-btn--compact"
+              aria-live="polite"
               onclick={() => copyToClipboard(profile.did, 'did')}
             >
               {copiedIndex === 'did' ? 'Copied' : 'Copy DID'}
