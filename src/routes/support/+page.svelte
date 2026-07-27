@@ -101,6 +101,7 @@
             type="button"
             class="copy-btn"
             aria-label="Copy {crypto.coin} address"
+            aria-live="polite"
             onclick={() => copyAddress(crypto.address, i)}
           >
             {#if copiedIndex === i}

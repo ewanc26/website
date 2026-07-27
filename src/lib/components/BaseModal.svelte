@@ -32,27 +32,12 @@
     portalElement = document.body;
   });
 
-  // The dialog is rendered with the `open` attribute rather than
-  // `showModal()`, so the browser gives us neither Escape-to-close nor
-  // initial focus. Provide both, and restore focus to whatever opened it.
   $effect(() => {
-    if (!open || !dialogElement) return;
-
-    const previouslyFocused = document.activeElement as HTMLElement | null;
-    dialogElement.focus();
-
-    const handleKeydown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        onClose();
-      }
-    };
-    document.addEventListener('keydown', handleKeydown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeydown);
-      previouslyFocused?.focus?.();
-    };
+    if (open) {
+      dialogElement?.showModal();
+    } else {
+      dialogElement?.close();
+    }
   });
 </script>
 
@@ -62,10 +47,7 @@
     <div class="backdrop" role="presentation" onclick={onClose}></div>
     <dialog
       bind:this={dialogElement}
-      {open}
-      tabindex="-1"
       class="base-modal"
-      aria-modal="true"
       aria-label={title}
       oncancel={(event) => {
         event.preventDefault();
