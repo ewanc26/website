@@ -95,10 +95,10 @@
         {/if}
       </div>
       <div class="footer-symbols">
-        <a href="https://bsky.app/profile/{PUBLIC_ATPROTO_DID}" aria-label="Bluesky" class="footer-icon-link">
+        <a href="https://bsky.app/profile/{PUBLIC_ATPROTO_DID}" target="_blank" rel="noopener" aria-label="Bluesky" class="footer-icon-link">
           <Bluesky size={14} />
         </a>
-        <a href="https://eurosky.tech" aria-label="Eurosky" class="footer-icon-link">
+        <a href="https://eurosky.tech" target="_blank" rel="noopener" aria-label="Eurosky" class="footer-icon-link">
           <Eurosky size={14} />
         </a>
         <WolfToggle />
@@ -110,7 +110,7 @@
       <nav class="footer-nav" aria-label="Footer navigation">
         <a href={`mailto:${contactEmail}`} class="footer-link">{contactEmail}</a>
         {#if primaryRepository}
-          <a href={primaryRepository.url} rel="noopener" class="footer-link">source</a>
+          <a href={primaryRepository.url} target="_blank" rel="noopener" class="footer-link">source</a>
         {/if}
         {#if projectLicense?.url}
           <a href={projectLicense.url} rel="license noopener" class="footer-link">{projectLicense.name ?? 'license'}</a>

@@ -168,7 +168,12 @@
 
     .nav-link:hover,
     .nav-link.active {
-      background: var(--surface-sunken);
+      color: var(--color-primary-700);
+      background: color-mix(
+        in oklch,
+        var(--color-primary-500) 12%,
+        var(--surface-sunken)
+      );
       box-shadow: none;
     }
   }
