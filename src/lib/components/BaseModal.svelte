@@ -26,8 +26,33 @@
   } = $props();
 
   let portalElement = $state<HTMLElement | null>(null);
+  let dialogElement = $state<HTMLDialogElement | null>(null);
+
   onMount(() => {
     portalElement = document.body;
+  });
+
+  // The dialog is rendered with the `open` attribute rather than
+  // `showModal()`, so the browser gives us neither Escape-to-close nor
+  // initial focus. Provide both, and restore focus to whatever opened it.
+  $effect(() => {
+    if (!open || !dialogElement) return;
+
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    dialogElement.focus();
+
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleKeydown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeydown);
+      previouslyFocused?.focus?.();
+    };
   });
 </script>
 
@@ -36,7 +61,9 @@
   <div use:portal={portalElement} class="portal-wrapper">
     <div class="backdrop" role="presentation" onclick={onClose}></div>
     <dialog
+      bind:this={dialogElement}
       {open}
+      tabindex="-1"
       class="base-modal"
       aria-modal="true"
       aria-label={title}
@@ -103,6 +130,17 @@
     border-radius: var(--radius-lg);
     padding: var(--space-lg);
     z-index: 9999;
+  }
+
+  /* Programmatic container focus only — the ring would read as a bug. */
+  .base-modal:focus {
+    outline: none;
+  }
+
+  .close-btn:focus-visible {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
   }
 
   .modal-header {

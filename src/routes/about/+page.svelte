@@ -57,9 +57,15 @@
   let copiedIndex = $state<'did' | null>(null);
 
   async function copyToClipboard(text: string, id: 'did') {
-    await navigator.clipboard.writeText(text);
-    copiedIndex = id;
-    setTimeout(() => (copiedIndex = null), 2000);
+    // navigator.clipboard is undefined outside secure contexts, and
+    // writeText() rejects when permission is denied.
+    try {
+      await navigator.clipboard?.writeText(text);
+      copiedIndex = id;
+      setTimeout(() => (copiedIndex = null), 2000);
+    } catch {
+      copiedIndex = null;
+    }
   }
 </script>
 
@@ -68,7 +74,15 @@
 <main class="shell-wide">
   <header class="page-hd about-hero hero-reveal">
     {#if profile.avatar}
-      <img src={profile.avatar} alt="{profile.displayName}'s avatar" class="about-avatar" />
+      <!-- Decorative: the display name is the adjacent <h1>. -->
+      <img
+        src={profile.avatar}
+        alt=""
+        class="about-avatar"
+        width="64"
+        height="64"
+        decoding="async"
+      />
     {/if}
     <div class="about-intro">
       <h1 class="page-title">{profile.displayName ?? profile.handle}</h1>

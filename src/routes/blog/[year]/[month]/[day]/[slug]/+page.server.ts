@@ -8,6 +8,7 @@ import {
 } from "$env/static/public";
 import { error } from "@sveltejs/kit";
 import { normalizeSlug } from "$lib/utils/slugify";
+import { safeResourceUrl } from "$lib/utils/url";
 import { renderMarkdown } from "$lib/utils/markdown";
 import {
   leafletProvider,
@@ -91,6 +92,7 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
 
   const comments = await fetchComments(post.uri, fetch);
   const { content: _content, ...serialisable } = post;
+  const publicationUrl = safeResourceUrl(blogPublication?.url);
 
   return {
     post: {
@@ -104,8 +106,12 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
       ? {
           title: blogPublication.name,
           description: blogPublication.description ?? "",
-          url: blogPublication.url,
-          rss: `${blogPublication.url}/rss`,
+          // The publication URL comes from a remote record; only emit it as
+          // a link target when it is a real http(s) URL.
+          url: publicationUrl,
+          rss: publicationUrl
+            ? `${publicationUrl.replace(/\/+$/, "")}/rss`
+            : undefined,
         }
       : null,
     comments,

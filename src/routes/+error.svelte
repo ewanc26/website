@@ -1,34 +1,44 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
+  import { dev } from '$app/environment';
+  import { SITE } from '$lib/config';
   import NotFoundEgg from '$lib/components/ostara-eggs/NotFoundEgg.svelte';
-  // If your project uses the standard SvelteKit page store reactive rune:
-  // import { page } from '$app/state'; 
+
+  const heading = $derived(
+    page.status === 404
+      ? 'Route Not Found'
+      : (page.error?.message ?? 'An Unexpected Error Occurred')
+  );
+  // Only surface stack traces during development — they can leak server paths.
+  const stack = $derived(dev ? ((page.error as { stack?: string } | null)?.stack) : undefined);
 </script>
 
+<svelte:head>
+  <title>{page.status} — {heading} — {SITE.title}</title>
+  <meta name="description" content="{page.status} error on {SITE.title}." />
+  <meta name="robots" content="noindex, follow" />
+</svelte:head>
+
 <main class="shell-narrow error-layout">
-  {#if $page.status === 404}
+  {#if page.status === 404}
     <NotFoundEgg />
   {:else}
     <div class="panel error-card">
     <div class="panel-head">
-      <span class="error-badge">STATUS {$page.status}</span>
+      <span class="error-badge">STATUS {page.status}</span>
     </div>
-    
+
     <div class="panel-body">
-      <h1 class="error-title">
-        {$page.status === 404 ? 'Route Not Found' : ($page.error?.message ?? 'An Unexpected Error Occurred')}
-      </h1>
-      
+      <h1 class="error-title">{heading}</h1>
+
       <p class="error-desc">
-        {$page.status === 404 
-          ? 'The requested page could not be located. It may have been moved, deleted, or the URL slug might contain a typo.' 
-          : 'The system encountered an unhandled exception while attempting to build this view.'}
+        The system encountered an unhandled exception while attempting to build this view.
       </p>
 
-      {#if ($page.error as any)?.stack}
+      {#if stack}
         <details class="error-details">
           <summary>EXCEPTION_TRACE</summary>
-          <pre><code>{($page.error as any).stack}</code></pre>
+          <pre><code>{stack}</code></pre>
         </details>
       {/if}
 

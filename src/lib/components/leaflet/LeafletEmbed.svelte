@@ -5,6 +5,7 @@
    * a 16:9 fallback for unmeasured embeds.
    */
   import LoadingSkeleton from "$lib/components/LoadingSkeleton.svelte";
+  import { safeResourceUrl } from "$lib/utils/url";
 
   let { url, height, aspectRatio }: {
     url: string;
@@ -18,20 +19,25 @@
       : "16 / 9"
   );
   let loaded = $state(false);
+
+  /** Remote block data is untrusted — only allow absolute http(s) embeds. */
+  let embedSrc = $derived(safeResourceUrl(url));
 </script>
 
-<div class="leaflet-embed" aria-busy={!loaded}>
-  <div class="leaflet-embed-loading" class:is-loaded={loaded} aria-hidden={loaded}>
-    <LoadingSkeleton count={3} label="Loading embedded content" />
+{#if embedSrc}
+  <div class="leaflet-embed" aria-busy={!loaded}>
+    <div class="leaflet-embed-loading" class:is-loaded={loaded} aria-hidden={loaded}>
+      <LoadingSkeleton count={3} label="Loading embedded content" />
+    </div>
+    <iframe
+      class:is-loaded={loaded}
+      src={embedSrc}
+      {height}
+      style="aspect-ratio: {ratio}"
+      loading="lazy"
+      sandbox="allow-scripts allow-same-origin allow-popups"
+      title="Embedded content"
+      onload={() => (loaded = true)}
+    ></iframe>
   </div>
-  <iframe
-    class:is-loaded={loaded}
-    src={url}
-    {height}
-    style="aspect-ratio: {ratio}"
-    loading="lazy"
-    sandbox="allow-scripts allow-same-origin allow-popups"
-    title="Embedded content"
-    onload={() => (loaded = true)}
-  ></iframe>
-</div>
+{/if}

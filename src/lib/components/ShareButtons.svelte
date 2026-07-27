@@ -12,9 +12,15 @@
   let copied = $state(false);
 
   async function copyToClipboard() {
-    await navigator.clipboard.writeText(url);
-    copied = true;
-    setTimeout(() => (copied = false), 2000);
+    // navigator.clipboard is undefined outside secure contexts, and
+    // writeText() rejects when permission is denied.
+    try {
+      await navigator.clipboard?.writeText(url);
+      copied = true;
+      setTimeout(() => (copied = false), 2000);
+    } catch {
+      copied = false;
+    }
   }
 
   // Construct structured email template

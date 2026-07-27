@@ -4,6 +4,8 @@
    * The `src` is a pre-resolved PDS blob URL (set during serialisation).
    */
 
+  import { safeResourceUrl } from "$lib/utils/url";
+
   let { src, alt, width, height, fullBleed }: {
     src: string;
     alt?: string;
@@ -17,11 +19,15 @@
       ? `${width} / ${height}`
       : undefined
   );
+
+  /** Blob URLs are resolved server-side, but the record is still untrusted. */
+  let imageSrc = $derived(safeResourceUrl(src));
 </script>
 
+{#if imageSrc}
 <figure class="leaflet-image" class:full-bleed={fullBleed}>
   <img
-    src={src}
+    src={imageSrc}
     alt={alt ?? ""}
     {width}
     {height}
@@ -33,3 +39,4 @@
     <figcaption class="leaflet-image-alt">{alt}</figcaption>
   {/if}
 </figure>
+{/if}

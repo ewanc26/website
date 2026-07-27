@@ -7,6 +7,7 @@
    */
 
   import type { FacetSchema } from "$lib/providers/facets";
+  import { safeLinkUrl } from "$lib/utils/url";
 
   /** Loosely-typed facet shape from serialised block data. */
   interface SerialisedFacet {
@@ -152,8 +153,11 @@
       if (seg.marks.italic) inner = `<em>${inner}</em>`;
       if (seg.marks.bold) inner = `<strong>${inner}</strong>`;
     }
-    if (seg.marks.link) {
-      inner = `<a href="${esc(seg.marks.link)}" target="_blank" rel="noopener">${inner}</a>`;
+    // Remote facets are untrusted: drop anything that is not an
+    // http(s)/mailto/at link rather than emitting a javascript: href.
+    const href = safeLinkUrl(seg.marks.link);
+    if (href) {
+      inner = `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${inner}</a>`;
     }
     return inner;
   }

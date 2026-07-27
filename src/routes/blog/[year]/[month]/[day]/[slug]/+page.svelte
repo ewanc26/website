@@ -94,7 +94,11 @@
                 {#if data.blog}
                     <footer class="post-footer">
                         <p class="footer-pub">
-                            <a href={data.blog.url} target="_blank" rel="noopener">{data.blog.title}</a>
+                            {#if data.blog.url}
+                                <a href={data.blog.url} target="_blank" rel="noopener noreferrer">{data.blog.title}</a>
+                            {:else}
+                                {data.blog.title}
+                            {/if}
                         </p>
                         <p class="footer-desc">{data.blog.description}</p>
                         <div class="post-provenance">
@@ -107,9 +111,11 @@
                                     <Leaflet size={14} /> Leaflet
                                 </a>
                             </div>
-                            <a href={data.blog.rss} target="_blank" rel="noopener" class="rss-link post-provenance-link">
-                                <Rss size={14} strokeWidth={2} /> RSS
-                            </a>
+                            {#if data.blog.rss}
+                                <a href={data.blog.rss} target="_blank" rel="noopener noreferrer" class="rss-link post-provenance-link">
+                                    <Rss size={14} strokeWidth={2} aria-hidden="true" /> RSS
+                                </a>
+                            {/if}
                         </div>
                     </footer>
                 {/if}

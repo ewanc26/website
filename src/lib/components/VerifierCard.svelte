@@ -13,7 +13,15 @@
 
 <div class="verifier-card">
   <div class="avatar">
-    <img src={avatarUrl || getPlaceholderAvatar(did)} alt={name} />
+    <!-- Decorative: the name is already rendered next to it. -->
+    <img
+      src={avatarUrl || getPlaceholderAvatar(did)}
+      alt=""
+      width="32"
+      height="32"
+      loading="lazy"
+      decoding="async"
+    />
   </div>
   <div class="verifier-info">
     <span class="name">{name}</span>

@@ -27,10 +27,16 @@
   let { data } = $props();
   let copiedIndex = $state<string | null>(null);
 
-  function copyCode(code: string, id: string) {
-    navigator.clipboard.writeText(code);
-    copiedIndex = id;
-    setTimeout(() => (copiedIndex = null), 2000);
+  async function copyCode(code: string, id: string) {
+    // navigator.clipboard is undefined outside secure contexts, and
+    // writeText() rejects when permission is denied.
+    try {
+      await navigator.clipboard?.writeText(code);
+      copiedIndex = id;
+      setTimeout(() => (copiedIndex = null), 2000);
+    } catch {
+      copiedIndex = null;
+    }
   }
 
   const colorPalettes = [

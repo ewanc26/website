@@ -23,6 +23,7 @@
 
   import type { FacetSchema } from "$lib/providers/facets";
   import type { SerialisedBlock } from "$lib/providers/serialise";
+  import { safeLinkUrl } from "$lib/utils/url";
 
   const NS = "pub.leaflet.richtext.facet";
   const SCHEMA: FacetSchema = {
@@ -108,9 +109,15 @@
     {@const level = Math.min(Math.max((inner.level as number) ?? 1, 1), 6)}
     {@const hid = headingId(getPlaintext(inner))}
     {#if level === 1}
-      <h1 id={hid} class="leaflet-h1{align ? ` ${align}` : ''}">
+      <!--
+        Rendered as <h2> with the h1 styling: this component always renders
+        inside an <article> that already has the post title as its <h1>, and
+        a second <h1> breaks the document outline (and hides the heading from
+        the h2/h3/h4 table of contents).
+      -->
+      <h2 id={hid} class="leaflet-h1{align ? ` ${align}` : ''}">
         <LeafletFacets plaintext={getPlaintext(inner)} facets={getFacets(inner)} schema={SCHEMA} />
-      </h1>
+      </h2>
     {:else if level === 2}
       <h2 id={hid} class="leaflet-h2{align ? ` ${align}` : ''}">
         <LeafletFacets plaintext={getPlaintext(inner)} facets={getFacets(inner)} schema={SCHEMA} />
@@ -217,8 +224,13 @@
     <div class="leaflet-unsupported">Signup form</div>
 
   {:else if $type === B("standardSitePost")}
+    {@const linkedPostHref = safeLinkUrl(inner.uri)}
     <div class="leaflet-unsupported">
-      <a href={inner.uri as string} target="_blank" rel="noopener">Linked post</a>
+      {#if linkedPostHref}
+        <a href={linkedPostHref} target="_blank" rel="noopener noreferrer">Linked post</a>
+      {:else}
+        Linked post
+      {/if}
     </div>
 
   {:else}
@@ -229,7 +241,12 @@
 {#snippet listItem(item: Record<string, unknown>, ordered: boolean)}
   <li class="leaflet-list-item">
     {#if item.checked !== undefined}
-      <input type="checkbox" checked={item.checked as boolean} disabled />
+      <input
+        type="checkbox"
+        checked={item.checked as boolean}
+        disabled
+        aria-label={item.checked ? "Done" : "Not done"}
+      />
     {/if}
     {#if item.content}
       {@const content = item.content as Record<string, unknown>}

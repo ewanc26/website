@@ -7,14 +7,14 @@ import type { Config } from "@sveltejs/adapter-vercel";
 export const config: Config = { maxDuration: 30 };
 
 export const GET: RequestHandler = async ({ url }) => {
-  const offset = Math.max(
-    0,
-    parseInt(url.searchParams.get("offset") ?? "0", 10),
-  );
-  const limit = Math.min(
-    100,
-    Math.max(1, parseInt(url.searchParams.get("limit") ?? "20", 10)),
-  );
+  /** parseInt returns NaN for junk input, which silently slices to nothing. */
+  const intParam = (name: string, fallback: number) => {
+    const parsed = parseInt(url.searchParams.get(name) ?? "", 10);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  };
+
+  const offset = Math.max(0, intParam("offset", 0));
+  const limit = Math.min(100, Math.max(1, intParam("limit", 20)));
 
   const { posts } = await fetchBlogPosts();
   const publicationPosts = posts

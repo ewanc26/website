@@ -29,9 +29,15 @@
   let copiedIndex = $state<number | null>(null);
 
   async function copyAddress(address: string, index: number) {
-    await navigator.clipboard.writeText(address);
-    copiedIndex = index;
-    setTimeout(() => (copiedIndex = null), 2000);
+    // navigator.clipboard is undefined outside secure contexts, and
+    // writeText() rejects when permission is denied.
+    try {
+      await navigator.clipboard?.writeText(address);
+      copiedIndex = index;
+      setTimeout(() => (copiedIndex = null), 2000);
+    } catch {
+      copiedIndex = null;
+    }
   }
 </script>
 

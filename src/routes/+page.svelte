@@ -66,7 +66,7 @@
   <!-- Hero -->
   <section class="page-hd hero-hd hero-reveal">
     {#if profile.avatar}
-      <img src={profile.avatar} alt="" class="hero-avatar" />
+      <img src={profile.avatar} alt="" class="hero-avatar" width="128" height="128" decoding="async" />
     {/if}
     <div class="hero-text">
       <h1 class="page-title">
@@ -102,6 +102,8 @@
               src={musicStatus.artworkUrl}
               alt=""
               class="now-playing-art"
+              width="24"
+              height="24"
               loading="lazy"
               decoding="async"
             />
