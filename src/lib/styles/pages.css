@@ -962,78 +962,6 @@
     font-weight: 600;
   }
 
-  /* Cryptocurrency Grid */
-  .crypto-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2xs);
-    padding: var(--space-xs);
-    background: var(--surface-raised);
-    border-radius: var(--radius-md);
-  }
-
-  @media (max-width: 560px) {
-    .crypto-grid {
-      padding: var(--space-2xs);
-    }
-  }
-
-  .crypto-card {
-    padding: var(--space-3);
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    display: grid;
-    grid-template-columns: minmax(9rem, 0.5fr) minmax(0, 1.5fr) auto;
-    align-items: center;
-    gap: var(--space-md);
-    background: transparent;
-  }
-
-  .crypto-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  @media (max-width: 700px) {
-    .crypto-card {
-      grid-template-columns: minmax(0, 1fr);
-      gap: var(--space-sm);
-    }
-  }
-
-  .crypto-coin {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    font-weight: 700;
-    color: var(--color-text-900);
-  }
-
-  .pref-tag {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--color-primary-500);
-    border: 1px solid currentColor;
-    padding: 1px 6px;
-    border-radius: var(--radius-xs);
-  }
-
-  .crypto-addr {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--color-text-600);
-    word-break: break-all;
-    background: var(--surface-sunken);
-    padding: var(--space-sm);
-    border-radius: var(--radius-xs);
-  }
-
-  /* Support copy button variant */
-  .support .copy-btn {
-    border-radius: var(--radius-xs);
-    padding: 4px 8px;
-  }
-
   /* ── Site meta page ─────────────────────────────────────────── */
 
   .error {
@@ -2099,7 +2027,6 @@
     .project-card--link,
     .project-item,
     .link-chip,
-    .crypto-card:has(button),
     .comment:has(a),
     .meta-card:has(a)
   ) {
@@ -2114,7 +2041,6 @@
     .project-card--link,
     .project-item,
     .link-chip,
-    .crypto-card:has(button),
     .comment:has(a),
     .meta-card:has(a)
   ):is(:hover, :focus-visible, :focus-within) {
