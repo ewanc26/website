@@ -25,6 +25,10 @@ Guidance for ewancroft.uk, a SvelteKit 2/Svelte 5 site deployed to Vercel's Node
 - `ATPROTO_APP_PASSWORD`, `KOFI_VERIFICATION_TOKEN`, `GITHUB_WEBHOOK_SECRET`, `GITHUB_TOKEN`, and any future server credential are private. `PUBLIC_*` values are bundled. Keep `.env.example` and README accurate without inserting real values; note that the current examples omit several webhook/write variables.
 - Public endpoints must validate/query-cap inputs, avoid leaking upstream error bodies or credentials, and set caching that matches data mutability. OG text is bounded, but font/WASM initialization, CPU/memory cost, cache cardinality, and error responses still need abuse testing.
 
+## Identity
+
+- `static/pgp-key.asc` is Ewan's public PGP key, served verbatim at `/pgp-key.asc` and linked/fingerprinted from the Identity section of `src/routes/about/+page.svelte` (`pgpFingerprint` constant). It is intentionally public and committed; only ever replace it with a new public key export, never a private key.
+
 ## UI and working conventions
 
 - Reuse the OKLCH tokens and existing components. Keep the “traditional meets technical” register, Sabbat/seasonal behavior, responsive layout, semantic headings/links/buttons, visible focus, reduced motion, contrast, and minimal client JavaScript.

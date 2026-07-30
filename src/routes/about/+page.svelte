@@ -54,9 +54,11 @@
     return `${monthNames[parseInt(month)] ?? 'Jan'} ${year}`;
   }
 
-  let copiedIndex = $state<'did' | null>(null);
+  const pgpFingerprint = 'C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D';
 
-  async function copyToClipboard(text: string, id: 'did') {
+  let copiedIndex = $state<'did' | 'pgp' | null>(null);
+
+  async function copyToClipboard(text: string, id: 'did' | 'pgp') {
     // navigator.clipboard is undefined outside secure contexts, and
     // writeText() rejects when permission is denied.
     try {
@@ -297,6 +299,19 @@
           <dd><code class="id-code">{profile.handle}</code></dd>
           <dt>PDS</dt>
           <dd><code class="id-code">eurosky.social</code></dd>
+          <dt>PGP</dt>
+          <dd class="id-pgp">
+            <code class="id-code">{pgpFingerprint}</code>
+            <button
+              type="button"
+              class="copy-btn copy-btn--compact"
+              aria-live="polite"
+              onclick={() => copyToClipboard(pgpFingerprint.replace(/\s/g, ''), 'pgp')}
+            >
+              {copiedIndex === 'pgp' ? 'Copied' : 'Copy fingerprint'}
+            </button>
+            <a href="/pgp-key.asc" class="id-link">Download key <ArrowRight size={14} /></a>
+          </dd>
           <dt>Name</dt>
           <dd><a href="/about/name" class="id-link">About my name <ArrowRight size={14} /></a></dd>
         </dl>
