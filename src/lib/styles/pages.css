@@ -57,6 +57,13 @@
     line-height: 1.55;
   }
 
+  .hero-gaelic {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--color-text-600);
+    font-style: italic;
+  }
+
   .hero-meta {
     display: flex;
     flex-wrap: wrap;
@@ -477,6 +484,13 @@
   .about-pronouns {
     font-size: var(--text-sm);
     color: var(--color-text-600);
+    margin: 0;
+  }
+
+  .about-gaelic {
+    font-size: var(--text-sm);
+    color: var(--color-text-600);
+    font-style: italic;
     margin: 0;
   }
 

@@ -73,6 +73,7 @@
         {profile.displayName ?? profile.handle}
         <VerificationBadge verified={true} verifiers={data.verifications} />
       </h1>
+      <p class="hero-gaelic">eòghann croit</p>
       <p class="hero-bio">{profile.description}</p>
       <div class="hero-meta" aria-label="Profile metadata">
         <span>@{profile.handle}</span>

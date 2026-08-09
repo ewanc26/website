@@ -42,9 +42,12 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
 
   const post = publicationDocs.find((d) => {
     const date = new Date(d.publishedAt);
-    const y = date.getFullYear().toString();
-    const m = (date.getMonth() + 1).toString().padStart(2, "0");
-    const dStr = date.getDate().toString().padStart(2, "0");
+    const ukDate = new Date(
+      date.toLocaleString("en-GB", { timeZone: "Europe/London" }),
+    );
+    const y = ukDate.getFullYear().toString();
+    const m = (ukDate.getMonth() + 1).toString().padStart(2, "0");
+    const dStr = ukDate.getDate().toString().padStart(2, "0");
     const docSlug = normalizeSlug(d.title);
     return y === year && m === month && dStr === day && docSlug === slug;
   });

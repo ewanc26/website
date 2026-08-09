@@ -117,6 +117,8 @@
         {/if}
         <a href="/site/design" class="footer-link">design</a>
         <a href="/site/meta" class="footer-link">site meta &amp; privacy</a>
+        <a href="https://ko-fi.com/ewancroft" target="_blank" rel="noopener" class="footer-link">Ko-fi</a>
+        <a href="https://github.com/sponsors/ewanc26" target="_blank" rel="noopener" class="footer-link">GitHub Sponsors</a>
       </nav>
     </div>
   </div>
