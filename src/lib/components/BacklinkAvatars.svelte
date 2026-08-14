@@ -168,7 +168,7 @@
         <p>{backlink.text}</p>
         <a href={backlink.url} target="_blank" rel="noopener noreferrer">
           {backlink.collection === 'app.bsky.feed.post' ? 'View Bluesky post' : 'View source'}
-          <ExternalLink size={13} strokeWidth={2} aria-hidden="true" />
+          <ExternalLink size={14} strokeWidth={2} aria-hidden="true" />
         </a>
       </li>
     {/each}
@@ -226,7 +226,7 @@
   .avatar-stack {
     display: flex;
     align-items: center;
-    padding-left: 7px;
+    padding-left: var(--space-sm);
   }
 
   .backlink-avatar,
@@ -235,7 +235,7 @@
     width: 34px;
     height: 34px;
     flex: 0 0 34px;
-    margin-left: -7px;
+    margin-left: calc(-1 * var(--space-sm));
     overflow: hidden;
     border: 2px solid var(--color-canvas-50);
     border-radius: var(--radius-full);
@@ -270,11 +270,11 @@
   }
 
   .avatar-skeleton {
-    animation: avatar-pulse 1.2s ease-in-out infinite alternate;
+    animation: avatar-pulse 1.2s var(--ease-out-quart) infinite alternate;
   }
 
-  .avatar-skeleton:nth-child(2) { animation-delay: 120ms; }
-  .avatar-skeleton:nth-child(3) { animation-delay: 240ms; }
+  .avatar-skeleton:nth-child(2) { animation-delay: 100ms; }
+  .avatar-skeleton:nth-child(3) { animation-delay: 200ms; }
 
   .modal-intro {
     margin: 0 0 var(--space-md);

@@ -100,6 +100,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
+    color-scheme: light;
   }
   .swatches {
     display: grid;
@@ -112,10 +113,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--color-canvas-50);
     font-weight: 800;
     font-size: var(--text-xs);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
   }
   .controls { display: flex; flex-direction: column; gap: var(--space-xs); }
   .slider-container {

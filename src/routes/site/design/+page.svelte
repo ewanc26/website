@@ -271,10 +271,7 @@
                   <dt>PRIMARY LOGO</dt>
                   <dd>
                     <div class="logo-sample">
-                      <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="32" height="32" rx="16" fill="var(--color-primary-500)"/>
-                        <path d="M11 21V11H21V13H13V15H19V17H13V19H21V21H11Z" fill="var(--color-canvas-50)"/>
-                      </svg>
+                      <img class="logo-sample-img" src={favicon} alt="Favicon Primary" width="24" height="24" />
                       <span>Favicon Primary</span>
                     </div>
                   </dd>
@@ -717,6 +714,15 @@
           <div class="asset-grid">
             <div class="asset-card">
               <h3 class="sub-title" id="favicon">Favicon</h3>
+              <div class="asset-preview">
+                <img
+                  class="favicon-preview"
+                  src={favicon}
+                  alt="Favicon preview"
+                  width="64"
+                  height="64"
+                />
+              </div>
               <dl class="asset-meta">
                 <div><dt>PATH</dt><dd><code>{assets.favicon.publicUrl}</code></dd></div>
                 <div><dt>SIZE</dt><dd>{assets.favicon.size}</dd></div>

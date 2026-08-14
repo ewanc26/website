@@ -43,7 +43,7 @@
 					{ opacity: 0.72, transform: `${transform} scale(1)`, offset: 0.68 },
 					{ opacity: 0, transform: `${transform} scale(0.94)` }
 				],
-				{ duration: 1900, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
+				{ duration: 1900, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'forwards' }
 			);
 
 			animation.onfinish = () => paw.remove();
@@ -152,7 +152,7 @@
 		pointer-events: none;
 		color: var(--color-primary-500);
 		opacity: 0.055;
-		transition: opacity 600ms ease;
+		transition: opacity var(--duration-slow) var(--ease-out-quart);
 	}
 
 	.paw-trail.wolf-active {

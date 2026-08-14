@@ -125,7 +125,7 @@
     border: 1px solid var(--surface-color);
     font-size: var(--text-sm);
     color: var(--color-ink-600);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     text-align: left;
     overflow-x: auto;
     word-break: break-word;
@@ -148,17 +148,18 @@
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
-    transition: all var(--duration-fast) var(--ease-out-quart);
+    transition:
+      background-color var(--duration-fast) var(--ease-out-quart),
+      transform var(--duration-fast) var(--ease-out-quart);
   }
 
   .error-button {
     background: var(--color-primary-600);
-    color: white;
+    color: var(--color-canvas-50);
   }
 
   .error-button:hover {
     background: var(--color-primary-700);
-    transform: translateY(-2px);
   }
 
   .error-button-secondary {

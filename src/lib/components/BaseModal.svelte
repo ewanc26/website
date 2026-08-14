@@ -148,7 +148,7 @@
     align-items: center;
     justify-content: center;
     padding: 0;
-    margin-right: -10px;
+    margin-right: calc(-1 * var(--space-sm));
   }
 
   .close-btn:hover {
