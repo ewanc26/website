@@ -8,6 +8,7 @@
   import Pentacle from '$lib/components/icons/Pentacle.svelte';
   import { ArrowRight, ExternalLink, Music } from '@lucide/svelte';
   import { normalizeSlug } from '$lib/utils/slugify';
+  import { blogDateParts } from '$lib/utils/date';
   import type { ProfileData } from '@ewanc26/atproto';
   import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from '$env/static/public';
 
@@ -51,10 +52,7 @@
   });
 
   function getBlogUrl(post: any) {
-    const date = new Date(post.createdAt);
-    const y = date.getFullYear();
-    const m = (date.getMonth() + 1).toString().padStart(2, '0');
-    const d = date.getDate().toString().padStart(2, '0');
+    const { year: y, month: m, day: d } = blogDateParts(post.createdAt);
     const slug = normalizeSlug(post.title);
     return `/blog/${y}/${m}/${d}/${slug}`;
   }

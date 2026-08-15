@@ -1,5 +1,6 @@
 <script lang="ts">
     import { normalizeSlug } from '$lib/utils/slugify';
+    import { blogDateParts } from '$lib/utils/date';
     import SiteHead from '$lib/components/SiteHead.svelte';
     import EmptyState from '$lib/components/EmptyState.svelte';
     import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
@@ -24,10 +25,7 @@
     ));
 
     function getPostUrl(post: PostSummary) {
-        const date = new Date(post.createdAt);
-        const y = date.getFullYear();
-        const m = (date.getMonth() + 1).toString().padStart(2, '0');
-        const d = date.getDate().toString().padStart(2, '0');
+        const { year: y, month: m, day: d } = blogDateParts(post.createdAt);
         const slug = normalizeSlug(post.title);
         return `/blog/${y}/${m}/${d}/${slug}`;
     }
@@ -39,13 +37,13 @@
     function groupPosts(posts: PostSummary[]) {
         const grouped = new Map<number, Map<number, PostSummary[]>>();
         for (const post of posts) {
-            const date = new Date(post.createdAt);
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
-            if (!grouped.has(year)) grouped.set(year, new Map());
-            const yearMap = grouped.get(year)!;
-            if (!yearMap.has(month)) yearMap.set(month, []);
-            yearMap.get(month)!.push(post);
+            const { year, month } = blogDateParts(post.createdAt);
+            const y = parseInt(year, 10);
+            const m = parseInt(month, 10);
+            if (!grouped.has(y)) grouped.set(y, new Map());
+            const yearMap = grouped.get(y)!;
+            if (!yearMap.has(m)) yearMap.set(m, []);
+            yearMap.get(m)!.push(post);
         }
         return Array.from(grouped.entries()).sort((a, b) => b[0] - a[0]);
     }

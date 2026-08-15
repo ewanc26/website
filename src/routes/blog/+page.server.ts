@@ -13,6 +13,7 @@ import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
 } from "$env/static/public";
+import { blogDateParts } from "$lib/utils/date";
 
 const PAGE_SIZE = 20;
 
@@ -43,14 +44,14 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
   const grouped = new Map<number, Map<number, typeof publicationPosts>>();
 
   for (const post of publicationPosts) {
-    const date = new Date(post.createdAt);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
+    const { year, month } = blogDateParts(post.createdAt);
+    const yearNum = parseInt(year, 10);
+    const monthNum = parseInt(month, 10);
 
-    if (!grouped.has(year)) grouped.set(year, new Map());
-    const yearMap = grouped.get(year)!;
-    if (!yearMap.has(month)) yearMap.set(month, []);
-    yearMap.get(month)!.push(post);
+    if (!grouped.has(yearNum)) grouped.set(yearNum, new Map());
+    const yearMap = grouped.get(yearNum)!;
+    if (!yearMap.has(monthNum)) yearMap.set(monthNum, []);
+    yearMap.get(monthNum)!.push(post);
   }
 
   // Flatten for initial page — take first PAGE_SIZE posts across all groups

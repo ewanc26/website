@@ -3,6 +3,7 @@ import { fetchBlogPosts } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 import { error, redirect } from "@sveltejs/kit";
 import { normalizeSlug } from "$lib/utils/slugify";
+import { blogDateParts } from "$lib/utils/date";
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
   const { rkey } = params;
@@ -18,11 +19,8 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
     throw error(404, "Post not found");
   }
 
-  const date = new Date(post.createdAt);
-  const y = date.getFullYear();
-  const m = (date.getMonth() + 1).toString().padStart(2, "0");
-  const d = date.getDate().toString().padStart(2, "0");
+  const { year, month, day } = blogDateParts(post.createdAt);
   const slug = normalizeSlug(post.title);
 
-  throw redirect(301, `/blog/${y}/${m}/${d}/${slug}`);
+  throw redirect(301, `/blog/${year}/${month}/${day}/${slug}`);
 };
