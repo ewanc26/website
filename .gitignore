@@ -28,3 +28,6 @@ vite.config.ts.timestamp-*
 # Letta
 .letta
 .env*.local
+
+# IDE
+.vscode/

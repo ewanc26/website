@@ -1,0 +1,22 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Lockfiles
+package-lock.json linguist-generated
+pnpm-lock.yaml linguist-generated
+
+# Fonts
+*.woff linguist-generated
+*.woff2 linguist-generated
+*.ttf linguist-generated
+*.otf linguist-generated
+
+# Agent / tooling configuration
+**/.agents/** linguist-vendored
+.claude/** linguist-vendored
+.opencode/** linguist-vendored
+.letta/** linguist-vendored
+
+# OS metadata
+.DS_Store linguist-generated
+**/.DS_Store linguist-generated
