@@ -1,0 +1,39 @@
+name: Bug Report
+description: Report a bug or unexpected behavior
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened? What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+      label: Logs, screenshots, or error output
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit / URL
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Page / routing
+        - Styling / layout
+        - API / data loading
+        - Build / deployment
+        - Other
+    validations:
+      required: true
