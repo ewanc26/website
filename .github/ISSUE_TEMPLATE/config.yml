@@ -1,0 +1,1 @@
+blank_issues_enabled: false\ncontact_links:\n  - name: "Security vulnerability"\n    url: https://github.com/ewanc26/website/security/advisories/new\n    about: Report privately. Do not open a public issue for a security defect.
