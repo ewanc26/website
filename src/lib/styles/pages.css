@@ -970,6 +970,30 @@
     border-radius: var(--radius-md);
   }
 
+  .payment-panel {
+    width: 100%;
+    max-width: 27rem;
+    margin: var(--space-lg) auto 0;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--surface-color);
+    border-radius: var(--radius-md);
+  }
+
+  .payment-panel iframe {
+    display: block;
+    width: 100%;
+    height: 38rem;
+    border: 0;
+  }
+
+  .payment-note {
+    max-width: 32rem;
+    margin: var(--space-sm) auto 0;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
   .section-note {
     color: var(--color-text-700);
     font-size: var(--text-sm);

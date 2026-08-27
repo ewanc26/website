@@ -1,21 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { isVisiblyFullMoon } from '$lib/utils/moonPhase';
 
-	// Easter eggs #11–13, drawn from the blog archive:
-	// Full moon: https://blog.ewancroft.uk/3mn5vswt5ksxw
+	// Easter eggs #12–13, drawn from the blog archive:
 	// Cube of Computing: https://blog.ewancroft.uk/3mptikkp34s2o
 	// Against Entropy: https://blog.ewancroft.uk/3mljfql5ydk2i
-	let isFullMoon = $state(false);
 	let cubeVisible = $state(false);
 	let entropyVisible = $state(false);
 	let keyBuffer = '';
 	let cubeTimer: ReturnType<typeof setTimeout> | null = null;
 	let entropyTimer: ReturnType<typeof setTimeout> | null = null;
-
-	function updateMoon() {
-		isFullMoon = isVisiblyFullMoon();
-	}
 
 	function isWriting(target: EventTarget | null) {
 		return target instanceof HTMLElement &&
@@ -56,12 +49,9 @@
 	}
 
 	onMount(() => {
-		updateMoon();
-		const moonTimer = setInterval(updateMoon, 60 * 60 * 1000);
 		document.addEventListener('keydown', handleKeydown);
 
 		return () => {
-			clearInterval(moonTimer);
 			document.removeEventListener('keydown', handleKeydown);
 			if (cubeTimer) clearTimeout(cubeTimer);
 			if (entropyTimer) clearTimeout(entropyTimer);
@@ -69,14 +59,7 @@
 	});
 </script>
 
-<svelte:body class:archive-full-moon={isFullMoon} class:resisting-entropy={entropyVisible} />
-
-{#if isFullMoon}
-	<div class="archive-moon" aria-hidden="true">
-		<span class="moon-disc"></span>
-		<span class="moon-copy">look up</span>
-	</div>
-{/if}
+<svelte:body class:resisting-entropy={entropyVisible} />
 
 {#if cubeVisible}
 	<div class="mac-arrival" role="status" aria-live="polite">
@@ -95,39 +78,6 @@
 {/if}
 
 <style>
-	.archive-moon {
-		position: fixed;
-		top: clamp(5rem, 12vh, 8rem);
-		right: clamp(1.5rem, 7vw, 8rem);
-		z-index: -1;
-		display: grid;
-		justify-items: center;
-		gap: 0.65rem;
-		color: oklch(86% 0.025 245);
-		opacity: 0.2;
-		pointer-events: none;
-		animation: moon-rise 1.8s ease-out both;
-	}
-
-	.moon-disc {
-		display: block;
-		width: clamp(3.5rem, 7vw, 6rem);
-		aspect-ratio: 1;
-		border-radius: 50%;
-		background:
-			radial-gradient(circle at 34% 38%, oklch(52% 0.018 245 / 0.22) 0 8%, transparent 9%),
-			radial-gradient(circle at 68% 60%, oklch(52% 0.018 245 / 0.18) 0 11%, transparent 12%),
-			currentColor;
-		box-shadow: 0 0 2.5rem oklch(86% 0.025 245 / 0.45);
-	}
-
-	.moon-copy {
-		font-family: var(--font-mono);
-		font-size: 0.65rem;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-	}
-
 	.mac-arrival {
 		position: fixed;
 		right: clamp(1rem, 4vw, 3rem);
@@ -195,17 +145,8 @@
 		font-size: 0.8rem;
 	}
 
-	:global(body.archive-full-moon .nav-brand svg) {
-		filter: drop-shadow(0 0 0.45rem oklch(86% 0.025 245 / 0.5));
-	}
-
 	:global(body.resisting-entropy .shell-main) {
 		animation: resist-entropy 1.2s steps(1, end) both;
-	}
-
-	@keyframes moon-rise {
-		from { opacity: 0; transform: translateY(1rem); }
-		to { opacity: 0.2; transform: translateY(0); }
 	}
 
 	@keyframes happy-mac-startup {
@@ -233,18 +174,12 @@
 	}
 
 	@media (max-width: 700px) {
-		.archive-moon {
-			right: 1.25rem;
-			opacity: 0.14;
-		}
-
 		.archive-status {
 			max-width: 13rem;
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.archive-moon,
 		.mac-arrival,
 		.entropy-status,
 		.happy-mac,
