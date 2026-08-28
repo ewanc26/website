@@ -36,7 +36,7 @@ import { Coffee, GitPullRequest, Heart } from '@lucide/svelte';
         <span class="row-meta">One-time or monthly</span>
       </a>
       <a
-        href="https://github.com/sponsors/ewanc26/sponsorships"
+        href="https://github.com/sponsors/ewanc26"
         target="_blank"
         rel="noopener noreferrer"
         class="post-row"
