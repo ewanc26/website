@@ -2,14 +2,15 @@
   /**
    * Native Leaflet reader for published blog content.
    *
-   * The server serialises BlobRefs to safe PDS URLs and keeps every page so
-   * page blocks, galleries and newer Leaflet block types can be represented
-   * without flattening the document to Markdown.
+   * The server serialises BlobRefs to safe PDS URLs, keeps every page and
+   * hydrates public record references so the reader can represent the current
+   * Leaflet publishing surface without flattening the document to Markdown.
    */
 
   import LeafletFacets from "./LeafletFacets.svelte";
   import LeafletImage from "./LeafletImage.svelte";
   import LeafletImageGallery from "./LeafletImageGallery.svelte";
+  import LeafletCanvas from "./LeafletCanvas.svelte";
   import LeafletCode from "./LeafletCode.svelte";
   import LeafletMath from "./LeafletMath.svelte";
   import LeafletEmbed from "./LeafletEmbed.svelte";
@@ -27,6 +28,7 @@
   import { safeLinkUrl } from "$lib/utils/url";
 
   const NS = "pub.leaflet.richtext.facet";
+  const CANVAS = "pub.leaflet.pages.canvas";
   const SCHEMA: FacetSchema = {
     facet: NS,
     byteSlice: `${NS}#byteSlice`,
@@ -74,6 +76,12 @@
     url?: string;
   }
 
+  interface ReaderReference {
+    uri: string;
+    cid?: string;
+    value: Obj;
+  }
+
   interface Footnote {
     id: string;
     index: number;
@@ -84,15 +92,19 @@
   let {
     blocks,
     pages = [],
+    pageType,
     sourceUrl,
     posts = [],
     publication,
+    references = {},
   }: {
     blocks: SerialisedBlock[];
     pages?: SerialisedPage[];
+    pageType?: string;
     sourceUrl?: string;
     posts?: ReaderPost[];
     publication?: ReaderPublication | null;
+    references?: Record<string, ReaderReference>;
   } = $props();
 
   const MAX_PAGE_DEPTH = 8;
@@ -153,11 +165,17 @@
   }
 
   function pageForId(id: unknown): SerialisedPage | undefined {
-    return typeof id === "string" ? pages.find((page) => page.id === id) : undefined;
+    return typeof id === "string"
+      ? pages.find((page) => page.id === id)
+      : undefined;
   }
 
   function sourceHref(): string | undefined {
     return safeLinkUrl(sourceUrl) ?? safeLinkUrl(publication?.url);
+  }
+
+  function referenceValue(uri: unknown): Obj | undefined {
+    return typeof uri === "string" ? references[uri]?.value : undefined;
   }
 
   function atReferenceHref(uri: unknown): string | undefined {
@@ -171,18 +189,24 @@
     if (typeof uri === "string" && publication?.uri === uri) {
       return safeLinkUrl(publication.url);
     }
+
+    const remote = referenceValue(uri);
+    const remoteUrl = safeLinkUrl(remote?.url);
+    if (remoteUrl) return remoteUrl;
     return atReferenceHref(uri);
   }
 
   function postsForBlock(inner: Obj): ReaderPost[] {
-    const legacyTag = typeof inner.filterByTag === "string" ? inner.filterByTag : undefined;
     const currentTags = Array.isArray(inner.filterByTags)
-      ? inner.filterByTags.filter((tag): tag is string => typeof tag === "string")
+      ? inner.filterByTags.filter(
+          (tag): tag is string => typeof tag === "string",
+        )
       : [];
-    const wantedTags = currentTags.length ? currentTags : legacyTag ? [legacyTag] : [];
 
-    let filtered = wantedTags.length
-      ? posts.filter((post) => wantedTags.every((tag) => post.tags?.includes(tag)))
+    let filtered = currentTags.length
+      ? posts.filter((post) =>
+          currentTags.every((tag) => post.tags?.includes(tag)),
+        )
       : posts;
 
     const limit =
@@ -199,7 +223,12 @@
       .trim()
       .replace(/[^\w\s-]/g, "")
       .replace(/\s+/g, "-");
-    return base || `leaflet-heading-${index}`;
+    return `${base || "leaflet-heading"}-${index}`;
+  }
+
+  function safeAnchor(value: string): string {
+    const cleaned = value.trim().replace(/[^A-Za-z0-9_:.-]/g, "-");
+    return cleaned || "footnote";
   }
 
   function collectFootnotes(): Footnote[] {
@@ -211,7 +240,10 @@
       for (const facet of facets ?? []) {
         for (const feature of facet.features ?? []) {
           if (feature.$type !== `${NS}#footnote`) continue;
-          const id = typeof feature.footnoteId === "string" ? feature.footnoteId : undefined;
+          const id =
+            typeof feature.footnoteId === "string"
+              ? feature.footnoteId
+              : undefined;
           if (!id || seen.has(id)) continue;
           seen.add(id);
           found.push({
@@ -248,7 +280,11 @@
 
     const scanBlock = (inner: Obj) => {
       const type = inner.$type;
-      if (type === B("text") || type === B("header") || type === B("blockquote")) {
+      if (
+        type === B("text") ||
+        type === B("header") ||
+        type === B("blockquote")
+      ) {
         scanFacets(getFacets(inner));
       } else if (type === B("unorderedList")) {
         scanListItems((inner.children as Obj[]) ?? [], false);
@@ -272,7 +308,9 @@
 
   let footnotes = $derived(collectFootnotes());
   let footnoteNumbers = $derived(
-    Object.fromEntries(footnotes.map((footnote) => [footnote.id, footnote.index])),
+    Object.fromEntries(
+      footnotes.map((footnote) => [footnote.id, footnote.index]),
+    ),
   );
 </script>
 
@@ -481,19 +519,26 @@
       <LeafletButton text={(inner.text as string) ?? ""} url={(inner.url as string) ?? ""} />
 
     {:else if type === B("bskyPost")}
+      {@const postRef = inner.postRef as { uri: string; cid: string }}
       <LeafletBskyPost
-        postRef={inner.postRef as { uri: string; cid: string }}
+        {postRef}
         clientHost={inner.clientHost as string | undefined}
+        record={references[postRef?.uri]}
       />
 
     {:else if type === B("standardSitePost")}
       {@const href = atReferenceHref(inner.uri)}
       {@const localPost = typeof inner.uri === "string" ? posts.find((post) => post.uri === inner.uri) : undefined}
+      {@const remotePost = referenceValue(inner.uri)}
+      {@const remoteTitle = typeof remotePost?.title === "string" ? remotePost.title : undefined}
+      {@const remoteDescription = typeof remotePost?.description === "string" ? remotePost.description : undefined}
       <article class="leaflet-reference-card" data-size={(inner.size as string) ?? "medium"}>
         {#if href}
           <a href={href} class="leaflet-reference-link">
-            <strong>{localPost?.title ?? "Referenced post"}</strong>
-            {#if localPost?.description}<span>{localPost.description}</span>{/if}
+            <strong>{localPost?.title ?? remoteTitle ?? "Referenced post"}</strong>
+            {#if localPost?.description ?? remoteDescription}
+              <span>{localPost?.description ?? remoteDescription}</span>
+            {/if}
           </a>
         {:else}
           <em>Post not found.</em>
@@ -502,13 +547,15 @@
 
     {:else if type === B("standardSitePublication")}
       {@const href = publicationReferenceHref(inner.uri)}
+      {@const remotePublication = referenceValue(inner.uri)}
+      {@const isLocalPublication = publication?.uri === inner.uri}
+      {@const publicationTitle = isLocalPublication ? publication?.title : typeof remotePublication?.name === "string" ? remotePublication.name : "Referenced publication"}
+      {@const publicationDescription = isLocalPublication ? publication?.description : typeof remotePublication?.description === "string" ? remotePublication.description : undefined}
       <article class="leaflet-reference-card leaflet-publication-card">
         {#if href}
           <a href={href} class="leaflet-reference-link">
-            <strong>{publication?.uri === inner.uri ? publication.title : "Referenced publication"}</strong>
-            {#if publication?.uri === inner.uri && publication.description}
-              <span>{publication.description}</span>
-            {/if}
+            <strong>{publicationTitle}</strong>
+            {#if publicationDescription}<span>{publicationDescription}</span>{/if}
           </a>
         {:else}
           <em>Publication not found.</em>
@@ -517,7 +564,7 @@
 
     {:else if type === B("postsList")}
       {@const listed = postsForBlock(inner)}
-      <section class="leaflet-posts-list" aria-label="Publication posts">
+      <section class="leaflet-posts-list" data-view={(inner.view as string) ?? "small"} aria-label="Publication posts">
         {#if listed.length}
           {#each listed as post, postIndex}
             <article class:highlighted={inner.highlightFirstPost === true && postIndex === 0}>
@@ -541,17 +588,41 @@
       {@const embeddedPage = pageForId(inner.id)}
       {#if embeddedPage && depth < MAX_PAGE_DEPTH}
         <section class="leaflet-embedded-page" aria-label="Embedded Leaflet page">
-          {@render renderBlocks(embeddedPage.blocks, depth + 1)}
+          {#if embeddedPage.$type === CANVAS}
+            <LeafletCanvas blocks={visibleBlocks(embeddedPage.blocks)}>
+              {#snippet renderBlock(canvasBlock)}
+                {@render renderBlocks([canvasBlock], depth + 1)}
+              {/snippet}
+            </LeafletCanvas>
+          {:else}
+            {@render renderBlocks(embeddedPage.blocks, depth + 1)}
+          {/if}
         </section>
       {:else}
         <div class="leaflet-reader-fallback">Embedded page unavailable.</div>
       {/if}
 
     {:else if type === B("poll")}
+      {@const pollRef = inner.pollRef as { uri?: string; cid?: string } | undefined}
+      {@const poll = referenceValue(pollRef?.uri)}
+      {@const options = Array.isArray(poll?.options) ? poll.options as Obj[] : []}
       <section class="leaflet-interactive-card">
-        <strong>Poll</strong>
-        <p>This poll is interactive in Leaflet.</p>
-        {#if sourceHref()}<a href={sourceHref()} target="_blank" rel="noopener noreferrer">Open poll in Leaflet</a>{/if}
+        <strong>{typeof poll?.name === "string" ? poll.name : "Poll"}</strong>
+        {#if options.length > 0}
+          <ul class="leaflet-poll-options">
+            {#each options as option}
+              <li>{typeof option.text === "string" ? option.text : "Option"}</li>
+            {/each}
+          </ul>
+        {:else}
+          <p>Poll options could not be loaded.</p>
+        {/if}
+        {#if typeof poll?.endDate === "string"}
+          <p class="leaflet-interactive-meta">
+            Closes <time datetime={poll.endDate as string}>{new Date(poll.endDate as string).toLocaleString("en-gb")}</time>
+          </p>
+        {/if}
+        {#if sourceHref()}<a href={sourceHref()} target="_blank" rel="noopener noreferrer">Vote on Leaflet</a>{/if}
       </section>
 
     {:else if type === B("signup")}
@@ -587,21 +658,30 @@
   {/each}
 {/snippet}
 
-{@render renderBlocks(blocks, 0)}
+{#if pageType === CANVAS}
+  <LeafletCanvas blocks={visibleBlocks(blocks)}>
+    {#snippet renderBlock(canvasBlock)}
+      {@render renderBlocks([canvasBlock], 0)}
+    {/snippet}
+  </LeafletCanvas>
+{:else}
+  {@render renderBlocks(blocks, 0)}
+{/if}
 
 {#if footnotes.length > 0}
   <section class="leaflet-footnotes" aria-label="Footnotes">
     <hr />
     <ol>
       {#each footnotes as footnote}
-        <li id={`fn-${footnote.id}`}>
+        {@const anchor = safeAnchor(footnote.id)}
+        <li id={`fn-${anchor}`}>
           <LeafletFacets
             plaintext={footnote.contentPlaintext}
             facets={footnote.contentFacets}
             schema={SCHEMA}
             {footnoteNumbers}
           />
-          <a class="leaflet-footnote-back" href={`#fnref-${footnote.id}`} aria-label={`Back to footnote ${footnote.index}`}>↩</a>
+          <a class="leaflet-footnote-back" href={`#fnref-${anchor}`} aria-label={`Back to footnote ${footnote.index}`}>↩</a>
         </li>
       {/each}
     </ol>
@@ -650,6 +730,14 @@
     opacity: 0.9;
   }
 
+  .leaflet-posts-list[data-view="chapter"] {
+    gap: 1rem;
+  }
+
+  .leaflet-posts-list[data-view="chapter"] article {
+    padding-block: 1rem;
+  }
+
   .leaflet-posts-list article.highlighted {
     padding-block: 1rem;
     opacity: 1;
@@ -664,6 +752,18 @@
 
   .leaflet-members-gate p,
   .leaflet-interactive-card p { margin-block: 0.35rem; }
+
+  .leaflet-poll-options {
+    display: grid;
+    gap: 0.5rem;
+    margin-block: 0.75rem;
+    padding-left: 1.25rem;
+  }
+
+  .leaflet-interactive-meta {
+    font-size: 0.85em;
+    opacity: 0.75;
+  }
 
   .leaflet-html {
     display: block;
