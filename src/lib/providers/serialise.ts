@@ -20,6 +20,7 @@ export interface SerialisedBlock {
   y?: number;
   width?: number;
   height?: number;
+  rotation?: number;
   [key: string]: unknown;
 }
 
@@ -35,6 +36,8 @@ export interface SerialisedPage {
 export interface SerialisedContent {
   blocks: SerialisedBlock[];
   pages: SerialisedPage[];
+  primaryPageType?: string;
+  primaryPageId?: string;
 }
 
 /**
@@ -142,6 +145,8 @@ export async function serialiseContent(
   return {
     blocks: primary?.blocks ?? [],
     pages,
+    primaryPageType: primary?.$type,
+    primaryPageId: primary?.id,
   };
 }
 
