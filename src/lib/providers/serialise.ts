@@ -1,5 +1,5 @@
 /**
- * Serialise Leaflet content blocks for SvelteKit server→client transfer.
+ * Serialise Leaflet content for SvelteKit server→client transfer.
  *
  * The raw AT Protocol record contains BlobRef objects with CID class instances
  * that SvelteKit cannot dehydrate. This module does a JSON round-trip to
@@ -16,6 +16,25 @@ type Obj = Record<string, unknown>;
 export interface SerialisedBlock {
   block: Obj;
   alignment?: string;
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  [key: string]: unknown;
+}
+
+/** A serialised Leaflet page. Canvas positioning metadata is preserved. */
+export interface SerialisedPage {
+  $type?: string;
+  id?: string;
+  blocks: SerialisedBlock[];
+  [key: string]: unknown;
+}
+
+/** Complete reader-safe Leaflet content. */
+export interface SerialisedContent {
+  blocks: SerialisedBlock[];
+  pages: SerialisedPage[];
 }
 
 /**
@@ -41,7 +60,8 @@ function extractCid(obj: Obj): string | null {
 
 /**
  * Walk a plain-object tree, replacing image/previewImage BlobRefs
- * with PDS blob URLs.
+ * with PDS blob URLs. This intentionally walks nested gallery/list/page data,
+ * so new Leaflet containers inherit blob handling without special cases.
  */
 function replaceBlobs(obj: unknown, did: string): void {
   if (Array.isArray(obj)) {
@@ -54,7 +74,7 @@ function replaceBlobs(obj: unknown, did: string): void {
   for (const [key, val] of Object.entries(o)) {
     if (val && typeof val === "object" && !Array.isArray(val)) {
       const v = val as Obj;
-      // Check if this is a BlobRef (after JSON round-trip)
+      // Check if this is a BlobRef (after JSON round-trip).
       if (v.$type === "blob" || ("mimeType" in v && "ref" in v)) {
         const cid = extractCid(v);
         if (cid) {
@@ -78,43 +98,60 @@ function replaceBlobs(obj: unknown, did: string): void {
   }
 }
 
+/** Resolve inline or blob-backed pages from a Leaflet content record. */
+async function readPages(
+  content: unknown,
+  fetchBlob: (ref: unknown) => Promise<Uint8Array>,
+): Promise<Obj[]> {
+  const c = content as Obj;
+  let pages = (c.pages as Obj[]) ?? [];
+
+  if (c.blobPages) {
+    try {
+      const bytes = await fetchBlob(c.blobPages);
+      pages = JSON.parse(new TextDecoder().decode(bytes)) as Obj[];
+    } catch {
+      // Older records may keep usable inline pages alongside blobPages.
+    }
+  }
+
+  return pages;
+}
+
 /**
- * Serialise a Leaflet content record into a plain-POJO blocks array
- * safe for SvelteKit dehydration.
- *
- * @param content The raw `pub.leaflet.content` record value
- * @param did The DID that owns the record (for blob URL construction)
- * @param fetchBlob Async function to fetch blob pages if needed
- * @returns The blocks array with BlobRefs replaced by PDS URLs
+ * Serialise all Leaflet pages, not only the first linear page. Page blocks can
+ * reference sibling pages by id, so a faithful reader needs the complete page
+ * set even when the blog starts by rendering one linear document.
+ */
+export async function serialiseContent(
+  content: unknown,
+  did: string,
+  fetchBlob: (ref: unknown) => Promise<Uint8Array>,
+): Promise<SerialisedContent> {
+  const rawPages = await readPages(content, fetchBlob);
+
+  // JSON round-trip converts BlobRef/CID class instances to plain POJOs.
+  const pages = JSON.parse(JSON.stringify(rawPages)) as SerialisedPage[];
+  replaceBlobs(pages, did);
+
+  for (const page of pages) {
+    if (!Array.isArray(page.blocks)) page.blocks = [];
+  }
+
+  const primary = pages.find((page) => page.$type === LINEAR) ?? pages[0];
+  return {
+    blocks: primary?.blocks ?? [],
+    pages,
+  };
+}
+
+/**
+ * Backwards-compatible helper for callers that only need the primary page.
  */
 export async function serialiseBlocks(
   content: unknown,
   did: string,
   fetchBlob: (ref: unknown) => Promise<Uint8Array>,
 ): Promise<SerialisedBlock[]> {
-  const c = content as Obj;
-  let pages = (c.pages as Obj[]) ?? [];
-
-  // Handle blobPages (large content stored as a blob)
-  if (c.blobPages) {
-    try {
-      const bytes = await fetchBlob(c.blobPages);
-      pages = JSON.parse(new TextDecoder().decode(bytes)) as Obj[];
-    } catch {
-      /* fall back to inline pages */
-    }
-  }
-
-  const page = pages.find((p) => p.$type === LINEAR) ?? pages[0];
-  const blocks = (page?.blocks as Obj[]) ?? [];
-
-  // JSON round-trip converts BlobRef/CID class instances to plain POJOs.
-  // BlobRef.toJSON() produces { $type: "blob", ref: { $link: "cid" }, ... }
-  // CID.toString() produces the CID string.
-  const cloned = JSON.parse(JSON.stringify(blocks)) as SerialisedBlock[];
-
-  // Walk the cloned blocks, replacing BlobRefs with PDS URLs
-  replaceBlobs(cloned, did);
-
-  return cloned;
+  return (await serialiseContent(content, did, fetchBlob)).blocks;
 }
