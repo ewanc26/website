@@ -62,9 +62,11 @@
                     <LeafletBlocks
                         blocks={data.post.blocks}
                         pages={data.post.pages}
-                        sourceUrl={page.url.href}
+                        pageType={data.post.primaryPageType}
+                        sourceUrl={data.post.url ?? data.blog?.url}
                         posts={data.readerPosts}
                         publication={data.blog}
+                        references={data.readerReferences}
                     />
                 {:else}
                     {@html data.post.renderedContent}
