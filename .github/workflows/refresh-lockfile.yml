@@ -5,7 +5,7 @@ on:
     branches: [feat/leaflet-reader-compat]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   lockfile:
@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: feat/leaflet-reader-compat
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
@@ -29,9 +31,15 @@ jobs:
       - name: Regenerate lockfile
         run: pnpm install --lockfile-only --no-frozen-lockfile
 
-      - name: Upload lockfile
-        uses: actions/upload-artifact@v4
-        with:
-          name: oauth-lockfile
-          path: pnpm-lock.yaml
-          if-no-files-found: error
+      - name: Commit lockfile when changed
+        shell: bash
+        run: |
+          if git diff --quiet -- pnpm-lock.yaml; then
+            echo "Lockfile already current"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pnpm-lock.yaml
+          git commit -m "build: refresh OAuth lockfile"
+          git push origin HEAD:feat/leaflet-reader-compat
