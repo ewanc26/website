@@ -1,34 +1,29 @@
-const SESSION_KEY = "ewancroft:leaflet-comment-session";
-const RESOLVE_HANDLE = "https://bsky.social/xrpc/com.atproto.identity.resolveHandle";
-const PLC_DIRECTORY = "https://plc.directory";
+import {
+  BrowserOAuthClient,
+  type OAuthSession,
+} from "@atproto/oauth-client-browser";
+
 const COMMENT_COLLECTION = "pub.leaflet.comment";
+export const COMMENT_SCOPE =
+  "atproto repo:pub.leaflet.comment?action=create" as const;
+
+const PROD_CLIENT_ID = "https://ewancroft.uk/client-metadata.json";
+const RETURN_TO_KEY = "ewancroft:leaflet-comment-return-to";
 
 export interface ReaderSession {
   did: string;
   handle: string;
-  pds: string;
-  accessJwt: string;
-  refreshJwt: string;
-}
-
-interface DidDocument {
-  service?: Array<{
-    id?: string;
-    type?: string;
-    serviceEndpoint?: string;
-  }>;
-}
-
-interface SessionResponse {
-  did: string;
-  handle: string;
-  accessJwt: string;
-  refreshJwt: string;
+  oauthSession: OAuthSession;
 }
 
 interface CreateRecordResponse {
   uri: string;
   cid?: string;
+}
+
+interface SessionResponse {
+  did?: string;
+  handle?: string;
 }
 
 function errorMessage(payload: unknown, fallback: string): string {
@@ -49,195 +44,108 @@ async function jsonOrUndefined(response: Response): Promise<unknown> {
   }
 }
 
-function didWebUrl(did: string): string {
-  const parts = did.slice("did:web:".length).split(":").map(decodeURIComponent);
-  const host = parts.shift();
-  if (!host || !/^[A-Za-z0-9.-]+(?::\d+)?$/.test(host)) {
-    throw new Error("Unsupported did:web identifier");
-  }
-
-  if (parts.length === 0) return `https://${host}/.well-known/did.json`;
-  return `https://${host}/${parts.map(encodeURIComponent).join("/")}/did.json`;
-}
-
-async function resolveDidDocument(did: string): Promise<DidDocument> {
-  let url: string;
-  if (did.startsWith("did:plc:")) {
-    url = `${PLC_DIRECTORY}/${encodeURIComponent(did)}`;
-  } else if (did.startsWith("did:web:")) {
-    url = didWebUrl(did);
-  } else {
-    throw new Error("This DID method is not supported for browser sign-in");
-  }
-
-  const response = await fetch(url, { headers: { Accept: "application/json" } });
-  const payload = await jsonOrUndefined(response);
-  if (!response.ok) {
-    throw new Error(errorMessage(payload, `Could not resolve ${did}`));
-  }
-  return payload as DidDocument;
-}
-
-async function resolveIdentifier(identifier: string): Promise<string> {
-  const normalized = identifier.trim().replace(/^@/, "");
-  if (!normalized) throw new Error("Enter your AT Protocol handle");
-  if (normalized.startsWith("did:")) return normalized;
-
-  const url = new URL(RESOLVE_HANDLE);
-  url.searchParams.set("handle", normalized);
-  const response = await fetch(url, { headers: { Accept: "application/json" } });
-  const payload = (await jsonOrUndefined(response)) as { did?: unknown } | undefined;
-  if (!response.ok || typeof payload?.did !== "string") {
-    throw new Error(errorMessage(payload, "Could not resolve that handle"));
-  }
-  return payload.did;
-}
-
-async function resolvePds(did: string): Promise<string> {
-  const document = await resolveDidDocument(did);
-  const service = document.service?.find(
-    (entry) =>
-      entry.type === "AtprotoPersonalDataServer" ||
-      entry.id === "#atproto_pds" ||
-      entry.id?.endsWith("#atproto_pds"),
+function isLoopbackHost(hostname: string): boolean {
+  return (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "[::1]" ||
+    hostname === "::1"
   );
-  const endpoint = service?.serviceEndpoint;
-  if (!endpoint) throw new Error("No AT Protocol PDS was found for this account");
-
-  const url = new URL(endpoint);
-  if (url.protocol !== "https:") {
-    throw new Error("Refusing to send an app password to a non-HTTPS PDS");
-  }
-  return url.origin;
 }
 
-function saveSession(session: ReaderSession): ReaderSession {
-  if (typeof sessionStorage !== "undefined") {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+/**
+ * atproto OAuth has a special virtual client-id format for loopback clients.
+ * Production always uses the discoverable metadata hosted by ewancroft.uk.
+ */
+function clientId(): string {
+  if (typeof window === "undefined" || !isLoopbackHost(window.location.hostname)) {
+    return PROD_CLIENT_ID;
   }
-  return session;
+
+  const redirect = new URL("/oauth/callback", window.location.origin);
+  // The OAuth loopback profile intentionally uses an IP literal rather than
+  // localhost, even when Vite was opened as http://localhost:5173.
+  if (redirect.hostname === "localhost") redirect.hostname = "127.0.0.1";
+
+  return `http://localhost?${new URLSearchParams([
+    ["redirect_uri", redirect.href],
+    ["scope", COMMENT_SCOPE],
+  ])}`;
 }
 
-export function getReaderSession(): ReaderSession | null {
-  if (typeof sessionStorage === "undefined") return null;
-  const raw = sessionStorage.getItem(SESSION_KEY);
-  if (!raw) return null;
+let clientPromise: Promise<BrowserOAuthClient> | undefined;
 
+function getClient(): Promise<BrowserOAuthClient> {
+  if (!clientPromise) {
+    clientPromise = BrowserOAuthClient.load({
+      clientId: clientId(),
+      handleResolver: "https://bsky.social",
+    });
+  }
+  return clientPromise;
+}
+
+async function describeSession(oauthSession: OAuthSession): Promise<ReaderSession> {
+  let handle = oauthSession.did;
+
+  // getSession is useful for presentation only. The OAuth account DID remains
+  // authoritative and the comment writer does not depend on this request.
   try {
-    const value = JSON.parse(raw) as Partial<ReaderSession>;
-    if (
-      typeof value.did === "string" &&
-      typeof value.handle === "string" &&
-      typeof value.pds === "string" &&
-      typeof value.accessJwt === "string" &&
-      typeof value.refreshJwt === "string"
-    ) {
-      return value as ReaderSession;
+    const response = await oauthSession.fetchHandler(
+      "/xrpc/com.atproto.server.getSession",
+      { headers: { Accept: "application/json" } },
+    );
+    if (response.ok) {
+      const payload = (await response.json()) as SessionResponse;
+      if (typeof payload.handle === "string" && payload.handle.trim()) {
+        handle = payload.handle;
+      }
     }
   } catch {}
 
-  sessionStorage.removeItem(SESSION_KEY);
-  return null;
+  return { did: oauthSession.did, handle, oauthSession };
 }
 
-export function clearReaderSession(): void {
-  if (typeof sessionStorage !== "undefined") sessionStorage.removeItem(SESSION_KEY);
+/**
+ * Restore the browser's existing OAuth session or process an OAuth callback
+ * when this runs on the configured callback URL.
+ */
+export async function initReaderSession(): Promise<ReaderSession | null> {
+  const client = await getClient();
+  const result = await client.init();
+  return result ? describeSession(result.session) : null;
 }
 
+function safeReturnTo(value: string | null): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/blog";
+  return value;
+}
+
+export function consumeReaderReturnTo(): string {
+  if (typeof sessionStorage === "undefined") return "/blog";
+  const value = sessionStorage.getItem(RETURN_TO_KEY);
+  sessionStorage.removeItem(RETURN_TO_KEY);
+  return safeReturnTo(value);
+}
+
+/** Begin the standards-based atproto OAuth redirect flow. */
 export async function signInReader(
   identifier: string,
-  appPassword: string,
-): Promise<ReaderSession> {
-  if (!appPassword.trim()) throw new Error("Enter an AT Protocol app password");
+  returnTo: string,
+): Promise<never> {
+  const normalized = identifier.trim().replace(/^@/, "");
+  if (!normalized) throw new Error("Enter your AT Protocol handle");
 
-  const did = await resolveIdentifier(identifier);
-  const pds = await resolvePds(did);
-  const response = await fetch(`${pds}/xrpc/com.atproto.server.createSession`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ identifier: did, password: appPassword }),
-  });
-  const payload = (await jsonOrUndefined(response)) as SessionResponse | undefined;
-  if (
-    !response.ok ||
-    typeof payload?.did !== "string" ||
-    typeof payload.handle !== "string" ||
-    typeof payload.accessJwt !== "string" ||
-    typeof payload.refreshJwt !== "string"
-  ) {
-    throw new Error(errorMessage(payload, "AT Protocol sign-in failed"));
+  if (typeof sessionStorage !== "undefined") {
+    sessionStorage.setItem(RETURN_TO_KEY, safeReturnTo(returnTo));
   }
-  if (payload.did !== did) throw new Error("The PDS returned a different account identity");
 
-  return saveSession({
-    did: payload.did,
-    handle: payload.handle,
-    pds,
-    accessJwt: payload.accessJwt,
-    refreshJwt: payload.refreshJwt,
-  });
+  const client = await getClient();
+  return client.signIn(normalized, { scope: COMMENT_SCOPE });
 }
 
-async function refreshReaderSession(session: ReaderSession): Promise<ReaderSession> {
-  const response = await fetch(`${session.pds}/xrpc/com.atproto.server.refreshSession`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${session.refreshJwt}`,
-    },
-  });
-  const payload = (await jsonOrUndefined(response)) as SessionResponse | undefined;
-  if (
-    !response.ok ||
-    typeof payload?.accessJwt !== "string" ||
-    typeof payload.refreshJwt !== "string"
-  ) {
-    clearReaderSession();
-    throw new Error(errorMessage(payload, "Your AT Protocol session has expired"));
-  }
-
-  return saveSession({
-    ...session,
-    handle: typeof payload.handle === "string" ? payload.handle : session.handle,
-    accessJwt: payload.accessJwt,
-    refreshJwt: payload.refreshJwt,
-  });
-}
-
-async function createRecord(
-  session: ReaderSession,
-  record: Record<string, unknown>,
-): Promise<CreateRecordResponse> {
-  const request = async (current: ReaderSession) =>
-    fetch(`${current.pds}/xrpc/com.atproto.repo.createRecord`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${current.accessJwt}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        repo: current.did,
-        collection: COMMENT_COLLECTION,
-        record,
-      }),
-    });
-
-  let current = session;
-  let response = await request(current);
-  if (response.status === 401) {
-    current = await refreshReaderSession(current);
-    response = await request(current);
-  }
-
-  const payload = (await jsonOrUndefined(response)) as CreateRecordResponse | undefined;
-  if (!response.ok || typeof payload?.uri !== "string") {
-    throw new Error(errorMessage(payload, "Could not publish the comment"));
-  }
-  return payload;
+export async function signOutReader(session: ReaderSession): Promise<void> {
+  await session.oauthSession.signOut();
 }
 
 export async function publishLeafletComment(
@@ -250,11 +158,33 @@ export async function publishLeafletComment(
   if (!subject.startsWith("at://")) throw new Error("Invalid Leaflet document URI");
   if (!text) throw new Error("Write something before posting");
 
-  return createRecord(session, {
-    $type: COMMENT_COLLECTION,
-    subject,
-    plaintext: text,
-    createdAt: new Date().toISOString(),
-    ...(replyParent ? { reply: { parent: replyParent } } : {}),
-  });
+  const response = await session.oauthSession.fetchHandler(
+    "/xrpc/com.atproto.repo.createRecord",
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        repo: session.did,
+        collection: COMMENT_COLLECTION,
+        record: {
+          $type: COMMENT_COLLECTION,
+          subject,
+          plaintext: text,
+          createdAt: new Date().toISOString(),
+          ...(replyParent ? { reply: { parent: replyParent } } : {}),
+        },
+      }),
+    },
+  );
+
+  const payload = (await jsonOrUndefined(response)) as
+    | CreateRecordResponse
+    | undefined;
+  if (!response.ok || typeof payload?.uri !== "string") {
+    throw new Error(errorMessage(payload, "Could not publish the comment"));
+  }
+  return payload;
 }
