@@ -59,7 +59,13 @@
         <div class="post-body">
             <article class="prose">
                 {#if useBlocks}
-                    <LeafletBlocks blocks={data.post.blocks} />
+                    <LeafletBlocks
+                        blocks={data.post.blocks}
+                        pages={data.post.pages}
+                        sourceUrl={page.url.href}
+                        posts={data.readerPosts}
+                        publication={data.blog}
+                    />
                 {:else}
                     {@html data.post.renderedContent}
                 {/if}
