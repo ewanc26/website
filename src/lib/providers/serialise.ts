@@ -4,11 +4,9 @@
  * The raw AT Protocol record contains BlobRef objects with CID class instances
  * that SvelteKit cannot dehydrate. This module does a JSON round-trip to
  * convert class instances to plain POJOs, then walks the result replacing
- * every image/previewImage BlobRef with a PDS blob URL stored as
+ * every image/previewImage BlobRef with a public blob URL stored as
  * `_imageSrc` / `_previewImageSrc`. The original blob fields are removed.
  */
-
-const LINEAR = "pub.leaflet.pages.linearDocument";
 
 type Obj = Record<string, unknown>;
 
@@ -41,10 +39,11 @@ export interface SerialisedContent {
 }
 
 /**
- * Build a PDS blob URL from a DID and a CID string.
+ * Build a network-readable blob URL from a DID and CID. Slingshot resolves the
+ * owning PDS instead of assuming the document author lives on one fixed host.
  */
 export function pdsBlobUrl(did: string, cid: string): string {
-  return `https://eurosky.social/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(cid)}`;
+  return `https://slingshot.microcosm.blue/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(cid)}`;
 }
 
 /**
@@ -63,7 +62,7 @@ function extractCid(obj: Obj): string | null {
 
 /**
  * Walk a plain-object tree, replacing image/previewImage BlobRefs
- * with PDS blob URLs. This intentionally walks nested gallery/list/page data,
+ * with blob URLs. This intentionally walks nested gallery/list/page data,
  * so new Leaflet containers inherit blob handling without special cases.
  */
 function replaceBlobs(obj: unknown, did: string): void {
@@ -107,24 +106,27 @@ async function readPages(
   fetchBlob: (ref: unknown) => Promise<Uint8Array>,
 ): Promise<Obj[]> {
   const c = content as Obj;
-  let pages = (c.pages as Obj[]) ?? [];
 
+  // pub.leaflet.content explicitly says blobPages is authoritative when set:
+  // consumers MUST ignore the inline pages array, which may only be a stub.
   if (c.blobPages) {
     try {
       const bytes = await fetchBlob(c.blobPages);
-      pages = JSON.parse(new TextDecoder().decode(bytes)) as Obj[];
+      const decoded = JSON.parse(new TextDecoder().decode(bytes));
+      return Array.isArray(decoded) ? (decoded as Obj[]) : [];
     } catch {
-      // Older records may keep usable inline pages alongside blobPages.
+      return [];
     }
   }
 
-  return pages;
+  return Array.isArray(c.pages) ? (c.pages as Obj[]) : [];
 }
 
 /**
- * Serialise all Leaflet pages, not only the first linear page. Page blocks can
- * reference sibling pages by id, so a faithful reader needs the complete page
- * set even when the blog starts by rendering one linear document.
+ * Serialise all Leaflet pages. Page order is significant: the first page is
+ * the document's entry page, regardless of whether it is linear or canvas.
+ * Page blocks can reference sibling pages by id, so a faithful reader keeps
+ * the complete page set available to the renderer.
  */
 export async function serialiseContent(
   content: unknown,
@@ -141,7 +143,7 @@ export async function serialiseContent(
     if (!Array.isArray(page.blocks)) page.blocks = [];
   }
 
-  const primary = pages.find((page) => page.$type === LINEAR) ?? pages[0];
+  const primary = pages[0];
   return {
     blocks: primary?.blocks ?? [],
     pages,
