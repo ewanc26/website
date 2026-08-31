@@ -2,7 +2,7 @@
   "client_id": "https://ewancroft.uk/client-metadata.json",
   "client_name": "ewancroft.uk Leaflet reader",
   "client_uri": "https://ewancroft.uk",
-  "logo_uri": "https://ewancroft.uk/favicon.png",
+  "logo_uri": "https://ewancroft.uk/favicon.svg",
   "tos_uri": "https://ewancroft.uk/about",
   "policy_uri": "https://ewancroft.uk/about",
   "redirect_uris": ["https://ewancroft.uk/oauth/callback"],
