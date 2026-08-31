@@ -137,7 +137,7 @@
         {#if readerSession}
             <div class="comment-session-row">
                 <span>Commenting as <strong>@{readerSession.handle}</strong></span>
-                <button type="button" class="comment-link-button" on:click={signOut} disabled={busy}>
+                <button type="button" class="comment-link-button" onclick={signOut} disabled={busy}>
                     <LogOut size={14} aria-hidden="true" /> Sign out
                 </button>
             </div>
@@ -145,7 +145,7 @@
             {#if replyingTo}
                 <div class="replying-to">
                     <span>Replying to <strong>@{replyingTo.authorHandle}</strong></span>
-                    <button type="button" class="comment-link-button" on:click={() => (replyingTo = null)}>Cancel</button>
+                    <button type="button" class="comment-link-button" onclick={() => (replyingTo = null)}>Cancel</button>
                 </div>
             {/if}
 
@@ -159,12 +159,12 @@
             ></textarea>
             <div class="composer-actions">
                 <span class="composer-note">Published as a <code>pub.leaflet.comment</code> record in your own repo.</span>
-                <button type="button" class="comment-primary-button" on:click={submitComment} disabled={busy || !draft.trim()}>
+                <button type="button" class="comment-primary-button" onclick={submitComment} disabled={busy || !draft.trim()}>
                     <Send size={14} aria-hidden="true" /> {busy ? 'Publishing…' : 'Publish comment'}
                 </button>
             </div>
         {:else}
-            <form class="comment-signin" on:submit|preventDefault={signIn}>
+            <form class="comment-signin" onsubmit={(event) => { event.preventDefault(); void signIn(); }}>
                 <div class="comment-signin-fields">
                     <label>
                         <span>AT Protocol handle</span>
@@ -172,7 +172,7 @@
                     </label>
                     <label>
                         <span>App password</span>
-                        <input bind:value={appPassword} type="password" autocomplete="current-password" placeholder="xxxx-xxxx-xxxx-xxxx" disabled={busy} required />
+                        <input bind:value={appPassword} type="password" autocomplete="off" placeholder="xxxx-xxxx-xxxx-xxxx" disabled={busy} required />
                     </label>
                 </div>
                 <div class="composer-actions">
@@ -199,7 +199,7 @@
                     </div>
                     <p class="comment-body">{entry.comment.plaintext}</p>
                     {#if readerSession}
-                        <button type="button" class="comment-reply-button" on:click={() => startReply(entry.comment)}>
+                        <button type="button" class="comment-reply-button" onclick={() => startReply(entry.comment)}>
                             <Reply size={13} aria-hidden="true" /> Reply
                         </button>
                     {/if}
@@ -276,7 +276,6 @@
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
-        border: 0;
         font: inherit;
         cursor: pointer;
     }
@@ -284,11 +283,12 @@
     .comment-primary-button {
         flex: none;
         padding: 0.55rem 0.8rem;
+        border: 1px solid currentColor;
         border-radius: 0.5rem;
-        background: currentColor;
+        background: transparent;
+        color: inherit;
+        font-weight: 650;
     }
-
-    .comment-primary-button :global(svg) { filter: invert(1); }
 
     .comment-primary-button:disabled,
     .comment-link-button:disabled { opacity: 0.55; cursor: not-allowed; }
@@ -296,6 +296,7 @@
     .comment-link-button,
     .comment-reply-button {
         padding: 0;
+        border: 0;
         background: transparent;
         color: inherit;
         text-decoration: underline;
