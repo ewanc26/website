@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@atproto/api':
-        specifier: ^0.20.7
-        version: 0.20.7
       '@atproto/lex':
         specifier: ^0.1.4
         version: 0.1.4
