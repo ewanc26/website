@@ -13,8 +13,9 @@ import { safeResourceUrl } from "$lib/utils/url";
 import { renderMarkdown } from "$lib/utils/markdown";
 import {
   leafletProvider,
-  serialiseBlocks,
+  serialiseContent,
   type SerialisedBlock,
+  type SerialisedPage,
 } from "$lib/providers";
 
 export const config: Config = { maxDuration: 60 };
@@ -50,15 +51,14 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
   if (!post) {
     throw error(404, "Post not found");
   }
-  // Generate a clean text excerpt string by removing common markdown markup indicators
+
   const cleanExcerpt = (text: string) => {
     return text
-      .replace(/[#*`_~\[\]()\-]/g, "") // Strip structural formatting tokens
-      .replace(/\s+/g, " ") // Normalize duplicate spaces and line breaks
+      .replace(/[#*`_~\[\]()\-]/g, "")
+      .replace(/\s+/g, " ")
       .trim();
   };
 
-  // Build the strict fallback chain for description strings
   let metaDescription = post.description ?? "";
   if (!metaDescription && post.textContent) {
     const excerpt = cleanExcerpt(post.textContent);
@@ -70,6 +70,7 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
   }
 
   let blocks: SerialisedBlock[] = [];
+  let pages: SerialisedPage[] = [];
   let renderedContent = "";
 
   if (
@@ -77,7 +78,17 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
     typeof post.content === "object" &&
     leafletProvider.matches(post.content)
   ) {
-    blocks = await serialiseBlocks(post.content, PUBLIC_ATPROTO_DID, fetchBlob);
+    const serialised = await serialiseContent(
+      post.content,
+      PUBLIC_ATPROTO_DID,
+      fetchBlob,
+    );
+    blocks = serialised.blocks;
+    pages = serialised.pages;
+
+    // Keep the existing Markdown fallback for old/non-JS clients and records
+    // that predate native block rendering. Lossy conversion is deliberately
+    // separate from the native Leaflet reader path.
     const result = await leafletProvider.toMarkdown(post.content, {
       fetchBlob,
     });
@@ -92,6 +103,23 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
   const { content: _content, ...serialisable } = post;
   const publicationUrl = safeResourceUrl(blogPublication?.url);
 
+  const readerPosts = publicationDocs
+    .map((document) => {
+      const date = blogDateParts(document.publishedAt);
+      return {
+        uri: document.uri,
+        title: document.title,
+        description: document.description ?? undefined,
+        createdAt: document.publishedAt,
+        tags: document.tags ?? [],
+        url: `/blog/${date.year}/${date.month}/${date.day}/${normalizeSlug(document.title)}`,
+      };
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+
   return {
     post: {
       ...serialisable,
@@ -99,9 +127,12 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
       renderedContent,
       metaDescription,
       blocks,
+      pages,
     },
+    readerPosts,
     blog: blogPublication
       ? {
+          uri: blogPublication.uri,
           title: blogPublication.name,
           description: blogPublication.description ?? "",
           // The publication URL comes from a remote record; only emit it as
