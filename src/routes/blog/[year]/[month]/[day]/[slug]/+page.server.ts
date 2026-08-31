@@ -3,6 +3,10 @@ import type { Config } from "@sveltejs/adapter-vercel";
 import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
 import { fetchBlob, fetchComments } from "$lib/services/atproto";
 import {
+  fetchAtRecords,
+  type AtRecord,
+} from "$lib/services/atproto/records";
+import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
 } from "$env/static/public";
@@ -19,6 +23,50 @@ import {
 } from "$lib/providers";
 
 export const config: Config = { maxDuration: 60 };
+
+const B = (name: string) => `pub.leaflet.blocks.${name}`;
+
+type Obj = Record<string, unknown>;
+
+/** Collect only AT-URI references whose schemas explicitly point at records. */
+function collectReaderReferences(pages: SerialisedPage[]): Set<string> {
+  const refs = new Set<string>();
+
+  const add = (value: unknown) => {
+    if (typeof value === "string" && value.startsWith("at://")) refs.add(value);
+  };
+
+  const walk = (value: unknown): void => {
+    if (Array.isArray(value)) {
+      value.forEach(walk);
+      return;
+    }
+    if (!value || typeof value !== "object") return;
+
+    const obj = value as Obj;
+    switch (obj.$type) {
+      case B("poll"):
+        if (obj.pollRef && typeof obj.pollRef === "object") {
+          add((obj.pollRef as Obj).uri);
+        }
+        break;
+      case B("bskyPost"):
+        if (obj.postRef && typeof obj.postRef === "object") {
+          add((obj.postRef as Obj).uri);
+        }
+        break;
+      case B("standardSitePost"):
+      case B("standardSitePublication"):
+        add(obj.uri);
+        break;
+    }
+
+    Object.values(obj).forEach(walk);
+  };
+
+  walk(pages);
+  return refs;
+}
 
 export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
   // Long cache — posts don’t change often; Vercel CDN takes the burden off the
@@ -73,6 +121,7 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
   let pages: SerialisedPage[] = [];
   let primaryPageType: string | undefined;
   let primaryPageId: string | undefined;
+  let readerReferences: Record<string, AtRecord> = {};
   let renderedContent = "";
 
   if (
@@ -89,6 +138,13 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
     pages = serialised.pages;
     primaryPageType = serialised.primaryPageType;
     primaryPageId = serialised.primaryPageId;
+
+    // Hydrate record-backed reader blocks without following record-controlled
+    // PDS endpoints. Slingshot resolves the public AT Protocol record for us.
+    readerReferences = await fetchAtRecords(
+      collectReaderReferences(pages),
+      fetch,
+    );
 
     // Keep the existing Markdown fallback for old/non-JS clients and records
     // that predate native block rendering. Lossy conversion is deliberately
@@ -136,6 +192,7 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
       primaryPageId,
     },
     readerPosts,
+    readerReferences,
     blog: blogPublication
       ? {
           uri: blogPublication.uri,
