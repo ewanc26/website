@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@atproto/lex": "^0.1.4",
+    "@atproto/oauth-client-browser": "^0.5.4",
     "@ewanc26/atproto": "^0.2.12",
     "@ewanc26/supporters": "^0.3.0",
     "@resvg/resvg-wasm": "^2.6.2",
