@@ -86,7 +86,7 @@ function getClient(): Promise<BrowserOAuthClient> {
 }
 
 async function describeSession(oauthSession: OAuthSession): Promise<ReaderSession> {
-  let handle = oauthSession.did;
+  let handle: string = oauthSession.did;
 
   // getSession is useful for presentation only. The OAuth account DID remains
   // authoritative and the comment writer does not depend on this request.
@@ -132,7 +132,7 @@ export function consumeReaderReturnTo(): string {
 export async function signInReader(
   identifier: string,
   returnTo: string,
-): Promise<never> {
+): Promise<void> {
   const normalized = identifier.trim().replace(/^@/, "");
   if (!normalized) throw new Error("Enter your AT Protocol handle");
 
@@ -141,7 +141,7 @@ export async function signInReader(
   }
 
   const client = await getClient();
-  return client.signIn(normalized, { scope: COMMENT_SCOPE });
+  await client.signIn(normalized, { scope: COMMENT_SCOPE });
 }
 
 export async function signOutReader(session: ReaderSession): Promise<void> {
