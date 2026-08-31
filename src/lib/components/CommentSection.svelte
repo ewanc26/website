@@ -1,12 +1,13 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
     import { MessageCircle, Reply, Send, LogIn, LogOut } from '@lucide/svelte';
     import EmptyState from '$lib/components/EmptyState.svelte';
     import type { LeafletComment } from '$lib/services/atproto/fetch';
     import {
-        clearReaderSession,
-        getReaderSession,
+        initReaderSession,
         publishLeafletComment,
         signInReader,
+        signOutReader,
         type ReaderSession,
     } from '$lib/services/atproto/commentClient';
 
@@ -20,15 +21,26 @@
 
     let readerSession = $state<ReaderSession | null>(null);
     let identifier = $state('');
-    let appPassword = $state('');
     let draft = $state('');
     let replyingTo = $state<LeafletComment | null>(null);
     let busy = $state(false);
+    let authReady = $state(false);
     let error = $state('');
     let notice = $state('');
     let localComments = $state<LeafletComment[]>([]);
 
-    readerSession = getReaderSession();
+    onMount(() => {
+        void (async () => {
+            try {
+                readerSession = await initReaderSession();
+                if (readerSession) identifier = readerSession.handle;
+            } catch (cause) {
+                error = cause instanceof Error ? cause.message : 'Could not restore AT Protocol sign-in.';
+            } finally {
+                authReady = true;
+            }
+        })();
+    });
 
     let allComments = $derived([...comments, ...localComments]);
     let threadedComments = $derived(buildThread(allComments));
@@ -68,24 +80,29 @@
         notice = '';
         busy = true;
         try {
-            readerSession = await signInReader(identifier, appPassword);
-            appPassword = '';
-            identifier = readerSession.handle;
-            notice = `Signed in as @${readerSession.handle}.`;
+            const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+            await signInReader(identifier, returnTo);
         } catch (cause) {
-            error = cause instanceof Error ? cause.message : 'Could not sign in.';
-        } finally {
+            error = cause instanceof Error ? cause.message : 'Could not start AT Protocol sign-in.';
             busy = false;
         }
     }
 
-    function signOut() {
-        clearReaderSession();
-        readerSession = null;
-        appPassword = '';
-        replyingTo = null;
-        notice = 'Signed out from commenting.';
+    async function signOut() {
+        if (!readerSession) return;
         error = '';
+        notice = '';
+        busy = true;
+        try {
+            await signOutReader(readerSession);
+            readerSession = null;
+            replyingTo = null;
+            notice = 'Signed out from commenting.';
+        } catch (cause) {
+            error = cause instanceof Error ? cause.message : 'Could not sign out.';
+        } finally {
+            busy = false;
+        }
     }
 
     async function submitComment() {
@@ -137,7 +154,7 @@
         {#if readerSession}
             <div class="comment-session-row">
                 <span>Commenting as <strong>@{readerSession.handle}</strong></span>
-                <button type="button" class="comment-link-button" onclick={signOut} disabled={busy}>
+                <button type="button" class="comment-link-button" onclick={() => void signOut()} disabled={busy}>
                     <LogOut size={14} aria-hidden="true" /> Sign out
                 </button>
             </div>
@@ -163,6 +180,8 @@
                     <Send size={14} aria-hidden="true" /> {busy ? 'Publishing…' : 'Publish comment'}
                 </button>
             </div>
+        {:else if !authReady}
+            <p class="composer-note" role="status">Checking AT Protocol sign-in…</p>
         {:else}
             <form class="comment-signin" onsubmit={(event) => { event.preventDefault(); void signIn(); }}>
                 <div class="comment-signin-fields">
@@ -170,15 +189,11 @@
                         <span>AT Protocol handle</span>
                         <input bind:value={identifier} autocomplete="username" placeholder="you.example.com" disabled={busy} required />
                     </label>
-                    <label>
-                        <span>App password</span>
-                        <input bind:value={appPassword} type="password" autocomplete="off" placeholder="xxxx-xxxx-xxxx-xxxx" disabled={busy} required />
-                    </label>
                 </div>
                 <div class="composer-actions">
-                    <span class="composer-note">Use an <strong>app password</strong>, never your main account password. It is sent directly from this browser to your PDS and is not stored; only the resulting session is kept for this tab.</span>
-                    <button type="submit" class="comment-primary-button" disabled={busy || !identifier.trim() || !appPassword.trim()}>
-                        <LogIn size={14} aria-hidden="true" /> {busy ? 'Signing in…' : 'Sign in to comment'}
+                    <span class="composer-note">Sign in with AT Protocol OAuth. This reader only requests permission to create <code>pub.leaflet.comment</code> records in your repo; your password is never shared with this site.</span>
+                    <button type="submit" class="comment-primary-button" disabled={busy || !identifier.trim()}>
+                        <LogIn size={14} aria-hidden="true" /> {busy ? 'Opening sign-in…' : 'Sign in to comment'}
                     </button>
                 </div>
             </form>
@@ -258,7 +273,7 @@
 
     .comment-signin-fields {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 1fr);
         gap: 0.75rem;
         margin-bottom: 0.75rem;
     }
@@ -337,7 +352,6 @@
     }
 
     @media (max-width: 640px) {
-        .comment-signin-fields { grid-template-columns: 1fr; }
         .composer-actions { align-items: flex-start; flex-direction: column; }
         .comment-list .comment { margin-inline-start: min(calc(var(--comment-depth, 0) * 0.75rem), 3rem); }
     }
