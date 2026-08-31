@@ -71,6 +71,8 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
 
   let blocks: SerialisedBlock[] = [];
   let pages: SerialisedPage[] = [];
+  let primaryPageType: string | undefined;
+  let primaryPageId: string | undefined;
   let renderedContent = "";
 
   if (
@@ -85,6 +87,8 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
     );
     blocks = serialised.blocks;
     pages = serialised.pages;
+    primaryPageType = serialised.primaryPageType;
+    primaryPageId = serialised.primaryPageId;
 
     // Keep the existing Markdown fallback for old/non-JS clients and records
     // that predate native block rendering. Lossy conversion is deliberately
@@ -128,6 +132,8 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
       metaDescription,
       blocks,
       pages,
+      primaryPageType,
+      primaryPageId,
     },
     readerPosts,
     blog: blogPublication
