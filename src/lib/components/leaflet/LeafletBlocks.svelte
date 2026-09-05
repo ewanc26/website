@@ -197,11 +197,15 @@
   }
 
   function postsForBlock(inner: Obj): ReaderPost[] {
-    const currentTags = Array.isArray(inner.filterByTags)
-      ? inner.filterByTags.filter(
+    // Current Leaflet uses one tag; retain support for the older array form
+    // because published records are immutable and both exist in the wild.
+    const currentTags = typeof inner.filterByTag === "string"
+      ? [inner.filterByTag]
+      : Array.isArray(inner.filterByTags)
+        ? inner.filterByTags.filter(
           (tag): tag is string => typeof tag === "string",
-        )
-      : [];
+          )
+        : [];
 
     let filtered = currentTags.length
       ? posts.filter((post) =>
@@ -526,6 +530,16 @@
         record={references[postRef?.uri]}
       />
 
+    {:else if type === B("leafletQuote")}
+      {@const quoteUri = typeof inner.src === "string" ? inner.src : typeof (inner.record as Obj | undefined)?.uri === "string" ? (inner.record as Obj).uri as string : undefined}
+      {@const quote = referenceValue(quoteUri)}
+      {@const quoteHref = quoteUri ? atReferenceHref(quoteUri) : undefined}
+      <figure class="leaflet-bsky-post">
+        {#if typeof quote?.title === "string"}<strong>{quote.title}</strong>{/if}
+        {#if typeof quote?.description === "string"}<blockquote>{quote.description}</blockquote>{/if}
+        {#if quoteHref}<figcaption><a href={quoteHref}>View quoted Leaflet post →</a></figcaption>{/if}
+      </figure>
+
     {:else if type === B("standardSitePost")}
       {@const href = atReferenceHref(inner.uri)}
       {@const localPost = typeof inner.uri === "string" ? posts.find((post) => post.uri === inner.uri) : undefined}
@@ -564,13 +578,14 @@
 
     {:else if type === B("postsList")}
       {@const listed = postsForBlock(inner)}
-      <section class="leaflet-posts-list" data-view={(inner.view as string) ?? "small"} aria-label="Publication posts">
+      {@const view = inner.view === "compact" || inner.view === "full" ? inner.view : "compact"}
+      <section class="leaflet-posts-list" data-view={view} aria-label="Publication posts">
         {#if listed.length}
           {#each listed as post, postIndex}
             <article class:highlighted={inner.highlightFirstPost === true && postIndex === 0}>
               <a href={safeLinkUrl(post.url)}>
                 <strong>{post.title}</strong>
-                {#if (inner.view === "medium" || inner.view === "chapter") && post.description}
+                {#if view === "full" && post.description}
                   <span>{post.description}</span>
                 {/if}
                 {#if post.createdAt}

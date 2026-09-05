@@ -55,6 +55,14 @@ function collectReaderReferences(pages: SerialisedPage[]): Set<string> {
           add((obj.postRef as Obj).uri);
         }
         break;
+      case B("leafletQuote"):
+        // Leaflet has used both `src` and a strong-ref-shaped `record` for
+        // quoted posts across published revisions.
+        add(obj.src);
+        if (obj.record && typeof obj.record === "object") {
+          add((obj.record as Obj).uri);
+        }
+        break;
       case B("standardSitePost"):
       case B("standardSitePublication"):
         add(obj.uri);
