@@ -28,6 +28,26 @@
     { key: "6", label: "Experience" },
     { key: "7", label: "Education" },
     { key: "8", label: "Languages & links" },
+    { key: "a", label: "All sections" },
+    { key: "q", label: "Quit" },
+  ]);
+
+  const facts = $derived([
+    { label: "Name", value: cv.name },
+    { label: "Headline", value: cv.headline },
+    { label: "Location", value: cv.location },
+    {
+      label: "Skills",
+      value: `${cv.skillGroups.reduce((n, g) => n + g.skills.length, 0)} across ${cv.skillGroups.length} categories`,
+    },
+    {
+      label: "Projects",
+      value: `${cv.selectedProjects.length + cv.recordProjects.length} listed`,
+    },
+    {
+      label: "Languages",
+      value: cv.languages.map((l) => l.name).join(", "),
+    },
   ]);
 </script>
 
@@ -38,7 +58,7 @@
   ogType="CV"
 />
 
-<main class="shell-narrow cv-page">
+<main class="shell-wide cv-page">
   <header class="spec-header">
     <div class="spec-meta">
       <span class="meta-tag">TERMINAL CV</span>
@@ -47,9 +67,9 @@
     </div>
     <h1 class="page-title">CV</h1>
     <p class="spec-abstract">
-      A fully interactive CV that lives in the terminal. It aggregates the same
-      AT Protocol records as the about page — skills, education, languages,
-      projects — served as a self-contained bash script.
+      A fully interactive CV that lives in the terminal. It aggregates the
+      same AT Protocol records as the about page — skills, education,
+      languages, projects — served as a self-contained bash script.
     </p>
   </header>
 
@@ -71,73 +91,67 @@
         </button>
       </div>
       <p class="cv-command-note">
-        Menu-driven, reads from <code>/dev/tty</code>, falls back to plain text
-        when piped. Single sections work too:
+        Menu-driven, reads from <code>/dev/tty</code>, falls back to plain
+        text when piped. Single sections work too:
         <code>curl -fsSL ewancroft.uk/cv | bash -s -- skills</code>.
       </p>
     </div>
   </div>
 
-  <section class="cv-section">
-    <h2 class="section-title">Menu</h2>
-    <ul class="bare-list cv-menu">
-      {#each sections as section (section.key)}
-        <li class="cv-menu-row">
-          <span class="cv-menu-key">{section.key}</span>
-          <span class="cv-menu-label">{section.label}</span>
-        </li>
-      {/each}
-      <li class="cv-menu-row">
-        <span class="cv-menu-key">a</span>
-        <span class="cv-menu-label">All sections</span>
-      </li>
-      <li class="cv-menu-row">
-        <span class="cv-menu-key">q</span>
-        <span class="cv-menu-label">Quit</span>
-      </li>
-    </ul>
-  </section>
+  <div class="cv-grid">
+    <section class="cv-main">
+      <header class="section-hd">
+        <h2 class="section-title">Menu</h2>
+      </header>
+      <ul class="bare-list cv-menu">
+        {#each sections as section (section.key)}
+          <li class="cv-menu-row">
+            <span class="cv-menu-key">{section.key}</span>
+            <span class="cv-menu-label">{section.label}</span>
+          </li>
+        {/each}
+      </ul>
+    </section>
 
-  <section class="cv-section">
-    <h2 class="section-title">At a glance</h2>
-    <dl class="meta-list cv-facts">
-      {#each [
-        { label: "Name", value: cv.name },
-        { label: "Headline", value: cv.headline },
-        { label: "Location", value: cv.location },
-        { label: "Skills", value: `${cv.skillGroups.reduce((n, g) => n + g.skills.length, 0)} across ${cv.skillGroups.length} categories` },
-        { label: "Projects", value: `${cv.selectedProjects.length + cv.recordProjects.length} listed` },
-        { label: "Languages", value: cv.languages.map((l) => l.name).join(", ") },
-      ] as fact (fact.label)}
-        <div class="cv-fact">
-          <dt>{fact.label}</dt>
-          <dd>{fact.value}</dd>
-        </div>
-      {/each}
-    </dl>
-    <p class="cv-updated">
-      Generated {cv.generatedAt} from
-      <code>did:plc:ofrbh253gwicbkc5nktqepol</code>
-    </p>
-  </section>
+    <section class="cv-facts-section">
+      <header class="section-hd">
+        <h2 class="section-title">At a glance</h2>
+      </header>
+      <dl class="meta-list cv-facts">
+        {#each facts as fact (fact.label)}
+          <div class="cv-fact">
+            <dt>{fact.label}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        {/each}
+      </dl>
+      <p class="cv-updated">
+        Generated {cv.generatedAt} from
+        <code>did:plc:ofrbh253gwicbkc5nktqepol</code>
+      </p>
+    </section>
+  </div>
 </main>
 
 <style>
   .cv-page {
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
+  }
+
+  .cv-page :global(.spec-header) {
+    margin-bottom: var(--space-lg);
   }
 
   .cv-command-panel {
-    margin-top: var(--space-md);
+    margin-bottom: var(--space-xl);
   }
 
   .cv-command-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-sm);
+    gap: var(--space-md);
     flex-wrap: wrap;
   }
 
@@ -147,15 +161,32 @@
   }
 
   .cv-command-note {
-    margin: var(--space-sm) 0 0;
+    margin: var(--space-md) 0 0;
     font-size: var(--text-sm);
     color: var(--color-text-600);
   }
 
-  .cv-section {
+  /* Two-column layout — same shape as about-grid */
+  .cv-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: var(--space-2xl);
+    align-items: start;
+    padding-bottom: var(--space-2xl);
+  }
+
+  @media (max-width: 900px) {
+    .cv-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cv-main,
+  .cv-facts-section {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--space-md);
+    min-width: 0;
   }
 
   .cv-menu {
@@ -170,8 +201,8 @@
   .cv-menu-row {
     display: flex;
     align-items: baseline;
-    gap: var(--space-sm);
-    padding: var(--space-2xs) var(--space-2xs);
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-sm);
     border-radius: var(--radius-sm);
   }
 
@@ -179,11 +210,11 @@
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--color-accent-600);
-    min-width: 1.25rem;
+    min-width: 1.5rem;
     text-align: center;
     border: 1px solid var(--surface-color);
     background: var(--surface-sunken);
-    padding: 1px 4px;
+    padding: 2px 5px;
     border-radius: var(--radius-xs);
   }
 
@@ -192,15 +223,16 @@
   }
 
   .cv-facts {
-    gap: var(--space-xs);
+    gap: var(--space-2xs);
   }
 
   .cv-fact {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    gap: var(--space-sm);
-    padding: var(--space-2xs) var(--space-2xs);
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-sm);
+    border-radius: var(--radius-sm);
   }
 
   .cv-fact dt {
@@ -219,7 +251,7 @@
   }
 
   .cv-updated {
-    margin: var(--space-xs) 0 0;
+    margin: var(--space-md) 0 0;
     font-size: var(--text-xs);
     color: var(--color-text-600);
   }
