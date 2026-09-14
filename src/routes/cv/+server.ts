@@ -2,7 +2,8 @@
  * GET /cv — interactive terminal CV.
  *
  * Content negotiation:
- * - browsers (Accept: text/html) get a landing page with the curl command
+ * - browsers (Accept: text/html) are redirected to /about/cv, the styled
+ *   landing page in the site's design system
  * - everything else (curl, wget, httpie) gets a self-contained bash script,
  *   generated live from AT Protocol records — the same sources as /about.
  *
@@ -15,26 +16,17 @@ import type { Config } from "@sveltejs/adapter-vercel";
 import type { RequestHandler } from "./$types";
 import { gatherCvData } from "$lib/server/cv/data";
 import { generateCvScript } from "$lib/server/cv/script";
-import { landingPage } from "$lib/server/cv/landing";
 
 export const config: Config = { maxDuration: 30 };
 export const prerender = false;
 
-export const GET: RequestHandler = async ({
-  fetch,
-  request,
-  url,
-  setHeaders,
-}) => {
+export const GET: RequestHandler = async ({ fetch, request, setHeaders }) => {
   const accept = request.headers.get("accept") ?? "";
-  const wantsHtml = accept.includes("text/html");
-
-  if (wantsHtml) {
-    setHeaders({
-      "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600",
+  if (accept.includes("text/html")) {
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/about/cv" },
     });
-    return new Response(landingPage(url.origin), { status: 200 });
   }
 
   const data = await gatherCvData(PUBLIC_ATPROTO_DID, fetch);
