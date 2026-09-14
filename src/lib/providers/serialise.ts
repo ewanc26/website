@@ -1,3 +1,5 @@
+import { buildPdsBlobUrl, resolveIdentity } from "@ewanc26/atproto";
+
 /**
  * Serialise Leaflet content for SvelteKit server→client transfer.
  *
@@ -38,12 +40,9 @@ export interface SerialisedContent {
   primaryPageId?: string;
 }
 
-/**
- * Build a network-readable blob URL from a DID and CID. Slingshot resolves the
- * owning PDS instead of assuming the document author lives on one fixed host.
- */
-export function pdsBlobUrl(did: string, cid: string): string {
-  return `https://slingshot.microcosm.blue/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(cid)}`;
+/** Build a browser-readable blob URL against the DID owner's actual PDS. */
+export function pdsBlobUrl(pds: string, did: string, cid: string): string {
+  return buildPdsBlobUrl(pds, did, cid);
 }
 
 /**
@@ -65,9 +64,9 @@ function extractCid(obj: Obj): string | null {
  * with blob URLs. This intentionally walks nested gallery/list/page data,
  * so new Leaflet containers inherit blob handling without special cases.
  */
-function replaceBlobs(obj: unknown, did: string): void {
+function replaceBlobs(obj: unknown, pds: string, did: string): void {
   if (Array.isArray(obj)) {
-    obj.forEach((item) => replaceBlobs(item, did));
+    obj.forEach((item) => replaceBlobs(item, pds, did));
     return;
   }
   if (typeof obj !== "object" || obj === null) return;
@@ -80,7 +79,7 @@ function replaceBlobs(obj: unknown, did: string): void {
       if (v.$type === "blob" || ("mimeType" in v && "ref" in v)) {
         const cid = extractCid(v);
         if (cid) {
-          const url = pdsBlobUrl(did, cid);
+          const url = pdsBlobUrl(pds, did, cid);
           if (key === "image") {
             o._imageSrc = url;
             delete o.image;
@@ -92,10 +91,10 @@ function replaceBlobs(obj: unknown, did: string): void {
           }
         }
       } else {
-        replaceBlobs(v, did);
+        replaceBlobs(v, pds, did);
       }
     } else if (Array.isArray(val)) {
-      replaceBlobs(val, did);
+      replaceBlobs(val, pds, did);
     }
   }
 }
@@ -132,12 +131,14 @@ export async function serialiseContent(
   content: unknown,
   did: string,
   fetchBlob: (ref: unknown) => Promise<Uint8Array>,
+  fetchFn?: typeof globalThis.fetch,
 ): Promise<SerialisedContent> {
   const rawPages = await readPages(content, fetchBlob);
 
   // JSON round-trip converts BlobRef/CID class instances to plain POJOs.
   const pages = JSON.parse(JSON.stringify(rawPages)) as SerialisedPage[];
-  replaceBlobs(pages, did);
+  const identity = await resolveIdentity(did, fetchFn);
+  replaceBlobs(pages, identity.pds, did);
 
   for (const page of pages) {
     if (!Array.isArray(page.blocks)) page.blocks = [];
@@ -159,6 +160,7 @@ export async function serialiseBlocks(
   content: unknown,
   did: string,
   fetchBlob: (ref: unknown) => Promise<Uint8Array>,
+  fetchFn?: typeof globalThis.fetch,
 ): Promise<SerialisedBlock[]> {
-  return (await serialiseContent(content, did, fetchBlob)).blocks;
+  return (await serialiseContent(content, did, fetchBlob, fetchFn)).blocks;
 }
