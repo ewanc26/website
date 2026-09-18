@@ -129,3 +129,13 @@ If you find this project useful, consider supporting its development:
 ## License
 
 See LICENSE file for details.
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=ewanc26%2Fwebsite&type=date&legend=bottom-right">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=ewanc26/website&type=date&theme=dark&legend=bottom-right" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=ewanc26/website&type=date&legend=bottom-right" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=ewanc26/website&type=date&legend=bottom-right" />
+ </picture>
+</a>
