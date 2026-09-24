@@ -1,43 +1,100 @@
 # Website
 
-A personal website and blog built with [SvelteKit](https://kit.svelte.dev/), featuring AT Protocol (Bluesky) integration, markdown-based blog posts, and dynamic content rendering.
+A personal website and blog built with [SvelteKit](https://svelte.dev/docs/kit), with an AT Protocol-native publishing stack built around [Standard.site](https://standard.site/) and [Leaflet](https://leaflet.pub/).
+
+The site owns the presentation layer while AT Protocol records provide the publication and document data. Native Leaflet documents are rendered as structured content blocks, with Markdown retained as a compatibility fallback.
 
 ## Features
 
-- **Blog System**: Markdown-based blog posts with automatic date-based routing
-- **AT Protocol Integration**: Fetch and display Bluesky posts and profiles
-- **Content Rendering**: Custom Leaflet components for flexible content blocks (code, embeds, images, math)
-- **Project Showcase**: Display pinned repositories from a GitHub profile
-- **Social Features**: Comment sections, share buttons, and recommendation system
-- **API Endpoints**: REST API for blog posts, recommendations, and subscriptions
-- **Webhooks**: GitHub webhook support for CI/CD integration
-- **Open Graph**: Dynamic OG image generation for social media sharing
-- **Responsive Design**: Tailwind CSS for mobile-first styling
+- **AT Protocol-native blog**: Discover publications and documents from the configured AT Protocol DID rather than storing posts as local Markdown files
+- **Standard.site publications**: Blog documents are associated with a Standard.site publication record
+- **Leaflet rendering**: Native `pub.leaflet.blocks.*` content is serialised and rendered with dedicated Svelte components
+- **Rich text facets**: UTF-8 byte-indexed facets support formatting, links, mentions, IDs, code, highlights, and footnotes
+- **Embedded records**: Leaflet references to posts and publications can be hydrated from AT Protocol records and rendered in context
+- **Markdown compatibility**: Leaflet content can also be converted to Markdown and rendered for older or non-JavaScript clients
+- **Date-based routing**: Blog posts use `/blog/:year/:month/:day/:slug` URLs derived from publication date and title
+- **Caching**: Blog listings and individual posts use public cache headers with stale-while-revalidate behaviour
+- **AT Protocol integration**: Bluesky profiles, posts, mentions, comments, recommendations, and other AT Protocol data
+- **Project showcase**: Display pinned repositories from a GitHub profile
+- **Social features**: Comments and share buttons
+- **API endpoints**: REST endpoints for blog, recommendations, and subscriptions
+- **Webhooks**: GitHub webhook support
+- **Open Graph**: Dynamic social sharing metadata and OG image generation
+- **Responsive design**: Tailwind CSS with mobile-first styling
+
+## How the blog works
+
+The blog is not a conventional Markdown-file blog. Its authoritative content lives in AT Protocol records.
+
+```
+Standard.site / Leaflet records
+          ↓
+AT Protocol / configured DID
+          ↓
+@ewanc26/atproto
+          ↓
+SvelteKit server load functions
+          ↓
+Vercel/public HTTP cache
+          ↓
+Leaflet serialisation
+          ↓
+LeafletBlocks + LeafletFacets
+          ↓
+Website presentation
+```
+
+The blog index fetches documents and publications, identifies the configured blog publication, filters its documents, sorts them newest-first, and exposes the first page of posts.
+
+Individual post routes resolve the URL against the publication's documents. When a document contains native Leaflet content, the server serialises its pages and blocks, hydrates referenced AT Protocol records, and passes the structured result to `LeafletBlocks.svelte`. The page also produces a Markdown representation as a compatibility path.
+
+The main renderer is `src/lib/components/leaflet/LeafletBlocks.svelte`. It handles text, images, embeds, references, post/publication cards, post lists, polls, sign-up blocks, membership delimiters, nested pages, canvas content, footnotes, and unsupported-block fallbacks.
+
+`src/lib/components/leaflet/LeafletFacets.svelte` handles rich-text facets using UTF-8 byte offsets rather than JavaScript character offsets. This is important for correctly interpreting AT Protocol text data containing non-ASCII characters.
+
+### Caching
+
+The blog listing uses:
+
+```
+Cache-Control: public, s-maxage=60, stale-while-revalidate=300
+```
+
+Individual posts use:
+
+```
+Cache-Control: public, s-maxage=3600, stale-while-revalidate=86400
+```
+
+This keeps the site responsive without requiring every request to re-fetch the publication and document records.
 
 ## Tech Stack
 
-- **Framework**: [SvelteKit](https://kit.svelte.dev/)
+- **Framework**: [SvelteKit](https://svelte.dev/docs/kit)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **Package Manager**: pnpm
-- **Markdown**: MDAST-based markdown processing
-- **Social**: AT Protocol SDK for Bluesky integration
+- **Publishing/data model**: AT Protocol + Standard.site
+- **Document model**: Leaflet-compatible structured blocks
+- **Markdown**: MDAST-based processing
+- **Social**: AT Protocol SDK / Bluesky integration
+- **Deployment**: [Vercel](https://vercel.com/)
 
 ## Project Structure
 
 ```
 src/
 ├── lib/
-│   ├── components/          # Reusable Svelte components
-│   │   ├── leaflet/        # Content block components
+│   ├── components/
+│   │   ├── leaflet/        # Native Leaflet block and facet renderers
 │   │   └── icons/          # SVG icon components
-│   ├── providers/          # Data processing (facets, markdown, etc.)
+│   ├── providers/          # Content providers, serialisation, Markdown
 │   ├── services/
-│   │   └── atproto/        # Bluesky/AT Protocol API integration
+│   │   └── atproto/        # AT Protocol data fetching and agents
 │   ├── styles/             # Global CSS and design tokens
 │   └── utils/              # Utility functions
 └── routes/
-    ├── blog/               # Blog listing and post pages
+    ├── blog/               # Blog listing and date/slug post pages
     ├── projects/           # Project showcase
     ├── api/                # API endpoints
     └── webhook/            # Webhook handlers
@@ -47,20 +104,18 @@ src/
 
 ### Prerequisites
 
-- Node.js (v18+)
+- Node.js 18+
 - pnpm
 
 ### Installation
 
 ```sh
-# Install dependencies
 pnpm install
 ```
 
 ### Development
 
 ```sh
-# Start development server
 pnpm run dev
 
 # Open in browser
@@ -72,52 +127,39 @@ The site will be available at `http://localhost:5173`.
 ### Building
 
 ```sh
-# Create production build
 pnpm run build
-
-# Preview production build
 pnpm run preview
 ```
 
 ## Environment Variables
 
-Create a `.env.local` file in the root directory:
+The blog requires the AT Protocol DID and the publication record to be configured through public environment variables:
 
 ```env
-# AT Protocol/Bluesky configuration (if applicable)
-ATPROTO_USERNAME=your_username
-ATPROTO_PASSWORD=your_password
-
-# Other configuration
-PUBLIC_SITE_URL=https://your-domain.com
-GITHUB_USERNAME=your_github_username
-# Optional; public profile parsing is used when this is unset
-GITHUB_TOKEN=github_token_with_public_repository_read_access
+PUBLIC_ATPROTO_DID=did:plc:...
+PUBLIC_LEAFLET_BLOG_PUBLICATION=...
 ```
+
+Other integrations may require additional environment variables. See the source configuration and deployment environment for the current set.
 
 ## Configuration
 
-- **Site Config**: [src/lib/config.ts](src/lib/config.ts)
-- **Vite Config**: [vite.config.ts](vite.config.ts)
-- **Svelte Config**: [svelte.config.js](svelte.config.js)
+- **Site configuration**: [src/lib/config.ts](src/lib/config.ts)
+- **Vite configuration**: [vite.config.ts](vite.config.ts)
+- **Svelte configuration**: [svelte.config.js](svelte.config.js)
 
 ## Deployment
 
-This project is configured for deployment on [Vercel](https://vercel.com/) (see [vercel.json](vercel.json)).
-
-To deploy:
+The project is configured for deployment on [Vercel](https://vercel.com/) (see [vercel.json](vercel.json)).
 
 ```sh
-# Build for production
 pnpm run build
-
-# Deploy using Vercel CLI
 vercel
 ```
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome. Please submit a Pull Request with a focused change and enough context to review it.
 
 ## Support
 
