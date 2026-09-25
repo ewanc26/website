@@ -6,7 +6,6 @@
     import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
     import { Rss, ArrowUpRight } from '@lucide/svelte';
     import { noiseAction } from '$lib/client/noise';
-    import { noiseAction } from '@ewanc26/noise';
 
     let { data } = $props();
 
@@ -144,10 +143,8 @@
                             class="lead-story-image"
                             use:noiseAction={{
                                 seed: `blog-lead:${leadPost.rkey}:${leadPost.title}`,
-                                width: 1200,
-                                height: 630,
-                                octaves: 3,
-                                gridSize: 5,
+                                width: 1024,
+                                height: 1024,
                             }}
                             aria-hidden="true"
                         ></canvas>
