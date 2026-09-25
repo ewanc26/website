@@ -5,6 +5,7 @@
     import EmptyState from '$lib/components/EmptyState.svelte';
     import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
     import { Rss, ArrowUpRight } from '@lucide/svelte';
+    import { noiseAction } from '$lib/client/noise';
     import { noiseAction } from '@ewanc26/noise';
 
     let { data } = $props();
@@ -415,13 +416,18 @@
     }
 
     .lead-story-image {
-        display: block;
         width: calc(100% + 2 * clamp(var(--space-lg), 5vw, var(--space-xl)));
-        height: auto;
         aspect-ratio: 1200 / 630;
-        object-fit: cover;
         margin: calc(-1 * clamp(var(--space-lg), 5vw, var(--space-xl))) calc(-1 * clamp(var(--space-lg), 5vw, var(--space-xl))) var(--space-lg);
+        overflow: hidden;
         border-bottom: 1px solid var(--surface-color);
+    }
+
+    .lead-story-image :is(img, canvas) {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .lead-story h2 {
