@@ -123,19 +123,19 @@
     </div>
 
     {#if filteredPosts.length > 0}
-        <section class="news-front animate-in" aria-labelledby="latest-heading">
+        <section class="news-front animate-in" aria-label="Latest writing">
             <div class="front-lead">
                 <a href={getPostUrl(leadPost)} class="lead-story active-press">
                     <div class="story-kicker">
-                        {#if featuredPost.tags.length > 0}
-                            {featuredPost.tags[0]}
+                        {#if leadPost.tags.length > 0}
+                            {leadPost.tags[0]}
                         {:else}
                             Latest
                         {/if}
                     </div>
-                    <h2>{featuredPost.title}</h2>
+                    <h2>{leadPost.title}</h2>
                     <div class="story-meta">
-                        <time datetime={featuredPost.createdAt}>{formatDate(featuredPost.createdAt)}</time>
+                        <time datetime={leadPost.createdAt}>{formatDate(leadPost.createdAt)}</time>
                         <span>Read article <ArrowUpRight size={14} strokeWidth={2} /></span>
                     </div>
                 </a>
@@ -235,14 +235,10 @@
                         <h3>{yearGroup.year}</h3>
                         <div class="archive-months">
                             {#each yearGroup.months as month}
-                                <button
-                                    type="button"
-                                    class="archive-month active-press"
-                                    onclick={() => selectTopic(String(yearGroup.year) + '-' + String(month.month).padStart(2, '0'))}
-                                >
+                                <div class="archive-month">
                                     <span>{formatMonth(month.month)}</span>
                                     <strong>{month.count}</strong>
-                                </button>
+                                </div>
                             {/each}
                         </div>
                     </div>
@@ -538,12 +534,6 @@
         background: var(--surface-raised);
         font: inherit;
         font-size: var(--text-sm);
-        cursor: pointer;
-    }
-
-    .archive-month:is(:hover, :focus-visible) {
-        background: color-mix(in oklch, var(--color-primary-500) 10%, var(--surface-sunken));
-        color: var(--color-text-950);
     }
 
     .archive-month strong {
