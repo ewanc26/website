@@ -8,7 +8,7 @@
 
 import type { PageServerLoad } from "./$types";
 import type { Config } from "@sveltejs/adapter-vercel";
-import { fetchBlogPosts, fetchPublications } from "@ewanc26/atproto";
+import { buildPdsBlobUrl, fetchDocuments, fetchPublications, resolveIdentity } from "@ewanc26/atproto";
 import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
@@ -23,8 +23,8 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
   setHeaders({
     "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
   });
-  const [{ posts }, { publications }] = await Promise.all([
-    fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ posts: [] })),
+  const [{ documents }, { publications }] = await Promise.all([
+    fetchDocuments(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ documents: [] })),
     fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
       publications: [],
     })),
@@ -33,12 +33,29 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
   const blogPublication = publications.find(
     (p) => p.rkey === PUBLIC_LEAFLET_BLOG_PUBLICATION,
   );
-  const publicationPosts = posts
+  const publicationPosts = documents
     .filter((p) => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION)
     .sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
+
+  const identity = await resolveIdentity(PUBLIC_ATPROTO_DID, fetch).catch(() => null);
+
+  const coverImageUrl = (coverImage: unknown) => {
+    if (!identity || !coverImage || typeof coverImage !== "object") return undefined;
+    const ref = coverImage as Record<string, unknown>;
+    const link = ref.ref;
+    const cid =
+      typeof link === "string"
+        ? link
+        : link && typeof link === "object" && "$link" in link
+          ? (link as { $link?: unknown }).$link
+          : undefined;
+    return typeof cid === "string"
+      ? buildPdsBlobUrl(identity.pds, PUBLIC_ATPROTO_DID, cid)
+      : undefined;
+  };
 
   // Build archive and topic summaries from the same AT Protocol publication records.
   const archive = new Map<number, Map<number, number>>();
@@ -116,13 +133,14 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
 
   // Flatten for initial page — take first PAGE_SIZE posts across all groups
   const allPostsFlat = publicationPosts.map(
-    ({ title, createdAt, publicationRkey, rkey, url, tags }) => ({
+    ({ title, createdAt, publicationRkey, rkey, url, tags, coverImage }) => ({
       title,
       createdAt,
       publicationRkey,
       rkey,
       url,
       tags: tags ?? [],
+      coverImage: coverImageUrl(coverImage),
     }),
   );
 
