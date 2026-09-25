@@ -59,7 +59,7 @@
 />
 
 <main class="shell-wide cv-page">
-  <header class="spec-header">
+  <header class="page-hd spec-header animate-in">
     <div class="spec-meta">
       <span class="meta-tag">TERMINAL CV</span>
       <span class="meta-tag">AT PROTOCOL</span>
@@ -73,7 +73,7 @@
     </p>
   </header>
 
-  <div class="panel cv-command-panel">
+  <div class="panel cv-command-panel animate-in stagger-1">
     <div class="panel-head">
       <Terminal size={14} aria-hidden="true" />
       ewan@ewancroft.uk:~$
@@ -81,7 +81,12 @@
     <div class="panel-body">
       <div class="cv-command-row">
         <code class="cv-command">{curlCommand}</code>
-        <button class="copy-btn copy-btn--compact" onclick={copyCurl}>
+        <button
+          type="button"
+          class="copy-btn copy-btn--compact"
+          aria-live="polite"
+          onclick={copyCurl}
+        >
           {#if copied}
             <Check size={14} aria-hidden="true" />
           {:else}
@@ -98,16 +103,18 @@
     </div>
   </div>
 
-  <div class="cv-grid">
+  <div class="cv-grid animate-in stagger-2">
     <section class="cv-main">
       <header class="section-hd">
         <h2 class="section-title">Menu</h2>
       </header>
-      <ul class="bare-list cv-menu">
+      <ul class="bare-list">
         {#each sections as section (section.key)}
-          <li class="cv-menu-row">
-            <span class="cv-menu-key">{section.key}</span>
-            <span class="cv-menu-label">{section.label}</span>
+          <li class="post-row">
+            <span class="cv-menu-pair">
+              <span class="cv-menu-key">{section.key}</span>
+              <span class="post-title">{section.label}</span>
+            </span>
           </li>
         {/each}
       </ul>
@@ -119,7 +126,7 @@
       </header>
       <dl class="meta-list cv-facts">
         {#each facts as fact (fact.label)}
-          <div class="cv-fact">
+          <div class="cv-fact post-row">
             <dt>{fact.label}</dt>
             <dd>{fact.value}</dd>
           </div>
@@ -139,10 +146,6 @@
     flex-direction: column;
   }
 
-  .cv-page :global(.spec-header) {
-    margin-bottom: var(--space-lg);
-  }
-
   .cv-command-panel {
     margin-bottom: var(--space-xl);
   }
@@ -156,6 +159,7 @@
   }
 
   .cv-command {
+    min-width: 0;
     font-size: var(--text-sm);
     overflow-wrap: anywhere;
   }
@@ -166,18 +170,33 @@
     color: var(--color-text-600);
   }
 
+  .cv-command-note code {
+    overflow-wrap: anywhere;
+  }
+
   /* Two-column layout — same shape as about-grid */
   .cv-grid {
     display: grid;
     grid-template-columns: 1fr 320px;
     gap: var(--space-2xl);
     align-items: start;
-    padding-bottom: var(--space-2xl);
+    padding-bottom: var(--space-12);
   }
 
   @media (max-width: 900px) {
     .cv-grid {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .cv-command-row {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .cv-command-row .copy-btn {
+      align-self: flex-end;
     }
   }
 
@@ -189,21 +208,10 @@
     min-width: 0;
   }
 
-  .cv-menu {
+  .cv-menu-pair {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-2xs);
-    padding: var(--space-xs);
-    background: var(--surface-raised);
-    border-radius: var(--radius-md);
-  }
-
-  .cv-menu-row {
-    display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: var(--space-md);
-    padding: var(--space-sm) var(--space-sm);
-    border-radius: var(--radius-sm);
   }
 
   .cv-menu-key {
@@ -216,23 +224,16 @@
     background: var(--surface-sunken);
     padding: 2px 5px;
     border-radius: var(--radius-xs);
-  }
-
-  .cv-menu-label {
-    font-size: var(--text-sm);
+    flex-shrink: 0;
+    align-self: center;
   }
 
   .cv-facts {
-    gap: var(--space-2xs);
+    margin-bottom: 0;
   }
 
   .cv-fact {
-    display: flex;
-    justify-content: space-between;
     align-items: baseline;
-    gap: var(--space-md);
-    padding: var(--space-sm) var(--space-sm);
-    border-radius: var(--radius-sm);
   }
 
   .cv-fact dt {
@@ -251,8 +252,25 @@
   }
 
   .cv-updated {
-    margin: var(--space-md) 0 0;
+    margin: 0;
     font-size: var(--text-xs);
     color: var(--color-text-600);
+  }
+
+  .cv-updated code {
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 560px) {
+    .cv-fact {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: var(--space-2xs);
+    }
+
+    .cv-fact dd {
+      width: 100%;
+      text-align: left;
+    }
   }
 </style>
