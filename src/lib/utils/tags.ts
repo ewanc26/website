@@ -77,6 +77,10 @@ function jaccardSimilarity(a: Set<string>, b: Set<string>): number {
   return union === 0 ? 0 : intersection / union;
 }
 
+interface TagEdge {
+  score: number;
+}
+
 export function buildTagGroups(
   tags: Map<string, NormalizedTag>,
   maxGroups = 6,
@@ -85,58 +89,95 @@ export function buildTagGroups(
   const names = [...tags.keys()].sort(
     (a, b) => (tags.get(b)!.count - tags.get(a)!.count) || a.localeCompare(b),
   );
-  const grouped = new Set<string>();
-  const groups: {
-    name: string;
-    count: number;
-    tags: { name: string; count: number }[];
-  }[] = [];
 
-  for (const root of names) {
-    if (grouped.has(root)) continue;
+  const adjacency = new Map<string, Map<string, number>>();
 
-    const rootTag = tags.get(root)!;
-    const related = names
-      .filter((name) => name !== root && !grouped.has(name))
-      .map((name) => {
-        const candidate = tags.get(name)!;
-        const cooccurrence = cooccurrenceSimilarity(rootTag.posts, candidate.posts);
-        const jaccard = jaccardSimilarity(rootTag.posts, candidate.posts);
-        const lexical = tokenSimilarity(root, name);
-        const score = cooccurrence * 0.65 + jaccard * 0.2 + lexical * 0.15;
+  for (let i = 0; i < names.length; i += 1) {
+    const a = names[i];
+    const aTag = tags.get(a)!;
 
-        return { name, candidate, cooccurrence, lexical, score };
-      })
-      .filter(
-        ({ candidate, cooccurrence, lexical, score }) =>
-          candidate.count >= 2 &&
-          score >= 0.2 &&
-          (cooccurrence >= 0.25 || lexical >= 0.5),
-      )
-      .sort(
-        (a, b) =>
-          b.score - a.score ||
-          b.candidate.count - a.candidate.count ||
-          a.name.localeCompare(b.name),
-      )
-      .slice(0, maxRelated);
+    for (let j = i + 1; j < names.length; j += 1) {
+      const b = names[j];
+      const bTag = tags.get(b)!;
 
-    if (rootTag.count < 2 || related.length === 0) continue;
+      if (aTag.count < 2 && bTag.count < 2) continue;
 
-    grouped.add(root);
-    for (const item of related) grouped.add(item.name);
+      const cooccurrence = cooccurrenceSimilarity(aTag.posts, bTag.posts);
+      const jaccard = jaccardSimilarity(aTag.posts, bTag.posts);
+      const lexical = tokenSimilarity(a, b);
+      const score = cooccurrence * 0.6 + jaccard * 0.25 + lexical * 0.15;
 
-    groups.push({
-      name: root,
-      count: rootTag.count,
-      tags: [root, ...related.map((item) => item.name)].map((name) => ({
-        name,
-        count: tags.get(name)!.count,
-      })),
-    });
+      if (score < 0.2 || (cooccurrence < 0.25 && lexical < 0.5)) continue;
 
-    if (groups.length >= maxGroups) break;
+      if (!adjacency.has(a)) adjacency.set(a, new Map());
+      if (!adjacency.has(b)) adjacency.set(b, new Map());
+      adjacency.get(a)!.set(b, score);
+      adjacency.get(b)!.set(a, score);
+    }
   }
 
-  return groups;
+  const communities: string[][] = [];
+  const visited = new Set<string>();
+
+  for (const name of names) {
+    if (visited.has(name) || !adjacency.has(name)) continue;
+
+    const queue = [name];
+    const community: string[] = [];
+    visited.add(name);
+
+    while (queue.length) {
+      const current = queue.shift()!;
+      community.push(current);
+
+      for (const [neighbor, score] of adjacency.get(current) ?? []) {
+        if (score < 0.2 || visited.has(neighbor)) continue;
+        visited.add(neighbor);
+        queue.push(neighbor);
+      }
+    }
+
+    if (community.length > 1) communities.push(community);
+  }
+
+  return communities
+    .map((community) => {
+      const ranked = community
+        .map((name) => ({
+          name,
+          count: tags.get(name)!.count,
+          degree: [...(adjacency.get(name)?.values() ?? [])].reduce(
+            (sum, score) => sum + score,
+            0,
+          ),
+        }))
+        .sort(
+          (a, b) =>
+            b.count - a.count ||
+            b.degree - a.degree ||
+            a.name.localeCompare(b.name),
+        );
+
+      const selected = ranked.slice(0, maxRelated + 1);
+      const root = selected[0];
+
+      return {
+        name: root.name,
+        count: root.count,
+        tags: selected.map(({ name, count }) => ({ name, count })),
+        totalCount: community.reduce(
+          (sum, name) => sum + tags.get(name)!.count,
+          0,
+        ),
+      };
+    })
+    .filter((group) => group.tags.length > 1)
+    .sort(
+      (a, b) =>
+        b.totalCount - a.totalCount ||
+        b.count - a.count ||
+        a.name.localeCompare(b.name),
+    )
+    .slice(0, maxGroups)
+    .map(({ totalCount: _totalCount, ...group }) => group);
 }
