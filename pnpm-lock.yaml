@@ -120,8 +120,6 @@ importers:
 
 packages:
 
-  '@ewanc26/noise@0.1.4': {}
-
   '@atproto-labs/did-resolver@0.3.2':
     resolution: {integrity: sha512-FtUZcVqzdAiYhjQtvT3juNP1cUcsweAnnx5mkz22iM7PnVtK3NGCJ478PuoUrL2F+yhgiO+rSHmXuYxuP3+PAg==}
     engines: {node: '>=22'}
@@ -1821,8 +1819,6 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
 snapshots:
-
-  '@ewanc26/noise@0.1.4': {}
 
   '@atproto-labs/did-resolver@0.3.2':
     dependencies:
