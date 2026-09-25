@@ -49,6 +49,7 @@
     "remark-html": "^16.0.1",
     "remark-rehype": "^11.1.2",
     "satori": "^0.26.0",
-    "unified": "^11.0.5"
+    "unified": "^11.0.5",
+    "@ewanc26/noise": "^0.1.4"
   }
 }
