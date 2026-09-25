@@ -195,19 +195,56 @@
                     </div>
                     <span>From the publication records</span>
                 </div>
-                <div class="topic-list">
-                    {#each data.topics as topic}
-                        <button
-                            type="button"
-                            class:topic-active={searchQuery.toLowerCase() === topic.name.toLowerCase()}
-                            class="topic-link active-press"
-                            onclick={() => selectTopic(topic.name)}
-                        >
-                            <span>{topic.name}</span>
-                            <strong>{topic.count}</strong>
-                        </button>
+                <div class="topic-groups">
+                    {#each data.topics as group}
+                        <div class="topic-group">
+                            <div class="topic-group-heading">
+                                <button
+                                    type="button"
+                                    class:topic-active={searchQuery.toLowerCase() === group.name.toLowerCase()}
+                                    class="topic-root active-press"
+                                    onclick={() => selectTopic(group.name)}
+                                >
+                                    <span>{group.name}</span>
+                                    <strong>{group.count}</strong>
+                                </button>
+                                <span>related</span>
+                            </div>
+                            <div class="topic-list">
+                                {#each group.tags.slice(1) as topic}
+                                    <button
+                                        type="button"
+                                        class:topic-active={searchQuery.toLowerCase() === topic.name.toLowerCase()}
+                                        class="topic-link active-press"
+                                        onclick={() => selectTopic(topic.name)}
+                                    >
+                                        <span>{topic.name}</span>
+                                        <strong>{topic.count}</strong>
+                                    </button>
+                                {/each}
+                            </div>
+                        </div>
                     {/each}
                 </div>
+
+                {#if data.ungroupedTopics?.length > 0}
+                    <div class="topic-more">
+                        <p class="section-kicker">More topics</p>
+                        <div class="topic-list">
+                            {#each data.ungroupedTopics as topic}
+                                <button
+                                    type="button"
+                                    class:topic-active={searchQuery.toLowerCase() === topic.name.toLowerCase()}
+                                    class="topic-link active-press"
+                                    onclick={() => selectTopic(topic.name)}
+                                >
+                                    <span>{topic.name}</span>
+                                    <strong>{topic.count}</strong>
+                                </button>
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
             </section>
         {/if}
 
@@ -546,11 +583,60 @@
         margin-top: clamp(2.5rem, 7vw, 5rem);
     }
 
+    .topic-groups {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-md);
+        padding-top: var(--space-md);
+    }
+
+    .topic-group {
+        padding: var(--space-md);
+        border: 1px solid var(--surface-color);
+        background: var(--surface-raised);
+    }
+
+    .topic-group-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-sm);
+        padding-bottom: var(--space-sm);
+        border-bottom: 1px solid var(--surface-color);
+    }
+
+    .topic-group-heading > span {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--color-text-500);
+    }
+
+    .topic-root {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-xs);
+        padding: 0;
+        border: 0;
+        background: none;
+        color: var(--color-text-950);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .topic-root strong {
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        color: var(--color-text-600);
+    }
+
     .topic-list {
         display: flex;
         flex-wrap: wrap;
         gap: var(--space-xs);
-        padding-top: var(--space-md);
+        padding-top: var(--space-sm);
     }
 
     .topic-link {
@@ -573,12 +659,19 @@
         color: var(--color-text-600);
     }
 
+    .topic-more {
+        margin-top: var(--space-md);
+    }
+
     .topic-link.topic-active {
         border-color: var(--color-primary-500);
         background: color-mix(in oklch, var(--color-primary-500) 10%, var(--surface-sunken));
     }
 
     @media (max-width: 760px) {
+        .topic-groups {
+            grid-template-columns: 1fr;
+        }
         .blog-masthead {
             align-items: flex-start;
             flex-direction: column;
