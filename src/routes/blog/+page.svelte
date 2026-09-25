@@ -15,6 +15,7 @@
         rkey: string;
         url: string;
         tags: string[];
+        coverImage?: string;
     };
 
     let posts: PostSummary[] = $state([]);
@@ -44,6 +45,16 @@
         const { year: y, month: m, day: d } = blogDateParts(post.createdAt);
         const slug = normalizeSlug(post.title);
         return `/blog/${y}/${m}/${d}/${slug}`;
+    }
+
+    function getLeadImage(post: PostSummary) {
+        if (post.coverImage) return post.coverImage;
+        const params = new URLSearchParams({
+            title: post.title,
+            type: 'ARTICLE',
+            slug: getPostUrl(post),
+        });
+        return `/api/og/generate?${params.toString()}`;
     }
 
     function formatDate(date: string, options: Intl.DateTimeFormatOptions = {}) {
@@ -126,6 +137,15 @@
         <section class="news-front animate-in" aria-label="Latest writing">
             <div class="front-lead">
                 <a href={getPostUrl(leadPost)} class="lead-story active-press">
+                    <img
+                        class="lead-story-image"
+                        src={getLeadImage(leadPost)}
+                        alt=""
+                        width="1200"
+                        height="630"
+                        loading="eager"
+                        decoding="async"
+                    />
                     <div class="story-kicker">
                         {#if leadPost.tags.length > 0}
                             {leadPost.tags[0]}
@@ -387,6 +407,16 @@
         background: var(--surface-raised);
         color: inherit;
         text-decoration: none;
+    }
+
+    .lead-story-image {
+        display: block;
+        width: calc(100% + 2 * clamp(var(--space-lg), 5vw, var(--space-xl)));
+        height: auto;
+        aspect-ratio: 1200 / 630;
+        object-fit: cover;
+        margin: calc(-1 * clamp(var(--space-lg), 5vw, var(--space-xl))) calc(-1 * clamp(var(--space-lg), 5vw, var(--space-xl))) var(--space-lg);
+        border-bottom: 1px solid var(--surface-color);
     }
 
     .lead-story h2 {
