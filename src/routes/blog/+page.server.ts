@@ -63,7 +63,7 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
   const topicPosts = new Map<string, Set<string>>();
 
   for (const post of publicationPosts) {
-    const { year, month } = blogDateParts(post.createdAt);
+    const { year, month } = blogDateParts(post.publishedAt);
     const yearNum = parseInt(year, 10);
     const monthNum = parseInt(month, 10);
 
@@ -133,9 +133,9 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
 
   // Flatten for initial page — take first PAGE_SIZE posts across all groups
   const allPostsFlat = publicationPosts.map(
-    ({ title, createdAt, publicationRkey, rkey, url, tags, coverImage }) => ({
+    ({ title, publishedAt, publicationRkey, rkey, url, tags, coverImage }) => ({
       title,
-      createdAt,
+      createdAt: publishedAt,
       publicationRkey,
       rkey,
       url,
