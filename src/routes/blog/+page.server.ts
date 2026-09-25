@@ -14,6 +14,7 @@ import {
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
 } from "$env/static/public";
 import { blogDateParts } from "$lib/utils/date";
+import { buildNormalizedTags, buildTagGroups, normalizeTag } from "$lib/utils/tags";
 
 const PAGE_SIZE = 20;
 
@@ -59,8 +60,6 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
 
   // Build archive and topic summaries from the same AT Protocol publication records.
   const archive = new Map<number, Map<number, number>>();
-  const topicCounts = new Map<string, number>();
-  const topicPosts = new Map<string, Set<string>>();
 
   for (const post of publicationPosts) {
     const { year, month } = blogDateParts(post.publishedAt);
@@ -70,66 +69,24 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
     if (!archive.has(yearNum)) archive.set(yearNum, new Map());
     const yearMap = archive.get(yearNum)!;
     yearMap.set(monthNum, (yearMap.get(monthNum) ?? 0) + 1);
-
-    for (const tag of post.tags ?? []) {
-      topicCounts.set(tag, (topicCounts.get(tag) ?? 0) + 1);
-      if (!topicPosts.has(tag)) topicPosts.set(tag, new Set());
-      topicPosts.get(tag)!.add(post.rkey);
-    }
   }
 
-  // Standard.site tags are intentionally flat. Build a presentation-only
-  // taxonomy from tag co-occurrence, without changing the source records.
-  const topicNames = Array.from(topicCounts.keys());
-  const similarity = (a: string, b: string) => {
-    const aPosts = topicPosts.get(a)!;
-    const bPosts = topicPosts.get(b)!;
-    let intersection = 0;
-    for (const rkey of aPosts) {
-      if (bPosts.has(rkey)) intersection++;
-    }
-    const union = aPosts.size + bPosts.size - intersection;
-    return union === 0 ? 0 : intersection / union;
-  };
+  // Standard.site tags are source data, so normalise them only for presentation
+  // and search. The records themselves are never rewritten.
+  const normalizedTags = buildNormalizedTags(
+    publicationPosts.map((post) => ({
+      rkey: post.rkey,
+      tags: post.tags,
+    })),
+  );
+  const topicGroups = buildTagGroups(normalizedTags);
+  const groupedTags = new Set(topicGroups.flatMap((group) => group.tags.map((tag) => tag.name)));
 
-  const groupedTags = new Set<string>();
-  const topicGroups: { name: string; count: number; tags: { name: string; count: number }[] }[] = [];
-
-  for (const root of [...topicNames].sort(
-    (a, b) => (topicCounts.get(b)! - topicCounts.get(a)!) || a.localeCompare(b),
-  )) {
-    if (groupedTags.has(root) || (topicCounts.get(root) ?? 0) < 2) continue;
-
-    const related = topicNames
-      .filter((tag) => tag !== root && !groupedTags.has(tag))
-      .map((tag) => ({ tag, score: similarity(root, tag) }))
-      .filter(({ score }) => score >= 0.2)
-      .sort((a, b) => b.score - a.score || a.tag.localeCompare(b.tag))
-      .slice(0, 5)
-      .map(({ tag }) => tag);
-
-    if (related.length === 0) continue;
-
-    groupedTags.add(root);
-    for (const tag of related) groupedTags.add(tag);
-
-    topicGroups.push({
-      name: root,
-      count: topicCounts.get(root)!,
-      tags: [root, ...related].map((name) => ({
-        name,
-        count: topicCounts.get(name)!,
-      })),
-    });
-
-    if (topicGroups.length >= 6) break;
-  }
-
-  const ungroupedTopics = topicNames
-    .filter((name) => !groupedTags.has(name))
-    .sort((a, b) => topicCounts.get(b)! - topicCounts.get(a)! || a.localeCompare(b))
+  const ungroupedTopics = [...normalizedTags.values()]
+    .filter((tag) => !groupedTags.has(tag.name))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
     .slice(0, 12)
-    .map((name) => ({ name, count: topicCounts.get(name)! }));
+    .map(({ name, count }) => ({ name, count }));
 
   // Flatten for initial page — take first PAGE_SIZE posts across all groups
   const allPostsFlat = publicationPosts.map(
@@ -139,7 +96,7 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
       publicationRkey,
       rkey,
       url,
-      tags: tags ?? [],
+      tags: [...new Set((tags ?? []).map(normalizeTag).filter(Boolean))],
       coverImage: coverImageUrl(coverImage),
     }),
   );
