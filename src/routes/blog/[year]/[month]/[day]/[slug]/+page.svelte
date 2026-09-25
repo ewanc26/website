@@ -15,12 +15,31 @@
 
     /** Use native block rendering when blocks are available. */
     let useBlocks = $derived(data.post.blocks && data.post.blocks.length > 0);
+
+    // Reuse the same dynamic OG generator as SiteHead for posts without a
+    // Standard.site cover image. This keeps the visible fallback identical to
+    // the image used for social previews, without introducing another asset
+    // pipeline or storing generated images in the AT Protocol record.
+    const generatedCoverImage = $derived.by(() => {
+        const params = new URLSearchParams({
+            title: data.post.title,
+            type: 'ARTICLE',
+            slug: page.url.pathname,
+        });
+        if (data.post.description) {
+            params.set('subtitle', data.post.description.slice(0, 150));
+        }
+        return `/api/og/generate?${params.toString()}`;
+    });
+    const coverImage = $derived(data.post.coverImage ?? generatedCoverImage);
+    const coverImageGenerated = $derived(!data.post.coverImage);
 </script>
 
 <SiteHead
     title={data.post.title}
     description={data.post.metaDescription}
     ogSubtitle={data.post.description}
+    image={data.post.coverImage}
     type="article"
     ogType="ARTICLE"
     publishedTime={data.post.createdAt}
@@ -30,6 +49,20 @@
 />
 
 <main class="shell-prose">
+    <figure class="post-cover hero-reveal">
+        <img
+            src={coverImage}
+            alt={coverImageGenerated ? `Generated cover image for “${data.post.title}”` : `Cover image for “${data.post.title}”`}
+            width="1200"
+            height="630"
+            loading="eager"
+            decoding="async"
+        />
+        {#if coverImageGenerated}
+            <figcaption>Generated cover · no cover image supplied by the publication</figcaption>
+        {/if}
+    </figure>
+
     <header class="post-hd hero-reveal">
         <h1 class="post-title">{data.post.title}</h1>
         {#if data.post.description}
@@ -113,3 +146,26 @@
         </div>
     </div>
 </main>
+
+<style>
+    .post-cover {
+        margin: 0 0 var(--space-xl);
+        border-bottom: 1px solid var(--surface-color);
+    }
+
+    .post-cover img {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1200 / 630;
+        object-fit: cover;
+        background: var(--surface-raised);
+    }
+
+    .post-cover figcaption {
+        padding: var(--space-xs) 0;
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        color: var(--color-text-500);
+    }
+</style>
