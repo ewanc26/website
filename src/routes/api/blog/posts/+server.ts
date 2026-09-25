@@ -3,6 +3,7 @@ import type { RequestHandler } from "./$types";
 import { fetchBlogPosts } from "$lib/services/atproto/fetch";
 import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
 import type { Config } from "@sveltejs/adapter-vercel";
+import { normalizeTag } from "$lib/utils/tags";
 
 export const config: Config = { maxDuration: 30 };
 
@@ -29,7 +30,7 @@ export const GET: RequestHandler = async ({ url }) => {
     ? publicationPosts.filter(
         (post) =>
           post.title.toLocaleLowerCase().includes(query) ||
-          (post.tags ?? []).some((tag) => tag.toLocaleLowerCase().includes(query)),
+          (post.tags ?? []).some((tag) => normalizeTag(tag).includes(query)),
       )
     : publicationPosts;
 
@@ -41,7 +42,7 @@ export const GET: RequestHandler = async ({ url }) => {
       publicationRkey,
       rkey,
       url,
-      tags: tags || [],
+      tags: [...new Set((tags || []).map(normalizeTag).filter(Boolean))],
     }));
 
   return json(
