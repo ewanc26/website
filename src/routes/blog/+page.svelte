@@ -5,6 +5,7 @@
     import EmptyState from '$lib/components/EmptyState.svelte';
     import LoadingSkeleton from '$lib/components/LoadingSkeleton.svelte';
     import { Rss, ArrowUpRight } from '@lucide/svelte';
+    import { noiseAction } from '@ewanc26/noise';
 
     let { data } = $props();
 
@@ -45,16 +46,6 @@
         const { year: y, month: m, day: d } = blogDateParts(post.createdAt);
         const slug = normalizeSlug(post.title);
         return `/blog/${y}/${m}/${d}/${slug}`;
-    }
-
-    function getLeadImage(post: PostSummary) {
-        if (post.coverImage) return post.coverImage;
-        const params = new URLSearchParams({
-            title: post.title,
-            type: 'ARTICLE',
-            slug: getPostUrl(post),
-        });
-        return `/api/og/generate?${params.toString()}`;
     }
 
     function formatDate(date: string, options: Intl.DateTimeFormatOptions = {}) {
@@ -137,15 +128,29 @@
         <section class="news-front animate-in" aria-label="Latest writing">
             <div class="front-lead">
                 <a href={getPostUrl(leadPost)} class="lead-story active-press">
-                    <img
-                        class="lead-story-image"
-                        src={getLeadImage(leadPost)}
-                        alt=""
-                        width="1200"
-                        height="630"
-                        loading="eager"
-                        decoding="async"
-                    />
+                    {#if leadPost.coverImage}
+                        <img
+                            class="lead-story-image"
+                            src={leadPost.coverImage}
+                            alt=""
+                            width="1200"
+                            height="630"
+                            loading="eager"
+                            decoding="async"
+                        />
+                    {:else}
+                        <canvas
+                            class="lead-story-image"
+                            use:noiseAction={{
+                                seed: `blog-lead:${leadPost.rkey}:${leadPost.title}`,
+                                width: 1200,
+                                height: 630,
+                                octaves: 3,
+                                gridSize: 5,
+                            }}
+                            aria-hidden="true"
+                        ></canvas>
+                    {/if}
                     <div class="story-kicker">
                         {#if leadPost.tags.length > 0}
                             {leadPost.tags[0]}
