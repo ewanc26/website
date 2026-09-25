@@ -15,6 +15,7 @@ export const GET: RequestHandler = async ({ url }) => {
 
   const offset = Math.max(0, intParam("offset", 0));
   const limit = Math.min(100, Math.max(1, intParam("limit", 20)));
+  const query = (url.searchParams.get("q") ?? "").trim().toLocaleLowerCase();
 
   const { posts } = await fetchBlogPosts();
   const publicationPosts = posts
@@ -24,7 +25,15 @@ export const GET: RequestHandler = async ({ url }) => {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
 
-  const page = publicationPosts
+  const matchingPosts = query
+    ? publicationPosts.filter(
+        (post) =>
+          post.title.toLocaleLowerCase().includes(query) ||
+          (post.tags ?? []).some((tag) => tag.toLocaleLowerCase().includes(query)),
+      )
+    : publicationPosts;
+
+  const page = matchingPosts
     .slice(offset, offset + limit)
     .map(({ title, createdAt, publicationRkey, rkey, url, tags }) => ({
       title,
@@ -36,7 +45,7 @@ export const GET: RequestHandler = async ({ url }) => {
     }));
 
   return json(
-    { posts: page, total: publicationPosts.length },
+    { posts: page, total: matchingPosts.length },
     {
       headers: {
         "Cache-Control": "public, s-maxage=120, stale-while-revalidate=300",
