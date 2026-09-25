@@ -40,18 +40,22 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
 
-  // Group by year > month
-  const grouped = new Map<number, Map<number, typeof publicationPosts>>();
+  // Build archive and topic summaries from the same AT Protocol publication records.
+  const archive = new Map<number, Map<number, number>>();
+  const topicCounts = new Map<string, number>();
 
   for (const post of publicationPosts) {
     const { year, month } = blogDateParts(post.createdAt);
     const yearNum = parseInt(year, 10);
     const monthNum = parseInt(month, 10);
 
-    if (!grouped.has(yearNum)) grouped.set(yearNum, new Map());
-    const yearMap = grouped.get(yearNum)!;
-    if (!yearMap.has(monthNum)) yearMap.set(monthNum, []);
-    yearMap.get(monthNum)!.push(post);
+    if (!archive.has(yearNum)) archive.set(yearNum, new Map());
+    const yearMap = archive.get(yearNum)!;
+    yearMap.set(monthNum, (yearMap.get(monthNum) ?? 0) + 1);
+
+    for (const tag of post.tags ?? []) {
+      topicCounts.set(tag, (topicCounts.get(tag) ?? 0) + 1);
+    }
   }
 
   // Flatten for initial page — take first PAGE_SIZE posts across all groups
@@ -82,5 +86,16 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
     total: allPostsFlat.length,
     hasMore: remaining > 0,
     pageSize: PAGE_SIZE,
+    topics: Array.from(topicCounts.entries())
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([name, count]) => ({ name, count })),
+    archive: Array.from(archive.entries())
+      .sort((a, b) => b[0] - a[0])
+      .map(([year, months]) => ({
+        year,
+        months: Array.from(months.entries())
+          .sort((a, b) => b[0] - a[0])
+          .map(([month, count]) => ({ month, count })),
+      })),
   };
 };
