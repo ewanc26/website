@@ -43,6 +43,7 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
   // Build archive and topic summaries from the same AT Protocol publication records.
   const archive = new Map<number, Map<number, number>>();
   const topicCounts = new Map<string, number>();
+  const topicPosts = new Map<string, Set<string>>();
 
   for (const post of publicationPosts) {
     const { year, month } = blogDateParts(post.createdAt);
@@ -55,8 +56,63 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
 
     for (const tag of post.tags ?? []) {
       topicCounts.set(tag, (topicCounts.get(tag) ?? 0) + 1);
+      if (!topicPosts.has(tag)) topicPosts.set(tag, new Set());
+      topicPosts.get(tag)!.add(post.rkey);
     }
   }
+
+  // Standard.site tags are intentionally flat. Build a presentation-only
+  // taxonomy from tag co-occurrence, without changing the source records.
+  const topicNames = Array.from(topicCounts.keys());
+  const similarity = (a: string, b: string) => {
+    const aPosts = topicPosts.get(a)!;
+    const bPosts = topicPosts.get(b)!;
+    let intersection = 0;
+    for (const rkey of aPosts) {
+      if (bPosts.has(rkey)) intersection++;
+    }
+    const union = aPosts.size + bPosts.size - intersection;
+    return union === 0 ? 0 : intersection / union;
+  };
+
+  const groupedTags = new Set<string>();
+  const topicGroups: { name: string; count: number; tags: { name: string; count: number }[] }[] = [];
+
+  for (const root of [...topicNames].sort(
+    (a, b) => (topicCounts.get(b)! - topicCounts.get(a)!) || a.localeCompare(b),
+  )) {
+    if (groupedTags.has(root) || (topicCounts.get(root) ?? 0) < 2) continue;
+
+    const related = topicNames
+      .filter((tag) => tag !== root && !groupedTags.has(tag))
+      .map((tag) => ({ tag, score: similarity(root, tag) }))
+      .filter(({ score }) => score >= 0.2)
+      .sort((a, b) => b.score - a.score || a.tag.localeCompare(b.tag))
+      .slice(0, 5)
+      .map(({ tag }) => tag);
+
+    if (related.length === 0) continue;
+
+    groupedTags.add(root);
+    for (const tag of related) groupedTags.add(tag);
+
+    topicGroups.push({
+      name: root,
+      count: topicCounts.get(root)!,
+      tags: [root, ...related].map((name) => ({
+        name,
+        count: topicCounts.get(name)!,
+      })),
+    });
+
+    if (topicGroups.length >= 6) break;
+  }
+
+  const ungroupedTopics = topicNames
+    .filter((name) => !groupedTags.has(name))
+    .sort((a, b) => topicCounts.get(b)! - topicCounts.get(a)! || a.localeCompare(b))
+    .slice(0, 12)
+    .map((name) => ({ name, count: topicCounts.get(name)! }));
 
   // Flatten for initial page — take first PAGE_SIZE posts across all groups
   const allPostsFlat = publicationPosts.map(
@@ -86,9 +142,8 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
     total: allPostsFlat.length,
     hasMore: remaining > 0,
     pageSize: PAGE_SIZE,
-    topics: Array.from(topicCounts.entries())
-      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-      .map(([name, count]) => ({ name, count })),
+    topics: topicGroups,
+    ungroupedTopics,
     archive: Array.from(archive.entries())
       .sort((a, b) => b[0] - a[0])
       .map(([year, months]) => ({
