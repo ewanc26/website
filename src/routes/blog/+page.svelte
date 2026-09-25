@@ -32,9 +32,13 @@
         post.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
     ));
 
-    let featuredPost = $derived(filteredPosts[0]);
+    let leadPost = $derived(filteredPosts[0]);
     let secondaryPosts = $derived(filteredPosts.slice(1, 5));
-    let latestPosts = $derived(filteredPosts.slice(5));
+    let notebookPosts = $derived(filteredPosts.slice(5));
+
+    function selectTopic(topic: string) {
+        searchQuery = topic;
+    }
 
     function getPostUrl(post: PostSummary) {
         const { year: y, month: m, day: d } = blogDateParts(post.createdAt);
@@ -92,13 +96,13 @@
     <header class="blog-masthead animate-in">
         <div>
             <p class="eyebrow">ewancroft.uk / writing</p>
-            <h1 class="page-title">{data.blog?.title ?? 'Blog'}</h1>
+            <h1 class="page-title">Writing</h1>
             {#if data.blog?.description}
                 <p class="page-desc">{data.blog.description}</p>
             {/if}
         </div>
         <div class="masthead-tools">
-            <span class="archive-count">{data.total} posts</span>
+            <span class="archive-count">{data.total} posts / ATProto publication</span>
             {#if data.blog}
                 <a href={data.blog.rss} target="_blank" rel="noopener" class="section-link active-press">
                     <Rss size={14} strokeWidth={2} /> RSS
@@ -119,14 +123,14 @@
     </div>
 
     {#if filteredPosts.length > 0}
-        <section class="news-front animate-in" aria-label="Featured stories">
+        <section class="news-front animate-in" aria-labelledby="latest-heading">
             <div class="front-lead">
-                <a href={getPostUrl(featuredPost)} class="lead-story active-press">
+                <a href={getPostUrl(leadPost)} class="lead-story active-press">
                     <div class="story-kicker">
                         {#if featuredPost.tags.length > 0}
                             {featuredPost.tags[0]}
                         {:else}
-                            Featured
+                            Latest
                         {/if}
                     </div>
                     <h2>{featuredPost.title}</h2>
@@ -156,14 +160,17 @@
             {/if}
         </section>
 
-        {#if latestPosts.length > 0}
-            <section class="latest-section animate-in" aria-labelledby="latest-heading">
+        {#if notebookPosts.length > 0}
+            <section class="latest-section animate-in" aria-labelledby="notebook-heading">
                 <div class="section-heading">
-                    <h2 id="latest-heading">Latest</h2>
+                    <div>
+                        <p class="section-kicker">The notebook</p>
+                        <h2 id="notebook-heading">Recent writing</h2>
+                    </div>
                     <span>{filteredPosts.length} shown</span>
                 </div>
                 <div class="latest-list">
-                    {#each latestPosts as post}
+                    {#each notebookPosts as post}
                         <a href={getPostUrl(post)} class="latest-story active-press">
                             <span class="latest-date">
                                 <time datetime={post.createdAt}>{formatDate(post.createdAt, { day: '2-digit', month: 'short' })}</time>
@@ -179,6 +186,31 @@
             </section>
         {/if}
 
+        {#if data.topics?.length > 0}
+            <section class="topics-section animate-in" aria-labelledby="topics-heading">
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">Explore</p>
+                        <h2 id="topics-heading">Topics</h2>
+                    </div>
+                    <span>From the publication records</span>
+                </div>
+                <div class="topic-list">
+                    {#each data.topics as topic}
+                        <button
+                            type="button"
+                            class:topic-active={searchQuery.toLowerCase() === topic.name.toLowerCase()}
+                            class="topic-link active-press"
+                            onclick={() => selectTopic(topic.name)}
+                        >
+                            <span>{topic.name}</span>
+                            <strong>{topic.count}</strong>
+                        </button>
+                    {/each}
+                </div>
+            </section>
+        {/if}
+
         {#if hasMore}
             <div class="load-more animate-in">
                 {#if loading}
@@ -189,25 +221,34 @@
             </div>
         {/if}
 
-        <section class="archive-section animate-in" aria-labelledby="archive-heading">
-            <div class="section-heading">
-                <h2 id="archive-heading">Archive</h2>
-                <span>By year and month</span>
-            </div>
-            {#each groupPosts(filteredPosts) as [year, months]}
-                <div class="archive-year">
-                    <h3>{year}</h3>
-                    <div class="archive-months">
-                        {#each Array.from(months.entries()).sort((a, b) => b[0] - a[0]) as [month, monthPosts]}
-                            <div class="archive-month">
-                                <span>{formatMonth(month)}</span>
-                                <strong>{monthPosts.length}</strong>
-                            </div>
-                        {/each}
+        {#if data.archive?.length > 0 && !searchQuery}
+            <section class="archive-section animate-in" aria-labelledby="archive-heading">
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">The archive</p>
+                        <h2 id="archive-heading">By year</h2>
                     </div>
+                    <span>{data.total} posts</span>
                 </div>
-            {/each}
-        </section>
+                {#each data.archive as yearGroup}
+                    <div class="archive-year">
+                        <h3>{yearGroup.year}</h3>
+                        <div class="archive-months">
+                            {#each yearGroup.months as month}
+                                <button
+                                    type="button"
+                                    class="archive-month active-press"
+                                    onclick={() => selectTopic(String(yearGroup.year) + '-' + String(month.month).padStart(2, '0'))}
+                                >
+                                    <span>{formatMonth(month.month)}</span>
+                                    <strong>{month.count}</strong>
+                                </button>
+                            {/each}
+                        </div>
+                    </div>
+                {/each}
+            </section>
+        {/if}
     {:else if searchQuery}
         <EmptyState title="No matching posts" description="Try a different title or tag." icon={false} />
     {:else}
@@ -396,6 +437,16 @@
         border-bottom: 4px solid var(--color-text-950);
     }
 
+    .section-kicker {
+        margin: 0 0 var(--space-2xs);
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--color-primary-600);
+    }
+
     .section-heading h2 {
         margin: 0;
         font-size: clamp(1.5rem, 3vw, 2.25rem);
@@ -485,13 +536,56 @@
         border: 1px solid var(--surface-color);
         border-radius: var(--radius-sm);
         background: var(--surface-raised);
+        font: inherit;
         font-size: var(--text-sm);
+        cursor: pointer;
+    }
+
+    .archive-month:is(:hover, :focus-visible) {
+        background: color-mix(in oklch, var(--color-primary-500) 10%, var(--surface-sunken));
+        color: var(--color-text-950);
     }
 
     .archive-month strong {
         font-family: var(--font-mono);
         font-size: var(--text-xs);
         color: var(--color-text-600);
+    }
+
+    .topics-section {
+        margin-top: clamp(2.5rem, 7vw, 5rem);
+    }
+
+    .topic-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+        padding-top: var(--space-md);
+    }
+
+    .topic-link {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-xs);
+        padding: var(--space-xs) var(--space-sm);
+        border: 1px solid var(--surface-color);
+        border-radius: var(--radius-sm);
+        background: var(--surface-raised);
+        color: inherit;
+        font: inherit;
+        font-size: var(--text-sm);
+        cursor: pointer;
+    }
+
+    .topic-link strong {
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        color: var(--color-text-600);
+    }
+
+    .topic-link.topic-active {
+        border-color: var(--color-primary-500);
+        background: color-mix(in oklch, var(--color-primary-500) 10%, var(--surface-sunken));
     }
 
     @media (max-width: 760px) {
