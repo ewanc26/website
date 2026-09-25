@@ -17,9 +17,6 @@ importers:
       '@ewanc26/atproto':
         specifier: ^0.2.12
         version: 0.2.12(@atproto/api@0.20.7)
-      '@ewanc26/noise':
-        specifier: ^0.1.4
-        version: 0.1.4
       '@ewanc26/supporters':
         specifier: ^0.3.0
         version: 0.3.0(@atproto/api@0.20.7)(svelte@5.56.3)
