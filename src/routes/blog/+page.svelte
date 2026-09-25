@@ -22,24 +22,60 @@
     let posts: PostSummary[] = $state([]);
     let hasMore = $state(false);
     let loading = $state(false);
+    let searching = $state(false);
     let searchQuery = $state('');
+    let searchRequestId = 0;
 
     $effect.pre(() => {
         posts = data.posts;
         hasMore = data.hasMore;
     });
 
-    let filteredPosts = $derived(posts.filter((post) =>
-        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-    ));
+    let filteredPosts = $derived(posts);
 
     let leadPost = $derived(filteredPosts[0]);
     let secondaryPosts = $derived(filteredPosts.slice(1, 5));
     let notebookPosts = $derived(filteredPosts.slice(5));
 
+    async function searchPosts(query: string) {
+        const requestId = ++searchRequestId;
+        const trimmedQuery = query.trim();
+        searchQuery = query;
+
+        if (!trimmedQuery) {
+            posts = data.posts;
+            hasMore = data.hasMore;
+            searching = false;
+            return;
+        }
+
+        searching = true;
+        try {
+            const params = new URLSearchParams({
+                q: trimmedQuery,
+                offset: '0',
+                limit: String(data.pageSize),
+            });
+            const res = await fetch(`/api/blog/posts?${params}`);
+            if (!res.ok) throw new Error(`Blog API returned ${res.status}`);
+            const result = await res.json();
+
+            if (requestId !== searchRequestId) return;
+            posts = result.posts;
+            hasMore = posts.length < result.total;
+        } catch (error) {
+            if (requestId === searchRequestId) {
+                console.error('Failed to search blog posts', error);
+                posts = [];
+                hasMore = false;
+            }
+        } finally {
+            if (requestId === searchRequestId) searching = false;
+        }
+    }
+
     function selectTopic(topic: string) {
-        searchQuery = topic;
+        void searchPosts(topic);
     }
 
     function getPostUrl(post: PostSummary) {
@@ -79,7 +115,12 @@
         if (loading || !hasMore) return;
         loading = true;
         try {
-            const res = await fetch(`/api/blog/posts?offset=${posts.length}&limit=${data.pageSize}`);
+            const params = new URLSearchParams({
+                offset: String(posts.length),
+                limit: String(data.pageSize),
+            });
+            if (searchQuery.trim()) params.set('q', searchQuery.trim());
+            const res = await fetch(`/api/blog/posts?${params}`);
             if (!res.ok) throw new Error(`Blog API returned ${res.status}`);
             const result = await res.json();
             posts = [...posts, ...result.posts];
@@ -120,6 +161,7 @@
             type="search"
             placeholder="Search by title or tag"
             bind:value={searchQuery}
+            oninput={(event) => void searchPosts(event.currentTarget.value)}
             class="blog-search"
         />
     </div>
