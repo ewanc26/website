@@ -17,6 +17,9 @@ importers:
       '@ewanc26/atproto':
         specifier: ^0.2.12
         version: 0.2.12(@atproto/api@0.20.7)
+      '@ewanc26/noise':
+        specifier: ^0.1.4
+        version: 0.1.4
       '@ewanc26/supporters':
         specifier: ^0.3.0
         version: 0.3.0(@atproto/api@0.20.7)(svelte@5.56.3)
@@ -116,6 +119,9 @@ importers:
         version: 8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)
 
 packages:
+
+  '@ewanc26/noise@0.1.4':
+    resolution: {}
 
   '@atproto-labs/did-resolver@0.3.2':
     resolution: {integrity: sha512-FtUZcVqzdAiYhjQtvT3juNP1cUcsweAnnx5mkz22iM7PnVtK3NGCJ478PuoUrL2F+yhgiO+rSHmXuYxuP3+PAg==}
@@ -1816,6 +1822,8 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
 snapshots:
+
+  '@ewanc26/noise@0.1.4': {}
 
   '@atproto-labs/did-resolver@0.3.2':
     dependencies:
