@@ -21,6 +21,7 @@
 
     let posts: PostSummary[] = $state([]);
     let hasMore = $state(false);
+    let total = $state(0);
     let loading = $state(false);
     let searching = $state(false);
     let searchQuery = $state('');
@@ -29,13 +30,17 @@
     $effect.pre(() => {
         posts = data.posts;
         hasMore = data.hasMore;
+        total = data.total;
     });
 
     let filteredPosts = $derived(posts);
+    let isSearching = $derived(searchQuery.trim().length > 0);
 
-    let leadPost = $derived(filteredPosts[0]);
-    let secondaryPosts = $derived(filteredPosts.slice(1, 5));
-    let notebookPosts = $derived(filteredPosts.slice(5));
+    // The editorial front page only makes sense for the unfiltered archive;
+    // search results read better as a single scannable list.
+    let leadPost = $derived(isSearching ? undefined : filteredPosts[0]);
+    let secondaryPosts = $derived(isSearching ? [] : filteredPosts.slice(1, 5));
+    let notebookPosts = $derived(isSearching ? filteredPosts : filteredPosts.slice(5));
 
     async function searchPosts(query: string) {
         const requestId = ++searchRequestId;
@@ -45,6 +50,7 @@
         if (!trimmedQuery) {
             posts = data.posts;
             hasMore = data.hasMore;
+            total = data.total;
             searching = false;
             return;
         }
@@ -62,11 +68,13 @@
 
             if (requestId !== searchRequestId) return;
             posts = result.posts;
+            total = result.total;
             hasMore = posts.length < result.total;
         } catch (error) {
             if (requestId === searchRequestId) {
                 console.error('Failed to search blog posts', error);
                 posts = [];
+                total = 0;
                 hasMore = false;
             }
         } finally {
@@ -76,6 +84,11 @@
 
     function selectTopic(topic: string) {
         void searchPosts(topic);
+        document.getElementById('blog-search')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function isActiveTopic(topic: string) {
+        return searchQuery.trim().toLowerCase() === topic.toLowerCase();
     }
 
     function getPostUrl(post: PostSummary) {
@@ -95,20 +108,6 @@
 
     function formatMonth(month: number) {
         return new Date(2000, month - 1, 1).toLocaleDateString('en-gb', { month: 'long' });
-    }
-
-    function groupPosts(items: PostSummary[]) {
-        const grouped = new Map<number, Map<number, PostSummary[]>>();
-        for (const post of items) {
-            const { year, month } = blogDateParts(post.createdAt);
-            const y = parseInt(year, 10);
-            const m = parseInt(month, 10);
-            if (!grouped.has(y)) grouped.set(y, new Map());
-            const yearMap = grouped.get(y)!;
-            if (!yearMap.has(m)) yearMap.set(m, []);
-            yearMap.get(m)!.push(post);
-        }
-        return Array.from(grouped.entries()).sort((a, b) => b[0] - a[0]);
     }
 
     async function loadMore() {
@@ -154,7 +153,7 @@
         </div>
     </header>
 
-    <div class="index-toolbar">
+    <div class="index-toolbar" aria-busy={searching}>
         <label for="blog-search" class="sr-only">Search posts</label>
         <input
             id="blog-search"
@@ -164,10 +163,20 @@
             oninput={(event) => void searchPosts(event.currentTarget.value)}
             class="blog-search"
         />
+        {#if isSearching}
+            <p class="search-status" aria-live="polite">
+                {#if searching}
+                    Searching…
+                {:else}
+                    {total} {total === 1 ? 'result' : 'results'}
+                {/if}
+            </p>
+        {/if}
     </div>
 
     {#if filteredPosts.length > 0}
-        <section class="news-front animate-in" aria-label="Latest writing">
+        {#if leadPost}
+        <section class="news-front animate-in" class:news-front--solo={secondaryPosts.length === 0} aria-label="Latest writing">
             <div class="front-lead">
                 <a href={getPostUrl(leadPost)} class="lead-story active-press">
                     {#if leadPost.coverImage}
@@ -186,7 +195,7 @@
                             use:noiseAction={{
                                 seed: `blog-lead:${leadPost.rkey}:${leadPost.title}`,
                                 width: 1200,
-                                height: 800,
+                                height: 630,
                                 octaves: 3,
                                 gridSize: 5,
                             }}
@@ -226,15 +235,16 @@
                 </div>
             {/if}
         </section>
+        {/if}
 
         {#if notebookPosts.length > 0}
             <section class="latest-section animate-in" aria-labelledby="notebook-heading">
                 <div class="section-heading">
                     <div>
-                        <p class="section-kicker">The notebook</p>
-                        <h2 id="notebook-heading">Recent writing</h2>
+                        <p class="section-kicker">{isSearching ? 'Search' : 'The notebook'}</p>
+                        <h2 id="notebook-heading">{isSearching ? `Matching “${searchQuery.trim()}”` : 'Recent writing'}</h2>
                     </div>
-                    <span>{filteredPosts.length} shown</span>
+                    <span>{filteredPosts.length} of {total}</span>
                 </div>
                 <div class="latest-list">
                     {#each notebookPosts as post}
@@ -246,10 +256,20 @@
                                 {/if}
                             </span>
                             <span class="latest-title">{post.title}</span>
-                            <ArrowUpRight class="latest-arrow" size={16} strokeWidth={2} />
+                            <span class="latest-arrow"><ArrowUpRight size={16} strokeWidth={2} /></span>
                         </a>
                     {/each}
                 </div>
+
+                {#if hasMore}
+                    <div class="load-more">
+                        {#if loading}
+                            <LoadingSkeleton count={2} label="Loading more posts" />
+                        {:else}
+                            <button onclick={loadMore} type="button" class="active-press">Load more</button>
+                        {/if}
+                    </div>
+                {/if}
             </section>
         {/if}
 
@@ -268,20 +288,20 @@
                             <div class="topic-group-heading">
                                 <button
                                     type="button"
-                                    class:topic-active={searchQuery.toLowerCase() === group.name.toLowerCase()}
+                                    class:topic-active={isActiveTopic(group.name)}
                                     class="topic-root active-press"
                                     onclick={() => selectTopic(group.name)}
                                 >
                                     <span>{group.name}</span>
                                     <strong>{group.count}</strong>
                                 </button>
-                                <span>related</span>
+                                <span>{group.tags.length - 1} related</span>
                             </div>
                             <div class="topic-list">
                                 {#each group.tags.slice(1) as topic}
                                     <button
                                         type="button"
-                                        class:topic-active={searchQuery.toLowerCase() === topic.name.toLowerCase()}
+                                        class:topic-active={isActiveTopic(topic.name)}
                                         class="topic-link active-press"
                                         onclick={() => selectTopic(topic.name)}
                                     >
@@ -301,7 +321,7 @@
                             {#each data.ungroupedTopics as topic}
                                 <button
                                     type="button"
-                                    class:topic-active={searchQuery.toLowerCase() === topic.name.toLowerCase()}
+                                    class:topic-active={isActiveTopic(topic.name)}
                                     class="topic-link active-press"
                                     onclick={() => selectTopic(topic.name)}
                                 >
@@ -315,17 +335,7 @@
             </section>
         {/if}
 
-        {#if hasMore}
-            <div class="load-more animate-in">
-                {#if loading}
-                    <LoadingSkeleton count={2} label="Loading more posts" />
-                {:else}
-                    <button onclick={loadMore} type="button" class="active-press">Load more</button>
-                {/if}
-            </div>
-        {/if}
-
-        {#if data.archive?.length > 0 && !searchQuery}
+        {#if data.archive?.length > 0 && !isSearching}
             <section class="archive-section animate-in" aria-labelledby="archive-heading">
                 <div class="section-heading">
                     <div>
@@ -406,6 +416,10 @@
         padding-bottom: 0.15rem;
     }
 
+    .masthead-tools .section-link {
+        margin-top: 0;
+    }
+
     .archive-count {
         font-family: var(--font-mono);
         font-size: var(--text-xs);
@@ -431,52 +445,66 @@
         border-color: var(--color-primary-500);
     }
 
+    .search-status {
+        margin: var(--space-xs) 0 0;
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        color: var(--color-text-600);
+    }
+
     .news-front {
         display: grid;
         grid-template-columns: minmax(0, 1.6fr) minmax(18rem, 1fr);
         gap: 0;
         margin-top: var(--space-xl);
         border-top: 1px solid var(--surface-color);
-        border-bottom: 1px solid var(--surface-color);
+    }
+
+    .news-front--solo {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .front-lead {
         min-width: 0;
         border-right: 1px solid var(--surface-color);
+        border-bottom: 1px solid var(--surface-color);
+    }
+
+    .news-front--solo .front-lead {
+        border-right: none;
     }
 
     .lead-story {
+        --lead-pad: clamp(var(--space-lg), 5vw, var(--space-xl));
         display: flex;
+        height: 100%;
         min-height: 25rem;
         flex-direction: column;
-        justify-content: flex-end;
-        padding: clamp(var(--space-lg), 5vw, var(--space-xl));
+        padding: var(--lead-pad);
         background: var(--surface-raised);
         color: inherit;
         text-decoration: none;
     }
 
+    /* Bleed the artwork to the card edges, cancelling the card padding. */
     .lead-story-image {
-        width: calc(100% + 2 * clamp(var(--space-lg), 5vw, var(--space-xl)));
+        display: block;
+        width: calc(100% + 2 * var(--lead-pad));
+        max-width: none;
+        height: auto;
         aspect-ratio: 1200 / 630;
-        margin: calc(-1 * clamp(var(--space-lg), 5vw, var(--space-xl))) calc(-1 * clamp(var(--space-lg), 5vw, var(--space-xl))) var(--space-lg);
-        overflow: hidden;
+        margin: calc(-1 * var(--lead-pad)) calc(-1 * var(--lead-pad)) var(--space-lg);
+        object-fit: cover;
         border-bottom: 1px solid var(--surface-color);
     }
 
-    .lead-story-image :is(img, canvas) {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
     .lead-story h2 {
-        max-width: 12ch;
-        margin: 0;
-        font-size: clamp(2rem, 4.5vw, 4rem);
-        line-height: 0.98;
-        letter-spacing: -0.055em;
+        max-width: 18ch;
+        margin: 0 0 var(--space-xl);
+        font-size: clamp(1.9rem, 4vw, 3.25rem);
+        line-height: 1;
+        letter-spacing: -0.045em;
+        text-wrap: balance;
     }
 
     .story-meta {
@@ -484,7 +512,7 @@
         align-items: center;
         justify-content: space-between;
         gap: var(--space-md);
-        margin-top: var(--space-xl);
+        margin-top: auto;
         padding-top: var(--space-sm);
         border-top: 1px solid var(--surface-color);
         font-family: var(--font-mono);
@@ -502,6 +530,7 @@
     .secondary-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        grid-auto-rows: 1fr;
     }
 
     .secondary-story {
@@ -511,10 +540,17 @@
         text-decoration: none;
         border-bottom: 1px solid var(--surface-color);
         background: var(--color-background-50);
+        transition: background-color var(--duration-fast) var(--ease-out-quart);
     }
 
     .secondary-story:nth-child(odd) {
         border-right: 1px solid var(--surface-color);
+    }
+
+    /* An odd final story spans the row rather than leaving an empty cell. */
+    .secondary-story:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+        border-right: none;
     }
 
     .secondary-story h3 {
@@ -522,6 +558,7 @@
         font-size: clamp(1.15rem, 2vw, 1.5rem);
         line-height: 1.08;
         letter-spacing: -0.025em;
+        text-wrap: balance;
     }
 
     .secondary-story time {
@@ -532,7 +569,8 @@
 
     .lead-story:is(:hover, :focus-visible),
     .secondary-story:is(:hover, :focus-visible),
-    .latest-story:is(:hover, :focus-visible) {
+    .latest-story:is(:hover, :focus-visible),
+    .topic-link:is(:hover, :focus-visible) {
         background: color-mix(in oklch, var(--color-primary-500) 10%, var(--surface-sunken));
         color: var(--color-text-950);
         text-decoration: none;
@@ -543,12 +581,19 @@
         margin-top: clamp(2.5rem, 7vw, 5rem);
     }
 
+    /* Reset the global .section-heading label style from content.css. */
     .section-heading {
         display: flex;
         align-items: baseline;
         justify-content: space-between;
         gap: var(--space-md);
+        margin: 0;
         padding-bottom: var(--space-sm);
+        font-size: inherit;
+        font-weight: inherit;
+        letter-spacing: normal;
+        text-transform: none;
+        color: inherit;
         border-bottom: 4px solid var(--color-text-950);
     }
 
@@ -587,6 +632,7 @@
         border-bottom: 1px solid var(--surface-color);
         color: inherit;
         text-decoration: none;
+        transition: background-color var(--duration-fast) var(--ease-out-quart);
     }
 
     .latest-date {
@@ -613,8 +659,13 @@
     }
 
     .latest-arrow {
+        display: inline-flex;
         color: var(--color-text-500);
         flex-shrink: 0;
+    }
+
+    .latest-story:is(:hover, :focus-visible) .latest-arrow {
+        color: var(--color-primary-600);
     }
 
     .load-more {
@@ -708,6 +759,12 @@
         cursor: pointer;
     }
 
+    .topic-root:is(:hover, :focus-visible),
+    .topic-root.topic-active {
+        background: none;
+        color: var(--color-primary-600);
+    }
+
     .topic-root strong {
         font-family: var(--font-mono);
         font-size: var(--text-xs);
@@ -732,7 +789,11 @@
         color: inherit;
         font: inherit;
         font-size: var(--text-sm);
+        font-weight: 400;
         cursor: pointer;
+        transition:
+            background-color var(--duration-fast) var(--ease-out-quart),
+            border-color var(--duration-fast) var(--ease-out-quart);
     }
 
     .topic-link strong {
@@ -750,6 +811,20 @@
         background: color-mix(in oklch, var(--color-primary-500) 10%, var(--surface-sunken));
     }
 
+    @media (max-width: 900px) {
+        .news-front {
+            grid-template-columns: 1fr;
+        }
+
+        .front-lead {
+            border-right: none;
+        }
+
+        .lead-story {
+            min-height: 0;
+        }
+    }
+
     @media (max-width: 760px) {
         .topic-groups {
             grid-template-columns: 1fr;
@@ -764,18 +839,6 @@
             justify-content: space-between;
         }
 
-        .news-front {
-            grid-template-columns: 1fr;
-        }
-
-        .front-lead {
-            border-right: none;
-            border-bottom: 1px solid var(--surface-color);
-        }
-
-        .lead-story {
-            min-height: 20rem;
-        }
     }
 
     @media (max-width: 560px) {
@@ -785,6 +848,7 @@
 
         .secondary-grid {
             grid-template-columns: 1fr;
+            grid-auto-rows: auto;
         }
 
         .secondary-story,
