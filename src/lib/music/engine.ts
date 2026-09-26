@@ -7,6 +7,11 @@
  * theme, so the music and the palette turn the Wheel of the Year
  * together and never jump or click.
  *
+ * A composed melody (melody.ts / melodies.ts) plays over that pad,
+ * cross-fading between each Sabbat's own original tune the same way —
+ * the pad and chimes stay generative, but the melody is real, fixed,
+ * intentional musical content, not a random pattern.
+ *
  * Two more things keep it feeling alive rather than looped: `pulse()`
  * gives real interactions on the page (a comment published, a link
  * copied) an audible, immediate confirmation instead of waiting on the
@@ -26,6 +31,8 @@ import { ROOT_HZ } from "./constants";
 import { createBreathLayer, type BreathLayer } from "./breath";
 import { createChimeLayer, type ChimeLayer } from "./chime";
 import { createChordVoice, setChord } from "./chordVoice";
+import { createMelodyLayer, type MelodyLayer } from "./melody";
+import { SABBAT_MELODIES } from "./melodies";
 import { createNoiseTexture, type NoiseTexture } from "./noiseTexture";
 import { createWildLayer, type WildLayer } from "./wildLayer";
 import { makeImpulseResponse } from "./buffers";
@@ -48,6 +55,7 @@ export class AmbianceEngine {
   private noise: NoiseTexture;
   private wild: WildLayer;
   private chime: ChimeLayer;
+  private melody: MelodyLayer;
 
   private disposed = false;
 
@@ -107,6 +115,7 @@ export class AmbianceEngine {
     // Starts its own self-rescheduling loop immediately; it's a no-op
     // while the ambiance is muted, so this costs nothing until start().
     this.chime = createChimeLayer(buses);
+    this.melody = createMelodyLayer(buses);
   }
 
   /** Resume the context (needed after a user gesture) and fade the pad in. */
@@ -114,6 +123,7 @@ export class AmbianceEngine {
     if (this.disposed) return;
     if (this.ctx.state === "suspended") await this.ctx.resume();
     this.chime.setRunning(true);
+    this.melody.setRunning(true);
     ramp(this.master.gain, volume, this.ctx, 2.5);
   }
 
@@ -121,6 +131,7 @@ export class AmbianceEngine {
   stop() {
     if (this.disposed) return;
     this.chime.setRunning(false);
+    this.melody.setRunning(false);
     ramp(this.master.gain, 0, this.ctx, 2.5);
   }
 
@@ -149,12 +160,14 @@ export class AmbianceEngine {
   setFocusMode(active: boolean) {
     this.noise.setFocusMode(active);
     this.chime.setFocusMode(active);
+    this.melody.setFocusMode(active);
   }
 
   setReducedMotion(reduced: boolean) {
     this.breath.setReducedMotion(reduced);
     this.wild.setReducedMotion(reduced);
     this.chime.setReducedMotion(reduced);
+    this.melody.setReducedMotion(reduced);
     const detuneDepth = reduced ? 2 : 6;
     for (const lfo of this.detuneLfos)
       ramp(lfo.depth.gain, detuneDepth, this.ctx, 3);
@@ -208,6 +221,18 @@ export class AmbianceEngine {
     this.chime.setRootHz(currentRootHz);
     this.wild.setRootHz(currentRootHz);
 
+    // The melody's two voices, unlike the chime's single blended root,
+    // each need their own Sabbat's actual root — the whole point of the
+    // cross-fade is prev fading out in its own key while next fades in
+    // in its own, exactly like the chord voices below.
+    this.melody.setSabbats(
+      SABBAT_MELODIES[prev.name],
+      noteHz(ROOT_HZ, semitoneOf(prev)),
+      SABBAT_MELODIES[next.name],
+      noteHz(ROOT_HZ, semitoneOf(next)),
+      progress,
+    );
+
     ramp(this.voiceA.gain.gain, 0.16 * (1 - progress), this.ctx, 90);
     ramp(this.voiceB.gain.gain, 0.16 * progress, this.ctx, 90);
 
@@ -240,6 +265,7 @@ export class AmbianceEngine {
     if (this.disposed) return;
     this.disposed = true;
     this.chime.dispose();
+    this.melody.dispose();
     try {
       this.ctx.close();
     } catch {
