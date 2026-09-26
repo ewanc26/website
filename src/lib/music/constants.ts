@@ -30,6 +30,13 @@ export const SABBAT_SEMITONES: Record<Sabbat["name"], number> = {
 // the drone underneath them.
 export const CHIME_DEGREES = [0, 2, 4, 7, 9, 12, 14, 16, 19];
 
+// A flat random pick across those degrees has no melodic contour —
+// every note is equally likely to follow any other, which reads as
+// aimless. Weighting the root, fifth, and octave (indices 0, 3, 5)
+// more heavily gives the line somewhere to "land", the same intuition
+// behind a Markov chain's transition weights, without needing one.
+export const CHIME_WEIGHTS = [3, 1, 1, 2, 1, 2, 1, 1, 1];
+
 // FM ratios that read as bell-like (inharmonic but not clangorous).
 export const CHIME_RATIOS = [2, 3, 3.5, 4];
 

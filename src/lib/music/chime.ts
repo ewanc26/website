@@ -4,17 +4,42 @@
  * randomised, non-matching intervals, each dropping a single note.
  * No two firings ever line up the same way, so the piece never
  * audibly repeats even though it's built from a handful of fixed
- * parts (one FM-bell voice, one pentatonic scale).
+ * parts (one FM-bell voice, one pentatonic scale). Notes are a
+ * weighted pick over that scale rather than flat-random, favouring the
+ * root/fifth/octave as places for the line to land, and never
+ * repeating the previous note — the same intuition as a Markov
+ * chain's transition weights, without the overhead of one.
  *
  * Density and brightness lean on the real Moon phase — the same
  * lunar calculation the site's footer already shows — so a fuller
  * Moon rings brighter and more often.
  */
 
-import { CHIME_DEGREES, CHIME_RATIOS } from "./constants";
+import { CHIME_DEGREES, CHIME_RATIOS, CHIME_WEIGHTS } from "./constants";
 import { noteHz } from "./notes";
 import { randomBetween } from "./ramp";
 import type { AudioBuses } from "./types";
+
+const CHIME_WEIGHT_TOTAL = CHIME_WEIGHTS.reduce((sum, w) => sum + w, 0);
+
+/** A weighted pick, excluding the immediately previous note so the line
+ *  doesn't stall on a repeat — a lightweight stand-in for a Markov
+ *  chain's "don't return to the same state" rule. */
+function pickDegreeIndex(excludeIndex: number | null): number {
+  let index: number;
+  do {
+    let r = Math.random() * CHIME_WEIGHT_TOTAL;
+    index = CHIME_WEIGHTS.length - 1;
+    for (let i = 0; i < CHIME_WEIGHTS.length; i++) {
+      r -= CHIME_WEIGHTS[i];
+      if (r <= 0) {
+        index = i;
+        break;
+      }
+    }
+  } while (index === excludeIndex);
+  return index;
+}
 
 export interface ChimeLayer {
   setRunning(running: boolean): void;
@@ -48,6 +73,7 @@ export function createChimeLayer(buses: AudioBuses): ChimeLayer {
   let moonFraction = 0.5;
   let rootHz = 55;
   let timer: ReturnType<typeof setTimeout> | null = null;
+  let lastDegreeIndex: number | null = null;
 
   function scheduleNext() {
     if (disposed) return;
@@ -72,8 +98,9 @@ export function createChimeLayer(buses: AudioBuses): ChimeLayer {
     if (!running || disposed) return;
     const now = ctx.currentTime;
 
-    const degree =
-      CHIME_DEGREES[Math.floor(Math.random() * CHIME_DEGREES.length)];
+    const degreeIndex = pickDegreeIndex(lastDegreeIndex);
+    lastDegreeIndex = degreeIndex;
+    const degree = CHIME_DEGREES[degreeIndex];
     const registerLift =
       24 + Math.round(moonFraction * 12) + (options.registerBoost ?? 0);
     const freq = noteHz(rootHz, degree + registerLift);
@@ -87,14 +114,20 @@ export function createChimeLayer(buses: AudioBuses): ChimeLayer {
     modulator.type = "sine";
     modulator.frequency.value = freq * ratio;
 
-    // A fast-decaying modulation index gives the classic FM-bell
-    // "bright attack, mellow tail" without a sample.
+    // The FM modulation index (peak frequency deviation / modulator
+    // frequency) is what actually decides whether this reads as a bell:
+    // below ~1 it's just vibrato, and only ~5 and up gives that bright,
+    // metallic strike. Hit it hard at the onset, then collapse it almost
+    // to nothing within half a second so the tail rings clean rather
+    // than staying harsh — a fuller Moon strikes a little harder.
     const modIndex = ctx.createGain();
-    const peakIndex = freq * (1.1 + moonFraction * 0.6);
+    const modulatorHz = freq * ratio;
+    const indexPeak = 4 + moonFraction * 3;
+    const peakIndex = indexPeak * modulatorHz;
     modIndex.gain.setValueAtTime(peakIndex, now);
     modIndex.gain.exponentialRampToValueAtTime(
-      Math.max(1, peakIndex * 0.02),
-      now + 0.6,
+      Math.max(1, modulatorHz * 0.03),
+      now + 0.35,
     );
     modulator.connect(modIndex);
     modIndex.connect(carrier.frequency);

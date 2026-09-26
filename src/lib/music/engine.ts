@@ -82,9 +82,16 @@ export class AmbianceEngine {
 
     this.wet = ctx.createGain();
     this.wet.gain.value = 0.35;
+    // A short pre-delay keeps the reverb from smearing straight into
+    // whatever triggered it — the dry attack (a chime's strike, a chord
+    // change) reads clearly for ~25ms before the tail blooms in behind
+    // it, instead of the two arriving at once and blurring together.
+    const preDelay = ctx.createDelay(0.05);
+    preDelay.delayTime.value = 0.025;
     const reverb = ctx.createConvolver();
     reverb.buffer = makeImpulseResponse(ctx);
-    this.wet.connect(reverb);
+    this.wet.connect(preDelay);
+    preDelay.connect(reverb);
     reverb.connect(this.brightness);
 
     const buses: AudioBuses = { ctx, dry, wet: this.wet };
