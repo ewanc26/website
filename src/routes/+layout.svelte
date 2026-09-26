@@ -8,6 +8,7 @@
 	import SabbatBackground from '$lib/components/SabbatBackground.svelte';
 	import WolfPawTrail from '$lib/components/WolfPawTrail.svelte';
 	import SeasonalThemeUpdater from '$lib/components/SeasonalThemeUpdater.svelte';
+	import AmbianceEngine from '$lib/components/AmbianceEngine.svelte';
 	import MondayEgg from '$lib/components/ostara-eggs/MondayEgg.svelte';
 	import IdleEgg from '$lib/components/ostara-eggs/IdleEgg.svelte';
 	import ThreeToast from '$lib/components/ostara-eggs/ThreeToast.svelte';
@@ -40,6 +41,7 @@
 
 <SabbatBackground />
 <SeasonalThemeUpdater />
+<AmbianceEngine />
 <WolfPawTrail />
 <MondayEgg />
 <IdleEgg />
