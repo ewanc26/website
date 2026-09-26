@@ -458,8 +458,11 @@
 
   /* ── About page ─────────────────────────────────────────────── */
 
+  /* Explicit row: .page-hd sets flex-direction: column, so without this the
+     avatar stacks above the name instead of sitting beside it. */
   .about-hero {
     display: flex;
+    flex-direction: row;
     gap: var(--space-md);
     align-items: flex-start;
   }
@@ -479,6 +482,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-2xs);
+    /* Allow the intro to shrink beside the avatar on narrow screens. */
+    min-width: 0;
   }
 
   .about-pronouns {
@@ -648,6 +653,13 @@
     gap: var(--space-2xs);
   }
 
+  /* A fingerprint is 47 mono characters and cannot fit one line on a phone,
+     so let it wrap instead of clipping to an unreadable ellipsis. */
+  .id-pgp .id-code {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
   /* Copy button (about + support) */
   .copy-btn {
     align-self: flex-start;
@@ -676,7 +688,9 @@
       height: 56px;
     }
 
-    .about-sidebar {
+    /* Needs the .about-grid prefix to outrank the two-column rule from the
+       900px query above — media queries add no specificity of their own. */
+    .about-grid .about-sidebar {
       grid-template-columns: 1fr;
     }
 
@@ -684,6 +698,12 @@
     .sub-section .post-row {
       flex-direction: column;
       gap: var(--space-xs);
+    }
+
+    /* Touch-sized identity controls; the compact default is desktop-only. */
+    .id-list .copy-btn--compact,
+    .id-list .id-link {
+      min-height: var(--control-size);
     }
   }
 
