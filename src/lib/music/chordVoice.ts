@@ -72,11 +72,14 @@ export function createChordVoice(
   });
 
   // A heavily low-passed sub an octave below the root, for body and
-  // weight without muddying the chord above it.
+  // weight without muddying the chord above it. It bypasses the autopan
+  // and goes straight to `gain`: bass panned left/right can phase-cancel
+  // on real speakers and just reads as wobbly rather than wide, so it
+  // stays centred while the chord above it moves.
   const subFilter = ctx.createBiquadFilter();
   subFilter.type = "lowpass";
   subFilter.frequency.value = 180;
-  subFilter.connect(pan);
+  subFilter.connect(gain);
   const sub = ctx.createOscillator();
   sub.type = "sawtooth";
   sub.connect(subFilter);

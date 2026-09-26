@@ -15,7 +15,14 @@
  * Moon rings brighter and more often.
  */
 
-import { CHIME_DEGREES, CHIME_RATIOS, CHIME_WEIGHTS } from "./constants";
+import {
+  CHIME_DEGREES,
+  CHIME_RATIOS,
+  CHIME_WEIGHTS,
+  FM_INDEX_TAPER_HZ,
+  FM_RATIO_HIGH_HZ,
+  FM_RATIO_MID_HZ,
+} from "./constants";
 import { noteHz } from "./notes";
 import { randomBetween } from "./ramp";
 import type { AudioBuses } from "./types";
@@ -39,6 +46,14 @@ function pickDegreeIndex(excludeIndex: number | null): number {
     }
   } while (index === excludeIndex);
   return index;
+}
+
+/** Keyboard-scale the ratio pool: fewer, simpler ratios as the note
+ *  climbs, so the modulator frequency (and its sidebands) stay in check. */
+function ratioPoolFor(freq: number): number[] {
+  if (freq > FM_RATIO_HIGH_HZ) return [2];
+  if (freq > FM_RATIO_MID_HZ) return [2, 3];
+  return CHIME_RATIOS;
 }
 
 export interface ChimeLayer {
@@ -104,7 +119,8 @@ export function createChimeLayer(buses: AudioBuses): ChimeLayer {
     const registerLift =
       24 + Math.round(moonFraction * 12) + (options.registerBoost ?? 0);
     const freq = noteHz(rootHz, degree + registerLift);
-    const ratio = CHIME_RATIOS[Math.floor(Math.random() * CHIME_RATIOS.length)];
+    const ratioPool = ratioPoolFor(freq);
+    const ratio = ratioPool[Math.floor(Math.random() * ratioPool.length)];
 
     const carrier = ctx.createOscillator();
     carrier.type = "sine";
@@ -120,9 +136,12 @@ export function createChimeLayer(buses: AudioBuses): ChimeLayer {
     // metallic strike. Hit it hard at the onset, then collapse it almost
     // to nothing within half a second so the tail rings clean rather
     // than staying harsh — a fuller Moon strikes a little harder.
+    // The index itself is keyboard-scaled down for higher notes, in step
+    // with the ratio pool above, for the same anti-aliasing reason.
     const modIndex = ctx.createGain();
     const modulatorHz = freq * ratio;
-    const indexPeak = 4 + moonFraction * 3;
+    const registerTaper = Math.min(1, FM_INDEX_TAPER_HZ / freq);
+    const indexPeak = (4 + moonFraction * 3) * registerTaper;
     const peakIndex = indexPeak * modulatorHz;
     modIndex.gain.setValueAtTime(peakIndex, now);
     modIndex.gain.exponentialRampToValueAtTime(

@@ -40,5 +40,18 @@ export const CHIME_WEIGHTS = [3, 1, 1, 2, 1, 2, 1, 1, 1];
 // FM ratios that read as bell-like (inharmonic but not clangorous).
 export const CHIME_RATIOS = [2, 3, 3.5, 4];
 
+// Real FM synths taper both the modulation index and the modulator
+// ratio down for higher notes ("keyboard scaling"). A Web Audio
+// oscillator driven by an audio-rate FM signal computes true
+// instantaneous frequency with no anti-aliasing of its own, so the
+// same *relative* brightness that reads as a warm bell at a low
+// carrier can push sidebands past Nyquist — audible aliasing — at a
+// high one. FM_INDEX_TAPER_HZ scales the index down above that pitch;
+// past FM_RATIO_MID_HZ and FM_RATIO_HIGH_HZ, the ratio pool itself
+// narrows to keep the absolute deviation in check.
+export const FM_INDEX_TAPER_HZ = 300;
+export const FM_RATIO_MID_HZ = 400;
+export const FM_RATIO_HIGH_HZ = 700;
+
 // Default AudioParam ramp time constant.
 export const SMOOTH_S = 4;
