@@ -8,7 +8,7 @@
 
 import type { PageServerLoad } from "./$types";
 import type { Config } from "@sveltejs/adapter-vercel";
-import { buildPdsBlobUrl, fetchDocuments, fetchPublications, resolveIdentity } from "@ewanc26/atproto";
+import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
 import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
@@ -38,25 +38,8 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
     .filter((p) => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION)
     .sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
     );
-
-  const identity = await resolveIdentity(PUBLIC_ATPROTO_DID, fetch).catch(() => null);
-
-  const coverImageUrl = (coverImage: unknown) => {
-    if (!identity || !coverImage || typeof coverImage !== "object") return undefined;
-    const ref = coverImage as Record<string, unknown>;
-    const link = ref.ref;
-    const cid =
-      typeof link === "string"
-        ? link
-        : link && typeof link === "object" && "$link" in link
-          ? (link as { $link?: unknown }).$link
-          : undefined;
-    return typeof cid === "string"
-      ? buildPdsBlobUrl(identity.pds, PUBLIC_ATPROTO_DID, cid)
-      : undefined;
-  };
 
   // Build archive and topic summaries from the same AT Protocol publication records.
   const archive = new Map<number, Map<number, number>>();
@@ -97,7 +80,8 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
       rkey,
       url,
       tags: [...new Set((tags ?? []).map(normalizeTag).filter(Boolean))],
-      coverImage: coverImageUrl(coverImage),
+      // fetchDocuments already resolves the cover blob to a PDS URL.
+      coverImage,
     }),
   );
 
