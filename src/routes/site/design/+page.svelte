@@ -23,6 +23,7 @@
   import { getMoonPhaseName } from '$lib/utils/moonPhase';
   import { PUBLIC_ATPROTO_DID } from '$env/static/public';
   import packageInfo from '../../../../package.json';
+  import { pulseAmbiance } from '$lib/stores/ambiance';
 
   let { data } = $props();
   let copiedIndex = $state<string | null>(null);
@@ -33,6 +34,7 @@
     try {
       await navigator.clipboard?.writeText(code);
       copiedIndex = id;
+      pulseAmbiance();
       setTimeout(() => (copiedIndex = null), 2000);
     } catch {
       copiedIndex = null;
