@@ -120,9 +120,6 @@ importers:
 
 packages:
 
-  '@ewanc26/noise@0.1.4':
-    resolution: {}
-
   '@atproto-labs/did-resolver@0.3.2':
     resolution: {integrity: sha512-FtUZcVqzdAiYhjQtvT3juNP1cUcsweAnnx5mkz22iM7PnVtK3NGCJ478PuoUrL2F+yhgiO+rSHmXuYxuP3+PAg==}
     engines: {node: '>=22'}
@@ -469,6 +466,9 @@ packages:
     resolution: {integrity: sha512-Rzzw9nEcmpxp3iG3eyOPu5v5HooPYuf3jLsbNbyP0ZEW8NFyUgX3Inv9AolvVsoZSjGkoGDhiiRQyplpoZ0hNQ==}
     peerDependencies:
       '@atproto/api': '>=0.13.0'
+
+  '@ewanc26/noise@0.1.4':
+    resolution: {integrity: sha512-ArDg9MhOob/kxBlraTSRgInbOBhdNtg7TafKo+ENEKwZi+dgQJNHeRgfleAMoMnYZL2TmABJWbDnXt2D5aVMwg==}
 
   '@ewanc26/supporters@0.3.0':
     resolution: {integrity: sha512-T+E7U0uhi1KX4mKbjprRi3BzsADPqileMQHo9oFOc5n9NIIwsddxLYDg0jGzW5XCr39voQkfRGj7g1vyfggKYA==}
@@ -1823,8 +1823,6 @@ packages:
 
 snapshots:
 
-  '@ewanc26/noise@0.1.4': {}
-
   '@atproto-labs/did-resolver@0.3.2':
     dependencies:
       '@atproto-labs/fetch': 0.3.1
@@ -2211,6 +2209,8 @@ snapshots:
   '@ewanc26/atproto@0.2.12(@atproto/api@0.20.7)':
     dependencies:
       '@atproto/api': 0.20.7
+
+  '@ewanc26/noise@0.1.4': {}
 
   '@ewanc26/supporters@0.3.0(@atproto/api@0.20.7)(svelte@5.56.3)':
     dependencies:
