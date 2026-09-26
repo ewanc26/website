@@ -198,9 +198,15 @@ export class AmbianceEngine {
       this.currentSabbatName = prev.name;
     }
     setChord(this.ctx, this.voiceB, next);
-    this.chime.setRootHz(
-      noteHz(ROOT_HZ, semitoneOf(progress < 0.5 ? prev : next)),
+    // The wolf-mode undertone and the chime layer both key off the same
+    // current root as the drone, so wolf mode never drifts out of tune
+    // with whichever Sabbat is actually playing.
+    const currentRootHz = noteHz(
+      ROOT_HZ,
+      semitoneOf(progress < 0.5 ? prev : next),
     );
+    this.chime.setRootHz(currentRootHz);
+    this.wild.setRootHz(currentRootHz);
 
     ramp(this.voiceA.gain.gain, 0.16 * (1 - progress), this.ctx, 90);
     ramp(this.voiceB.gain.gain, 0.16 * progress, this.ctx, 90);

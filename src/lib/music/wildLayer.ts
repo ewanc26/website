@@ -11,6 +11,9 @@ import type { AudioBuses } from "./types";
 export interface WildLayer {
   setActive(active: boolean): void;
   setReducedMotion(reduced: boolean): void;
+  /** Track the drone's current root so the growl stays in key with it
+   *  across the year, instead of sitting fixed at one Sabbat's pitch. */
+  setRootHz(hz: number): void;
 }
 
 export function createWildLayer(buses: AudioBuses): WildLayer {
@@ -49,6 +52,9 @@ export function createWildLayer(buses: AudioBuses): WildLayer {
     },
     setReducedMotion(reduced) {
       ramp(sweepDepth.gain, reduced ? 40 : 120, ctx, 3);
+    },
+    setRootHz(hz) {
+      ramp(osc.frequency, hz / 2, ctx, 6);
     },
   };
 }
