@@ -6,6 +6,7 @@
    */
   import { Check, Link2, Mail } from '@lucide/svelte';
   import Bluesky from '$lib/components/icons/Bluesky.svelte';
+  import { pulseAmbiance } from '$lib/stores/ambiance';
 
   let { url, title } = $props<{ url: string, title: string }>();
 
@@ -17,6 +18,7 @@
     try {
       await navigator.clipboard?.writeText(url);
       copied = true;
+      pulseAmbiance();
       setTimeout(() => (copied = false), 2000);
     } catch {
       copied = false;

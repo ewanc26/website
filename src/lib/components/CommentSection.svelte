@@ -10,6 +10,7 @@
         signOutReader,
         type ReaderSession,
     } from '$lib/services/atproto/commentClient';
+    import { pulseAmbiance } from '$lib/stores/ambiance';
 
     let {
         comments,
@@ -129,6 +130,7 @@
             draft = '';
             replyingTo = null;
             notice = 'Comment published to your AT Protocol repository. It may take a moment to appear in other Leaflet readers.';
+            pulseAmbiance();
         } catch (cause) {
             error = cause instanceof Error ? cause.message : 'Could not publish the comment.';
         } finally {

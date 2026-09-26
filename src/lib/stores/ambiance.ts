@@ -1,5 +1,7 @@
 /**
- * ambianceEnabled — persisted on/off switch for the background soundscape.
+ * ambianceEnabled — persisted on/off switch for the background
+ * soundscape, plus a small pulse event other components can fire to
+ * ring it in response to real page activity.
  *
  * Ambient audio is opt-in: browsers block autoplay without a user gesture
  * anyway, and an unexpected drone on page load would be an unwelcome
@@ -52,3 +54,24 @@ export const ambianceEnabled = {
     ambianceStore.set(false);
   },
 };
+
+/**
+ * A one-shot "something just happened" signal for the ambiance engine —
+ * a comment published, a link copied — decoupled from the audio code
+ * itself so ordinary UI components don't need to import Web Audio
+ * internals just to ring a confirmation note. AmbianceEngine listens
+ * for this and, if the visitor has the soundscape on, plays a single
+ * bright chime; otherwise it's a silent no-op.
+ */
+const PULSE_EVENT = "ambiance:pulse";
+
+export function pulseAmbiance() {
+  if (!browser) return;
+  window.dispatchEvent(new Event(PULSE_EVENT));
+}
+
+export function onAmbiancePulse(handler: () => void): () => void {
+  if (!browser) return () => {};
+  window.addEventListener(PULSE_EVENT, handler);
+  return () => window.removeEventListener(PULSE_EVENT, handler);
+}

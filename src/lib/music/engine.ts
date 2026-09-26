@@ -7,6 +7,14 @@
  * theme, so the music and the palette turn the Wheel of the Year
  * together and never jump or click.
  *
+ * Two more things keep it feeling alive rather than looped: `pulse()`
+ * gives real interactions on the page (a comment published, a link
+ * copied) an audible, immediate confirmation instead of waiting on the
+ * generative schedule; `setResting()` lets the piece open up — more
+ * reverb, slower and longer chimes — once the visitor stops scrolling,
+ * moving the pointer, or typing, the same instinct behind a screensaver
+ * blooming when left alone.
+ *
  * Owns one AudioContext and the whole node graph. Constructed lazily,
  * on the user gesture that first enables the ambiance, so the
  * browser's autoplay policy is always satisfied.
@@ -28,6 +36,7 @@ import type { AudioBuses, ChordVoice, DetuneLfo } from "./types";
 export class AmbianceEngine {
   private ctx: AudioContext;
   private master: GainNode;
+  private wet: GainNode;
   private brightness: BiquadFilterNode;
 
   private voiceA: ChordVoice;
@@ -59,14 +68,14 @@ export class AmbianceEngine {
     dry.gain.value = 0.75;
     dry.connect(this.brightness);
 
-    const wet = ctx.createGain();
-    wet.gain.value = 0.35;
+    this.wet = ctx.createGain();
+    this.wet.gain.value = 0.35;
     const reverb = ctx.createConvolver();
     reverb.buffer = makeImpulseResponse(ctx);
-    wet.connect(reverb);
+    this.wet.connect(reverb);
     reverb.connect(this.brightness);
 
-    const buses: AudioBuses = { ctx, dry, wet };
+    const buses: AudioBuses = { ctx, dry, wet: this.wet };
 
     this.voiceA = createChordVoice(buses, 0.061, this.detuneLfos);
     this.voiceB = createChordVoice(buses, 0.083, this.detuneLfos);
@@ -138,6 +147,24 @@ export class AmbianceEngine {
   }
 
   /**
+   * Left uninterrupted for a while (no scroll, pointer, or key activity),
+   * the piece opens up: more reverb, and the chime layer both loosens
+   * its pace and lingers longer on each note. Any real interaction
+   * should clear this immediately.
+   */
+  setResting(resting: boolean) {
+    ramp(this.wet.gain, resting ? 0.55 : 0.35, this.ctx, 8);
+    this.chime.setResting(resting);
+  }
+
+  /** One immediate, bright chime — feedback for a real interaction
+   *  (a comment published, a link copied) rather than the ambient
+   *  generative schedule. No-op while the ambiance itself is muted. */
+  pulse() {
+    this.chime.pulse();
+  }
+
+  /**
    * Called periodically (and once at startup) to move the drone toward
    * the current point on the Wheel of the Year, the time of day, and
    * the real Moon phase. Everything here is a slow ramp, so calling it
@@ -174,8 +201,14 @@ export class AmbianceEngine {
     ramp(this.voiceB.filter.frequency, hueBrightness, this.ctx, 60);
 
     // The real Moon phase — the same figure the footer already shows —
-    // quietly governs how often and how brightly the chimes ring.
-    this.chime.setMoonFraction(getMoonIllumination(now).fraction);
+    // quietly governs how often and how brightly the chimes ring. On
+    // Mōnandæg (Monday, the Moon's day — the header marks it too) that
+    // reading gets a small, deliberate boost.
+    const moonFraction = getMoonIllumination(now).fraction;
+    const isMoonDay = now.getDay() === 1;
+    this.chime.setMoonFraction(
+      isMoonDay ? Math.min(1, moonFraction + 0.15) : moonFraction,
+    );
   }
 
   dispose() {

@@ -21,9 +21,18 @@ export interface ChimeLayer {
   setActivity(value: number): void;
   setFocusMode(active: boolean): void;
   setReducedMotion(reduced: boolean): void;
+  setResting(resting: boolean): void;
   setMoonFraction(fraction: number): void;
   setRootHz(hz: number): void;
+  /** Play one bright, immediate note as feedback for a real interaction
+   *  (a comment published, a link copied) — bypasses the schedule. */
+  pulse(): void;
   dispose(): void;
+}
+
+interface PlayOptions {
+  registerBoost?: number;
+  ampBoost?: number;
 }
 
 /** Starts the loop immediately; it reschedules itself until disposed. */
@@ -35,6 +44,7 @@ export function createChimeLayer(buses: AudioBuses): ChimeLayer {
   let activity = 0;
   let focusMode = false;
   let reducedMotion = false;
+  let resting = false;
   let moonFraction = 0.5;
   let rootHz = 55;
   let timer: ReturnType<typeof setTimeout> | null = null;
@@ -44,7 +54,10 @@ export function createChimeLayer(buses: AudioBuses): ChimeLayer {
     const base = reducedMotion ? 15 : 10;
     const busyPenalty = activity * 6;
     const moonBonus = moonFraction * 4;
-    const mean = Math.max(4, base + busyPenalty - moonBonus);
+    // Left undisturbed for a while, the piece opens up and volunteers
+    // more of itself — the same instinct behind a screensaver blooming.
+    const restingBonus = resting ? 3 : 0;
+    const mean = Math.max(4, base + busyPenalty - moonBonus - restingBonus);
     const delaySeconds = randomBetween(mean * 0.6, mean * 1.6);
     timer = setTimeout(() => {
       play();
@@ -52,13 +65,14 @@ export function createChimeLayer(buses: AudioBuses): ChimeLayer {
     }, delaySeconds * 1000);
   }
 
-  function play() {
+  function play(options: PlayOptions = {}) {
     if (!running || disposed) return;
     const now = ctx.currentTime;
 
     const degree =
       CHIME_DEGREES[Math.floor(Math.random() * CHIME_DEGREES.length)];
-    const registerLift = 24 + Math.round(moonFraction * 12);
+    const registerLift =
+      24 + Math.round(moonFraction * 12) + (options.registerBoost ?? 0);
     const freq = noteHz(rootHz, degree + registerLift);
     const ratio = CHIME_RATIOS[Math.floor(Math.random() * CHIME_RATIOS.length)];
 
@@ -83,8 +97,11 @@ export function createChimeLayer(buses: AudioBuses): ChimeLayer {
     modIndex.connect(carrier.frequency);
 
     const amp = ctx.createGain();
-    const peakAmp = (focusMode ? 0.035 : 0.05) + moonFraction * 0.02;
-    const decay = randomBetween(2.5, 5);
+    const peakAmp =
+      (focusMode ? 0.035 : 0.05) +
+      moonFraction * 0.02 +
+      (options.ampBoost ?? 0);
+    const decay = resting ? randomBetween(4, 7) : randomBetween(2.5, 5);
     amp.gain.setValueAtTime(0, now);
     amp.gain.linearRampToValueAtTime(peakAmp, now + 0.02);
     amp.gain.exponentialRampToValueAtTime(0.0001, now + decay);
@@ -131,11 +148,17 @@ export function createChimeLayer(buses: AudioBuses): ChimeLayer {
     setReducedMotion(reduced) {
       reducedMotion = reduced;
     },
+    setResting(value) {
+      resting = value;
+    },
     setMoonFraction(fraction) {
       moonFraction = fraction;
     },
     setRootHz(hz) {
       rootHz = hz;
+    },
+    pulse() {
+      play({ registerBoost: 5, ampBoost: 0.02 });
     },
     dispose() {
       disposed = true;
