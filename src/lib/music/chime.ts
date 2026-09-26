@@ -51,14 +51,17 @@ export function createChimeLayer(buses: AudioBuses): ChimeLayer {
 
   function scheduleNext() {
     if (disposed) return;
-    const base = reducedMotion ? 15 : 10;
+    const base = reducedMotion ? 20 : 16;
     const busyPenalty = activity * 6;
     const moonBonus = moonFraction * 4;
     // Left undisturbed for a while, the piece opens up and volunteers
     // more of itself — the same instinct behind a screensaver blooming.
     const restingBonus = resting ? 3 : 0;
-    const mean = Math.max(4, base + busyPenalty - moonBonus - restingBonus);
-    const delaySeconds = randomBetween(mean * 0.6, mean * 1.6);
+    // However bright the Moon or restful the moment, never so dense that
+    // the chimes stop being "ignorable" background and start demanding
+    // attention — Eno's own bar for Music for Airports.
+    const mean = Math.max(9, base + busyPenalty - moonBonus - restingBonus);
+    const delaySeconds = randomBetween(mean * 0.7, mean * 1.5);
     timer = setTimeout(() => {
       play();
       scheduleNext();

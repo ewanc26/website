@@ -57,7 +57,19 @@ export class AmbianceEngine {
 
     this.master = ctx.createGain();
     this.master.gain.value = 0; // fades in via start()/setVolume()
-    this.master.connect(ctx.destination);
+
+    // A gentle bus limiter as insurance, not a sound of its own: several
+    // independently-scheduled layers (drone, texture, chimes, pulses)
+    // can occasionally stack, and this catches that overlap before it
+    // ever turns into an audible crackle or clip.
+    const limiter = ctx.createDynamicsCompressor();
+    limiter.threshold.value = -18;
+    limiter.knee.value = 12;
+    limiter.ratio.value = 4;
+    limiter.attack.value = 0.005;
+    limiter.release.value = 0.25;
+    this.master.connect(limiter);
+    limiter.connect(ctx.destination);
 
     this.brightness = ctx.createBiquadFilter();
     this.brightness.type = "lowpass";
