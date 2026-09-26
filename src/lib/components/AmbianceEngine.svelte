@@ -18,7 +18,7 @@
 	import { page } from '$app/state';
 	import { ambianceEnabled } from '$lib/stores/ambiance';
 	import { wolfMode } from '$lib/stores/wolfMode';
-	import { AmbianceEngine as Engine } from '$lib/audio/ambianceEngine';
+	import { AmbianceEngine as Engine } from '$lib/music';
 
 	const UPDATE_INTERVAL_MS = 5 * 60 * 1000;
 	const VOLUME = 0.5;
