@@ -92,7 +92,7 @@
     {#if filteredPosts.length > 0}
         {#each groupPosts(filteredPosts) as [year, months], i}
             <section class="archive-year animate-in" style="animation-delay: {100 + i * 100}ms">
-                <h2 class="year-head">{year}</h2>
+                <h2 class="year-head text-outline">{year}</h2>
                 {#each Array.from(months.entries()).sort((a, b) => b[0] - a[0]) as [month, monthPosts]}
                     <section class="month-group">
                         <h3 class="month-label">{formatMonth(month)}</h3>

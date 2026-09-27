@@ -2,6 +2,7 @@
 	import SiteHead from '$lib/components/SiteHead.svelte';
 	import { ExternalLink } from '@lucide/svelte';
 	import type { NormalizedSiteInfo } from '$lib/services/atproto/siteInfo';
+	import { reveal } from '$lib/actions/reveal';
 
 	let { data } = $props();
 
@@ -21,7 +22,7 @@
 <SiteHead title="Site Meta" description={info?.additionalInfo?.purpose ?? 'Information about this website, its technology, privacy, and the people who made it possible.'} ogSubtitle="Tech stack, privacy, credits, and open-source info." ogType="SITE_META" />
 
 <main class="shell-wide">
-	<header class="page-hd spec-header">
+	<header class="page-hd spec-header hero-reveal">
 		<h1 class="page-title">Site Meta</h1>
 		<p class="spec-abstract">
 			Information about this website, its technology, and the people who made it possible.
@@ -31,7 +32,7 @@
 	{#if info}
 		<div class="spec-content">
 			{#if info.additionalInfo?.purpose}
-					<section class="spec-section" id="purpose">
+					<section class="spec-section" use:reveal id="purpose">
 						<header class="section-hd">
 							<h2 class="section-title">Purpose</h2>
 						</header>
@@ -40,7 +41,7 @@
 				{/if}
 
 				{#if info.additionalInfo?.websiteBirthYear}
-					<section class="spec-section" id="history">
+					<section class="spec-section" use:reveal id="history">
 						<header class="section-hd">
 							<h2 class="section-title">History</h2>
 						</header>
@@ -49,7 +50,7 @@
 				{/if}
 
 				{#if info.privacyStatement || info.additionalInfo?.analytics}
-					<section class="spec-section" id="privacy">
+					<section class="spec-section" use:reveal id="privacy">
 						<header class="section-hd">
 							<h2 class="section-title">Privacy</h2>
 						</header>
@@ -76,7 +77,7 @@
 				{/if}
 
 				{#if info.openSourceInfo}
-					<section class="spec-section" id="open-source">
+					<section class="spec-section" use:reveal id="open-source">
 						<header class="section-hd">
 							<h2 class="section-title">Open Source</h2>
 						</header>
@@ -149,7 +150,7 @@
 				{/if}
 
 				{#if info.technologyStack?.length}
-					<section class="spec-section" id="tech-stack">
+					<section class="spec-section" use:reveal id="tech-stack">
 						<header class="section-hd">
 							<h2 class="section-title">Technology Stack</h2>
 						</header>
@@ -181,7 +182,7 @@
 				{/if}
 
 				{#if info.additionalInfo?.deployment || info.additionalInfo?.sectionLicense.length}
-					<section class="spec-section" id="operations">
+					<section class="spec-section" use:reveal id="operations">
 						<header class="section-hd">
 							<h2 class="section-title">Operations &amp; licensing</h2>
 						</header>
@@ -213,7 +214,7 @@
 				{/if}
 
 				{#if info.credits?.length}
-					<section class="spec-section" id="credits">
+					<section class="spec-section" use:reveal id="credits">
 						<header class="section-hd">
 							<h2 class="section-title">Credits</h2>
 						</header>

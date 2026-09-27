@@ -73,6 +73,17 @@
     animation-delay: 175ms;
   }
 
+  /* Scroll-triggered counterpart to .content-reveal, applied by the
+     `reveal` action (src/lib/actions/reveal.ts). Hidden until the element
+     crosses into the viewport, then plays once. */
+  .reveal {
+    opacity: 0;
+  }
+
+  .reveal.is-revealed {
+    animation: content-settle var(--duration-normal) var(--ease-out-expo) both;
+  }
+
   /* ── Signature Moments ──────────────────────────────────────── */
 
   /* Dramatic entrance for hero text */

@@ -18,6 +18,7 @@
   import Yule from '$lib/components/icons/sabbats/Yule.svelte';
   import favicon from '$lib/assets/favicon.svg';
   import { Copy, Check } from '@lucide/svelte';
+  import { reveal } from '$lib/actions/reveal';
   import ColourDemonstrator from '$lib/components/ColourDemonstrator.svelte';
   import VerifierCard from '$lib/components/VerifierCard.svelte';
   import { getMoonPhaseName } from '$lib/utils/moonPhase';
@@ -58,7 +59,7 @@
   ];
 
   const typeScale = [
-    { token: '--text-xl', weight: 800, sample: 'Display heading' },
+    { token: '--text-xl', weight: 800, sample: 'Prominent heading' },
     { token: '--text-lg', weight: 700, sample: 'Section heading' },
     { token: '--text-md', weight: 400, sample: 'Body default' },
     { token: '--text-sm', weight: 400, sample: 'Labels and secondary copy' },
@@ -134,7 +135,12 @@
     {
       name: 'Typography as hierarchy',
       description:
-        'Strict 1.25 modular scale with fluid clamp() sizing. Narrow columns — 65–75ch — and line-height that scales inversely with size.',
+        'Strict 1.25 modular scale with fluid clamp() sizing, extended by two poster-scale display steps for masthead and page titles. Narrow prose columns — 65–75ch — and line-height that scales inversely with size, down to 0.78 at masthead scale.',
+    },
+    {
+      name: 'Deliberate drama',
+      description:
+        'Scale jumps are 3–5x, not 1.5x, and reserved for a single focal point per page. A full-bleed marquee and outlined display type carry the weight; body copy and list rows stay quiet so the contrast reads as intentional, not noisy.',
     },
     {
       name: 'Functional interactivity',
@@ -225,7 +231,7 @@
 />
 
 <main class="shell-wide design-page">
-  <header class="page-hd spec-header">
+  <header class="page-hd spec-header hero-reveal">
     <div class="spec-meta">
       <span class="meta-tag">DESIGN SYSTEM</span>
       <span class="meta-tag">v{packageInfo.version}</span>
@@ -244,7 +250,7 @@
 
     <div class="spec-content">
       <!-- Identity -->
-      <section class="spec-section identity" id="identity">
+      <section class="spec-section identity" use:reveal id="identity">
         <header class="section-hd">
           <h2 class="section-title">Identity</h2>
         </header>
@@ -285,7 +291,7 @@
       </section>
 
       <!-- Colour -->
-      <section class="spec-section colour" id="colour">
+      <section class="spec-section colour" use:reveal id="colour">
         <header class="section-hd">
           <h2 class="section-title">Colour Architecture</h2>
         </header>
@@ -340,7 +346,7 @@
       </section>
 
       <!-- Typography -->
-      <section class="spec-section typography" id="typography">
+      <section class="spec-section typography" use:reveal id="typography">
         <header class="section-hd">
           <h2 class="section-title">Typography</h2>
         </header>
@@ -359,6 +365,39 @@
               <span class="font-meta">MONO / JETBRAINS MONO / 400</span>
               <div class="font-display">0123456789!?@#</div>
             </div>
+          </div>
+
+          <h3 class="sub-title" id="display-type">Display Type</h3>
+          <p class="component-note">
+            Two poster-scale steps above the interaction type scale below, reserved for the
+            homepage masthead and page titles. Weight 900, tight tracking, near-1 line-height.
+            Fluid on <code>vw</code>, so they hold their own drama at any viewport without a
+            breakpoint jump.
+          </p>
+          <div class="display-specimens">
+            <div class="display-specimen">
+              <span class="font-meta">--TEXT-4XL · WEIGHT 900 · HOME MASTHEAD ONLY</span>
+              <p class="display-sample display-sample--masthead">ewan</p>
+            </div>
+            <div class="display-specimen">
+              <span class="font-meta">--TEXT-3XL · WEIGHT 900 · EVERY PAGE-HD</span>
+              <p class="display-sample display-sample--title">Page title</p>
+            </div>
+          </div>
+
+          <h3 class="sub-title" id="outline-type">Outline Type</h3>
+          <p class="component-note">
+            <code>.text-outline</code> paints the glyph solid, then an SVG filter
+            (<code>feMorphology</code> dilates the shape, <code>feComposite</code> cuts the
+            original back out) leaves only the true outer contour. Plain
+            <code>-webkit-text-stroke</code> traces every overlapping contour inside Inter's
+            variable glyphs and draws stray lines through counters and joins; this filter
+            approach doesn't. <code>.text-outline--thin</code> is the lighter pass used below
+            640px and on secondary wordmarks, where a thick stroke would fill the counters in.
+          </p>
+          <div class="outline-specimens">
+            <p class="outline-sample text-outline" lang="gd">eòghann</p>
+            <p class="outline-sample outline-sample--thin text-outline text-outline--thin">2026</p>
           </div>
 
           <div class="scale-table">
@@ -394,7 +433,7 @@
       </section>
 
       <!-- Prose -->
-      <section class="spec-section prose-spec" id="prose">
+      <section class="spec-section prose-spec" use:reveal id="prose">
         <header class="section-hd">
           <h2 class="section-title">Prose Styling</h2>
         </header>
@@ -414,7 +453,7 @@
       </section>
 
       <!-- Geometry -->
-      <section class="spec-section geometry" id="geometry">
+      <section class="spec-section geometry" use:reveal id="geometry">
         <header class="section-hd">
           <h2 class="section-title">Geometry</h2>
         </header>
@@ -452,7 +491,7 @@
       </section>
 
       <!-- Motion -->
-      <section class="spec-section motion" id="motion">
+      <section class="spec-section motion" use:reveal id="motion">
         <header class="section-hd">
           <h2 class="section-title">Motion</h2>
         </header>
@@ -483,7 +522,7 @@
       </section>
 
       <!-- Iconography -->
-      <section class="spec-section iconography" id="iconography">
+      <section class="spec-section iconography" use:reveal id="iconography">
         <header class="section-hd">
           <h2 class="section-title">Iconography</h2>
         </header>
@@ -530,7 +569,7 @@
       </section>
 
       <!-- Components -->
-      <section class="spec-section components" id="components">
+      <section class="spec-section components" use:reveal id="components">
         <header class="section-hd">
           <h2 class="section-title">Components</h2>
         </header>
@@ -589,7 +628,7 @@
                   </div>
                   <div>
                     <dt>Highlight</dt>
-                    <dd>12% primary mixed into the sunken surface</dd>
+                    <dd>18% primary mixed into the raised surface</dd>
                   </div>
                   <div>
                     <dt>Motion</dt>
@@ -621,6 +660,29 @@
             </div>
 
             <div class="comp-item">
+              <h3 class="sub-title" id="scrolling-band">Scrolling Band</h3>
+              <p class="component-note">
+                A full-bleed marquee in the seasonal primary, breaking the shell to anchor the
+                homepage masthead. Duplicated content and a 50% transform loop it seamlessly;
+                <code>--duration-marquee</code> (60s) keeps the loop as a single, separately
+                tokened duration rather than a literal in the component, since it's a full cycle
+                and not a state transition. Disabled under
+                <code>prefers-reduced-motion</code>.
+              </p>
+              <div class="band-demo" aria-hidden="true">
+                <div class="band-demo-track">
+                  {#each [0, 1] as _}
+                    <span class="band-demo-run">
+                      <span>Poet</span><Triskele size={14} />
+                      <span>Programmer</span><Triskele size={14} />
+                      <span>Pagan</span><Triskele size={14} />
+                    </span>
+                  {/each}
+                </div>
+              </div>
+            </div>
+
+            <div class="comp-item">
               <h3 class="sub-title" id="blockquote">Blockquote</h3>
               <blockquote>
                 "Every element must earn its place on the screen. If it doesn't serve a functional purpose, it is slop."
@@ -631,7 +693,7 @@
       </section>
 
       <!-- Layout -->
-      <section class="spec-section layout" id="layout">
+      <section class="spec-section layout" use:reveal id="layout">
         <header class="section-hd">
           <h2 class="section-title">Layout Systems</h2>
         </header>
@@ -659,7 +721,7 @@
       </section>
 
       <!-- Voice & Tone -->
-      <section class="spec-section voice" id="voice">
+      <section class="spec-section voice" use:reveal id="voice">
         <header class="section-hd">
           <h2 class="section-title">Voice &amp; Tone</h2>
         </header>
@@ -685,7 +747,7 @@
       </section>
 
       <!-- Manifesto -->
-      <section class="spec-section principles" id="manifesto">
+      <section class="spec-section principles" use:reveal id="manifesto">
         <header class="section-hd">
           <h2 class="section-title">Manifesto</h2>
         </header>
@@ -704,7 +766,7 @@
       </section>
 
       <!-- Assets -->
-      <section class="spec-section assets" id="assets">
+      <section class="spec-section assets" use:reveal id="assets">
         <header class="section-hd">
           <h2 class="section-title">Assets</h2>
         </header>

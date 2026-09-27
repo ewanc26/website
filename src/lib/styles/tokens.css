@@ -197,6 +197,12 @@
     --text-lg: clamp(1.25rem, 1.5vw + 1rem, 2rem);
     --text-xl: clamp(2rem, 2vw + 1.5rem, 3rem);
     --text-2xl: clamp(2rem, 5vw, 3.5rem);
+    /* Display steps — poster-scale headlines introduced in the 2026 bold
+       pass. --text-3xl is the inner-page title ceiling; --text-4xl is the
+       homepage masthead-only ceiling. Both stay in the modular family:
+       roughly 1.85x and 2.3x --text-xl at their floor. */
+    --text-3xl: clamp(2.75rem, 12vw, 6.5rem);
+    --text-4xl: clamp(5rem, 22vw, 15rem);
     --text-micro: 0.625rem;
 
     /* ── Radii ────────────────────────────────────────────────── */
@@ -214,5 +220,16 @@
     --duration-fast: 200ms;
     --duration-normal: 300ms;
     --duration-slow: 500ms;
+    /* Marquee is a full loop, not a state transition — a different order
+       of magnitude from the interaction durations above, kept as its own
+       token rather than a literal in the component. */
+    --duration-marquee: 60s;
+    /* The ambient audio engine's whole-mix breathing LFO runs at
+       BREATH_HZ = 0.06 in src/lib/music/constants.ts (period = 1 / 0.06).
+       SabbatBackground's moon/pentacles wax and wane at this same rate,
+       so the one background layer that's always on screen pulses in time
+       with the one that's only sometimes on speakers. Keep both in sync
+       if either changes. */
+    --duration-breath: 16.6667s;
   }
 }

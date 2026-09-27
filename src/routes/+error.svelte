@@ -21,6 +21,7 @@
 
 <main class="shell-narrow error-layout">
   {#if page.status === 404}
+    <p class="error-numeral text-outline" aria-hidden="true">404</p>
     <NotFoundEgg />
   {:else}
     <div class="panel error-card">
@@ -54,10 +55,21 @@
 <style>
   .error-layout {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: calc(100vh - var(--space-2xl) * 2);
     padding: var(--space-xl) var(--space-md);
+  }
+
+  .error-numeral {
+    margin: 0 0 var(--space-md);
+    font-size: clamp(6rem, 30vw, 14rem);
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.06em;
+    line-height: 0.85;
+    user-select: none;
   }
 
   .error-card {

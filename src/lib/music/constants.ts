@@ -55,3 +55,10 @@ export const FM_RATIO_HIGH_HZ = 700;
 
 // Default AudioParam ramp time constant.
 export const SMOOTH_S = 4;
+
+// The pad's whole-mix breathing LFO (see breath.ts). SabbatBackground.svelte
+// drives the visual wax-wane of the moon/pentacles at the same rate
+// (--duration-breath in tokens.css, 1 / BREATH_HZ), so the one background
+// layer that's always present — silent or not — pulses at the same rate
+// as the audio layer when it's on. Change one, change the other.
+export const BREATH_HZ = 0.06;

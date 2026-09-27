@@ -100,6 +100,11 @@
   }
 }
 
+/* Forward (the default: a clicked link, goto()) reads as advancing —
+   the old page recedes upward and out, the new one arrives from below
+   and settles. Back/forward-button navigation gets the exact mirror
+   (the *-back keyframes below), so retreating actually feels like
+   retreating rather than replaying the same motion. */
 @keyframes vt-page-out {
   from {
     opacity: 1;
@@ -107,14 +112,36 @@
   }
   to {
     opacity: 0;
-    transform: translateY(calc(-1 * var(--space-xs)));
+    transform: translateY(calc(-1 * var(--space-md)));
   }
 }
 
 @keyframes vt-page-in {
   from {
     opacity: 0;
-    transform: translateY(var(--space-sm));
+    transform: translateY(var(--space-lg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vt-page-out-back {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(var(--space-md));
+  }
+}
+
+@keyframes vt-page-in-back {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--space-lg)));
   }
   to {
     opacity: 1;
@@ -133,20 +160,41 @@
     mix-blend-mode: normal;
   }
 
+  /* Direction comes from +layout.svelte's onNavigate as custom properties
+     on :root, not an attribute + descendant selector reaching into the
+     pseudo-element tree: tested directly, and an attribute selector on
+     :root (`:root[data-nav-direction="back"] ::view-transition-old(...)`)
+     silently never matched the transition pseudo-element tree in Chrome,
+     even with correct specificity — confirmed via
+     document.getAnimations(), which kept reporting the forward keyframe
+     names during a real back-navigation. Custom properties inherit into
+     that tree the same as any other element, which does work. */
   ::view-transition-old(page-content) {
-    animation: vt-page-out var(--duration-fast) var(--ease-out-quart) both;
+    animation-name: var(--vt-out-name, vt-page-out);
+    animation-duration: var(--duration-fast);
+    animation-timing-function: var(--ease-out-quart);
+    animation-fill-mode: both;
   }
 
   ::view-transition-new(page-content) {
-    animation: vt-page-in var(--duration-normal) var(--ease-out-expo) both;
+    animation-name: var(--vt-in-name, vt-page-in);
+    animation-duration: var(--duration-normal);
+    animation-timing-function: var(--ease-out-expo);
+    animation-fill-mode: both;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* !important: the direction-qualified rules above are more specific
+     (an attribute selector on :root) than this one, and would otherwise
+     win on animation-name alone even though this rule runs later —
+     specificity beats source order regardless of media query nesting.
+     Without it, a reduced-motion visitor navigating back would still
+     get a real (if different) animation instead of none. */
   ::view-transition-old(root),
   ::view-transition-new(root),
   ::view-transition-old(page-content),
   ::view-transition-new(page-content) {
-    animation: none;
+    animation: none !important;
   }
 }
