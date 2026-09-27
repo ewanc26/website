@@ -48,7 +48,9 @@ jobs:
         run: pnpm check
 
       - name: Run focused tests
-        run: pnpm test:site-info
+        run: |
+          pnpm test:site-info
+          pnpm test:blog
 
       - name: Build
         run: pnpm build

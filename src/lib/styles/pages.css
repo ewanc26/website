@@ -861,28 +861,6 @@
     }
   }
 
-  /* ── Blog index page ─────────────────────────────────────────── */
-
-  /* Year dividers: outlined display numerals anchor the dense archive. */
-  .year-head {
-    font-size: clamp(3rem, 9vw, 6rem);
-    font-weight: 900;
-    font-style: italic;
-    letter-spacing: -0.05em;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-    padding: var(--space-lg) 0 var(--space-xs);
-    margin: 0;
-  }
-
-  .month-label {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--color-text-700);
-    padding: var(--space-sm) 0 var(--space-xs);
-    margin: 0;
-  }
-
   /* ── Blog post page ─────────────────────────────────────────── */
 
   .post-hd {

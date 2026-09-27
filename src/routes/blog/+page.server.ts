@@ -8,12 +8,14 @@
 
 import type { PageServerLoad } from "./$types";
 import type { Config } from "@sveltejs/adapter-vercel";
-import { fetchBlogPosts, fetchPublications } from "@ewanc26/atproto";
+import { buildPdsBlobUrl, fetchDocuments, fetchPublications, resolveIdentity } from "@ewanc26/atproto";
 import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
 } from "$env/static/public";
 import { blogDateParts } from "$lib/utils/date";
+import { buildNormalizedTags, buildTagGroups, normalizeTag } from "$lib/utils/tags";
+import { firstContentImageCid } from "$lib/utils/coverImage";
 
 const PAGE_SIZE = 20;
 
@@ -23,8 +25,8 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
   setHeaders({
     "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
   });
-  const [{ posts }, { publications }] = await Promise.all([
-    fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ posts: [] })),
+  const [{ documents }, { publications }] = await Promise.all([
+    fetchDocuments(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ documents: [] })),
     fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
       publications: [],
     })),
@@ -33,41 +35,75 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
   const blogPublication = publications.find(
     (p) => p.rkey === PUBLIC_LEAFLET_BLOG_PUBLICATION,
   );
-  const publicationPosts = posts
+  const publicationPosts = documents
     .filter((p) => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION)
     .sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
     );
 
-  // Group by year > month
-  const grouped = new Map<number, Map<number, typeof publicationPosts>>();
+  // Build archive and topic summaries from the same AT Protocol publication records.
+  const archive = new Map<number, Map<number, number>>();
 
   for (const post of publicationPosts) {
-    const { year, month } = blogDateParts(post.createdAt);
+    const { year, month } = blogDateParts(post.publishedAt);
     const yearNum = parseInt(year, 10);
     const monthNum = parseInt(month, 10);
 
-    if (!grouped.has(yearNum)) grouped.set(yearNum, new Map());
-    const yearMap = grouped.get(yearNum)!;
-    if (!yearMap.has(monthNum)) yearMap.set(monthNum, []);
-    yearMap.get(monthNum)!.push(post);
+    if (!archive.has(yearNum)) archive.set(yearNum, new Map());
+    const yearMap = archive.get(yearNum)!;
+    yearMap.set(monthNum, (yearMap.get(monthNum) ?? 0) + 1);
   }
 
-  // Flatten for initial page — take first PAGE_SIZE posts across all groups
-  const allPostsFlat = publicationPosts.map(
-    ({ title, createdAt, publicationRkey, rkey, url, tags }) => ({
-      title,
-      createdAt,
-      publicationRkey,
-      rkey,
-      url,
-      tags: tags ?? [],
-    }),
+  // Standard.site tags are source data, so normalise them only for presentation
+  // and search. The records themselves are never rewritten.
+  const normalizedTags = buildNormalizedTags(
+    publicationPosts.map((post) => ({
+      rkey: post.rkey,
+      tags: post.tags,
+    })),
   );
+  const topicGroups = buildTagGroups(normalizedTags);
+  const groupedTags = new Set(topicGroups.flatMap((group) => group.tags.map((tag) => tag.name)));
 
-  const initial = allPostsFlat.slice(0, PAGE_SIZE);
-  const remaining = allPostsFlat.length - PAGE_SIZE;
+  const ungroupedTopics = [...normalizedTags.values()]
+    .filter((tag) => !groupedTags.has(tag.name))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+    .slice(0, 12)
+    .map(({ name, count }) => ({ name, count }));
+
+  // Most Leaflet posts never set a cover, so fall back to the first image in
+  // the post itself. Only the initial page needs covers.
+  const initialPosts = publicationPosts.slice(0, PAGE_SIZE);
+  const needsFallback = initialPosts.some(
+    (post) => !post.coverImage && firstContentImageCid(post.content),
+  );
+  const pds = needsFallback
+    ? await resolveIdentity(PUBLIC_ATPROTO_DID, fetch)
+        .then((identity) => identity.pds)
+        .catch(() => null)
+    : null;
+
+  const initial = initialPosts.map(
+    ({ title, publishedAt, publicationRkey, rkey, url, tags, coverImage, content }) => {
+      const contentImage = pds ? firstContentImageCid(content) : null;
+      return {
+        title,
+        createdAt: publishedAt,
+        publicationRkey,
+        rkey,
+        url,
+        tags: [...new Set((tags ?? []).map(normalizeTag).filter(Boolean))],
+        // fetchDocuments already resolves the cover blob to a PDS URL.
+        coverImage:
+          coverImage ??
+          (pds && contentImage
+            ? buildPdsBlobUrl(pds, PUBLIC_ATPROTO_DID, contentImage)
+            : undefined),
+      };
+    },
+  );
+  const remaining = publicationPosts.length - PAGE_SIZE;
 
   return {
     blog: blogPublication
@@ -79,8 +115,18 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
         }
       : null,
     posts: initial,
-    total: allPostsFlat.length,
+    total: publicationPosts.length,
     hasMore: remaining > 0,
     pageSize: PAGE_SIZE,
+    topics: topicGroups,
+    ungroupedTopics,
+    archive: Array.from(archive.entries())
+      .sort((a, b) => b[0] - a[0])
+      .map(([year, months]) => ({
+        year,
+        months: Array.from(months.entries())
+          .sort((a, b) => b[0] - a[0])
+          .map(([month, count]) => ({ month, count })),
+      })),
   };
 };
