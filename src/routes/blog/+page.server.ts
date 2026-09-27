@@ -8,13 +8,14 @@
 
 import type { PageServerLoad } from "./$types";
 import type { Config } from "@sveltejs/adapter-vercel";
-import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
+import { buildPdsBlobUrl, fetchDocuments, fetchPublications, resolveIdentity } from "@ewanc26/atproto";
 import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
 } from "$env/static/public";
 import { blogDateParts } from "$lib/utils/date";
 import { buildNormalizedTags, buildTagGroups, normalizeTag } from "$lib/utils/tags";
+import { firstContentImageCid } from "$lib/utils/coverImage";
 
 const PAGE_SIZE = 20;
 
@@ -71,22 +72,38 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
     .slice(0, 12)
     .map(({ name, count }) => ({ name, count }));
 
-  // Flatten for initial page — take first PAGE_SIZE posts across all groups
-  const allPostsFlat = publicationPosts.map(
-    ({ title, publishedAt, publicationRkey, rkey, url, tags, coverImage }) => ({
-      title,
-      createdAt: publishedAt,
-      publicationRkey,
-      rkey,
-      url,
-      tags: [...new Set((tags ?? []).map(normalizeTag).filter(Boolean))],
-      // fetchDocuments already resolves the cover blob to a PDS URL.
-      coverImage,
-    }),
+  // Most Leaflet posts never set a cover, so fall back to the first image in
+  // the post itself. Only the initial page needs covers.
+  const initialPosts = publicationPosts.slice(0, PAGE_SIZE);
+  const needsFallback = initialPosts.some(
+    (post) => !post.coverImage && firstContentImageCid(post.content),
   );
+  const pds = needsFallback
+    ? await resolveIdentity(PUBLIC_ATPROTO_DID, fetch)
+        .then((identity) => identity.pds)
+        .catch(() => null)
+    : null;
 
-  const initial = allPostsFlat.slice(0, PAGE_SIZE);
-  const remaining = allPostsFlat.length - PAGE_SIZE;
+  const initial = initialPosts.map(
+    ({ title, publishedAt, publicationRkey, rkey, url, tags, coverImage, content }) => {
+      const contentImage = pds ? firstContentImageCid(content) : null;
+      return {
+        title,
+        createdAt: publishedAt,
+        publicationRkey,
+        rkey,
+        url,
+        tags: [...new Set((tags ?? []).map(normalizeTag).filter(Boolean))],
+        // fetchDocuments already resolves the cover blob to a PDS URL.
+        coverImage:
+          coverImage ??
+          (pds && contentImage
+            ? buildPdsBlobUrl(pds, PUBLIC_ATPROTO_DID, contentImage)
+            : undefined),
+      };
+    },
+  );
+  const remaining = publicationPosts.length - PAGE_SIZE;
 
   return {
     blog: blogPublication
@@ -98,7 +115,7 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
         }
       : null,
     posts: initial,
-    total: allPostsFlat.length,
+    total: publicationPosts.length,
     hasMore: remaining > 0,
     pageSize: PAGE_SIZE,
     topics: topicGroups,
