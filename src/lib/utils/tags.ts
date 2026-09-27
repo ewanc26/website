@@ -43,141 +43,124 @@ export function buildNormalizedTags(
   return result;
 }
 
-function tokenSimilarity(a: string, b: string): number {
-  const aTokens = new Set(a.split(" ").filter(Boolean));
-  const bTokens = new Set(b.split(" ").filter(Boolean));
-  if (!aTokens.size || !bTokens.size) return 0;
-
-  let intersection = 0;
-  for (const token of aTokens) {
-    if (bTokens.has(token)) intersection += 1;
-  }
-
-  return intersection / (aTokens.size + bTokens.size - intersection);
+/**
+ * Near-duplicate spellings of one idea: "at protocol" / "atproto" /
+ * "atprotocol", "apple" / "apple inc.", "pagan" / "paganism". Spacing and
+ * punctuation are ignored, and a longer spelling may only add a short suffix,
+ * so "apple music" or "personal website" stay distinct from their first word.
+ */
+function isLexicalVariant(a: string, b: string): boolean {
+  const compact = (tag: string) => tag.replace(/[\s._-]+/g, "");
+  const [short, long] = [compact(a), compact(b)].sort((x, y) => x.length - y.length);
+  return short.length >= 4 && long.startsWith(short) && long.length - short.length <= 4;
 }
 
-function cooccurrenceSimilarity(a: Set<string>, b: Set<string>): number {
-  if (!a.size || !b.size) return 0;
-
-  let intersection = 0;
+function overlap(a: Set<string>, b: Set<string>): number {
+  let count = 0;
   for (const rkey of a) {
-    if (b.has(rkey)) intersection += 1;
+    if (b.has(rkey)) count += 1;
   }
-
-  return intersection / Math.min(a.size, b.size);
+  return count;
 }
 
-function jaccardSimilarity(a: Set<string>, b: Set<string>): number {
-  let intersection = 0;
-  for (const rkey of a) {
-    if (b.has(rkey)) intersection += 1;
-  }
-
-  const union = a.size + b.size - intersection;
-  return union === 0 ? 0 : intersection / union;
-}
-
-interface TagEdge {
-  score: number;
-}
-
+/**
+ * Group tags around the broadest topics.
+ *
+ * Every tag picks at most one parent: a broader tag that it mostly
+ * appears alongside (at least `minShare` of its posts) and is specifically tied
+ * to (it appears with the parent at least `minLift` times more often than
+ * chance), or a spelling variant of itself. When several tags qualify, the one
+ * with the strongest lift wins. Because a tag attaches to its single best
+ * parent rather than to anything it co-occurs with, broad tags on most posts
+ * ("personal", "reflection") can't chain unrelated topics into one cluster.
+ */
 export function buildTagGroups(
   tags: Map<string, NormalizedTag>,
   maxGroups = 6,
   maxRelated = 5,
+  minShare = 0.5,
+  minLift = 1.5,
+  minShared = 3,
 ) {
-  const names = [...tags.keys()].sort(
-    (a, b) => (tags.get(b)!.count - tags.get(a)!.count) || a.localeCompare(b),
+  const allPosts = new Set<string>();
+  for (const tag of tags.values()) {
+    for (const rkey of tag.posts) allPosts.add(rkey);
+  }
+
+  const ranked = [...tags.values()].sort(
+    (a, b) => b.count - a.count || a.name.localeCompare(b.name),
   );
 
-  const adjacency = new Map<string, Map<string, number>>();
+  const parentOf = new Map<string, { parent: NormalizedTag; shared: number }>();
 
-  for (let i = 0; i < names.length; i += 1) {
-    const a = names[i];
-    const aTag = tags.get(a)!;
+  for (const tag of ranked) {
+    let best: { parent: NormalizedTag; shared: number; score: number } | undefined;
 
-    for (let j = i + 1; j < names.length; j += 1) {
-      const b = names[j];
-      const bTag = tags.get(b)!;
+    for (const candidate of ranked) {
+      if (candidate === tag || candidate.count < tag.count) continue;
+      if (candidate.count === tag.count && candidate.name >= tag.name) continue;
 
-      if (aTag.count < 2 && bTag.count < 2) continue;
+      const shared = overlap(tag.posts, candidate.posts);
+      const variant = isLexicalVariant(tag.name, candidate.name);
+      const share = shared / tag.count;
+      const lift = share / (candidate.count / allPosts.size);
+      // A similar-sized peer only counts when the two mostly travel together
+      // (e.g. "rust" and "learning"); otherwise the parent must be clearly
+      // broader, so peers don't swallow each other.
+      const related =
+        (tag.count <= candidate.count * 0.75 || share >= 0.6) &&
+        shared >= minShared &&
+        share >= minShare &&
+        lift >= minLift;
+      if (!variant && !related) continue;
 
-      const cooccurrence = cooccurrenceSimilarity(aTag.posts, bTag.posts);
-      const jaccard = jaccardSimilarity(aTag.posts, bTag.posts);
-      const lexical = tokenSimilarity(a, b);
-      const score = cooccurrence * 0.6 + jaccard * 0.25 + lexical * 0.15;
-
-      if (score < 0.2 || (cooccurrence < 0.25 && lexical < 0.5)) continue;
-
-      if (!adjacency.has(a)) adjacency.set(a, new Map());
-      if (!adjacency.has(b)) adjacency.set(b, new Map());
-      adjacency.get(a)!.set(b, score);
-      adjacency.get(b)!.set(a, score);
-    }
-  }
-
-  const communities: string[][] = [];
-  const visited = new Set<string>();
-
-  for (const name of names) {
-    if (visited.has(name) || !adjacency.has(name)) continue;
-
-    const queue = [name];
-    const community: string[] = [];
-    visited.add(name);
-
-    while (queue.length) {
-      const current = queue.shift()!;
-      community.push(current);
-
-      for (const [neighbor, score] of adjacency.get(current) ?? []) {
-        if (score < 0.2 || visited.has(neighbor)) continue;
-        visited.add(neighbor);
-        queue.push(neighbor);
-      }
+      // Spelling variants always win; otherwise prefer the most specific parent.
+      const score = variant ? Number.POSITIVE_INFINITY : lift;
+      if (!best || score > best.score) best = { parent: candidate, shared, score };
     }
 
-    if (community.length > 1) communities.push(community);
+    if (best) parentOf.set(tag.name, { parent: best.parent, shared: best.shared });
   }
 
-  return communities
-    .map((community) => {
-      const ranked = community
-        .map((name) => ({
-          name,
-          count: tags.get(name)!.count,
-          degree: [...(adjacency.get(name)?.values() ?? [])].reduce(
-            (sum, score) => sum + score,
-            0,
-          ),
-        }))
+  // Attach each tag to the top of its parent chain so every tag shows once.
+  const rootOf = (name: string) => {
+    let current = name;
+    const seen = new Set<string>();
+    while (parentOf.has(current) && !seen.has(current)) {
+      seen.add(current);
+      current = parentOf.get(current)!.parent.name;
+    }
+    return current;
+  };
+
+  const children = new Map<string, Array<{ tag: NormalizedTag; shared: number }>>();
+  for (const [name, { shared }] of parentOf) {
+    const root = rootOf(name);
+    if (!children.has(root)) children.set(root, []);
+    children.get(root)!.push({ tag: tags.get(name)!, shared });
+  }
+
+  return ranked
+    .filter((tag) => children.has(tag.name) && !parentOf.has(tag.name))
+    .slice(0, maxGroups)
+    .map((root) => {
+      const members = children
+        .get(root.name)!
         .sort(
           (a, b) =>
-            b.count - a.count ||
-            b.degree - a.degree ||
-            a.name.localeCompare(b.name),
-        );
-
-      const selected = ranked.slice(0, maxRelated + 1);
-      const root = selected[0];
+            b.shared - a.shared ||
+            b.tag.count - a.tag.count ||
+            a.tag.name.localeCompare(b.tag.name),
+        )
+        .slice(0, maxRelated);
 
       return {
         name: root.name,
         count: root.count,
-        tags: selected.map(({ name, count }) => ({ name, count })),
-        totalCount: community.reduce(
-          (sum, name) => sum + tags.get(name)!.count,
-          0,
-        ),
+        tags: [root, ...members.map(({ tag }) => tag)].map(({ name, count }) => ({
+          name,
+          count,
+        })),
       };
-    })
-    .filter((group) => group.tags.length > 1)
-    .sort(
-      (a, b) =>
-        b.totalCount - a.totalCount ||
-        b.count - a.count ||
-        a.name.localeCompare(b.name),
-    )
-    .slice(0, maxGroups)
-    .map(({ totalCount: _totalCount, ...group }) => group);
+    });
 }

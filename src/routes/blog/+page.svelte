@@ -19,19 +19,16 @@
         coverImage?: string;
     };
 
-    let posts: PostSummary[] = $state([]);
-    let hasMore = $state(false);
-    let total = $state(0);
+    // Derived from the load data so the server render already has posts
+    // (an effect never runs during SSR). Search and "load more" override
+    // them locally; new load data resets them.
+    let posts: PostSummary[] = $derived(data.posts);
+    let hasMore = $derived(data.hasMore);
+    let total = $derived(data.total);
     let loading = $state(false);
     let searching = $state(false);
     let searchQuery = $state('');
     let searchRequestId = 0;
-
-    $effect.pre(() => {
-        posts = data.posts;
-        hasMore = data.hasMore;
-        total = data.total;
-    });
 
     let filteredPosts = $derived(posts);
     let isSearching = $derived(searchQuery.trim().length > 0);
