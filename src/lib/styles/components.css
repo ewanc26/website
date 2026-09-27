@@ -7,6 +7,35 @@
  * ================================================================ */
 
 @layer components {
+  /* ── Outline text ───────────────────────────────────────────── */
+
+  /* Holds the filter definitions in +layout.svelte. Not display:none —
+     some engines drop filters defined inside an unrendered <svg>. */
+  .svg-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  /* Wireframe display type: the text is painted solid in the seasonal
+     primary and the filter hollows it to a clean outer contour. */
+  .text-outline {
+    color: var(--color-primary-500);
+    filter: url(#text-outline);
+  }
+
+  .text-outline--thin {
+    filter: url(#text-outline-thin);
+  }
+
+  /* A 2px contour clogs the counters at phone sizes. */
+  @media (max-width: 640px) {
+    .text-outline {
+      filter: url(#text-outline-thin);
+    }
+  }
+
   /* ── Navigation ─────────────────────────────────────────────── */
 
   .nav {
@@ -32,7 +61,8 @@
   }
 
   .nav-brand {
-    font-weight: 700;
+    font-weight: 900;
+    letter-spacing: -0.035em;
     color: var(--color-text-950);
     font-size: var(--text-md);
     display: flex;

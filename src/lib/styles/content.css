@@ -19,12 +19,20 @@
   }
 
   .page-title {
-    font-size: var(--text-2xl);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    margin: 0;
+    font-size: var(--text-3xl);
+    font-weight: 900;
+    letter-spacing: -0.055em;
+    line-height: 0.9;
+    margin: 0 0 0 -0.04em;
     color: var(--color-text-950);
+    text-wrap: balance;
+  }
+
+  /* Every inner page header closes on a heavy seasonal rule, echoing the
+     masthead on the homepage. */
+  .page-hd:not(.hero-hd) {
+    border-bottom: 3px solid var(--color-primary-500);
+    margin-bottom: var(--space-lg);
   }
 
   .page-desc {
@@ -82,8 +90,13 @@
     cursor: default;
   }
 
-  a.post-row:hover {
-    background-color: var(--surface-sunken);
+  a.post-row:hover,
+  a.post-row:focus-visible {
+    background-color: color-mix(
+      in oklch,
+      var(--color-primary-500) 18%,
+      var(--surface-raised)
+    );
     color: var(--color-text-950);
   }
 
@@ -110,8 +123,13 @@
     cursor: pointer;
   }
 
-  a.link-row:hover {
-    background-color: var(--surface-sunken);
+  a.link-row:hover,
+  a.link-row:focus-visible {
+    background-color: color-mix(
+      in oklch,
+      var(--color-primary-500) 18%,
+      var(--surface-raised)
+    );
     color: var(--color-text-950);
   }
 
@@ -134,6 +152,15 @@
 
   .section-link:hover {
     color: var(--color-primary-400);
+  }
+
+  .section-link svg {
+    transition: transform var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .section-link:hover svg,
+  .section-link:focus-visible svg {
+    transform: translateX(3px);
   }
 
   /* ── Sub-heading — secondary grouping label ──────────────────── */

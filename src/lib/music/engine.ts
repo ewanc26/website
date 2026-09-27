@@ -60,7 +60,14 @@ export class AmbianceEngine {
   private disposed = false;
 
   constructor() {
-    const ctx = new AudioContext();
+    // "playback": this pad has no interactive timing to protect (nothing
+    // here reacts to input within a frame), so trading a little extra
+    // output latency for lower CPU/power use is a clean win — exactly
+    // the tradeoff MDN's AudioContextLatencyCategory docs describe for
+    // "playback with visualizations... where real-time interaction is
+    // not required". The default ("interactive") optimises for the
+    // opposite case.
+    const ctx = new AudioContext({ latencyHint: "playback" });
     this.ctx = ctx;
 
     this.master = ctx.createGain();
@@ -96,6 +103,17 @@ export class AmbianceEngine {
     // it, instead of the two arriving at once and blurring together.
     const preDelay = ctx.createDelay(0.05);
     preDelay.delayTime.value = 0.025;
+    // A ConvolverNode is genuinely the most expensive node type in the
+    // Web Audio API — it's doing real FFT-based convolution every render
+    // quantum, continuously, for as long as the ambiance is on. A
+    // delay-line/all-pass network (the classic Schroeder/FDN approach)
+    // would cost far less CPU for a similar wash, and is the standard
+    // recommendation for this exact tradeoff. Kept as a convolver
+    // anyway: the reverb tail's character here has already been tuned
+    // by ear across several commits (see git log), and reworking the
+    // algorithm risks changing that sound in ways only listening, not
+    // reading, would catch. Worth revisiting if the engine is ever
+    // profiled and this shows up as a real cost on target devices.
     const reverb = ctx.createConvolver();
     reverb.buffer = makeImpulseResponse(ctx);
     this.wet.connect(preDelay);
@@ -135,15 +153,36 @@ export class AmbianceEngine {
     ramp(this.master.gain, 0, this.ctx, 2.5);
   }
 
-  /** Fully suspend the context, e.g. when the tab is hidden. */
+  /**
+   * Fully suspend the context, e.g. when the tab is hidden.
+   *
+   * `AudioContext.currentTime` stops advancing the instant a context is
+   * suspended — verified directly, not assumed — but the chime and
+   * melody layers each run their own independent JS timer
+   * (setTimeout/setInterval) that keeps firing regardless of audio
+   * state, throttled but not stopped by a backgrounded tab. Left alone,
+   * every one of those wakeups would schedule a note against the same
+   * frozen `currentTime`, and a long-hidden tab would come back to a
+   * pile-up of notes all still queued to fire at that one instant —
+   * an audible burst instead of silence. Pausing both schedulers here
+   * (the same `running` flag that already makes them a no-op before the
+   * first start()) closes that off.
+   */
   async suspend() {
     if (this.disposed || this.ctx.state !== "running") return;
+    this.chime.setRunning(false);
+    this.melody.setRunning(false);
     await this.ctx.suspend();
   }
 
   async resume() {
     if (this.disposed || this.ctx.state !== "suspended") return;
     await this.ctx.resume();
+    // Only ever called while the visitor has ambiance enabled (see
+    // AmbianceEngine.svelte), so unconditionally re-arming here matches
+    // start()'s effect rather than needing its own "was it on" tracking.
+    this.chime.setRunning(true);
+    this.melody.setRunning(true);
   }
 
   setVolume(volume: number) {

@@ -11,6 +11,7 @@
   import { blogDateParts } from '$lib/utils/date';
   import type { ProfileData } from '@ewanc26/atproto';
   import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from '$env/static/public';
+  import { pulseAmbiance } from '$lib/stores/ambiance';
 
   let { data } = $props();
 
@@ -51,6 +52,19 @@
     }
   });
 
+  // The scrolling band pauses on hover/focus (see pages.css); pausing it
+  // is a deliberate "let me read this" gesture, unlike the section-link
+  // hover elsewhere on this page, which fires on every glance. Rare and
+  // intentional enough to earn the same confirmation chime as copying a
+  // link — throttled so resting the pointer there doesn't ring it twice.
+  let lastBandPulse = 0;
+  function pulseOnBandPause() {
+    const now = Date.now();
+    if (now - lastBandPulse < 4000) return;
+    lastBandPulse = now;
+    pulseAmbiance();
+  }
+
   function getBlogUrl(post: any) {
     const { year: y, month: m, day: d } = blogDateParts(post.createdAt);
     const slug = normalizeSlug(post.title);
@@ -63,57 +77,71 @@
 <main class="shell-wide home-page">
   <!-- Hero -->
   <section class="page-hd hero-hd hero-reveal">
-    {#if profile.avatar}
-      <img src={profile.avatar} alt="" class="hero-avatar" width="128" height="128" decoding="async" />
-    {/if}
-    <div class="hero-text">
-      <h1 class="page-title">
-        {profile.displayName ?? profile.handle}
-        <VerificationBadge verified={true} verifiers={data.verifications} />
+    <div class="hero-masthead">
+      <h1 class="page-title hero-name">
+        {profile.displayName ?? profile.handle}<span class="hero-badge"><VerificationBadge verified={true} verifiers={data.verifications} /></span>
       </h1>
-      <p class="hero-gaelic">eòghann</p>
-      <p class="hero-bio">{profile.description}</p>
-      <div class="hero-meta" aria-label="Profile metadata">
-        <span>@{profile.handle}</span>
-        <span>AT Protocol</span>
-        <span>Personal web</span>
+      <p class="hero-gaelic text-outline" lang="gd">eòghann</p>
+    </div>
+    <div class="hero-text">
+      {#if profile.avatar}
+        <img src={profile.avatar} alt="" class="hero-avatar" width="128" height="128" decoding="async" />
+      {/if}
+      <div class="hero-copy">
+        <p class="hero-bio">{profile.description}</p>
+        <div class="hero-meta" aria-label="Profile metadata">
+          <span>@{profile.handle}</span>
+          <span>AT Protocol</span>
+          <span>Personal web</span>
+        </div>
+        <!-- Status row -->
+        {#if homeLoading}
+          <div class="status-row animate-in stagger-1" aria-busy="true">
+            <LoadingSkeleton label="Loading current status" />
+          </div>
+        {:else if kibunStatus !== null || musicStatus !== null}
+          <div class="status-row content-reveal">
+            {#if kibunStatus}
+              <div class="status-chip">
+                <span class="status-emoji">{kibunStatus.emoji}</span>
+                <span class="status-text">{kibunStatus.text}</span>
+              </div>
+            {/if}
+            {#if musicStatus}
+              <div class="status-chip status-chip--music">
+                {#if musicStatus.artworkUrl}
+                  <img
+                    src={musicStatus.artworkUrl}
+                    alt=""
+                    class="now-playing-art"
+                    width="24"
+                    height="24"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                {:else}
+                  <Music size={14} strokeWidth={2} class="muted-icon" />
+                {/if}
+                <span class="status-text">{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(', ')}</span>
+              </div>
+            {/if}
+          </div>
+        {/if}
       </div>
     </div>
   </section>
 
-  <!-- Status row -->
-  {#if homeLoading}
-    <div class="status-row animate-in stagger-1" aria-busy="true">
-      <LoadingSkeleton label="Loading current status" />
+  <div class="hero-band" aria-hidden="true" onmouseenter={pulseOnBandPause}>
+    <div class="hero-band-track">
+      {#each [0, 1] as _}
+        <span class="hero-band-run">
+          {#each ['Poet', 'Programmer', 'Pagan', 'AT Protocol', 'Gàidhlig na h-Alba', 'Werewolf enthusiast'] as word}
+            <span>{word}</span><Triskele size={16} />
+          {/each}
+        </span>
+      {/each}
     </div>
-  {:else if kibunStatus !== null || musicStatus !== null}
-    <div class="status-row content-reveal">
-      {#if kibunStatus}
-        <div class="status-chip">
-          <span class="status-emoji">{kibunStatus.emoji}</span>
-          <span class="status-text">{kibunStatus.text}</span>
-        </div>
-      {/if}
-      {#if musicStatus}
-        <div class="status-chip status-chip--music">
-          {#if musicStatus.artworkUrl}
-            <img
-              src={musicStatus.artworkUrl}
-              alt=""
-              class="now-playing-art"
-              width="24"
-              height="24"
-              loading="lazy"
-              decoding="async"
-            />
-          {:else}
-            <Music size={14} strokeWidth={2} class="muted-icon" />
-          {/if}
-          <span class="status-text">{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(', ')}</span>
-        </div>
-      {/if}
-    </div>
-  {/if}
+  </div>
 
   <div class="home-ornament" aria-hidden="true">
     <Pentacle size={11} />
@@ -124,6 +152,7 @@
   <!-- Writing -->
   <section class="home-section animate-in stagger-2" aria-busy={posts === null}>
     <div class="home-section-hd">
+      <span class="home-section-num" aria-hidden="true">01</span>
       <h2 class="home-section-title">Recent writing</h2>
     </div>
     {#if posts === null}
@@ -132,7 +161,7 @@
         <ul class="post-list home-post-list content-reveal-list">
           {#each posts.filter(p => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION).slice(0, 5) as post, i}
             <li>
-              <a href={getBlogUrl(post)} class="post-row active-press">
+              <a href={getBlogUrl(post)} class="post-row active-press" class:post-row--featured={i === 0}>
                 <span class="row-stack post-copy">
                   {#if i === 0}<span class="home-row-label">Latest</span>{/if}
                   <span class="post-title">{post.title}</span>
@@ -154,6 +183,7 @@
   <!-- Projects -->
   <section class="home-section animate-in stagger-3" aria-busy={githubProjects === null}>
     <div class="home-section-hd">
+      <span class="home-section-num" aria-hidden="true">02</span>
       <h2 class="home-section-title">Selected projects</h2>
     </div>
     {#if githubProjects === null}
@@ -205,6 +235,7 @@
   <!-- Publications -->
   <section class="home-section animate-in stagger-4" aria-busy={publications === null}>
     <div class="home-section-hd">
+      <span class="home-section-num" aria-hidden="true">03</span>
       <h2 class="home-section-title">Publications</h2>
     </div>
     {#if publications === null}
@@ -231,6 +262,7 @@
   <!-- Links -->
   <section class="home-section animate-in stagger-5" aria-busy={links === null}>
     <div class="home-section-hd">
+      <span class="home-section-num" aria-hidden="true">04</span>
       <h2 class="home-section-title">Elsewhere</h2>
     </div>
     {#if links === null}

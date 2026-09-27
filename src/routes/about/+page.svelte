@@ -88,7 +88,7 @@
     {/if}
     <div class="about-intro">
       <h1 class="page-title">{profile.displayName ?? profile.handle}</h1>
-      <p class="about-gaelic">eòghann</p>
+      <p class="about-gaelic text-outline text-outline--thin" lang="gd">eòghann</p>
       {#if profile.pronouns}
         <p class="about-pronouns">{profile.pronouns}</p>
       {/if}

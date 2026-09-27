@@ -3,6 +3,7 @@
  * level, so it swells and settles instead of sitting at a flat volume.
  */
 
+import { BREATH_HZ } from "./constants";
 import { ramp } from "./ramp";
 import type { AudioBuses } from "./types";
 
@@ -14,7 +15,7 @@ export function createBreathLayer(buses: AudioBuses): BreathLayer {
   const { ctx, dry, wet } = buses;
 
   const lfo = ctx.createOscillator();
-  lfo.frequency.value = 0.06;
+  lfo.frequency.value = BREATH_HZ;
   const depth = ctx.createGain();
   depth.gain.value = 0.05;
   lfo.connect(depth);

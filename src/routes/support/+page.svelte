@@ -1,6 +1,7 @@
 <script lang="ts">
 import SiteHead from '$lib/components/SiteHead.svelte';
 import { Coffee, GitPullRequest, Heart } from '@lucide/svelte';
+import { reveal } from '$lib/actions/reveal';
 </script>
 
 <SiteHead
@@ -11,7 +12,7 @@ import { Coffee, GitPullRequest, Heart } from '@lucide/svelte';
 />
 
 <main class="shell-narrow support">
-  <header class="page-hd">
+  <header class="page-hd hero-reveal">
     <h1 class="page-title">Support</h1>
     <p class="page-desc">
       Everything I build is free and open-source. Your support keeps servers running,
@@ -19,7 +20,7 @@ import { Coffee, GitPullRequest, Heart } from '@lucide/svelte';
     </p>
   </header>
 
-  <section class="support-section">
+  <section class="support-section" use:reveal>
     <h2 class="section-heading">Support directly</h2>
     <div class="support-grid">
       <a
@@ -65,7 +66,7 @@ import { Coffee, GitPullRequest, Heart } from '@lucide/svelte';
     </p>
   </section>
 
-  <section class="support-section">
+  <section class="support-section" use:reveal={{ delay: 80 }}>
     <h2 class="section-heading">Other ways to help</h2>
     <ul class="bare-list">
       <li class="post-row">

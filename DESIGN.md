@@ -15,6 +15,15 @@ Port of the visual system for ewancroft.uk.
 - **Tone**: Traditional meets Technical.
 - **Elements**: Sabbat-aware backgrounds, poetic typography, generous whitespace.
 
+### Display type
+
+- Two poster-scale tokens sit above the interaction type scale: `--text-3xl` (page titles, every `page-hd`) and `--text-4xl` (homepage masthead only). Weight 900, tight tracking, near-1 line-height, fluid on `vw`.
+- Reserve poster scale for one focal point per page — the masthead name, a page title. Everything else stays on the standard scale so the jump reads as intentional, not noisy.
+- `.text-outline` / `.text-outline--thin` render wireframe display type: an SVG filter (`feMorphology` dilate + `feComposite` cut) leaves one clean contour per glyph. Don't use `-webkit-text-stroke` for this — it traces every overlapping contour inside Inter's variable glyphs and draws stray lines through counters and joins. The `--thin` variant is for sub-640px viewports and secondary wordmarks, where the thicker pass fills in small counters.
+- A full-bleed scrolling band (edge to edge, breaking the shell) in the seasonal primary is the one motion-driven brand flourish, used to anchor the masthead. Its loop duration is `--duration-marquee` (60s), tokened separately from the interaction durations since it's a full cycle, not a state transition. Disabled under `prefers-reduced-motion`. Hovering or focusing it pauses the loop and, if the ambient soundscape is on, rings its confirmation chime — pausing a scrolling text is a deliberate "let me read this" gesture, unlike a passing hover elsewhere, so it earns an audible response the way copying a link does.
+- The background moon and pentacles (`SabbatBackground.svelte`) wax and wane on `--duration-breath` (16.6667s = 1 / `BREATH_HZ` in `src/lib/music/constants.ts`) — the same rate as the ambient engine's whole-mix breathing LFO. It's the one background layer that's always on screen, silent or not, so when the soundscape is on, what you see and what you hear pulse together. Change one, change the other.
+- Page navigations use the View Transitions API (`+layout.svelte`), crossfading and sliding just the content region — chrome (header, footer) never re-transitions. Direction is real, not guessed from route depth: a clicked link or `goto()` pushes the new page up from below (advancing); the browser's actual back/forward buttons get the exact mirror, settling down from above (retreating). Both variants are disabled outright under `prefers-reduced-motion` — see the `!important` note in `system.css` if touching this, since the direction-qualified rules are more specific and would otherwise still win on `animation-name`.
+
 ## Register: Product
 
 - **Tone**: Clinical, efficient, dense.
