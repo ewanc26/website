@@ -22,6 +22,7 @@ import {
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 import { env } from "$env/dynamic/private";
 import { fetchPinnedGitHubProjects } from "$lib/services/github";
+import { resolveDid } from "$lib/services/atproto/did";
 
 export const config: Config = { maxDuration: 30 };
 
@@ -66,6 +67,18 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
     env.GITHUB_TOKEN,
   ).catch(() => []);
 
+  // The PDS is whatever the DID document's service entry says right now,
+  // not a value hardcoded on this page — the account can (and has)
+  // migrated between hosts, and a stale hardcoded host would quietly lie
+  // about it. Cached for an hour inside resolveDid, so this is cheap on
+  // repeat requests.
+  const pdsPromise = resolveDid(PUBLIC_ATPROTO_DID, fetch)
+    .then((doc) => {
+      const endpoint = doc?.service?.[0]?.serviceEndpoint;
+      return typeof endpoint === "string" ? new URL(endpoint).hostname : null;
+    })
+    .catch(() => null);
+
   const profile = await profilePromise;
 
   return {
@@ -78,6 +91,7 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
       sifaLanguages: sifaLanguagesPromise,
       sifaExternalAccounts: sifaExternalAccountsPromise,
       githubProjects: githubProjectsPromise,
+      pds: pdsPromise,
     },
   };
 };

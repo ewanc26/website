@@ -20,25 +20,8 @@
   /* Masthead: the name is set as a poster, not a heading. The Gaelic
      form sits beneath it in outline so the two read as one wordmark. */
   .hero-hd {
-    position: relative;
     gap: clamp(var(--space-lg), 4vw, var(--space-12));
     align-items: stretch;
-    isolation: isolate;
-  }
-
-  /* Seasonal glow behind the masthead — tinted by the Sabbat palette, so
-     it shifts with the wheel of the year rather than being a fixed hue. */
-  .hero-hd::before {
-    content: "";
-    position: absolute;
-    inset: -30% 0 -10%;
-    z-index: -1;
-    background: radial-gradient(
-      ellipse 34% 48% at 36% 44%,
-      color-mix(in oklch, var(--color-primary-500) 16%, transparent),
-      transparent 70%
-    );
-    pointer-events: none;
   }
 
   .hero-masthead {
@@ -75,7 +58,11 @@
     margin: -0.12em 0 0;
     font-size: clamp(2.75rem, 11vw, 8rem);
     font-weight: 900;
-    font-style: italic;
+    /* Not italic: the shear brought adjacent glyphs (worst case, "gh")
+       close enough that .text-outline's dilate step bridged the gap
+       between them with a stray line, the same class of artifact the
+       filter was built to eliminate in the first place. Upright glyphs
+       keep a more consistent gap at every dilate radius. */
     letter-spacing: -0.05em;
     line-height: 0.9;
     user-select: none;
@@ -87,7 +74,12 @@
     align-items: center;
     gap: clamp(var(--space-md), 4vw, var(--space-lg));
     padding-top: clamp(var(--space-md), 3vw, var(--space-lg));
-    border-top: 3px solid var(--color-text-950);
+    /* Seasonal primary, not raw ink: every other rule line on this page
+       (the page-hd underline, each section-hd) already uses the primary
+       colour. This one was left on --color-text-950 by oversight, which
+       in dark mode is near-white and reads as a harsh, disconnected line
+       rather than part of the same rule-line language. */
+    border-top: 3px solid var(--color-primary-500);
   }
 
   .hero-copy {
@@ -153,8 +145,9 @@
     margin-left: -50vw;
     margin-bottom: var(--space-lg);
     overflow: hidden;
-    background: var(--color-primary-500);
-    /* Dark ink in both schemes: the 500 step is mid-tone either way. */
+    /* 600, not 500: a full-bleed strip this size at the 500 step read as
+       too bright/saturated against the rest of the restrained palette. */
+    background: var(--color-primary-600);
     color: light-dark(var(--primary-950), var(--primary-50));
     border-block: 3px solid var(--color-text-950);
   }
@@ -648,7 +641,7 @@
     margin: var(--space-2xs) 0 0;
     font-size: clamp(1.75rem, 5vw, 3.25rem);
     font-weight: 900;
-    font-style: italic;
+    /* Not italic — see .hero-gaelic. */
     letter-spacing: -0.045em;
     line-height: 1;
   }
@@ -864,7 +857,13 @@
   /* ── Blog post page ─────────────────────────────────────────── */
 
   .post-hd {
-    padding: var(--space-lg) 0;
+    padding: var(--space-lg) 0 var(--space-6);
+    /* Every other page-hd on the site closes on this same rule
+       (content.css: .page-hd:not(.hero-hd)); post-hd doesn't carry the
+       .page-hd class (its title/deck/meta shape is bespoke), so it was
+       the one header left without the closing line. */
+    border-bottom: 3px solid var(--color-primary-500);
+    margin-bottom: var(--space-lg);
   }
 
   .post-hd .post-title {
@@ -898,8 +897,13 @@
     gap: var(--space-xs);
   }
 
+  /* Spacing between rows comes from .post-meta--stacked's own flex gap;
+     this used to also set margin-top, which stacked on top of that gap
+     and made rows using this class sit further apart than the first
+     (classless) row above them. */
   .post-meta-group {
-    margin-top: var(--space-xs);
+    display: flex;
+    align-items: center;
   }
 
   /* Two-column layout: sidebar + content */
@@ -974,21 +978,22 @@
     display: none;
   }
 
-  /* Post footer */
+  /* Post footer: the publication attribution, visually closed off from
+     the comment thread above it rather than just trailing after it with
+     nothing but a margin to mark the change of subject. */
   .post-footer {
     margin-top: var(--space-lg);
     padding-top: var(--space-lg);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-  }
-
-  .post-provenance {
+    border-top: 1px solid var(--surface-color);
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
-    margin-top: var(--space-sm);
-    font-size: var(--text-xs);
+  }
+
+  .footer-pub-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
   }
 
   .post-provenance-row {
@@ -996,6 +1001,7 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
   }
 
   .post-provenance-label {
@@ -1028,10 +1034,12 @@
   }
 
   .rss-link {
+    /* Now sits inline in .post-provenance-row alongside the other
+       provenance links, not on its own row below — no margin-top to
+       nudge it out of alignment with them. */
     display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
-    margin-top: var(--space-2xs);
     font-size: var(--text-sm);
     color: var(--color-primary-500);
     text-decoration: none;
@@ -1648,7 +1656,7 @@
     margin: 0;
     font-size: clamp(2.5rem, 8vw, 4.5rem);
     font-weight: 900;
-    font-style: italic;
+    /* Not italic — see .hero-gaelic. */
     letter-spacing: -0.05em;
     line-height: 1;
   }
@@ -1661,7 +1669,7 @@
 
   .band-demo {
     overflow: hidden;
-    background: var(--color-primary-500);
+    background: var(--color-primary-600);
     color: light-dark(var(--primary-950), var(--primary-50));
     border-radius: var(--radius-sm);
     border-block: 2px solid var(--color-text-950);

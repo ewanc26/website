@@ -299,7 +299,15 @@
           <dt>Handle</dt>
           <dd><code class="id-code">{profile.handle}</code></dd>
           <dt>PDS</dt>
-          <dd><code class="id-code">eurosky.social</code></dd>
+          <dd>
+            {#await data.lazy.pds}
+              <code class="id-code">Resolving…</code>
+            {:then pds}
+              <code class="id-code">{pds ?? 'Unknown'}</code>
+            {:catch}
+              <code class="id-code">Unknown</code>
+            {/await}
+          </dd>
           <dt>PGP</dt>
           <dd class="id-pgp">
             <code class="id-code">{pgpFingerprint}</code>

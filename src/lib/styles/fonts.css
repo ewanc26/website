@@ -8,7 +8,13 @@
 @font-face {
   font-family: "Inter";
   font-style: normal;
-  font-weight: 400 800;
+  /* The variable font file's wght axis actually spans 100–900 (verified
+     directly against its fvar table), but this was declared as 400 800.
+     Any font-weight: 900 rule elsewhere on the site — the masthead, page
+     titles, outline text, the 404 numeral — was silently clamped to 800
+     by that declared range: confirmed empirically, not assumed, by
+     comparing rendered glyph widths at each weight. */
+  font-weight: 100 900;
   font-display: swap;
   src: url("/assets/fonts/Inter-4.1/web/InterVariable.woff2") format("woff2");
 }

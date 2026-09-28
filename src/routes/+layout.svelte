@@ -63,12 +63,12 @@
      -webkit-text-stroke, which traces every overlapping contour inside
      Inter's variable glyphs and draws stray lines through them. -->
 <svg class="svg-defs" aria-hidden="true" focusable="false">
-	<filter id="text-outline" x="-10%" y="-40%" width="120%" height="180%" color-interpolation-filters="sRGB">
-		<feMorphology in="SourceGraphic" operator="dilate" radius="2" result="thick" />
+	<filter id="text-outline" x="-20%" y="-60%" width="140%" height="220%" color-interpolation-filters="sRGB">
+		<feMorphology in="SourceGraphic" operator="dilate" radius="1.1" result="thick" />
 		<feComposite in="thick" in2="SourceGraphic" operator="out" />
 	</filter>
-	<filter id="text-outline-thin" x="-10%" y="-40%" width="120%" height="180%" color-interpolation-filters="sRGB">
-		<feMorphology in="SourceGraphic" operator="dilate" radius="1.25" result="thick" />
+	<filter id="text-outline-thin" x="-20%" y="-60%" width="140%" height="220%" color-interpolation-filters="sRGB">
+		<feMorphology in="SourceGraphic" operator="dilate" radius="0.75" result="thick" />
 		<feComposite in="thick" in2="SourceGraphic" operator="out" />
 	</filter>
 </svg>

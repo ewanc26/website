@@ -77,11 +77,13 @@
   /* ── Links ──────────────────────────────────────────────────── */
 
   .prose a {
-    color: var(--color-primary-500);
+    /* Not --color-primary-500 as text: see tokens.css. Article body
+       links are the highest-traffic case of this on the whole site. */
+    color: var(--color-primary-text);
     text-decoration: underline;
     text-decoration-color: color-mix(
       in oklch,
-      var(--color-primary-500) 35%,
+      var(--color-primary-text) 35%,
       transparent
     );
     text-underline-offset: 3px;
