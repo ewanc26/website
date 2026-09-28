@@ -1,46 +1,42 @@
 # DESIGN.md
 
-Port of the visual system for ewancroft.uk.
+The visual language of ewancroft.uk: **the almanac**.
 
-## Visual Tokens
+The site is a page from a personal almanac. Print conventions supply the structure; the Wheel of the Year supplies the colour and the ornament. The live specimen is at `/site/design`; the stylesheet is `src/styles/almanac.css` (tokens in `src/styles/tokens.css`, long-form reading in `src/styles/prose.css`).
 
-- **Palette**: Dynamic OKLCH, predominantly neutral/earthy with primary green accents.
-- **Typography**: Inter (Variable) for UI/Prose, JetBrains Mono for Code/Utility.
-- **Spacing**: 4pt modular scale (4px, 8px, 12px, 16px, 32px, 64px, 96px).
-- **Page gutters**: Fluid from 16px on phones to 32px on wide layouts; avoid breakpoint jumps that reduce usable width as the viewport grows.
-- **Motion**: Snap-to-standard `cubic-bezier(0.25, 1, 0.5, 1)` (Quart) for transitions; `expo` for entrances.
+## Principles
 
-## Register: Brand
+- **Paper and ink.** One tinted ground (`--paper`), one ink (`--ink`), one seasonal seal colour (`--stamp`). Solid colour only: no gradients, no shadows, no rounded corners (`--radius-*` are `0`; only `--radius-full` is used, for the seal's dots).
+- **Marginalia.** Section labels, roman numerals and metadata live in a left margin set in mono (`.folio > .margin`). Below 56rem the margin folds above the text.
+- **Leaders, not cards.** Lists are contents pages (`.toc`): title, dotted leader, date. Actionable rows tint to the seal colour on hover and never move. Grids of works are ruled `.plates` that invert on hover.
+- **The calendar is the ornament.** The running head (`.dateline`) reports the date, the moon phase and days to the next sabbat, computed per request in `Europe/London` (`src/lib/utils/almanac.ts`). The seal (`Stamp.astro`) names the current sabbat around tonight's moon and turns once every `--duration-stamp` (90s). On Mondays the dateline says _mōnandæg_.
+- **Quiet motion.** Entries fade up once (`.reveal`); pages crossfade via Astro's view transitions. Everything stops under `prefers-reduced-motion`.
 
-- **Tone**: Traditional meets Technical.
-- **Elements**: Sabbat-aware backgrounds, poetic typography, generous whitespace.
+## Type
 
-### Display type
+- **Fraunces** (variable: `opsz`, `wght`, `SOFT`, `WONK`) for everything readable. Display sizes are light (weight 250–300, `opsz` 144, tight tracking); italics use `WONK` for their lean. Prose sets at a 66ch measure.
+- **JetBrains Mono** for marginalia only: datelines, labels, numerals, metadata. Always small, usually upper-case, always tracked out.
+- Scale tokens: `--text-micro` … `--text-4xl`. `--text-3xl` is the page-title ceiling, `--text-4xl` the home nameplate only. One poster-scale focal point per page.
 
-- Two poster-scale tokens sit above the interaction type scale: `--text-3xl` (page titles, every `page-hd`) and `--text-4xl` (homepage masthead only). Weight 900, tight tracking, near-1 line-height, fluid on `vw`.
-- Reserve poster scale for one focal point per page — the masthead name, a page title. Everything else stays on the standard scale so the jump reads as intentional, not noisy.
-- `.text-outline` / `.text-outline--thin` render wireframe display type: an SVG filter (`feMorphology` dilate + `feComposite` cut) leaves one clean contour per glyph. Don't use `-webkit-text-stroke` for this — it traces every overlapping contour inside Inter's variable glyphs and draws stray lines through counters and joins. The `--thin` variant is for sub-640px viewports and secondary wordmarks, where the thicker pass fills in small counters.
-- A full-bleed scrolling band (edge to edge, breaking the shell) in the seasonal primary is the one motion-driven brand flourish, used to anchor the masthead. Its loop duration is `--duration-marquee` (60s), tokened separately from the interaction durations since it's a full cycle, not a state transition. Disabled under `prefers-reduced-motion`. Hovering or focusing it pauses the loop and, if the ambient soundscape is on, rings its confirmation chime — pausing a scrolling text is a deliberate "let me read this" gesture, unlike a passing hover elsewhere, so it earns an audible response the way copying a link does.
-- The background moon and pentacles (`SabbatBackground.svelte`) wax and wane on `--duration-breath` (16.6667s = 1 / `BREATH_HZ` in `src/lib/music/constants.ts`) — the same rate as the ambient engine's whole-mix breathing LFO. It's the one background layer that's always on screen, silent or not, so when the soundscape is on, what you see and what you hear pulse together. Change one, change the other.
-- `--color-primary-text` / `--color-primary-text-hover` are the accessible-text variants of the primary accent. `--color-primary-500` is deliberately the same lightness in both light and dark mode (a mirrored scale: 500↔500, 400↔600, 300↔700…), which is correct for backgrounds, icons, and borders at consistent visual weight — but wrong for text, since light mode's near-white background sits much closer to that fixed lightness than dark mode's near-black one does. Measured directly: primary-500-as-text is 6.53:1 in dark mode but only 2.66:1 in light mode, failing WCAG AA's 3:1 floor for large text and badly failing 4.5:1 for normal text. Use the `-text` tokens (which resolve to darker steps in light mode, lighter in dark) for any plain-text usage of the primary colour — links, `.section-link`, article prose links. Backgrounds, icon fills, and decorative borders should keep using `--color-primary-500` directly.
-- Page navigations use the View Transitions API (`+layout.svelte`), crossfading and sliding just the content region — chrome (header, footer) never re-transitions. Direction is real, not guessed from route depth: a clicked link or `goto()` pushes the new page up from below (advancing); the browser's actual back/forward buttons get the exact mirror, settling down from above (retreating). Both variants are disabled outright under `prefers-reduced-motion` — see the `!important` note in `system.css` if touching this, since the direction-qualified rules are more specific and would otherwise still win on `animation-name`.
+## Colour
 
-## Register: Product
+The seasonal engine is unchanged. `src/lib/server/theme.ts` generates OKLCH scales interpolated between the previous and next sabbat and injects them per request (`Base.astro`; refreshed hourly by `SeasonalThemeUpdater`). Neutrals are tinted toward the current hue.
 
-- **Tone**: Clinical, efficient, dense.
-- **Locations**: Blog listings, ATProto profiles, Project indices.
-- **Patterns**: Panel primitives, editorial indexes, minimal decoration.
+- `--paper`/`--paper-deep` = background 50/100, `--ink`/`--ink-soft` = text 950/700, `--rule` = text 300/400.
+- `--stamp` is `--color-primary-text`: the accessible text variant of the primary accent. `--color-primary-500` has the same lightness in both schemes (right for fills and rules, ~2.7:1 as text on light paper), so use the `-text` tokens for any plain-text use of the seasonal colour.
+- Locale is strictly `en-GB` (HTML `lang`, `og:locale`, date formatting).
 
-### Editorial indexes
+## Layout
 
-- Use a raised parent surface with a 4px inset to group compact rows.
-- Use the Selected Projects row anatomy across UI collections: a clear label, supporting detail, and trailing metadata where relevant.
-- Actionable rows share a primary-tinted hover and keyboard-focus highlight. Static rows do not imply interactivity.
-- Keep rows spatially stable on hover and focus; communicate state through colour rather than positional movement.
-- On tablet and mobile widths, collapse row columns before labels, descriptions, or metadata become cramped; preserve the same raised parent and inset-row hierarchy.
-- Keep prose lists semantic and unstyled; this pattern is for navigational and data indexes.
+- `.sheet` (76rem, fluid 16–40px gutters) wraps every page; `.sheet--narrow` for single columns.
+- `.folio` is the two-column page (margin left, text right). `.page-head` opens inner pages: mono kicker, light display title with an italic word, italic standfirst.
+- The colophon (`Colophon.astro`) replaces the footer: how the site was set, correspondence, imprint, and the wolf-mode and ambiance toggles.
+
+## Interactive islands
+
+Astro renders pages to static HTML; Svelte 5 is used only where interaction earns it (comments, table of contents, share bar, backlinks, Leaflet blocks, the ambient soundscape, Easter eggs). Persistent islands (`AmbianceEngine`, eggs) use `transition:persist` in `Base.astro` so audio survives navigation. Islands that need the current URL read `$app/state`, shimmed in `src/shims/app-state.svelte.ts`.
 
 ## Anti-references
 
-- **AI Slop**: No generic "Boost productivity" copy, no purple gradients, no heavy glassmorphism.
-- **Visual Noise**: No generic drop shadows, no un-weighted icons, no floating transitions without easing.
+- **AI slop**: no generic "boost productivity" copy, no purple gradients, no glassmorphism.
+- **Visual noise**: no drop shadows, no cards-on-cards, no motion without purpose.

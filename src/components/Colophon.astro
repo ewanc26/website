@@ -1,0 +1,69 @@
+---
+/**
+ * The colophon: what a printed book puts at the back — how it was set,
+ * where it can be found, under what terms it is shared.
+ */
+import { WolfToggle, AmbianceToggle } from "$lib/components/layout";
+import type { Almanac } from "$lib/utils/almanac";
+import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
+import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+
+interface Props {
+  almanac: Almanac;
+  siteInfo: NormalizedSiteInfo | null;
+}
+const { almanac, siteInfo } = Astro.props;
+
+const year = new Date().getFullYear();
+const born = siteInfo?.additionalInfo?.websiteBirthYear;
+const years = born && born < year ? `${born}–${year}` : `${year}`;
+const repo = siteInfo?.openSourceInfo?.repositories.find((r) => r.type === "primary") ?? siteInfo?.openSourceInfo?.repositories[0];
+const license = siteInfo?.openSourceInfo?.license;
+const email = siteInfo?.additionalInfo?.contact?.email ?? "contact@ewancroft.uk";
+---
+
+<footer class="colophon">
+  <div class="sheet">
+    <div class="colophon-grid">
+      <section>
+        <h2>Colophon</h2>
+        <p>
+          Set in Fraunces and JetBrains Mono, on paper the colour of the season.
+          Composed under a {almanac.moon.name.toLowerCase()} at {almanac.sabbat.name}.
+        </p>
+        <details>
+          <summary>About {almanac.sabbat.name}</summary>
+          <p>{almanac.sabbat.description}</p>
+        </details>
+      </section>
+
+      <section>
+        <h2>Correspondence</h2>
+        <ul>
+          <li><a href={`mailto:${email}`}>{email}</a></li>
+          <li><a href={`https://bsky.app/profile/${PUBLIC_ATPROTO_DID}`} rel="noopener">Bluesky</a></li>
+          <li><a href="https://eurosky.tech" rel="noopener">Eurosky</a></li>
+          <li><a href="https://ko-fi.com/ewancroft" rel="noopener">Ko-fi</a> · <a href="https://github.com/sponsors/ewanc26" rel="noopener">GitHub Sponsors</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Imprint</h2>
+        <ul>
+          {repo && <li><a href={repo.url} rel="noopener">Source</a></li>}
+          {license && <li><a href={license.url} rel="license noopener">{license.name ?? "Licence"}</a></li>}
+          <li><a href="/site/design">Design notes</a></li>
+          <li><a href="/site/meta">Site meta &amp; privacy</a></li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="colophon-base">
+      <span>© {years} Ewan Croft · No cookies, no tracking</span>
+      <span class="colophon-tools">
+        <WolfToggle client:idle />
+        <AmbianceToggle client:idle />
+      </span>
+    </div>
+  </div>
+</footer>

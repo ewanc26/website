@@ -1,0 +1,114 @@
+---
+import Base from "../../layouts/Base.astro";
+import PageHead from "../../components/PageHead.astro";
+import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
+import { PUBLIC_ATPROTO_DID, PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
+import { blogDateParts } from "$lib/utils/date";
+import { normalizeSlug } from "$lib/utils/slugify";
+import { normalizeTag } from "$lib/utils/tags";
+
+Astro.response.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
+
+const [{ documents }, { publications }] = await Promise.all([
+  fetchDocuments(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ documents: [] })),
+  fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ publications: [] })),
+]);
+const blog = publications.find((p) => p.rkey === PUBLIC_LEAFLET_BLOG_PUBLICATION);
+const posts = documents
+  .filter((d) => d.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION)
+  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+  .map((d) => {
+    const { year, month, day } = blogDateParts(d.publishedAt);
+    return {
+      title: d.title,
+      description: d.description as string | undefined,
+      date: d.publishedAt,
+      year,
+      tags: [...new Set((d.tags ?? []).map(normalizeTag).filter(Boolean))] as string[],
+      href: `/blog/${year}/${month}/${day}/${normalizeSlug(d.title)}`,
+    };
+  });
+
+const byYear = new Map<string, typeof posts>();
+for (const p of posts) byYear.set(p.year, [...(byYear.get(p.year) ?? []), p]);
+
+const tagCounts = new Map<string, number>();
+for (const p of posts) for (const t of p.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+const topics = [...tagCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 14);
+
+const fmt = (d: string) =>
+  new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "Europe/London" }).format(new Date(d));
+---
+
+<Base title="Blog" description={blog?.description ?? "Writing on technology, tradition, and the AT Protocol."} ogSubtitle="Writing on technology and tradition." ogType="BLOG">
+  <main class="sheet">
+    <PageHead kicker={`${posts.length} entries`} standfirst={blog?.description || undefined}>
+      The <em>archive</em>
+    </PageHead>
+
+    <section class="folio">
+      <div class="margin">
+        <span class="numeral">§</span>
+        <p>Find</p>
+        {topics.length > 0 && (
+          <div class="tags" role="group" aria-label="Topics">
+            {topics.map(([t, n]) => <button type="button" class="tag" data-topic={t}>{t} ({n})</button>)}
+          </div>
+        )}
+        {blog?.url && <p><a href={`${blog.url.replace(/\/+$/, "")}/rss`} rel="noopener">RSS ↗</a></p>}
+      </div>
+
+      <div>
+        <div class="search">
+          <label class="sr-only" for="post-filter">Filter posts by title or topic</label>
+          <input id="post-filter" type="search" placeholder="Filter by title or topic…" autocomplete="off" />
+        </div>
+        <p class="empty" data-none hidden>Nothing in the archive matches that.</p>
+
+        {[...byYear.entries()].map(([year, list]) => (
+          <section data-year aria-labelledby={`y${year}`}>
+            <h2 class="h-section" id={`y${year}`}>{year}</h2>
+            <ol class="toc">
+              {list.map((p) => (
+                <li data-post data-hay={`${p.title} ${p.tags.join(" ")}`.toLowerCase()}>
+                  <a href={p.href} class="toc-row">
+                    <span class="toc-title">{p.title}</span>
+                    <span class="toc-leader" aria-hidden="true"></span>
+                    <time class="toc-meta" datetime={p.date}>{fmt(p.date)}</time>
+                    {p.description && <p class="toc-note">{p.description}</p>}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))}
+        {posts.length === 0 && <p class="empty">The publishing service is not answering just now.</p>}
+      </div>
+    </section>
+  </main>
+</Base>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const input = document.querySelector<HTMLInputElement>("#post-filter");
+    if (!input) return;
+    const posts = [...document.querySelectorAll<HTMLElement>("[data-post]")];
+    const years = [...document.querySelectorAll<HTMLElement>("[data-year]")];
+    const none = document.querySelector<HTMLElement>("[data-none]")!;
+
+    const apply = () => {
+      const q = input.value.trim().toLowerCase();
+      for (const p of posts) p.hidden = !!q && !p.dataset.hay!.includes(q);
+      for (const y of years) y.hidden = !y.querySelector("[data-post]:not([hidden])");
+      none.hidden = !q || posts.some((p) => !p.hidden);
+    };
+    input.addEventListener("input", apply);
+    document.querySelectorAll<HTMLButtonElement>("[data-topic]").forEach((b) =>
+      b.addEventListener("click", () => {
+        input.value = b.dataset.topic!;
+        apply();
+        input.focus();
+      }),
+    );
+  });
+</script>

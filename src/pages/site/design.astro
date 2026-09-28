@@ -1,0 +1,74 @@
+---
+import Base from "../../layouts/Base.astro";
+import PageHead from "../../components/PageHead.astro";
+import Stamp from "../../components/Stamp.astro";
+import Triskele from "$lib/components/icons/Triskele.svelte";
+import Pentacle from "$lib/components/icons/Pentacle.svelte";
+import { getAlmanac } from "$lib/utils/almanac";
+import { sabbats } from "$lib/utils/sabbats";
+
+const almanac = getAlmanac();
+const swatches = [
+  ["Paper", "--paper"], ["Deep paper", "--paper-deep"], ["Ink", "--ink"],
+  ["Soft ink", "--ink-soft"], ["Rule", "--rule"], ["Seal", "--stamp"],
+];
+---
+
+<Base title="Design" description="The visual language of ewancroft.uk: an almanac set in Fraunces and JetBrains Mono." ogSubtitle="An almanac, set in Fraunces and JetBrains Mono." ogType="DESIGN">
+  <main class="sheet">
+    <PageHead kicker="Design notes" standfirst="This site is a page from a personal almanac. Print conventions supply the structure; the calendar supplies the colour and the ornament.">
+      The <em>almanac</em>
+    </PageHead>
+
+    <section class="folio" aria-labelledby="principles">
+      <div class="margin"><span class="numeral">i</span><span id="principles">Principles</span></div>
+      <ol class="prose">
+        <li><strong>Paper and ink.</strong> One tinted ground, one ink, one seasonal seal colour. Solid colour only: no gradients, no shadows, no rounded corners.</li>
+        <li><strong>Marginalia.</strong> Section labels, numerals and metadata sit in a left margin in mono, as they would beside a printed paragraph. On narrow screens the margin folds above the text.</li>
+        <li><strong>Leaders, not cards.</strong> Lists are contents pages: title, dotted leader, date. Emphasis comes from italics and colour, never from movement.</li>
+        <li><strong>The calendar is the ornament.</strong> The running head reports the date, the moon and the days to the next sabbat; the seal names the current sabbat around tonight's moon.</li>
+        <li><strong>Quiet motion.</strong> The seal turns once every ninety seconds; entries fade up once. All of it stops under reduced motion.</li>
+      </ol>
+    </section>
+
+    <section class="folio" aria-labelledby="type">
+      <div class="margin"><span class="numeral">ii</span><span id="type">Type</span></div>
+      <div>
+        <p class="display" style="font-size:var(--text-3xl);font-weight:250;line-height:.95;letter-spacing:-.04em;margin:0">Fraunces <em>italic</em></p>
+        <p class="prose" style="margin-top:1rem">Fraunces is a variable “old-style soft-serif”. Optical size does the work: display sizes are light and tight, text sizes are sturdy. The italic uses the WONK axis for its lean. Body copy sets at a 66-character measure.</p>
+        <p style="font-family:var(--font-mono);font-size:var(--text-sm);letter-spacing:.04em;margin-top:1rem">JetBrains Mono — datelines, labels, numerals, metadata. Always small, usually upper-case, always tracked out.</p>
+      </div>
+    </section>
+
+    <section class="folio" aria-labelledby="colour">
+      <div class="margin"><span class="numeral">iii</span><span id="colour">Colour</span></div>
+      <div>
+        <ul class="plates">
+          {swatches.map(([name, v]) => (
+            <li><div class="plate" style="min-height:8rem"><span class="plate-no">{v}</span><span class="plate-name">{name}</span><span style={`margin-top:auto;height:2.5rem;border:1px solid var(--ink);background:var(${v})`}></span></div></li>
+          ))}
+        </ul>
+        <p class="prose" style="margin-top:1rem">Every colour is generated in OKLCH and interpolated between the previous and next sabbat, so the paper, ink and seal drift with the year. Neutrals are tinted toward the current hue. The seal colour is used for text only through the <code>-text</code> variants, which meet WCAG AA.</p>
+      </div>
+    </section>
+
+    <section class="folio" aria-labelledby="seal">
+      <div class="margin"><span class="numeral">iv</span><span id="seal">The seal</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:2rem;align-items:center">
+        <Stamp almanac={almanac} />
+        <p class="prose" style="flex:1;min-width:16rem">Tonight: {almanac.moon.name.toLowerCase()}, {almanac.sabbat.name}. The next sabbat is {almanac.next.name}, in {almanac.next.days} days. The eight, in order: {sabbats.map((s) => s.name).join(", ")}.</p>
+        <span style="display:flex;gap:1rem;color:var(--stamp)"><Pentacle size={24} /><Triskele size={28} /></span>
+      </div>
+    </section>
+
+    <section class="folio" aria-labelledby="components">
+      <div class="margin"><span class="numeral">v</span><span id="components">Parts</span></div>
+      <div>
+        <p class="h-section">Contents entry</p>
+        <ul class="toc"><li><div class="toc-row"><span class="toc-title">A title with a leader</span><span class="toc-leader"></span><span class="toc-meta">28 Sep 2026</span></div></li></ul>
+        <p class="h-section" style="margin-top:2rem">Actions</p>
+        <p><span class="btn">Ruled button</span> <span class="tag">tag</span></p>
+      </div>
+    </section>
+  </main>
+</Base>

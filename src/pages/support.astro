@@ -1,0 +1,66 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+
+const PLATFORM_URLS: Record<string, string> = {
+  "ko-fi": "https://ko-fi.com/ewancroft",
+  "gh-sponsors": "https://github.com/sponsors/ewanc26",
+};
+const platform = Astro.url.searchParams.get("platform");
+if (platform && PLATFORM_URLS[platform]) return Astro.redirect(PLATFORM_URLS[platform], 301);
+---
+
+<Base title="Support" description="Support my open-source work via Ko-fi or GitHub Sponsors." ogSubtitle="Ko-fi and GitHub Sponsors." ogType="SUPPORT">
+  <main class="sheet">
+    <PageHead kicker="Patronage" standfirst="Everything I build is free and open-source. Your support keeps servers running, projects maintained, and new tools getting built.">
+      Support <em>the work</em>
+    </PageHead>
+
+    <section class="folio" aria-labelledby="direct">
+      <div class="margin"><span class="numeral">i</span><span id="direct">Directly</span></div>
+      <div>
+        <ul class="toc">
+          <li>
+            <a class="toc-row toc-row--lead" href="https://ko-fi.com/ewancroft" rel="noopener noreferrer" aria-label="Support with a one-time or monthly payment on Ko-fi">
+              <span class="toc-title">Ko-fi</span><span class="toc-leader" aria-hidden="true"></span><span class="toc-meta">One-time or monthly ↗</span>
+            </a>
+          </li>
+          <li>
+            <a class="toc-row toc-row--lead" href="https://github.com/sponsors/ewanc26" rel="noopener noreferrer" aria-label="Sponsor with a one-time or monthly payment on GitHub">
+              <span class="toc-title">GitHub Sponsors</span><span class="toc-leader" aria-hidden="true"></span><span class="toc-meta">One-time or monthly ↗</span>
+            </a>
+          </li>
+        </ul>
+        <iframe
+          class="kofi-frame"
+          src="https://ko-fi.com/ewancroft/?hidefeed=true&widget=true&embed=true&preview=true"
+          title="Support Ewan through Ko-fi"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <p class="empty">Payments are handled securely by Ko-fi or GitHub. This site never receives your payment details.</p>
+      </div>
+    </section>
+
+    <section class="folio" aria-labelledby="other">
+      <div class="margin"><span class="numeral">ii</span><span id="other">Otherwise</span></div>
+      <ul class="toc">
+        <li><div class="toc-row"><span class="toc-title">Share</span><span class="toc-leader" aria-hidden="true"></span><span class="toc-meta">Word of mouth</span></div></li>
+        <li>
+          <a class="toc-row" href="https://github.com/ewanc26" rel="noopener noreferrer" aria-label="Explore ways to contribute on Ewan's GitHub profile">
+            <span class="toc-title">Contribute</span><span class="toc-leader" aria-hidden="true"></span><span class="toc-meta">Bugs, features, PRs ↗</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </main>
+</Base>
+
+<style is:global>
+  .kofi-frame {
+    width: 100%;
+    height: 34rem;
+    margin-block: var(--space-lg);
+    border: 1px solid var(--ink);
+    background: #fff;
+  }
+</style>

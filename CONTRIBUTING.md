@@ -4,7 +4,7 @@ my website at ewancroft.uk
 
 ## Project context
 
-- Primary language: Svelte
+- Primary language: Astro (Svelte islands)
 - Default branch: main
 
 ## Before submitting changes

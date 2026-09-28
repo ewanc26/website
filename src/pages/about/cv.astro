@@ -1,0 +1,66 @@
+---
+import Base from "../../layouts/Base.astro";
+import PageHead from "../../components/PageHead.astro";
+import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { gatherCvData } from "$lib/server/cv/data";
+
+Astro.response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=3600");
+const cv = await gatherCvData(PUBLIC_ATPROTO_DID, fetch);
+const curl = "curl -fsSL ewancroft.uk/cv | bash";
+const facts: [string, string][] = [
+  ["Name", cv.name],
+  ["Headline", cv.headline],
+  ["Location", cv.location],
+  ["Skills", `${cv.skillGroups.reduce((n, g) => n + g.skills.length, 0)} across ${cv.skillGroups.length} categories`],
+  ["Projects", `${cv.selectedProjects.length + cv.recordProjects.length} listed`],
+  ["Languages", cv.languages.map((l) => l.name).join(", ")],
+];
+const sections = [
+  ["1", "Profile"], ["2", "Methodology"], ["3", "Skills"], ["4", "Selected projects"], ["5", "Projects"],
+  ["6", "Experience"], ["7", "Education"], ["8", "Languages & links"], ["a", "All sections"], ["q", "Quit"],
+];
+---
+
+<Base title="CV" description="Interactive terminal CV for Ewan Croft — aggregate of live AT Protocol records, served as a bash script." ogSubtitle="Interactive terminal CV." ogType="CV">
+  <main class="sheet">
+    <PageHead kicker="Curriculum vitae" standfirst="A CV that lives in the terminal. It aggregates the same AT Protocol records as the about page and is served as a self-contained bash script.">
+      The <em>terminal</em> CV
+    </PageHead>
+
+    <section class="folio" aria-labelledby="run">
+      <div class="margin"><span class="numeral">i</span><span id="run">Run it</span></div>
+      <div>
+        <pre class="cv-cmd"><code>$ {curl}</code></pre>
+        <p><button type="button" class="btn" data-copy={curl}>Copy command</button></p>
+        <p class="empty">Append <code>-s -- skills</code> to print a single section.</p>
+      </div>
+    </section>
+
+    <section class="folio" aria-labelledby="menu">
+      <div class="margin"><span class="numeral">ii</span><span id="menu">The menu</span></div>
+      <dl class="dl">
+        {sections.map(([k, label]) => (<><dt>[{k}]</dt><dd>{label}</dd></>))}
+      </dl>
+    </section>
+
+    <section class="folio" aria-labelledby="facts">
+      <div class="margin"><span class="numeral">iii</span><span id="facts">At a glance</span></div>
+      <div>
+        <dl class="dl">{facts.map(([k, v]) => (<><dt>{k}</dt><dd>{v}</dd></>))}</dl>
+        <p class="empty">Generated {cv.generatedAt} from live records.</p>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style is:global>
+  .cv-cmd {
+    margin: 0 0 var(--space-md);
+    padding: var(--space-md);
+    border: 1px solid var(--ink);
+    background: var(--paper-deep);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    overflow-x: auto;
+  }
+</style>

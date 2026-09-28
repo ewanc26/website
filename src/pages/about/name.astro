@@ -1,0 +1,47 @@
+---
+import Base from "../../layouts/Base.astro";
+import TableOfContents from "$lib/components/TableOfContents.svelte";
+import LeafletBlocks from "$lib/components/leaflet/LeafletBlocks.svelte";
+import Pentacle from "$lib/components/icons/Pentacle.svelte";
+import { fetchDocuments } from "@ewanc26/atproto";
+import { fetchBlob } from "$lib/services/atproto";
+import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { renderMarkdown } from "$lib/utils/markdown";
+import { leafletProvider, serialiseBlocks, type SerialisedBlock } from "$lib/providers";
+
+const RKEY = "3mnivbrtqc22b";
+const { documents } = await fetchDocuments(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ documents: [] as any[] }));
+const post = documents.find((d) => d.uri.endsWith(`/${RKEY}`));
+if (!post) return Astro.rewrite("/404");
+
+const excerpt = (post.textContent ?? "").replace(/[#*`_~\[\]()\-]/g, "").replace(/\s+/g, " ").trim();
+const meta = post.description || (excerpt ? (excerpt.length > 155 ? `${excerpt.slice(0, 152)}...` : excerpt) : `Read ${post.title} on ewancroft.uk.`);
+
+let blocks: SerialisedBlock[] = [];
+let html = "";
+if (post.content && typeof post.content === "object" && leafletProvider.matches(post.content)) {
+  blocks = await serialiseBlocks(post.content, PUBLIC_ATPROTO_DID, fetchBlob);
+  html = await renderMarkdown((await leafletProvider.toMarkdown(post.content, { fetchBlob })).markdown);
+} else {
+  html = await renderMarkdown(typeof post.content === "string" ? post.content : post.textContent || "");
+}
+---
+
+<Base title={post.title} description={meta} ogSubtitle={post.description} ogType="ABOUT">
+  <main class="sheet">
+    <header class="post-head reveal">
+      <p class="kicker"><a href="/about">← About</a></p>
+      <h1 class="post-title">{post.title}</h1>
+      {post.description && <p class="post-deck">{post.description}</p>}
+    </header>
+    <div class="folio">
+      <aside class="margin" aria-label="Contents"><TableOfContents container=".prose" client:idle /></aside>
+      <div>
+        <article class="prose prose--opening">
+          {blocks.length > 0 ? <LeafletBlocks blocks={blocks} client:visible /> : <Fragment set:html={html} />}
+        </article>
+        <div class="post-end" aria-hidden="true"><Pentacle size={20} /></div>
+      </div>
+    </div>
+  </main>
+</Base>

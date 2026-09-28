@@ -1,0 +1,18 @@
+---
+import Base from "../layouts/Base.astro";
+import NotFoundEgg from "$lib/components/ostara-eggs/NotFoundEgg.svelte";
+Astro.response.status = 404;
+---
+
+<Base title="Page not found" description="That page is not in this almanac." ogType="ERROR">
+  <main class="sheet">
+    <header class="page-head reveal">
+      <p class="kicker">Error</p>
+      <p class="lost-numeral" aria-hidden="true">404</p>
+      <h1 class="page-title">Lost <em>in the fog</em></h1>
+      <p class="standfirst">Whatever was here has moved, or was never here at all.</p>
+      <p><a class="btn" href="/">Back to the front page</a> <a class="btn" href="/blog">The archive</a></p>
+    </header>
+    <NotFoundEgg client:idle />
+  </main>
+</Base>

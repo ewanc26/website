@@ -13,13 +13,10 @@
     "test:blog": "node --experimental-strip-types --test src/lib/utils/tags.test.ts src/lib/utils/coverImage.test.ts"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@astrojs/svelte": "^9.0.1",
     "@astrojs/vercel": "^11.0.11",
     "@lucide/svelte": "^1.21.0",
-    "@sveltejs/adapter-auto": "^7.0.1",
-    "@sveltejs/adapter-vercel": "^6.3.4",
-    "@sveltejs/kit": "^2.67.0",
-    "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@tailwindcss/vite": "^4.3.1",
     "@types/chroma-js": "^3.1.2",
     "@types/mdast": "^4.0.4",
@@ -38,6 +35,8 @@
     "@ewanc26/atproto": "^0.2.12",
     "@ewanc26/noise": "^0.1.4",
     "@ewanc26/supporters": "^0.3.0",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
     "@resvg/resvg-wasm": "^2.6.2",
     "atmentions": "github:pixeline/atmentions",
     "chroma-js": "^3.2.0",
