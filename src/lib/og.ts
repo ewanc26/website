@@ -10,6 +10,8 @@ export type OgEntry = {
   slug: string;
   type?: string | null;
   moonPhase: number;
+  /** Running head, e.g. "Monday · 28 September 2026 · Waning gibbous". */
+  dateline: string;
   theme: {
     bg: string;
     fg: string;
@@ -124,7 +126,20 @@ const displayPath = (slug: string): string => {
   return `ewancroft.uk${compactPath.startsWith("/") ? "" : "/"}${compactPath}`;
 };
 
-// Satori uses a JSX-like object structure for defining the layout
+// Title: up to 3 lines, 44–92px (Fraunces runs narrower than the Inter it replaced)
+const getDisplayTitleSize = (title: string): number =>
+  dynamicFontSize(title, 3, 44, 92);
+
+const el = (
+  type: string,
+  style: Record<string, unknown>,
+  children?: unknown,
+  props: Record<string, unknown> = {},
+) => ({ type, props: { style, children, ...props } });
+
+// Satori uses a JSX-like object structure for defining the layout.
+// The card is one almanac page: a heavy rule, the dateline, the kicker,
+// the title in light Fraunces, an italic standfirst, and the sabbat seal.
 export const getOgTemplate = (entry: OgEntry) => {
   const title = cleanOgText(entry.title, MAX_TITLE_LENGTH);
   const subtitle = cleanOgText(entry.subtitle, MAX_SUBTITLE_LENGTH);
@@ -140,11 +155,10 @@ export const getOgTemplate = (entry: OgEntry) => {
         cy: "12",
         r: "9",
         fill: theme.accent,
-        opacity: "0.14",
+        opacity: "0.16",
       },
     },
   ];
-
   if (moon.isFull) {
     moonChildren.push({
       type: "circle",
@@ -160,7 +174,6 @@ export const getOgTemplate = (entry: OgEntry) => {
       },
     });
   }
-
   moonChildren.push({
     type: "circle",
     props: {
@@ -169,162 +182,185 @@ export const getOgTemplate = (entry: OgEntry) => {
       r: "9",
       fill: "none",
       stroke: theme.accent,
-      strokeWidth: "1",
-      opacity: moon.isNew ? "0.8" : "0.3",
+      strokeWidth: "0.5",
     },
   });
 
-  const children = [];
-
-  if (type) {
-    children.push({
-      type: "div",
+  // Seal: two rings and eight sabbat ticks around the moon.
+  const ticks = Array.from({ length: 8 }, (_, i) => {
+    const a = (i * Math.PI) / 4;
+    return {
+      type: "line",
       props: {
-        style: {
-          fontSize: "19px",
-          color: theme.typeFg,
-          fontFamily: "JetBrains Mono",
-          textTransform: "uppercase",
-          letterSpacing: "0",
-          marginBottom: "24px",
-        },
-        children: type,
+        x1: 100 + Math.cos(a) * 88,
+        y1: 100 + Math.sin(a) * 88,
+        x2: 100 + Math.cos(a) * 96,
+        y2: 100 + Math.sin(a) * 96,
+        stroke: theme.accent,
+        strokeWidth: "2",
       },
-    });
-  }
+    };
+  });
+  const seal = {
+    type: "svg",
+    props: {
+      width: "230",
+      height: "230",
+      viewBox: "0 0 200 200",
+      style: { position: "absolute", right: "80px", bottom: "96px" },
+      children: [
+        {
+          type: "circle",
+          props: {
+            cx: "100",
+            cy: "100",
+            r: "96",
+            fill: "none",
+            stroke: theme.accent,
+            strokeWidth: "1.5",
+          },
+        },
+        {
+          type: "circle",
+          props: {
+            cx: "100",
+            cy: "100",
+            r: "70",
+            fill: "none",
+            stroke: theme.accent,
+            strokeWidth: "1.5",
+          },
+        },
+        ...ticks,
+        {
+          type: "g",
+          props: {
+            transform: "translate(56 56) scale(3.6667)",
+            children: moonChildren,
+          },
+        },
+      ],
+    },
+  };
 
-  // Only render title when provided
+  const body: unknown[] = [];
+  if (type) {
+    body.push(
+      el(
+        "div",
+        {
+          fontFamily: "JetBrains Mono",
+          fontSize: "20px",
+          letterSpacing: "4px",
+          color: theme.accent,
+          marginBottom: "28px",
+        },
+        type,
+      ),
+    );
+  }
   if (title) {
-    const titleFontSize = getTitleFontSize(title);
-    const displayTitle = truncateToFit(title, titleFontSize, 3);
-    children.push({
-      type: "h1",
-      props: {
-        style: {
-          fontSize: `${titleFontSize}px`,
-          fontWeight: 800,
-          margin: "0 0 20px 0",
+    const size = getDisplayTitleSize(title);
+    body.push(
+      el(
+        "div",
+        {
+          fontFamily: "Fraunces",
+          fontWeight: 300,
+          fontSize: `${size}px`,
+          lineHeight: 1.02,
+          letterSpacing: "-2px",
+          color: theme.fg,
+          maxWidth: "820px",
           display: "-webkit-box",
           "-webkit-line-clamp": "3",
           "-webkit-box-orient": "vertical",
           overflow: "hidden",
-          lineHeight: 1.15,
         },
-        children: displayTitle,
-      },
-    });
+        truncateToFit(title, size, 3),
+      ),
+    );
   }
-
-  // Only render subtitle when one was actually provided
   if (subtitle) {
-    const subtitleFontSize = getSubtitleFontSize(subtitle);
-    const displaySubtitle = truncateToFit(subtitle, subtitleFontSize, 2);
-    children.push({
-      type: "p",
-      props: {
-        style: {
-          fontSize: `${subtitleFontSize}px`,
+    const size = getSubtitleFontSize(subtitle);
+    body.push(
+      el(
+        "div",
+        {
+          fontFamily: "Fraunces",
+          fontStyle: "italic",
+          fontWeight: 400,
+          fontSize: `${size}px`,
+          lineHeight: 1.35,
           color: theme.typeFg,
-          margin: "0",
+          marginTop: "28px",
+          maxWidth: "760px",
           display: "-webkit-box",
           "-webkit-line-clamp": "2",
           "-webkit-box-orient": "vertical",
           overflow: "hidden",
-          lineHeight: 1.4,
         },
-        children: displaySubtitle,
-      },
-    });
+        truncateToFit(subtitle, size, 2),
+      ),
+    );
   }
 
-  children.push(
+  return el(
+    "div",
     {
-      type: "div",
-      props: {
-        style: {
-          marginTop: "auto",
-          fontSize: "20px",
+      display: "flex",
+      flexDirection: "column",
+      width: "100%",
+      height: "100%",
+      backgroundColor: theme.bg,
+      color: theme.fg,
+      position: "relative",
+    },
+    [
+      el("div", { width: "100%", height: "12px", backgroundColor: theme.fg }),
+      el(
+        "div",
+        {
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "18px 80px",
+          borderBottom: `1px solid ${theme.fg}`,
           fontFamily: "JetBrains Mono",
-          color: theme.fg,
+          fontSize: "17px",
+          letterSpacing: "3px",
+          textTransform: "uppercase",
         },
-        children: displayPath(entry.slug),
-      },
-    },
-    // Pentacle Icon
-    {
-      type: "svg",
-      props: {
-        width: "160",
-        height: "160",
-        viewBox: "0 0 12 12",
-        style: {
-          position: "absolute",
-          bottom: "54px",
-          right: "64px",
-          opacity: "0.13",
+        [el("div", {}, entry.dateline), el("div", {}, "A personal almanac")],
+      ),
+      el(
+        "div",
+        {
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          flex: 1,
+          padding: "0 80px",
         },
-        children: [
-          {
-            type: "path",
-            props: {
-              d: "M11 6A5 5 0 1 0 1 6a5 5 0 0 0 10 0ZM6 1l2.936 9.048-7.692-5.595h9.512l-7.692 5.595Z",
-              stroke: theme.accent,
-              fill: "none",
-              strokeWidth: "0.6",
-              strokeLinecap: "round",
-              strokeLinejoin: "round",
-            },
-          },
+        body,
+      ),
+      el(
+        "div",
+        {
+          display: "flex",
+          justifyContent: "space-between",
+          margin: "0 80px",
+          padding: "20px 0 44px",
+          borderTop: `1px solid ${theme.accent}`,
+          fontFamily: "JetBrains Mono",
+          fontSize: "22px",
+          letterSpacing: "1px",
+        },
+        [
+          el("div", {}, displayPath(entry.slug)),
+          el("div", { color: theme.accent }, "Ewan Croft"),
         ],
-      },
-    },
+      ),
+      seal,
+    ],
   );
-
-  return {
-    type: "div",
-    props: {
-      style: {
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        height: "100%",
-        backgroundColor: theme.bg,
-        padding: "72px 80px 64px",
-        justifyContent: "center",
-        color: theme.fg,
-        position: "relative",
-      },
-      children: [
-        {
-          type: "svg",
-          props: {
-            width: "210",
-            height: "210",
-            viewBox: "0 0 24 24",
-            style: {
-              position: "absolute",
-              top: "48px",
-              right: "58px",
-              opacity: "0.11",
-            },
-            children: moonChildren,
-          },
-        },
-        {
-          type: "div",
-          props: {
-            style: {
-              position: "absolute",
-              top: "0",
-              left: "0",
-              width: "100%",
-              height: "8px",
-              backgroundColor: theme.accent,
-            },
-          },
-        },
-        ...children,
-      ],
-    },
-  };
 };

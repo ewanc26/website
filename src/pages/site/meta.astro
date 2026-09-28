@@ -63,7 +63,7 @@ const num = () => ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii"][n++] ?? Str
       <section class="folio" id="tech"><div class="margin"><span class="numeral">{num()}</span>Typesetting</div>
         <div>
           {bySection(info.technologyStack).map(([section, list]) => (
-            <><h3 class="h-sub" style="margin-top:0">{section}</h3>
+            <><h3 class="h-sub">{section}</h3>
             <dl class="dl">{list.map((t) => <><dt>{t.name}</dt><dd>{t.url ? <a href={t.url} rel="noopener">{t.description ?? t.url}</a> : t.description}</dd></>)}</dl></>
           ))}
         </div>
@@ -83,7 +83,7 @@ const num = () => ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii"][n++] ?? Str
       <section class="folio" id="credits"><div class="margin"><span class="numeral">{num()}</span>Credits</div>
         <div>
           {bySection(info.credits).map(([section, list]) => (
-            <><h3 class="h-sub" style="margin-top:0">{section}</h3>
+            <><h3 class="h-sub">{section}</h3>
             <ul class="toc">{list.map((c) => (
               <li><div class="toc-row"><span class="toc-title">{c.url ? <a href={c.url} rel="noopener">{c.name}</a> : c.name}</span><span class="toc-leader" aria-hidden="true"></span><span class="toc-meta">{c.type}{c.author ? ` · ${c.author}` : ""}</span>{c.description && <p class="toc-note">{c.description}</p>}</div></li>
             ))}</ul></>

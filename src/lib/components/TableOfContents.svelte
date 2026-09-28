@@ -57,7 +57,7 @@
 
 {#if !mounted}
     <!-- SSR placeholder: reserves space to prevent layout shift -->
-    <nav aria-label="Table of contents" class="outline outline-placeholder">
+    <nav aria-label="Table of contents" class="page-outline outline-placeholder">
         <h2>Contents</h2>
         <ol>
             <li><span class="outline-skeleton"></span></li>
@@ -69,7 +69,7 @@
         </ol>
     </nav>
 {:else if entries.length > 1}
-    <nav aria-label="Table of contents" class="outline">
+    <nav aria-label="Table of contents" class="page-outline">
         <h2>Contents</h2>
         <ol>
             {#each entries as entry}

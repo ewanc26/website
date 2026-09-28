@@ -36,6 +36,7 @@
     "@ewanc26/noise": "^0.1.4",
     "@ewanc26/supporters": "^0.3.0",
     "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource/fraunces": "^5.3.0",
     "@fontsource/jetbrains-mono": "^5.3.0",
     "@resvg/resvg-wasm": "^2.6.2",
     "atmentions": "github:pixeline/atmentions",
