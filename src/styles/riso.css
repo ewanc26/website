@@ -760,6 +760,22 @@
     font-size: var(--text-xs);
     opacity: 0.75;
   }
+  .cart-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+  .cart-icon {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+  }
+  a.cart:hover .cart-icon {
+    border-color: var(--paper);
+  }
   .cart-name {
     font-family: var(--font-display);
     font-variation-settings: "wdth" 115;
