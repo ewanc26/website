@@ -2,6 +2,9 @@
 import Base from "../../layouts/Base.astro";
 import Slab from "../../components/Slab.astro";
 import Barcode from "../../components/Barcode.astro";
+import Pentacle from "$lib/components/icons/Pentacle.svelte";
+import Triskele from "$lib/components/icons/Triskele.svelte";
+import Saltire from "$lib/components/icons/Saltire.svelte";
 import {
   fetchProfile, fetchLinks, fetchSifaProfile, fetchSifaSkills, fetchSifaEducation,
   fetchSifaLanguages, fetchSifaExternalAccounts,
@@ -59,6 +62,11 @@ const PGP = "C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D";
       <div>
         <p class="idcard-name">{profile.displayName ?? profile.handle}<br /><span lang="gd" style="font-size:0.55em">eòghann</span></p>
         {profile.pronouns && <p class="chip" style="width:fit-content;margin-top:.5rem">{profile.pronouns}</p>}
+        <ul class="sigils" style="margin-top:.75rem">
+          <li><Pentacle size={16} aria-label="Pagan" aria-hidden={false} /></li>
+          <li><Triskele size={18} aria-label="Highland" aria-hidden={false} /></li>
+          <li><Saltire size={16} aria-label="Scottish" aria-hidden={false} /></li>
+        </ul>
         <p class="lede" style="margin-top:1rem;font-size:1.1rem">{profile.description}</p>
       </div>
       <div style="grid-column:1/-1"><Barcode value={profile.did} /></div>
