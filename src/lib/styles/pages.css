@@ -70,7 +70,12 @@
     align-items: center;
     gap: clamp(var(--space-md), 4vw, var(--space-lg));
     padding-top: clamp(var(--space-md), 3vw, var(--space-lg));
-    border-top: 3px solid var(--color-text-950);
+    /* Seasonal primary, not raw ink: every other rule line on this page
+       (the page-hd underline, each section-hd) already uses the primary
+       colour. This one was left on --color-text-950 by oversight, which
+       in dark mode is near-white and reads as a harsh, disconnected line
+       rather than part of the same rule-line language. */
+    border-top: 3px solid var(--color-primary-500);
   }
 
   .hero-copy {
