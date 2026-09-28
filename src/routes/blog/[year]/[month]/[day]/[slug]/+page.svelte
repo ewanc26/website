@@ -83,24 +83,24 @@
 
                 {#if data.blog}
                     <footer class="post-footer">
-                        <p class="footer-pub">
-                            {#if data.blog.url}
-                                <a href={data.blog.url} target="_blank" rel="noopener noreferrer">{data.blog.title}</a>
-                            {:else}
-                                {data.blog.title}
-                            {/if}
-                        </p>
-                        <p class="footer-desc">{data.blog.description}</p>
-                        <div class="post-provenance">
-                            <div class="post-provenance-row">
-                                <span class="post-provenance-label">via</span>
-                                <a href="https://standard.site" target="_blank" rel="noopener" aria-label="Standard.site" class="post-provenance-link">
-                                    <StandardSite size={14} /> Standard.site
-                                </a>
-                                <a href="https://leaflet.pub" target="_blank" rel="noopener" aria-label="Leaflet" class="post-provenance-link">
-                                    <Leaflet size={14} /> Leaflet
-                                </a>
-                            </div>
+                        <div class="footer-pub-block">
+                            <p class="footer-pub">
+                                {#if data.blog.url}
+                                    <a href={data.blog.url} target="_blank" rel="noopener noreferrer">{data.blog.title}</a>
+                                {:else}
+                                    {data.blog.title}
+                                {/if}
+                            </p>
+                            <p class="footer-desc">{data.blog.description}</p>
+                        </div>
+                        <div class="post-provenance-row">
+                            <span class="post-provenance-label">via</span>
+                            <a href="https://standard.site" target="_blank" rel="noopener" aria-label="Standard.site" class="post-provenance-link">
+                                <StandardSite size={14} /> Standard.site
+                            </a>
+                            <a href="https://leaflet.pub" target="_blank" rel="noopener" aria-label="Leaflet" class="post-provenance-link">
+                                <Leaflet size={14} /> Leaflet
+                            </a>
                             {#if data.blog.rss}
                                 <a href={data.blog.rss} target="_blank" rel="noopener noreferrer" class="rss-link post-provenance-link">
                                     <Rss size={14} strokeWidth={2} aria-hidden="true" /> RSS

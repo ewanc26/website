@@ -857,7 +857,13 @@
   /* ── Blog post page ─────────────────────────────────────────── */
 
   .post-hd {
-    padding: var(--space-lg) 0;
+    padding: var(--space-lg) 0 var(--space-6);
+    /* Every other page-hd on the site closes on this same rule
+       (content.css: .page-hd:not(.hero-hd)); post-hd doesn't carry the
+       .page-hd class (its title/deck/meta shape is bespoke), so it was
+       the one header left without the closing line. */
+    border-bottom: 3px solid var(--color-primary-500);
+    margin-bottom: var(--space-lg);
   }
 
   .post-hd .post-title {
@@ -891,8 +897,13 @@
     gap: var(--space-xs);
   }
 
+  /* Spacing between rows comes from .post-meta--stacked's own flex gap;
+     this used to also set margin-top, which stacked on top of that gap
+     and made rows using this class sit further apart than the first
+     (classless) row above them. */
   .post-meta-group {
-    margin-top: var(--space-xs);
+    display: flex;
+    align-items: center;
   }
 
   /* Two-column layout: sidebar + content */
@@ -967,21 +978,22 @@
     display: none;
   }
 
-  /* Post footer */
+  /* Post footer: the publication attribution, visually closed off from
+     the comment thread above it rather than just trailing after it with
+     nothing but a margin to mark the change of subject. */
   .post-footer {
     margin-top: var(--space-lg);
     padding-top: var(--space-lg);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-  }
-
-  .post-provenance {
+    border-top: 1px solid var(--surface-color);
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
-    margin-top: var(--space-sm);
-    font-size: var(--text-xs);
+  }
+
+  .footer-pub-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
   }
 
   .post-provenance-row {
@@ -989,6 +1001,7 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
   }
 
   .post-provenance-label {
@@ -1021,10 +1034,12 @@
   }
 
   .rss-link {
+    /* Now sits inline in .post-provenance-row alongside the other
+       provenance links, not on its own row below — no margin-top to
+       nudge it out of alignment with them. */
     display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
-    margin-top: var(--space-2xs);
     font-size: var(--text-sm);
     color: var(--color-primary-500);
     text-decoration: none;
