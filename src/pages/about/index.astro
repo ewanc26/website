@@ -55,7 +55,7 @@ const PGP = "C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D";
 
     <div class="idcard thunk">
       <div class="idcard-hd"><span>ID CARD</span><span>{sifa?.headline ?? "Software developer"}</span></div>
-      <div class="duotone">{profile.avatar && <img src={profile.avatar} alt="" />}</div>
+      <div class="duotone">{profile.avatar && <img src={profile.avatar} alt={`Portrait of ${profile.displayName ?? profile.handle}`} />}</div>
       <div>
         <p class="idcard-name">{profile.displayName ?? profile.handle}<br /><span lang="gd" style="font-size:0.55em">eòghann</span></p>
         {profile.pronouns && <p class="chip" style="width:fit-content;margin-top:.5rem">{profile.pronouns}</p>}
