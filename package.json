@@ -4,16 +4,17 @@
   "version": "12.10.0",
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "preview": "vite preview",
-    "prepare": "svelte-kit sync || echo ''",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "prepare": "astro sync || echo ''",
+    "check": "astro check",
     "test:site-info": "node --experimental-strip-types --test src/lib/services/atproto/siteInfo.test.ts",
     "test:blog": "node --experimental-strip-types --test src/lib/utils/tags.test.ts src/lib/utils/coverImage.test.ts"
   },
   "devDependencies": {
+    "@astrojs/svelte": "^9.0.1",
+    "@astrojs/vercel": "^11.0.11",
     "@lucide/svelte": "^1.21.0",
     "@sveltejs/adapter-auto": "^7.0.1",
     "@sveltejs/adapter-vercel": "^6.3.4",
@@ -23,6 +24,7 @@
     "@types/chroma-js": "^3.1.2",
     "@types/mdast": "^4.0.4",
     "@types/node": "^26.0.0",
+    "astro": "^7.3.5",
     "prettier": "3.8.3",
     "svelte": "^5.56.3",
     "svelte-check": "^4.6.0",
@@ -34,6 +36,7 @@
     "@atproto/lex": "^0.1.4",
     "@atproto/oauth-client-browser": "^0.5.4",
     "@ewanc26/atproto": "^0.2.12",
+    "@ewanc26/noise": "^0.1.4",
     "@ewanc26/supporters": "^0.3.0",
     "@resvg/resvg-wasm": "^2.6.2",
     "atmentions": "github:pixeline/atmentions",
@@ -50,7 +53,6 @@
     "remark-html": "^16.0.1",
     "remark-rehype": "^11.1.2",
     "satori": "^0.26.0",
-    "unified": "^11.0.5",
-    "@ewanc26/noise": "^0.1.4"
+    "unified": "^11.0.5"
   }
 }

@@ -1,0 +1,55 @@
+---
+import { ClientRouter } from "astro:transitions";
+import { SITE } from "$lib/config";
+import { getDynamicThemeCSS } from "$lib/server/theme";
+import Header from "../components/Header.astro";
+import SabbatBackground from "$lib/components/SabbatBackground.svelte";
+import SeasonalThemeUpdater from "$lib/components/SeasonalThemeUpdater.svelte";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = SITE.description } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE.title}` : SITE.ogTitle;
+---
+
+<!doctype html>
+<html lang="en-GB" style="color-scheme: light dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="text-scale" content="scale" />
+    <link rel="icon" href="/favicon.svg" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <style id="sabbat-dynamic-theme" set:html={getDynamicThemeCSS()} is:global></style>
+    <ClientRouter />
+  </head>
+  <body>
+    <SabbatBackground client:idle transition:persist />
+    <SeasonalThemeUpdater client:idle transition:persist />
+    <!-- Shared SVG filters for .text-outline (see DESIGN.md: never use
+         -webkit-text-stroke for this). -->
+    <svg class="svg-defs" aria-hidden="true" focusable="false">
+      <filter id="text-outline" x="-20%" y="-60%" width="140%" height="220%" color-interpolation-filters="sRGB">
+        <feMorphology in="SourceGraphic" operator="dilate" radius="1.1" result="thick" />
+        <feComposite in="thick" in2="SourceGraphic" operator="out" />
+      </filter>
+      <filter id="text-outline-thin" x="-20%" y="-60%" width="140%" height="220%" color-interpolation-filters="sRGB">
+        <feMorphology in="SourceGraphic" operator="dilate" radius="0.75" result="thick" />
+        <feComposite in="thick" in2="SourceGraphic" operator="out" />
+      </filter>
+    </svg>
+    <a class="skip-to-content" href="#main-content">Skip to content</a>
+    <Header />
+    <div class="shell-main" id="main-content" tabindex="-1">
+      <slot />
+    </div>
+  </body>
+</html>
