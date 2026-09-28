@@ -1,6 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
-import PageHead from "../../components/PageHead.astro";
+import Slab from "../../components/Slab.astro";
 import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID, PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
 import { blogDateParts } from "$lib/utils/date";
@@ -20,71 +20,61 @@ const posts = documents
   .map((d) => {
     const { year, month, day } = blogDateParts(d.publishedAt);
     return {
-      title: d.title,
-      description: d.description as string | undefined,
-      date: d.publishedAt,
-      year,
+      title: d.title, date: d.publishedAt, year,
       tags: [...new Set((d.tags ?? []).map(normalizeTag).filter(Boolean))] as string[],
       href: `/blog/${year}/${month}/${day}/${normalizeSlug(d.title)}`,
     };
   });
-
 const byYear = new Map<string, typeof posts>();
 for (const p of posts) byYear.set(p.year, [...(byYear.get(p.year) ?? []), p]);
-
 const tagCounts = new Map<string, number>();
 for (const p of posts) for (const t of p.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
-const topics = [...tagCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 14);
-
-const fmt = (d: string) =>
-  new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "Europe/London" }).format(new Date(d));
+const topics = [...tagCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 16);
+const when = (iso: string) => {
+  const parts = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "Europe/London" }).formatToParts(new Date(iso));
+  return { day: parts.find((p) => p.type === "day")?.value ?? "", mon: (parts.find((p) => p.type === "month")?.value ?? "").toLowerCase() };
+};
 ---
 
 <Base title="Blog" description={blog?.description ?? "Writing on technology, tradition, and the AT Protocol."} ogSubtitle="Writing on technology and tradition." ogType="BLOG">
-  <main class="sheet">
-    <PageHead kicker={`${posts.length} entries`} standfirst={blog?.description || undefined}>
-      The <em>archive</em>
-    </PageHead>
+  <main class="wrap">
+    <Slab word="Blog" />
+    <p class="lede">{posts.length} entries. {blog?.description}{blog?.url && <> <a href={`${blog.url.replace(/\/+$/, "")}/rss`} rel="noopener">RSS ↗</a></>}</p>
 
-    <section class="folio">
-      <div class="margin">
-        <span class="numeral">§</span>
-        <p>Find</p>
-        {topics.length > 0 && (
-          <div class="tags" role="group" aria-label="Topics">
-            {topics.map(([t, n]) => <button type="button" class="tag" data-topic={t}>{t} ({n})</button>)}
-          </div>
-        )}
-        {blog?.url && <p><a href={`${blog.url.replace(/\/+$/, "")}/rss`} rel="noopener">RSS ↗</a></p>}
-      </div>
+    {topics.length > 0 && (
+      <ul class="chips" role="group" aria-label="Topics" style="margin-bottom:var(--space-md)">
+        {topics.map(([t, n]) => <li><button type="button" class="chip" data-topic={t}>{t} ({n})</button></li>)}
+      </ul>
+    )}
+    <div class="finder">
+      <label class="sr-only" for="post-filter">Filter posts by title or topic</label>
+      <input id="post-filter" type="search" placeholder="find a post…" autocomplete="off" />
+    </div>
+    <p class="empty" data-none hidden>Nothing matches that.</p>
 
-      <div>
-        <div class="search">
-          <label class="sr-only" for="post-filter">Filter posts by title or topic</label>
-          <input id="post-filter" type="search" placeholder="Filter by title or topic…" autocomplete="off" />
-        </div>
-        <p class="empty" data-none hidden>Nothing in the archive matches that.</p>
-
-        {[...byYear.entries()].map(([year, list]) => (
-          <section data-year aria-labelledby={`y${year}`}>
-            <h2 class="h-section" id={`y${year}`}>{year}</h2>
-            <ol class="toc">
-              {list.map((p) => (
+    {posts.length === 0 ? (
+      <p class="empty">The publishing service isn't answering just now.</p>
+    ) : (
+      [...byYear.entries()].map(([year, list]) => (
+        <section data-year aria-labelledby={`y${year}`}>
+          <span class="year" id={`y${year}`}>{year}</span>
+          <ol class="tracks">
+            {list.map((p) => {
+              const w = when(p.date);
+              return (
                 <li data-post data-hay={`${p.title} ${p.tags.join(" ")}`.toLowerCase()}>
-                  <a href={p.href} class="toc-row">
-                    <span class="toc-title">{p.title}</span>
-                    <span class="toc-leader" aria-hidden="true"></span>
-                    <time class="toc-meta" datetime={p.date}>{fmt(p.date)}</time>
-                    {p.description && <p class="toc-note">{p.description}</p>}
+                  <a href={p.href} class="track">
+                    <span class="track-when"><span class="track-day">{w.day}</span><span class="track-mon">{w.mon}</span></span>
+                    <span class="track-title">{p.title}</span>
+                    {p.tags.length > 0 && <span class="track-meta">{p.tags.join(" · ")}</span>}
                   </a>
                 </li>
-              ))}
-            </ol>
-          </section>
-        ))}
-        {posts.length === 0 && <p class="empty">The publishing service is not answering just now.</p>}
-      </div>
-    </section>
+              );
+            })}
+          </ol>
+        </section>
+      ))
+    )}
   </main>
 </Base>
 
@@ -95,7 +85,6 @@ const fmt = (d: string) =>
     const posts = [...document.querySelectorAll<HTMLElement>("[data-post]")];
     const years = [...document.querySelectorAll<HTMLElement>("[data-year]")];
     const none = document.querySelector<HTMLElement>("[data-none]")!;
-
     const apply = () => {
       const q = input.value.trim().toLowerCase();
       for (const p of posts) p.hidden = !!q && !p.dataset.hay!.includes(q);
@@ -104,11 +93,7 @@ const fmt = (d: string) =>
     };
     input.addEventListener("input", apply);
     document.querySelectorAll<HTMLButtonElement>("[data-topic]").forEach((b) =>
-      b.addEventListener("click", () => {
-        input.value = b.dataset.topic!;
-        apply();
-        input.focus();
-      }),
+      b.addEventListener("click", () => { input.value = b.dataset.topic!; apply(); input.focus(); }),
     );
   });
 </script>

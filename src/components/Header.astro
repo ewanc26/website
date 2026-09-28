@@ -1,7 +1,11 @@
 ---
-import { SITE, NAV_LINKS } from "$lib/config";
-import MoonPhase from "$lib/components/icons/MoonPhase.svelte";
-import TriskeleEgg from "$lib/components/ostara-eggs/TriskeleEgg.svelte";
+/**
+ * The spine: a solid strip down the left edge with the nav set sideways,
+ * like the spine of a zine. On phones it lies down as a bar at the bottom
+ * (thumb reach) — there is no hamburger. Subscriptions and Meta live in
+ * the footer.
+ */
+import PixelMoon from "./PixelMoon.astro";
 import type { Almanac } from "$lib/utils/almanac";
 
 interface Props {
@@ -9,70 +13,26 @@ interface Props {
 }
 const { almanac } = Astro.props;
 
+const links = [
+  { label: "Home", url: "/" },
+  { label: "About", url: "/about" },
+  { label: "Blog", url: "/blog" },
+  { label: "Projects", url: "https://docs.ewancroft.uk" },
+  { label: "Support", url: "/support" },
+];
 const pathname = Astro.url.pathname;
 const isActive = (url: string) =>
   url === "/" ? pathname === "/" : url.startsWith("/") && pathname.startsWith(url);
 ---
 
-<header>
-  <div class="dateline">
-    <div class="sheet dateline-inner">
-      <span class="dateline-item">
-        {almanac.weekday}{almanac.isMonday && <em lang="ang">&nbsp;· mōnandæg</em>}&nbsp;·&nbsp;{almanac.date}
-      </span>
-      <span class="dateline-item dateline-item--far">
-        <MoonPhase phase={almanac.moon.phase} size={12} />
-        {almanac.moon.name}
-      </span>
-      <span class="dateline-item">
-        {almanac.next.days === 0 ? `${almanac.next.name} today` : `${almanac.next.days} ${almanac.next.days === 1 ? "day" : "days"} to ${almanac.next.name}`}
-      </span>
-    </div>
+<nav class="spine" aria-label="Primary navigation">
+  <a class="spine-logo" href="/" aria-label="Ewan Croft, home" title={`Tonight: ${almanac.moon.name.toLowerCase()}`}>
+    <PixelMoon phase={almanac.moon.phase} size={36} />
+  </a>
+  <div class="spine-nav">
+    {links.map((l) => (
+      <a href={l.url} aria-current={isActive(l.url) ? "page" : undefined}>{l.label}</a>
+    ))}
   </div>
-
-  <nav class="masthead" aria-label="Primary navigation">
-    <div class="sheet masthead-inner">
-      <a href="/" class="wordmark" aria-label={`${SITE.title}, home`}>
-        <img src="/favicon.svg" alt="" width="20" height="20" />
-        {SITE.title}
-        {import.meta.env.DEV && <small>dev</small>}
-        <TriskeleEgg size={11} client:idle />
-      </a>
-
-      <button
-        class="menu-toggle"
-        data-menu-toggle
-        aria-expanded="false"
-        aria-controls="primary-navigation"
-      >Menu</button>
-
-      <div class="nav-links" id="primary-navigation" data-nav-links>
-        {NAV_LINKS.map((link) => (
-          <a
-            href={link.url}
-            class:list={["nav-link", { active: isActive(link.url) }]}
-            aria-current={isActive(link.url) ? "page" : undefined}
-          >{link.label}</a>
-        ))}
-      </div>
-    </div>
-  </nav>
-</header>
-
-<script>
-  // Fires on first load and after every client-side navigation.
-  document.addEventListener("astro:page-load", () => {
-    const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
-    const links = document.querySelector<HTMLElement>("[data-nav-links]");
-    if (!toggle || !links) return;
-    const setOpen = (open: boolean) => {
-      links.classList.toggle("open", open);
-      toggle.setAttribute("aria-expanded", String(open));
-      toggle.textContent = open ? "Close" : "Menu";
-    };
-    toggle.addEventListener("click", () => setOpen(!links.classList.contains("open")));
-    links.addEventListener("click", (e) => {
-      if ((e.target as HTMLElement).closest("a")) setOpen(false);
-    });
-  });
-</script>
+  {import.meta.env.DEV && <span class="spine-dev">dev</span>}
+</nav>

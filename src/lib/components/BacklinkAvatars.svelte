@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { page } from '$app/state';
   import { ExternalLink, Link2 } from '@lucide/svelte';
   import BaseModal from '$lib/components/BaseModal.svelte';
   import { getPlaceholderAvatar } from '$lib/utils/avatar';
@@ -36,23 +35,8 @@
   let mentionCount = $state(0);
   let modalOpen = $state(false);
 
-  const resolvedTargets = $derived.by(() => {
-    const data = page.data as {
-      post?: { uri?: string; url?: string };
-      blog?: { url?: string };
-    };
-    const values = [
-      `https://ewancroft.uk${page.url.pathname}`,
-      ...targets,
-    ];
-
-    if (data.post?.uri) values.push(data.post.uri);
-    if (data.post?.url) values.push(data.post.url);
-    if (page.url.pathname === '/blog' && data.blog?.url) values.push(data.blog.url);
-
-    return [...new Set(values.filter(Boolean))];
-  });
-
+  /** Pages pass every URL / AT-URI that identifies them; no route data to infer from. */
+  const resolvedTargets = $derived([...new Set(targets.filter(Boolean))]);
   const requestKey = $derived(resolvedTargets.join('\n'));
   const visiblePeople = $derived((people ?? []).slice(0, limit));
   const hiddenCount = $derived(Math.max(0, (people?.length ?? 0) - limit));
@@ -202,7 +186,7 @@
     min-height: 44px;
     padding: var(--space-xs) var(--space-sm);
     border: 0;
-    border-radius: var(--radius-full);
+    border-radius: 0;
     background: transparent;
     color: inherit;
     cursor: pointer;
@@ -238,7 +222,7 @@
     margin-left: calc(-1 * var(--space-sm));
     overflow: hidden;
     border: 2px solid var(--color-canvas-50);
-    border-radius: var(--radius-full);
+    border-radius: 0;
     background: var(--surface-raised);
   }
 
@@ -308,7 +292,7 @@
     width: 36px;
     height: 36px;
     flex: 0 0 36px;
-    border-radius: var(--radius-full);
+    border-radius: 0;
     object-fit: cover;
   }
 

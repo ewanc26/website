@@ -5,6 +5,7 @@
  * server-rendered CSS and interactive previews cannot drift apart.
  */
 
+import chroma from "chroma-js";
 import { getCurrentSabbat } from "$lib/utils/sabbats";
 import {
   baseline,
@@ -49,6 +50,16 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
   css += "    /* ── Sabbat-Specific Overrides ── */\n";
   css += `    --color-sabbat-primary: ${colors.length > 0 ? colors[0] : "#68b34d"};\n`;
 
+  // Two riso inks, derived from the same seasonal hue as the palette above.
+  // A is the season's own colour; B sits ~150° round the wheel so that where
+  // they overprint they mix toward a deep third colour. In dark mode the
+  // inks are printed on black stock (screen blend), so B is darker there.
+  const hueA = getThemeHue(now, "primary");
+  const hueB = (hueA + 150) % 360;
+  css += "    /* ── Riso inks ── */\n";
+  css += `    --riso-a: light-dark(oklch(68% 0.205 ${hueA.toFixed(2)}), oklch(66% 0.215 ${hueA.toFixed(2)}));\n`;
+  css += `    --riso-b: light-dark(oklch(84% 0.125 ${hueB.toFixed(2)}), oklch(62% 0.15 ${hueB.toFixed(2)}));\n`;
+
   css += "    /* ── Aliases ── */\n";
   [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].forEach((step) => {
     css += `    --ink-${step}: var(--text-${step});\n    --canvas-${step}: var(--background-${step});\n`;
@@ -59,10 +70,11 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
 }
 
 export function getOgThemeColors(now: Date = new Date()) {
+  const hueA = getThemeHue(now, "primary");
   return {
-    bg: getThemeShade(now, "background", "50", "dark"),
-    fg: getThemeShade(now, "text", "950", "dark"),
-    accent: getThemeShade(now, "primary", "500", "dark"),
-    typeFg: getThemeShade(now, "accent", "500", "dark"),
+    inkA: chroma.oklch(0.66, 0.215, hueA).hex(),
+    inkB: chroma.oklch(0.62, 0.15, (hueA + 150) % 360).hex(),
+    bg: getThemeShade(now, "background", "950", "dark"),
+    fg: getThemeShade(now, "text", "50", "dark"),
   };
 }

@@ -5,7 +5,6 @@ import TableOfContents from "$lib/components/TableOfContents.svelte";
 import CommentSection from "$lib/components/CommentSection.svelte";
 import LeafletBlocks from "$lib/components/leaflet/LeafletBlocks.svelte";
 import AtMentions from "$lib/components/AtMentions.svelte";
-import Pentacle from "$lib/components/icons/Pentacle.svelte";
 import { loadPost } from "$lib/server/post";
 
 Astro.response.headers.set("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400");
@@ -21,24 +20,19 @@ const dateLong = new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "lon
 ---
 
 <Base
-  title={post.title}
-  description={post.metaDescription}
-  ogSubtitle={post.description}
-  type="article"
-  ogType="ARTICLE"
-  publishedTime={post.createdAt}
-  tags={post.tags}
-  author="https://ewancroft.uk/about"
-  documentRkey={post.rkey}
+  title={post.title} description={post.metaDescription} ogSubtitle={post.description}
+  type="article" ogType="ARTICLE" publishedTime={post.createdAt} tags={post.tags}
+  author="https://ewancroft.uk/about" documentRkey={post.rkey}
+  backlinkTargets={[post.uri, post.url].filter((v): v is string => Boolean(v))}
 >
-  <main class="sheet">
-    <header class="post-head reveal">
-      <p class="kicker"><a href="/blog">← The archive</a></p>
+  <main class="wrap">
+    <header class="post-hero">
+      <p class="pix"><a href="/blog">← The archive</a></p>
       <h1 class="post-title">{post.title}</h1>
       {post.description && <p class="post-deck">{post.description}</p>}
       <div class="post-byline">
-        <time datetime={post.createdAt}>{dateLong}</time>
-        {(post.tags?.length ?? 0) > 0 && <span class="tags">{post.tags!.map((t: string) => <span class="tag">{t}</span>)}</span>}
+        <span class="tape">{dateLong}</span>
+        {(post.tags?.length ?? 0) > 0 && <span class="chips">{post.tags!.map((t: string) => <span class="chip">{t}</span>)}</span>}
       </div>
       <div class="post-byline">
         <ShareButtons url={url} title={post.title} client:idle />
@@ -46,45 +40,32 @@ const dateLong = new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "lon
       </div>
     </header>
 
-    <div class="folio">
-      <aside class="margin" aria-label="Contents">
-        <TableOfContents container=".prose" client:idle />
-      </aside>
-
+    <div class="article">
+      <aside class="rail"><TableOfContents container=".prose" client:idle /></aside>
       <div>
-        <article class="prose prose--opening">
+        <article class="prose">
           {useBlocks ? (
             <LeafletBlocks
-              blocks={post.blocks}
-              pages={post.pages}
-              pageType={post.primaryPageType}
-              sourceUrl={post.url ?? blog?.url}
-              posts={data.readerPosts}
-              publication={blog}
-              references={data.readerReferences}
-              client:visible
+              blocks={post.blocks} pages={post.pages} pageType={post.primaryPageType}
+              sourceUrl={post.url ?? blog?.url} posts={data.readerPosts} publication={blog}
+              references={data.readerReferences} client:visible
             />
           ) : (
             <Fragment set:html={post.renderedContent} />
           )}
         </article>
-        <div class="post-end" aria-hidden="true"><Pentacle size={20} /></div>
+        <p class="post-end" aria-hidden="true">◆ ◆ ◆</p>
 
         <div class="post-after">
           <CommentSection comments={data.comments} subjectUri={post.uri} client:visible />
-
           {blog && (
             <footer>
-              <h2 class="h-section">Published in</h2>
-              <p>
-                {blog.url ? <a href={blog.url} rel="noopener noreferrer">{blog.title}</a> : blog.title}
-                {blog.description && <> — <em>{blog.description}</em></>}
-              </p>
-              <p class="tags">
-                <a class="tag" href="https://standard.site" rel="noopener">Standard.site</a>
-                <a class="tag" href="https://leaflet.pub" rel="noopener">Leaflet</a>
-                {blog.rss && <a class="tag" href={blog.rss} rel="noopener noreferrer">RSS</a>}
-              </p>
+              <h2>Published in</h2>
+              <p>{blog.url ? <a href={blog.url} rel="noopener noreferrer">{blog.title}</a> : blog.title}{blog.description && <> — <em>{blog.description}</em></>}</p>
+              <ul class="chips">
+                <li class="chip">Standard.site</li><li class="chip">Leaflet</li>
+                {blog.rss && <li><a class="chip" href={blog.rss} rel="noopener noreferrer">RSS</a></li>}
+              </ul>
             </footer>
           )}
         </div>

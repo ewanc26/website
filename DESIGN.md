@@ -1,42 +1,40 @@
 # DESIGN.md
 
-The visual language of ewancroft.uk: **the almanac**.
+The visual language of ewancroft.uk.
 
-The site is a page from a personal almanac. Print conventions supply the structure; the Wheel of the Year supplies the colour and the ornament. The live specimen is at `/site/design`; the stylesheet is `src/styles/almanac.css` (tokens in `src/styles/tokens.css`, long-form reading in `src/styles/prose.css`).
+Not a documentation site, not a portfolio template. This is a two-ink risograph zine crossed with a game cartridge shelf. The live specimen is at `/site/design`; the stylesheet is `src/styles/riso.css` (tokens in `src/styles/tokens.css`, long-form reading in `src/styles/prose.css`).
 
 ## Principles
 
-- **Paper and ink.** One tinted ground (`--paper`), one ink (`--ink`), one seasonal seal colour (`--stamp`). Solid colour only: no gradients, no shadows, no rounded corners (`--radius-*` are `0`; only `--radius-full` is used, for the seal's dots).
-- **Marginalia.** Section labels, roman numerals and metadata live in a left margin set in mono (`.folio > .margin`). Below 56rem the margin folds above the text.
-- **Leaders, not cards.** Lists are contents pages (`.toc`): title, dotted leader, date. Actionable rows tint to the seal colour on hover and never move. Grids of works are ruled `.plates` that invert on hover.
-- **The calendar is the ornament.** The running head (`.dateline`) reports the date, the moon phase and days to the next sabbat, computed per request in `Europe/London` (`src/lib/utils/almanac.ts`). The seal (`Stamp.astro`) names the current sabbat around tonight's moon and turns once every `--duration-stamp` (90s). On Mondays the dateline says _mōnandæg_.
-- **Quiet motion.** Entries fade up once (`.reveal`); pages crossfade via Astro's view transitions. Everything stops under `prefers-reduced-motion`.
+- **Two inks, one black.** Everything on the page is those three colours (plus paper), overprinted with `mix-blend-mode: multiply` (screen at night) so overlaps make a third colour. The two inks (`--riso-a`, `--riso-b`) are generated in OKLCH from the site's seasonal hue — one direct, one ~150° round the wheel — so the palette still turns with the Wheel of the Year (`src/lib/server/theme.ts`). No gradients except the halftone dot screen, which is what a real riso press makes.
+- **Cut, not rounded.** Every corner is square (`--radius-*: 0`). Circles exist only for the moon and the deliberately punched "cartridge" corner-notch on project tiles.
+- **Colossal or pixel.** Section headings (`.slab`, `.word`) print at poster scale, cropped by the sheet, doubled in the second ink a hair out of register. Everything small — labels, metadata, buttons, nav — is Pixelify Sans, styled like a game's HUD.
+- **Nothing floats.** No cards with shadows. Panels (`.cart`, `.idcard`, `.nametag`) sit flat on the page and are told apart by ink, rule weight and a few degrees of rotation, not elevation.
+- **Stepped motion.** Entrances use `steps()` easing (`.thunk`, `--ease-step`), like a print run advancing a frame at a time, not the eased motion of an app. Everything stops under `prefers-reduced-motion`.
 
 ## Type
 
-- **Fraunces** (variable: `opsz`, `wght`, `SOFT`, `WONK`) for everything readable. Display sizes are light (weight 250–300, `opsz` 144, tight tracking); italics use `WONK` for their lean. Prose sets at a 66ch measure.
-- **JetBrains Mono** for marginalia only: datelines, labels, numerals, metadata. Always small, usually upper-case, always tracked out.
-- Scale tokens: `--text-micro` … `--text-4xl`. `--text-3xl` is the page-title ceiling, `--text-4xl` the home nameplate only. One poster-scale focal point per page.
+- **Archivo** (variable, width axis pushed to ~110–125) carries every headline and the nav. Weight 900, tight negative tracking, always uppercase in the big slabs.
+- **Atkinson Hyperlegible Next** — designed for legibility over looks — carries body prose.
+- **Pixelify Sans** is the game-UI voice: nav labels, tags, buttons, metadata, the ID card and cartridge lettering.
+- **JetBrains Mono** is reserved for code.
 
 ## Colour
 
-The seasonal engine is unchanged. `src/lib/server/theme.ts` generates OKLCH scales interpolated between the previous and next sabbat and injects them per request (`Base.astro`; refreshed hourly by `SeasonalThemeUpdater`). Neutrals are tinted toward the current hue.
-
-- `--paper`/`--paper-deep` = background 50/100, `--ink`/`--ink-soft` = text 950/700, `--rule` = text 300/400.
-- `--stamp` is `--color-primary-text`: the accessible text variant of the primary accent. `--color-primary-500` has the same lightness in both schemes (right for fills and rules, ~2.7:1 as text on light paper), so use the `-text` tokens for any plain-text use of the seasonal colour.
-- Locale is strictly `en-GB` (HTML `lang`, `og:locale`, date formatting).
+`src/lib/server/theme.ts`'s `getDynamicThemeCSS()` still runs the seasonal engine; it now emits `--riso-a`/`--riso-b` alongside the old token scales, refreshed hourly by `SeasonalThemeUpdater` and recomputed per request in `Base.astro`. `--blend` is `multiply` on newsprint by day and `screen` on black stock by night (`prefers-color-scheme`), so overprints always read as ink on the medium beneath them, not as a flat colour.
 
 ## Layout
 
-- `.sheet` (76rem, fluid 16–40px gutters) wraps every page; `.sheet--narrow` for single columns.
-- `.folio` is the two-column page (margin left, text right). `.page-head` opens inner pages: mono kicker, light display title with an italic word, italic standfirst.
-- The colophon (`Colophon.astro`) replaces the footer: how the site was set, correspondence, imprint, and the wolf-mode and ambiance toggles.
+- `.wrap` (82rem, fluid gutters) wraps every page.
+- **The spine** (`Header.astro`) is a solid ink strip down the left edge on desktop (nav set vertically) and a bar pinned to the bottom on phones — no hamburger menu.
+- **The press** (`Colophon.astro`) replaces a conventional footer: colophon, correspondence, small print, a calibration colour bar, and the eight moon phases with tonight's lit.
+- Section layout is `.cols`: a sticky word-mark heading on the left, content on the right.
 
 ## Interactive islands
 
-Astro renders pages to static HTML; Svelte 5 is used only where interaction earns it (comments, table of contents, share bar, backlinks, Leaflet blocks, the ambient soundscape, Easter eggs). Persistent islands (`AmbianceEngine`, eggs) use `transition:persist` in `Base.astro` so audio survives navigation. Islands that need the current URL read `$app/state`, shimmed in `src/shims/app-state.svelte.ts`.
+Astro renders every page to static HTML; Svelte 5 is used only where interaction earns it (comments, table of contents, share bar, backlinks, Leaflet blocks, the ambient soundscape, Easter eggs). Persistent islands use `transition:persist` in `Base.astro` so audio and eggs survive navigation.
 
 ## Anti-references
 
-- **AI slop**: no generic "boost productivity" copy, no purple gradients, no glassmorphism.
-- **Visual noise**: no drop shadows, no cards-on-cards, no motion without purpose.
+- **AI slop**: no generic "boost productivity" copy, no purple gradients, no glassmorphism, no centred hero with a subtitle and two buttons.
+- **Visual noise for its own sake**: no drop shadows, no soft blur, no motion without a reason tied to the print-shop conceit.

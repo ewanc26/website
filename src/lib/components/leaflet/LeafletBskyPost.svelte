@@ -55,7 +55,7 @@
   .leaflet-bsky-post {
     margin-block: 1rem;
     border: 1px solid currentColor;
-    border-radius: 0.5rem;
+    border-radius: 0;
     padding: 1rem;
   }
 

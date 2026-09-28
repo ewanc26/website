@@ -154,18 +154,22 @@
     --accent-900: light-dark(rgb(20 37 14), rgb(224 241 218));
     --accent-950: light-dark(rgb(10 19 7), rgb(239 248 236));
 
-    /* ── Almanac roles ────────────────────────────────────────── */
-    /* Paper, ink, and the two rule weights. Everything is a solid colour
-       from the seasonal palette; there are no gradients or shadows. */
-    --paper: var(--background-50);
-    --paper-deep: var(--background-100);
-    --ink: var(--text-950);
-    --ink-soft: var(--text-700);
-    --ink-faint: var(--text-600);
-    --rule: light-dark(var(--text-300), var(--text-400));
-    --rule-strong: var(--text-950);
-    --stamp: var(--color-primary-text);
+    /* ── Riso zine roles ──────────────────────────────────────── */
+    /* Newsprint (or black stock in the dark), one black, and two spot inks
+       set by the seasonal engine (--riso-a / --riso-b, see theme.ts). The
+       fallbacks below are Mabon's; the engine overrides them per request. */
+    --paper: light-dark(oklch(95.5% 0.008 205), oklch(14.5% 0.014 275));
+    --paper-deep: light-dark(oklch(90.5% 0.014 205), oklch(20.5% 0.02 275));
+    --ink: light-dark(oklch(19% 0.025 275), oklch(95% 0.01 100));
+    --ink-soft: light-dark(oklch(38% 0.025 275), oklch(80% 0.012 100));
+    --on-ink: oklch(15% 0.02 275);
+    --riso-a: light-dark(oklch(68% 0.205 28), oklch(66% 0.215 28));
+    --riso-b: light-dark(oklch(84% 0.125 178), oklch(62% 0.15 178));
+    /* Ink on newsprint subtracts (multiply); ink on black stock adds. */
+    --blend: multiply;
 
+    --stamp: var(--color-primary-text);
+    --rule: var(--ink);
     --surface-color: var(--paper-deep);
     --surface-raised: var(--paper);
     --surface-sunken: var(--paper-deep);
@@ -183,37 +187,44 @@
     --space-2xl: 96px;
 
     /* ── Layout geometry ──────────────────────────────────────── */
-    --sheet: 76rem;
-    --shell-wide: 76rem;
+    --spine: 4.5rem;
+    --bar: 3.75rem;
+    --wrap: 82rem;
+    --shell-wide: 82rem;
     --shell-narrow: 48rem;
-    --margin-col: 11rem;
-    --measure-prose: 66ch;
-    --measure-copy: 58ch;
-    --gutter: clamp(16px, 4vw, 40px);
+    --measure-prose: 62ch;
+    --measure-copy: 56ch;
+    --gutter: clamp(16px, 4vw, 48px);
     --control-size: 44px;
     --icon-sm: 16px;
     --icon-md: 24px;
+    --edge: 3px;
 
     /* ── Typography ───────────────────────────────────────────── */
-    /* Fraunces carries everything readable; JetBrains Mono is reserved
-       for marginalia: datelines, labels, numerals, metadata. */
-    --font-family: "Fraunces Variable", "Iowan Old Style", Georgia, serif;
-    --font-display: "Fraunces Variable", "Iowan Old Style", Georgia, serif;
+    /* Archivo (wdth 125, wght 900) is the poster voice; Atkinson
+       Hyperlegible Next reads; Pixelify Sans is the game-UI voice for
+       small labels; JetBrains Mono is for code only. */
+    --font-family:
+      "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible Next",
+      system-ui, sans-serif;
+    --font-display:
+      "Archivo Variable", "Archivo", "Arial Black", Impact, sans-serif;
+    --font-pixel:
+      "Pixelify Sans Variable", "Pixelify Sans", ui-monospace, monospace;
     --font-mono:
-      "JetBrains Mono", ui-monospace, "Cascadia Code", "Fira Code", Menlo,
-      monospace;
+      "JetBrains Mono", ui-monospace, "Cascadia Code", Menlo, monospace;
 
-    --text-micro: 0.6875rem;
-    --text-xs: 0.75rem;
-    --text-sm: 0.9375rem;
-    --text-md: 1.125rem;
-    --text-lg: clamp(1.375rem, 1.2vw + 1.1rem, 1.75rem);
-    --text-xl: clamp(1.75rem, 2vw + 1.2rem, 2.5rem);
-    --text-2xl: clamp(2.25rem, 4vw + 1rem, 3.5rem);
-    --text-3xl: clamp(3rem, 8vw + 0.5rem, 6rem);
-    --text-4xl: clamp(3.75rem, 16vw, 11.5rem);
+    --text-micro: 0.8125rem;
+    --text-xs: 0.9375rem;
+    --text-sm: 1rem;
+    --text-md: 1.1875rem;
+    --text-lg: clamp(1.375rem, 1vw + 1.1rem, 1.75rem);
+    --text-xl: clamp(1.9rem, 2.4vw + 1.2rem, 3rem);
+    --text-2xl: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+    --text-3xl: clamp(3.5rem, 12vw, 9rem);
+    --text-4xl: clamp(5rem, 28vw, 26rem);
 
-    /* ── Radii — the almanac is square-cornered ───────────────── */
+    /* ── Radii — everything is cut with a knife ───────────────── */
     --radius-xs: 0;
     --radius-sm: 0;
     --radius-md: 0;
@@ -221,23 +232,20 @@
     --radius-xl: 0;
     --radius-full: 9999px;
 
-    /* ── Motion ───────────────────────────────────────────────── */
+    /* ── Motion — stepped, like a print run ───────────────────── */
     --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-step: steps(4, end);
     --duration-instant: 100ms;
     --duration-fast: 160ms;
     --duration-normal: 260ms;
     --duration-slow: 500ms;
-    /* The stamp turns once per lunar-ish minute; the background moon and the
-       ambient engine's LFO breathe on --duration-breath (1 / BREATH_HZ in
-       src/lib/music/constants.ts). Keep the latter in sync. */
-    --duration-stamp: 90s;
+    /* Ambient engine breathes at 1 / BREATH_HZ (src/lib/music/constants.ts). */
     --duration-breath: 16.6667s;
 
-    /* ── Accessible text variants of the primary accent ─────────── */
-    /* primary-500 keeps the same lightness in both schemes (right for
-       fills and rules, wrong for text: 2.66:1 on light paper). Use these
-       for any plain-text use of the seasonal colour. */
+    /* primary-500 keeps the same lightness in both schemes (fine for
+       fills, wrong as text on newsprint), so plain-text uses of the seasonal
+       colour go through these. */
     --color-primary-text: light-dark(
       var(--color-primary-700),
       var(--color-primary-500)
@@ -246,5 +254,11 @@
       var(--color-primary-800),
       var(--color-primary-400)
     );
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --blend: screen;
+    }
   }
 }

@@ -714,7 +714,7 @@
   .leaflet-reader-fallback {
     margin-block: 1rem;
     border: 1px solid currentColor;
-    border-radius: 0.5rem;
+    border-radius: 0;
     padding: 1rem;
   }
 
@@ -740,7 +740,7 @@
 
   .leaflet-posts-list article {
     border: 1px solid currentColor;
-    border-radius: 0.5rem;
+    border-radius: 0;
     padding: 0.75rem 1rem;
     opacity: 0.9;
   }
@@ -786,7 +786,7 @@
     min-height: 20rem;
     margin-block: 1rem;
     border: 1px solid currentColor;
-    border-radius: 0.5rem;
+    border-radius: 0;
     background: white;
   }
 

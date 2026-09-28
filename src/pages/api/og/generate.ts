@@ -53,14 +53,11 @@ const loadFont = async (url: string) => {
   }
 };
 
-let fonts: Promise<[ArrayBuffer, ArrayBuffer, ArrayBuffer]> | undefined;
+let fonts: Promise<[ArrayBuffer, ArrayBuffer]> | undefined;
 const loadFonts = () =>
   (fonts ??= Promise.all([
     loadFont(
-      "node_modules/@fontsource/fraunces/files/fraunces-latin-300-normal.woff",
-    ),
-    loadFont(
-      "node_modules/@fontsource/fraunces/files/fraunces-latin-400-italic.woff",
+      "node_modules/@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff",
     ),
     loadFont("src/lib/fonts/JetBrainsMono-Regular.ttf"),
   ]).catch((error) => {
@@ -74,7 +71,7 @@ export const GET: APIRoute = async ({ url }) => {
   try {
     await ensureWasm();
 
-    const [frauncesLight, frauncesItalic, monoFont] = await loadFonts();
+    const [archivoBlack, monoFont] = await loadFonts();
 
     const theme = getOgThemeColors();
     const almanac = getAlmanac();
@@ -101,16 +98,10 @@ export const GET: APIRoute = async ({ url }) => {
         height: 630,
         fonts: [
           {
-            name: "Fraunces",
-            data: frauncesLight,
-            weight: 300,
+            name: "Archivo Black",
+            data: archivoBlack,
+            weight: 900,
             style: "normal",
-          },
-          {
-            name: "Fraunces",
-            data: frauncesItalic,
-            weight: 400,
-            style: "italic",
           },
           {
             name: "JetBrains Mono",

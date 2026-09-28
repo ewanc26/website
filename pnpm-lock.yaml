@@ -23,10 +23,16 @@ importers:
       '@ewanc26/supporters':
         specifier: ^0.3.0
         version: 0.3.0(@atproto/api@0.20.7)(svelte@5.56.3)
-      '@fontsource-variable/fraunces':
+      '@fontsource-variable/archivo':
         specifier: ^5.3.0
         version: 5.3.0
-      '@fontsource/fraunces':
+      '@fontsource-variable/atkinson-hyperlegible-next':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource-variable/pixelify-sans':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/archivo-black':
         specifier: ^5.3.0
         version: 5.3.0
       '@fontsource/jetbrains-mono':
@@ -711,11 +717,17 @@ packages:
   '@ewanc26/tid@1.1.3':
     resolution: {integrity: sha512-y30dhmJL5iK5hSql+wUD+gXLD31J7uDBxJhL5VRqKj/BmIDSwY3BhHcpRi/K+dgr4Fwzr5WQ3PliKhBZ6+B0ng==}
 
-  '@fontsource-variable/fraunces@5.3.0':
-    resolution: {integrity: sha512-9BYGySn4AHEJdgp9Z28tQ3X+laJMEOITXkQarZXeloWQZDq5oOvXJ3kDA8c7MGIfpogIaZfjrQBqmda8POOCKA==}
+  '@fontsource-variable/archivo@5.3.0':
+    resolution: {integrity: sha512-HogK8FJelrD1o7TlZlkIVtHgc20bO5PZRWE7mUeUTdMN055alznQV6/00J00IBeu8FQAH4s3zW9UJNvKExXf+g==}
 
-  '@fontsource/fraunces@5.3.0':
-    resolution: {integrity: sha512-LEHTOBiZufQzAvnAe2rZ8ZknbDS28Q9kzwb0L+gZJEmjLGr8hhZ/5NuHXwDuHBWhVXYoiGGXmrb0H6Ko/RrHTg==}
+  '@fontsource-variable/atkinson-hyperlegible-next@5.3.0':
+    resolution: {integrity: sha512-UnLzNUy1RWoLDfydAatP4NaRm99X/WbQEph7q/PymJnCFIOOwKOx3pBmp5ys8trO0dM+CKGuJgeZP9fAR4mQpA==}
+
+  '@fontsource-variable/pixelify-sans@5.3.0':
+    resolution: {integrity: sha512-rOF07QCyHg9xb4UZF3lpXOM4UO+zo3y8tXvO7T+vy40GVt/GU8HL+/YWE029CMsbhOwk4plRDY9G8BU5cWs1ig==}
+
+  '@fontsource/archivo-black@5.3.0':
+    resolution: {integrity: sha512-7EsTIQ+Blf96ktpzTUpI7msi+u9/AJxM/GZxOSkEubVd1jSTrFSTNxMgfpX/8rQsjZ+19a+qvRbtcTEp5J/72g==}
 
   '@fontsource/jetbrains-mono@5.3.0':
     resolution: {integrity: sha512-fqDfB5I9f1p1TV486aUgB9t8zP84P0O1FtQR5Ol9vjwPy+S+EIGlVYm1cvj2W5shcZMTg2nZFdVMoH5wFu8a1A==}
@@ -3706,9 +3718,13 @@ snapshots:
 
   '@ewanc26/tid@1.1.3': {}
 
-  '@fontsource-variable/fraunces@5.3.0': {}
+  '@fontsource-variable/archivo@5.3.0': {}
 
-  '@fontsource/fraunces@5.3.0': {}
+  '@fontsource-variable/atkinson-hyperlegible-next@5.3.0': {}
+
+  '@fontsource-variable/pixelify-sans@5.3.0': {}
+
+  '@fontsource/archivo-black@5.3.0': {}
 
   '@fontsource/jetbrains-mono@5.3.0': {}
 

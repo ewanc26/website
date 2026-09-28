@@ -46,12 +46,7 @@
   .skeleton-pulse {
     width: 60%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      var(--surface-color) 0%,
-      var(--surface-raised) 50%,
-      var(--surface-color) 100%
-    );
+    background: color-mix(in oklab, var(--rule) 40%, transparent);
     animation: skeleton-sweep 1.6s infinite var(--ease-out-quart);
     will-change: transform;
   }
