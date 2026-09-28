@@ -956,6 +956,28 @@
     opacity: 0.55;
     clip-path: polygon(0 60%, 100% 30%, 100% 100%, 0 100%);
   }
+  /* Poster cards (watching): the same duotone treatment as the ID card
+     photo, at the film-poster ratio, with the wash lighter so the art
+     still reads through it. */
+  .duotone--poster {
+    aspect-ratio: 2 / 3;
+  }
+  .duotone--poster::after {
+    opacity: 0.35;
+  }
+  .cart-rating {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    z-index: 1;
+    padding: 0.15rem 0.45rem;
+    background: var(--ink);
+    color: var(--paper);
+    border: 2px solid var(--paper);
+    font-family: var(--font-pixel);
+    font-weight: 600;
+    font-size: var(--text-xs);
+  }
   .idcard-name {
     font-family: var(--font-display);
     font-variation-settings: "wdth" 120;
