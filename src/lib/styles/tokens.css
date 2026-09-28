@@ -231,5 +231,22 @@
        with the one that's only sometimes on speakers. Keep both in sync
        if either changes. */
     --duration-breath: 16.6667s;
+
+    /* ── Accessible text variants of the primary accent ─────────── */
+    /* See the comment above this block's sibling in theme.ts/tokens.css
+       history: primary-500 is deliberately the same lightness in both
+       schemes, which is correct for backgrounds but fails contrast when
+       used as text in light mode. Use these two for primary-coloured
+       text specifically; keep --color-primary-500 itself for
+       backgrounds, icons, and borders, where the mirrored scale is the
+       point. */
+    --color-primary-text: light-dark(
+      var(--color-primary-700),
+      var(--color-primary-500)
+    );
+    --color-primary-text-hover: light-dark(
+      var(--color-primary-800),
+      var(--color-primary-400)
+    );
   }
 }

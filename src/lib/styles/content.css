@@ -145,13 +145,13 @@
     gap: var(--space-xs);
     margin-top: var(--space-md);
     font-size: var(--text-sm);
-    color: var(--color-primary-500);
+    color: var(--color-primary-text);
     text-decoration: none;
     transition: color var(--duration-fast) var(--ease-out-quart);
   }
 
   .section-link:hover {
-    color: var(--color-primary-400);
+    color: var(--color-primary-text-hover);
   }
 
   .section-link svg {

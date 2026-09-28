@@ -117,8 +117,12 @@
   }
 
   a:hover {
-    color: var(--color-primary-500);
-    text-decoration-color: var(--color-primary-500);
+    /* Not --color-primary-500: see the accessible-text tokens' comment
+       in tokens.css. Universal rule, so this was the highest-impact
+       instance of the contrast failure — every hovered link on the
+       site, in light mode. */
+    color: var(--color-primary-text);
+    text-decoration-color: var(--color-primary-text);
     text-underline-offset: 4px;
   }
 
