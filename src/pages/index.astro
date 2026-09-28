@@ -17,7 +17,7 @@ const { profile, verifications, kibunStatus, musicStatus, posts, githubProjects,
 const name = (profile.displayName ?? profile.handle).trim();
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const bio = esc(profile.description ?? "").replace(
-  /(werewol(?:f|ves)|pagan|poet|programmer|Gàidhlig(?: na h-Alba)?)/gi,
+  /(werewol(?:f|ves)|furr(?:y|ies)|pagan|poet|programmer|Gàidhlig(?: na h-Alba)?)/gi,
   "<mark>$1</mark>",
 );
 
@@ -54,7 +54,7 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
               {kibunStatus && <span class="now"><span aria-hidden="true">{kibunStatus.emoji}</span>{kibunStatus.text}</span>}
               {musicStatus && (
                 <span class="now now--track">
-                  {musicStatus.artworkUrl ? <img src={musicStatus.artworkUrl} alt="" width="36" height="36" loading="lazy" decoding="async" /> : <span aria-hidden="true">♪</span>}
+                  {musicStatus.artworkUrl ? <img src={musicStatus.artworkUrl} alt={`Album art for ${musicStatus.trackName}`} width="36" height="36" loading="lazy" decoding="async" /> : <span aria-hidden="true">♪</span>}
                   <span>{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(", ")}</span>
                 </span>
               )}
