@@ -1187,7 +1187,11 @@
     font-family: var(--font-pixel);
     font-size: var(--text-xs);
   }
-  .moons {
+  /* .press-base .moons (two classes) beats the generic .press ul (one
+     class + one type) on specificity, which was otherwise winning and
+     silently turning this into a single-column grid — a one-per-row
+     stack, not the horizontal strip it's meant to be. */
+  .press-base .moons {
     display: flex;
     gap: var(--space-sm);
     align-items: center;
