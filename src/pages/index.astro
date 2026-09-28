@@ -78,7 +78,7 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
       </div>
     </section>
 
-    <h2 class="word" data-t="Words">Words<small>the newest six</small></h2>
+    <h2 class="word"><span class="word-text">Words</span><small>the newest six</small></h2>
     {writing.length > 0 ? (
       <div>
         <ol class="tracks">
@@ -102,7 +102,7 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
 
     {feed.length > 0 && (
       <>
-        <h2 class="word" data-t="Feed">Feed<small>lately, on Bluesky</small></h2>
+        <h2 class="word"><span class="word-text">Feed</span><small>lately, on Bluesky</small></h2>
         <div>
           <ol class="tracks">
             {feed.map((post) => {
@@ -124,7 +124,7 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
 
     {apps.length > 0 && (
       <>
-        <h2 class="word" data-t="Apps">Apps<small>things I've shipped</small></h2>
+        <h2 class="word"><span class="word-text">Apps</span><small>things I've shipped</small></h2>
         <div>
           <ul class="carts">
             {apps.slice(0, 6).map((app, i) => (
@@ -148,7 +148,7 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
       </>
     )}
 
-    <h2 class="word" data-t="Works">Works<small>open source, live from GitHub</small></h2>
+    <h2 class="word"><span class="word-text">Works</span><small>open source, live from GitHub</small></h2>
     {githubProjects.length > 0 ? (
       <div>
         <ul class="carts">
@@ -177,7 +177,7 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
 
     {watching.length > 0 && (
       <>
-        <h2 class="word" data-t="Watching">Watching<small>logged on Popfeed</small></h2>
+        <h2 class="word"><span class="word-text">Watching</span><small>logged on Popfeed</small></h2>
         <ul class="carts">
           {watching.slice(0, 6).map((w, i) => {
             const href = w.imdbId ? `https://www.imdb.com/title/${w.imdbId}/` : undefined;
@@ -206,7 +206,7 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
 
     {otherPublications.length > 0 && (
       <>
-        <h2 class="word" data-t="Shelf">Shelf<small>other things I publish</small></h2>
+        <h2 class="word"><span class="word-text">Shelf</span><small>other things I publish</small></h2>
         <ul class="shelf">
           {otherPublications.map((pub) => (
             <li>
@@ -222,7 +222,7 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
 
     {links.cards?.length > 0 && (
       <>
-        <h2 class="word" data-t="Elsewhere">Elsewhere</h2>
+        <h2 class="word"><span class="word-text">Elsewhere</span></h2>
         <ul class="shelf">
           {links.cards.slice(0, 8).map((link) => (
             <li>

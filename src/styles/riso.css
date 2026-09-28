@@ -411,10 +411,33 @@
 
   /* ── Section heading (big word peeking over the content) ─────── */
 
+  /*
+   * .word is a flex row, not a text node with an inline <small> — a plain
+   * inline small wrapping onto its own line inside an 11rem/0.78-line-height
+   * heading inherits that giant line box and lands with a huge gap under
+   * the word (confirmed on "Watching logged / on Popfeed", where "APPS
+   * things I've shipped" happened to fit on one line and hid the bug).
+   * Flex items on wrap get their own line sized to that line's content,
+   * not the parent's font metrics, so this holds for any word/subtitle
+   * length combination.
+   */
   .word {
     position: relative;
     z-index: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--space-md);
+    row-gap: 0.15em;
     margin: var(--space-xl) 0 0;
+    padding-bottom: 0.36em;
+    margin-bottom: -0.14em;
+  }
+  .word + * {
+    position: relative;
+    z-index: 1;
+  }
+  .word-text {
     font-family: var(--font-display);
     font-variation-settings: "wdth" 125;
     font-weight: 900;
@@ -424,12 +447,6 @@
     text-transform: uppercase;
     color: var(--riso-b);
     mix-blend-mode: var(--blend);
-    margin-bottom: -0.14em;
-    padding-bottom: 0.5em;
-  }
-  .word + * {
-    position: relative;
-    z-index: 1;
   }
   .word small {
     font-family: var(--font-pixel);
@@ -440,8 +457,6 @@
     text-transform: none;
     color: var(--ink);
     mix-blend-mode: normal;
-    margin-left: var(--space-md);
-    vertical-align: 0.4em;
   }
 
   /* ── Poster (home) ───────────────────────────────────────────── */
@@ -716,19 +731,19 @@
     text-decoration: none;
     rotate: var(--tilt, 0deg);
   }
+  /* Punched corner: a flat clipped triangle, not a gradient hard-stop.
+     Gradients don't anti-alias a diagonal edge reliably — it renders as a
+     visible staircase at this size, with the cart-band bleeding through
+     the gaps. clip-path clips cleanly regardless of angle or size. */
   .cart::after {
     content: "";
     position: absolute;
     top: calc(-1 * var(--edge));
     right: calc(-1 * var(--edge));
-    width: 28px;
-    height: 28px;
-    background: linear-gradient(
-      225deg,
-      var(--paper) calc(50% - 1.5px),
-      var(--ink) calc(50% - 1.5px) calc(50% + 1.5px),
-      var(--paper) calc(50% + 1.5px)
-    );
+    width: 26px;
+    height: 26px;
+    background: var(--paper);
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
     z-index: 2;
   }
   .cart:hover {
@@ -736,12 +751,7 @@
     color: var(--paper);
   }
   .cart:hover::after {
-    background: linear-gradient(
-      225deg,
-      var(--paper) calc(50% - 1.5px),
-      var(--paper) calc(50% - 1.5px) calc(50% + 1.5px),
-      var(--ink) calc(50% + 1.5px)
-    );
+    background: var(--ink);
   }
   .cart-band {
     height: 1.15rem;
