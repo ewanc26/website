@@ -58,7 +58,11 @@
     margin: -0.12em 0 0;
     font-size: clamp(2.75rem, 11vw, 8rem);
     font-weight: 900;
-    font-style: italic;
+    /* Not italic: the shear brought adjacent glyphs (worst case, "gh")
+       close enough that .text-outline's dilate step bridged the gap
+       between them with a stray line, the same class of artifact the
+       filter was built to eliminate in the first place. Upright glyphs
+       keep a more consistent gap at every dilate radius. */
     letter-spacing: -0.05em;
     line-height: 0.9;
     user-select: none;
@@ -637,7 +641,7 @@
     margin: var(--space-2xs) 0 0;
     font-size: clamp(1.75rem, 5vw, 3.25rem);
     font-weight: 900;
-    font-style: italic;
+    /* Not italic — see .hero-gaelic. */
     letter-spacing: -0.045em;
     line-height: 1;
   }
@@ -1637,7 +1641,7 @@
     margin: 0;
     font-size: clamp(2.5rem, 8vw, 4.5rem);
     font-weight: 900;
-    font-style: italic;
+    /* Not italic — see .hero-gaelic. */
     letter-spacing: -0.05em;
     line-height: 1;
   }
