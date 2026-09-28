@@ -15,8 +15,8 @@ export type OgEntry = {
   theme: {
     bg: string;
     fg: string;
-    accent: string;
-    typeFg: string;
+    inkA: string;
+    inkB: string;
   };
 };
 
@@ -138,38 +138,34 @@ const el = (
 ) => ({ type, props: { style, children, ...props } });
 
 // Satori uses a JSX-like object structure for defining the layout.
-// The card is one almanac page: a heavy rule, the dateline, the kicker,
-// the title in light Fraunces, an italic standfirst, and the sabbat seal.
+// The card is a riso-printed strip: a colour bar of both inks, a mono
+// dateline, the title in colossal Archivo Black, a mono standfirst, and
+// a torn-edge "cartridge" tab bottom-right carrying the moon.
 export const getOgTemplate = (entry: OgEntry) => {
   const title = cleanOgText(entry.title, MAX_TITLE_LENGTH);
   const subtitle = cleanOgText(entry.subtitle, MAX_SUBTITLE_LENGTH);
   const type = normalizeOgType(entry.type);
   const { theme } = entry;
+  const { inkA, inkB } = theme;
   const moon = getMoonPhaseGeometry(entry.moonPhase);
 
   const moonChildren: Array<Record<string, unknown>> = [
     {
       type: "circle",
-      props: {
-        cx: "12",
-        cy: "12",
-        r: "9",
-        fill: theme.accent,
-        opacity: "0.16",
-      },
+      props: { cx: "12", cy: "12", r: "9", fill: inkA, opacity: "0.16" },
     },
   ];
   if (moon.isFull) {
     moonChildren.push({
       type: "circle",
-      props: { cx: "12", cy: "12", r: "9", fill: theme.accent },
+      props: { cx: "12", cy: "12", r: "9", fill: inkA },
     });
   } else if (moon.path) {
     moonChildren.push({
       type: "path",
       props: {
         d: moon.path,
-        fill: theme.accent,
+        fill: inkA,
         fillRule: moon.isGibbous ? "evenodd" : "nonzero",
       },
     });
@@ -181,67 +177,10 @@ export const getOgTemplate = (entry: OgEntry) => {
       cy: "12",
       r: "9",
       fill: "none",
-      stroke: theme.accent,
-      strokeWidth: "0.5",
+      stroke: inkA,
+      strokeWidth: "0.6",
     },
   });
-
-  // Seal: two rings and eight sabbat ticks around the moon.
-  const ticks = Array.from({ length: 8 }, (_, i) => {
-    const a = (i * Math.PI) / 4;
-    return {
-      type: "line",
-      props: {
-        x1: 100 + Math.cos(a) * 88,
-        y1: 100 + Math.sin(a) * 88,
-        x2: 100 + Math.cos(a) * 96,
-        y2: 100 + Math.sin(a) * 96,
-        stroke: theme.accent,
-        strokeWidth: "2",
-      },
-    };
-  });
-  const seal = {
-    type: "svg",
-    props: {
-      width: "230",
-      height: "230",
-      viewBox: "0 0 200 200",
-      style: { position: "absolute", right: "80px", bottom: "96px" },
-      children: [
-        {
-          type: "circle",
-          props: {
-            cx: "100",
-            cy: "100",
-            r: "96",
-            fill: "none",
-            stroke: theme.accent,
-            strokeWidth: "1.5",
-          },
-        },
-        {
-          type: "circle",
-          props: {
-            cx: "100",
-            cy: "100",
-            r: "70",
-            fill: "none",
-            stroke: theme.accent,
-            strokeWidth: "1.5",
-          },
-        },
-        ...ticks,
-        {
-          type: "g",
-          props: {
-            transform: "translate(56 56) scale(3.6667)",
-            children: moonChildren,
-          },
-        },
-      ],
-    },
-  };
 
   const body: unknown[] = [];
   if (type) {
@@ -250,10 +189,13 @@ export const getOgTemplate = (entry: OgEntry) => {
         "div",
         {
           fontFamily: "JetBrains Mono",
-          fontSize: "20px",
-          letterSpacing: "4px",
-          color: theme.accent,
-          marginBottom: "28px",
+          fontSize: "22px",
+          fontWeight: 700,
+          letterSpacing: "5px",
+          color: theme.bg,
+          backgroundColor: inkB,
+          padding: "4px 16px",
+          marginBottom: "32px",
         },
         type,
       ),
@@ -265,13 +207,13 @@ export const getOgTemplate = (entry: OgEntry) => {
       el(
         "div",
         {
-          fontFamily: "Fraunces",
-          fontWeight: 300,
+          fontFamily: "Archivo Black",
           fontSize: `${size}px`,
-          lineHeight: 1.02,
+          lineHeight: 0.98,
           letterSpacing: "-2px",
-          color: theme.fg,
-          maxWidth: "820px",
+          textTransform: "uppercase",
+          color: inkA,
+          maxWidth: "860px",
           display: "-webkit-box",
           "-webkit-line-clamp": "3",
           "-webkit-box-orient": "vertical",
@@ -287,12 +229,11 @@ export const getOgTemplate = (entry: OgEntry) => {
       el(
         "div",
         {
-          fontFamily: "Fraunces",
-          fontStyle: "italic",
+          fontFamily: "JetBrains Mono",
           fontWeight: 400,
           fontSize: `${size}px`,
           lineHeight: 1.35,
-          color: theme.typeFg,
+          color: theme.fg,
           marginTop: "28px",
           maxWidth: "760px",
           display: "-webkit-box",
@@ -304,6 +245,26 @@ export const getOgTemplate = (entry: OgEntry) => {
       ),
     );
   }
+
+  // The moon sits in a torn-corner tab, bottom right — the same cut used
+  // for the "cartridge" project tiles on the site itself.
+  const moonTab = el(
+    "div",
+    {
+      position: "absolute",
+      right: "64px",
+      bottom: "56px",
+      width: "128px",
+      height: "128px",
+      display: "flex",
+      backgroundColor: inkB,
+      border: `3px solid ${inkA}`,
+    },
+    el("svg", { width: "100%", height: "100%" }, undefined, {
+      viewBox: "0 0 24 24",
+      children: moonChildren,
+    }),
+  );
 
   return el(
     "div",
@@ -317,20 +278,24 @@ export const getOgTemplate = (entry: OgEntry) => {
       position: "relative",
     },
     [
-      el("div", { width: "100%", height: "12px", backgroundColor: theme.fg }),
+      el("div", { display: "flex", width: "100%", height: "16px" }, [
+        el("div", { flex: 1, backgroundColor: inkA }),
+        el("div", { flex: 1, backgroundColor: inkB }),
+      ]),
       el(
         "div",
         {
           display: "flex",
           justifyContent: "space-between",
-          padding: "18px 80px",
-          borderBottom: `1px solid ${theme.fg}`,
+          padding: "20px 80px",
+          borderBottom: `2px solid ${theme.fg}`,
           fontFamily: "JetBrains Mono",
-          fontSize: "17px",
+          fontSize: "18px",
           letterSpacing: "3px",
           textTransform: "uppercase",
+          color: theme.fg,
         },
-        [el("div", {}, entry.dateline), el("div", {}, "A personal almanac")],
+        [el("div", {}, entry.dateline), el("div", {}, "ewancroft.uk")],
       ),
       el(
         "div",
@@ -348,19 +313,22 @@ export const getOgTemplate = (entry: OgEntry) => {
         {
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "flex-end",
           margin: "0 80px",
-          padding: "20px 0 44px",
-          borderTop: `1px solid ${theme.accent}`,
+          padding: "20px 210px 44px 0",
+          borderTop: `2px solid ${inkA}`,
           fontFamily: "JetBrains Mono",
           fontSize: "22px",
+          fontWeight: 700,
           letterSpacing: "1px",
+          color: theme.fg,
         },
         [
           el("div", {}, displayPath(entry.slug)),
-          el("div", { color: theme.accent }, "Ewan Croft"),
+          el("div", { color: inkA }, "Ewan Croft"),
         ],
       ),
-      seal,
+      moonTab,
     ],
   );
 };

@@ -8,6 +8,7 @@ import { normalizeSiteInfo } from "$lib/services/atproto/siteInfo";
 import { PUBLIC_ATPROTO_DID, PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
 import Header from "../components/Header.astro";
 import Colophon from "../components/Colophon.astro";
+import BacklinkAvatars from "$lib/components/BacklinkAvatars.svelte";
 import AmbianceEngine from "$lib/components/AmbianceEngine.svelte";
 import SeasonalThemeUpdater from "$lib/components/SeasonalThemeUpdater.svelte";
 import WolfPawTrail from "$lib/components/WolfPawTrail.svelte";
@@ -15,7 +16,7 @@ import MondayEgg from "$lib/components/ostara-eggs/MondayEgg.svelte";
 import IdleEgg from "$lib/components/ostara-eggs/IdleEgg.svelte";
 import ThreeToast from "$lib/components/ostara-eggs/ThreeToast.svelte";
 import BlogArchiveEggs from "$lib/components/ostara-eggs/BlogArchiveEggs.svelte";
-import "../styles/almanac.css";
+import "../styles/riso.css";
 
 interface Props {
   title?: string;
@@ -31,15 +32,18 @@ interface Props {
   author?: string;
   /** rkey of the site.standard.document record for this page. */
   documentRkey?: string;
+  /** Extra URLs / AT-URIs whose backlinks to show (the page URL is always included). */
+  backlinkTargets?: string[];
 }
 
-const { title, description, ogSubtitle, ogType, image, type = "website", publishedTime, tags, author, documentRkey } =
+const { title, description, ogSubtitle, ogType, image, type = "website", publishedTime, tags, author, documentRkey, backlinkTargets = [] } =
   Astro.props;
 
 const almanac = getAlmanac();
 const siteInfo = normalizeSiteInfo(await fetchSiteInfo(fetch).catch(() => null));
 
 const pathname = Astro.url.pathname;
+const backlinks = [`https://ewancroft.uk${pathname}`, ...backlinkTargets];
 const fullTitle = title ? `${title} — ${SITE.title}` : SITE.ogTitle;
 const fullDescription = description ?? siteInfo?.additionalInfo?.purpose ?? SITE.description;
 const canonical = new URL(pathname, Astro.url.origin).href;
@@ -133,6 +137,9 @@ const ogAlt = `Social preview for ${title ?? SITE.title}${ogType ? `, labelled $
     <div class="shell-main" id="main-content" tabindex="-1">
       <slot />
     </div>
+    {Astro.response.status !== 404 && (
+      <div class="wrap backlinks"><BacklinkAvatars targets={backlinks} client:idle /></div>
+    )}
     <Colophon almanac={almanac} siteInfo={siteInfo} />
 
     <script>

@@ -43,7 +43,7 @@
   .avatar, .avatar img {
     width: 32px;
     height: 32px;
-    border-radius: 50%;
+    border-radius: 0;
   }
   .verifier-info {
     display: flex;

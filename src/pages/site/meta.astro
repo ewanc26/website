@@ -1,12 +1,11 @@
 ---
 import Base from "../../layouts/Base.astro";
-import PageHead from "../../components/PageHead.astro";
+import Slab from "../../components/Slab.astro";
 import { fetchSiteInfo } from "$lib/services/atproto/fetch";
 import { normalizeSiteInfo } from "$lib/services/atproto/siteInfo";
 
 Astro.response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=3600");
 const info = normalizeSiteInfo(await fetchSiteInfo(fetch).catch(() => null));
-
 function bySection<T extends { section?: string }>(items: T[]) {
   const m = new Map<string, T[]>();
   for (const i of items) m.set(i.section ?? "Other", [...(m.get(i.section ?? "Other") ?? []), i]);
@@ -14,82 +13,79 @@ function bySection<T extends { section?: string }>(items: T[]) {
 }
 const a = info?.additionalInfo;
 const os = info?.openSourceInfo;
-let n = 0;
-const num = () => ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii"][n++] ?? String(n);
 ---
 
 <Base title="Site Meta" description={a?.purpose ?? "Information about this website, its technology, privacy, and the people who made it possible."} ogSubtitle="Tech stack, privacy, credits, and open-source info." ogType="SITE_META">
-  <main class="sheet">
-    <PageHead kicker="Imprint" standfirst="Information about this website, its technology, and the people who made it possible.">
-      Site <em>meta</em>
-    </PageHead>
-
+  <main class="wrap">
+    <Slab word="Site Meta" long />
     {!info && <p class="empty">Site information could not be loaded just now.</p>}
 
     {a?.purpose && (
-      <section class="folio" id="purpose"><div class="margin"><span class="numeral">{num()}</span>Purpose</div>
-        <div><p class="lede-text">{a.purpose}</p>{a.websiteBirthYear && <p class="empty">First launched in {a.websiteBirthYear}.</p>}</div>
-      </section>
+      <div class="cols thunk" style="--i:1"><h2>Purpose</h2>
+        <div><p class="lede" style="margin:0">{a.purpose}</p>{a.websiteBirthYear && <p class="note">First launched in {a.websiteBirthYear}.</p>}</div>
+      </div>
     )}
 
     {(info?.privacyStatement || a?.analytics) && (
-      <section class="folio" id="privacy"><div class="margin"><span class="numeral">{num()}</span>Privacy</div>
+      <div class="cols thunk" style="--i:2"><h2>Privacy</h2>
         <div>
           {info?.privacyStatement && <p>{info.privacyStatement}</p>}
           {a?.analytics && (
-            <dl class="dl">
-              <dt>Analytics</dt><dd>{a.analytics.services.length ? a.analytics.services.join(", ") : "No analytics services declared."}</dd>
+            <dl class="dl" style="margin-top:1rem">
+              <dt>Analytics</dt><dd>{a.analytics.services.length ? a.analytics.services.join(", ") : "None declared."}</dd>
               {a.analytics.cookiePolicy && <><dt>Cookies</dt><dd>{a.analytics.cookiePolicy}</dd></>}
             </dl>
           )}
         </div>
-      </section>
+      </div>
     )}
 
     {os && (
-      <section class="folio" id="open-source"><div class="margin"><span class="numeral">{num()}</span>Open source</div>
+      <div class="cols thunk" style="--i:3"><h2>Open source</h2>
         <div>
           {os.description && <p>{os.description}</p>}
-          <dl class="dl">
+          <dl class="dl" style="margin-top:1rem">
             {os.license && <><dt>Licence</dt><dd>{os.license.url ? <a href={os.license.url} rel="license noopener">{os.license.name ?? "View licence"}</a> : os.license.name}</dd></>}
-            {os.repositories.map((r) => <><dt>{r.type ?? "Repo"}</dt><dd><a href={r.url} rel="noopener">{r.description || r.url}</a>{r.platform && <> <span class="tag">{r.platform}</span></>}</dd></>)}
+            {os.repositories.map((r) => <><dt>{r.type ?? "Repo"}</dt><dd><a href={r.url} rel="noopener">{r.description || r.url}</a>{r.platform && <> <span class="chip">{r.platform}</span></>}</dd></>)}
             {os.relatedServices.map((s) => <><dt>{s.relationship ?? "Related"}</dt><dd>{s.url ? <a href={s.url} rel="noopener">{s.name}</a> : s.name}{s.description && <> — {s.description}</>}</dd></>)}
           </dl>
         </div>
-      </section>
+      </div>
     )}
 
     {info && info.technologyStack.length > 0 && (
-      <section class="folio" id="tech"><div class="margin"><span class="numeral">{num()}</span>Typesetting</div>
+      <div class="cols thunk" style="--i:4"><h2>Built with</h2>
         <div>
           {bySection(info.technologyStack).map(([section, list]) => (
-            <><h3 class="h-sub">{section}</h3>
-            <dl class="dl">{list.map((t) => <><dt>{t.name}</dt><dd>{t.url ? <a href={t.url} rel="noopener">{t.description ?? t.url}</a> : t.description}</dd></>)}</dl></>
+            <div style="margin-bottom:1.5rem"><p class="pix" style="margin-bottom:.5rem;color:var(--riso-a)">{section}</p>
+              <dl class="dl">{list.map((t) => <><dt>{t.name}</dt><dd>{t.url ? <a href={t.url} rel="noopener">{t.description ?? t.url}</a> : t.description}</dd></>)}</dl>
+            </div>
           ))}
         </div>
-      </section>
+      </div>
     )}
 
     {(a?.deployment || (a?.sectionLicense.length ?? 0) > 0) && (
-      <section class="folio" id="operations"><div class="margin"><span class="numeral">{num()}</span>Operations</div>
+      <div class="cols thunk" style="--i:5"><h2>Operations</h2>
         <dl class="dl">
           {a?.deployment && <><dt>Hosting</dt><dd>{[a.deployment.platform, a.deployment.cdn].filter(Boolean).join(" · ")}{a.deployment.customDomain && " · custom domain"}</dd></>}
           {a?.sectionLicense.map((l) => <><dt>{l.section ?? "Licence"}</dt><dd>{l.url ? <a href={l.url} rel="license noopener">{l.name ?? l.url}</a> : l.name}</dd></>)}
         </dl>
-      </section>
+      </div>
     )}
 
     {info && info.credits.length > 0 && (
-      <section class="folio" id="credits"><div class="margin"><span class="numeral">{num()}</span>Credits</div>
+      <div class="cols thunk" style="--i:6"><h2>Credits</h2>
         <div>
           {bySection(info.credits).map(([section, list]) => (
-            <><h3 class="h-sub">{section}</h3>
-            <ul class="toc">{list.map((c) => (
-              <li><div class="toc-row"><span class="toc-title">{c.url ? <a href={c.url} rel="noopener">{c.name}</a> : c.name}</span><span class="toc-leader" aria-hidden="true"></span><span class="toc-meta">{c.type}{c.author ? ` · ${c.author}` : ""}</span>{c.description && <p class="toc-note">{c.description}</p>}</div></li>
-            ))}</ul></>
+            <div style="margin-bottom:1.5rem"><p class="pix" style="margin-bottom:.5rem;color:var(--riso-a)">{section}</p>
+              <ul class="shelf">{list.map((c) => (
+                <li><div class="shelf-item"><span class="shelf-name">{c.url ? <a href={c.url} rel="noopener">{c.name}</a> : c.name}</span><span class="shelf-meta">{c.type}{c.author ? ` · ${c.author}` : ""}</span>{c.description && <p class="shelf-note">{c.description}</p>}</div></li>
+              ))}</ul>
+            </div>
           ))}
         </div>
-      </section>
+      </div>
     )}
   </main>
 </Base>

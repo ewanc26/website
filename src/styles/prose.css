@@ -1,92 +1,73 @@
 /* ================================================================
- * prose.css — long-form reading, set like a printed page
+ * prose.css — long reading, in the zine's voice
  *
- * Applies inside `.prose` (posts, the name essay). Body copy is
- * Fraunces at a book measure; headings are quiet and italic-led;
- * the first paragraph opens with a drop cap when `.prose--opening`.
+ * Body is Atkinson Hyperlegible Next (built for legibility). Headings
+ * are marker-highlighted Archivo; quotes get a fat ink bar; list
+ * bullets are little printed squares.
  * ================================================================ */
 
 @layer components {
   .prose {
     max-width: var(--measure-prose);
-    font-size: clamp(1.125rem, 0.4vw + 1.02rem, 1.3125rem);
-    line-height: 1.7;
-    font-variation-settings:
-      "opsz" 14,
-      "SOFT" 30;
-    hanging-punctuation: first;
+    font-size: clamp(1.15rem, 0.5vw + 1.05rem, 1.32rem);
+    line-height: 1.68;
     overflow-wrap: break-word;
   }
-
   .prose > * + * {
-    margin-top: 1.1em;
+    margin-top: 1.15em;
   }
-
   .prose p {
     text-wrap: pretty;
-    hyphens: auto;
-  }
-
-  .prose--opening > p:first-of-type::first-letter {
-    float: left;
-    font-size: 4.6em;
-    line-height: 0.78;
-    padding: 0.07em 0.1em 0 0;
-    font-weight: 400;
-    font-variation-settings:
-      "opsz" 144,
-      "SOFT" 100;
-    color: var(--stamp);
   }
 
   .prose :is(h1, h2, h3, h4, h5, h6) {
-    margin-top: 2em;
     scroll-margin-top: var(--space-lg);
-    letter-spacing: -0.015em;
   }
-  .prose h1,
-  .prose h2 {
-    font-size: 1.75em;
-    font-weight: 400;
-    font-variation-settings:
-      "opsz" 72,
-      "SOFT" 60;
+  .prose :is(h1, h2) {
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 2.2em;
+    padding: 0 0.12em;
+    font-variation-settings: "wdth" 118;
+    font-weight: 900;
+    font-size: 1.9em;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    background: linear-gradient(transparent 58%, var(--riso-b) 58%);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
   .prose h3 {
-    font-size: 1.35em;
-    font-weight: 500;
-    font-style: italic;
-    font-variation-settings:
-      "opsz" 36,
-      "SOFT" 100,
-      "WONK" 1;
+    margin-top: 1.9em;
+    font-variation-settings: "wdth" 106;
+    font-weight: 800;
+    font-size: 1.4em;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .prose h3::before {
+    content: "";
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    margin-right: 0.4em;
+    background: var(--riso-a);
   }
   .prose :is(h4, h5, h6) {
-    font-family: var(--font-mono);
-    font-size: 0.72em;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    margin-top: 1.6em;
+    font-family: var(--font-pixel);
+    font-weight: 600;
+    font-size: 1.05em;
+    color: var(--riso-a);
   }
-
-  .prose a {
-    color: var(--ink);
-    text-decoration-color: var(--stamp);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.18em;
-  }
-  .prose a:hover {
-    color: var(--color-primary-text);
+  @media (prefers-color-scheme: dark) {
+    .prose :is(h1, h2) {
+      color: var(--on-ink);
+    }
   }
 
   .prose strong {
-    font-weight: 650;
-  }
-  .prose em {
-    font-variation-settings:
-      "opsz" 14,
-      "SOFT" 100,
-      "WONK" 1;
+    font-weight: 750;
   }
   .prose del {
     color: var(--ink-soft);
@@ -94,69 +75,70 @@
 
   .prose blockquote {
     margin-inline: 0;
-    padding: 0 0 0 1.25em;
-    border-left: 2px solid var(--stamp);
-    font-style: italic;
-    color: var(--ink-soft);
+    padding: 0 0 0 1.1em;
+    border-left: 12px solid var(--riso-a);
+    font-weight: 600;
+    font-size: 1.08em;
+    line-height: 1.45;
   }
   .prose blockquote > p + p {
     margin-top: 0.7em;
   }
 
   .prose :is(ul, ol) {
-    padding-left: 1.4em;
+    padding-left: 1.5em;
   }
   .prose li + li {
-    margin-top: 0.35em;
+    margin-top: 0.4em;
   }
   .prose ul > li::marker {
-    content: "· ";
-    color: var(--stamp);
+    content: "■  ";
+    color: var(--riso-a);
+    font-size: 0.8em;
   }
   .prose ol > li::marker {
-    font-family: var(--font-mono);
-    font-size: 0.75em;
-    color: var(--stamp);
+    font-family: var(--font-pixel);
+    font-weight: 700;
+    color: var(--riso-a);
   }
   .prose li > :is(ul, ol) {
-    margin-top: 0.35em;
+    margin-top: 0.4em;
   }
 
   .prose hr {
     border: 0;
-    height: 1.5em;
-    text-align: center;
-    margin-block: 2.5em;
-  }
-  .prose hr::before {
-    content: "·  ·  ·";
-    letter-spacing: 0.5em;
-    color: var(--stamp);
+    height: 12px;
+    margin-block: 2.4em;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--ink) 0 12px,
+      transparent 12px 24px
+    );
   }
 
   .prose img {
     height: auto;
-    border: 1px solid var(--rule);
-    padding: 4px;
-    background: var(--paper);
+    border: var(--edge) solid var(--ink);
   }
 
   .prose code:not(pre > code) {
-    background: var(--paper-deep);
     padding: 0.1em 0.35em;
-    font-size: 0.82em;
+    background: var(--paper-deep);
+    border: 1px solid var(--ink);
+    font-size: 0.8em;
   }
   .prose pre {
     overflow-x: auto;
     padding: var(--space-md);
-    border: 1px solid var(--ink);
+    border: var(--edge) solid var(--ink);
     background: var(--paper-deep);
-    font-size: 0.8em;
+    font-size: 0.78em;
     line-height: 1.55;
   }
   .prose pre > code {
     background: none;
     padding: 0;
+    border: 0;
     font-size: inherit;
   }
 
@@ -164,27 +146,25 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 0.9em;
-    border-top: 2px solid var(--ink);
-    border-bottom: 2px solid var(--ink);
+    border: var(--edge) solid var(--ink);
   }
   .prose th {
     text-align: left;
-    font-family: var(--font-mono);
-    font-size: 0.72em;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-bottom: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-pixel);
+    font-weight: 600;
   }
   .prose :is(th, td) {
-    padding: 0.5em 0.75em 0.5em 0;
+    padding: 0.5em 0.75em;
     vertical-align: top;
   }
   .prose tbody tr + tr td {
-    border-top: 1px solid var(--rule);
+    border-top: 2px solid var(--ink);
   }
 
   .prose input[type="checkbox"] {
-    accent-color: var(--stamp);
+    accent-color: var(--riso-a);
     margin-right: 0.5em;
   }
 }

@@ -88,12 +88,10 @@
 		gap: 1rem;
 		max-width: min(24rem, calc(100vw - 2rem));
 		padding: 0.85rem 1rem;
-		border: 1px solid var(--color-text-200);
-		border-radius: var(--radius-md, 6px);
-		background: color-mix(in oklch, var(--color-background-50) 90%, transparent);
-		color: var(--color-primary-600);
-		box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 0.1);
-		backdrop-filter: blur(10px);
+		border: 1px solid var(--ink);
+		border-radius: 0;
+		background: var(--paper);
+		color: var(--stamp);
 		pointer-events: none;
 		animation:
 			archive-in 500ms cubic-bezier(0.2, 0.8, 0.2, 1) both,
@@ -103,7 +101,6 @@
 	.happy-mac {
 		width: 2.5rem;
 		flex: 0 0 auto;
-		filter: drop-shadow(0 0.3rem 0.55rem rgb(0 0 0 / 0.18));
 		transform-origin: 50% 100%;
 		animation: happy-mac-startup 6.7s ease-in-out infinite;
 	}

@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
-import PageHead from "../../components/PageHead.astro";
+import Slab from "../../components/Slab.astro";
+import Barcode from "../../components/Barcode.astro";
 import {
   fetchProfile, fetchLinks, fetchSifaProfile, fetchSifaSkills, fetchSifaEducation,
   fetchSifaLanguages, fetchSifaExternalAccounts,
@@ -22,7 +23,6 @@ const [profile, links, sifa, skills, education, languages, accounts, projects, p
   fetchSifaLanguages(did, fetch).catch(() => []),
   fetchSifaExternalAccounts(did, fetch).catch(() => []),
   fetchPinnedGitHubProjects(env.GITHUB_USERNAME || "ewanc26", fetch, env.GITHUB_TOKEN).catch(() => []),
-  // The PDS is whatever the DID document says right now, not a hardcoded host.
   resolveDid(did, fetch)
     .then((doc) => {
       const e = doc?.service?.[0]?.serviceEndpoint;
@@ -45,107 +45,92 @@ for (const s of skills as any[]) {
   grouped.set(c, [...(grouped.get(c) ?? []), s]);
 }
 const MONTHS = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const fmt = (d?: string) => {
-  if (!d) return "—";
-  const [y, m] = d.split("-");
-  return `${MONTHS[parseInt(m)] ?? "Jan"} ${y}`;
-};
+const fmt = (d?: string) => { if (!d) return "—"; const [y, m] = d.split("-"); return `${MONTHS[parseInt(m)] ?? "Jan"} ${y}`; };
 const PGP = "C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D";
 ---
 
 <Base title="About" description={profile.description} ogType="ABOUT">
-  <main class="sheet">
-    <PageHead kicker={sifa?.headline ?? "About"} standfirst={profile.description || undefined}>
-      {profile.displayName ?? profile.handle}<br /><em lang="gd">eòghann</em>
-    </PageHead>
-    {profile.pronouns && <p class="kicker">{profile.pronouns}</p>}
+  <main class="wrap">
+    <Slab word="About" />
 
-    <section class="folio" aria-labelledby="skills">
-      <div class="margin"><span class="numeral">i</span><span id="skills">Skills</span></div>
+    <div class="idcard thunk">
+      <div class="idcard-hd"><span>ID CARD</span><span>{sifa?.headline ?? "Software developer"}</span></div>
+      <div class="duotone">{profile.avatar && <img src={profile.avatar} alt="" />}</div>
+      <div>
+        <p class="idcard-name">{profile.displayName ?? profile.handle}<br /><span lang="gd" style="font-size:0.55em">eòghann</span></p>
+        {profile.pronouns && <p class="chip" style="width:fit-content;margin-top:.5rem">{profile.pronouns}</p>}
+        <p class="lede" style="margin-top:1rem;font-size:1.1rem">{profile.description}</p>
+      </div>
+      <div style="grid-column:1/-1"><Barcode value={profile.did} /></div>
+    </div>
+
+    <div class="cols thunk" style="--i:1">
+      <h2>Skills</h2>
       <div>
         {grouped.size === 0 && <p class="empty">Skills could not be loaded just now.</p>}
         {[...grouped.entries()].map(([cat, list]) => (
-          <>
-            <h3 class="h-sub">{cat}</h3>
-            <p class="tags">{list.map((s) => <span class="tag">{s.name}</span>)}</p>
-          </>
+          <div style="margin-bottom:1.5rem">
+            <p class="pix" style="margin-bottom:.5rem;color:var(--riso-a)">{cat}</p>
+            <ul class="chips">{list.map((s) => <li class="chip">{s.name}</li>)}</ul>
+          </div>
         ))}
       </div>
-    </section>
+    </div>
 
-    <section class="folio" aria-labelledby="education">
-      <div class="margin"><span class="numeral">ii</span><span id="education">Education</span></div>
+    <div class="cols thunk" style="--i:2">
+      <h2>Education</h2>
       {education.length === 0 ? <p class="empty">Education could not be loaded just now.</p> : (
-        <ul class="toc">
+        <ul class="shelf">
           {(education as any[]).map((e) => (
-            <li>
-              <div class="toc-row">
-                <span class="toc-title">{e.degree}</span><span class="toc-leader" aria-hidden="true"></span>
-                <span class="toc-meta">{fmt(e.startedAt)} — {e.endedAt ? fmt(e.endedAt) : "Present"}</span>
-                <p class="toc-note">{e.institution}</p>
-              </div>
+            <li class="shelf-item">
+              <span class="shelf-name">{e.degree}</span>
+              <span class="shelf-meta">{fmt(e.startedAt)} – {e.endedAt ? fmt(e.endedAt) : "Present"}</span>
+              <p class="shelf-note">{e.institution}</p>
             </li>
           ))}
         </ul>
       )}
-    </section>
+    </div>
 
-    <section class="folio" aria-labelledby="works">
-      <div class="margin"><span class="numeral">iii</span><span id="works">Works</span></div>
+    <div class="cols thunk" style="--i:3">
+      <h2>Works</h2>
       {projects.length === 0 ? <p class="empty">Projects could not be loaded just now.</p> : (
-        <ul class="toc">
+        <ul class="shelf">
           {(projects as any[]).map((p) => (
-            <li>
-              <a href={p.url} rel="noopener" class="toc-row">
-                <span class="toc-title">{p.name}</span><span class="toc-leader" aria-hidden="true"></span>
-                <span class="toc-meta">{p.language ?? ""} ↗</span>
-                {p.description && <p class="toc-note">{p.description}</p>}
-              </a>
-            </li>
+            <li><a href={p.url} rel="noopener"><span class="shelf-name">{p.name}</span><span class="shelf-meta">{p.language ?? ""} ↗</span>{p.description && <p class="shelf-note">{p.description}</p>}</a></li>
           ))}
         </ul>
       )}
-    </section>
+    </div>
 
-    <section class="folio" aria-labelledby="tongues">
-      <div class="margin"><span class="numeral">iv</span><span id="tongues">Tongues</span></div>
+    <div class="cols thunk" style="--i:4">
+      <h2>Tongues</h2>
       {languages.length === 0 ? <p class="empty">Languages could not be loaded just now.</p> : (
-        <ul class="toc">
+        <ul class="shelf">
           {(languages as any[]).map((l) => (
-            <li><div class="toc-row"><span class="toc-title">{l.name}</span><span class="toc-leader" aria-hidden="true"></span><span class="toc-meta">{PROFICIENCY[l.proficiency] ?? l.proficiency}</span></div></li>
+            <li class="shelf-item"><span class="shelf-name">{l.name}</span><span class="shelf-meta">{PROFICIENCY[l.proficiency] ?? l.proficiency}</span></li>
           ))}
         </ul>
       )}
-    </section>
+    </div>
 
-    <section class="folio" aria-labelledby="links">
-      <div class="margin"><span class="numeral">v</span><span id="links">Links</span></div>
-      <ul class="toc">
-        {(accounts as any[]).map((a) => (
-          <li><a href={a.url} rel="noopener" class="toc-row"><span class="toc-title">{a.label || a.url.replace("https://", "")}</span><span class="toc-leader" aria-hidden="true"></span><span class="toc-meta">↗</span></a></li>
-        ))}
-        {(links?.cards ?? []).map((c: any) => (
-          <li><a href={c.url} rel="noopener" class="toc-row"><span class="toc-title">{c.emoji} {c.text}</span><span class="toc-leader" aria-hidden="true"></span><span class="toc-meta">↗</span></a></li>
-        ))}
+    <div class="cols thunk" style="--i:5">
+      <h2>Links</h2>
+      <ul class="shelf">
+        {(accounts as any[]).map((a) => (<li><a href={a.url} rel="noopener"><span class="shelf-name">{a.label || a.url.replace("https://", "")}</span><span class="shelf-meta">↗</span></a></li>))}
+        {(links?.cards ?? []).map((c: any) => (<li><a href={c.url} rel="noopener"><span class="shelf-name">{c.emoji} {c.text}</span><span class="shelf-meta">↗</span></a></li>))}
       </ul>
-    </section>
+    </div>
 
-    <section class="folio" aria-labelledby="identity">
-      <div class="margin"><span class="numeral">vi</span><span id="identity">Identity</span></div>
+    <div class="cols thunk" style="--i:6">
+      <h2>Identity</h2>
       <dl class="dl">
-        <dt>DID</dt>
-        <dd><code>{profile.did}</code> <button type="button" class="btn btn--small" data-copy={profile.did}>Copy</button></dd>
+        <dt>DID</dt><dd><code>{profile.did}</code> <button type="button" class="btn btn--small" data-copy={profile.did}>Copy</button></dd>
         <dt>Handle</dt><dd><code>{profile.handle}</code></dd>
         <dt>PDS</dt><dd><code>{pds ?? "Unknown"}</code></dd>
-        <dt>PGP</dt>
-        <dd>
-          <code>{PGP}</code>
-          <button type="button" class="btn btn--small" data-copy={PGP.replace(/\s/g, "")}>Copy</button>
-          <a href="/pgp-key.asc" class="btn btn--small">Key ↓</a>
-        </dd>
-        <dt>More</dt>
-        <dd><a href="/about/name">About my name →</a> · <a href="/about/cv">Terminal CV →</a></dd>
+        <dt>PGP</dt><dd><code>{PGP}</code> <button type="button" class="btn btn--small" data-copy={PGP.replace(/\s/g, "")}>Copy</button> <a href="/pgp-key.asc" class="btn btn--small">Key ↓</a></dd>
+        <dt>More</dt><dd><a href="/about/name">About my name →</a> · <a href="/about/cv">Terminal CV →</a></dd>
       </dl>
-    </section>
+    </div>
   </main>
 </Base>

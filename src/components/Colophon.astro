@@ -1,9 +1,11 @@
 ---
 /**
- * The colophon: what a printed book puts at the back — how it was set,
- * where it can be found, under what terms it is shared.
+ * The press: a print shop's back page. What it was printed in, the
+ * calibration colour bar, tonight's moon among its eight phases.
  */
+import PixelMoon from "./PixelMoon.astro";
 import { WolfToggle, AmbianceToggle } from "$lib/components/layout";
+import TriskeleEgg from "$lib/components/ostara-eggs/TriskeleEgg.svelte";
 import type { Almanac } from "$lib/utils/almanac";
 import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
@@ -20,16 +22,19 @@ const years = born && born < year ? `${born}–${year}` : `${year}`;
 const repo = siteInfo?.openSourceInfo?.repositories.find((r) => r.type === "primary") ?? siteInfo?.openSourceInfo?.repositories[0];
 const license = siteInfo?.openSourceInfo?.license;
 const email = siteInfo?.additionalInfo?.contact?.email ?? "contact@ewancroft.uk";
+
+const phases = Array.from({ length: 8 }, (_, i) => i / 8);
+const current = Math.round(almanac.moon.phase * 8) % 8;
 ---
 
-<footer class="colophon">
-  <div class="sheet">
-    <div class="colophon-grid">
+<footer class="press">
+  <div class="wrap">
+    <div class="press-grid">
       <section>
         <h2>Colophon</h2>
         <p>
-          Set in Fraunces and JetBrains Mono, on paper the colour of the season.
-          Composed under a {almanac.moon.name.toLowerCase()} at {almanac.sabbat.name}.
+          Printed in two inks, mixed for {almanac.sabbat.name}, on newsprint by day and black stock by night.
+          Set in Archivo, Atkinson Hyperlegible Next and Pixelify Sans.
         </p>
         <details>
           <summary>About {almanac.sabbat.name}</summary>
@@ -38,29 +43,41 @@ const email = siteInfo?.additionalInfo?.contact?.email ?? "contact@ewancroft.uk"
       </section>
 
       <section>
-        <h2>Correspondence</h2>
+        <h2>Write to me</h2>
         <ul>
           <li><a href={`mailto:${email}`}>{email}</a></li>
-          <li><a href={`https://bsky.app/profile/${PUBLIC_ATPROTO_DID}`} rel="noopener">Bluesky</a></li>
-          <li><a href="https://eurosky.tech" rel="noopener">Eurosky</a></li>
+          <li><a href={`https://bsky.app/profile/${PUBLIC_ATPROTO_DID}`} rel="noopener">Bluesky</a> · <a href="https://eurosky.tech" rel="noopener">Eurosky</a></li>
           <li><a href="https://ko-fi.com/ewancroft" rel="noopener">Ko-fi</a> · <a href="https://github.com/sponsors/ewanc26" rel="noopener">GitHub Sponsors</a></li>
         </ul>
       </section>
 
       <section>
-        <h2>Imprint</h2>
+        <h2>Small print</h2>
         <ul>
-          {repo && <li><a href={repo.url} rel="noopener">Source</a></li>}
+          <li><a href="/subscriptions">What I read</a></li>
+          {repo && <li><a href={repo.url} rel="noopener">Source code</a></li>}
           {license && <li><a href={license.url} rel="license noopener">{license.name ?? "Licence"}</a></li>}
-          <li><a href="/site/design">Design notes</a></li>
+          <li><a href="/site/design">How this was made</a></li>
           <li><a href="/site/meta">Site meta &amp; privacy</a></li>
         </ul>
       </section>
     </div>
 
-    <div class="colophon-base">
-      <span>© {years} Ewan Croft · No cookies, no tracking</span>
-      <span class="colophon-tools">
+    <div class="colorbar" role="img" aria-label="Colour calibration bar: paper, second ink, first ink, both inks overprinted, black">
+      <i class="sw-paper"></i><i class="sw-b"></i><i class="sw-a"></i><i class="sw-ov"></i><i class="sw-ink"></i>
+    </div>
+
+    <div class="press-base">
+      <span>© {years} Ewan Croft · no cookies, no tracking</span>
+      <ul class="moons" aria-label={`Moon phases; tonight is a ${almanac.moon.name.toLowerCase()}`}>
+        {phases.map((p, i) => (
+          <li aria-current={i === current ? "true" : undefined} title={i === current ? `Tonight: ${almanac.moon.name.toLowerCase()}` : undefined}>
+            <PixelMoon phase={p} size={22} />
+          </li>
+        ))}
+      </ul>
+      <span class="press-tools">
+        <TriskeleEgg size={12} client:idle />
         <WolfToggle client:idle />
         <AmbianceToggle client:idle />
       </span>

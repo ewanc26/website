@@ -1,74 +1,54 @@
 ---
 import Base from "../../layouts/Base.astro";
-import PageHead from "../../components/PageHead.astro";
-import Stamp from "../../components/Stamp.astro";
-import Triskele from "$lib/components/icons/Triskele.svelte";
-import Pentacle from "$lib/components/icons/Pentacle.svelte";
+import Slab from "../../components/Slab.astro";
+import HalftoneMoon from "../../components/HalftoneMoon.astro";
+import PixelMoon from "../../components/PixelMoon.astro";
 import { getAlmanac } from "$lib/utils/almanac";
 import { sabbats } from "$lib/utils/sabbats";
 
 const almanac = getAlmanac();
-const swatches = [
-  ["Paper", "--paper"], ["Deep paper", "--paper-deep"], ["Ink", "--ink"],
-  ["Soft ink", "--ink-soft"], ["Rule", "--rule"], ["Seal", "--stamp"],
-];
+const swatches: [string, string][] = [["Paper", "--paper"], ["Deep paper", "--paper-deep"], ["Ink", "--ink"], ["Ink one", "--riso-a"], ["Ink two", "--riso-b"]];
 ---
 
-<Base title="Design" description="The visual language of ewancroft.uk: an almanac set in Fraunces and JetBrains Mono." ogSubtitle="An almanac, set in Fraunces and JetBrains Mono." ogType="DESIGN">
-  <main class="sheet">
-    <PageHead kicker="Design notes" standfirst="This site is a page from a personal almanac. Print conventions supply the structure; the calendar supplies the colour and the ornament.">
-      The <em>almanac</em>
-    </PageHead>
+<Base title="Design" description="How this site is made: a two-ink riso zine crossed with a game menu." ogSubtitle="A two-ink riso zine crossed with a game menu." ogType="DESIGN">
+  <main class="wrap">
+    <Slab word="Made Of" long />
+    <p class="lede">This is a risograph zine that thinks it's a game cartridge shelf. Two spot inks, set by the season; newsprint by day, black stock by night; type that's either colossal or pixels.</p>
 
-    <section class="folio" aria-labelledby="principles">
-      <div class="margin"><span class="numeral">i</span><span id="principles">Principles</span></div>
-      <ol class="prose">
-        <li><strong>Paper and ink.</strong> One tinted ground, one ink, one seasonal seal colour. Solid colour only: no gradients, no shadows, no rounded corners.</li>
-        <li><strong>Marginalia.</strong> Section labels, numerals and metadata sit in a left margin in mono, as they would beside a printed paragraph. On narrow screens the margin folds above the text.</li>
-        <li><strong>Leaders, not cards.</strong> Lists are contents pages: title, dotted leader, date. Emphasis comes from italics and colour, never from movement.</li>
-        <li><strong>The calendar is the ornament.</strong> The running head reports the date, the moon and the days to the next sabbat; the seal names the current sabbat around tonight's moon.</li>
-        <li><strong>Quiet motion.</strong> The seal turns once every ninety seconds; entries fade up once. All of it stops under reduced motion.</li>
+    <div class="cols thunk" style="--i:1"><h2>Rules</h2>
+      <ol class="prose" style="max-width:none">
+        <li><strong>Two inks, one black.</strong> Everything else is those three colours, overprinted with a screen or multiply blend so overlaps make a third. No gradients except the halftone dot screen a riso press actually makes.</li>
+        <li><strong>Cut, not rounded.</strong> Every corner is square. Circles exist only for the moon and the buttons that are meant to look punched.</li>
+        <li><strong>Colossal or pixel.</strong> Section words are printed at poster scale, cropped by the sheet; small text is Pixelify Sans, like a game's HUD.</li>
+        <li><strong>Nothing floats.</strong> No cards with shadows. Panels sit flat and are told apart by ink, rules and slight rotation.</li>
+        <li><strong>Stepped motion.</strong> Things arrive in steps, like a print run advancing, not eased like an app.</li>
       </ol>
-    </section>
+    </div>
 
-    <section class="folio" aria-labelledby="type">
-      <div class="margin"><span class="numeral">ii</span><span id="type">Type</span></div>
+    <div class="cols thunk" style="--i:2"><h2>Type</h2>
       <div>
-        <p class="display" style="font-size:var(--text-3xl);font-weight:250;line-height:.95;letter-spacing:-.04em;margin:0">Fraunces <em>italic</em></p>
-        <p class="prose" style="margin-top:1rem">Fraunces is a variable “old-style soft-serif”. Optical size does the work: display sizes are light and tight, text sizes are sturdy. The italic uses the WONK axis for its lean. Body copy sets at a 66-character measure.</p>
-        <p style="font-family:var(--font-mono);font-size:var(--text-sm);letter-spacing:.04em;margin-top:1rem">JetBrains Mono — datelines, labels, numerals, metadata. Always small, usually upper-case, always tracked out.</p>
+        <p class="slab" data-t="Aa" style="font-size:6rem;margin:0 0 1rem">Aa</p>
+        <p class="prose" style="max-width:none">Archivo (width axis pushed wide) carries every headline. Atkinson Hyperlegible Next — built for legibility, not for looks — carries the reading. Pixelify Sans is the game-UI voice: labels, metadata, buttons. JetBrains Mono is reserved for code.</p>
       </div>
-    </section>
+    </div>
 
-    <section class="folio" aria-labelledby="colour">
-      <div class="margin"><span class="numeral">iii</span><span id="colour">Colour</span></div>
+    <div class="cols thunk" style="--i:3"><h2>Colour</h2>
       <div>
-        <ul class="plates">
+        <ul class="carts" style="grid-template-columns:repeat(auto-fill,minmax(9rem,1fr))">
           {swatches.map(([name, v]) => (
-            <li><div class="plate" style="min-height:8rem"><span class="plate-no">{v}</span><span class="plate-name">{name}</span><span style={`margin-top:auto;height:2.5rem;border:1px solid var(--ink);background:var(${v})`}></span></div></li>
+            <li class="cart" style="rotate:0"><span class="cart-band" style={`background:var(${v})`}></span><span class="cart-body"><span class="cart-no">{v}</span><span class="cart-name" style="font-size:1.1rem">{name}</span></span></li>
           ))}
         </ul>
-        <p class="prose" style="margin-top:1rem">Every colour is generated in OKLCH and interpolated between the previous and next sabbat, so the paper, ink and seal drift with the year. Neutrals are tinted toward the current hue. The seal colour is used for text only through the <code>-text</code> variants, which meet WCAG AA.</p>
+        <p class="prose" style="max-width:none;margin-top:1rem">Both inks are generated in OKLCH from the same seasonal hue the old site used — one direct, one ~150° round the wheel — so the whole site's palette turns with the Wheel of the Year.</p>
       </div>
-    </section>
+    </div>
 
-    <section class="folio" aria-labelledby="seal">
-      <div class="margin"><span class="numeral">iv</span><span id="seal">The seal</span></div>
+    <div class="cols thunk" style="--i:4"><h2>The moon</h2>
       <div style="display:flex;flex-wrap:wrap;gap:2rem;align-items:center">
-        <Stamp almanac={almanac} />
-        <p class="prose" style="flex:1;min-width:16rem">Tonight: {almanac.moon.name.toLowerCase()}, {almanac.sabbat.name}. The next sabbat is {almanac.next.name}, in {almanac.next.days} days. The eight, in order: {sabbats.map((s) => s.name).join(", ")}.</p>
-        <span style="display:flex;gap:1rem;color:var(--stamp)"><Pentacle size={24} /><Triskele size={28} /></span>
+        <div style="width:8rem;color:var(--riso-a)"><HalftoneMoon phase={almanac.moon.phase} id="dsmoon" class="stamp" /></div>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;max-width:20rem">{Array.from({length:8},(_, i)=>i/8).map((p) => <PixelMoon phase={p} size={26} />)}</div>
+        <p class="prose" style="flex:1;min-width:16rem;max-width:none">Tonight: {almanac.moon.name.toLowerCase()}, at {almanac.sabbat.name}. Next sabbat: {almanac.next.name}, in {almanac.next.days} days. The eight: {sabbats.map((s) => s.name).join(", ")}.</p>
       </div>
-    </section>
-
-    <section class="folio" aria-labelledby="components">
-      <div class="margin"><span class="numeral">v</span><span id="components">Parts</span></div>
-      <div>
-        <p class="h-section">Contents entry</p>
-        <ul class="toc"><li><div class="toc-row"><span class="toc-title">A title with a leader</span><span class="toc-leader"></span><span class="toc-meta">28 Sep 2026</span></div></li></ul>
-        <p class="h-section" style="margin-top:2rem">Actions</p>
-        <p><span class="btn">Ruled button</span> <span class="tag">tag</span></p>
-      </div>
-    </section>
+    </div>
   </main>
 </Base>

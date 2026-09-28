@@ -1,8 +1,8 @@
 ---
 import Base from "../../layouts/Base.astro";
+import Slab from "../../components/Slab.astro";
 import TableOfContents from "$lib/components/TableOfContents.svelte";
 import LeafletBlocks from "$lib/components/leaflet/LeafletBlocks.svelte";
-import Pentacle from "$lib/components/icons/Pentacle.svelte";
 import { fetchDocuments } from "@ewanc26/atproto";
 import { fetchBlob } from "$lib/services/atproto";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
@@ -28,19 +28,17 @@ if (post.content && typeof post.content === "object" && leafletProvider.matches(
 ---
 
 <Base title={post.title} description={meta} ogSubtitle={post.description} ogType="ABOUT">
-  <main class="sheet">
-    <header class="post-head reveal">
-      <p class="kicker"><a href="/about">← About</a></p>
-      <h1 class="post-title">{post.title}</h1>
-      {post.description && <p class="post-deck">{post.description}</p>}
-    </header>
-    <div class="folio">
-      <aside class="margin" aria-label="Contents"><TableOfContents container=".prose" client:idle /></aside>
+  <main class="wrap">
+    <p class="pix"><a href="/about">← About</a></p>
+    <Slab word="My Name" long />
+    {post.description && <p class="post-deck">{post.description}</p>}
+    <div class="article">
+      <aside class="rail"><TableOfContents container=".prose" client:idle /></aside>
       <div>
-        <article class="prose prose--opening">
+        <article class="prose">
           {blocks.length > 0 ? <LeafletBlocks blocks={blocks} client:visible /> : <Fragment set:html={html} />}
         </article>
-        <div class="post-end" aria-hidden="true"><Pentacle size={20} /></div>
+        <p class="post-end" aria-hidden="true">◆ ◆ ◆</p>
       </div>
     </div>
   </main>

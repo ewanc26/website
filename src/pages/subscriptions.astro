@@ -1,6 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
-import PageHead from "../components/PageHead.astro";
+import Slab from "../components/Slab.astro";
 import { fetchSubscriptions, fetchRecommendations } from "$lib/services/atproto/fetch";
 
 Astro.response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
@@ -11,46 +11,30 @@ const [subscriptions, recommendations] = await Promise.all([
 ---
 
 <Base title="Subscriptions" description="Publications I read on Standard.site." ogSubtitle="Publications and feeds I follow." ogType="SUBSCRIPTIONS">
-  <main class="sheet">
-    <PageHead kicker="Reading list" standfirst="A curated index of publications and feeds actively tracked on Standard.site.">
-      What I <em>subscribe</em> to
-    </PageHead>
+  <main class="wrap">
+    <Slab word="Reading" long />
+    <p class="lede">A curated index of publications and feeds actively tracked on Standard.site.</p>
 
-    <section class="folio" aria-labelledby="active">
-      <div class="margin"><span class="numeral">i</span><span id="active">Active index</span></div>
-      {subscriptions.length === 0 ? (
-        <p class="empty">No subscriptions could be loaded just now.</p>
-      ) : (
-        <ul class="toc">
+    <div class="cols thunk" style="--i:1">
+      <h2>Subscribed</h2>
+      {subscriptions.length === 0 ? <p class="empty">No subscriptions could be loaded just now.</p> : (
+        <ul class="shelf">
           {subscriptions.map((sub) => (
-            <li>
-              <a href={sub.url} rel="noopener" class="toc-row">
-                <span class="toc-title">{sub.name}</span><span class="toc-leader" aria-hidden="true"></span>
-                <span class="toc-meta">{sub.authorDisplayName ?? sub.authorHandle} · {sub.authorHandle}</span>
-              </a>
-            </li>
+            <li><a href={sub.url} rel="noopener"><span class="shelf-name">{sub.name}</span><span class="shelf-meta">{sub.authorHandle}</span><p class="shelf-note">{sub.authorDisplayName ?? sub.authorHandle}</p></a></li>
           ))}
         </ul>
       )}
-    </section>
+    </div>
 
-    <section class="folio" aria-labelledby="recs">
-      <div class="margin"><span class="numeral">ii</span><span id="recs">Recommended</span></div>
-      {recommendations.length === 0 ? (
-        <p class="empty">No recommendations could be loaded just now.</p>
-      ) : (
-        <ul class="toc">
+    <div class="cols thunk" style="--i:2">
+      <h2>Recommended</h2>
+      {recommendations.length === 0 ? <p class="empty">No recommendations could be loaded just now.</p> : (
+        <ul class="shelf">
           {recommendations.map((rec) => (
-            <li>
-              <a href={rec.url} rel="noopener" class="toc-row">
-                <span class="toc-title">{rec.name}</span><span class="toc-leader" aria-hidden="true"></span>
-                <span class="toc-meta">{rec.authorHandle}</span>
-                {rec.description && <p class="toc-note">{rec.description}</p>}
-              </a>
-            </li>
+            <li><a href={rec.url} rel="noopener"><span class="shelf-name">{rec.name}</span><span class="shelf-meta">{rec.authorHandle}</span>{rec.description && <p class="shelf-note">{rec.description}</p>}</a></li>
           ))}
         </ul>
       )}
-    </section>
+    </div>
   </main>
 </Base>

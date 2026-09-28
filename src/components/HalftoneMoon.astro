@@ -1,0 +1,31 @@
+---
+/**
+ * The big moon: the lit part is a halftone dot screen (as a riso print
+ * would render a tint), the dark part a faint solid. Uses currentColor.
+ */
+import { getMoonPhaseGeometry } from "$lib/utils/moonPhase";
+
+interface Props {
+  phase: number;
+  id?: string;
+  class?: string;
+}
+const { phase, id = "ht", class: className } = Astro.props;
+const g = getMoonPhaseGeometry(phase);
+// getMoonPhaseGeometry draws on a 24-unit grid with r=9 at (12,12).
+const place = "translate(50 50) scale(5.5556) translate(-12 -12)";
+---
+
+<svg class={className} viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id={`${id}-dots`} width="0.31" height="0.31" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <circle cx="0.155" cy="0.155" r="0.113" fill="currentColor"></circle>
+    </pattern>
+  </defs>
+  <g transform={place}>
+    <circle cx="12" cy="12" r="9" fill="currentColor" opacity="0.13"></circle>
+    {g.isFull && <circle cx="12" cy="12" r="9" fill={`url(#${id}-dots)`}></circle>}
+    {!g.isFull && g.path && <path d={g.path} fill={`url(#${id}-dots)`} fill-rule={g.isGibbous ? "evenodd" : "nonzero"}></path>}
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="0.22"></circle>
+  </g>
+</svg>

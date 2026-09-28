@@ -1,8 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
-import Stamp from "../components/Stamp.astro";
-import Triskele from "$lib/components/icons/Triskele.svelte";
-import Pentacle from "$lib/components/icons/Pentacle.svelte";
+import HalftoneMoon from "../components/HalftoneMoon.astro";
 import VerificationBadge from "$lib/components/VerificationBadge.svelte";
 import { getAlmanac } from "$lib/utils/almanac";
 import { normalizeSlug } from "$lib/utils/slugify";
@@ -16,145 +14,141 @@ const almanac = getAlmanac();
 const { profile, verifications, kibunStatus, musicStatus, posts, githubProjects, githubUsername, publications, links } =
   await getHomeData();
 
+const name = (profile.displayName ?? profile.handle).trim();
+const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const bio = esc(profile.description ?? "").replace(
+  /(werewol(?:f|ves)|pagan|poet|programmer|Gàidhlig(?: na h-Alba)?)/gi,
+  "<mark>$1</mark>",
+);
+
 const writing = posts.filter((p) => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION).slice(0, 6);
 const otherPublications = publications.filter((p) => p.rkey !== PUBLIC_LEAFLET_BLOG_PUBLICATION);
 const blogUrl = (post: { title: string; createdAt: string }) => {
   const { year, month, day } = blogDateParts(post.createdAt);
   return `/blog/${year}/${month}/${day}/${normalizeSlug(post.title)}`;
 };
-const fmt = (d: string) =>
-  new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Europe/London" }).format(new Date(d));
+const when = (iso: string) => {
+  const parts = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "Europe/London" }).formatToParts(new Date(iso));
+  return {
+    day: parts.find((p) => p.type === "day")?.value ?? "",
+    mon: (parts.find((p) => p.type === "month")?.value ?? "").toLowerCase(),
+  };
+};
 const pad = (n: number) => String(n).padStart(2, "0");
-const firstName = (profile.displayName ?? profile.handle).split(" ");
+const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
 ---
 
 <Base title="" ogType="HOME">
-  <main class="sheet">
-    <section class="nameplate reveal">
-      <div>
-        <p class="kicker">A personal almanac</p>
-        <h1 class="nameplate-name">
-          {firstName[0]}{firstName.length > 1 && <><br /><em>{firstName.slice(1).join(" ")}</em></>}
-          <span class="name-badge"><VerificationBadge verified={true} verifiers={verifications} client:idle /></span>
-        </h1>
-        <p class="nameplate-gaelic" lang="gd">eòghann</p>
-        <ul class="credo" aria-label="In brief">
-          <li>Poet</li><li>Programmer</li><li>Pagan</li><li lang="gd">Gàidhlig na h-Alba</li>
-        </ul>
-      </div>
-      <Stamp almanac={almanac} />
-    </section>
+  <main class="wrap">
+    <section class="poster">
+      <div class="poster-moon"><HalftoneMoon phase={almanac.moon.phase} id="pm" /></div>
+      <h1 class="poster-name" data-t={name} style={`--n:${Math.max(3, name.length)}`}>
+        {name}<span class="poster-badge"><VerificationBadge verified={true} verifiers={verifications} client:idle /></span>
+      </h1>
 
-    <section class="folio reveal" style="--i:1">
-      <div class="margin"><span class="numeral">i</span>Foreword</div>
-      <div class="lede">
-        {profile.avatar && <img src={profile.avatar} alt="" class="lede-avatar" width="128" height="160" decoding="async" />}
-        <div>
-          <p class="lede-text">{profile.description}</p>
-          <ul class="status-line" aria-label="Current status">
-            <li>@{profile.handle}</li>
-            {kibunStatus && <li><span aria-hidden="true">{kibunStatus.emoji}</span> {kibunStatus.text}</li>}
-            {musicStatus && (
-              <li>
-                {musicStatus.artworkUrl && <img src={musicStatus.artworkUrl} alt="" width="20" height="20" loading="lazy" decoding="async" />}
-                ♪ {musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(", ")}
-              </li>
-            )}
-          </ul>
+      <div class="poster-row">
+        <div class="thunk">
+          <p class="bio" set:html={bio} />
+          {(kibunStatus || musicStatus) && (
+            <div style="margin-top:var(--space-lg)">
+              {kibunStatus && <span class="now"><span aria-hidden="true">{kibunStatus.emoji}</span>{kibunStatus.text}</span>}
+              {musicStatus && (
+                <span class="now now--track">
+                  {musicStatus.artworkUrl ? <img src={musicStatus.artworkUrl} alt="" width="36" height="36" loading="lazy" decoding="async" /> : <span aria-hidden="true">♪</span>}
+                  <span>{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(", ")}</span>
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div class="nametag thunk" style="--i:2">
+          <div class="nametag-hd">Hello<small>my name is</small></div>
+          <div class="nametag-name" lang="gd">eòghann</div>
+          <div class="nametag-sub">(it's Ewan, in Gaelic)</div>
         </div>
       </div>
     </section>
 
-    <section class="folio reveal" style="--i:2" aria-labelledby="writing">
-      <div class="margin"><span class="numeral">ii</span><span id="writing">Writing</span></div>
+    <h2 class="word" data-t="Words">Words<small>the newest six</small></h2>
+    {writing.length > 0 ? (
       <div>
-        {writing.length > 0 ? (
-          <>
-            <ol class="toc">
-              {writing.map((post, i) => (
-                <li>
-                  <a href={blogUrl(post)} class:list={["toc-row", { "toc-row--lead": i === 0 }]}>
-                    <span class="toc-title">{i === 0 && <span class="toc-flag">Latest</span>}{post.title}</span>
-                    <span class="toc-leader" aria-hidden="true"></span>
-                    <time class="toc-meta" datetime={post.createdAt}>{fmt(post.createdAt)}</time>
-                  </a>
-                </li>
-              ))}
-            </ol>
-            <p><a href="/blog" class="btn btn--small">The whole archive →</a></p>
-          </>
-        ) : (
-          <p class="empty">The publishing service is not answering just now. Try again shortly.</p>
-        )}
+        <ol class="tracks">
+          {writing.map((post, i) => {
+            const w = when(post.createdAt);
+            return (
+              <li>
+                <a href={blogUrl(post)} class:list={["track", { "track--lead": i === 0 }]}>
+                  <span class="track-when"><span class="track-day">{w.day}</span><span class="track-mon">{w.mon}</span></span>
+                  <span class="track-title">{post.title}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ol>
+        <div class="btns"><a href="/blog" class="btn btn--a">Everything I've written →</a></div>
       </div>
-    </section>
+    ) : (
+      <p class="empty">The publishing service isn't answering. Try again in a bit.</p>
+    )}
 
-    <section class="folio reveal" style="--i:3" aria-labelledby="works">
-      <div class="margin"><span class="numeral">iii</span><span id="works">Works</span></div>
+    <h2 class="word" data-t="Works">Works<small>things I made</small></h2>
+    {githubProjects.length > 0 ? (
       <div>
-        {githubProjects.length > 0 ? (
-          <>
-            <ul class="plates">
-              {githubProjects.slice(0, 6).map((project, i) => (
-                <li>
-                  <a class="plate" href={project.url} rel="noopener" style="height:100%">
-                    <span class="plate-no">Plate {pad(i + 1)}</span>
-                    <span class="plate-name">{project.name}</span>
-                    {project.description && <p class="plate-desc">{project.description}</p>}
-                    <span class="plate-foot">
-                      <span>
-                        {project.language && <><span class="lang-dot" style={`background:${project.languageColor ?? "currentColor"}`}></span>{project.language}</>}
-                      </span>
-                      <span>GitHub ↗</span>
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <p><a href={`https://github.com/${githubUsername}?tab=repositories`} rel="noopener" class="btn btn--small">All repositories ↗</a>
-              <a href="https://docs.ewancroft.uk" rel="noopener" class="btn btn--small">Documentation ↗</a></p>
-          </>
-        ) : (
-          <p class="empty">Project data is unavailable at the moment.</p>
-        )}
-      </div>
-    </section>
-
-    {otherPublications.length > 0 && (
-      <section class="folio reveal" style="--i:4" aria-labelledby="serials">
-        <div class="margin"><span class="numeral">iv</span><span id="serials">Serials</span></div>
-        <ul class="toc">
-          {otherPublications.map((pub) => (
+        <ul class="carts">
+          {githubProjects.slice(0, 6).map((project, i) => (
             <li>
-              <a href={pub.url} rel="noopener" class="toc-row">
-                <span class="toc-title">{pub.name}</span>
-                <span class="toc-leader" aria-hidden="true"></span>
-                <span class="toc-meta">↗</span>
-                {pub.description && <p class="toc-note">{pub.description}</p>}
+              <a class="cart" href={project.url} rel="noopener" style={`--tilt:${tilts[i % tilts.length]}deg;--lang:${project.languageColor ?? "var(--riso-a)"}`}>
+                <span class="cart-band"></span>
+                <span class="cart-body">
+                  <span class="cart-no">cart {pad(i + 1)}</span>
+                  <span class="cart-name">{project.name}</span>
+                  {project.description && <span class="cart-desc">{project.description}</span>}
+                  <span class="cart-foot"><span>{project.language ?? ""}</span><span>play ▸</span></span>
+                </span>
               </a>
             </li>
           ))}
         </ul>
-      </section>
+        <div class="btns">
+          <a href={`https://github.com/${githubUsername}?tab=repositories`} rel="noopener" class="btn btn--small">All repositories ↗</a>
+          <a href="https://docs.ewancroft.uk" rel="noopener" class="btn btn--small">The docs ↗</a>
+        </div>
+      </div>
+    ) : (
+      <p class="empty">Project data is unavailable right now.</p>
+    )}
+
+    {otherPublications.length > 0 && (
+      <>
+        <h2 class="word" data-t="Shelf">Shelf<small>other things I publish</small></h2>
+        <ul class="shelf">
+          {otherPublications.map((pub) => (
+            <li>
+              <a href={pub.url} rel="noopener">
+                <span class="shelf-name">{pub.name}</span><span class="shelf-meta">↗</span>
+                {pub.description && <p class="shelf-note">{pub.description}</p>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
     )}
 
     {links.cards?.length > 0 && (
-      <section class="folio reveal" style="--i:5" aria-labelledby="elsewhere">
-        <div class="margin"><span class="numeral">v</span><span id="elsewhere">Elsewhere</span></div>
-        <ul class="toc">
+      <>
+        <h2 class="word" data-t="Elsewhere">Elsewhere</h2>
+        <ul class="shelf">
           {links.cards.slice(0, 8).map((link) => (
             <li>
-              <a href={link.url} rel="noopener" class="toc-row">
-                <span class="toc-title">{link.emoji && <span aria-hidden="true">{link.emoji} </span>}{link.text}</span>
-                <span class="toc-leader" aria-hidden="true"></span>
-                <span class="toc-meta">{link.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗</span>
+              <a href={link.url} rel="noopener">
+                <span class="shelf-name">{link.emoji && <span aria-hidden="true">{link.emoji} </span>}{link.text}</span>
+                <span class="shelf-meta">{link.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗</span>
               </a>
             </li>
           ))}
         </ul>
-      </section>
+      </>
     )}
-
-    <div class="ornament" aria-hidden="true"><Pentacle size={11} /><Triskele size={18} /><Pentacle size={11} /></div>
   </main>
 </Base>

@@ -1,0 +1,13 @@
+---
+/**
+ * The page word: colossal, cropped by the sheet, printed twice — once in
+ * each ink, the second plate a hair out of register.
+ */
+interface Props {
+  word: string;
+  long?: boolean;
+}
+const { word, long = false } = Astro.props;
+---
+
+<h1 class:list={["slab", { "slab--long": long }]} data-t={word}>{word}</h1>
