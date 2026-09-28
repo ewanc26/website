@@ -1,0 +1,30 @@
+import { defineConfig } from "astro/config";
+import svelte from "@astrojs/svelte";
+import vercel from "@astrojs/vercel";
+import tailwindcss from "@tailwindcss/vite";
+import { fileURLToPath } from "node:url";
+
+const r = (p) => fileURLToPath(new URL(p, import.meta.url));
+
+// https://astro.build/config
+export default defineConfig({
+  output: "server",
+  adapter: vercel(),
+  integrations: [svelte({ compilerOptions: { runes: true } })],
+  prefetch: { prefetchAll: false, defaultStrategy: "hover" },
+  vite: {
+    plugins: [tailwindcss()],
+    resolve: {
+      // Keeps the existing src/lib code working unchanged while it is ported
+      // off SvelteKit. Remove the shims as their call sites are rewritten.
+      alias: {
+        $lib: r("./src/lib"),
+        "$env/static/public": r("./src/shims/env-public.ts"),
+        "$env/dynamic/private": r("./src/shims/env-private.ts"),
+        "$app/environment": r("./src/shims/app-environment.ts"),
+      },
+    },
+    ssr: { noExternal: ["@lucide/svelte"] },
+    assetsInclude: ["**/*.wasm"],
+  },
+});

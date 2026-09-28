@@ -31,3 +31,7 @@ vite.config.ts.timestamp-*
 
 # IDE
 .vscode/
+
+# Astro
+dist/
+.astro/
