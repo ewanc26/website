@@ -7,13 +7,20 @@ import { normalizeSlug } from "$lib/utils/slugify";
 import { blogDateParts } from "$lib/utils/date";
 import { getHomeData } from "$lib/services/home";
 import { fetchShippedApps } from "$lib/services/atproto/apps";
+import { fetchWatching } from "$lib/services/atproto/watching";
+import { fetchRecentPosts } from "$lib/services/atproto/feed";
 import { PUBLIC_LEAFLET_BLOG_PUBLICATION, PUBLIC_ATPROTO_DID } from "$env/static/public";
 
 Astro.response.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
 
 const almanac = getAlmanac();
-const [{ profile, verifications, kibunStatus, musicStatus, posts, githubProjects, githubUsername, publications, links }, apps] =
-  await Promise.all([getHomeData(), fetchShippedApps(PUBLIC_ATPROTO_DID, fetch).catch(() => [])]);
+const [{ profile, verifications, kibunStatus, musicStatus, posts, githubProjects, githubUsername, publications, links }, apps, watching, feed] =
+  await Promise.all([
+    getHomeData(),
+    fetchShippedApps(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
+    fetchWatching(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
+    fetchRecentPosts(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
+  ]);
 
 const name = (profile.displayName ?? profile.handle).trim();
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -93,6 +100,28 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
       <p class="empty">The publishing service isn't answering. Try again in a bit.</p>
     )}
 
+    {feed.length > 0 && (
+      <>
+        <h2 class="word" data-t="Feed">Feed<small>lately, on Bluesky</small></h2>
+        <div>
+          <ol class="tracks">
+            {feed.map((post) => {
+              const w = when(post.createdAt);
+              return (
+                <li>
+                  <a href={`https://bsky.app/profile/${PUBLIC_ATPROTO_DID}/post/${post.rkey}`} class="track" target="_blank" rel="noopener">
+                    <span class="track-when"><span class="track-day">{w.day}</span><span class="track-mon">{w.mon}</span></span>
+                    <span class="track-title">{post.text}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ol>
+          <div class="btns"><a href={`https://bsky.app/profile/${PUBLIC_ATPROTO_DID}`} target="_blank" rel="noopener" class="btn btn--small">Follow on Bluesky ↗</a></div>
+        </div>
+      </>
+    )}
+
     {apps.length > 0 && (
       <>
         <h2 class="word" data-t="Apps">Apps<small>things I've shipped</small></h2>
@@ -144,6 +173,35 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
       </div>
     ) : (
       <p class="empty">Project data is unavailable right now.</p>
+    )}
+
+    {watching.length > 0 && (
+      <>
+        <h2 class="word" data-t="Watching">Watching<small>logged on Popfeed</small></h2>
+        <ul class="carts">
+          {watching.slice(0, 6).map((w, i) => {
+            const href = w.imdbId ? `https://www.imdb.com/title/${w.imdbId}/` : undefined;
+            const Tag = href ? "a" : "div";
+            const kind = w.creativeWorkType === "tv_show" ? "TV" : w.creativeWorkType === "movie" ? "Film" : w.creativeWorkType;
+            const year = w.releaseDate ? new Date(w.releaseDate).getFullYear() : null;
+            return (
+              <li>
+                <Tag class="cart" href={href} target={href ? "_blank" : undefined} rel={href ? "noopener" : undefined} style={`--tilt:${tilts[i % tilts.length]}deg`}>
+                  <span class="duotone duotone--poster">
+                    {w.posterUrl && <img src={w.posterUrl} alt={`Poster for ${w.title}`} loading="lazy" decoding="async" />}
+                    {w.rating != null && <span class="cart-rating">{w.rating}/10</span>}
+                  </span>
+                  <span class="cart-body">
+                    <span class="cart-no">watch {pad(i + 1)}</span>
+                    <span class="cart-name" style="font-size:1.3rem">{w.title}</span>
+                    <span class="cart-desc">{[kind, year, w.genres[0]].filter(Boolean).join(" · ")}</span>
+                  </span>
+                </Tag>
+              </li>
+            );
+          })}
+        </ul>
+      </>
     )}
 
     {otherPublications.length > 0 && (
