@@ -6,13 +6,14 @@ import { getAlmanac } from "$lib/utils/almanac";
 import { normalizeSlug } from "$lib/utils/slugify";
 import { blogDateParts } from "$lib/utils/date";
 import { getHomeData } from "$lib/services/home";
-import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
+import { fetchShippedApps } from "$lib/services/atproto/apps";
+import { PUBLIC_LEAFLET_BLOG_PUBLICATION, PUBLIC_ATPROTO_DID } from "$env/static/public";
 
 Astro.response.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
 
 const almanac = getAlmanac();
-const { profile, verifications, kibunStatus, musicStatus, posts, githubProjects, githubUsername, publications, links } =
-  await getHomeData();
+const [{ profile, verifications, kibunStatus, musicStatus, posts, githubProjects, githubUsername, publications, links }, apps] =
+  await Promise.all([getHomeData(), fetchShippedApps(PUBLIC_ATPROTO_DID, fetch).catch(() => [])]);
 
 const name = (profile.displayName ?? profile.handle).trim();
 const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -92,7 +93,33 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
       <p class="empty">The publishing service isn't answering. Try again in a bit.</p>
     )}
 
-    <h2 class="word" data-t="Works">Works<small>things I made</small></h2>
+    {apps.length > 0 && (
+      <>
+        <h2 class="word" data-t="Apps">Apps<small>things I've shipped</small></h2>
+        <div>
+          <ul class="carts">
+            {apps.slice(0, 6).map((app, i) => (
+              <li>
+                <a class="cart" href={app.externalUrl} rel="noopener" style={`--tilt:${tilts[i % tilts.length]}deg`}>
+                  <span class="cart-band" style="background:var(--riso-a)"></span>
+                  <span class="cart-body">
+                    <span class="cart-no">app {pad(i + 1)}</span>
+                    <span class="cart-head">
+                      {app.iconUrl && <img class="cart-icon" src={app.iconUrl} alt="" width="28" height="28" loading="lazy" decoding="async" />}
+                      <span class="cart-name">{app.name}</span>
+                    </span>
+                    {app.tagline && <span class="cart-desc">{app.tagline}</span>}
+                    <span class="cart-foot"><span>{new URL(app.externalUrl).hostname}</span><span>open ▸</span></span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </>
+    )}
+
+    <h2 class="word" data-t="Works">Works<small>open source, live from GitHub</small></h2>
     {githubProjects.length > 0 ? (
       <div>
         <ul class="carts">
