@@ -6,8 +6,6 @@
  * values. If you're hardcoding a number, it should be here.
  * ================================================================ */
 
-@import "tailwindcss";
-
 @theme {
   /* ── Tailwind v4 Theme Configuration ──────────────────────── */
   --color-text-50: var(--text-50);

@@ -66,7 +66,7 @@ const PGP = "C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D";
         {grouped.size === 0 && <p class="empty">Skills could not be loaded just now.</p>}
         {[...grouped.entries()].map(([cat, list]) => (
           <>
-            <h3 class="h-sub" style="margin-top:0">{cat}</h3>
+            <h3 class="h-sub">{cat}</h3>
             <p class="tags">{list.map((s) => <span class="tag">{s.name}</span>)}</p>
           </>
         ))}

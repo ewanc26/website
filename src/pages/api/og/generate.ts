@@ -6,6 +6,7 @@ import satori from "satori";
 import { cleanOgText, getDefaultOgTitle, getOgTemplate } from "$lib/og";
 import { getOgThemeColors } from "$lib/server/theme";
 import { getMoonIllumination } from "$lib/utils/moonPhase";
+import { getAlmanac } from "$lib/utils/almanac";
 
 // Files are read from disk relative to the project root; the Vercel adapter
 // bundles them via `includeFiles` in astro.config.mjs.
@@ -52,10 +53,15 @@ const loadFont = async (url: string) => {
   }
 };
 
-let fonts: Promise<[ArrayBuffer, ArrayBuffer]> | undefined;
+let fonts: Promise<[ArrayBuffer, ArrayBuffer, ArrayBuffer]> | undefined;
 const loadFonts = () =>
   (fonts ??= Promise.all([
-    loadFont("src/lib/fonts/Inter-ExtraBold.ttf"),
+    loadFont(
+      "node_modules/@fontsource/fraunces/files/fraunces-latin-300-normal.woff",
+    ),
+    loadFont(
+      "node_modules/@fontsource/fraunces/files/fraunces-latin-400-italic.woff",
+    ),
     loadFont("src/lib/fonts/JetBrainsMono-Regular.ttf"),
   ]).catch((error) => {
     fonts = undefined;
@@ -68,9 +74,10 @@ export const GET: APIRoute = async ({ url }) => {
   try {
     await ensureWasm();
 
-    const [interFont, monoFont] = await loadFonts();
+    const [frauncesLight, frauncesItalic, monoFont] = await loadFonts();
 
     const theme = getOgThemeColors();
+    const almanac = getAlmanac();
 
     const title = cleanOgText(url.searchParams.get("title"), 180);
     const subtitle = cleanOgText(url.searchParams.get("subtitle"), 180);
@@ -84,6 +91,9 @@ export const GET: APIRoute = async ({ url }) => {
         slug: cleanOgText(url.searchParams.get("slug"), 100) ?? "/",
         type,
         moonPhase: getMoonIllumination(new Date()).phase,
+        dateline: [almanac.weekday, almanac.date, almanac.moon.name].join(
+          " · ",
+        ),
         theme,
       }),
       {
@@ -91,10 +101,16 @@ export const GET: APIRoute = async ({ url }) => {
         height: 630,
         fonts: [
           {
-            name: "Inter",
-            data: interFont,
-            weight: 800,
+            name: "Fraunces",
+            data: frauncesLight,
+            weight: 300,
             style: "normal",
+          },
+          {
+            name: "Fraunces",
+            data: frauncesItalic,
+            weight: 400,
+            style: "italic",
           },
           {
             name: "JetBrains Mono",

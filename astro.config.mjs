@@ -13,7 +13,8 @@ export default defineConfig({
     // Read from disk at runtime by the OG image endpoint (the resvg wasm is
     // picked up by the adapter's own dependency tracing).
     includeFiles: [
-      "./src/lib/fonts/Inter-ExtraBold.ttf",
+      "./node_modules/@fontsource/fraunces/files/fraunces-latin-300-normal.woff",
+      "./node_modules/@fontsource/fraunces/files/fraunces-latin-400-italic.woff",
       "./src/lib/fonts/JetBrainsMono-Regular.ttf",
     ],
   }),
