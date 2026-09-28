@@ -50,5 +50,49 @@ const swatches: [string, string][] = [["Paper", "--paper"], ["Deep paper", "--pa
         <p class="prose" style="flex:1;min-width:16rem;max-width:none">Tonight: {almanac.moon.name.toLowerCase()}, at {almanac.sabbat.name}. Next sabbat: {almanac.next.name}, in {almanac.next.days} days. The eight: {sabbats.map((s) => s.name).join(", ")}.</p>
       </div>
     </div>
+
+    <div class="cols thunk" style="--i:5"><h2>Open source</h2>
+      <div>
+        <p class="prose" style="max-width:none">
+          This page and everything under it is built on other people's free work. None of it is credited automatically — the site's own
+          <a href="/site/meta">tech-stack listing</a> comes from a record I write myself, and it lags behind what's actually running. This list doesn't:
+          it's the CSS-adjacent open source underneath the design specifically, checked against the packages actually installed, not memory.
+        </p>
+        <ul class="shelf" style="margin-top:1.5rem">
+          <li>
+            <a href="https://tailwindcss.com" rel="noopener"><span class="shelf-name">Tailwind CSS</span><span class="shelf-meta">MIT ↗</span></a>
+            <p class="shelf-note">The utility-class reset and layer system everything else sits on top of.</p>
+          </li>
+          <li>
+            <a href="https://fontsource.org" rel="noopener"><span class="shelf-name">Fontsource</span><span class="shelf-meta">MIT ↗</span></a>
+            <p class="shelf-note">Self-hostable open-source fonts as npm packages — no Google Fonts CDN request on this site.</p>
+          </li>
+          <li>
+            <a href="https://fontsource.org/fonts/archivo" rel="noopener"><span class="shelf-name">Archivo</span><span class="shelf-meta">OFL-1.1 ↗</span></a>
+            <p class="shelf-note">The display face — every headline and section word.</p>
+          </li>
+          <li>
+            <a href="https://fontsource.org/fonts/atkinson-hyperlegible-next" rel="noopener"><span class="shelf-name">Atkinson Hyperlegible Next</span><span class="shelf-meta">OFL-1.1 ↗</span></a>
+            <p class="shelf-note">Commissioned by the Braille Institute of America specifically for letter-level legibility, not looks. Carries the reading.</p>
+          </li>
+          <li>
+            <a href="https://fontsource.org/fonts/pixelify-sans" rel="noopener"><span class="shelf-name">Pixelify Sans</span><span class="shelf-meta">OFL-1.1 ↗</span></a>
+            <p class="shelf-note">The game-UI voice — labels, metadata, buttons.</p>
+          </li>
+          <li>
+            <a href="https://fontsource.org/fonts/jetbrains-mono" rel="noopener"><span class="shelf-name">JetBrains Mono</span><span class="shelf-meta">OFL-1.1 ↗</span></a>
+            <p class="shelf-note">Reserved for code.</p>
+          </li>
+          <li>
+            <a href="https://lucide.dev" rel="noopener"><span class="shelf-name">Lucide</span><span class="shelf-meta">ISC ↗</span></a>
+            <p class="shelf-note">The icon set behind the few plain glyphs on the site that aren't hand-drawn for it.</p>
+          </li>
+          <li>
+            <a href="https://astro.build" rel="noopener"><span class="shelf-name">Astro</span><span class="shelf-meta">MIT ↗</span></a>
+            <p class="shelf-note">Renders the whole site to HTML; Svelte (also MIT) runs the interactive pieces inside it.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
   </main>
 </Base>
