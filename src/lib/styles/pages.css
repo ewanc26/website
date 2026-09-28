@@ -141,8 +141,9 @@
     margin-left: -50vw;
     margin-bottom: var(--space-lg);
     overflow: hidden;
-    background: var(--color-primary-500);
-    /* Dark ink in both schemes: the 500 step is mid-tone either way. */
+    /* 600, not 500: a full-bleed strip this size at the 500 step read as
+       too bright/saturated against the rest of the restrained palette. */
+    background: var(--color-primary-600);
     color: light-dark(var(--primary-950), var(--primary-50));
     border-block: 3px solid var(--color-text-950);
   }
@@ -1649,7 +1650,7 @@
 
   .band-demo {
     overflow: hidden;
-    background: var(--color-primary-500);
+    background: var(--color-primary-600);
     color: light-dark(var(--primary-950), var(--primary-50));
     border-radius: var(--radius-sm);
     border-block: 2px solid var(--color-text-950);

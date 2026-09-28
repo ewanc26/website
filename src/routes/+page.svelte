@@ -65,6 +65,20 @@
     pulseAmbiance();
   }
 
+  // Repeated several times over so one block alone is comfortably wider
+  // than any real viewport (a single pass of six words is only ~1200px,
+  // narrower than most monitors) — the two-block translateX(-50%) loop
+  // in pages.css only reads as seamless if a block can never run out of
+  // content before the viewport's trailing edge does.
+  const bandWords = Array(4).fill([
+    'Poet',
+    'Programmer',
+    'Pagan',
+    'AT Protocol',
+    'Gàidhlig na h-Alba',
+    'Werewolf enthusiast'
+  ]).flat();
+
   function getBlogUrl(post: any) {
     const { year: y, month: m, day: d } = blogDateParts(post.createdAt);
     const slug = normalizeSlug(post.title);
@@ -135,7 +149,7 @@
     <div class="hero-band-track">
       {#each [0, 1] as _}
         <span class="hero-band-run">
-          {#each ['Poet', 'Programmer', 'Pagan', 'AT Protocol', 'Gàidhlig na h-Alba', 'Werewolf enthusiast'] as word}
+          {#each bandWords as word}
             <span>{word}</span><Triskele size={16} />
           {/each}
         </span>
