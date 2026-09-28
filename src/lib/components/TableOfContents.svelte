@@ -57,26 +57,26 @@
 
 {#if !mounted}
     <!-- SSR placeholder: reserves space to prevent layout shift -->
-    <nav aria-label="Table of contents" class="toc toc-placeholder">
+    <nav aria-label="Table of contents" class="outline outline-placeholder">
         <h2>Contents</h2>
         <ol>
-            <li><span class="toc-skeleton"></span></li>
-            <li><span class="toc-skeleton"></span></li>
-            <li><span class="toc-skeleton"></span></li>
-            <li><span class="toc-skeleton"></span></li>
-            <li><span class="toc-skeleton"></span></li>
-            <li><span class="toc-skeleton"></span></li>
+            <li><span class="outline-skeleton"></span></li>
+            <li><span class="outline-skeleton"></span></li>
+            <li><span class="outline-skeleton"></span></li>
+            <li><span class="outline-skeleton"></span></li>
+            <li><span class="outline-skeleton"></span></li>
+            <li><span class="outline-skeleton"></span></li>
         </ol>
     </nav>
 {:else if entries.length > 1}
-    <nav aria-label="Table of contents" class="toc">
+    <nav aria-label="Table of contents" class="outline">
         <h2>Contents</h2>
         <ol>
             {#each entries as entry}
                 <li>
                     <a
                         href="#{entry.id}"
-                        class="toc-link"
+                        class="outline-link"
                         class:h3={entry.level === 3}
                         class:h4={entry.level === 4}
                     >{entry.text}</a>
@@ -85,5 +85,5 @@
         </ol>
     </nav>
 {:else}
-    <div class="toc-sentinel"></div>
+    <div class="outline-sentinel"></div>
 {/if}

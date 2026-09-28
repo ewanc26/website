@@ -1,10 +1,10 @@
 ---
 import Base from "../layouts/Base.astro";
-import EmptyState from "$lib/components/EmptyState.svelte";
-import VerificationBadge from "$lib/components/VerificationBadge.svelte";
+import Stamp from "../components/Stamp.astro";
 import Triskele from "$lib/components/icons/Triskele.svelte";
 import Pentacle from "$lib/components/icons/Pentacle.svelte";
-import { ArrowRight, ExternalLink, Music } from "@lucide/svelte";
+import VerificationBadge from "$lib/components/VerificationBadge.svelte";
+import { getAlmanac } from "$lib/utils/almanac";
 import { normalizeSlug } from "$lib/utils/slugify";
 import { blogDateParts } from "$lib/utils/date";
 import { getHomeData } from "$lib/services/home";
@@ -12,194 +12,149 @@ import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
 
 Astro.response.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
 
+const almanac = getAlmanac();
 const { profile, verifications, kibunStatus, musicStatus, posts, githubProjects, githubUsername, publications, links } =
   await getHomeData();
 
-// Repeated so a single block is always wider than the viewport; the
-// two-block translateX(-50%) loop in pages.css only reads as seamless then.
-const bandWords = Array(4)
-  .fill(["Poet", "Programmer", "Pagan", "AT Protocol", "Gàidhlig na h-Alba", "Werewolf enthusiast"])
-  .flat();
-
-const blogPosts = posts.filter((p) => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION).slice(0, 5);
+const writing = posts.filter((p) => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION).slice(0, 6);
 const otherPublications = publications.filter((p) => p.rkey !== PUBLIC_LEAFLET_BLOG_PUBLICATION);
 const blogUrl = (post: { title: string; createdAt: string }) => {
   const { year, month, day } = blogDateParts(post.createdAt);
   return `/blog/${year}/${month}/${day}/${normalizeSlug(post.title)}`;
 };
-const fmtDate = (d: string) =>
-  new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+const fmt = (d: string) =>
+  new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Europe/London" }).format(new Date(d));
+const pad = (n: number) => String(n).padStart(2, "0");
+const firstName = (profile.displayName ?? profile.handle).split(" ");
 ---
 
-<Base title="Home">
-  <main class="shell-wide home-page">
-    <section class="page-hd hero-hd hero-reveal">
-      <div class="hero-masthead">
-        <h1 class="page-title hero-name">
-          {profile.displayName ?? profile.handle}<span class="hero-badge"><VerificationBadge verified={true} verifiers={verifications} client:idle /></span>
+<Base title="" ogType="HOME">
+  <main class="sheet">
+    <section class="nameplate reveal">
+      <div>
+        <p class="kicker">A personal almanac</p>
+        <h1 class="nameplate-name">
+          {firstName[0]}{firstName.length > 1 && <><br /><em>{firstName.slice(1).join(" ")}</em></>}
+          <span class="name-badge"><VerificationBadge verified={true} verifiers={verifications} client:idle /></span>
         </h1>
-        <p class="hero-gaelic text-outline" lang="gd">eòghann</p>
+        <p class="nameplate-gaelic" lang="gd">eòghann</p>
+        <ul class="credo" aria-label="In brief">
+          <li>Poet</li><li>Programmer</li><li>Pagan</li><li lang="gd">Gàidhlig na h-Alba</li>
+        </ul>
       </div>
-      <div class="hero-text">
-        {profile.avatar && <img src={profile.avatar} alt="" class="hero-avatar" width="128" height="128" decoding="async" />}
-        <div class="hero-copy">
-          <p class="hero-bio">{profile.description}</p>
-          <div class="hero-meta" aria-label="Profile metadata">
-            <span>@{profile.handle}</span>
-            <span>AT Protocol</span>
-            <span>Personal web</span>
-          </div>
-          {(kibunStatus || musicStatus) && (
-            <div class="status-row content-reveal">
-              {kibunStatus && (
-                <div class="status-chip">
-                  <span class="status-emoji">{kibunStatus.emoji}</span>
-                  <span class="status-text">{kibunStatus.text}</span>
-                </div>
-              )}
-              {musicStatus && (
-                <div class="status-chip status-chip--music">
-                  {musicStatus.artworkUrl ? (
-                    <img src={musicStatus.artworkUrl} alt="" class="now-playing-art" width="24" height="24" loading="lazy" decoding="async" />
-                  ) : (
-                    <Music size={14} strokeWidth={2} class="muted-icon" />
-                  )}
-                  <span class="status-text">{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(", ")}</span>
-                </div>
-              )}
-            </div>
-          )}
+      <Stamp almanac={almanac} />
+    </section>
+
+    <section class="folio reveal" style="--i:1">
+      <div class="margin"><span class="numeral">i</span>Foreword</div>
+      <div class="lede">
+        {profile.avatar && <img src={profile.avatar} alt="" class="lede-avatar" width="128" height="160" decoding="async" />}
+        <div>
+          <p class="lede-text">{profile.description}</p>
+          <ul class="status-line" aria-label="Current status">
+            <li>@{profile.handle}</li>
+            {kibunStatus && <li><span aria-hidden="true">{kibunStatus.emoji}</span> {kibunStatus.text}</li>}
+            {musicStatus && (
+              <li>
+                {musicStatus.artworkUrl && <img src={musicStatus.artworkUrl} alt="" width="20" height="20" loading="lazy" decoding="async" />}
+                ♪ {musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(", ")}
+              </li>
+            )}
+          </ul>
         </div>
       </div>
     </section>
 
-    <div class="hero-band" aria-hidden="true" data-hero-band>
-      <div class="hero-band-track">
-        {[0, 1].map(() => (
-          <span class="hero-band-run">
-            {bandWords.map((word) => (<><span>{word}</span><Triskele size={16} /></>))}
-          </span>
-        ))}
+    <section class="folio reveal" style="--i:2" aria-labelledby="writing">
+      <div class="margin"><span class="numeral">ii</span><span id="writing">Writing</span></div>
+      <div>
+        {writing.length > 0 ? (
+          <>
+            <ol class="toc">
+              {writing.map((post, i) => (
+                <li>
+                  <a href={blogUrl(post)} class:list={["toc-row", { "toc-row--lead": i === 0 }]}>
+                    <span class="toc-title">{i === 0 && <span class="toc-flag">Latest</span>}{post.title}</span>
+                    <span class="toc-leader" aria-hidden="true"></span>
+                    <time class="toc-meta" datetime={post.createdAt}>{fmt(post.createdAt)}</time>
+                  </a>
+                </li>
+              ))}
+            </ol>
+            <p><a href="/blog" class="btn btn--small">The whole archive →</a></p>
+          </>
+        ) : (
+          <p class="empty">The publishing service is not answering just now. Try again shortly.</p>
+        )}
       </div>
-    </div>
-
-    <div class="home-ornament" aria-hidden="true">
-      <Pentacle size={11} /><Triskele size={18} /><Pentacle size={11} />
-    </div>
-
-    <section class="home-section animate-in stagger-2">
-      <div class="home-section-hd"><span class="home-section-num" aria-hidden="true">01</span><h2 class="home-section-title">Recent writing</h2></div>
-      {blogPosts.length > 0 ? (
-        <>
-          <ul class="post-list home-post-list content-reveal-list">
-            {blogPosts.map((post, i) => (
-              <li>
-                <a href={blogUrl(post)} class:list={["post-row", "active-press", { "post-row--featured": i === 0 }]}>
-                  <span class="row-stack post-copy">
-                    {i === 0 && <span class="home-row-label">Latest</span>}
-                    <span class="post-title">{post.title}</span>
-                  </span>
-                  <time class="post-date">{fmtDate(post.createdAt)}</time>
-                </a>
-              </li>
-            ))}
-          </ul>
-          <a href="/blog" class="section-link">All posts <ArrowRight size={14} strokeWidth={2} /></a>
-        </>
-      ) : (
-        <EmptyState title="Blog unavailable" description="Unable to load blog posts at the moment. The publishing service may be temporarily unavailable. Please try again later." />
-      )}
     </section>
 
-    <section class="home-section animate-in stagger-3">
-      <div class="home-section-hd"><span class="home-section-num" aria-hidden="true">02</span><h2 class="home-section-title">Selected projects</h2></div>
-      {githubProjects.length > 0 ? (
-        <>
-          <div class="project-grid content-reveal-list">
-            {githubProjects.slice(0, 6).map((project) =>
-              project.url ? (
-                <a href={project.url} target="_blank" rel="noopener" class="project-card project-card--link active-press">
-                  <strong class="project-name">{project.name}</strong>
-                  {project.description && <p class="project-desc">{project.description}</p>}
-                  <span class="project-card-meta">
-                    {project.language && (
-                      <span class="project-language">
-                        <span class="project-language-dot" style={`background-color:${project.languageColor ?? "var(--color-text-400)"}`} aria-hidden="true"></span>
-                        {project.language}
+    <section class="folio reveal" style="--i:3" aria-labelledby="works">
+      <div class="margin"><span class="numeral">iii</span><span id="works">Works</span></div>
+      <div>
+        {githubProjects.length > 0 ? (
+          <>
+            <ul class="plates">
+              {githubProjects.slice(0, 6).map((project, i) => (
+                <li>
+                  <a class="plate" href={project.url} rel="noopener" style="height:100%">
+                    <span class="plate-no">Plate {pad(i + 1)}</span>
+                    <span class="plate-name">{project.name}</span>
+                    {project.description && <p class="plate-desc">{project.description}</p>}
+                    <span class="plate-foot">
+                      <span>
+                        {project.language && <><span class="lang-dot" style={`background:${project.languageColor ?? "currentColor"}`}></span>{project.language}</>}
                       </span>
-                    )}
-                    <span class="project-link">GitHub <ExternalLink size={10} strokeWidth={2} /></span>
-                  </span>
-                </a>
-              ) : (
-                <div class="project-card">
-                  <strong class="project-name">{project.name}</strong>
-                  {project.description && <p class="project-desc">{project.description}</p>}
-                </div>
-              ),
-            )}
-          </div>
-          <a href={`https://github.com/${githubUsername}?tab=repositories`} target="_blank" rel="noopener" class="section-link">All repositories <ArrowRight size={14} strokeWidth={2} /></a>
-        </>
-      ) : (
-        <EmptyState title="Projects unavailable" description="Unable to load project data at the moment. The service may be temporarily unavailable." />
-      )}
+                      <span>GitHub ↗</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p><a href={`https://github.com/${githubUsername}?tab=repositories`} rel="noopener" class="btn btn--small">All repositories ↗</a>
+              <a href="https://docs.ewancroft.uk" rel="noopener" class="btn btn--small">Documentation ↗</a></p>
+          </>
+        ) : (
+          <p class="empty">Project data is unavailable at the moment.</p>
+        )}
+      </div>
     </section>
 
-    <section class="home-section animate-in stagger-4">
-      <div class="home-section-hd"><span class="home-section-num" aria-hidden="true">03</span><h2 class="home-section-title">Publications</h2></div>
-      {otherPublications.length > 0 ? (
-        <ul class="post-list content-reveal-list">
+    {otherPublications.length > 0 && (
+      <section class="folio reveal" style="--i:4" aria-labelledby="serials">
+        <div class="margin"><span class="numeral">iv</span><span id="serials">Serials</span></div>
+        <ul class="toc">
           {otherPublications.map((pub) => (
             <li>
-              <a href={pub.url} target="_blank" rel="noopener" class="post-row publication-row active-press">
-                <span class="post-title">{pub.name}</span>
-                <span class="row-meta publication-description">{pub.description}</span>
+              <a href={pub.url} rel="noopener" class="toc-row">
+                <span class="toc-title">{pub.name}</span>
+                <span class="toc-leader" aria-hidden="true"></span>
+                <span class="toc-meta">↗</span>
+                {pub.description && <p class="toc-note">{pub.description}</p>}
               </a>
             </li>
           ))}
         </ul>
-      ) : (
-        <EmptyState title="Publications unavailable" description="Unable to load publications at the moment. Please try again later." />
-      )}
-    </section>
+      </section>
+    )}
 
-    <section class="home-section animate-in stagger-5">
-      <div class="home-section-hd"><span class="home-section-num" aria-hidden="true">04</span><h2 class="home-section-title">Elsewhere</h2></div>
-      {links.cards?.length > 0 ? (
-        <div class="link-grid content-reveal-list">
+    {links.cards?.length > 0 && (
+      <section class="folio reveal" style="--i:5" aria-labelledby="elsewhere">
+        <div class="margin"><span class="numeral">v</span><span id="elsewhere">Elsewhere</span></div>
+        <ul class="toc">
           {links.cards.slice(0, 8).map((link) => (
-            <a href={link.url} target="_blank" rel="noopener" class="link-chip active-press">
-              <span class="link-label">
-                {link.emoji && <span class="link-emoji">{link.emoji}</span>}
-                <span class="link-text">{link.text}</span>
-              </span>
-              <span class="link-url">{link.url}</span>
-              <ExternalLink size={10} strokeWidth={2} class="muted-icon" />
-            </a>
+            <li>
+              <a href={link.url} rel="noopener" class="toc-row">
+                <span class="toc-title">{link.emoji && <span aria-hidden="true">{link.emoji} </span>}{link.text}</span>
+                <span class="toc-leader" aria-hidden="true"></span>
+                <span class="toc-meta">{link.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗</span>
+              </a>
+            </li>
           ))}
-        </div>
-      ) : (
-        <EmptyState title="Links unavailable" description="Unable to load links at the moment. Please try again later." />
-      )}
-    </section>
+        </ul>
+      </section>
+    )}
+
+    <div class="ornament" aria-hidden="true"><Pentacle size={11} /><Triskele size={18} /><Pentacle size={11} /></div>
   </main>
 </Base>
-
-<script>
-  import { pulseAmbiance } from "$lib/stores/ambiance";
-
-  // Pausing the band is a deliberate "let me read this" gesture, so it rings
-  // the same chime as copying a link — throttled so resting the pointer
-  // there doesn't ring it twice.
-  document.addEventListener("astro:page-load", () => {
-    const band = document.querySelector("[data-hero-band]");
-    let last = 0;
-    band?.addEventListener("mouseenter", () => {
-      const now = Date.now();
-      if (now - last < 4000) return;
-      last = now;
-      pulseAmbiance();
-    });
-  });
-</script>

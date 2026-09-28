@@ -6,7 +6,7 @@ Guidance for AI coding agents working in **website**.
 
 my website at ewancroft.uk
 
-- Language: Svelte
+- Language: Astro (Svelte islands)
 - Default branch: main
 
 ## Working rules

@@ -1,6 +1,6 @@
 # Website
 
-A personal website and blog built with [SvelteKit](https://svelte.dev/docs/kit), with an AT Protocol-native publishing stack built around [Standard.site](https://standard.site/) and [Leaflet](https://leaflet.pub/).
+A personal website and blog built with [Astro](https://astro.build) (Svelte 5 for interactive islands), with an AT Protocol-native publishing stack built around [Standard.site](https://standard.site/) and [Leaflet](https://leaflet.pub/).
 
 The site owns the presentation layer while AT Protocol records provide the publication and document data. Native Leaflet documents are rendered as structured content blocks, with Markdown retained as a compatibility fallback.
 
@@ -33,7 +33,7 @@ AT Protocol / configured DID
           ↓
 @ewanc26/atproto
           ↓
-SvelteKit server load functions
+Astro server-rendered pages
           ↓
 Vercel/public HTTP cache
           ↓
@@ -70,9 +70,9 @@ This keeps the site responsive without requiring every request to re-fetch the p
 
 ## Tech Stack
 
-- **Framework**: [SvelteKit](https://svelte.dev/docs/kit)
+- **Framework**: [Astro](https://astro.build), with Svelte 5 islands and the Vercel adapter
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS v4 reset plus the hand-written almanac stylesheet ([src/styles/almanac.css](src/styles/almanac.css)); type is Fraunces and JetBrains Mono via Fontsource
 - **Package Manager**: pnpm
 - **Publishing/data model**: AT Protocol + Standard.site
 - **Document model**: Leaflet-compatible structured blocks
@@ -145,8 +145,8 @@ Other integrations may require additional environment variables. See the source 
 ## Configuration
 
 - **Site configuration**: [src/lib/config.ts](src/lib/config.ts)
-- **Vite configuration**: [vite.config.ts](vite.config.ts)
-- **Svelte configuration**: [svelte.config.js](svelte.config.js)
+- **Astro configuration**: [astro.config.mjs](astro.config.mjs) (adapter, Svelte integration, and the `$lib`/`$env`/`$app` shims that keep `src/lib` working)
+- **Static files**: `public/` (favicon, OAuth client metadata, lexicons, PGP key)
 
 ## Deployment
 

@@ -12,7 +12,8 @@
       "$lib/*": ["src/lib/*"],
       "$env/static/public": ["src/shims/env-public.ts"],
       "$env/dynamic/private": ["src/shims/env-private.ts"],
-      "$app/environment": ["src/shims/app-environment.ts"]
+      "$app/environment": ["src/shims/app-environment.ts"],
+      "$app/state": ["src/shims/app-state.svelte.ts"]
     }
   }
 }

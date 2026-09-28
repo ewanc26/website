@@ -9,7 +9,14 @@ const r = (p) => fileURLToPath(new URL(p, import.meta.url));
 // https://astro.build/config
 export default defineConfig({
   output: "server",
-  adapter: vercel(),
+  adapter: vercel({
+    // Read from disk at runtime by the OG image endpoint (the resvg wasm is
+    // picked up by the adapter's own dependency tracing).
+    includeFiles: [
+      "./src/lib/fonts/Inter-ExtraBold.ttf",
+      "./src/lib/fonts/JetBrainsMono-Regular.ttf",
+    ],
+  }),
   integrations: [svelte({ compilerOptions: { runes: true } })],
   prefetch: { prefetchAll: false, defaultStrategy: "hover" },
   vite: {
@@ -22,6 +29,7 @@ export default defineConfig({
         "$env/static/public": r("./src/shims/env-public.ts"),
         "$env/dynamic/private": r("./src/shims/env-private.ts"),
         "$app/environment": r("./src/shims/app-environment.ts"),
+        "$app/state": r("./src/shims/app-state.svelte.ts"),
       },
     },
     ssr: { noExternal: ["@lucide/svelte"] },
