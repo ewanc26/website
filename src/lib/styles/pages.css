@@ -20,25 +20,8 @@
   /* Masthead: the name is set as a poster, not a heading. The Gaelic
      form sits beneath it in outline so the two read as one wordmark. */
   .hero-hd {
-    position: relative;
     gap: clamp(var(--space-lg), 4vw, var(--space-12));
     align-items: stretch;
-    isolation: isolate;
-  }
-
-  /* Seasonal glow behind the masthead — tinted by the Sabbat palette, so
-     it shifts with the wheel of the year rather than being a fixed hue. */
-  .hero-hd::before {
-    content: "";
-    position: absolute;
-    inset: -30% 0 -10%;
-    z-index: -1;
-    background: radial-gradient(
-      ellipse 34% 48% at 36% 44%,
-      color-mix(in oklch, var(--color-primary-500) 16%, transparent),
-      transparent 70%
-    );
-    pointer-events: none;
   }
 
   .hero-masthead {
