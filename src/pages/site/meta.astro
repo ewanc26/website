@@ -57,7 +57,7 @@ const os = info?.openSourceInfo;
       <div class="cols thunk" style="--i:4"><h2>Built with</h2>
         <div>
           {bySection(info.technologyStack).map(([section, list]) => (
-            <div style="margin-bottom:1.5rem"><p class="pix" style="margin-bottom:.5rem;color:var(--riso-a)">{section}</p>
+            <div style="margin-bottom:1.5rem"><p class="pix" style="margin-bottom:.5rem;color:var(--riso-a-text)">{section}</p>
               <dl class="dl">{list.map((t) => <><dt>{t.name}</dt><dd>{t.url ? <a href={t.url} rel="noopener">{t.description ?? t.url}</a> : t.description}</dd></>)}</dl>
             </div>
           ))}
@@ -78,7 +78,7 @@ const os = info?.openSourceInfo;
       <div class="cols thunk" style="--i:6"><h2>Credits</h2>
         <div>
           {bySection(info.credits).map(([section, list]) => (
-            <div style="margin-bottom:1.5rem"><p class="pix" style="margin-bottom:.5rem;color:var(--riso-a)">{section}</p>
+            <div style="margin-bottom:1.5rem"><p class="pix" style="margin-bottom:.5rem;color:var(--riso-a-text)">{section}</p>
               <ul class="shelf">{list.map((c) => (
                 <li><div class="shelf-item"><span class="shelf-name">{c.url ? <a href={c.url} rel="noopener">{c.name}</a> : c.name}</span><span class="shelf-meta">{c.type}{c.author ? ` · ${c.author}` : ""}</span>{c.description && <p class="shelf-note">{c.description}</p>}</div></li>
               ))}</ul>

@@ -42,7 +42,7 @@ const when = (iso: string) => {
     <p class="lede">{posts.length} entries. {blog?.description}{blog?.url && <> <a href={`${blog.url.replace(/\/+$/, "")}/rss`} rel="noopener">RSS ↗</a></>}</p>
 
     {topics.length > 0 && (
-      <ul class="chips" role="group" aria-label="Topics" style="margin-bottom:var(--space-md)">
+      <ul class="chips" aria-label="Topics" style="margin-bottom:var(--space-md)">
         {topics.map(([t, n]) => <li><button type="button" class="chip" data-topic={t}>{t} ({n})</button></li>)}
       </ul>
     )}
