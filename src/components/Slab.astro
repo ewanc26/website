@@ -7,7 +7,10 @@ interface Props {
   word: string;
   long?: boolean;
 }
+import SigilBand from "./SigilBand.astro";
+
 const { word, long = false } = Astro.props;
 ---
 
+<SigilBand seed={word} />
 <h1 class:list={["slab", { "slab--long": long }]} data-t={word} style={`--n:${word.length + (word.length <= 3 ? 0.6 : 0)}`}>{word}</h1>

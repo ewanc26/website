@@ -1,5 +1,6 @@
 ---
 import Base from "../../../../../layouts/Base.astro";
+import SigilBand from "../../../../../components/SigilBand.astro";
 import ShareButtons from "$lib/components/ShareButtons.astro";
 import TableOfContents from "$lib/components/TableOfContents.astro";
 import CommentSection from "$lib/components/CommentSection.astro";
@@ -26,6 +27,7 @@ const dateLong = new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "lon
   backlinkTargets={[post.uri, post.url].filter((v): v is string => Boolean(v))}
 >
   <main class="wrap">
+    <SigilBand seed={post.title} />
     <header class="post-hero">
       <p class="pix"><a href="/blog">← The archive</a></p>
       <h1 class="post-title">{post.title}</h1>
