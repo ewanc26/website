@@ -158,7 +158,6 @@
   .shell-main {
     position: relative;
     z-index: 1;
-    overflow-x: clip;
     padding-block: var(--space-lg) var(--space-2xl);
   }
 
