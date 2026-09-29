@@ -510,9 +510,18 @@
   }
   .poster-sigils .ps-a {
     color: var(--riso-a);
+    animation: sigil-spin 1400ms var(--ease-out-expo) both;
   }
   .poster-sigils .ps-b {
     color: var(--riso-b);
+    animation: sigil-spin 1400ms var(--ease-out-expo) 120ms both;
+    --spin: -360deg;
+  }
+  @keyframes sigil-spin {
+    from {
+      rotate: var(--spin, 360deg);
+      opacity: 0;
+    }
   }
   .poster-name {
     position: relative;
