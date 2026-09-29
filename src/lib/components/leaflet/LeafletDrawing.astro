@@ -1,0 +1,40 @@
+---
+import {
+  inkColor, inkFillPath, inkStrokePath, parseFills, parseStrokes, parseViewBox,
+} from "$lib/utils/leafletInk";
+
+type Obj = Record<string, unknown>;
+const { block } = Astro.props as { block: Obj };
+const box = parseViewBox(block.viewBox);
+const fills = parseFills(block.fills);
+const strokes = parseStrokes(block.strokes);
+---
+{box ? (
+  <figure class="leaflet-drawing">
+    <svg
+      viewBox={`${box.x} ${box.y} ${box.width} ${box.height}`}
+      overflow="visible"
+      style={`aspect-ratio:${box.width}/${box.height}`}
+      role="img"
+      aria-label="Drawing"
+    >
+      {fills.map((fill) => <path d={inkFillPath(fill)} fill={inkColor(fill.color)} />)}
+      {strokes.map((stroke) => <path d={inkStrokePath(stroke)} fill={inkColor(stroke.color)} />)}
+    </svg>
+  </figure>
+) : (
+  <div class="leaflet-reader-fallback">Drawing has no readable view box.</div>
+)}
+
+<style>
+  .leaflet-drawing {
+    margin-block: 1rem;
+    margin-inline: 0;
+  }
+
+  .leaflet-drawing svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>
