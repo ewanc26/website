@@ -73,7 +73,6 @@
     if (!host) return;
     const tilt = rnd(16, 30);
     const base = rnd(14, 30);
-    let defs = "";
     let body = "";
     for (let i = 0; i < 4; i++) {
       const x0 = base + i * rnd(11, 15);
@@ -103,15 +102,14 @@
         right.push(`${(x - nx * b).toFixed(2)},${(y - ny * b).toFixed(2)}`);
       }
       const d = `M${left.join("L")}L${right.reverse().join("L")}Z`;
-      const centre = `M${x0} ${y0}Q${cx} ${cy} ${x1} ${y1}`;
-      defs += `<mask id="claw-m${i}" maskUnits="userSpaceOnUse" x="-20" y="-20" width="140" height="140"><path class="reveal" style="animation-delay:${i * 90}ms" d="${centre}" pathLength="1" fill="none" stroke="#fff" stroke-width="14"/></mask>`;
-      body += `<g mask="url(#claw-m${i})"><path class="flesh" d="${d}"/><path class="wound" d="${d}"/></g>`;
+      void ``;
+      body += `<g><path class="flesh" d="${d}"/><path class="wound" d="${d}"/></g>`;
       for (let k = 0; k < 3; k++) {
         const t = rnd(0.15, 0.8);
         body += `<circle class="spatter" style="animation-delay:${i * 90 + 260}ms" cx="${(x0 + (x1 - x0) * t + rnd(-4, 4)).toFixed(1)}" cy="${(y0 + (y1 - y0) * t + rnd(-2, 2)).toFixed(1)}" r="${rnd(0.15, 0.55).toFixed(2)}"/>`;
       }
     }
-    host.innerHTML = `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><defs>${defs}</defs>${body}</svg>`;
+    host.innerHTML = `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">${body}</svg>`;
   }
 
   const effects: Record<string, () => void> = {
@@ -250,13 +248,13 @@
     inset: 0;
     z-index: 9998;
     pointer-events: none;
-    filter: drop-shadow(0 0 0.5rem oklch(20% 0.14 27 / 0.6));
-    animation: claws-fade 0.9s ease-in 2.1s forwards;
+    animation: claws-wipe 0.45s cubic-bezier(0.3, 0.9, 0.2, 1) both, claws-fade 0.9s ease-in 2.1s forwards;
   }
   .claws :global(svg) {
     width: 100%;
     height: 100%;
     display: block;
+    will-change: transform;
   }
   .claws :global(.wound) {
     fill: oklch(31% 0.15 27);
@@ -267,22 +265,21 @@
     stroke-width: 0.7;
     stroke-linejoin: round;
   }
-  .claws :global(.reveal) {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    animation: slash 0.38s cubic-bezier(0.3, 0.9, 0.2, 1) forwards;
-  }
   .claws :global(.spatter) {
     fill: oklch(35% 0.16 27);
     opacity: 0;
     animation: spatter 0.2s ease-out forwards;
   }
-  @keyframes slash { to { stroke-dashoffset: 0; } }
+  @keyframes claws-wipe {
+    from { clip-path: inset(0 0 100% 0); }
+    to { clip-path: inset(0); }
+  }
   @keyframes spatter { to { opacity: 0.9; } }
   @keyframes claws-fade { to { opacity: 0; } }
 
   :global(body.turning) .vignette {
     display: block;
+    will-change: opacity;
     position: fixed;
     inset: 0;
     z-index: 9996;
@@ -292,18 +289,19 @@
   }
   :global(body.turning .shell-main) {
     animation: change 2.6s steps(1, end) both;
+    will-change: transform;
   }
   @keyframes vignette {
     0%, 100% { opacity: 0; }
     20%, 70% { opacity: 1; }
   }
   @keyframes change {
-    0%, 100% { transform: none; filter: none; }
-    15% { transform: translate(2px, -1px) skewX(-0.4deg); filter: saturate(1.6) contrast(1.1); }
-    30% { transform: translate(-2px, 1px) skewX(0.4deg); }
-    45% { transform: translate(1px, 2px); filter: saturate(0.4) contrast(1.3); }
-    60% { transform: translate(-1px, -1px) skewX(-0.2deg); }
-    75% { transform: none; filter: saturate(1.3); }
+    0%, 100% { transform: none; }
+    15% { transform: translate(3px, -1px); }
+    30% { transform: translate(-3px, 1px); }
+    45% { transform: translate(2px, 2px); }
+    60% { transform: translate(-2px, -1px); }
+    75% { transform: none; }
   }
 
   :global(body.tartan-on) .plaid {
@@ -333,7 +331,6 @@
     .moonrise,
     .heritage-toast,
     .claws,
-    .claws :global(.reveal),
     .claws :global(.spatter),
     :global(body.turning .shell-main),
     :global(body.turning) .vignette,
@@ -342,9 +339,4 @@
     }
     .flag-veil { opacity: 0.85; }
     .moonrise { opacity: 1; transform: translateY(20%); }
-    .claws :global(.reveal) { stroke-dashoffset: 0; }
-    .claws :global(.spatter) { opacity: 0.9; }
-    :global(body.turning) .vignette,
-    :global(body.tartan-on) .plaid { opacity: 1; }
-  }
-</style>
+  </style>
