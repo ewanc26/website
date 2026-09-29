@@ -813,7 +813,7 @@
     color: var(--paper);
   }
   .cart:hover .cart-body {
-    background: var(--ink);
+    background: transparent;
   }
   .cart-band {
     height: 1.15rem;
@@ -840,14 +840,15 @@
   }
   .cart-icon {
     flex: 0 0 auto;
+    box-sizing: border-box;
     width: 28px;
     height: 28px;
+    padding: 2px;
     object-fit: cover;
-    border: 2px solid var(--ink);
-    background: var(--paper);
+    background: var(--ink);
   }
   a.cart:hover .cart-icon {
-    border-color: var(--paper);
+    background: var(--paper);
   }
   .cart-name {
     font-family: var(--font-display);
