@@ -57,7 +57,14 @@ export async function getHomeData() {
     publicationsData,
     links,
   ] = await Promise.all([
-    fetchProfile(PUBLIC_ATPROTO_DID, fetch),
+    fetchProfile(PUBLIC_ATPROTO_DID, fetch).catch(
+      () =>
+        ({
+          displayName: "Ewan Croft",
+          handle: "ewancroft.uk",
+          description: "",
+        }) as Awaited<ReturnType<typeof fetchProfile>>,
+    ),
     fetchVerifications(),
     fetchKibunStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
     fetchMusicStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
@@ -80,6 +87,6 @@ export async function getHomeData() {
     githubProjects: githubProjects as any[],
     githubUsername,
     publications: (publicationsData?.publications ?? []) as any[],
-    links: links as { cards: any[] },
+    links: (links ?? { cards: [] }) as { cards: any[] },
   };
 }

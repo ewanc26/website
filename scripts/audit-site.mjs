@@ -14,6 +14,8 @@ const seeds = [
   "/site/meta",
   "/site/design",
 ];
+// Pages backed by a specific PDS record; they legitimately 404 under CI's placeholder DID.
+const dataBacked = new Set(["/about/name"]);
 const seen = new Map();
 const queue = [...seeds];
 const broken = [];
@@ -34,6 +36,7 @@ while (queue.length && seen.size < 60) {
   const probe = await page.request.get(base + path);
   seen.set(path, probe.status());
   if (probe.status() >= 400) {
+    if (dataBacked.has(path)) continue;
     broken.push(`${path} -> ${probe.status()}`);
     continue;
   }
