@@ -1056,7 +1056,7 @@
   .cart-rating {
     position: absolute;
     top: var(--space-sm);
-    right: var(--space-sm);
+    left: var(--space-sm);
     z-index: 1;
     padding: 0.15rem 0.45rem;
     background: var(--ink);
