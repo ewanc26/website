@@ -1389,69 +1389,6 @@
     }
   }
 
-  /* ── Folds: sections are creased sheets that open as they scroll in ──
-     Each block hinges on its top edge (a printed crease line), starts
-     folded back away from the reader, and swings flat while a shade
-     across it fades — the way a folded zine leaf catches the light.
-     Transform only lives while the animation runs, so sticky headings
-     work once a section is open. Pure CSS; needs scroll-driven
-     animations and is skipped for reduced motion. */
-  .cols,
-  .word + * {
-    position: relative;
-  }
-  .cols::before,
-  .word + *::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 0;
-    border-top: 1px solid color-mix(in oklab, var(--ink) 55%, transparent);
-    box-shadow: 0 1px 0 color-mix(in oklab, var(--paper) 80%, transparent);
-    pointer-events: none;
-    z-index: 3;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: view()) {
-      .cols,
-      .word + * {
-        transform-origin: 50% 0;
-        animation: fold-open linear both;
-        animation-timeline: view();
-        animation-range: entry 0% entry 70%;
-      }
-      .cols::after,
-      .word + *::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: 3;
-        pointer-events: none;
-        background: linear-gradient(
-          to bottom,
-          color-mix(in oklab, var(--ink) 38%, transparent),
-          transparent 70%
-        );
-        animation: fold-shade linear both;
-        animation-timeline: view();
-        animation-range: entry 0% entry 70%;
-      }
-    }
-  }
-  @keyframes fold-open {
-    from {
-      transform: perspective(1100px) rotateX(-58deg);
-    }
-  }
-  @keyframes fold-shade {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-
   /* The overprint plate slides into (mis)register once on load. */
   .slab::after,
   .poster-name::after {
