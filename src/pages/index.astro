@@ -44,6 +44,25 @@ const when = (iso: string) => {
 };
 const pad = (n: number) => String(n).padStart(2, "0");
 const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
+
+const feedTitle = (post: (typeof feed)[number]) => {
+  if (post.text) return post.text;
+  switch (post.kind) {
+    case "images": return (post.imageCount ?? 1) > 1 ? `Shared ${post.imageCount} photos` : "Shared a photo";
+    case "external": return post.linkTitle ? `Shared a link: ${post.linkTitle}` : "Shared a link";
+    case "video": return "Shared a video";
+    case "quote":
+    case "quote-media": return "Quoted a post";
+    default: return "";
+  }
+};
+const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
+  images: "photo",
+  external: "link",
+  video: "video",
+  quote: "quote",
+  "quote-media": "quote + media",
+};
 ---
 
 <Base title="" ogType="HOME">
@@ -107,11 +126,13 @@ const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
           <ol class="tracks">
             {feed.map((post) => {
               const w = when(post.createdAt);
+              const tag = feedTag[post.kind];
               return (
                 <li>
                   <a href={`https://bsky.app/profile/${PUBLIC_ATPROTO_DID}/post/${post.rkey}`} class="track" target="_blank" rel="noopener">
                     <span class="track-when"><span class="track-day">{w.day}</span><span class="track-mon">{w.mon}</span></span>
-                    <span class="track-title">{post.text}</span>
+                    <span class="track-title">{feedTitle(post)}</span>
+                    {tag && <span class="track-meta">{tag}</span>}
                   </a>
                 </li>
               );
