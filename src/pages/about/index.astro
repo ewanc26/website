@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Slab from "../../components/Slab.astro";
+import SigilBand from "../../components/SigilBand.astro";
 import Barcode from "../../components/Barcode.astro";
 import Pentacle from "$lib/components/icons/Pentacle.astro";
 import Triskele from "$lib/components/icons/Triskele.astro";
@@ -54,8 +55,9 @@ const PGP = "C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D";
 
 <Base title="About" description={profile.description} ogType="ABOUT">
   <main class="wrap">
-    <Slab word="About" />
+    <Slab word="About" sigils={false} />
 
+    <div class="idcard-row">
     <div class="idcard thunk">
       <div class="idcard-hd"><span>ID CARD</span><span>{sifa?.headline ?? "Software developer"}</span></div>
       <div class="duotone">{profile.avatar && <img src={profile.avatar} alt={`Portrait of ${profile.displayName ?? profile.handle}`} />}</div>
@@ -70,6 +72,8 @@ const PGP = "C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D";
         <p class="lede" style="margin-top:1rem;font-size:1.1rem">{profile.description}</p>
       </div>
       <div style="grid-column:1/-1"><Barcode value={profile.did} /></div>
+    </div>
+    <SigilBand side />
     </div>
 
     <div class="cols thunk" style="--i:1">
@@ -142,3 +146,15 @@ const PGP = "C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D";
     </div>
   </main>
 </Base>
+
+<style>
+  .idcard-row {
+    display: flex;
+    gap: var(--space-xl, 3rem);
+    align-items: stretch;
+  }
+  .idcard-row > :global(.idcard) {
+    flex: 0 1 44rem;
+    min-width: 0;
+  }
+</style>
