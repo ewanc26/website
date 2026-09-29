@@ -7,8 +7,15 @@ const aspectRatio = width && height && width > 0 && height > 0 ? `${width} / ${h
 const imageSrc = safeResourceUrl(src);
 ---
 {imageSrc && (
-  <figure class:list={["leaflet-image", { "full-bleed": fullBleed }]}>
+  <figure class:list={["leaflet-image", { "full-bleed": fullBleed, "leaflet-image--unsized": !aspectRatio }]}>
     <img src={imageSrc} alt={alt ?? ""} width={width} height={height} style={aspectRatio ? `aspect-ratio: ${aspectRatio}` : undefined} loading="lazy" decoding="async" />
     {alt && <figcaption class="leaflet-image-alt">{alt}</figcaption>}
   </figure>
 )}
+
+<style>
+  .leaflet-image--unsized img {
+    min-height: 12rem;
+    background: var(--paper-deep);
+  }
+</style>

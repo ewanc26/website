@@ -1,6 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import { SITE } from "$lib/config";
+import { SITE, ME_LINKS } from "$lib/config";
 import { getDynamicThemeCSS } from "$lib/server/theme";
 import { getAlmanac } from "$lib/utils/almanac";
 import { fetchSiteInfo } from "$lib/services/atproto/fetch";
@@ -48,6 +48,30 @@ const fullTitle = title ? `${title} — ${SITE.title}` : SITE.ogTitle;
 const fullDescription = description ?? siteInfo?.additionalInfo?.purpose ?? SITE.description;
 const canonical = new URL(pathname, Astro.url.origin).href;
 
+const person = {
+  "@type": "Person",
+  "@id": "https://ewancroft.uk/#me",
+  name: "Ewan Croft",
+  url: "https://ewancroft.uk",
+  description: SITE.description,
+  sameAs: ME_LINKS,
+};
+const jsonLd =
+  type === "article"
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: title,
+        description: fullDescription,
+        datePublished: publishedTime,
+        keywords: tags?.join(", "),
+        mainEntityOfPage: canonical,
+        author: person,
+      }
+    : ogType === "HOME" || ogType === "ABOUT"
+      ? { "@context": "https://schema.org", ...person }
+      : undefined;
+
 const projectLicense = siteInfo?.openSourceInfo?.license;
 const pageLicense = pathname.startsWith("/blog")
   ? (siteInfo?.additionalInfo?.sectionLicense.find((l) => l.section?.toLowerCase() === "blog") ?? projectLicense)
@@ -90,6 +114,9 @@ const ogAlt = `Social preview for ${title ?? SITE.title}${ogType ? `, labelled $
 
     {publicationAtUri && <link rel="site.standard.publication" href={publicationAtUri} />}
     {documentAtUri && <link rel="site.standard.document" href={documentAtUri} />}
+
+    {ME_LINKS.map((href) => <link rel="me" href={href} />)}
+    {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")} />}
 
     <meta property="og:type" content={type} />
     <meta property="og:title" content={fullTitle} />
