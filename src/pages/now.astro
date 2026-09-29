@@ -1,6 +1,8 @@
 ---
 import Base from "../layouts/Base.astro";
 import Slab from "../components/Slab.astro";
+import NowPlaying from "$lib/components/NowPlaying.astro";
+import { fetchRecentPlays } from "$lib/services/atproto/plays";
 import { getHomeData } from "$lib/services/home";
 import { fetchWatching } from "$lib/services/atproto/watching";
 import { fetchRecentPosts } from "$lib/services/atproto/feed";
@@ -10,8 +12,9 @@ import { getAlmanac } from "$lib/utils/almanac";
 Astro.response.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
 
 const almanac = getAlmanac();
-const [{ kibunStatus, musicStatus }, watching, feed] = await Promise.all([
+const [{ kibunStatus, musicStatus }, plays, watching, feed] = await Promise.all([
   getHomeData(),
+  fetchRecentPlays(PUBLIC_ATPROTO_DID, 5, fetch).catch(() => []),
   fetchWatching(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
   fetchRecentPosts(PUBLIC_ATPROTO_DID, fetch, 3).catch(() => []),
 ]);
@@ -40,15 +43,15 @@ const dateFmt = (iso: string) =>
     </div>
 
     <div class="cols thunk" style="--i:3"><h2>Playing</h2>
-      {musicStatus ? (
+      {plays.length > 0 || !musicStatus ? (
+        <NowPlaying plays={plays} limit={5} />
+      ) : (
         <p class="prose" style="max-width:none">
           <span class="now now--track">
             {musicStatus.artworkUrl ? <img src={musicStatus.artworkUrl} alt={`Album art for ${musicStatus.trackName}`} width="36" height="36" loading="lazy" decoding="async" /> : <span aria-hidden="true">♪</span>}
             <span>{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(", ")}</span>
           </span>
         </p>
-      ) : (
-        <p class="empty">Silence, at the moment.</p>
       )}
     </div>
 
