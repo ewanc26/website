@@ -9,7 +9,6 @@ import AmbianceToggle from "$lib/components/layout/AmbianceToggle.astro";
 import TriskeleEgg from "$lib/components/ostara-eggs/TriskeleEgg.astro";
 import SigilRule from "./SigilRule.astro";
 import Pentacle from "$lib/components/icons/Pentacle.astro";
-import Saltire from "$lib/components/icons/Saltire.astro";
 import type { Almanac } from "$lib/utils/almanac";
 import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
@@ -85,7 +84,6 @@ const current = Math.round(almanac.moon.phase * 8) % 8;
         <span class="sigils">
           <Pentacle size={13} aria-label="Pagan" aria-hidden={false} />
           <TriskeleEgg size={12} />
-          <Saltire size={13} aria-label="Scottish" aria-hidden={false} />
         </span>
         <WolfToggle />
         <AmbianceToggle />
