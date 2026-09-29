@@ -41,6 +41,9 @@ importers:
       chroma-js:
         specifier: ^3.2.0
         version: 3.2.0
+      cookie:
+        specifier: ^2.0.1
+        version: 2.0.1
       dompurify:
         specifier: ^3.4.11
         version: 3.4.11
