@@ -1,6 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
 import HalftoneMoon from "../components/HalftoneMoon.astro";
+import SigilRule from "../components/SigilRule.astro";
+import Pentacle from "$lib/components/icons/Pentacle.astro";
+import Triskele from "$lib/components/icons/Triskele.astro";
 import { getAlmanac } from "$lib/utils/almanac";
 import { normalizeSlug } from "$lib/utils/slugify";
 import { blogDateParts } from "$lib/utils/date";
@@ -68,6 +71,10 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
   <main class="wrap">
     <section class="poster">
       <div class="poster-moon"><HalftoneMoon phase={almanac.moon.phase} id="pm" /></div>
+      <div class="poster-sigils" aria-hidden="true">
+        <Pentacle size="100%" class="ps-a" />
+        <Triskele size="100%" class="ps-b" />
+      </div>
       <h1 class="poster-name" data-t={name} style={`--n:${Math.max(3, name.length)}`}>
         {name}
       </h1>
@@ -129,7 +136,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
 
     {feed.length > 0 && (
       <>
-        <h2 class="word"><span class="word-text" style="--n:4">Feed</span><small>lately, on Bluesky</small></h2>
+        <SigilRule /><h2 class="word"><span class="word-text" style="--n:4">Feed</span><small>lately, on Bluesky</small></h2>
         <div>
           <ol class="tracks">
             {feed.map((post) => {
@@ -154,7 +161,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
 
     {apps.length > 0 && (
       <>
-        <h2 class="word"><span class="word-text" style="--n:4">Apps</span><small>things I've shipped</small></h2>
+        <SigilRule /><h2 class="word"><span class="word-text" style="--n:4">Apps</span><small>things I've shipped</small></h2>
         <div>
           <ul class="carts">
             {apps.slice(0, 6).map((app, i) => (
@@ -178,7 +185,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
       </>
     )}
 
-    <h2 class="word"><span class="word-text" style="--n:5">Works</span><small>open source, live from GitHub</small></h2>
+    <SigilRule /><h2 class="word"><span class="word-text" style="--n:5">Works</span><small>open source, live from GitHub</small></h2>
     {githubProjects.length > 0 ? (
       <div>
         <ul class="carts">
@@ -207,7 +214,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
 
     {watching.length > 0 && (
       <>
-        <h2 class="word"><span class="word-text" style="--n:8">Watching</span><small>logged on Popfeed</small></h2>
+        <SigilRule /><h2 class="word"><span class="word-text" style="--n:8">Watching</span><small>logged on Popfeed</small></h2>
         <ul class="carts">
           {watching.slice(0, 6).map((w, i) => {
             const href = w.imdbId ? `https://www.imdb.com/title/${w.imdbId}/` : undefined;
@@ -236,7 +243,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
 
     {otherPublications.length > 0 && (
       <>
-        <h2 class="word"><span class="word-text" style="--n:5">Shelf</span><small>other things I publish</small></h2>
+        <SigilRule /><h2 class="word"><span class="word-text" style="--n:5">Shelf</span><small>other things I publish</small></h2>
         <ul class="shelf">
           {otherPublications.map((pub) => (
             <li>
@@ -252,7 +259,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
 
     {links.cards?.length > 0 && (
       <>
-        <h2 class="word"><span class="word-text" style="--n:9">Elsewhere</span></h2>
+        <SigilRule /><h2 class="word"><span class="word-text" style="--n:9">Elsewhere</span></h2>
         <ul class="shelf">
           {links.cards.slice(0, 8).map((link) => (
             <li>

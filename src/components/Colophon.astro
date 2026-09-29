@@ -7,6 +7,7 @@ import PixelMoon from "./PixelMoon.astro";
 import WolfToggle from "$lib/components/layout/WolfToggle.astro";
 import AmbianceToggle from "$lib/components/layout/AmbianceToggle.astro";
 import TriskeleEgg from "$lib/components/ostara-eggs/TriskeleEgg.astro";
+import SigilRule from "./SigilRule.astro";
 import Pentacle from "$lib/components/icons/Pentacle.astro";
 import Saltire from "$lib/components/icons/Saltire.astro";
 import type { Almanac } from "$lib/utils/almanac";
@@ -30,6 +31,7 @@ const phases = Array.from({ length: 8 }, (_, i) => i / 8);
 const current = Math.round(almanac.moon.phase * 8) % 8;
 ---
 
+<SigilRule />
 <footer class="press">
   <div class="wrap">
     <div class="press-grid">
