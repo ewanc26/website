@@ -1,4 +1,5 @@
 ---
+import ArrowUpRight from "../../lib/components/icons/ArrowUpRight.astro";
 import Base from "../../layouts/Base.astro";
 import Slab from "../../components/Slab.astro";
 import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
@@ -39,7 +40,7 @@ const when = (iso: string) => {
 <Base title="Blog" description={blog?.description ?? "Writing on technology, tradition, and the AT Protocol."} ogSubtitle="Writing on technology and tradition." ogType="BLOG">
   <main class="wrap">
     <Slab word="Blog" />
-    <p class="lede">{posts.length} entries. {blog?.description}{blog?.url && <> <a href={`${blog.url.replace(/\/+$/, "")}/rss`} rel="noopener">RSS ↗︎</a></>}</p>
+    <p class="lede">{posts.length} entries. {blog?.description}{blog?.url && <> <a href={`${blog.url.replace(/\/+$/, "")}/rss`} rel="noopener">RSS<ArrowUpRight /></a></>}</p>
 
     {topics.length > 0 && (
       <ul class="chips" aria-label="Topics" style="margin-bottom:var(--space-md)">
