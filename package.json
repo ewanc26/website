@@ -40,6 +40,7 @@
     "@resvg/resvg-wasm": "^2.6.2",
     "atmentions": "github:pixeline/atmentions",
     "chroma-js": "^3.2.0",
+    "cookie": "^2.0.1",
     "dompurify": "^3.4.11",
     "marked": "^18.0.5",
     "rehype-raw": "^7.0.0",
