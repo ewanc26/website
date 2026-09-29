@@ -18,7 +18,6 @@ The site owns the presentation layer while AT Protocol records provide the publi
 - **Project showcase**: Display pinned repositories from a GitHub profile
 - **Social features**: Comments and share buttons
 - **API endpoints**: REST endpoints for blog, recommendations, and subscriptions
-- **Webhooks**: GitHub webhook support
 - **Open Graph**: Dynamic social sharing metadata and OG image generation
 - **Responsive design**: Tailwind CSS with mobile-first styling
 
@@ -96,8 +95,7 @@ src/
 └── routes/
     ├── blog/               # Blog listing and date/slug post pages
     ├── projects/           # Project showcase
-    ├── api/                # API endpoints
-    └── webhook/            # Webhook handlers
+    └── api/                # API endpoints
 ```
 
 ## Getting Started
