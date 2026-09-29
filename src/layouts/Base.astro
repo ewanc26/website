@@ -83,6 +83,9 @@ const ogAlt = `Social preview for ${title ?? SITE.title}${ogType ? `, labelled $
     <title>{fullTitle}</title>
     <meta name="description" content={fullDescription} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="Ewan's Corner" href="/rss.xml" />
+    <meta name="theme-color" content="#f1f3f3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d0d14" media="(prefers-color-scheme: dark)" />
     {pageLicense?.url && <link rel="license" href={pageLicense.url} title={pageLicense.name} />}
 
     {publicationAtUri && <link rel="site.standard.publication" href={publicationAtUri} />}
