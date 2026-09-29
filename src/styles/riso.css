@@ -602,14 +602,24 @@
   .nt-swap > * {
     grid-area: 1 / 1;
   }
+  .nt-gd,
   .nt-en {
-    visibility: hidden;
+    transition: opacity 350ms ease;
+  }
+  .nt-en {
+    opacity: 0;
   }
   .nametag:is(:hover, :focus-visible) .nt-gd {
-    visibility: hidden;
+    opacity: 0;
   }
   .nametag:is(:hover, :focus-visible) .nt-en {
-    visibility: visible;
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nt-gd,
+    .nt-en {
+      transition: none;
+    }
   }
   .nametag:focus-visible {
     outline: 3px solid var(--riso-b);
