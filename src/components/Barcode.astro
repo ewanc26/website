@@ -17,6 +17,6 @@ for (const ch of value) {
 }
 ---
 
-<svg class="barcode" viewBox={`0 0 ${x} 10`} preserveAspectRatio="none" shape-rendering="crispEdges" aria-hidden="true" focusable="false">
+<svg class="barcode" viewBox={`0 0 ${x} 10`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
   {bars.map((b) => <rect x={b.x} y="0" width={b.w} height="10" fill="currentColor" />)}
 </svg>
