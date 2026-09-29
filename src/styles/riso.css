@@ -1065,9 +1065,7 @@
     font-family: var(--font-pixel);
     font-size: var(--text-xs);
   }
-  /* The frame is the container's own background and everything else is
-     inset inside it, so no two layers share a rotated outer edge (which
-     is what leaked red/black fringes at the corners). */
+  /* Photos sit in a plain ink frame, untouched. */
   .duotone {
     position: relative;
     isolation: isolate;
@@ -1075,38 +1073,15 @@
     aspect-ratio: 4 / 5;
     overflow: hidden;
   }
-  .duotone::before {
-    content: "";
-    position: absolute;
-    inset: var(--edge);
-    background: var(--riso-a);
-  }
   .duotone img {
     position: absolute;
     inset: var(--edge);
     width: calc(100% - 2 * var(--edge));
     height: calc(100% - 2 * var(--edge));
     object-fit: cover;
-    filter: grayscale(1) contrast(1.15);
-    mix-blend-mode: multiply;
   }
-  .duotone::after {
-    content: "";
-    position: absolute;
-    inset: var(--edge);
-    background: var(--riso-b);
-    mix-blend-mode: var(--blend);
-    opacity: 0.55;
-    clip-path: polygon(0 60%, 100% 30%, 100% 100%, 0 100%);
-  }
-  /* Poster cards (watching): the same duotone treatment as the ID card
-     photo, at the film-poster ratio, with the wash lighter so the art
-     still reads through it. */
   .duotone--poster {
     aspect-ratio: 2 / 3;
-  }
-  .duotone--poster::after {
-    opacity: 0.35;
   }
   .cart-rating {
     position: absolute;
