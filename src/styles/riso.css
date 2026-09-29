@@ -966,6 +966,19 @@
     text-align: right;
     overflow-wrap: anywhere;
   }
+  @media (max-width: 40rem) {
+    .shelf a,
+    .shelf .shelf-item {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+    .shelf a:has(> .shelf-meta > .arrow-ur:only-child) {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .shelf-meta {
+      text-align: left;
+    }
+  }
   .shelf-note {
     grid-column: 1 / -1;
     margin: 0;
