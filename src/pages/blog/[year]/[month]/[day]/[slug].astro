@@ -32,7 +32,7 @@ const dateLong = new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "lon
       {post.description && <p class="post-deck">{post.description}</p>}
       <div class="post-byline">
         <span class="tape">{dateLong}</span>
-        {(post.tags?.length ?? 0) > 0 && <span class="chips">{post.tags!.map((t: string) => <span class="chip">{t}</span>)}</span>}
+        {(post.tags?.length ?? 0) > 0 && <span class="chips">{post.tags!.map((t: string) => <span class="chip">{t.replace(/_/g, " ")}</span>)}</span>}
       </div>
       <div class="post-byline">
         <ShareButtons url={url} title={post.title} />

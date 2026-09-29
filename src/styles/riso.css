@@ -1396,6 +1396,9 @@
   }
 
   .section-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
     margin: 0 0 var(--space-md);
     font-family: var(--font-display);
     font-variation-settings: "wdth" 125;
