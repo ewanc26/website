@@ -268,13 +268,14 @@
     font-family: var(--font-display);
     font-variation-settings: "wdth" 125;
     font-weight: 900;
-    font-size: clamp(4rem, 18vw, 17rem);
+    --avail: calc(min(100vw, var(--wrap)) - 2 * var(--gutter) - 1rem);
+    /* One line always: shrink to fit the character count (~0.92em per glyph). */
+    font-size: min(17rem, calc(var(--avail) / (var(--n, 6) * 0.92)));
+    white-space: nowrap;
     line-height: 0.8;
     letter-spacing: -0.05em;
     text-transform: uppercase;
     color: var(--riso-a-text);
-    overflow-wrap: anywhere;
-    text-wrap: balance;
   }
   .slab {
     isolation: isolate;
@@ -289,7 +290,7 @@
     pointer-events: none;
   }
   .slab--long {
-    font-size: clamp(3rem, 11vw, 10rem);
+    font-size: min(10rem, calc(var(--avail) / (var(--n, 6) * 0.92)));
     line-height: 0.85;
   }
 
@@ -444,7 +445,15 @@
     font-family: var(--font-display);
     font-variation-settings: "wdth" 125;
     font-weight: 900;
-    font-size: clamp(3.5rem, 14vw, 11rem);
+    font-size: min(
+      11rem,
+      calc(
+        (min(100vw, var(--wrap)) - 2 * var(--gutter) - 1rem) /
+          (var(--n, 6) * 0.92)
+      )
+    );
+    white-space: nowrap;
+    flex: none;
     line-height: 0.78;
     letter-spacing: -0.045em;
     text-transform: uppercase;
@@ -460,6 +469,10 @@
     text-transform: none;
     color: var(--ink);
     mix-blend-mode: normal;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* ── Poster (home) ───────────────────────────────────────────── */
@@ -888,14 +901,15 @@
   }
   @media (min-width: 60rem) {
     .cols {
-      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 19rem) minmax(0, 1fr);
     }
   }
   .cols > h2 {
     font-family: var(--font-display);
     font-variation-settings: "wdth" 125;
     font-weight: 900;
-    font-size: 2rem;
+    font-size: 1.6rem;
+    white-space: nowrap;
     line-height: 0.95;
     letter-spacing: -0.03em;
     text-transform: uppercase;

@@ -10,4 +10,4 @@ interface Props {
 const { word, long = false } = Astro.props;
 ---
 
-<h1 class:list={["slab", { "slab--long": long }]} data-t={word}>{word}</h1>
+<h1 class:list={["slab", { "slab--long": long }]} data-t={word} style={`--n:${word.length + (word.length <= 3 ? 0.6 : 0)}`}>{word}</h1>
