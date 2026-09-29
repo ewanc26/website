@@ -1,19 +1,16 @@
 import type { APIRoute } from "astro";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { Resvg, initWasm } from "@resvg/resvg-wasm";
 import wasmDataUri from "@resvg/resvg-wasm/index_bg.wasm?inline";
+import archivoUri from "../../../../node_modules/@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff?inline";
+import monoUri from "../../../lib/fonts/JetBrainsMono-Regular.ttf?inline";
 import satori from "satori";
 import { cleanOgText, getDefaultOgTitle, getOgTemplate } from "$lib/og";
 import { getOgThemeColors } from "$lib/server/theme";
 import { getMoonIllumination } from "$lib/utils/moonPhase";
 import { getAlmanac } from "$lib/utils/almanac";
 
-// Files are read from disk relative to the project root; the Vercel adapter
-// bundles them via `includeFiles` in astro.config.mjs.
-const root = process.cwd();
-const readAsset = async (relative: string) => {
-  const buf = await readFile(join(root, relative));
+const decode = (uri: string): ArrayBuffer => {
+  const buf = Buffer.from(uri.slice(uri.indexOf(",") + 1), "base64");
   return buf.buffer.slice(
     buf.byteOffset,
     buf.byteOffset + buf.byteLength,
@@ -22,8 +19,7 @@ const readAsset = async (relative: string) => {
 
 let wasmInitialization: Promise<void> | undefined;
 const ensureWasm = () => {
-  wasmInitialization ??= Promise.resolve(wasmDataUri)
-    .then((uri) => Buffer.from(uri.slice(uri.indexOf(",") + 1), "base64"))
+  wasmInitialization ??= Promise.resolve(decode(wasmDataUri))
     .then(async (buffer) => {
       try {
         await initWasm(buffer);
@@ -44,26 +40,10 @@ const ensureWasm = () => {
   return wasmInitialization;
 };
 
-const loadFont = async (url: string) => {
-  try {
-    return await readAsset(url);
-  } catch (err) {
-    console.error(`Failed to load font from ${url}:`, err);
-    throw err;
-  }
-};
-
-let fonts: Promise<[ArrayBuffer, ArrayBuffer]> | undefined;
-const loadFonts = () =>
-  (fonts ??= Promise.all([
-    loadFont(
-      "node_modules/@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff",
-    ),
-    loadFont("src/lib/fonts/JetBrainsMono-Regular.ttf"),
-  ]).catch((error) => {
-    fonts = undefined;
-    throw error;
-  }));
+const loadFonts = async (): Promise<[ArrayBuffer, ArrayBuffer]> => [
+  decode(archivoUri),
+  decode(monoUri),
+];
 
 import { SITE } from "$lib/config";
 
