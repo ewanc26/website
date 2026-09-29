@@ -1440,28 +1440,27 @@
     letter-spacing: -0.02em;
   }
 
-  /* ── Motion: stepped, like a print run ───────────────────────── */
+  /* ── Motion: a smooth settle; transform + opacity only ───────── */
 
   .thunk {
-    animation: thunk 420ms var(--ease-step) both;
-    animation-delay: calc(var(--i, 0) * 90ms);
+    animation: thunk 380ms var(--ease-out-expo) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
   }
   @keyframes thunk {
     from {
       opacity: 0;
-      translate: 0 18px;
-      scale: 1.025;
+      translate: 0 14px;
     }
   }
   /* Async content (backlinks, mentions) arrives with the same thunk. */
   .content-reveal {
-    animation: thunk 420ms var(--ease-step) both;
+    animation: thunk 380ms var(--ease-out-expo) both;
   }
 
   /* The overprint plate slides into (mis)register once on load. */
   .slab::after,
   .poster-name::after {
-    animation: register 700ms var(--ease-step) both;
+    animation: register 600ms var(--ease-out-expo) both;
   }
   @keyframes register {
     from {
