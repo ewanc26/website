@@ -58,11 +58,11 @@ const hasFooter = Astro.slots.has("footer");
   }
 
   .base-modal[open] {
-    animation: modal-in 260ms var(--ease-step) both;
+    animation: modal-in 260ms var(--ease-out-expo) both;
   }
 
   .base-modal[open]::backdrop {
-    animation: modal-fade 260ms var(--ease-step) both;
+    animation: modal-fade 260ms var(--ease-out-expo) both;
   }
 
   @keyframes modal-in {
