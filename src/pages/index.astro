@@ -1,4 +1,5 @@
 ---
+import Link from "../lib/components/icons/Link.astro";
 import ArrowUpRight from "../lib/components/icons/ArrowUpRight.astro";
 import Base from "../layouts/Base.astro";
 import HalftoneMoon from "../components/HalftoneMoon.astro";
@@ -269,7 +270,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
             <li>
               <a href={link.url} rel="noopener">
                 <span class="shelf-name">{link.emoji && <span aria-hidden="true">{link.emoji} </span>}{link.text}</span>
-                <span class="shelf-meta">{link.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}<ArrowUpRight /></span>
+                <span class="shelf-meta shelf-chip"><Link /><span class="sr-only">{link.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span></span>
               </a>
             </li>
           ))}
