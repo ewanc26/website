@@ -16,15 +16,16 @@ import LeafletEmbed from "./LeafletEmbed.astro";
 import LeafletWebsiteCard from "./LeafletWebsiteCard.astro";
 import LeafletButton from "./LeafletButton.astro";
 import LeafletBskyPost from "./LeafletBskyPost.astro";
+import LeafletDrawing from "./LeafletDrawing.astro";
 import Pentacle from "../icons/Pentacle.astro";
 import Triskele from "../icons/Triskele.astro";
 
 import type { SerialisedBlock, SerialisedPage } from "$lib/providers/serialise";
 import type { SerialisedFacet } from "$lib/utils/leafletFacets";
 import { safeLinkUrl } from "$lib/utils/url";
-import { isPositioned, measure, styleFor } from "$lib/utils/leafletCanvas";
+import { canvasBlockOrder, fixedMetrics, isPositioned, measure, stackOrders, styleFor } from "$lib/utils/leafletCanvas";
 import {
-  B, CANVAS, MAX_PAGE_DEPTH, SCHEMA, alignmentClass, getAspectRatio, getFacets, getPlaintext, textSizeClass, type Obj,
+  B, CANVAS, LINEAR, MAX_PAGE_DEPTH, SCHEMA, alignmentClass, getAspectRatio, getFacets, getPlaintext, textSizeClass, type Obj,
 } from "$lib/utils/leafletReader";
 
 const NS = "pub.leaflet.richtext.facet";
@@ -51,6 +52,13 @@ interface ReaderReference {
   value: Obj;
 }
 
+interface ReaderHeader {
+  title: string;
+  description?: string;
+  publishedAt?: string;
+  tags?: string[];
+}
+
 interface Footnote {
   id: string;
   index: number;
@@ -67,9 +75,17 @@ interface Props {
   posts?: ReaderPost[];
   publication?: ReaderPublication | null;
   references?: Record<string, ReaderReference>;
+  /** The document's own metadata, for `postHeader` blocks. */
+  header?: ReaderHeader;
+  /** Publications this publication recommends, for `recommendedPubs` blocks. */
+  recommendedPublications?: ReaderReference[];
   /** Internal: recursion depth and pre-computed footnote numbers for embedded pages. */
   depth?: number;
   footnoteNumbers?: Record<string, number>;
+  /** Internal: fixed bounds for an embedded canvas page. */
+  canvasSize?: { width?: number; height?: number };
+  /** Internal: true while rendering blocks placed on a canvas page. */
+  inCanvas?: boolean;
 }
 
 const {
@@ -80,8 +96,12 @@ const {
   posts = [],
   publication,
   references = {},
+  header,
+  recommendedPublications = [],
   depth = 0,
   footnoteNumbers: inheritedFootnoteNumbers,
+  canvasSize,
+  inCanvas = false,
 } = Astro.props as Props;
 
 function visibleBlocks(items: SerialisedBlock[]): SerialisedBlock[] {
@@ -140,6 +160,29 @@ function postsForBlock(inner: Obj): ReaderPost[] {
       : undefined;
   if (limit && limit > 0) filtered = filtered.slice(0, limit);
   return filtered;
+}
+function postsListView(view: unknown): "small" | "medium" | "chapter" {
+  // Current Leaflet: small | medium | chapter, unknown values read as medium.
+  // Older published records used compact | full.
+  if (view === "small" || view === "compact") return "small";
+  if (view === "chapter") return "chapter";
+  return "medium";
+}
+function firstTextBlock(page: SerialisedPage | undefined): string | undefined {
+  const wrappers = page?.$type === CANVAS ? [...(page?.blocks ?? [])].sort(canvasBlockOrder) : page?.blocks ?? [];
+  for (const wrapper of wrappers) {
+    const inner = wrapper.block;
+    if (!inner) continue;
+    if (inner.$type === LINEAR) {
+      const nested = firstTextBlock({ blocks: (inner.blocks as SerialisedBlock[]) ?? [] });
+      if (nested) return nested;
+      continue;
+    }
+    if ((inner.$type === B("header") || inner.$type === B("text")) && getPlaintext(inner).trim()) {
+      return getPlaintext(inner).trim();
+    }
+  }
+  return undefined;
 }
 function headingId(text: string, index: number): string {
   const base = text
@@ -212,7 +255,9 @@ function collectFootnotes(): Footnote[] {
       scanListItems((inner.children as Obj[]) ?? [], false);
     } else if (type === B("orderedList")) {
       scanListItems((inner.children as Obj[]) ?? [], true);
-    } else if (type === B("page") && typeof inner.id === "string") {
+    } else if (type === LINEAR) {
+      scanBlocks((inner.blocks as SerialisedBlock[]) ?? []);
+    } else if ((type === B("page") || type === B("embeddedCanvas")) && typeof inner.id === "string") {
       if (visitedPages.has(inner.id)) return;
       visitedPages.add(inner.id);
       const page = pageForId(inner.id);
@@ -221,7 +266,7 @@ function collectFootnotes(): Footnote[] {
   };
 
   const scanBlocks = (items: SerialisedBlock[]) => {
-    for (const wrapper of visibleBlocks(items)) scanBlock(wrapper.block);
+    for (const wrapper of visibleBlocks(items)) if (wrapper?.block) scanBlock(wrapper.block);
   };
 
   scanBlocks(blocks);
@@ -232,30 +277,34 @@ const isRoot = inheritedFootnoteNumbers === undefined;
 const footnotes = isRoot ? collectFootnotes() : [];
 const footnoteNumbers: Record<string, number> = inheritedFootnoteNumbers ?? Object.fromEntries(footnotes.map((f) => [f.id, f.index]));
 
-const shared = { pages, sourceUrl, posts, publication, references, footnoteNumbers };
+const shared = { pages, sourceUrl, posts, publication, references, header, recommendedPublications, footnoteNumbers };
 const source = sourceHref();
 const items = visibleBlocks(blocks);
-const canvasItems = pageType === CANVAS ? items : [];
+// Canvas blocks carry no document order; Leaflet reads them top-to-bottom,
+// left-to-right and stacks them by their fractional stackOrder.
+const canvasItems = pageType === CANVAS ? [...items].sort(canvasBlockOrder) : [];
 const positioned = canvasItems.filter(isPositioned);
 const unpositioned = canvasItems.filter((b) => !isPositioned(b));
-const metrics = measure(canvasItems);
+const fixed = fixedMetrics(canvasSize?.width, canvasSize?.height);
+const metrics = fixed ?? measure(canvasItems);
+const zIndexes = stackOrders(positioned);
 const asFacets = (i: Obj) => ({ plaintext: getPlaintext(i), facets: getFacets(i), schema: SCHEMA, footnoteNumbers });
 ---
 
 {pageType === CANVAS ? (
   <>
     {positioned.length > 0 && (
-      <div class="leaflet-canvas" style={`aspect-ratio:${metrics.width}/${metrics.height}`} aria-label="Leaflet canvas">
-        {positioned.map((block) => (
-          <div class="leaflet-canvas-block" style={styleFor(block, metrics)}>
-            <Astro.self blocks={[block]} {...shared} depth={depth + 1} />
+      <div class:list={["leaflet-canvas", { "leaflet-canvas--fixed": fixed }]} style={`aspect-ratio:${metrics.width}/${metrics.height}`} aria-label="Leaflet canvas">
+        {positioned.map((block, index) => (
+          <div class="leaflet-canvas-block" style={styleFor(block, metrics, zIndexes[index])}>
+            <Astro.self blocks={[block]} {...shared} depth={depth + 1} inCanvas={true} />
           </div>
         ))}
       </div>
     )}
     {unpositioned.length > 0 && (
       <div class="leaflet-canvas-unpositioned" aria-label="Unpositioned canvas content">
-        {unpositioned.map((block) => <Astro.self blocks={[block]} {...shared} depth={depth + 1} />)}
+        {unpositioned.map((block) => <Astro.self blocks={[block]} {...shared} depth={depth + 1} inCanvas={true} />)}
       </div>
     )}
   </>
@@ -293,10 +342,10 @@ const asFacets = (i: Obj) => ({ plaintext: getPlaintext(i), facets: getFacets(i)
       )}
 
       {type === B("image") && (
-        <LeafletImage src={(inner._imageSrc as string) ?? ""} alt={inner.alt as string | undefined} width={ratio?.width} height={ratio?.height} fullBleed={inner.fullBleed as boolean | undefined} />
+        <LeafletImage src={(inner._imageSrc as string) ?? ""} alt={inner.alt as string | undefined} width={ratio?.width} height={ratio?.height} fullBleed={inner.fullBleed as boolean | undefined} displayWidth={inner.width as number | undefined} />
       )}
 
-      {type === B("imageGallery") && <LeafletImageGallery images={(inner.images as Obj[]) ?? []} format={inner.format as string | undefined} />}
+      {type === B("imageGallery") && <LeafletImageGallery images={(inner.images as Obj[]) ?? []} format={inner.format as string | undefined} gap={inner.gap as number | undefined} maxWidth={inner.maxWidth as number | undefined} />}
 
       {type === B("unorderedList") && (
         <ul class={`leaflet-list${align ? ` ${align}` : ""}`}>
@@ -310,14 +359,18 @@ const asFacets = (i: Obj) => ({ plaintext: getPlaintext(i), facets: getFacets(i)
         </ol>
       )}
 
-      {type === B("iframe") && <LeafletEmbed url={(inner.url as string) ?? ""} height={inner.height as number | undefined} aspectRatio={ratio} />}
-
-      {type === B("html") && (() => {
+      {(type === B("html") || (type === B("iframe") && typeof inner.html === "string" && inner.html)) && (() => {
+        // pub.leaflet.blocks.html, plus the deprecated iframe `html` field,
+        // which takes precedence over the iframe's url.
         const html = typeof inner.html === "string" ? inner.html : typeof inner.content === "string" ? inner.content : "";
+        const height = typeof inner.height === "number" && Number.isFinite(inner.height) ? Math.min(Math.max(inner.height, 16), 1600) : undefined;
+        const style = ratio ? `aspect-ratio:${ratio.width}/${ratio.height};min-height:0` : height ? `height:${height}px;min-height:0` : undefined;
         return html
-          ? <iframe class="leaflet-html" title="Embedded Leaflet HTML" srcdoc={html} sandbox="" loading="lazy"></iframe>
+          ? <iframe class="leaflet-html" title="Embedded Leaflet HTML" srcdoc={html} sandbox="" loading="lazy" referrerpolicy="no-referrer" style={style}></iframe>
           : <div class="leaflet-reader-fallback">HTML block has no readable content.</div>;
       })()}
+
+      {type === B("iframe") && !(typeof inner.html === "string" && inner.html) && <LeafletEmbed url={(inner.url as string) ?? ""} height={inner.height as number | undefined} aspectRatio={ratio} />}
 
       {type === B("website") && (
         <LeafletWebsiteCard src={(inner.src as string) ?? ""} title={inner.title as string | undefined} description={inner.description as string | undefined} previewImageSrc={inner._previewImageSrc as string | undefined} />
@@ -382,14 +435,14 @@ const asFacets = (i: Obj) => ({ plaintext: getPlaintext(i), facets: getFacets(i)
 
       {type === B("postsList") && (() => {
         const listed = postsForBlock(inner);
-        const view = inner.view === "compact" || inner.view === "full" ? inner.view : "compact";
+        const view = postsListView(inner.view);
         return (
           <section class="leaflet-posts-list" data-view={view} aria-label="Publication posts">
             {listed.length ? listed.map((post, postIndex) => (
               <article class:list={{ highlighted: inner.highlightFirstPost === true && postIndex === 0 }}>
                 <a href={safeLinkUrl(post.url)}>
                   <strong>{post.title}</strong>
-                  {view === "full" && post.description && <span>{post.description}</span>}
+                  {view !== "small" && post.description && <span>{post.description}</span>}
                   {post.createdAt && <time datetime={post.createdAt}>{new Date(post.createdAt).toLocaleDateString("en-gb")}</time>}
                 </a>
               </article>
@@ -400,12 +453,72 @@ const asFacets = (i: Obj) => ({ plaintext: getPlaintext(i), facets: getFacets(i)
 
       {type === B("page") && (() => {
         const embedded = pageForId(inner.id);
-        return embedded && depth < MAX_PAGE_DEPTH ? (
-          <section class="leaflet-embedded-page" aria-label="Embedded Leaflet page">
-            <Astro.self blocks={embedded.blocks} pageType={embedded.$type} {...shared} depth={depth + 1} />
-          </section>
-        ) : <div class="leaflet-reader-fallback">Embedded page unavailable.</div>;
+        if (!embedded || depth >= MAX_PAGE_DEPTH) return <div class="leaflet-reader-fallback">Embedded page unavailable.</div>;
+        const body = <Astro.self blocks={embedded.blocks} pageType={embedded.$type} {...shared} depth={depth + 1} />;
+        // Leaflet opens sub-pages in a side frame. Without that frame, a
+        // compact link becomes a disclosure and a full one embeds inline.
+        return inner.display === "compact" ? (
+          <details class="leaflet-embedded-page leaflet-embedded-page--compact">
+            <summary>{firstTextBlock(embedded) ?? "Open page"}</summary>
+            {body}
+          </details>
+        ) : (
+          <section class="leaflet-embedded-page" aria-label="Embedded Leaflet page">{body}</section>
+        );
       })()}
+
+      {type === B("embeddedCanvas") && (() => {
+        const embedded = pageForId(inner.id);
+        // Leaflet skips an embedded canvas whose page lacks a fixed size.
+        if (!embedded || embedded.$type !== CANVAS || !fixedMetrics(embedded.width, embedded.height) || depth >= MAX_PAGE_DEPTH) {
+          return <div class="leaflet-reader-fallback">Embedded canvas unavailable.</div>;
+        }
+        return (
+          <div class="leaflet-embedded-canvas">
+            <Astro.self blocks={embedded.blocks} pageType={CANVAS} canvasSize={{ width: embedded.width as number, height: embedded.height as number }} {...shared} depth={depth + 1} />
+          </div>
+        );
+      })()}
+
+      {type === LINEAR && (
+        // A linear-document group placed on a canvas: its blocks flow as a column.
+        <div class="leaflet-canvas-group">
+          <Astro.self blocks={(inner.blocks as SerialisedBlock[]) ?? []} {...shared} depth={depth + 1} inCanvas={inCanvas} />
+        </div>
+      )}
+
+      {type === B("drawing") && <LeafletDrawing block={inner} />}
+
+      {type === B("postHeader") && inCanvas && header && (
+        // Leaflet only renders this on canvas pages; linear pages keep the
+        // document's own header, which this site's post hero already shows.
+        <header class:list={["leaflet-post-header", { compact: inner.compact === true }]}>
+          {publication?.title && <p class="leaflet-post-header-pub">{publication.title}</p>}
+          <p class="leaflet-post-header-title">{header.title}</p>
+          {inner.compact !== true && header.description && <p class="leaflet-post-header-desc">{header.description}</p>}
+          {header.publishedAt && <time datetime={header.publishedAt}>{new Date(header.publishedAt).toLocaleDateString("en-gb", { day: "2-digit", month: "long", year: "numeric" })}</time>}
+        </header>
+      )}
+
+      {type === B("recommendedPubs") && recommendedPublications.length > 0 && (
+        <section class:list={["leaflet-recommended-pubs", { compact: inner.compact === true }]} aria-label="Recommended publications">
+          {recommendedPublications.map((rec) => {
+            const href = publicationReferenceHref(rec.uri);
+            const name = typeof rec.value.name === "string" ? rec.value.name : "Publication";
+            const description = typeof rec.value.description === "string" ? rec.value.description : undefined;
+            return (
+              <article class="leaflet-reference-card leaflet-publication-card">
+                {href ? (
+                  <a href={href} class="leaflet-reference-link" target="_blank" rel="noopener noreferrer">
+                    <strong>{name}</strong>
+                    {description && <span>{description}</span>}
+                  </a>
+                ) : <strong>{name}</strong>}
+              </article>
+            );
+          })}
+        </section>
+      )}
 
       {type === B("poll") && (() => {
         const poll = referenceValue(pollRef?.uri);
@@ -445,8 +558,8 @@ const asFacets = (i: Obj) => ({ plaintext: getPlaintext(i), facets: getFacets(i)
       )}
 
       {![
-        "text", "header", "blockquote", "code", "math", "horizontalRule", "image", "imageGallery", "unorderedList", "orderedList", "iframe", "html", "website", "button", "bskyPost", "leafletQuote", "standardSitePost", "standardSitePublication", "postsList", "page", "poll", "signup", "membersOnlyDelimiter",
-      ].some((name) => type === B(name)) && (
+        "text", "header", "blockquote", "code", "math", "horizontalRule", "image", "imageGallery", "unorderedList", "orderedList", "iframe", "html", "website", "button", "bskyPost", "leafletQuote", "standardSitePost", "standardSitePublication", "postsList", "page", "embeddedCanvas", "poll", "signup", "membersOnlyDelimiter", "drawing", "postHeader", "recommendedPubs",
+      ].some((name) => type === B(name)) && type !== LINEAR && (
         <div class="leaflet-reader-fallback">
           <span>Unsupported Leaflet block: <code>{type || "unknown"}</code>.</span>
           {source && <a href={source} target="_blank" rel="noopener noreferrer"> Open original</a>}
@@ -489,6 +602,43 @@ const asFacets = (i: Obj) => ({ plaintext: getPlaintext(i), facets: getFacets(i)
   }
 
   .leaflet-embedded-page { border-style: dashed; }
+  .leaflet-embedded-page--compact > summary { cursor: pointer; font-weight: 600; }
+  .leaflet-embedded-page--compact[open] > summary { margin-bottom: 0.75rem; }
+
+  .leaflet-embedded-canvas {
+    margin-block: 1rem;
+    border: 1px solid currentColor;
+    border-radius: 0;
+  }
+  .leaflet-embedded-canvas > .leaflet-canvas { margin-block: 0; }
+
+  .leaflet-canvas-group { display: flow-root; }
+
+  .leaflet-post-header {
+    margin-block: 0;
+    padding: 1rem;
+    border: 1px solid currentColor;
+    border-radius: 0;
+  }
+  .leaflet-post-header p { margin-block: 0.25rem; }
+  .leaflet-post-header-pub { font-size: 0.8em; opacity: 0.75; }
+  .leaflet-post-header-title { font-size: 1.4em; font-weight: 700; line-height: 1.2; }
+  .leaflet-post-header.compact .leaflet-post-header-title { font-size: 1.15em; }
+  .leaflet-post-header time { font-size: 0.8em; opacity: 0.75; }
+
+  .leaflet-recommended-pubs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(14rem, 100%), 1fr));
+    gap: 0.75rem;
+    margin-block: 1rem;
+  }
+  .leaflet-recommended-pubs > .leaflet-reference-card { margin-block: 0; }
+  .leaflet-recommended-pubs.compact {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .leaflet-recommended-pubs.compact > .leaflet-reference-card { flex: 0 0 min(16rem, 80%); }
 
   .leaflet-reference-link,
   .leaflet-posts-list a {
@@ -514,6 +664,9 @@ const asFacets = (i: Obj) => ({ plaintext: getPlaintext(i), facets: getFacets(i)
     padding: 0.75rem 1rem;
     opacity: 0.9;
   }
+
+  .leaflet-posts-list[data-view="small"] { gap: 0.4rem; }
+  .leaflet-posts-list[data-view="small"] article { padding-block: 0.5rem; }
 
   .leaflet-posts-list[data-view="chapter"] {
     gap: 1rem;
@@ -587,6 +740,11 @@ const asFacets = (i: Obj) => ({ plaintext: getPlaintext(i), facets: getFacets(i)
 
   .leaflet-canvas-block > :global(:first-child) { margin-top: 0; }
   .leaflet-canvas-block > :global(:last-child) { margin-bottom: 0; }
+
+  .leaflet-canvas--fixed {
+    min-height: 0;
+    overflow: hidden;
+  }
 
   .leaflet-canvas-unpositioned {
     display: grid;
