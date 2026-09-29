@@ -3,19 +3,52 @@ import Base from "../../layouts/Base.astro";
 import Slab from "../../components/Slab.astro";
 import HalftoneMoon from "../../components/HalftoneMoon.astro";
 import PixelMoon from "../../components/PixelMoon.astro";
+import { fetchSiteInfo } from "$lib/services/atproto/fetch";
+import { normalizeSiteInfo } from "$lib/services/atproto/siteInfo";
 import { getAlmanac } from "$lib/utils/almanac";
 import { sabbats } from "$lib/utils/sabbats";
 
+Astro.response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=3600");
+const info = normalizeSiteInfo(await fetchSiteInfo(fetch).catch(() => null));
+function bySection<T extends { section?: string }>(items: T[]) {
+  const m = new Map<string, T[]>();
+  for (const i of items) m.set(i.section ?? "Other", [...(m.get(i.section ?? "Other") ?? []), i]);
+  return [...m.entries()];
+}
+const a = info?.additionalInfo;
+const os = info?.openSourceInfo;
 const almanac = getAlmanac();
 const swatches: [string, string][] = [["Paper", "--paper"], ["Deep paper", "--paper-deep"], ["Ink", "--ink"], ["Ink one", "--riso-a"], ["Ink two", "--riso-b"]];
 ---
 
-<Base title="Design" description="How this site is made: a two-ink riso zine crossed with a game menu." ogSubtitle="A two-ink riso zine crossed with a game menu." ogType="DESIGN">
+<Base title="This Site" description={a?.purpose ?? "How this site is made and run: design, tech stack, privacy, and credits."} ogSubtitle="Design, tech stack, privacy, and credits." ogType="SITE_META">
   <main class="wrap">
-    <Slab word="Made Of" long />
+    <Slab word="This Site" long />
+    {!info && <p class="empty">Site information could not be loaded just now.</p>}
+
     <p class="lede">This is a risograph zine that thinks it's a game cartridge shelf. Two spot inks, set by the season; newsprint by day, black stock by night; type that's either colossal or pixels.</p>
 
-    <div class="cols thunk" style="--i:1"><h2>Rules</h2>
+    {a?.purpose && (
+      <div class="cols thunk" style="--i:1"><h2>Purpose</h2>
+        <div><p class="lede" style="margin:0">{a.purpose}</p>{a.websiteBirthYear && <p class="note">First launched in {a.websiteBirthYear}.</p>}</div>
+      </div>
+    )}
+
+    {(info?.privacyStatement || a?.analytics) && (
+      <div class="cols thunk" style="--i:2"><h2>Privacy</h2>
+        <div>
+          {info?.privacyStatement && <p>{info.privacyStatement}</p>}
+          {a?.analytics && (
+            <dl class="dl" style="margin-top:1rem">
+              <dt>Analytics</dt><dd>{a.analytics.services.length ? a.analytics.services.join(", ") : "None declared."}</dd>
+              {a.analytics.cookiePolicy && <><dt>Cookies</dt><dd>{a.analytics.cookiePolicy}</dd></>}
+            </dl>
+          )}
+        </div>
+      </div>
+    )}
+
+    <div class="cols thunk" style="--i:3"><h2>Rules</h2>
       <ol class="prose" style="max-width:none">
         <li><strong>Two inks, one black.</strong> Everything else is those three colours, overprinted with a screen or multiply blend so overlaps make a third. No gradients except the halftone dot screen a riso press actually makes.</li>
         <li><strong>Cut, not rounded.</strong> Every corner is square. Circles exist only for the moon and the buttons that are meant to look punched.</li>
@@ -25,14 +58,14 @@ const swatches: [string, string][] = [["Paper", "--paper"], ["Deep paper", "--pa
       </ol>
     </div>
 
-    <div class="cols thunk" style="--i:2"><h2>Type</h2>
+    <div class="cols thunk" style="--i:4"><h2>Type</h2>
       <div>
         <p class="slab" data-t="Aa" style="font-size:6rem;margin:0 0 1rem">Aa</p>
         <p class="prose" style="max-width:none">Archivo (width axis pushed wide) carries every headline. Atkinson Hyperlegible Next — built for legibility, not for looks — carries the reading. Pixelify Sans is the game-UI voice: labels, metadata, buttons. JetBrains Mono is reserved for code.</p>
       </div>
     </div>
 
-    <div class="cols thunk" style="--i:3"><h2>Colour</h2>
+    <div class="cols thunk" style="--i:5"><h2>Colour</h2>
       <div>
         <ul class="carts" style="grid-template-columns:repeat(auto-fill,minmax(9rem,1fr))">
           {swatches.map(([name, v]) => (
@@ -43,7 +76,7 @@ const swatches: [string, string][] = [["Paper", "--paper"], ["Deep paper", "--pa
       </div>
     </div>
 
-    <div class="cols thunk" style="--i:4"><h2>The moon</h2>
+    <div class="cols thunk" style="--i:6"><h2>The moon</h2>
       <div style="display:flex;flex-wrap:wrap;gap:2rem;align-items:center">
         <div style="width:8rem;color:var(--riso-a)"><HalftoneMoon phase={almanac.moon.phase} id="dsmoon" class="stamp" /></div>
         <div style="display:flex;gap:.4rem;flex-wrap:wrap;max-width:20rem">{Array.from({length:8},(_, i)=>i/8).map((p) => <PixelMoon phase={p} size={26} />)}</div>
@@ -51,12 +84,36 @@ const swatches: [string, string][] = [["Paper", "--paper"], ["Deep paper", "--pa
       </div>
     </div>
 
-    <div class="cols thunk" style="--i:5"><h2>Open source</h2>
+    {info && info.technologyStack.length > 0 && (
+      <div class="cols thunk" style="--i:7"><h2>Built with</h2>
+        <div>
+          {bySection(info.technologyStack).map(([section, list]) => (
+            <div style="margin-bottom:1.5rem"><p class="pix" style="margin-bottom:.5rem;color:var(--riso-a-text)">{section}</p>
+              <dl class="dl">{list.map((t) => <><dt>{t.name}</dt><dd>{t.url ? <a href={t.url} rel="noopener">{t.description ?? t.url}</a> : t.description}</dd></>)}</dl>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {os && (
+      <div class="cols thunk" style="--i:8"><h2>Open source</h2>
+        <div>
+          {os.description && <p>{os.description}</p>}
+          <dl class="dl" style="margin-top:1rem">
+            {os.license && <><dt>Licence</dt><dd>{os.license.url ? <a href={os.license.url} rel="license noopener">{os.license.name ?? "View licence"}</a> : os.license.name}</dd></>}
+            {os.repositories.map((r) => <><dt>{r.type ?? "Repo"}</dt><dd><a href={r.url} rel="noopener">{r.description || r.url}</a>{r.platform && <> <span class="chip">{r.platform}</span></>}</dd></>)}
+            {os.relatedServices.map((s) => <><dt>{s.relationship ?? "Related"}</dt><dd>{s.url ? <a href={s.url} rel="noopener">{s.name}</a> : s.name}{s.description && <> — {s.description}</>}</dd></>)}
+          </dl>
+        </div>
+      </div>
+    )}
+
+    <div class="cols thunk" style="--i:9"><h2>Design sources</h2>
       <div>
         <p class="prose" style="max-width:none">
-          This page and everything under it is built on other people's free work. None of it is credited automatically — the site's own
-          <a href="/site/meta">tech-stack listing</a> comes from a record I write myself, and it lags behind what's actually running. This list doesn't:
-          it's the CSS-adjacent open source underneath the design specifically, checked against the packages actually installed, not memory.
+          The open source underneath the design specifically, checked against the packages actually installed rather than the
+          hand-written record above, which can lag behind what's running.
         </p>
         <ul class="shelf" style="margin-top:1.5rem">
           <li>
@@ -94,5 +151,28 @@ const swatches: [string, string][] = [["Paper", "--paper"], ["Deep paper", "--pa
         </ul>
       </div>
     </div>
+
+    {(a?.deployment || (a?.sectionLicense.length ?? 0) > 0) && (
+      <div class="cols thunk" style="--i:10"><h2>Operations</h2>
+        <dl class="dl">
+          {a?.deployment && <><dt>Hosting</dt><dd>{[a.deployment.platform, a.deployment.cdn].filter(Boolean).join(" · ")}{a.deployment.customDomain && " · custom domain"}</dd></>}
+          {a?.sectionLicense.map((l) => <><dt>{l.section ?? "Licence"}</dt><dd>{l.url ? <a href={l.url} rel="license noopener">{l.name ?? l.url}</a> : l.name}</dd></>)}
+        </dl>
+      </div>
+    )}
+
+    {info && info.credits.length > 0 && (
+      <div class="cols thunk" style="--i:11"><h2>Credits</h2>
+        <div>
+          {bySection(info.credits).map(([section, list]) => (
+            <div style="margin-bottom:1.5rem"><p class="pix" style="margin-bottom:.5rem;color:var(--riso-a-text)">{section}</p>
+              <ul class="shelf">{list.map((c) => (
+                <li><div class="shelf-item"><span class="shelf-name">{c.url ? <a href={c.url} rel="noopener">{c.name}</a> : c.name}</span><span class="shelf-meta">{c.type}{c.author ? ` · ${c.author}` : ""}</span>{c.description && <p class="shelf-note">{c.description}</p>}</div></li>
+              ))}</ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
   </main>
 </Base>

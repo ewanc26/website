@@ -28,5 +28,5 @@ export const NAV_LINKS = [
   { label: "Projects", url: "https://docs.ewancroft.uk" },
   { label: "Support", url: "/support" },
   { label: "Subscriptions", url: "/subscriptions" },
-  { label: "Meta", url: "/site/meta" },
+  { label: "Site", url: "/site" },
 ];

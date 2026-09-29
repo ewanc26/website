@@ -9,8 +9,7 @@ const STATIC = [
   "/now",
   "/support",
   "/subscriptions",
-  "/site/meta",
-  "/site/design",
+  "/site",
 ];
 
 export const GET: APIRoute = async ({ url }) => {
