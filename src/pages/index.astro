@@ -72,8 +72,9 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
     <section class="poster">
       <div class="poster-moon"><HalftoneMoon phase={almanac.moon.phase} id="pm" /></div>
       <div class="poster-sigils" aria-hidden="true">
-        <Pentacle size={96} class="ps-a" />
-        <Triskele size={96} class="ps-b" />
+        <Pentacle size={96} class="ps-a" style="--x:0%;--y:0%;--w:24%" />
+        <Triskele size={96} class="ps-b" style="--x:38%;--y:24%;--w:20%" />
+        <Pentacle size={96} class="ps-a" style="--x:74%;--y:6%;--w:16%" />
       </div>
       <h1 class="poster-name" data-t={name} style={`--n:${Math.max(3, name.length)}`}>
         {name}
@@ -274,26 +275,3 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
     )}
   </main>
 </Base>
-
-<script>
-  // Scatter the pentacle and triskele across the poster's top band: one per
-  // half so they never overlap, each spinning a random way.
-  const place = () => {
-    const box = document.querySelector<HTMLElement>(".poster-sigils");
-    const [a, b] = box?.querySelectorAll<HTMLElement>(":scope > *") ?? [];
-    if (!box || !a || !b) return;
-    const rand = (min: number, max: number) => min + Math.random() * (max - min);
-    const dir = () => (Math.random() < 0.5 ? "360deg" : "-360deg");
-    const swap = Math.random() < 0.5;
-    const [left, right] = swap ? [b, a] : [a, b];
-    left.style.setProperty("--x", `${rand(0, 38)}%`);
-    right.style.setProperty("--x", `${rand(52, 88)}%`);
-    for (const el of [a, b]) {
-      el.style.setProperty("--y", `${rand(0, 30)}%`);
-      el.style.setProperty("--spin", dir());
-    }
-    b.style.setProperty("--d", "120ms");
-    box.dataset.placed = "";
-  };
-  document.addEventListener("astro:page-load", place);
-</script>
