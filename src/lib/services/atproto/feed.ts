@@ -35,6 +35,9 @@ export interface FeedPost {
   linkTitle?: string;
   /** bsky.app permalink for the quoted post, when the embed is a quote of a post. */
   quotedHref?: string;
+  quotedUri?: string;
+  /** Resolved from the public AppView; absent if the quoted post is gone or the lookup failed. */
+  quoted?: { author: string; text: string };
 }
 
 const CACHE_TTL_MS = 1000 * 60 * 5; // 5 minutes — posts move fast
@@ -65,6 +68,7 @@ interface EmbedInfo {
   thumbUrl?: string;
   linkTitle?: string;
   quotedHref?: string;
+  quotedUri?: string;
 }
 
 function describeEmbed(embed: any, did: string): EmbedInfo {
@@ -85,7 +89,11 @@ function describeEmbed(embed: any, did: string): EmbedInfo {
       return { kind: "video" };
     case "app.bsky.embed.record":
       // A bare quote: embed.record is the strong ref itself.
-      return { kind: "quote", quotedHref: bskyPermalink(embed.record?.uri) };
+      return {
+        kind: "quote",
+        quotedHref: bskyPermalink(embed.record?.uri),
+        quotedUri: embed.record?.uri,
+      };
     case "app.bsky.embed.recordWithMedia": {
       // A quote plus its own media: embed.record wraps another
       // app.bsky.embed.record, one level deeper than the bare-quote case.
@@ -94,6 +102,7 @@ function describeEmbed(embed: any, did: string): EmbedInfo {
         ...media,
         kind: "quote-media",
         quotedHref: bskyPermalink(embed.record?.record?.uri),
+        quotedUri: embed.record?.record?.uri,
       };
     }
     default:
@@ -148,6 +157,42 @@ export async function fetchRecentPosts(
     if (!cursor) break;
   }
 
+  await attachQuoted(posts, fetchFn);
+
   setCache(cacheKey, posts, CACHE_TTL_MS);
   return posts;
+}
+
+/** One batched getPosts call (max 25 URIs) covers every quote in the feed. */
+async function attachQuoted(posts: FeedPost[], fetchFn: typeof fetch) {
+  const uris = [
+    ...new Set(posts.map((p) => p.quotedUri).filter((u): u is string => !!u)),
+  ].slice(0, 25);
+  if (!uris.length) return;
+  try {
+    const qs = uris.map((u) => `uris=${encodeURIComponent(u)}`).join("&");
+    const res = await fetchFn(
+      `https://public.api.bsky.app/xrpc/app.bsky.feed.getPosts?${qs}`,
+    );
+    if (!res.ok) return;
+    const data = (await res.json()) as {
+      posts?: {
+        uri: string;
+        author?: { handle?: string; displayName?: string };
+        record?: { text?: string };
+      }[];
+    };
+    const byUri = new Map((data.posts ?? []).map((q) => [q.uri, q]));
+    for (const p of posts) {
+      const q = p.quotedUri ? byUri.get(p.quotedUri) : undefined;
+      if (!q) continue;
+      const handle = q.author?.handle ? `@${q.author.handle}` : "";
+      p.quoted = {
+        author: q.author?.displayName?.trim() || handle,
+        text: (q.record?.text ?? "").trim(),
+      };
+    }
+  } catch {
+    // Quote context is decoration; the feed works without it.
+  }
 }
