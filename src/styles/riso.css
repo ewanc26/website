@@ -1008,6 +1008,7 @@
   .duotone {
     position: relative;
     background: var(--riso-a);
+    background-clip: padding-box;
     border: var(--edge) solid var(--ink);
     aspect-ratio: 4 / 5;
     overflow: hidden;
