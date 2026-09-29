@@ -38,7 +38,7 @@ export function getAlmanac(now: Date = new Date()): Almanac {
 
   return {
     weekday: fmt({ weekday: "long" }),
-    date: fmt({ day: "numeric", month: "long", year: "numeric" }),
+    date: fmt({ day: "2-digit", month: "long", year: "numeric" }),
     moon: { name: moon.name, phase: moon.phase, fraction: moon.fraction },
     sabbat: {
       name: sabbat.name,

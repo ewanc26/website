@@ -85,16 +85,16 @@ const unique = [...new Set(targets.filter(Boolean))];
           wrap.append(avatar(p.avatarUrl, p.did, 34));
           avatars.append(wrap);
         });
-        if (people.length > limit) avatars.append(el("span", "backlink-overflow", `+${people.length - limit}`));
+        if (people.length > limit) avatars.append(el("span", "backlink-overflow", `+${String(people.length - limit).padStart(2, "0")}`));
         btn.append(
           label,
           avatars,
-          el("span", "backlink-copy", `${count} backlink${count === 1 ? "" : "s"} from ${people.length} ${people.length === 1 ? "person" : "people"}`),
+          el("span", "backlink-copy", `${String(count).padStart(2, "0")} backlink${count === 1 ? "" : "s"} from ${String(people.length).padStart(2, "0")} ${people.length === 1 ? "person" : "people"}`),
         );
         aside.append(btn);
         host.replaceChildren(aside);
 
-        dialog.querySelector("[data-modal-title]")!.textContent = `Backlinks (${count})`;
+        dialog.querySelector("[data-modal-title]")!.textContent = `Backlinks (${String(count).padStart(2, "0")})`;
         const body = dialog.querySelector("[data-backlinks-body]")!;
         const intro = el("p", "modal-intro", "Posts and articles on the AT Protocol network that link to this page.");
         const list = el("ul", "backlink-records");
@@ -105,7 +105,7 @@ const unique = [...new Set(targets.filter(Boolean))];
           ident.append(el("strong", undefined, r.authorDisplayName ?? r.authorHandle), el("span", undefined, `@${r.authorHandle}`));
           author.append(avatar(r.authorAvatarUrl, r.authorDid, 36), ident);
           if (r.createdAt) {
-            const time = el("time", undefined, new Date(r.createdAt).toLocaleDateString("en-gb", { day: "numeric", month: "short", year: "numeric" }));
+            const time = el("time", undefined, new Date(r.createdAt).toLocaleDateString("en-gb", { day: "2-digit", month: "short", year: "numeric" }));
             time.dateTime = r.createdAt;
             author.append(time);
           }

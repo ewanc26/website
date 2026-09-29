@@ -7,8 +7,8 @@ import { buildThread } from "$lib/utils/commentThread";
 interface Props { comments: LeafletComment[]; subjectUri: string }
 const { comments, subjectUri } = Astro.props as Props;
 const thread = buildThread(comments);
-const fmt = (iso: string) => new Date(iso).toLocaleDateString("en-gb", { year: "numeric", month: "short", day: "numeric" });
-const heading = comments.length > 0 ? `${comments.length} comment${comments.length !== 1 ? "s" : ""}` : "Comments";
+const fmt = (iso: string) => new Date(iso).toLocaleDateString("en-gb", { year: "numeric", month: "short", day: "2-digit" });
+const heading = comments.length > 0 ? `${String(comments.length).padStart(2, "0")} comment${comments.length !== 1 ? "s" : ""}` : "Comments";
 ---
 
 <section class="comments-section" aria-labelledby="comments-heading" data-comments data-subject={subjectUri}>
@@ -54,7 +54,7 @@ const heading = comments.length > 0 ? `${comments.length} comment${comments.leng
   const icon = (name: keyof typeof ICONS, size = 14) =>
     `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  const fmt = (iso: string) => new Date(iso).toLocaleDateString("en-gb", { year: "numeric", month: "short", day: "numeric" });
+  const fmt = (iso: string) => new Date(iso).toLocaleDateString("en-gb", { year: "numeric", month: "short", day: "2-digit" });
   const msg = (e: unknown, fallback: string) => (e instanceof Error ? e.message : fallback);
 
   function setup(root: HTMLElement) {
@@ -78,7 +78,7 @@ const heading = comments.length > 0 ? `${comments.length} comment${comments.leng
     function renderList() {
       const all = [...base, ...local];
       const thread = buildThread(all);
-      headingEl.textContent = all.length > 0 ? `${all.length} comment${all.length !== 1 ? "s" : ""}` : "Comments";
+      headingEl.textContent = all.length > 0 ? `${String(all.length).padStart(2, "0")} comment${all.length !== 1 ? "s" : ""}` : "Comments";
       list.hidden = thread.length === 0;
       empty.hidden = thread.length > 0;
       list.innerHTML = thread

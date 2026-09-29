@@ -35,7 +35,7 @@ const blogUrl = (post: { title: string; createdAt: string }) => {
   return `/blog/${year}/${month}/${day}/${normalizeSlug(post.title)}`;
 };
 const when = (iso: string) => {
-  const parts = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "Europe/London" }).formatToParts(new Date(iso));
+  const parts = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", timeZone: "Europe/London" }).formatToParts(new Date(iso));
   return {
     day: parts.find((p) => p.type === "day")?.value ?? "",
     mon: (parts.find((p) => p.type === "month")?.value ?? "").toLowerCase(),
@@ -210,7 +210,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
                 <Tag class="cart" href={href} target={href ? "_blank" : undefined} rel={href ? "noopener" : undefined} style={`--tilt:${tilts[i % tilts.length]}deg`}>
                   <span class="duotone duotone--poster">
                     {w.posterUrl && <img src={w.posterUrl} alt={`Poster for ${w.title}`} loading="lazy" decoding="async" />}
-                    {w.rating != null && <span class="cart-rating">{w.rating}/10</span>}
+                    {w.rating != null && <span class="cart-rating">{pad(w.rating)}/10</span>}
                   </span>
                   <span class="cart-body">
                     <span class="cart-no">watch {pad(i + 1)}</span>
