@@ -36,7 +36,7 @@ export const baseline: Baseline = {
     "300": { light: [0.806, 0.08, 136.59], dark: [0.47, 0.088, 137.13] },
     "400": { light: [0.742, 0.106, 136.4], dark: [0.576, 0.11, 136.77] },
     "500": { light: [0.677, 0.132, 136.88], dark: [0.677, 0.132, 136.88] },
-    "600": { light: [0.576, 0.11, 136.77], dark: [0.742, 0.106, 136.4] },
+    "600": { light: [0.5, 0.11, 136.77], dark: [0.742, 0.106, 136.4] },
     "700": { light: [0.47, 0.088, 137.13], dark: [0.806, 0.08, 136.59] },
     "800": { light: [0.357, 0.063, 137.05], dark: [0.871, 0.053, 136.42] },
     "900": { light: [0.235, 0.036, 136.87], dark: [0.935, 0.026, 136.26] },
@@ -98,7 +98,8 @@ export const baseline: Baseline = {
 
 export function getSabbatContext(now: Date) {
   const year = now.getFullYear();
-  const getSabbatDate = (s: Sabbat, y: number) => new Date(y, s.month - 1, s.day);
+  const getSabbatDate = (s: Sabbat, y: number) =>
+    new Date(y, s.month - 1, s.day);
   const allSabbats = [
     ...sabbats.map((s) => ({ ...s, date: getSabbatDate(s, year - 1) })),
     ...sabbats.map((s) => ({ ...s, date: getSabbatDate(s, year) })),
@@ -145,8 +146,10 @@ export function getTargetHues(now: Date): [number, number, number] {
       .map((c) => c.get("oklch.h"));
 
     if (colourful.length === 0) return [135, 135, 135];
-    if (colourful.length === 1) return [colourful[0], colourful[0], colourful[0]];
-    if (colourful.length === 2) return [colourful[0], colourful[1], colourful[1]];
+    if (colourful.length === 1)
+      return [colourful[0], colourful[0], colourful[0]];
+    if (colourful.length === 2)
+      return [colourful[0], colourful[1], colourful[1]];
     return [colourful[0], colourful[1], colourful[2]];
   };
 

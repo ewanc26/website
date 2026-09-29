@@ -58,7 +58,10 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
   const hueB = (hueA + 150) % 360;
   css += "    /* ── Riso inks ── */\n";
   css += `    --riso-a: light-dark(oklch(68% 0.205 ${hueA.toFixed(2)}), oklch(66% 0.215 ${hueA.toFixed(2)}));\n`;
+  css += `    --riso-a-text: light-dark(oklch(52% 0.2 ${hueA.toFixed(2)}), oklch(66% 0.215 ${hueA.toFixed(2)}));\n`;
   css += `    --riso-b: light-dark(oklch(84% 0.125 ${hueB.toFixed(2)}), oklch(62% 0.15 ${hueB.toFixed(2)}));\n`;
+
+  css += `    --riso-b-text: light-dark(oklch(58% 0.12 ${hueB.toFixed(2)}), oklch(62% 0.15 ${hueB.toFixed(2)}));\n`;
 
   css += "    /* ── Aliases ── */\n";
   [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].forEach((step) => {

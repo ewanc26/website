@@ -272,7 +272,7 @@
     line-height: 0.8;
     letter-spacing: -0.05em;
     text-transform: uppercase;
-    color: var(--riso-a);
+    color: var(--riso-a-text);
     overflow-wrap: anywhere;
     text-wrap: balance;
   }
@@ -448,7 +448,7 @@
     line-height: 0.78;
     letter-spacing: -0.045em;
     text-transform: uppercase;
-    color: var(--riso-b);
+    color: var(--riso-b-text);
     mix-blend-mode: var(--blend);
   }
   .word small {
@@ -495,7 +495,7 @@
     line-height: 0.78;
     letter-spacing: -0.055em;
     text-transform: uppercase;
-    color: var(--riso-a);
+    color: var(--riso-a-text);
     isolation: isolate;
   }
   .poster-name::after {
@@ -642,7 +642,7 @@
     font-weight: 900;
     font-size: 2.9rem;
     letter-spacing: -0.04em;
-    color: var(--riso-a);
+    color: var(--riso-a-text);
   }
   .track:hover .track-day {
     color: var(--riso-b);
@@ -1058,7 +1058,7 @@
     margin-top: var(--space-xl);
     font-family: var(--font-pixel);
     font-size: var(--text-lg);
-    color: var(--riso-a);
+    color: var(--riso-a-text);
   }
   .post-after {
     display: grid;
@@ -1227,7 +1227,7 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    color: var(--riso-a);
+    color: var(--riso-a-text);
   }
   .backlinks {
     position: relative;
@@ -1250,7 +1250,7 @@
     font-size: var(--text-md);
     text-transform: none;
     letter-spacing: 0;
-    color: var(--riso-a);
+    color: var(--riso-a-text);
     background: none;
   }
   .page-outline ol {
