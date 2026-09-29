@@ -72,8 +72,8 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
     <section class="poster">
       <div class="poster-moon"><HalftoneMoon phase={almanac.moon.phase} id="pm" /></div>
       <div class="poster-sigils" aria-hidden="true">
-        <Pentacle size="100%" class="ps-a" />
-        <Triskele size="100%" class="ps-b" />
+        <Pentacle size={96} class="ps-a" />
+        <Triskele size={96} class="ps-b" />
       </div>
       <h1 class="poster-name" data-t={name} style={`--n:${Math.max(3, name.length)}`}>
         {name}
