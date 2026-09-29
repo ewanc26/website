@@ -1,5 +1,4 @@
 import { defineConfig } from "astro/config";
-import svelte from "@astrojs/svelte";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "node:url";
@@ -17,7 +16,6 @@ export default defineConfig({
       "./src/lib/fonts/JetBrainsMono-Regular.ttf",
     ],
   }),
-  integrations: [svelte({ compilerOptions: { runes: true } })],
   prefetch: { prefetchAll: false, defaultStrategy: "hover" },
   vite: {
     plugins: [tailwindcss()],
@@ -29,10 +27,8 @@ export default defineConfig({
         "$env/static/public": r("./src/shims/env-public.ts"),
         "$env/dynamic/private": r("./src/shims/env-private.ts"),
         "$app/environment": r("./src/shims/app-environment.ts"),
-        "$app/state": r("./src/shims/app-state.svelte.ts"),
       },
     },
-    ssr: { noExternal: ["@lucide/svelte"] },
     assetsInclude: ["**/*.wasm"],
   },
 });

@@ -1,0 +1,11 @@
+---
+import { safeLinkUrl } from "$lib/utils/url";
+const { text, url } = Astro.props as { text: string; url: string };
+// Remote block data is untrusted — reject javascript:/data: hrefs.
+const href = safeLinkUrl(url);
+---
+{href && (
+  <div class="leaflet-button">
+    <a href={href} target="_blank" rel="noopener noreferrer">{text}</a>
+  </div>
+)}

@@ -8,14 +8,14 @@ import { normalizeSiteInfo } from "$lib/services/atproto/siteInfo";
 import { PUBLIC_ATPROTO_DID, PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
 import Header from "../components/Header.astro";
 import Colophon from "../components/Colophon.astro";
-import BacklinkAvatars from "$lib/components/BacklinkAvatars.svelte";
-import AmbianceEngine from "$lib/components/AmbianceEngine.svelte";
-import SeasonalThemeUpdater from "$lib/components/SeasonalThemeUpdater.svelte";
-import WolfPawTrail from "$lib/components/WolfPawTrail.svelte";
-import MondayEgg from "$lib/components/ostara-eggs/MondayEgg.svelte";
-import IdleEgg from "$lib/components/ostara-eggs/IdleEgg.svelte";
-import ThreeToast from "$lib/components/ostara-eggs/ThreeToast.svelte";
-import BlogArchiveEggs from "$lib/components/ostara-eggs/BlogArchiveEggs.svelte";
+import BacklinkAvatars from "$lib/components/BacklinkAvatars.astro";
+import AmbianceEngine from "$lib/components/AmbianceEngine.astro";
+import SeasonalThemeUpdater from "$lib/components/SeasonalThemeUpdater.astro";
+import WolfPawTrail from "$lib/components/WolfPawTrail.astro";
+import MondayEgg from "$lib/components/ostara-eggs/MondayEgg.astro";
+import IdleEgg from "$lib/components/ostara-eggs/IdleEgg.astro";
+import ThreeToast from "$lib/components/ostara-eggs/ThreeToast.astro";
+import BlogArchiveEggs from "$lib/components/ostara-eggs/BlogArchiveEggs.astro";
 import "../styles/riso.css";
 
 interface Props {
@@ -116,13 +116,13 @@ const ogAlt = `Social preview for ${title ?? SITE.title}${ogType ? `, labelled $
     <ClientRouter />
   </head>
   <body>
-    <SeasonalThemeUpdater client:idle transition:persist="theme" />
-    <AmbianceEngine client:idle transition:persist="ambiance" />
-    <WolfPawTrail client:idle transition:persist="paws" />
-    <MondayEgg client:idle transition:persist="egg-monday" />
-    <IdleEgg client:idle transition:persist="egg-idle" />
-    <ThreeToast client:idle transition:persist="egg-toast" />
-    <BlogArchiveEggs client:idle transition:persist="egg-archive" />
+    <SeasonalThemeUpdater transition:persist="theme" />
+    <AmbianceEngine transition:persist="ambiance" />
+    <WolfPawTrail transition:persist="paws" />
+    <MondayEgg transition:persist="egg-monday" />
+    <IdleEgg transition:persist="egg-idle" />
+    <ThreeToast transition:persist="egg-toast" />
+    <BlogArchiveEggs transition:persist="egg-archive" />
 
     <!-- Shared SVG filters, kept for .text-outline consumers. -->
     <svg class="svg-defs" aria-hidden="true" focusable="false">
@@ -138,7 +138,7 @@ const ogAlt = `Social preview for ${title ?? SITE.title}${ogType ? `, labelled $
       <slot />
     </div>
     {Astro.response.status !== 404 && (
-      <div class="wrap backlinks"><BacklinkAvatars targets={backlinks} client:idle /></div>
+      <div class="wrap backlinks"><BacklinkAvatars targets={backlinks} /></div>
     )}
     <Colophon almanac={almanac} siteInfo={siteInfo} />
 

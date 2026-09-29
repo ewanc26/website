@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import HalftoneMoon from "../components/HalftoneMoon.astro";
-import VerificationBadge from "$lib/components/VerificationBadge.svelte";
+import VerificationBadge from "$lib/components/VerificationBadge.astro";
 import { getAlmanac } from "$lib/utils/almanac";
 import { normalizeSlug } from "$lib/utils/slugify";
 import { blogDateParts } from "$lib/utils/date";
@@ -70,7 +70,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
     <section class="poster">
       <div class="poster-moon"><HalftoneMoon phase={almanac.moon.phase} id="pm" /></div>
       <h1 class="poster-name" data-t={name} style={`--n:${Math.max(3, name.length)}`}>
-        {name}<span class="poster-badge"><VerificationBadge verified={true} verifiers={verifications} client:idle /></span>
+        {name}<span class="poster-badge"><VerificationBadge verified={true} verifiers={verifications} /></span>
       </h1>
 
       <div class="poster-row">

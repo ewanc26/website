@@ -179,7 +179,7 @@ export class AmbianceEngine {
     if (this.disposed || this.ctx.state !== "suspended") return;
     await this.ctx.resume();
     // Only ever called while the visitor has ambiance enabled (see
-    // AmbianceEngine.svelte), so unconditionally re-arming here matches
+    // AmbianceEngine.astro), so unconditionally re-arming here matches
     // start()'s effect rather than needing its own "was it on" tracking.
     this.chime.setRunning(true);
     this.melody.setRunning(true);

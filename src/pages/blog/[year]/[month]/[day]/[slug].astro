@@ -1,10 +1,10 @@
 ---
 import Base from "../../../../../layouts/Base.astro";
-import ShareButtons from "$lib/components/ShareButtons.svelte";
-import TableOfContents from "$lib/components/TableOfContents.svelte";
-import CommentSection from "$lib/components/CommentSection.svelte";
-import LeafletBlocks from "$lib/components/leaflet/LeafletBlocks.svelte";
-import AtMentions from "$lib/components/AtMentions.svelte";
+import ShareButtons from "$lib/components/ShareButtons.astro";
+import TableOfContents from "$lib/components/TableOfContents.astro";
+import CommentSection from "$lib/components/CommentSection.astro";
+import LeafletBlocks from "$lib/components/leaflet/LeafletBlocks.astro";
+import AtMentions from "$lib/components/AtMentions.astro";
 import { loadPost } from "$lib/server/post";
 
 Astro.response.headers.set("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400");
@@ -35,20 +35,20 @@ const dateLong = new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "lon
         {(post.tags?.length ?? 0) > 0 && <span class="chips">{post.tags!.map((t: string) => <span class="chip">{t}</span>)}</span>}
       </div>
       <div class="post-byline">
-        <ShareButtons url={url} title={post.title} client:idle />
-        <AtMentions url={url} aturi={post.uri} variant="default" client:idle />
+        <ShareButtons url={url} title={post.title} />
+        <AtMentions url={url} aturi={post.uri} variant="default" />
       </div>
     </header>
 
     <div class="article">
-      <aside class="rail"><TableOfContents container=".prose" client:idle /></aside>
+      <aside class="rail"><TableOfContents container=".prose" /></aside>
       <div>
         <article class="prose">
           {useBlocks ? (
             <LeafletBlocks
               blocks={post.blocks} pages={post.pages} pageType={post.primaryPageType}
               sourceUrl={post.url ?? blog?.url} posts={data.readerPosts} publication={blog}
-              references={data.readerReferences} client:visible
+              references={data.readerReferences}
             />
           ) : (
             <Fragment set:html={post.renderedContent} />
@@ -57,7 +57,7 @@ const dateLong = new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "lon
         <p class="post-end" aria-hidden="true">◆ ◆ ◆</p>
 
         <div class="post-after">
-          <CommentSection comments={data.comments} subjectUri={post.uri} client:visible />
+          <CommentSection comments={data.comments} subjectUri={post.uri} />
           {blog && (
             <footer>
               <h2>Published in</h2>
