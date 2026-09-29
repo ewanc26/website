@@ -28,6 +28,17 @@ export const OG_DEFAULT_TITLES: Record<string, string> = {
   SUBSCRIPTIONS: "Subscriptions",
   SITE_META: "Site Metadata",
   DESIGN: "Design",
+  NOW: "Now",
+};
+
+/** Ink split of the top bar per page type, so sections are told apart at a glance. */
+const BAR_SPLIT: Record<string, [number, number]> = {
+  ARTICLE: [3, 1],
+  BLOG: [1, 1],
+  ABOUT: [1, 3],
+  NOW: [1, 2],
+  DESIGN: [2, 1],
+  HOME: [1, 1],
 };
 
 const MAX_TITLE_LENGTH = 180;
@@ -148,6 +159,7 @@ export const getOgTemplate = (entry: OgEntry) => {
   const { theme } = entry;
   const { inkA, inkB } = theme;
   const moon = getMoonPhaseGeometry(entry.moonPhase);
+  const barSplit = BAR_SPLIT[(type ?? "").replace(/ /g, "_")] ?? [1, 1];
 
   const moonChildren: Array<Record<string, unknown>> = [
     {
@@ -279,8 +291,8 @@ export const getOgTemplate = (entry: OgEntry) => {
     },
     [
       el("div", { display: "flex", width: "100%", height: "16px" }, [
-        el("div", { flex: 1, backgroundColor: inkA }),
-        el("div", { flex: 1, backgroundColor: inkB }),
+        el("div", { flex: barSplit[0], backgroundColor: inkA }),
+        el("div", { flex: barSplit[1], backgroundColor: inkB }),
       ]),
       el(
         "div",
