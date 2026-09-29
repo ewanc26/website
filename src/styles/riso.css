@@ -510,6 +510,7 @@
     max-width: 5.5rem;
     height: auto;
     aspect-ratio: 1;
+    rotate: var(--r, 0deg);
     color: var(--riso-a);
   }
   .poster-sigils .ps-b {
