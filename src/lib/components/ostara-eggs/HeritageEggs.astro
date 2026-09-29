@@ -1,0 +1,289 @@
+<div class="flag-veil" data-flag hidden aria-hidden="true"></div>
+<div class="heritage-toast" data-heritage-toast role="status" aria-live="polite" hidden></div>
+<div class="moonrise" data-moonrise hidden aria-hidden="true"></div>
+<div class="claws" data-claws hidden aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none">
+  <path d="M12 -5 L38 108" pathLength="1" />
+  <path d="M30 -5 L56 108" pathLength="1" />
+  <path d="M48 -5 L74 108" pathLength="1" />
+</svg></div>
+<div class="vignette" aria-hidden="true"></div>
+<div class="plaid" aria-hidden="true"></div>
+
+<script>
+  // Easter eggs — Anglo-Scottish and werewolf. Type a word anywhere outside a field:
+  //   saltire / george / union   flag veils (also automatic on 30 Nov and 23 Apr, once per session)
+  //   tartan                     plaid overprint
+  //   howl                       moonrise
+  //   werewolf                   the change: claw marks and a red vignette
+  // Nights of a real full moon also tint the nav triskele.
+  import { getMoonPhase } from "$lib/utils/moonPhase";
+
+  const FLAGS: Record<string, { svg: string; label: string }> = {
+    saltire: {
+      label: "SAINT ANDREW · THE SALTIRE",
+      svg: `<svg viewBox="0 0 5 3" preserveAspectRatio="xMidYMid slice"><rect width="5" height="3" fill="#005EB8"/><path d="M0 0L5 3M5 0L0 3" stroke="#fff" stroke-width=".6"/></svg>`,
+    },
+    george: {
+      label: "SAINT GEORGE · THE CROSS",
+      svg: `<svg viewBox="0 0 5 3" preserveAspectRatio="xMidYMid slice"><rect width="5" height="3" fill="#fff"/><path d="M2.5 0V3M0 1.5H5" stroke="#CE1124" stroke-width=".6"/></svg>`,
+    },
+    union: {
+      label: "TWO CROWNS · ONE ISLAND",
+      svg: `<svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice"><rect width="60" height="30" fill="#012169"/><path d="M0 0L60 30M60 0L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0L60 30M60 0L0 30" stroke="#C8102E" stroke-width="2"/><path d="M30 0V30M0 15H60" stroke="#fff" stroke-width="10"/><path d="M30 0V30M0 15H60" stroke="#C8102E" stroke-width="6"/></svg>`,
+    },
+  };
+
+  const timers = new Map<string, ReturnType<typeof setTimeout>>();
+
+  const $ = <T extends HTMLElement | SVGElement>(sel: string) => document.querySelector<T>(sel);
+
+  function show(el: Element | null, ms: number, after?: () => void) {
+    if (!el) return;
+    const h = el as HTMLElement;
+    const key = h.dataset.timerKey ?? (h.dataset.timerKey = String(Math.random()));
+    clearTimeout(timers.get(key));
+    h.hidden = true;
+    void h.getBoundingClientRect();
+    h.hidden = false;
+    timers.set(
+      key,
+      setTimeout(() => {
+        h.hidden = true;
+        after?.();
+      }, ms),
+    );
+  }
+
+  function toast(text: string, ms = 3600) {
+    const t = $<HTMLElement>("[data-heritage-toast]");
+    if (!t) return;
+    t.textContent = text;
+    show(t, ms);
+  }
+
+  function flag(name: keyof typeof FLAGS) {
+    const veil = $<HTMLElement>("[data-flag]");
+    if (!veil) return;
+    veil.innerHTML = FLAGS[name].svg;
+    show(veil, 3400);
+    toast(FLAGS[name].label, 3400);
+  }
+
+  const effects: Record<string, () => void> = {
+    saltire: () => flag("saltire"),
+    george: () => flag("george"),
+    union: () => flag("union"),
+    tartan: () => {
+      document.body.classList.add("tartan-on");
+      toast("TARTAN", 4600);
+      setTimeout(() => document.body.classList.remove("tartan-on"), 4600);
+    },
+    howl: () => {
+      show($("[data-moonrise]"), 4600);
+      toast("AWOOOOO", 3200);
+    },
+    werewolf: () => {
+      document.body.classList.add("turning");
+      show($("[data-claws]"), 2600);
+      toast("THE MOON IS UP.", 2800);
+      setTimeout(() => document.body.classList.remove("turning"), 2600);
+    },
+  };
+
+  let buffer = "";
+  document.addEventListener("keydown", (e) => {
+    const t = e.target;
+    if (e.metaKey || e.ctrlKey || e.altKey || e.key.length !== 1) return;
+    if (t instanceof HTMLElement && (t.isContentEditable || t.matches("input, textarea, select"))) return;
+    buffer = `${buffer}${e.key.toLowerCase()}`.slice(-12);
+    for (const word of Object.keys(effects)) {
+      if (buffer.endsWith(word)) {
+        buffer = "";
+        effects[word]();
+        return;
+      }
+    }
+  });
+
+  document.addEventListener("astro:page-load", () => {
+    try {
+      const p = getMoonPhase(new Date()).phase;
+      document.body.classList.toggle("is-full-moon", Math.abs(p - 0.5) < 0.03);
+    } catch {
+      /* moon is decoration */
+    }
+
+    const d = new Date();
+    const day = `${d.getMonth() + 1}-${d.getDate()}`;
+    const key = day === "11-30" ? "saltire" : day === "4-23" ? "george" : null;
+    if (!key) return;
+    try {
+      if (sessionStorage.getItem("flag-day")) return;
+      sessionStorage.setItem("flag-day", "1");
+    } catch {
+      return;
+    }
+    setTimeout(() => flag(key as keyof typeof FLAGS), 900);
+  });
+</script>
+
+<style>
+  [hidden] {
+    display: none !important;
+  }
+
+  .flag-veil {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0;
+    animation: veil 3.4s ease-in-out both;
+  }
+  .flag-veil :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  @keyframes veil {
+    0% { opacity: 0; clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+    18% { opacity: 0.92; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+    72% { opacity: 0.92; }
+    100% { opacity: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  }
+
+  .vignette,
+  .plaid {
+    display: none;
+  }
+
+  .heritage-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 5.5rem;
+    z-index: 9999;
+    translate: -50% 0;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    pointer-events: none;
+    animation: toast-in 300ms ease-out both;
+  }
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(0.6rem); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .moonrise {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    z-index: 9997;
+    width: min(46vw, 26rem);
+    aspect-ratio: 1;
+    translate: -50% 0;
+    border-radius: 50%;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 38% 36%, oklch(97% 0.02 95), oklch(86% 0.03 90) 60%, oklch(74% 0.03 85));
+    box-shadow: 0 0 6rem 2rem oklch(90% 0.05 95 / 0.55);
+    animation: rise 4.6s ease-in-out both;
+  }
+  @keyframes rise {
+    0% { transform: translateY(100%); opacity: 0; }
+    30%, 75% { transform: translateY(20%); opacity: 1; }
+    100% { transform: translateY(-40%); opacity: 0; }
+  }
+
+  .claws {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+  }
+  .claws svg {
+    width: 100%;
+    height: 100%;
+  }
+  .claws :global(path) {
+    fill: none;
+    stroke: oklch(48% 0.2 27);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: slash 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, fade 0.8s ease-in 1.8s forwards;
+  }
+  .claws :global(path:nth-child(2)) { animation-delay: 0.08s, 1.8s; }
+  .claws :global(path:nth-child(3)) { animation-delay: 0.16s, 1.8s; }
+  @keyframes slash { to { stroke-dashoffset: 0; } }
+  @keyframes fade { to { opacity: 0; } }
+
+  :global(body.turning) .vignette {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 9996;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 40%, oklch(30% 0.16 27 / 0.75));
+    animation: vignette 2.6s ease-in-out both;
+  }
+  :global(body.turning .shell-main) {
+    animation: change 2.6s steps(1, end) both;
+  }
+  @keyframes vignette {
+    0%, 100% { opacity: 0; }
+    20%, 70% { opacity: 1; }
+  }
+  @keyframes change {
+    0%, 100% { transform: none; filter: none; }
+    15% { transform: translate(2px, -1px) skewX(-0.4deg); filter: saturate(1.6) contrast(1.1); }
+    30% { transform: translate(-2px, 1px) skewX(0.4deg); }
+    45% { transform: translate(1px, 2px); filter: saturate(0.4) contrast(1.3); }
+    60% { transform: translate(-1px, -1px) skewX(-0.2deg); }
+    75% { transform: none; filter: saturate(1.3); }
+  }
+
+  :global(body.tartan-on) .plaid {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 9996;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    background:
+      repeating-linear-gradient(90deg, oklch(40% 0.14 145 / 0.55) 0 28px, transparent 28px 44px, oklch(35% 0.12 260 / 0.55) 44px 52px, transparent 52px 96px),
+      repeating-linear-gradient(0deg, oklch(45% 0.2 27 / 0.55) 0 28px, transparent 28px 44px, oklch(35% 0.12 260 / 0.55) 44px 52px, transparent 52px 96px);
+    animation: tartan 4.6s ease-in-out both;
+  }
+  @keyframes tartan {
+    0%, 100% { opacity: 0; }
+    15%, 80% { opacity: 1; }
+  }
+
+  :global(body.is-full-moon .nav-brand) {
+    color: oklch(88% 0.06 90);
+    filter: drop-shadow(0 0 6px oklch(90% 0.08 90 / 0.6));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flag-veil,
+    .moonrise,
+    .heritage-toast,
+    .claws :global(path),
+    :global(body.turning .shell-main),
+    :global(body.turning) .vignette,
+    :global(body.tartan-on) .plaid {
+      animation: none;
+    }
+    .flag-veil { opacity: 0.85; }
+    .moonrise { opacity: 1; transform: translateY(20%); }
+    .claws :global(path) { stroke-dashoffset: 0; }
+    :global(body.turning) .vignette,
+    :global(body.tartan-on) .plaid { opacity: 1; }
+  }
+</style>
