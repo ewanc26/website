@@ -22,10 +22,14 @@ interface MarkSet {
   strike: boolean;
   underline: boolean;
   highlight: boolean;
+  /** CSS colour for a highlight that carries one; undefined uses the default mark. */
+  highlightColor?: string;
   link?: string;
   id?: string;
   didMention?: string;
   atMention?: string;
+  /** Web URL Leaflet resolved for an atMention, when it stored one. */
+  atMentionHref?: string;
   footnoteId?: string;
 }
 
@@ -48,10 +52,12 @@ function sameMarks(a: MarkSet, b: MarkSet): boolean {
     a.strike === b.strike &&
     a.underline === b.underline &&
     a.highlight === b.highlight &&
+    a.highlightColor === b.highlightColor &&
     a.link === b.link &&
     a.id === b.id &&
     a.didMention === b.didMention &&
     a.atMention === b.atMention &&
+    a.atMentionHref === b.atMentionHref &&
     a.footnoteId === b.footnoteId
   );
 }
@@ -96,6 +102,10 @@ function computeSegments(
           break;
         case `${NS}#highlight`:
           marks.highlight = true;
+          {
+            const colour = themeColor(feature.color);
+            if (colour) marks.highlightColor = colour;
+          }
           break;
         case `${NS}#id`:
           if (typeof feature.id === "string") marks.id = feature.id;
@@ -106,6 +116,8 @@ function computeSegments(
         case `${NS}#atMention`:
           if (typeof feature.atURI === "string")
             marks.atMention = feature.atURI;
+          if (typeof feature.href === "string")
+            marks.atMentionHref = feature.href;
           break;
         case `${NS}#footnote`:
           if (typeof feature.footnoteId === "string") {
@@ -146,10 +158,14 @@ function computeSegments(
         if (range.marks.strike) marks.strike = true;
         if (range.marks.underline) marks.underline = true;
         if (range.marks.highlight) marks.highlight = true;
+        if (range.marks.highlightColor)
+          marks.highlightColor = range.marks.highlightColor;
         if (range.marks.link) marks.link = range.marks.link;
         if (range.marks.id) marks.id = range.marks.id;
         if (range.marks.didMention) marks.didMention = range.marks.didMention;
         if (range.marks.atMention) marks.atMention = range.marks.atMention;
+        if (range.marks.atMentionHref)
+          marks.atMentionHref = range.marks.atMentionHref;
         if (range.marks.footnoteId) marks.footnoteId = range.marks.footnoteId;
       }
     }
@@ -196,6 +212,23 @@ function safeId(value: string | undefined): string | undefined {
   return id || undefined;
 }
 
+/**
+ * A `pub.leaflet.theme.color#rgb` / `#rgba` value as a CSS colour. Channels are
+ * 0–255 and alpha is a 0–100 percentage.
+ */
+function themeColor(value: unknown): string | undefined {
+  if (!value || typeof value !== "object") return undefined;
+  const { r, g, b, a } = value as Record<string, unknown>;
+  const channel = (v: unknown) =>
+    typeof v === "number" && Number.isInteger(v) && v >= 0 && v <= 255;
+  if (!channel(r) || !channel(g) || !channel(b)) return undefined;
+  if (typeof a === "number" && Number.isFinite(a)) {
+    const alpha = Math.min(Math.max(a, 0), 100) / 100;
+    return `rgb(${r} ${g} ${b} / ${alpha})`;
+  }
+  return `rgb(${r} ${g} ${b})`;
+}
+
 function mentionHref(marks: MarkSet): string | undefined {
   if (
     marks.didMention &&
@@ -203,6 +236,10 @@ function mentionHref(marks: MarkSet): string | undefined {
   ) {
     return `https://bsky.app/profile/${marks.didMention}`;
   }
+
+  // Leaflet may store the resolved web URL alongside the AT-URI; prefer it.
+  const stored = safeLinkUrl(marks.atMentionHref);
+  if (marks.atMention && stored) return stored;
 
   if (marks.atMention?.startsWith("at://")) {
     const parts = marks.atMention.slice(5).split("/");
@@ -236,7 +273,12 @@ function renderSeg(
   } else {
     if (segment.marks.strike) inner = `<del>${inner}</del>`;
     if (segment.marks.underline) inner = `<u>${inner}</u>`;
-    if (segment.marks.highlight) inner = `<mark>${inner}</mark>`;
+    if (segment.marks.highlight) {
+      // themeColor only ever emits rgb(<ints> / <number>), so it is safe inline.
+      inner = segment.marks.highlightColor
+        ? `<mark style="background-color:${segment.marks.highlightColor}">${inner}</mark>`
+        : `<mark>${inner}</mark>`;
+    }
     if (segment.marks.italic) inner = `<em>${inner}</em>`;
     if (segment.marks.bold) inner = `<strong>${inner}</strong>`;
   }
