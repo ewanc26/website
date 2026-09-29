@@ -481,7 +481,7 @@
     display: grid;
     align-content: end;
     min-height: min(84vh, 58rem);
-    padding-block: var(--space-2xl) var(--space-lg);
+    padding-block: max(var(--space-2xl), 9rem) var(--space-lg);
   }
   .poster-moon {
     position: absolute;
@@ -496,26 +496,27 @@
   .poster-sigils {
     position: absolute;
     z-index: 0;
-    left: 0;
-    top: var(--space-lg);
-    display: flex;
-    align-items: center;
-    gap: var(--space-lg);
+    inset: var(--space-md) 0 auto 0;
+    height: 7rem;
     pointer-events: none;
   }
   .poster-sigils :is(.ps-a, .ps-b) {
-    flex: none;
+    position: absolute;
+    left: var(--x, 0%);
+    top: var(--y, 10%);
     width: clamp(3rem, 9vw, 6.5rem);
     height: clamp(3rem, 9vw, 6.5rem);
+    animation: sigil-spin 1400ms var(--ease-out-expo) var(--d, 0ms) both;
+  }
+  .poster-sigils:not([data-placed]) > * {
+    animation: none;
+    opacity: 0;
   }
   .poster-sigils .ps-a {
     color: var(--riso-a);
-    animation: sigil-spin 1400ms var(--ease-out-expo) both;
   }
   .poster-sigils .ps-b {
     color: var(--riso-b);
-    animation: sigil-spin 1400ms var(--ease-out-expo) 120ms both;
-    --spin: -360deg;
   }
   @keyframes sigil-spin {
     from {
