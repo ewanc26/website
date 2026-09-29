@@ -84,9 +84,11 @@
     text-decoration-color: transparent;
   }
 
+  /* Ink ring over a paper halo: visible on paper, on either ink, and on the spine. */
   :focus-visible {
     outline: 3px solid var(--ink);
     outline-offset: 3px;
+    box-shadow: 0 0 0 3px var(--paper);
   }
 
   img,
@@ -174,6 +176,7 @@
   }
   .spine :focus-visible {
     outline-color: var(--on-ink);
+    box-shadow: none;
   }
   .spine-logo {
     display: none;
@@ -1396,14 +1399,56 @@
 @media print {
   .spine,
   .press,
-  body::after {
-    display: none;
+  .rail,
+  .post-byline,
+  .post-after,
+  .post-end,
+  .skip-to-content,
+  body::after,
+  [data-modal-open],
+  dialog {
+    display: none !important;
+  }
+  * {
+    animation: none !important;
+    transition: none !important;
+    mix-blend-mode: normal !important;
+    box-shadow: none !important;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
   }
   body {
     padding: 0;
   }
-  html {
-    background: #fff;
+  .article {
+    display: block;
+  }
+  .prose {
+    max-width: none;
+    font-size: 11.5pt;
+    line-height: 1.5;
+  }
+  .prose a {
     color: #000;
+    text-decoration: underline;
+  }
+  .prose a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    word-break: break-all;
+  }
+  .prose img,
+  .prose figure,
+  .prose blockquote,
+  .prose pre {
+    break-inside: avoid;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
   }
 }
