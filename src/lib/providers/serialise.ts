@@ -1,10 +1,10 @@
 import { buildPdsBlobUrl, resolveIdentity } from "@ewanc26/atproto";
 
 /**
- * Serialise Leaflet content for SvelteKit server→client transfer.
+ * Serialise Leaflet content for server→client transfer (moved to Astro from SvelteKit).
  *
  * The raw AT Protocol record contains BlobRef objects with CID class instances
- * that SvelteKit cannot dehydrate. This module does a JSON round-trip to
+ * that cannot be serialised directly. This module does a JSON round-trip to
  * convert class instances to plain POJOs, then walks the result replacing
  * every image/previewImage BlobRef with a public blob URL stored as
  * `_imageSrc` / `_previewImageSrc`. The original blob fields are removed.
