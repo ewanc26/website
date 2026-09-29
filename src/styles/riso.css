@@ -173,9 +173,6 @@
     color: var(--on-ink);
     border-top: var(--edge) solid var(--ink);
   }
-  .spine {
-    view-transition-name: spine;
-  }
   .spine :focus-visible {
     outline-color: var(--on-ink);
     box-shadow: none;
@@ -1473,22 +1470,13 @@
   }
 }
 
-/* Page turns: a short, smooth crossfade. Stepped timing here read as
-   stutter, since the new page's sections also step in on arrival. */
+/* Page turns swap instantly: the root cross-fade snapshots the whole page
+   (blend-mode layers included), which stutters in Safari. Sections animate
+   in on arrival instead. */
+::view-transition-group(root),
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 160ms;
-  animation-timing-function: ease-out;
-}
-
-/* The spine sits outside the page crossfade so it never blinks on navigation. */
-::view-transition-group(spine),
-::view-transition-old(spine),
-::view-transition-new(spine) {
   animation: none;
-}
-::view-transition-old(spine) {
-  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
