@@ -1,4 +1,5 @@
 ---
+import ArrowUpRight from "../../lib/components/icons/ArrowUpRight.astro";
 import Base from "../../layouts/Base.astro";
 import Slab from "../../components/Slab.astro";
 import SigilBand from "../../components/SigilBand.astro";
@@ -101,7 +102,7 @@ const PGP = "C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D";
       {projects.length === 0 ? <p class="empty">Projects could not be loaded just now.</p> : (
         <ul class="shelf">
           {(projects as any[]).map((p) => (
-            <li><a href={p.url} rel="noopener"><span class="shelf-name">{p.name}</span><span class="shelf-meta">{p.language ?? ""} ↗︎</span>{p.description && <p class="shelf-note">{p.description}</p>}</a></li>
+            <li><a href={p.url} rel="noopener"><span class="shelf-name">{p.name}</span><span class="shelf-meta">{p.language ?? ""}<ArrowUpRight /></span>{p.description && <p class="shelf-note">{p.description}</p>}</a></li>
           ))}
         </ul>
       )}
@@ -121,8 +122,8 @@ const PGP = "C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D";
     <div class="cols thunk" style="--i:5">
       <h2>Links</h2>
       <ul class="shelf">
-        {(accounts as any[]).map((a) => (<li><a href={a.url} rel="noopener"><span class="shelf-name">{a.label || a.url.replace("https://", "")}</span><span class="shelf-meta">↗︎</span></a></li>))}
-        {(links?.cards ?? []).map((c: any) => (<li><a href={c.url} rel="noopener"><span class="shelf-name">{c.emoji} {c.text}</span><span class="shelf-meta">↗︎</span></a></li>))}
+        {(accounts as any[]).map((a) => (<li><a href={a.url} rel="noopener"><span class="shelf-name">{a.label || a.url.replace("https://", "")}</span><span class="shelf-meta"><ArrowUpRight /></span></a></li>))}
+        {(links?.cards ?? []).map((c: any) => (<li><a href={c.url} rel="noopener"><span class="shelf-name">{c.emoji} {c.text}</span><span class="shelf-meta"><ArrowUpRight /></span></a></li>))}
       </ul>
     </div>
 

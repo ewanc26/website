@@ -1,4 +1,5 @@
 ---
+import ArrowUpRight from "../lib/components/icons/ArrowUpRight.astro";
 import Base from "../layouts/Base.astro";
 import Slab from "../components/Slab.astro";
 
@@ -16,8 +17,8 @@ if (platform && PLATFORM_URLS[platform]) return Astro.redirect(PLATFORM_URLS[pla
       <h2>Directly</h2>
       <div>
         <ul class="shelf">
-          <li><a href="https://ko-fi.com/ewancroft" rel="noopener noreferrer" aria-label="Support with a one-time or monthly payment on Ko-fi"><span class="shelf-name">Ko-fi</span><span class="shelf-meta">one-time or monthly ↗︎</span></a></li>
-          <li><a href="https://github.com/sponsors/ewanc26" rel="noopener noreferrer" aria-label="Sponsor with a one-time or monthly payment on GitHub"><span class="shelf-name">GitHub Sponsors</span><span class="shelf-meta">one-time or monthly ↗︎</span></a></li>
+          <li><a href="https://ko-fi.com/ewancroft" rel="noopener noreferrer" aria-label="Support with a one-time or monthly payment on Ko-fi"><span class="shelf-name">Ko-fi</span><span class="shelf-meta">one-time or monthly<ArrowUpRight /></span></a></li>
+          <li><a href="https://github.com/sponsors/ewanc26" rel="noopener noreferrer" aria-label="Sponsor with a one-time or monthly payment on GitHub"><span class="shelf-name">GitHub Sponsors</span><span class="shelf-meta">one-time or monthly<ArrowUpRight /></span></a></li>
         </ul>
         <iframe class="kofi-frame" src="https://ko-fi.com/ewancroft/?hidefeed=true&widget=true&embed=true&preview=true" title="Support Ewan through Ko-fi" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
         <p class="note">Payments are handled securely by Ko-fi or GitHub. This site never receives your payment details.</p>
@@ -28,7 +29,7 @@ if (platform && PLATFORM_URLS[platform]) return Astro.redirect(PLATFORM_URLS[pla
       <h2>Otherwise</h2>
       <ul class="shelf">
         <li class="shelf-item"><span class="shelf-name">Share</span><span class="shelf-meta">word of mouth</span></li>
-        <li><a href="https://github.com/ewanc26" rel="noopener noreferrer" aria-label="Explore ways to contribute on Ewan's GitHub profile"><span class="shelf-name">Contribute</span><span class="shelf-meta">bugs, features, PRs ↗︎</span></a></li>
+        <li><a href="https://github.com/ewanc26" rel="noopener noreferrer" aria-label="Explore ways to contribute on Ewan's GitHub profile"><span class="shelf-name">Contribute</span><span class="shelf-meta">bugs, features, PRs<ArrowUpRight /></span></a></li>
       </ul>
     </div>
   </main>
