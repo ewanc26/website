@@ -1509,3 +1509,13 @@
     break-after: avoid;
   }
 }
+
+/* Smooth the edges of tilted blocks (avoids jagged rotated borders). */
+.tape,
+.nametag,
+.now--track,
+.cart,
+.idcard {
+  backface-visibility: hidden;
+  outline: 1px solid transparent;
+}
