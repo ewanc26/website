@@ -763,16 +763,17 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background: var(--paper);
-    border: var(--edge) solid var(--ink);
+    padding: var(--edge);
+    background: var(--ink);
     color: var(--ink);
     text-decoration: none;
     rotate: var(--tilt, 0deg);
   }
-  /* Punched corner: clip the whole card (border included) with a polygon so
-     the corner is genuinely gone, then redraw the border along the new
-     diagonal with a thin ink strip. Painting a paper-coloured triangle over
-     the corner instead leaves the frame visible around it. */
+  /* Punched corner. The frame is the card's own ink background with the
+     band and body inset inside it, and the corner is cut with one
+     clip-path. The ink strip redrawing the diagonal border reaches past
+     the cut, so the cut edge is a single anti-aliased edge and nothing
+     underneath can fringe through it. */
   .cart {
     --notch: 26px;
     clip-path: polygon(
@@ -786,31 +787,33 @@
   .cart:focus-visible {
     clip-path: none;
   }
+  .cart:focus-visible::after {
+    display: none;
+  }
   .cart::after {
-    --pad: calc(var(--edge) * 3);
+    --c: calc(var(--edge) * 4);
     --t: calc(var(--edge) * 1.4142);
     content: "";
     position: absolute;
-    top: calc(-1 * var(--edge));
-    right: calc(-1 * var(--edge));
-    width: calc(var(--notch) + var(--pad));
-    height: calc(var(--notch) + var(--pad));
+    top: 0;
+    right: 0;
+    width: calc(var(--notch) + var(--c));
+    height: calc(var(--notch) + var(--c));
     background: var(--ink);
-    /* Outer edge is the cut; inner edge is offset by one border width and
-       mitred where it meets the top and right borders, so the join is flush. */
     clip-path: polygon(
-      0 0,
-      var(--pad) 0,
-      100% var(--notch),
-      calc(100% - var(--edge)) calc(var(--notch) - var(--edge) + var(--t)),
-      calc(var(--pad) + var(--edge) - var(--t)) var(--edge),
-      0 var(--edge)
+      calc(var(--c) - var(--t)) 0,
+      calc(var(--c) + var(--t)) 0,
+      100% calc(var(--notch) - var(--t)),
+      100% calc(var(--notch) + var(--t))
     );
     z-index: 2;
   }
   .cart:hover {
     background: var(--ink);
     color: var(--paper);
+  }
+  .cart:hover .cart-body {
+    background: var(--ink);
   }
   .cart-band {
     height: 1.15rem;
@@ -820,6 +823,7 @@
   .cart-body {
     display: flex;
     flex: 1;
+    background: var(--paper);
     flex-direction: column;
     gap: var(--space-sm);
     padding: var(--space-md);
