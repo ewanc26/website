@@ -227,7 +227,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
             return (
               <li>
                 <Tag class="cart" href={href} target={href ? "_blank" : undefined} rel={href ? "noopener" : undefined} style={`--tilt:${tilts[i % tilts.length]}deg`}>
-                  <span class="duotone duotone--poster">
+                  <span class="photo photo--poster">
                     {w.posterUrl && <img src={w.posterUrl} alt={`Poster for ${w.title}`} loading="lazy" decoding="async" />}
                     {w.rating != null && <span class="cart-rating">{pad(w.rating)}/10</span>}
                   </span>
