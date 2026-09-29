@@ -85,16 +85,16 @@ const unique = [...new Set(targets.filter(Boolean))];
           wrap.append(avatar(p.avatarUrl, p.did, 34));
           avatars.append(wrap);
         });
-        if (people.length > limit) avatars.append(el("span", "backlink-overflow", `+${String(people.length - limit).padStart(2, "0")}`));
+        if (people.length > limit) avatars.append(el("span", "backlink-overflow", `+${people.length - limit}`));
         btn.append(
           label,
           avatars,
-          el("span", "backlink-copy", `${String(count).padStart(2, "0")} backlink${count === 1 ? "" : "s"} from ${String(people.length).padStart(2, "0")} ${people.length === 1 ? "person" : "people"}`),
+          el("span", "backlink-copy", `${count} backlink${count === 1 ? "" : "s"} from ${people.length} ${people.length === 1 ? "person" : "people"}`),
         );
         aside.append(btn);
         host.replaceChildren(aside);
 
-        dialog.querySelector("[data-modal-title]")!.textContent = `Backlinks (${String(count).padStart(2, "0")})`;
+        dialog.querySelector("[data-modal-title]")!.textContent = `Backlinks (${count})`;
         const body = dialog.querySelector("[data-backlinks-body]")!;
         const intro = el("p", "modal-intro", "Posts and articles on the AT Protocol network that link to this page.");
         const list = el("ul", "backlink-records");
