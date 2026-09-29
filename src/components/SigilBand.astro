@@ -4,8 +4,9 @@ import Triskele from "$lib/components/icons/Triskele.astro";
 
 interface Props {
   seed?: string;
+  side?: boolean;
 }
-const { seed = "" } = Astro.props;
+const { seed = "", side = false } = Astro.props;
 
 type Mark = [kind: "p" | "t", x: number, y: number, size: number, rot: number];
 const layouts: Mark[][] = [
@@ -14,15 +15,23 @@ const layouts: Mark[][] = [
   [["p", 1, 2, 1.8, 10], ["t", 27, 0.4, 2.6, -22], ["p", 52, 1.5, 3, -15], ["t", 79, 0.2, 2, 25]],
   [["t", 3, 0.5, 2.8, -8], ["p", 29, 2.1, 2, 16], ["t", 54, 0.4, 2, 34], ["p", 78, 1.3, 2.8, -20]],
 ];
+const sideMarks: Mark[] = [
+  ["p", 8, 4, 3.4, -10],
+  ["t", 56, 14, 2.2, 22],
+  ["t", 14, 34, 2.6, 30],
+  ["p", 60, 46, 1.8, 12],
+  ["p", 22, 62, 2.2, -25],
+  ["t", 58, 72, 3, -14],
+];
 let hash = 0;
 for (const ch of seed) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
-const marks = layouts[hash % layouts.length];
+const marks = side ? sideMarks : layouts[hash % layouts.length];
 ---
 
-<div class="sigil-band" aria-hidden="true">
+<div class:list={["sigil-band", { "sigil-band--side": side }]} aria-hidden="true">
   {
     marks.map(([kind, x, y, size, rot]) => {
-      const style = `--x:${x}%;--y:${y}rem;--s:${size}rem;--r:${rot}deg`;
+      const style = `--x:${x}%;--y:${y}${side ? "%" : "rem"};--s:${size}rem;--r:${rot}deg`;
       return kind === "p" ? (
         <Pentacle size={48} class="sb-a" style={style} />
       ) : (
@@ -38,6 +47,19 @@ const marks = layouts[hash % layouts.length];
     height: 4.5rem;
     margin-top: var(--space-lg);
     pointer-events: none;
+  }
+  .sigil-band--side {
+    display: none;
+    height: auto;
+    margin: 0;
+    align-self: stretch;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  @media (min-width: 64rem) {
+    .sigil-band--side {
+      display: block;
+    }
   }
   .sigil-band :global(svg) {
     position: absolute;
