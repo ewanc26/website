@@ -22,6 +22,7 @@ import {
 } from "@ewanc26/atproto";
 import { resolveDid } from "./did";
 import { getPDSAgent } from "./agents";
+import { fetchAtRecords, type AtRecord } from "./records";
 import { getCache, setCache } from "$lib/utils/cache";
 
 // ── Simple wrappers (delegate to @ewanc26/atproto) ──────
@@ -229,6 +230,50 @@ export async function fetchRecommendations(
     )
     .map((r) => r.value);
 
+  setCache(cacheKey, data, CACHE_TTL_MS);
+  return data;
+}
+
+/**
+ * Publications a Leaflet publication recommends, for the `recommendedPubs`
+ * block. Reads `pub.leaflet.graph.recommendations` from the owner's repo (the
+ * lexicon requires the record to live beside the publication), then hydrates
+ * each recommended publication record through Slingshot.
+ */
+export async function fetchPublicationRecommendations(
+  publicationUri: string,
+  fetchFn: typeof fetch = fetch,
+): Promise<AtRecord[]> {
+  const cacheKey = `publication-recommendations:${publicationUri}`;
+  const cached = getCache<AtRecord[]>(cacheKey);
+  if (cached) return cached;
+
+  const agent = await getPDSAgent(PUBLIC_ATPROTO_DID, fetchFn);
+  const uris: string[] = [];
+  let cursor: string | undefined;
+  do {
+    const resp = await agent.com.atproto.repo.listRecords({
+      repo: PUBLIC_ATPROTO_DID,
+      collection: "pub.leaflet.graph.recommendations",
+      limit: 100,
+      cursor,
+    });
+    for (const record of resp.data.records) {
+      const value = record.value as {
+        publication?: unknown;
+        recommendations?: unknown;
+      };
+      if (value.publication !== publicationUri) continue;
+      if (!Array.isArray(value.recommendations)) continue;
+      for (const uri of value.recommendations) {
+        if (typeof uri === "string" && !uris.includes(uri)) uris.push(uri);
+      }
+    }
+    cursor = resp.data.cursor;
+  } while (cursor);
+
+  const found = await fetchAtRecords(uris, fetchFn);
+  const data = uris.flatMap((uri) => (found[uri] ? [found[uri]] : []));
   setCache(cacheKey, data, CACHE_TTL_MS);
   return data;
 }
