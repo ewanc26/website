@@ -1,7 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
 import HalftoneMoon from "../components/HalftoneMoon.astro";
-import VerificationBadge from "$lib/components/VerificationBadge.astro";
 import { getAlmanac } from "$lib/utils/almanac";
 import { normalizeSlug } from "$lib/utils/slugify";
 import { blogDateParts } from "$lib/utils/date";
@@ -14,7 +13,7 @@ import { PUBLIC_LEAFLET_BLOG_PUBLICATION, PUBLIC_ATPROTO_DID } from "$env/static
 Astro.response.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
 
 const almanac = getAlmanac();
-const [{ profile, verifications, kibunStatus, musicStatus, posts, githubProjects, githubUsername, publications, links }, apps, watching, feed] =
+const [{ profile, kibunStatus, musicStatus, posts, githubProjects, githubUsername, publications, links }, apps, watching, feed] =
   await Promise.all([
     getHomeData(),
     fetchShippedApps(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
@@ -70,7 +69,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
     <section class="poster">
       <div class="poster-moon"><HalftoneMoon phase={almanac.moon.phase} id="pm" /></div>
       <h1 class="poster-name" data-t={name} style={`--n:${Math.max(3, name.length)}`}>
-        {name}<span class="poster-badge"><VerificationBadge verified={true} verifiers={verifications} /></span>
+        {name}
       </h1>
 
       <div class="poster-row">
