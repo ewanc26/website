@@ -51,6 +51,8 @@ const dateLong = new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "lon
               blocks={post.blocks} pages={post.pages} pageType={post.primaryPageType}
               sourceUrl={post.url ?? blog?.url} posts={data.readerPosts} publication={blog}
               references={data.readerReferences}
+              recommendedPublications={data.recommendedPublications}
+              header={{ title: post.title, description: post.description ?? undefined, publishedAt: post.createdAt, tags: post.tags ?? undefined }}
             />
           ) : (
             <Fragment set:html={post.renderedContent} />

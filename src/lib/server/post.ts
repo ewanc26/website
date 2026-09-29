@@ -1,5 +1,9 @@
 import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
-import { fetchBlob, fetchComments } from "$lib/services/atproto";
+import {
+  fetchBlob,
+  fetchComments,
+  fetchPublicationRecommendations,
+} from "$lib/services/atproto";
 import { fetchAtRecords, type AtRecord } from "$lib/services/atproto/records";
 import {
   PUBLIC_ATPROTO_DID,
@@ -68,6 +72,17 @@ function collectReaderReferences(pages: SerialisedPage[]): Set<string> {
   return refs;
 }
 
+/** Whether any page uses a block type, so optional hydration can be skipped. */
+function usesBlock(pages: SerialisedPage[], type: string): boolean {
+  const walk = (value: unknown): boolean => {
+    if (Array.isArray(value)) return value.some(walk);
+    if (!value || typeof value !== "object") return false;
+    const obj = value as Obj;
+    return obj.$type === type || Object.values(obj).some(walk);
+  };
+  return walk(pages);
+}
+
 export async function loadPost(params: {
   year: string;
   month: string;
@@ -120,6 +135,7 @@ export async function loadPost(params: {
   let primaryPageType: string | undefined;
   let primaryPageId: string | undefined;
   let readerReferences: Record<string, AtRecord> = {};
+  let recommendedPublications: AtRecord[] = [];
   let renderedContent = "";
 
   if (
@@ -143,6 +159,15 @@ export async function loadPost(params: {
       collectReaderReferences(pages),
       fetch,
     );
+
+    // recommendedPubs carries no data of its own: Leaflet resolves it from
+    // the publication's recommendations record at render time.
+    if (blogPublication?.uri && usesBlock(pages, B("recommendedPubs"))) {
+      recommendedPublications = await fetchPublicationRecommendations(
+        blogPublication.uri,
+        fetch,
+      ).catch(() => []);
+    }
 
     // Keep the existing Markdown fallback for old/non-JS clients and records
     // that predate native block rendering. Lossy conversion is deliberately
@@ -191,6 +216,7 @@ export async function loadPost(params: {
     },
     readerPosts,
     readerReferences,
+    recommendedPublications,
     blog: blogPublication
       ? {
           uri: blogPublication.uri,
