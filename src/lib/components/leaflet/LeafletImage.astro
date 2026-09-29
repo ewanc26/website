@@ -1,14 +1,20 @@
 ---
 import { safeResourceUrl } from "$lib/utils/url";
-const { src, alt, width, height, fullBleed } = Astro.props as {
+const { src, alt, width, height, fullBleed, displayWidth } = Astro.props as {
   src: string; alt?: string; width?: number; height?: number; fullBleed?: boolean;
+  /** Leaflet's display width in px, capped at the page width. Ignored when full-bleed. */
+  displayWidth?: number;
 };
 const aspectRatio = width && height && width > 0 && height > 0 ? `${width} / ${height}` : undefined;
+const sized = !fullBleed && typeof displayWidth === "number" && Number.isFinite(displayWidth) && displayWidth > 0
+  ? `width:${Math.round(displayWidth)}px;max-width:100%;height:auto`
+  : undefined;
+const imgStyle = [aspectRatio && `aspect-ratio: ${aspectRatio}`, sized].filter(Boolean).join(";") || undefined;
 const imageSrc = safeResourceUrl(src);
 ---
 {imageSrc && (
   <figure class:list={["leaflet-image", { "full-bleed": fullBleed, "leaflet-image--unsized": !aspectRatio }]}>
-    <img src={imageSrc} alt={alt ?? ""} width={width} height={height} style={aspectRatio ? `aspect-ratio: ${aspectRatio}` : undefined} loading="lazy" decoding="async" />
+    <img src={imageSrc} alt={alt ?? ""} width={width} height={height} style={imgStyle} loading="lazy" decoding="async" />
     {alt && <figcaption class="leaflet-image-alt">{alt}</figcaption>}
   </figure>
 )}

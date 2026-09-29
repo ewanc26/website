@@ -50,6 +50,13 @@ const LOSS_LABELS: Record<string, string> = {
   [B("button")]: "buttons",
   [B("postsList")]: "post lists",
   [B("signup")]: "signup forms",
+  [B("html")]: "HTML embeds",
+  [B("imageGallery")]: "image galleries",
+  [B("standardSitePublication")]: "linked publications",
+  [B("embeddedCanvas")]: "embedded canvases",
+  [B("drawing")]: "drawings",
+  [B("recommendedPubs")]: "recommended publications",
+  [B("membersOnlyDelimiter")]: "members-only sections",
 };
 
 type Obj = Record<string, unknown>;
@@ -110,6 +117,9 @@ function blockToMdast(
           ]
         : [];
     }
+    case B("postHeader"):
+      // Renders the document's own metadata; nothing of its own to lose.
+      return [];
     case B("unorderedList"):
       return [listToMdast(inner, false, lost)];
     case B("orderedList"):

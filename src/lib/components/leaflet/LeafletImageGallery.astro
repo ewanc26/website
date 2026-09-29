@@ -2,8 +2,16 @@
 import { safeResourceUrl } from "$lib/utils/url";
 
 type Obj = Record<string, unknown>;
-interface Props { images: Obj[]; format?: string }
-const { images, format = "grid" } = Astro.props as Props;
+interface Props { images: Obj[]; format?: string; gap?: number; maxWidth?: number }
+const { images, format = "grid", gap, maxWidth } = Astro.props as Props;
+const px = (v: unknown) => (typeof v === "number" && Number.isFinite(v) && v >= 0 ? Math.round(v) : undefined);
+const gapPx = px(gap);
+const maxWidthPx = px(maxWidth);
+// Leaflet's per-image max width drives how many grid columns fit.
+const style = [
+  gapPx !== undefined && `--leaflet-gallery-gap:${gapPx}px`,
+  maxWidthPx && `--leaflet-gallery-col:${maxWidthPx}px`,
+].filter(Boolean).join(";") || undefined;
 
 const aspectRatio = (image: Obj): string | undefined => {
   const ratio = image.aspectRatio;
@@ -14,7 +22,7 @@ const aspectRatio = (image: Obj): string | undefined => {
 const mode = format === "carousel" || format === "strip" ? format : "grid";
 ---
 
-<div class:list={["leaflet-gallery", `leaflet-gallery--${mode}`]} aria-label="Image gallery">
+<div class:list={["leaflet-gallery", `leaflet-gallery--${mode}`]} style={style} aria-label="Image gallery">
   {images.map((image) => {
     const src = safeResourceUrl(image._imageSrc);
     const ratio = aspectRatio(image);
@@ -34,14 +42,14 @@ const mode = format === "carousel" || format === "strip" ? format : "grid";
 
   .leaflet-gallery--grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
-    gap: var(--space-xs);
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--leaflet-gallery-col, 12rem), 100%), 1fr));
+    gap: var(--leaflet-gallery-gap, var(--space-xs));
   }
 
   .leaflet-gallery--strip,
   .leaflet-gallery--carousel {
     display: flex;
-    gap: var(--space-xs);
+    gap: var(--leaflet-gallery-gap, var(--space-xs));
     overflow-x: auto;
     overscroll-behavior-inline: contain;
     scrollbar-width: thin;

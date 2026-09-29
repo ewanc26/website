@@ -31,6 +31,51 @@ function estimatedHeight(block: SerialisedBlock): number {
   return Math.max(160, Math.min(480, width * 0.6));
 }
 
+/**
+ * Fixed bounds for an embedded canvas page. Leaflet positions its blocks from
+ * the page origin and clips them to width × height, so the reader does too.
+ */
+export function fixedMetrics(width: unknown, height: unknown): Metrics | undefined {
+  const w = finiteNumber(width);
+  const h = finiteNumber(height);
+  return w && h && w > 0 && h > 0 ? { minX: 0, minY: 0, width: w, height: h } : undefined;
+}
+
+/** Reading order Leaflet uses for canvas blocks: top to bottom, then left to right. */
+export function canvasBlockOrder(a: SerialisedBlock, b: SerialisedBlock): number {
+  const ay = finiteNumber(a.y) ?? 0;
+  const by = finiteNumber(b.y) ?? 0;
+  return ay === by ? (finiteNumber(a.x) ?? 0) - (finiteNumber(b.x) ?? 0) : ay - by;
+}
+
+/**
+ * Resolve Leaflet's fractional `stackOrder` strings to dense z-indexes, in the
+ * order `items` was given. Blocks without one predate layering and sit below
+ * everything that has one, in reading order (mirrors canvasStackingOrder).
+ */
+export function stackOrders(items: SerialisedBlock[]): number[] {
+  const order = (b: SerialisedBlock) =>
+    typeof b.stackOrder === "string" ? b.stackOrder : null;
+  const out = new Array<number>(items.length);
+  items
+    .map((_, i) => i)
+    .sort((ia, ib) => {
+      const a = items[ia];
+      const b = items[ib];
+      const ao = order(a);
+      const bo = order(b);
+      if (ao === null || bo === null) {
+        if (ao === bo) return canvasBlockOrder(a, b);
+        return ao === null ? -1 : 1;
+      }
+      return ao === bo ? canvasBlockOrder(a, b) : ao < bo ? -1 : 1;
+    })
+    .forEach((index, rank) => {
+      out[index] = rank + 1;
+    });
+  return out;
+}
+
 export function measure(items: SerialisedBlock[]): Metrics {
   const positioned = items.filter(isPositioned);
   if (!positioned.length) {
@@ -54,7 +99,11 @@ export function measure(items: SerialisedBlock[]): Metrics {
   };
 }
 
-export function styleFor(block: SerialisedBlock, metrics: Metrics): string {
+export function styleFor(
+  block: SerialisedBlock,
+  metrics: Metrics,
+  zIndex?: number,
+): string {
   const x = finiteNumber(block.x) ?? metrics.minX;
   const y = finiteNumber(block.y) ?? metrics.minY;
   const width = Math.max(1, finiteNumber(block.width) ?? metrics.width);
@@ -70,6 +119,7 @@ export function styleFor(block: SerialisedBlock, metrics: Metrics): string {
   if (height !== undefined && height > 0) {
     declarations.push(`min-height:${(height / metrics.height) * 100}%`);
   }
+  if (zIndex !== undefined) declarations.push(`z-index:${zIndex}`);
   if (rotation !== undefined) {
     declarations.push(`transform:rotate(${rotation}deg)`);
   }

@@ -3,6 +3,7 @@ import type { SerialisedFacet } from "$lib/utils/leafletFacets";
 
 export const NS = "pub.leaflet.richtext.facet";
 export const CANVAS = "pub.leaflet.pages.canvas";
+export const LINEAR = "pub.leaflet.pages.linearDocument";
 export const MAX_PAGE_DEPTH = 8;
 
 export const SCHEMA: FacetSchema = {
