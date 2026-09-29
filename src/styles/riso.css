@@ -1134,6 +1134,9 @@
       position: sticky;
       top: var(--space-lg);
       align-self: start;
+      /* Own layer so Safari doesn't re-composite the sticky rail each scroll tick. */
+      transform: translateZ(0);
+      backface-visibility: hidden;
     }
   }
   .post-end {
