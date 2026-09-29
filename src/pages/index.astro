@@ -52,7 +52,7 @@ const feedTitle = (post: (typeof feed)[number]) => {
     case "external": return post.linkTitle ? `Shared a link: ${post.linkTitle}` : "Shared a link";
     case "video": return "Shared a video";
     case "quote":
-    case "quote-media": return "Quoted a post";
+    case "quote-media": return post.quoted?.author ? `Quoted ${post.quoted.author}` : "Quoted a post";
     default: return "";
   }
 };
@@ -133,6 +133,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
                     <span class="track-when"><span class="track-day">{w.day}</span><span class="track-mon">{w.mon}</span></span>
                     <span class="track-title">{feedTitle(post)}</span>
                     {tag && <span class="track-meta">{tag}</span>}
+                    {post.quoted?.text && <span class="track-note">“{post.quoted.text.length > 140 ? post.quoted.text.slice(0, 139) + "…" : post.quoted.text}”</span>}
                   </a>
                 </li>
               );
