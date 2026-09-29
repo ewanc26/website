@@ -1008,10 +1008,16 @@
   .duotone {
     position: relative;
     background: var(--riso-a);
-    background-clip: padding-box;
-    border: var(--edge) solid var(--ink);
     aspect-ratio: 4 / 5;
     overflow: hidden;
+  }
+  .duotone::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border: var(--edge) solid var(--ink);
+    pointer-events: none;
   }
   .duotone img {
     width: 100%;
