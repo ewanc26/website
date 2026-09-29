@@ -510,6 +510,7 @@
     text-transform: uppercase;
     color: var(--riso-a-text);
     isolation: isolate;
+    white-space: nowrap;
   }
   .poster-name::after {
     content: attr(data-t);
@@ -523,9 +524,9 @@
   }
   .poster-badge {
     display: inline-block;
-    font-size: 0.05em;
-    vertical-align: super;
-    margin-left: 0.4em;
+    font-size: clamp(1.5rem, 0.1em, 3.5rem);
+    vertical-align: top;
+    margin-left: 0.35em;
     letter-spacing: 0;
     mix-blend-mode: normal;
   }
