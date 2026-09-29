@@ -9,8 +9,8 @@ const cv = await gatherCvData(PUBLIC_ATPROTO_DID, fetch);
 const curl = "curl -fsSL ewancroft.uk/cv | bash";
 const facts: [string, string][] = [
   ["Name", cv.name], ["Headline", cv.headline], ["Location", cv.location],
-  ["Skills", `${String(cv.skillGroups.reduce((n, g) => n + g.skills.length, 0)).padStart(2, "0")} across ${String(cv.skillGroups.length).padStart(2, "0")} categories`],
-  ["Projects", `${String(cv.selectedProjects.length + cv.recordProjects.length).padStart(2, "0")} listed`],
+  ["Skills", `${cv.skillGroups.reduce((n, g) => n + g.skills.length, 0)} across ${cv.skillGroups.length} categories`],
+  ["Projects", `${cv.selectedProjects.length + cv.recordProjects.length} listed`],
   ["Languages", cv.languages.map((l) => l.name).join(", ")],
 ];
 const sections = [
