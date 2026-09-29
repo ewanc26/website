@@ -235,7 +235,7 @@
     /* ── Motion — stepped, like a print run ───────────────────── */
     --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-step: steps(4, end);
+    --ease-step: steps(4, start);
     --duration-instant: 100ms;
     --duration-fast: 160ms;
     --duration-normal: 260ms;
