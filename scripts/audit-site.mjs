@@ -56,8 +56,13 @@ while (queue.length && seen.size < 60) {
     broken.push(`${path} -> axe could not run`);
     continue;
   }
-  for (const v of results.violations)
+  for (const v of results.violations) {
     violations.push(`${path}: ${v.id} (${v.impact}) x${v.nodes.length}`);
+    for (const n of v.nodes.slice(0, 3))
+      violations.push(
+        `    ${n.target.join(" ")} ${(n.any[0]?.message ?? "").slice(0, 160)}`,
+      );
+  }
 
   const hrefs = await page.$$eval("a[href]", (as) =>
     as.map((a) => a.getAttribute("href")),
