@@ -31,7 +31,7 @@ const tagCounts = new Map<string, number>();
 for (const p of posts) for (const t of p.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
 const topics = [...tagCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 16);
 const when = (iso: string) => {
-  const parts = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "Europe/London" }).formatToParts(new Date(iso));
+  const parts = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", timeZone: "Europe/London" }).formatToParts(new Date(iso));
   return { day: parts.find((p) => p.type === "day")?.value ?? "", mon: (parts.find((p) => p.type === "month")?.value ?? "").toLowerCase() };
 };
 ---

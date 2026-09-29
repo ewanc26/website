@@ -16,7 +16,7 @@ if (!data) return Astro.rewrite("/404");
 const { post, blog } = data;
 const useBlocks = post.blocks && post.blocks.length > 0;
 const url = Astro.url.href;
-const dateLong = new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "long", day: "numeric", timeZone: "Europe/London" }).format(new Date(post.createdAt));
+const dateLong = new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "long", day: "2-digit", timeZone: "Europe/London" }).format(new Date(post.createdAt));
 ---
 
 <Base

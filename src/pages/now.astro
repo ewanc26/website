@@ -22,7 +22,7 @@ const [{ kibunStatus, musicStatus }, plays, watching, feed] = await Promise.all(
 const latestWatch = watching[0];
 const latestPost = feed[0];
 const dateFmt = (iso: string) =>
-  new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", timeZone: "Europe/London" }).format(new Date(iso));
+  new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "long", timeZone: "Europe/London" }).format(new Date(iso));
 ---
 
 <Base title="Now" description="What I'm listening to, watching and saying right now." ogSubtitle="What I'm up to, live from my AT Protocol repo." ogType="NOW">
@@ -58,7 +58,7 @@ const dateFmt = (iso: string) =>
     <div class="cols thunk" style="--i:4"><h2>Watching</h2>
       {latestWatch ? (
         <p class="prose" style="max-width:none">
-          {latestWatch.title}{latestWatch.rating != null && <> — {latestWatch.rating}/10</>}.
+          {latestWatch.title}{latestWatch.rating != null && <> — {String(latestWatch.rating).padStart(2, "0")}/10</>}.
         </p>
       ) : (
         <p class="empty">Nothing logged lately.</p>

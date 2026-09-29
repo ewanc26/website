@@ -13,7 +13,7 @@ const createdAt = typeof record?.value?.createdAt === "string" ? record.value.cr
   <figcaption>
     {createdAt && (
       <>
-        <time datetime={createdAt}>{new Date(createdAt).toLocaleDateString("en-gb", { year: "numeric", month: "short", day: "numeric" })}</time>
+        <time datetime={createdAt}>{new Date(createdAt).toLocaleDateString("en-gb", { year: "numeric", month: "short", day: "2-digit" })}</time>
         <span aria-hidden="true"> · </span>
       </>
     )}
