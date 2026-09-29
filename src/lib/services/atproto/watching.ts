@@ -21,6 +21,7 @@ export interface WatchingEntry {
   createdAt: string;
 }
 
+// Popfeed logs books, games, etc. too; this row is TV and films only.
 const CACHE_TTL_MS = 1000 * 60 * 10; // 10 minutes
 
 export async function fetchWatching(
@@ -57,7 +58,11 @@ export async function fetchWatching(
       imdbId: value.identifiers?.imdbId as string | undefined,
       createdAt: (value.createdAt as string) ?? "",
     }))
-    .filter((e) => e.title)
+    .filter(
+      (e) =>
+        e.title &&
+        (e.creativeWorkType === "movie" || e.creativeWorkType === "tv_show"),
+    )
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
   setCache(cacheKey, entries, CACHE_TTL_MS);
