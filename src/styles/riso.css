@@ -734,27 +734,38 @@
     text-decoration: none;
     rotate: var(--tilt, 0deg);
   }
-  /* Punched corner: a flat clipped triangle, not a gradient hard-stop.
-     Gradients don't anti-alias a diagonal edge reliably — it renders as a
-     visible staircase at this size, with the cart-band bleeding through
-     the gaps. clip-path clips cleanly regardless of angle or size. */
+  /* Punched corner: clip the whole card (border included) with a polygon so
+     the corner is genuinely gone, then redraw the border along the new
+     diagonal with a thin ink strip. Painting a paper-coloured triangle over
+     the corner instead leaves the frame visible around it. */
+  .cart {
+    --notch: 26px;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--notch)) 0,
+      100% var(--notch),
+      100% 100%,
+      0 100%
+    );
+  }
+  .cart:focus-visible {
+    clip-path: none;
+  }
   .cart::after {
     content: "";
     position: absolute;
     top: calc(-1 * var(--edge));
     right: calc(-1 * var(--edge));
-    width: 26px;
-    height: 26px;
-    background: var(--paper);
-    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    width: var(--notch);
+    height: var(--notch);
+    background: var(--ink);
+    --t: calc(var(--edge) * 1.42);
+    clip-path: polygon(0 0, 100% 100%, calc(100% - var(--t)) 100%, 0 var(--t));
     z-index: 2;
   }
   .cart:hover {
     background: var(--ink);
     color: var(--paper);
-  }
-  .cart:hover::after {
-    background: var(--ink);
   }
   .cart-band {
     height: 1.15rem;
