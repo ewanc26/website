@@ -46,7 +46,11 @@ const siteInfo = normalizeSiteInfo(await fetchSiteInfo(fetch).catch(() => null))
 const pathname = Astro.url.pathname;
 const backlinks = [`https://ewancroft.uk${pathname}`, ...backlinkTargets];
 const fullTitle = title ? `${title} — ${SITE.title}` : SITE.ogTitle;
-const fullDescription = description ?? siteInfo?.additionalInfo?.purpose ?? SITE.description;
+const rawDescription = description ?? siteInfo?.additionalInfo?.purpose ?? SITE.description;
+const fullDescription =
+  rawDescription.length > 125
+    ? rawDescription.slice(0, 124).replace(/\s+\S*$/, "").replace(/[.,;:]$/, "") + "\u2026"
+    : rawDescription;
 const canonical = new URL(pathname, Astro.url.origin).href;
 
 const person = {

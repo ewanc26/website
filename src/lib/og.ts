@@ -89,7 +89,7 @@ export const getDefaultOgTitle = (value: string | null): string | null => {
  * Clamped to [min, max] so extreme strings don't produce absurd values.
  */
 const USABLE_WIDTH = 1040;
-const AVG_CHAR_RATIO = 0.6;
+const AVG_CHAR_RATIO = 0.76;
 
 /**
  * Truncate `text` so it fits within `maxLines` lines at `fontSize`,
@@ -191,7 +191,7 @@ export const getOgTemplate = (entry: OgEntry) => {
   });
 
   const body: unknown[] = [];
-  if (type) {
+  if (type && type !== "HOME") {
     body.push(
       el(
         "div",
@@ -211,23 +211,25 @@ export const getOgTemplate = (entry: OgEntry) => {
   }
   if (title) {
     const size = getDisplayTitleSize(title);
+    const titleStyle = {
+      fontFamily: "Archivo Black",
+      fontSize: `${size}px`,
+      lineHeight: 0.98,
+      letterSpacing: "-2px",
+      textTransform: "uppercase",
+      maxWidth: "1040px",
+      display: "-webkit-box",
+      "-webkit-line-clamp": "3",
+      "-webkit-box-orient": "vertical",
+      overflow: "hidden",
+    };
+    const fitted = truncateToFit(title, size, 3);
+    // Two-ink misregistration: the second ink is printed slightly off.
     body.push(
       el(
         "div",
-        {
-          fontFamily: "Archivo Black",
-          fontSize: `${size}px`,
-          lineHeight: 0.98,
-          letterSpacing: "-2px",
-          textTransform: "uppercase",
-          color: inkA,
-          maxWidth: "860px",
-          display: "-webkit-box",
-          "-webkit-line-clamp": "3",
-          "-webkit-box-orient": "vertical",
-          overflow: "hidden",
-        },
-        truncateToFit(title, size, 3),
+        { ...titleStyle, color: inkA, textShadow: `7px 6px 0 ${inkB}` },
+        fitted,
       ),
     );
   }
@@ -243,7 +245,7 @@ export const getOgTemplate = (entry: OgEntry) => {
           lineHeight: 1.35,
           color: theme.fg,
           marginTop: "28px",
-          maxWidth: "760px",
+          maxWidth: "900px",
           display: "-webkit-box",
           "-webkit-line-clamp": "2",
           "-webkit-box-orient": "vertical",
@@ -303,7 +305,10 @@ export const getOgTemplate = (entry: OgEntry) => {
           textTransform: "uppercase",
           color: theme.fg,
         },
-        [el("div", {}, entry.dateline), el("div", {}, "ewancroft.uk")],
+        [
+          el("div", {}, entry.dateline),
+          el("div", {}, "Poet · Developer · Pagan"),
+        ],
       ),
       el(
         "div",
