@@ -18,9 +18,11 @@ export default defineConfig({
     "/atom.xml": { status: 301, destination: "/rss.xml" },
     "/sitemap": { status: 301, destination: "/sitemap.xml" },
     "/sitemap-index.xml": { status: 301, destination: "/sitemap.xml" },
-    "/about/design": { status: 301, destination: "/site/design" },
-    "/meta": { status: 301, destination: "/site/meta" },
-    "/design": { status: 301, destination: "/site/design" },
+    "/about/design": { status: 301, destination: "/site" },
+    "/meta": { status: 301, destination: "/site" },
+    "/design": { status: 301, destination: "/site" },
+    "/site/meta": { status: 301, destination: "/site" },
+    "/site/design": { status: 301, destination: "/site" },
   },
   adapter: vercel({
     // Read from disk at runtime by the OG image endpoint (the resvg wasm is

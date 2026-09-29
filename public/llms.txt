@@ -16,5 +16,4 @@ The site's visual identity is built on technical integrity, using a dynamic OKLC
 - [Projects](https://docs.ewancroft.uk)
 - [Support](/support)
 - [Subscriptions](/subscriptions)
-- [Site Meta](/site/meta)
-- [Design Spec](/site/design)
+- [This Site](/site) — design, tech stack, privacy, credits
