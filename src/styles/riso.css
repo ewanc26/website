@@ -49,7 +49,7 @@
     min-height: 100dvh;
     background: var(--paper);
     font-size: var(--text-md);
-    overflow-x: hidden;
+    overflow-x: clip;
     padding-bottom: var(--bar);
   }
   @media (min-width: 64rem) {
@@ -174,8 +174,12 @@
     color: var(--on-ink);
     border-top: var(--edge) solid var(--ink);
   }
+  /* Own compositing layer: Safari can drop fixed elements while scrolling
+     when blend-mode or sticky siblings repaint. */
   .spine {
     view-transition-name: spine;
+    transform: translateZ(0);
+    will-change: transform;
   }
   .spine :focus-visible {
     outline-color: var(--on-ink);
