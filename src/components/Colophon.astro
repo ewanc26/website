@@ -76,7 +76,7 @@ const current = Math.round(almanac.moon.phase * 8) % 8;
       <ul class="moons" aria-label={`Moon phases; tonight is a ${almanac.moon.name.toLowerCase()}`}>
         {phases.map((p, i) => (
           <li aria-current={i === current ? "true" : undefined} title={i === current ? `Tonight: ${almanac.moon.name.toLowerCase()}` : undefined}>
-            <PixelMoon phase={p} size={22} />
+            <PixelMoon phase={p} size={26} />
           </li>
         ))}
       </ul>
