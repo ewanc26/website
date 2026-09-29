@@ -1,6 +1,6 @@
 # Website
 
-A personal website and blog built with [Astro](https://astro.build) (Svelte 5 for interactive islands), with an AT Protocol-native publishing stack built around [Standard.site](https://standard.site/) and [Leaflet](https://leaflet.pub/).
+A personal website and blog built with [Astro](https://astro.build) (plain scripts for the few interactive parts), with an AT Protocol-native publishing stack built around [Standard.site](https://standard.site/) and [Leaflet](https://leaflet.pub/).
 
 The site owns the presentation layer while AT Protocol records provide the publication and document data. Native Leaflet documents are rendered as structured content blocks, with Markdown retained as a compatibility fallback.
 
@@ -8,7 +8,7 @@ The site owns the presentation layer while AT Protocol records provide the publi
 
 - **AT Protocol-native blog**: Discover publications and documents from the configured AT Protocol DID rather than storing posts as local Markdown files
 - **Standard.site publications**: Blog documents are associated with a Standard.site publication record
-- **Leaflet rendering**: Native `pub.leaflet.blocks.*` content is serialised and rendered with dedicated Svelte components
+- **Leaflet rendering**: Native `pub.leaflet.blocks.*` content is serialised and rendered with dedicated Astro components
 - **Rich text facets**: UTF-8 byte-indexed facets support formatting, links, mentions, IDs, code, highlights, and footnotes
 - **Embedded records**: Leaflet references to posts and publications can be hydrated from AT Protocol records and rendered in context
 - **Markdown compatibility**: Leaflet content can also be converted to Markdown and rendered for older or non-JavaScript clients
@@ -70,7 +70,7 @@ This keeps the site responsive without requiring every request to re-fetch the p
 
 ## Tech Stack
 
-- **Framework**: [Astro](https://astro.build), with Svelte 5 islands and the Vercel adapter
+- **Framework**: [Astro](https://astro.build) and the Vercel adapter
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4 reset plus the hand-written almanac stylesheet ([src/styles/almanac.css](src/styles/almanac.css)); type is Fraunces and JetBrains Mono via Fontsource
 - **Package Manager**: pnpm
@@ -145,7 +145,7 @@ Other integrations may require additional environment variables. See the source 
 ## Configuration
 
 - **Site configuration**: [src/lib/config.ts](src/lib/config.ts)
-- **Astro configuration**: [astro.config.mjs](astro.config.mjs) (adapter, Svelte integration, and the `$lib`/`$env`/`$app` shims that keep `src/lib` working)
+- **Astro configuration**: [astro.config.mjs](astro.config.mjs) (adapter and the `$lib`/`$env`/`$app` shims that keep `src/lib` working)
 - **Static files**: `public/` (favicon, OAuth client metadata, lexicons, PGP key)
 
 ## Deployment

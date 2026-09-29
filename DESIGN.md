@@ -32,7 +32,7 @@ Not a documentation site, not a portfolio template. This is a two-ink risograph 
 
 ## Interactive islands
 
-Astro renders every page to static HTML; Svelte 5 is used only where interaction earns it (comments, table of contents, share bar, backlinks, Leaflet blocks, the ambient soundscape, Easter eggs). Persistent islands use `transition:persist` in `Base.astro` so audio and eggs survive navigation.
+Astro renders every page to static HTML; plain `<script>`s and native `<dialog>` handle the few interactive parts (comments, table of contents, share bar, backlinks, Leaflet blocks, the ambient soundscape, Easter eggs); there is no framework. Persistent elements use `transition:persist` in `Base.astro` so audio and eggs survive navigation.
 
 ## Anti-references
 
