@@ -6,8 +6,8 @@
  * that stitch together DID resolution, PDS queries, and Constellation
  * backlinks.
  *
- * All fetch functions accept an optional `fetch` override so the (moved to Astro from SvelteKit)
- * server-side request context is respected.
+ * All fetch functions accept an optional `fetch` override so the
+ * server-side request context is respected. (Moved to Astro from SvelteKit.)
  */
 
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
