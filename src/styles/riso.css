@@ -1415,22 +1415,6 @@
     animation: thunk 420ms var(--ease-step) both;
   }
 
-  /* Below-the-fold sections are stamped as they scroll in, so the motion
-     isn't spent before anyone sees it. Pure CSS; browsers without
-     scroll-driven animations just show everything. */
-  @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: view()) {
-      main .word,
-      main .tracks > li,
-      main .carts > li,
-      main .shelf > li {
-        animation: thunk linear both;
-        animation-timeline: view();
-        animation-range: entry 0% entry 45%;
-      }
-    }
-  }
-
   /* The overprint plate slides into (mis)register once on load. */
   .slab::after,
   .poster-name::after {
