@@ -1066,21 +1066,21 @@
     font-size: var(--text-xs);
   }
   /* Photos sit in a plain ink frame, untouched. */
-  .duotone {
+  .photo {
     position: relative;
     isolation: isolate;
     background: var(--ink);
     aspect-ratio: 4 / 5;
     overflow: hidden;
   }
-  .duotone img {
+  .photo img {
     position: absolute;
     inset: var(--edge);
     width: calc(100% - 2 * var(--edge));
     height: calc(100% - 2 * var(--edge));
     object-fit: cover;
   }
-  .duotone--poster {
+  .photo--poster {
     aspect-ratio: 2 / 3;
   }
   .cart-rating {
