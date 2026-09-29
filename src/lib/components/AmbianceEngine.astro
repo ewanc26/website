@@ -54,7 +54,7 @@
 		// first interaction anywhere on the page, does.
 		let hasGesture = false;
 
-		const unsubscribe = ambianceEnabled.subscribe((enabled) => {
+		ambianceEnabled.subscribe((enabled) => {
 			if (enabled && hasGesture) void ensureEngine().start(VOLUME);
 			else engine?.stop();
 		});
@@ -116,7 +116,7 @@
 		window.addEventListener('pointermove', handlePointerMove, { passive: true });
 		window.addEventListener('keydown', markInteraction);
 
-		const decayTimer = setInterval(() => {
+		setInterval(() => {
 			activity *= 0.85;
 			engine?.setActivity(activity);
 			if (!resting && performance.now() - lastInteraction > RESTING_MS) {
@@ -125,7 +125,7 @@
 			}
 		}, 1000);
 
-		const updateTimer = setInterval(() => engine?.update(new Date()), UPDATE_INTERVAL_MS);
+		setInterval(() => engine?.update(new Date()), UPDATE_INTERVAL_MS);
 
 		const handleVisibility = () => {
 			if (!engine) return;
@@ -136,7 +136,7 @@
 
 		// A one-shot confirmation chime for real interactions elsewhere on
 		// the page (a comment published, a link copied) — see pulseAmbiance().
-		const unsubscribePulse = onAmbiancePulse(() => engine?.pulse());
+		onAmbiancePulse(() => engine?.pulse());
 
 		document.addEventListener('astro:page-load', () => engine?.setFocusMode(READING_PATH.test(location.pathname)));
 		wolfMode.subscribe((on) => engine?.setWildMode(on));
