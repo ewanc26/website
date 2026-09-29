@@ -13,6 +13,14 @@ export const SITE = {
     "Ewan Croft is an Anglo-Scottish pagan, poet, and programmer exploring the intersections of tradition and technology.",
 };
 
+/** Identity links, used for rel="me" and structured data sameAs. */
+export const ME_LINKS = [
+  "https://bsky.app/profile/ewancroft.uk",
+  "https://github.com/ewanc26",
+  "https://tangled.org/did:plc:ofrbh253gwicbkc5nktqepol",
+  "https://ko-fi.com/ewancroft",
+];
+
 export const NAV_LINKS = [
   { label: "Home", url: "/" },
   { label: "About", url: "/about" },
