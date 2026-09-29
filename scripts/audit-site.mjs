@@ -46,6 +46,7 @@ while (queue.length && seen.size < 60) {
   for (let attempt = 0; attempt < 3 && !results; attempt++) {
     try {
       results = await new AxeBuilder({ page })
+        .exclude("iframe") // third-party embeds (Ko-fi) are outside our control
         .withTags(["wcag2a", "wcag2aa"])
         .analyze();
     } catch {
