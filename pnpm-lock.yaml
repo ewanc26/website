@@ -17,9 +17,6 @@ importers:
       '@ewanc26/atproto':
         specifier: ^0.2.12
         version: 0.2.12(@atproto/api@0.20.7)
-      '@ewanc26/noise':
-        specifier: ^0.1.4
-        version: 0.1.4
       '@ewanc26/supporters':
         specifier: ^0.3.0
         version: 0.3.0(@atproto/api@0.20.7)(svelte@5.56.3)
@@ -53,9 +50,6 @@ importers:
       marked:
         specifier: ^18.0.5
         version: 18.0.5
-      qrcode-generator:
-        specifier: ^2.0.4
-        version: 2.0.4
       rehype-raw:
         specifier: ^7.0.0
         version: 7.0.0
@@ -695,9 +689,6 @@ packages:
     resolution: {integrity: sha512-Rzzw9nEcmpxp3iG3eyOPu5v5HooPYuf3jLsbNbyP0ZEW8NFyUgX3Inv9AolvVsoZSjGkoGDhiiRQyplpoZ0hNQ==}
     peerDependencies:
       '@atproto/api': '>=0.13.0'
-
-  '@ewanc26/noise@0.1.4':
-    resolution: {integrity: sha512-ArDg9MhOob/kxBlraTSRgInbOBhdNtg7TafKo+ENEKwZi+dgQJNHeRgfleAMoMnYZL2TmABJWbDnXt2D5aVMwg==}
 
   '@ewanc26/supporters@0.3.0':
     resolution: {integrity: sha512-T+E7U0uhi1KX4mKbjprRi3BzsADPqileMQHo9oFOc5n9NIIwsddxLYDg0jGzW5XCr39voQkfRGj7g1vyfggKYA==}
@@ -2398,9 +2389,6 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  qrcode-generator@2.0.4:
-    resolution: {integrity: sha512-mZSiP6RnbHl4xL2Ap5HfkjLnmxfKcPWpWe/c+5XxCuetEenqmNFf1FH/ftXPCtFG5/TDobjsjz6sSNL0Sr8Z9g==}
-
   quick-format-unescaped@4.0.4:
     resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
 
@@ -3657,8 +3645,6 @@ snapshots:
   '@ewanc26/atproto@0.2.12(@atproto/api@0.20.7)':
     dependencies:
       '@atproto/api': 0.20.7
-
-  '@ewanc26/noise@0.1.4': {}
 
   '@ewanc26/supporters@0.3.0(@atproto/api@0.20.7)(svelte@5.56.3)':
     dependencies:
@@ -5423,8 +5409,6 @@ snapshots:
 
   punycode@2.3.1:
     optional: true
-
-  qrcode-generator@2.0.4: {}
 
   quick-format-unescaped@4.0.4: {}
 
