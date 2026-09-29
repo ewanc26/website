@@ -1,0 +1,67 @@
+---
+import Icon from "../../components/Icon.astro";
+import Bluesky from "./icons/Bluesky.astro";
+
+const { url, title } = Astro.props as { url: string; title: string };
+
+const emailSubject = `Check out this post: ${title}`;
+const emailBody = `I thought you might find this interesting:
+
+Title: ${title}
+URL: ${url}
+
+---
+Sent from my website.`;
+const mailtoLink = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+const bskyLink = `https://bsky.app/intent/compose?text=${encodeURIComponent(`${title}\n\n${url}`)}`;
+---
+
+<div class="share-bar">
+  <a href={bskyLink} target="_blank" rel="noopener" class="share-link">
+    <Bluesky size={16} /> Bluesky
+  </a>
+  <button type="button" class="share-btn" data-share-copy={url} aria-live="polite">
+    <span class="share-idle"><Icon name="link-2" size={16} /> Copy link</span>
+    <span class="share-done" hidden><Icon name="check" size={16} /> Copied</span>
+  </button>
+  <a href={mailtoLink} class="share-link">
+    <Icon name="mail" size={16} /> Email
+  </a>
+</div>
+
+<script>
+  import { pulseAmbiance } from "$lib/stores/ambiance";
+
+  document.addEventListener("click", async (e) => {
+    const btn = (e.target as Element).closest<HTMLButtonElement>("[data-share-copy]");
+    if (!btn) return;
+    // navigator.clipboard is undefined outside secure contexts and writeText() rejects on denial.
+    try {
+      await navigator.clipboard?.writeText(btn.dataset.shareCopy ?? "");
+    } catch {
+      return;
+    }
+    btn.classList.add("share-btn--copied");
+    btn.querySelector<HTMLElement>(".share-idle")!.hidden = true;
+    btn.querySelector<HTMLElement>(".share-done")!.hidden = false;
+    pulseAmbiance();
+    setTimeout(() => {
+      btn.classList.remove("share-btn--copied");
+      btn.querySelector<HTMLElement>(".share-idle")!.hidden = false;
+      btn.querySelector<HTMLElement>(".share-done")!.hidden = true;
+    }, 2000);
+  });
+</script>
+
+<style>
+  .share-idle,
+  .share-done {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .share-idle[hidden],
+  .share-done[hidden] {
+    display: none;
+  }
+</style>

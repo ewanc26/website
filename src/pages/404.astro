@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import Slab from "../components/Slab.astro";
-import NotFoundEgg from "$lib/components/ostara-eggs/NotFoundEgg.svelte";
+import NotFoundEgg from "$lib/components/ostara-eggs/NotFoundEgg.astro";
 Astro.response.status = 404;
 ---
 
@@ -11,6 +11,6 @@ Astro.response.status = 404;
     <Slab word="Nowhere" long />
     <p class="lede">Whatever was here has moved, or was never here at all.</p>
     <div class="btns"><a class="btn btn--a" href="/">Back home</a><a class="btn" href="/blog">The archive</a></div>
-    <NotFoundEgg client:idle />
+    <NotFoundEgg />
   </main>
 </Base>

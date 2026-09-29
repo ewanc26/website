@@ -1,0 +1,41 @@
+---
+import LeafletFacets from "./LeafletFacets.astro";
+import LeafletImage from "./LeafletImage.astro";
+import { B, MAX_PAGE_DEPTH, SCHEMA, getAspectRatio, getFacets, getPlaintext, type Obj } from "$lib/utils/leafletReader";
+
+interface Props { item: Obj; ordered: boolean; depth: number; footnoteNumbers: Record<string, number> }
+const { item, ordered, depth, footnoteNumbers } = Astro.props as Props;
+const content = item.content && typeof item.content === "object" ? (item.content as Obj) : undefined;
+const contentType = content?.$type as string | undefined;
+const ratio = content ? getAspectRatio(content) : undefined;
+const canNest = depth < MAX_PAGE_DEPTH;
+const children = Array.isArray(item.children) ? (item.children as Obj[]) : [];
+const unorderedNested = item.unorderedListChildren as Obj | undefined;
+const orderedNested = item.orderedListChildren as Obj | undefined;
+---
+<li class="leaflet-list-item">
+  {typeof item.checked === "boolean" && (
+    <input type="checkbox" checked={item.checked} disabled aria-label={item.checked ? "Done" : "Not done"} />
+  )}
+  {content && contentType === B("image") && (
+    <LeafletImage src={(content._imageSrc as string) ?? ""} alt={content.alt as string | undefined} width={ratio?.width} height={ratio?.height} />
+  )}
+  {content && contentType === B("header") && (
+    <strong class="leaflet-list-heading"><LeafletFacets plaintext={getPlaintext(content)} facets={getFacets(content)} schema={SCHEMA} footnoteNumbers={footnoteNumbers} /></strong>
+  )}
+  {content && contentType !== B("image") && contentType !== B("header") && (
+    <LeafletFacets plaintext={getPlaintext(content)} facets={getFacets(content)} schema={SCHEMA} footnoteNumbers={footnoteNumbers} />
+  )}
+
+  {canNest && children.length > 0 ? (
+    ordered ? (
+      <ol class="leaflet-list ordered nested">{children.map((child) => <Astro.self item={child} ordered={true} depth={depth + 1} footnoteNumbers={footnoteNumbers} />)}</ol>
+    ) : (
+      <ul class="leaflet-list nested">{children.map((child) => <Astro.self item={child} ordered={false} depth={depth + 1} footnoteNumbers={footnoteNumbers} />)}</ul>
+    )
+  ) : canNest && ordered && unorderedNested ? (
+    <ul class="leaflet-list nested">{((unorderedNested.children as Obj[]) ?? []).map((child) => <Astro.self item={child} ordered={false} depth={depth + 1} footnoteNumbers={footnoteNumbers} />)}</ul>
+  ) : canNest && !ordered && orderedNested ? (
+    <ol class="leaflet-list ordered nested" start={orderedNested.startIndex as number | undefined}>{((orderedNested.children as Obj[]) ?? []).map((child) => <Astro.self item={child} ordered={true} depth={depth + 1} footnoteNumbers={footnoteNumbers} />)}</ol>
+  ) : null}
+</li>

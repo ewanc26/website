@@ -46,11 +46,11 @@ Website presentation
 
 The blog index fetches documents and publications, identifies the configured blog publication, filters its documents, sorts them newest-first, and exposes the first page of posts.
 
-Individual post routes resolve the URL against the publication's documents. When a document contains native Leaflet content, the server serialises its pages and blocks, hydrates referenced AT Protocol records, and passes the structured result to `LeafletBlocks.svelte`. The page also produces a Markdown representation as a compatibility path.
+Individual post routes resolve the URL against the publication's documents. When a document contains native Leaflet content, the server serialises its pages and blocks, hydrates referenced AT Protocol records, and passes the structured result to `LeafletBlocks.astro`. The page also produces a Markdown representation as a compatibility path.
 
-The main renderer is `src/lib/components/leaflet/LeafletBlocks.svelte`. It handles text, images, embeds, references, post/publication cards, post lists, polls, sign-up blocks, membership delimiters, nested pages, canvas content, footnotes, and unsupported-block fallbacks.
+The main renderer is `src/lib/components/leaflet/LeafletBlocks.astro`. It handles text, images, embeds, references, post/publication cards, post lists, polls, sign-up blocks, membership delimiters, nested pages, canvas content, footnotes, and unsupported-block fallbacks.
 
-`src/lib/components/leaflet/LeafletFacets.svelte` handles rich-text facets using UTF-8 byte offsets rather than JavaScript character offsets. This is important for correctly interpreting AT Protocol text data containing non-ASCII characters.
+`src/lib/components/leaflet/LeafletFacets.astro` handles rich-text facets using UTF-8 byte offsets rather than JavaScript character offsets. This is important for correctly interpreting AT Protocol text data containing non-ASCII characters.
 
 ### Caching
 

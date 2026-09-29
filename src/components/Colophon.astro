@@ -4,10 +4,11 @@
  * calibration colour bar, tonight's moon among its eight phases.
  */
 import PixelMoon from "./PixelMoon.astro";
-import { WolfToggle, AmbianceToggle } from "$lib/components/layout";
-import TriskeleEgg from "$lib/components/ostara-eggs/TriskeleEgg.svelte";
-import Pentacle from "$lib/components/icons/Pentacle.svelte";
-import Saltire from "$lib/components/icons/Saltire.svelte";
+import WolfToggle from "$lib/components/layout/WolfToggle.astro";
+import AmbianceToggle from "$lib/components/layout/AmbianceToggle.astro";
+import TriskeleEgg from "$lib/components/ostara-eggs/TriskeleEgg.astro";
+import Pentacle from "$lib/components/icons/Pentacle.astro";
+import Saltire from "$lib/components/icons/Saltire.astro";
 import type { Almanac } from "$lib/utils/almanac";
 import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
@@ -81,11 +82,11 @@ const current = Math.round(almanac.moon.phase * 8) % 8;
       <span class="press-tools">
         <span class="sigils">
           <Pentacle size={13} aria-label="Pagan" aria-hidden={false} />
-          <TriskeleEgg size={12} client:idle />
+          <TriskeleEgg size={12} />
           <Saltire size={13} aria-label="Scottish" aria-hidden={false} />
         </span>
-        <WolfToggle client:idle />
-        <AmbianceToggle client:idle />
+        <WolfToggle />
+        <AmbianceToggle />
       </span>
     </div>
   </div>

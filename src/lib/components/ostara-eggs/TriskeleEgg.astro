@@ -1,0 +1,70 @@
+---
+import Triskele from "../icons/Triskele.astro";
+const { size = 24 } = Astro.props as { size?: number | string };
+---
+<button type="button" class="te-wrap" aria-label="Activate triskele" data-triskele-egg>
+  <span class="te-icon"><Triskele size={size} /></span>
+</button>
+
+<script>
+  // Easter egg #3 — triple-click the nav triskele: three clicks within 1.5 s fires.
+  import { triggerThree } from "./eggStores";
+  let clickCount = 0;
+  let resetTimer: ReturnType<typeof setTimeout> | null = null;
+
+  document.addEventListener("click", (e) => {
+    const btn = (e.target as Element).closest<HTMLElement>("[data-triskele-egg]");
+    if (!btn) return;
+    clickCount++;
+    if (resetTimer) clearTimeout(resetTimer);
+    if (clickCount >= 3) {
+      clickCount = 0;
+      const icon = btn.querySelector<HTMLElement>(".te-icon")!;
+      icon.classList.add("te-spinning");
+      triggerThree();
+      setTimeout(() => icon.classList.remove("te-spinning"), 900);
+    } else {
+      resetTimer = setTimeout(() => (clickCount = 0), 1500);
+    }
+  });
+</script>
+
+<style>
+	.te-wrap {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		line-height: 1;
+		cursor: pointer;
+	}
+
+	.te-wrap:focus-visible {
+		outline: 2px solid var(--color-primary-500);
+		outline-offset: 3px;
+		border-radius: var(--radius-xs);
+	}
+
+	.te-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.te-spinning {
+		animation: te-spin 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+	}
+
+	@keyframes te-spin {
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
+	}
+</style>

@@ -1,7 +1,7 @@
 /* ================================================================
  * leaflet-blocks.css — Native Leaflet block rendering
  *
- * Styles for LeafletBlocks.svelte and its child components.
+ * Styles for LeafletBlocks.astro and its child components.
  * Uses the same design tokens as prose.css for visual consistency.
  *
  * Intentionally unlayered so these shared primitives win over

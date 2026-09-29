@@ -1,0 +1,14 @@
+---
+import { safeResourceUrl } from "$lib/utils/url";
+const { src, alt, width, height, fullBleed } = Astro.props as {
+  src: string; alt?: string; width?: number; height?: number; fullBleed?: boolean;
+};
+const aspectRatio = width && height && width > 0 && height > 0 ? `${width} / ${height}` : undefined;
+const imageSrc = safeResourceUrl(src);
+---
+{imageSrc && (
+  <figure class:list={["leaflet-image", { "full-bleed": fullBleed }]}>
+    <img src={imageSrc} alt={alt ?? ""} width={width} height={height} style={aspectRatio ? `aspect-ratio: ${aspectRatio}` : undefined} loading="lazy" decoding="async" />
+    {alt && <figcaption class="leaflet-image-alt">{alt}</figcaption>}
+  </figure>
+)}

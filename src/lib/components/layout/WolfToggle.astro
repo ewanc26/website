@@ -1,0 +1,37 @@
+<button class="footer-link active-press" data-wolf-toggle aria-label="Enable wolf mode" type="button">awoo</button>
+
+<script>
+  import { wolfMode } from "$lib/stores/wolfMode";
+
+  function sync(on: boolean) {
+    document.querySelectorAll<HTMLElement>("[data-wolf-toggle]").forEach((b) => {
+      b.textContent = on ? "normal" : "awoo";
+      b.setAttribute("aria-label", on ? "Disable wolf mode" : "Enable wolf mode");
+    });
+  }
+  wolfMode.subscribe(sync);
+  document.addEventListener("astro:page-load", () => {
+    sync(wolfMode.get());
+    if (wolfMode.get()) wolfMode.enable();
+  });
+  document.addEventListener("click", (e) => {
+    if ((e.target as Element).closest("[data-wolf-toggle]")) wolfMode.toggle();
+  });
+</script>
+
+<style>
+  .footer-link {
+    background: none;
+    border: none;
+    color: var(--color-text-600);
+    text-decoration: none;
+    white-space: nowrap;
+    padding: var(--space-sm); /* Touch target */
+    font-size: var(--text-xs);
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-out-quart);
+  }
+  .footer-link:hover {
+    color: var(--color-primary-700);
+  }
+</style>

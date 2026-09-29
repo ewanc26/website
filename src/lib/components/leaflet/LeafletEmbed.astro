@@ -1,0 +1,23 @@
+---
+import LoadingSkeleton from "../LoadingSkeleton.astro";
+import { safeResourceUrl } from "$lib/utils/url";
+const { url, height, aspectRatio } = Astro.props as {
+  url: string; height?: number; aspectRatio?: { width: number; height: number };
+};
+const ratio = aspectRatio && aspectRatio.width > 0 && aspectRatio.height > 0 ? `${aspectRatio.width} / ${aspectRatio.height}` : "16 / 9";
+const embedSrc = safeResourceUrl(url);
+---
+{embedSrc && (
+  <div class="leaflet-embed" aria-busy="true">
+    <div class="leaflet-embed-loading" aria-hidden="false"><LoadingSkeleton count={3} label="Loading embedded content" /></div>
+    <iframe
+      src={embedSrc}
+      height={height}
+      style={`aspect-ratio: ${ratio}`}
+      loading="lazy"
+      sandbox="allow-scripts allow-same-origin allow-popups"
+      title="Embedded content"
+      onload="this.classList.add('is-loaded');var w=this.parentElement;w.setAttribute('aria-busy','false');var l=w.querySelector('.leaflet-embed-loading');l.classList.add('is-loaded');l.setAttribute('aria-hidden','true')"
+    ></iframe>
+  </div>
+)}

@@ -1,8 +1,8 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Slab from "../../components/Slab.astro";
-import TableOfContents from "$lib/components/TableOfContents.svelte";
-import LeafletBlocks from "$lib/components/leaflet/LeafletBlocks.svelte";
+import TableOfContents from "$lib/components/TableOfContents.astro";
+import LeafletBlocks from "$lib/components/leaflet/LeafletBlocks.astro";
 import { fetchDocuments } from "@ewanc26/atproto";
 import { fetchBlob } from "$lib/services/atproto";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
@@ -33,10 +33,10 @@ if (post.content && typeof post.content === "object" && leafletProvider.matches(
     <Slab word="My Name" long />
     {post.description && <p class="post-deck">{post.description}</p>}
     <div class="article">
-      <aside class="rail"><TableOfContents container=".prose" client:idle /></aside>
+      <aside class="rail"><TableOfContents container=".prose" /></aside>
       <div>
         <article class="prose">
-          {blocks.length > 0 ? <LeafletBlocks blocks={blocks} client:visible /> : <Fragment set:html={html} />}
+          {blocks.length > 0 ? <LeafletBlocks blocks={blocks} /> : <Fragment set:html={html} />}
         </article>
         <p class="post-end" aria-hidden="true">◆ ◆ ◆</p>
       </div>

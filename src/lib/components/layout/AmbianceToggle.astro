@@ -1,0 +1,47 @@
+---
+import Icon from "../../../components/Icon.astro";
+---
+<button class="footer-link ambiance-toggle active-press" data-ambiance-toggle aria-label="Play background ambiance" aria-pressed="false" type="button">
+  <span data-on hidden><Icon name="volume-2" size={14} /></span>
+  <span data-off><Icon name="volume-x" size={14} /></span>
+</button>
+
+<script>
+  import { ambianceEnabled } from "$lib/stores/ambiance";
+
+  function sync(on: boolean) {
+    document.querySelectorAll<HTMLElement>("[data-ambiance-toggle]").forEach((b) => {
+      b.setAttribute("aria-label", on ? "Mute background ambiance" : "Play background ambiance");
+      b.setAttribute("aria-pressed", String(on));
+      b.querySelector<HTMLElement>("[data-on]")!.hidden = !on;
+      b.querySelector<HTMLElement>("[data-off]")!.hidden = on;
+    });
+  }
+  ambianceEnabled.subscribe(sync);
+  document.addEventListener("astro:page-load", () => sync(ambianceEnabled.get()));
+  document.addEventListener("click", (e) => {
+    if ((e.target as Element).closest("[data-ambiance-toggle]")) ambianceEnabled.toggle();
+  });
+</script>
+
+<style>
+	.footer-link {
+		background: none;
+		border: none;
+		color: var(--color-text-600);
+		text-decoration: none;
+		white-space: nowrap;
+		padding: var(--space-sm); /* Touch target */
+		font-size: var(--text-xs);
+		cursor: pointer;
+		transition: color var(--duration-fast) var(--ease-out-quart);
+	}
+	.footer-link:hover {
+		color: var(--color-primary-700);
+	}
+	.ambiance-toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+</style>
