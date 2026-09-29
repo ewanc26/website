@@ -496,33 +496,24 @@
   .poster-sigils {
     position: absolute;
     z-index: 0;
-    inset: var(--space-md) 0 auto 0;
+    top: var(--space-md);
+    left: 0;
+    width: calc(100% - min(62vw, 46rem) + var(--gutter));
     height: 7rem;
     pointer-events: none;
   }
-  .poster-sigils :is(.ps-a, .ps-b) {
+  .poster-sigils > * {
     position: absolute;
-    left: var(--x, 0%);
-    top: var(--y, 10%);
-    width: clamp(3rem, 9vw, 6.5rem);
-    height: clamp(3rem, 9vw, 6.5rem);
-    animation: sigil-spin 1400ms var(--ease-out-expo) var(--d, 0ms) both;
-  }
-  .poster-sigils:not([data-placed]) > * {
-    animation: none;
-    opacity: 0;
-  }
-  .poster-sigils .ps-a {
+    left: var(--x);
+    top: var(--y);
+    width: var(--w);
+    max-width: 5.5rem;
+    height: auto;
+    aspect-ratio: 1;
     color: var(--riso-a);
   }
   .poster-sigils .ps-b {
     color: var(--riso-b);
-  }
-  @keyframes sigil-spin {
-    from {
-      rotate: var(--spin, 360deg);
-      opacity: 0;
-    }
   }
   .poster-name {
     position: relative;
