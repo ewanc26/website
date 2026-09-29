@@ -2,7 +2,6 @@
 * text=auto
 
 # Lockfiles
-package-lock.json linguist-generated
 pnpm-lock.yaml linguist-generated
 
 # Fonts
