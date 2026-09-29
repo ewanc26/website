@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { Resvg, initWasm } from "@resvg/resvg-wasm";
+import wasmDataUri from "@resvg/resvg-wasm/index_bg.wasm?inline";
 import satori from "satori";
 import { cleanOgText, getDefaultOgTitle, getOgTemplate } from "$lib/og";
 import { getOgThemeColors } from "$lib/server/theme";
@@ -21,9 +22,8 @@ const readAsset = async (relative: string) => {
 
 let wasmInitialization: Promise<void> | undefined;
 const ensureWasm = () => {
-  wasmInitialization ??= readAsset(
-    "node_modules/@resvg/resvg-wasm/index_bg.wasm",
-  )
+  wasmInitialization ??= Promise.resolve(wasmDataUri)
+    .then((uri) => Buffer.from(uri.slice(uri.indexOf(",") + 1), "base64"))
     .then(async (buffer) => {
       try {
         await initWasm(buffer);
