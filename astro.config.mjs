@@ -8,6 +8,20 @@ const r = (p) => fileURLToPath(new URL(p, import.meta.url));
 // https://astro.build/config
 export default defineConfig({
   output: "server",
+  redirects: {
+    "/blog/rss": { status: 301, destination: "/rss.xml" },
+    "/blog/rss.xml": { status: 301, destination: "/rss.xml" },
+    "/blog/feed": { status: 301, destination: "/rss.xml" },
+    "/rss": { status: 301, destination: "/rss.xml" },
+    "/feed": { status: 301, destination: "/rss.xml" },
+    "/feed.xml": { status: 301, destination: "/rss.xml" },
+    "/atom.xml": { status: 301, destination: "/rss.xml" },
+    "/sitemap": { status: 301, destination: "/sitemap.xml" },
+    "/sitemap-index.xml": { status: 301, destination: "/sitemap.xml" },
+    "/about/design": { status: 301, destination: "/site/design" },
+    "/meta": { status: 301, destination: "/site/meta" },
+    "/design": { status: 301, destination: "/site/design" },
+  },
   adapter: vercel({
     // Read from disk at runtime by the OG image endpoint (the resvg wasm is
     // picked up by the adapter's own dependency tracing).
