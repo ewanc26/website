@@ -122,10 +122,6 @@ const dynamicFontSize = (
     ),
   );
 
-// Title: up to 3 lines, 38–80px
-const getTitleFontSize = (title: string): number =>
-  dynamicFontSize(title, 3, 38, 80);
-
 // Subtitle: up to 2 lines, 24–40px
 const getSubtitleFontSize = (subtitle: string): number =>
   dynamicFontSize(subtitle, 2, 24, 40);

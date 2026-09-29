@@ -9,16 +9,18 @@
 const DID_CACHE = new Map<string, { doc: any; ts: number }>();
 const DID_CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
 
-function fetchWithAbort(
+async function fetchWithAbort(
   url: string,
   fetchFn: typeof fetch,
   timeoutMs = 8000,
 ): Promise<Response> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
-  return fetchFn(url, { signal: controller.signal }).finally(() =>
-    clearTimeout(timer),
-  );
+  try {
+    return await fetchFn(url, { signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 /**
