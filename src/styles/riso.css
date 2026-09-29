@@ -1440,11 +1440,12 @@
   }
 }
 
-/* Page turns: a straight crossfade in steps. */
+/* Page turns: a short, smooth crossfade. Stepped timing here read as
+   stutter, since the new page's sections also step in on arrival. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 240ms;
-  animation-timing-function: steps(5, end);
+  animation-duration: 160ms;
+  animation-timing-function: ease-out;
 }
 
 /* The spine sits outside the page crossfade so it never blinks on navigation. */
