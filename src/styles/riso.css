@@ -596,6 +596,26 @@
     color: var(--ink-soft);
   }
 
+  .nt-swap {
+    display: grid;
+  }
+  .nt-swap > * {
+    grid-area: 1 / 1;
+  }
+  .nt-en {
+    visibility: hidden;
+  }
+  .nametag:is(:hover, :focus-visible) .nt-gd {
+    visibility: hidden;
+  }
+  .nametag:is(:hover, :focus-visible) .nt-en {
+    visibility: visible;
+  }
+  .nametag:focus-visible {
+    outline: 3px solid var(--riso-b);
+    outline-offset: 3px;
+  }
+
   .now {
     display: inline-flex;
     align-items: center;

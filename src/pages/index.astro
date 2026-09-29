@@ -88,10 +88,19 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
           )}
         </div>
 
-        <div class="nametag thunk" style="--i:2">
-          <div class="nametag-hd">Hello<small>my name is</small></div>
-          <div class="nametag-name" lang="gd">eòghann</div>
-          <div class="nametag-sub">(it's Ewan, in Gaelic)</div>
+        <div class="nametag thunk" style="--i:2" tabindex="0">
+          <div class="nametag-hd nt-swap">
+            <span class="nt-gd" lang="gd">Halò<small>is mise</small></span>
+            <span class="nt-en" lang="en">Hello<small>my name is</small></span>
+          </div>
+          <div class="nametag-name nt-swap">
+            <span class="nt-gd" lang="gd">eòghann</span>
+            <span class="nt-en" lang="en">ewan</span>
+          </div>
+          <div class="nametag-sub nt-swap">
+            <span class="nt-gd" lang="gd">(Ewan, sa Bheurla)</span>
+            <span class="nt-en" lang="en">(that's Eòghann, in Gaelic)</span>
+          </div>
         </div>
       </div>
     </section>
