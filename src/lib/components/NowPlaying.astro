@@ -1,0 +1,243 @@
+---
+/**
+ * Live scrobble read-out from fm.teal.feed.play. Server-rendered
+ * first, then refreshed from /api/plays while the tab is visible.
+ */
+import type { Play } from "$lib/services/atproto/plays";
+
+interface Props {
+  plays: Play[];
+  limit?: number;
+}
+const { plays, limit = 5 } = Astro.props;
+---
+
+<div class="np" data-np data-limit={limit} data-plays={JSON.stringify(plays)}>
+  <p class="np-status pix" data-np-status role="status"></p>
+  <ol class="tracks np-list" data-np-list>
+    {plays.length === 0 && <li class="empty">Silence, at the moment.</li>}
+    {plays.map((p) => (
+      <li class="track np-item" data-played={p.playedAt} data-duration={p.durationSec}>
+        {p.artworkUrl ? (
+          <img src={p.artworkUrl} alt="" width="40" height="40" loading="lazy" decoding="async" />
+        ) : (
+          <span class="np-art" aria-hidden="true">♪</span>
+        )}
+        <span class="np-text">
+          <strong>{p.href ? <a href={p.href} rel="noopener">{p.track}</a> : p.track}</strong>
+          <span>{p.artists.join(", ")}{p.release ? ` · ${p.release}` : ""}</span>
+        </span>
+        <time class="pix np-when" datetime={p.playedAt}></time>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<script>
+  const POLL_MS = 30_000;
+  const GRACE_S = 120;
+  const DEFAULT_LEN_S = 240;
+
+  interface P {
+    track: string;
+    artists: string[];
+    release?: string;
+    playedAt: string;
+    durationSec?: number;
+    href?: string;
+    artworkUrl?: string;
+  }
+
+  const ago = (ms: number) => {
+    const s = Math.max(0, Math.round(ms / 1000));
+    if (s < 60) return "just now";
+    const m = Math.round(s / 60);
+    if (m < 60) return `${m} min ago`;
+    const h = Math.round(m / 60);
+    if (h < 24) return `${h} h ago`;
+    return `${Math.round(h / 24)} d ago`;
+  };
+
+  const isLive = (p: P) =>
+    Date.now() - new Date(p.playedAt).getTime() < ((p.durationSec ?? DEFAULT_LEN_S) + GRACE_S) * 1000;
+
+  function paint(root: HTMLElement, plays: P[]) {
+    const status = root.querySelector<HTMLElement>("[data-np-status]")!;
+    const items = root.querySelectorAll<HTMLElement>(".np-item");
+    items.forEach((li) => {
+      const t = li.querySelector<HTMLTimeElement>(".np-when");
+      if (t) t.textContent = ago(Date.now() - new Date(li.dataset.played ?? "").getTime());
+    });
+    const latest = plays[0];
+    if (!latest) {
+      status.textContent = "";
+      return;
+    }
+    const live = isLive(latest);
+    status.textContent = live ? "● Playing now" : `Last played ${ago(Date.now() - new Date(latest.playedAt).getTime())}`;
+    root.classList.toggle("np--live", live);
+    items[0]?.classList.toggle("np-item--live", live);
+  }
+
+  function rebuild(root: HTMLElement, plays: P[]) {
+    const list = root.querySelector<HTMLElement>("[data-np-list]")!;
+    list.replaceChildren();
+    if (plays.length === 0) {
+      const li = document.createElement("li");
+      li.className = "empty";
+      li.textContent = "Silence, at the moment.";
+      list.append(li);
+    }
+    for (const p of plays) {
+      const li = document.createElement("li");
+      li.className = "track np-item";
+      li.dataset.played = p.playedAt;
+      if (p.durationSec != null) li.dataset.duration = String(p.durationSec);
+      if (p.artworkUrl) {
+        const img = document.createElement("img");
+        img.src = p.artworkUrl;
+        img.alt = "";
+        img.width = img.height = 40;
+        img.loading = "lazy";
+        li.append(img);
+      } else {
+        const art = document.createElement("span");
+        art.className = "np-art";
+        art.setAttribute("aria-hidden", "true");
+        art.textContent = "♪";
+        li.append(art);
+      }
+      const text = document.createElement("span");
+      text.className = "np-text";
+      const strong = document.createElement("strong");
+      if (p.href && /^https?:\/\//i.test(p.href)) {
+        const a = document.createElement("a");
+        a.href = p.href;
+        a.rel = "noopener";
+        a.textContent = p.track;
+        strong.append(a);
+      } else strong.textContent = p.track;
+      const sub = document.createElement("span");
+      sub.textContent = p.artists.join(", ") + (p.release ? ` · ${p.release}` : "");
+      text.append(strong, sub);
+      const time = document.createElement("time");
+      time.className = "pix np-when";
+      time.dateTime = p.playedAt;
+      li.append(text, time);
+      list.append(li);
+    }
+    root.dataset.plays = JSON.stringify(plays);
+    paint(root, plays);
+  }
+
+  let cleanup: (() => void) | undefined;
+
+  document.addEventListener("astro:page-load", () => {
+    cleanup?.();
+    const roots = [...document.querySelectorAll<HTMLElement>("[data-np]")];
+    if (!roots.length) return;
+
+    const read = (r: HTMLElement): P[] => {
+      try {
+        return JSON.parse(r.dataset.plays ?? "[]");
+      } catch {
+        return [];
+      }
+    };
+    roots.forEach((r) => paint(r, read(r)));
+
+    let inflight = false;
+    const refresh = async () => {
+      if (document.hidden || inflight) return;
+      inflight = true;
+      try {
+        const limit = Math.max(...roots.map((r) => Number(r.dataset.limit) || 5));
+        const res = await fetch(`/api/plays?limit=${limit}`, { headers: { accept: "application/json" } });
+        if (!res.ok) return;
+        const { plays } = (await res.json()) as { plays: P[] };
+        if (!Array.isArray(plays)) return;
+        roots.forEach((r) => {
+          const n = Number(r.dataset.limit) || 5;
+          const next = plays.slice(0, n);
+          if (JSON.stringify(next) !== r.dataset.plays) rebuild(r, next);
+        });
+      } catch {
+        /* keep what is on screen */
+      } finally {
+        inflight = false;
+      }
+    };
+
+    const poll = setInterval(refresh, POLL_MS);
+    const tick = setInterval(() => roots.forEach((r) => paint(r, read(r))), 15_000);
+    const onVis = () => {
+      if (!document.hidden) refresh();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    cleanup = () => {
+      clearInterval(poll);
+      clearInterval(tick);
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  });
+</script>
+
+<style is:global>
+  .np-status {
+    margin: 0 0 0.5rem;
+    min-height: 1.4em;
+  }
+  .np--live .np-status {
+    color: var(--riso-a-text);
+  }
+  .np--live .np-status::first-letter {
+    animation: np-blink 1.6s steps(2, jump-none) infinite;
+  }
+  @keyframes np-blink {
+    50% {
+      opacity: 0.25;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .np--live .np-status::first-letter {
+      animation: none;
+    }
+  }
+  .np-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .np-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.4rem 0;
+  }
+  .np-item img,
+  .np-art {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--ink, currentColor);
+    image-rendering: auto;
+  }
+  .np-text {
+    display: grid;
+    min-width: 0;
+  }
+  .np-text > * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .np-item--live .np-text strong {
+    color: var(--riso-a-text);
+  }
+  .np-when {
+    white-space: nowrap;
+  }
+</style>
