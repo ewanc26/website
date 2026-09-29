@@ -493,6 +493,29 @@
     mix-blend-mode: var(--blend);
     pointer-events: none;
   }
+  .poster-sigils {
+    position: absolute;
+    z-index: 0;
+    left: 0;
+    top: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    width: min(36vw, 17rem);
+    pointer-events: none;
+  }
+  .poster-sigils :is(.ps-a, .ps-b) {
+    flex: 1 1 0;
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 1;
+  }
+  .poster-sigils .ps-a {
+    color: var(--riso-a);
+  }
+  .poster-sigils .ps-b {
+    color: var(--riso-b);
+  }
   .poster-name {
     position: relative;
     z-index: 1;
