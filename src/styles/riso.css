@@ -972,12 +972,22 @@
       grid-template-columns: minmax(0, 1fr);
       align-items: start;
     }
-    .shelf a:has(> .shelf-meta > .arrow-ur:only-child) {
+    .shelf a:has(> .shelf-meta > .arrow-ur:only-child),
+    .shelf a:has(> .shelf-chip) {
       grid-template-columns: minmax(0, 1fr) auto;
     }
     .shelf-meta {
       text-align: left;
     }
+  }
+  .shelf-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-self: end;
+    padding: 0.3rem 0.55rem;
+    border: 2px solid currentColor;
+    border-radius: 999px;
+    line-height: 1;
   }
   .shelf-note {
     grid-column: 1 / -1;
