@@ -752,15 +752,25 @@
     clip-path: none;
   }
   .cart::after {
+    --pad: calc(var(--edge) * 3);
+    --t: calc(var(--edge) * 1.4142);
     content: "";
     position: absolute;
     top: calc(-1 * var(--edge));
     right: calc(-1 * var(--edge));
-    width: var(--notch);
-    height: var(--notch);
+    width: calc(var(--notch) + var(--pad));
+    height: calc(var(--notch) + var(--pad));
     background: var(--ink);
-    --t: calc(var(--edge) * 1.42);
-    clip-path: polygon(0 0, 100% 100%, calc(100% - var(--t)) 100%, 0 var(--t));
+    /* Outer edge is the cut; inner edge is offset by one border width and
+       mitred where it meets the top and right borders, so the join is flush. */
+    clip-path: polygon(
+      0 0,
+      var(--pad) 0,
+      100% var(--notch),
+      calc(100% - var(--edge)) calc(var(--notch) - var(--edge) + var(--t)),
+      calc(var(--pad) + var(--edge) - var(--t)) var(--edge),
+      0 var(--edge)
+    );
     z-index: 2;
   }
   .cart:hover {
