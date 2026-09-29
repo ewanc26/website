@@ -57,8 +57,12 @@ export const GET: APIRoute = async ({ url }) => {
     const almanac = getAlmanac();
 
     const title = cleanOgText(url.searchParams.get("title"), 180);
-    const subtitle = cleanOgText(url.searchParams.get("subtitle"), 180);
     const type = url.searchParams.get("type");
+    const subtitle =
+      cleanOgText(url.searchParams.get("subtitle"), 180) ??
+      (type?.toUpperCase() === "HOME"
+        ? "Poems, notes and the things I make."
+        : null);
     const finalTitle = title ?? getDefaultOgTitle(type) ?? SITE.title;
 
     const svg = await satori(
@@ -68,9 +72,7 @@ export const GET: APIRoute = async ({ url }) => {
         slug: cleanOgText(url.searchParams.get("slug"), 100) ?? "/",
         type,
         moonPhase: getMoonIllumination(new Date()).phase,
-        dateline: [almanac.weekday, almanac.date, almanac.moon.name].join(
-          " · ",
-        ),
+        dateline: almanac.moon.name,
         theme,
       }),
       {
