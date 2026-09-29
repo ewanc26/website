@@ -157,7 +157,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
               );
             })}
           </ol>
-          <div class="btns"><a href={`https://bsky.app/profile/${PUBLIC_ATPROTO_DID}`} target="_blank" rel="noopener" class="btn btn--small">Follow on Bluesky ↗</a></div>
+          <div class="btns"><a href={`https://bsky.app/profile/${PUBLIC_ATPROTO_DID}`} target="_blank" rel="noopener" class="btn btn--small">Follow on Bluesky ↗︎</a></div>
         </div>
       </>
     )}
@@ -207,8 +207,8 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
           ))}
         </ul>
         <div class="btns">
-          <a href={`https://github.com/${githubUsername}?tab=repositories`} rel="noopener" class="btn btn--small">All repositories ↗</a>
-          <a href="https://docs.ewancroft.uk" rel="noopener" class="btn btn--small">The docs ↗</a>
+          <a href={`https://github.com/${githubUsername}?tab=repositories`} rel="noopener" class="btn btn--small">All repositories ↗︎</a>
+          <a href="https://docs.ewancroft.uk" rel="noopener" class="btn btn--small">The docs ↗︎</a>
         </div>
       </div>
     ) : (
@@ -251,7 +251,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
           {otherPublications.map((pub) => (
             <li>
               <a href={pub.url} rel="noopener">
-                <span class="shelf-name">{pub.name}</span><span class="shelf-meta">↗</span>
+                <span class="shelf-name">{pub.name}</span><span class="shelf-meta">↗︎</span>
                 {pub.description && <p class="shelf-note">{pub.description}</p>}
               </a>
             </li>
@@ -268,7 +268,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
             <li>
               <a href={link.url} rel="noopener">
                 <span class="shelf-name">{link.emoji && <span aria-hidden="true">{link.emoji} </span>}{link.text}</span>
-                <span class="shelf-meta">{link.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗</span>
+                <span class="shelf-meta">{link.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗︎</span>
               </a>
             </li>
           ))}
