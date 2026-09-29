@@ -669,6 +669,9 @@
     background: var(--ink);
     color: var(--paper);
   }
+  .track:hover a:not(:hover) {
+    color: inherit;
+  }
   .track-when {
     display: grid;
     justify-items: center;
