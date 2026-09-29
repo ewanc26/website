@@ -24,14 +24,7 @@ export default defineConfig({
     "/site/meta": { status: 301, destination: "/site" },
     "/site/design": { status: 301, destination: "/site" },
   },
-  adapter: vercel({
-    // Read from disk at runtime by the OG image endpoint (the resvg wasm is
-    // picked up by the adapter's own dependency tracing).
-    includeFiles: [
-      "./node_modules/@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff",
-      "./src/lib/fonts/JetBrainsMono-Regular.ttf",
-    ],
-  }),
+  adapter: vercel(),
   prefetch: { prefetchAll: false, defaultStrategy: "hover" },
   vite: {
     plugins: [tailwindcss()],
