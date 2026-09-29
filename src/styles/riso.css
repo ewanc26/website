@@ -1325,9 +1325,8 @@
     gap: var(--space-md);
     align-items: center;
   }
-  /* Pentacle, triskele, saltire: a small fixed identity mark, not a
-     dynamic one — pagan, Highland, and Scottish, kept together as a set
-     everywhere they appear rather than scattered as loose decoration. */
+  /* Pentacle and triskele: a small fixed identity mark, pagan and
+     Highland, kept together as a set. */
   .sigils {
     display: flex;
     align-items: center;
