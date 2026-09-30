@@ -3,21 +3,5 @@
   "rewrites": [
     { "source": "/favicon.ico", "destination": "/favicon.svg" },
     { "source": "/sitemap.xml.gz", "destination": "/sitemap.xml" }
-  ],
-  "redirects": [
-    { "source": "/blog/rss", "destination": "/rss.xml", "permanent": true },
-    { "source": "/blog/rss.xml", "destination": "/rss.xml", "permanent": true },
-    { "source": "/blog/feed", "destination": "/rss.xml", "permanent": true },
-    { "source": "/rss", "destination": "/rss.xml", "permanent": true },
-    { "source": "/feed", "destination": "/rss.xml", "permanent": true },
-    { "source": "/feed.xml", "destination": "/rss.xml", "permanent": true },
-    { "source": "/atom.xml", "destination": "/rss.xml", "permanent": true },
-    { "source": "/sitemap", "destination": "/sitemap.xml", "permanent": true },
-    { "source": "/sitemap-index.xml", "destination": "/sitemap.xml", "permanent": true },
-    { "source": "/about/design", "destination": "/site", "permanent": true },
-    { "source": "/meta", "destination": "/site", "permanent": true },
-    { "source": "/design", "destination": "/site", "permanent": true },
-    { "source": "/site/meta", "destination": "/site", "permanent": true },
-    { "source": "/site/design", "destination": "/site", "permanent": true }
   ]
 }
