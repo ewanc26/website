@@ -143,6 +143,34 @@
 }
 
 @layer components {
+  /* Shared component primitives. Similar controls and metadata use these
+     dimensions so they adapt together instead of drifting by component. */
+  .ui-icon {
+    display: block;
+    width: var(--icon-size, 1em);
+    height: var(--icon-size, 1em);
+    flex: 0 0 var(--icon-size, 1em);
+    max-width: none;
+    vertical-align: middle;
+  }
+
+  .btn,
+  .share-link,
+  .share-btn {
+    min-height: var(--control-size);
+    border: var(--edge) solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .btn:hover,
+  .share-link:hover,
+  .share-btn:hover,
+  .share-btn--copied {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
   /* ── Layout ──────────────────────────────────────────────────── */
 
   .wrap {
@@ -342,11 +370,7 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-sm);
-    min-height: var(--control-size);
     padding: var(--space-sm) var(--space-md);
-    border: var(--edge) solid var(--ink);
-    background: var(--paper);
-    color: var(--ink);
     font-family: var(--font-display);
     font-variation-settings: "wdth" 110;
     font-weight: 800;
@@ -354,10 +378,6 @@
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-  }
-  .btn:hover {
-    background: var(--ink);
-    color: var(--paper);
   }
   .btn--a {
     background: var(--riso-a);
@@ -385,7 +405,11 @@
     list-style: none;
   }
   .chip {
-    padding: 0.1em 0.6em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    padding: 0.3em 0.6em;
     border: 2px solid var(--ink);
     font-family: var(--font-pixel);
     font-weight: 500;
@@ -740,7 +764,8 @@
      physical target, padding and border treatment, while the surrounding
      row decides where it sits at each breakpoint. */
   .shelf-chip,
-  .tag-chip {
+  .tag-chip,
+  .chip {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -759,17 +784,16 @@
     white-space: nowrap;
   }
   .shelf-chip > svg,
-  .tag-chip > svg {
+  .tag-chip > svg,
+  .chip > svg {
     width: 1em;
     height: 1em;
     flex: 0 0 1em;
     stroke-width: 2.5;
   }
   .shelf-chip > .feed-type-icon,
-  .tag-chip > [aria-hidden] {
-    color: var(--riso-a-text);
-  }
-  .tag-chip > [aria-hidden] {
+  .tag-chip > [aria-hidden],
+  .chip > svg {
     color: var(--riso-a-text);
   }
   .tag-chip-list {
@@ -1450,21 +1474,11 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-sm);
-    min-height: 36px;
     padding: var(--space-xs) var(--space-sm);
-    border: 2px solid var(--ink);
-    background: var(--paper);
-    color: var(--ink);
+    border-width: 2px;
     font-family: var(--font-pixel);
     font-weight: 600;
     font-size: var(--text-xs);
-    text-decoration: none;
-  }
-  .share-link:hover,
-  .share-btn:hover,
-  .share-btn--copied {
-    background: var(--ink);
-    color: var(--paper);
   }
 
   .section-heading {
