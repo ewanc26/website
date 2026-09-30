@@ -6,7 +6,7 @@ import SigilBand from "../../components/SigilBand.astro";
 import Barcode from "../../components/Barcode.astro";
 import {
   fetchProfile, fetchLinks, fetchSifaProfile, fetchSifaSkills, fetchSifaEducation,
-  fetchSifaLanguages, fetchSifaExternalAccounts,
+  fetchSifaLanguages,
 } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 import { env } from "$env/dynamic/private";
@@ -16,14 +16,13 @@ import { resolveDid } from "$lib/services/atproto/did";
 Astro.response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=3600");
 
 const did = PUBLIC_ATPROTO_DID;
-const [profile, links, sifa, skills, education, languages, accounts, projects, pds] = await Promise.all([
+const [profile, links, sifa, skills, education, languages, projects, pds] = await Promise.all([
   fetchProfile(did, fetch).catch(() => ({ displayName: "", description: "", avatar: "", handle: "", did, pronouns: "" }) as any),
   fetchLinks(did, fetch).catch(() => null),
   fetchSifaProfile(did, fetch).catch(() => null),
   fetchSifaSkills(did, fetch).catch(() => []),
   fetchSifaEducation(did, fetch).catch(() => []),
   fetchSifaLanguages(did, fetch).catch(() => []),
-  fetchSifaExternalAccounts(did, fetch).catch(() => []),
   fetchPinnedGitHubProjects(env.GITHUB_USERNAME || "ewanc26", fetch, env.GITHUB_TOKEN).catch(() => []),
   resolveDid(did, fetch)
     .then((doc) => {
@@ -122,7 +121,6 @@ const PGP = "C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D";
     <div class="cols thunk" style="--i:5">
       <h2>Links</h2>
       <ul class="shelf">
-        {(accounts as any[]).map((a) => (<li><a href={a.url} rel="noopener"><span class="shelf-name">{a.label || a.url.replace("https://", "")}</span><span class="shelf-meta"><ArrowUpRight /></span></a></li>))}
         {(links?.cards ?? []).map((c: any) => (<li><a href={c.url} rel="noopener"><span class="shelf-name">{c.emoji} {c.text}</span><span class="shelf-meta"><ArrowUpRight /></span></a></li>))}
       </ul>
     </div>
