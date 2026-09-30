@@ -680,7 +680,7 @@
     grid-template-columns: 4.5rem minmax(0, 1fr);
     gap: 0 var(--space-md);
     align-items: center;
-    padding: var(--space-md) 0;
+    padding: var(--space-md) var(--space-md) var(--space-md) 0;
     border-bottom: 2px solid var(--ink);
     color: var(--ink);
     text-decoration: none;
