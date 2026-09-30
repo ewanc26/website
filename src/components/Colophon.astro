@@ -58,7 +58,6 @@ const current = Math.round(almanac.moon.phase * 8) % 8;
       <section>
         <h2>Small print</h2>
         <ul>
-          <li><a href="/now">Now</a></li>
           <li><a href="/subscriptions">What I read</a></li>
           {repo && <li><a href={repo.url} rel="noopener">Source code</a></li>}
           {license && <li><a href={license.url} rel="license noopener">{license.name ?? "Licence"}</a></li>}

@@ -6,7 +6,6 @@ const STATIC = [
   "/about",
   "/about/name",
   "/blog",
-  "/now",
   "/support",
   "/subscriptions",
   "/site",
