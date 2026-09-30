@@ -159,6 +159,7 @@ const ogAlt = `Social preview for ${title ?? SITE.title}${ogType ? `, labelled $
     <ThreeToast transition:persist="egg-toast" />
     <BlogArchiveEggs transition:persist="egg-archive" />
     <HeritageEggs transition:persist="egg-heritage" />
+    <MarginSigils seed={pathname} />
 
     <!-- Shared SVG filters, kept for .text-outline consumers. -->
     <svg class="svg-defs" aria-hidden="true" focusable="false">
