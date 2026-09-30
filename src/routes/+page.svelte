@@ -86,7 +86,7 @@
       <div class="thunk">
         <p class="bio">{@html bio}</p>
         {#if kibunStatus || musicStatus}
-          <div style="margin-top:var(--space-lg)">
+          <div class="poster-statuses">
             <KibunStatus status={kibunStatus} />
             {#if musicStatus}
               <span class="now now--track">
