@@ -670,6 +670,18 @@
     outline-offset: 3px;
   }
 
+  .poster-statuses {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-sm) var(--space-md);
+    max-width: 100%;
+  }
+  .poster-statuses .now {
+    margin: 0;
+    max-width: 100%;
+  }
+
   .now {
     display: inline-flex;
     align-items: center;
