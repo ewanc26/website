@@ -730,7 +730,7 @@
     color: var(--riso-a-text);
   }
   .track:hover .track-day {
-    color: var(--riso-b);
+    color: var(--paper);
   }
   .track-mon {
     font-family: var(--font-pixel);
