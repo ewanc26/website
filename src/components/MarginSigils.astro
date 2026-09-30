@@ -12,6 +12,7 @@ type Mark = {
   y: number;
   size: number;
   rotate: number;
+  inset: number;
 };
 
 const { seed = "" } = Astro.props;
@@ -29,16 +30,31 @@ const next = () => {
 };
 
 const marks: Mark[] = [];
-const slots = [11, 36, 61, 86];
 
 for (const side of ["left", "right"] as const) {
-  for (const slot of slots) {
+  const positions: number[] = [];
+  const count = 5 + Math.floor(next() * 3);
+
+  for (let i = 0; i < count; i++) {
+    let y = 8 + next() * 84;
+    let attempts = 0;
+
+    while (
+      positions.some((existing) => Math.abs(existing - y) < 9) &&
+      attempts < 24
+    ) {
+      y = 8 + next() * 84;
+      attempts++;
+    }
+
+    positions.push(y);
     marks.push({
       kind: next() > 0.5 ? "p" : "t",
       side,
-      y: slot + (next() - 0.5) * 7,
-      size: 1.65 + next() * 0.85,
-      rotate: -24 + next() * 48,
+      y,
+      size: 1.5 + next() * 1,
+      rotate: -30 + next() * 60,
+      inset: 0.25 + next() * 1.25,
     });
   }
 }
@@ -46,8 +62,18 @@ for (const side of ["left", "right"] as const) {
 
 <aside class="margin-sigils" aria-hidden="true">
   {
-    marks.map(({ kind, side, y, size, rotate }) => {
-      const style = "--y:" + y + "%;--s:" + size + "rem;--r:" + rotate + "deg";
+    marks.map(({ kind, side, y, size, rotate, inset }) => {
+      const style =
+        "--y:" +
+        y +
+        "%;--s:" +
+        size +
+        "rem;--r:" +
+        rotate +
+        "deg;--i:" +
+        inset +
+        "rem";
+
       return kind === "p" ? (
         <span class:list={["margin-sigil", "margin-sigil--" + side, "margin-sigil--pentacle"]} style={style}>
           <Pentacle size={48} />
@@ -89,11 +115,17 @@ for (const side of ["left", "right"] as const) {
   }
 
   .margin-sigil--left {
-    left: max(1rem, calc((100vw - var(--wrap)) / 2 - var(--s) - 1rem));
+    left: max(
+      1rem,
+      calc((100vw - var(--wrap)) / 2 - var(--s) - var(--i))
+    );
   }
 
   .margin-sigil--right {
-    right: max(1rem, calc((100vw - var(--wrap)) / 2 - var(--s) - 1rem));
+    right: max(
+      1rem,
+      calc((100vw - var(--wrap)) / 2 - var(--s) - var(--i))
+    );
   }
 
   .margin-sigil :global(svg) {
