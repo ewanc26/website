@@ -8,7 +8,6 @@ const seeds = [
   "/",
   "/about",
   "/blog",
-  "/now",
   "/support",
   "/subscriptions",
   "/site/meta",
