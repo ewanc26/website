@@ -699,19 +699,19 @@
     padding: 0;
     border-top: 4px solid var(--ink);
   }
+  .track,
+  .shelf > li {
+    border-bottom: 2px solid var(--ink);
+    color: var(--ink);
+  }
+  .track:hover,
   .track {
     display: grid;
     grid-template-columns: 4.5rem minmax(0, 1fr);
     gap: 0 var(--space-md);
     align-items: center;
     padding: var(--space-md);
-    border-bottom: 2px solid var(--ink);
-    color: var(--ink);
     text-decoration: none;
-  }
-  .track:hover {
-    background: var(--ink);
-    color: var(--paper);
   }
   .track:hover a:not(:hover) {
     color: inherit;
@@ -992,7 +992,6 @@
     gap: 0.15rem var(--space-md);
     align-items: baseline;
     padding: var(--space-md);
-    border-bottom: 2px solid var(--ink);
   }
   .shelf > li > a {
     display: contents;
