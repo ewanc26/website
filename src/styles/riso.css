@@ -680,7 +680,7 @@
     grid-template-columns: 4.5rem minmax(0, 1fr);
     gap: 0 var(--space-md);
     align-items: center;
-    padding: var(--space-md) var(--space-md) var(--space-md) 0;
+    padding: var(--space-md);
     border-bottom: 2px solid var(--ink);
     color: var(--ink);
     text-decoration: none;
@@ -736,19 +736,38 @@
     font-size: var(--text-xs);
     opacity: 0.8;
   }
+  /* Shared compact icon/status treatment. Keep every metadata glyph the same
+     physical target, padding and border treatment, while the surrounding
+     row decides where it sits at each breakpoint. */
+  .shelf-chip,
   .tag-chip {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     align-self: start;
-    justify-self: start;
+    justify-self: end;
     gap: 0.25em;
-    padding: 0.1em 0.5em;
-    border: var(--edge-thin, 2px) solid var(--ink);
-    background: var(--paper);
-    color: var(--ink);
-    line-height: 1.3;
+    min-inline-size: clamp(2rem, 2.5vw, 2.25rem);
+    min-block-size: clamp(2rem, 2.5vw, 2.25rem);
+    padding: 0.35em 0.55em;
+    border: 2px solid currentColor;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    line-height: 1;
     opacity: 1;
     white-space: nowrap;
+  }
+  .shelf-chip > svg,
+  .tag-chip > svg {
+    width: 1em;
+    height: 1em;
+    flex: 0 0 1em;
+    stroke-width: 2.5;
+  }
+  .shelf-chip > .feed-type-icon,
+  .tag-chip > [aria-hidden] {
+    color: var(--riso-a-text);
   }
   .tag-chip > [aria-hidden] {
     color: var(--riso-a-text);
@@ -761,9 +780,14 @@
     clip-path: inset(50%);
     white-space: nowrap;
   }
-  .track:hover .tag-chip {
+  .track:hover .tag-chip,
+  .track:hover .shelf-chip {
     background: var(--ink);
     color: var(--paper);
+  }
+  .track:hover .shelf-chip > .feed-type-icon,
+  .track:hover .tag-chip > [aria-hidden] {
+    color: var(--riso-b);
   }
   .track--lead .track-title {
     font-size: clamp(1.8rem, 3.4vw + 0.6rem, 3.4rem);
@@ -943,7 +967,7 @@
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 0.15rem var(--space-md);
     align-items: baseline;
-    padding: var(--space-3) var(--space-md);
+    padding: var(--space-md);
     border-bottom: 2px solid var(--ink);
   }
   .shelf > li > a {
@@ -977,21 +1001,13 @@
       align-items: start;
     }
     .shelf > li:has(> a > .shelf-meta > .arrow-ur:only-child),
-    .shelf > li:has(> a > .shelf-chip) {
+    .shelf > li:has(> a > .shelf-chip),
+    .shelf > li:has(> .shelf-chip) {
       grid-template-columns: minmax(0, 1fr) auto;
     }
     .shelf-meta {
       text-align: left;
     }
-  }
-  .shelf-chip {
-    display: inline-flex;
-    align-items: center;
-    justify-self: end;
-    padding: 0.3rem 0.55rem;
-    border: 2px solid currentColor;
-    border-radius: 999px;
-    line-height: 1;
   }
   .shelf-note {
     grid-column: 1 / -1;
