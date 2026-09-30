@@ -6,7 +6,7 @@ import SigilBand from "../../components/SigilBand.astro";
 import Barcode from "../../components/Barcode.astro";
 import {
   fetchProfile, fetchLinks, fetchSifaProfile, fetchSifaSkills, fetchSifaEducation,
-  fetchSifaLanguages,
+  fetchSifaLanguages, fetchSifaExternalAccounts,
 } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 import { env } from "$env/dynamic/private";
@@ -23,6 +23,7 @@ const [profile, links, sifa, skills, education, languages, professional, project
   fetchSifaSkills(did, fetch).catch(() => []),
   fetchSifaEducation(did, fetch).catch(() => []),
   fetchSifaLanguages(did, fetch).catch(() => []),
+  fetchSifaExternalAccounts(did, fetch).catch(() => []),
   fetchPinnedGitHubProjects(env.GITHUB_USERNAME || "ewanc26", fetch, env.GITHUB_TOKEN).catch(() => []),
   resolveDid(did, fetch)
     .then((doc) => {
@@ -126,6 +127,15 @@ const PGP = "C918 A4FC C656 BEBF 0EB7  AE01 4CB2 0882 06DB 0B7D";
     </div>
 
     <div class="cols thunk" style="--i:6">
+      <h2>Professional</h2>
+      <ul class="shelf">
+        {(professional as any[]).filter((a) => a.label && a.url).map((a) => (
+          <li><a href={a.url} rel="noopener"><span class="shelf-name">{a.label}</span><span class="shelf-meta"><ArrowUpRight /></span></a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="cols thunk" style="--i:7">
       <h2>Identity</h2>
       <dl class="dl">
         <dt>DID</dt><dd><code>{profile.did}</code> <button type="button" class="btn btn--small" data-copy={profile.did}>Copy</button></dd>
