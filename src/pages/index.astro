@@ -154,7 +154,7 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
                     <span class="track-when"><span class="track-day">{w.day}</span><span class="track-mon">{w.mon}</span></span>
                     <span class="track-title">{feedTitle(post)}</span>
                     {tag && (
-                      <span class="shelf-meta shelf-chip" title={tag}>
+                      <span class="track-meta shelf-meta shelf-chip" title={tag}>
                         <FeedTypeIcon kind={post.kind} />
                         <span class="sr-only">{tag}</span>
                       </span>
