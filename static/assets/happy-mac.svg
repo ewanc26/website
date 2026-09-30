@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  "Happy Mac" by NiloGlock at Italian Wikipedia, licensed CC BY-SA 4.0.
+  Source: https://commons.wikimedia.org/wiki/File:Happy_Mac.svg
+  License: https://creativecommons.org/licenses/by-sa/4.0/
+  Modified for this site by removing Inkscape metadata and redundant attributes.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8.4710464 10.9614" role="img" aria-labelledby="title description" shape-rendering="crispEdges">
+  <title id="title">Happy Mac</title>
+  <desc id="description">The classic smiling Macintosh startup icon.</desc>
+  <g transform="translate(-5.3090212 -4.3002038)">
+    <g transform="matrix(.06455006 0 0 .06455006 7.6050574 7.0900779)">
+      <path fill="#000" d="M-30.937651 99.78759h122v26.80449h-122z"/>
+      <g transform="translate(-56.456402 -31.41017)">
+        <path fill="#555" d="M33.668747 136.75006v4.69998h31.950504v-4.69998zm41.740088 4.69998V146.15h11.145573v-4.69996zM91.152059 146.15v6.29987h11.318691V146.15z"/>
+        <path fill="#444" d="M65.619251 136.75006v4.69998h20.935157V146.15h15.916342v6.29987h20.86023V146.15h-15.87449v-4.69996H91.152059v-4.69998z"/>
+        <path fill="#222" d="M91.152059 136.75006v4.69998h16.304431V146.15h15.87449v6.29987h16.03777v-15.69981z"/>
+        <path fill="#777" d="M33.668747 141.45004V146.15h41.740088v-4.69996zM75.408835 146.15v6.29987h15.743224V146.15z"/>
+        <path fill="#888" d="M33.668823 146.14999h41.74001v6.3h-41.74001z"/>
+      </g>
+      <path fill="#ccc" d="M-30.969854-37.120319H91.062349V99.787579H-30.969854z"/>
+      <path fill="#ccf" d="M-15.075892-21.040775H74.98512v67.75h-90.061012z"/>
+      <path fill="#000" transform="scale(.26458333)" d="M102.17383-23.402344V59.882812H83.148438V78.779297H120.0508V-23.402344z"/>
+      <path fill="#000" d="M-30.969856-43.220318H91.062347v6.1H-30.969856z"/>
+      <path fill="#444" d="M-15.075892-27.140776H74.98512v6.1h-90.061012z"/>
+      <path fill="#444" transform="rotate(90)" d="M-21.040775 15.075892h67.75v6.1h-67.75z"/>
+      <path fill="#fff" transform="rotate(90)" d="M-21.040775-81.085121h67.75v6.1h-67.75z"/>
+      <path fill="#fff" d="M-15.07589 46.709225h90.061013v6.1H-15.07589z"/>
+      <path fill="#000" d="M31.655506 73.81324h43.400002v5H31.655506z"/>
+      <path fill="#fff" d="M31.655506 78.81324h43.400005v6H31.655506z"/>
+      <path fill="#0b0" d="M-21.133041 73.785721h11.060395v5h-11.060395z"/>
+      <path fill="#d00" d="M-21.133041 78.785721h11.060396v6h-11.060396z"/>
+      <path fill="#000" d="M5.8799295-6.1919641h5.0000005V5.0080357H5.8799295zM47.880306-6.1919641h6.1V5.0080357h-6.1zM10.8871 25.947487h5v6h-5zM38.149635 25.944651h4.75v6.002836h-4.75zM15.8871 31.947487h22.262533v5.011021H15.8871z"/>
+      <path fill="#000" transform="rotate(90)" d="M-37.120319 30.969854H99.787579v4.6H-37.120319zM-37.120331-95.662346H99.787582v4.6H-37.120331z"/>
+    </g>
+  </g>
+</svg>
