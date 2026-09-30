@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
 
   interface Props {
@@ -47,7 +46,7 @@
     entries = found;
   }
 
-  onMount(build);
+  // afterNavigate also fires once on initial mount, covering first load.
   afterNavigate(build);
 </script>
 
