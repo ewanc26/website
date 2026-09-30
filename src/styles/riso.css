@@ -944,7 +944,7 @@
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 0.15rem var(--space-md);
     align-items: baseline;
-    padding: var(--space-3) 0;
+    padding: var(--space-3) var(--space-md);
     border-bottom: 2px solid var(--ink);
     color: var(--ink);
     text-decoration: none;
