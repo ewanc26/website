@@ -6,7 +6,7 @@ Guidance for AI coding agents working in **website**.
 
 my website at ewancroft.uk
 
-- Language: Astro (plain <script> for interactivity)
+- Language: SvelteKit (Svelte 5, runes)
 - Default branch: main
 
 ## Working rules

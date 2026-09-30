@@ -1,6 +1,6 @@
 # Website
 
-A personal website and blog built with [Astro](https://astro.build) (plain scripts for the few interactive parts), with an AT Protocol-native publishing stack built around [Standard.site](https://standard.site/) and [Leaflet](https://leaflet.pub/).
+A personal website and blog built with [SvelteKit](https://svelte.dev/docs/kit), with an AT Protocol-native publishing stack built around [Standard.site](https://standard.site/) and [Leaflet](https://leaflet.pub/).
 
 The site owns the presentation layer while AT Protocol records provide the publication and document data. Native Leaflet documents are rendered as structured content blocks, with Markdown retained as a compatibility fallback.
 
@@ -8,7 +8,7 @@ The site owns the presentation layer while AT Protocol records provide the publi
 
 - **AT Protocol-native blog**: Discover publications and documents from the configured AT Protocol DID rather than storing posts as local Markdown files
 - **Standard.site publications**: Blog documents are associated with a Standard.site publication record
-- **Leaflet rendering**: Native `pub.leaflet.blocks.*` content is serialised and rendered with dedicated Astro components
+- **Leaflet rendering**: Native `pub.leaflet.blocks.*` content is serialised and rendered with dedicated Svelte components
 - **Rich text facets**: UTF-8 byte-indexed facets support formatting, links, mentions, IDs, code, highlights, and footnotes
 - **Embedded records**: Leaflet references to posts and publications can be hydrated from AT Protocol records and rendered in context
 - **Markdown compatibility**: Leaflet content can also be converted to Markdown and rendered for older or non-JavaScript clients
@@ -32,7 +32,7 @@ AT Protocol / configured DID
           ↓
 @ewanc26/atproto
           ↓
-Astro server-rendered pages
+SvelteKit server-rendered pages
           ↓
 Vercel/public HTTP cache
           ↓
@@ -45,11 +45,11 @@ Website presentation
 
 The blog index fetches documents and publications, identifies the configured blog publication, filters its documents, sorts them newest-first, and exposes the first page of posts.
 
-Individual post routes resolve the URL against the publication's documents. When a document contains native Leaflet content, the server serialises its pages and blocks, hydrates referenced AT Protocol records, and passes the structured result to `LeafletBlocks.astro`. The page also produces a Markdown representation as a compatibility path.
+Individual post routes resolve the URL against the publication's documents. When a document contains native Leaflet content, the server serialises its pages and blocks, hydrates referenced AT Protocol records, and passes the structured result to `LeafletBlocks.svelte`. The page also produces a Markdown representation as a compatibility path.
 
-The main renderer is `src/lib/components/leaflet/LeafletBlocks.astro`. It handles text, images, embeds, references, post/publication cards, post lists, polls, sign-up blocks, membership delimiters, nested pages, canvas content, footnotes, and unsupported-block fallbacks.
+The main renderer is `src/lib/components/leaflet/LeafletBlocks.svelte`. It handles text, images, embeds, references, post/publication cards, post lists, polls, sign-up blocks, membership delimiters, nested pages, canvas content, footnotes, and unsupported-block fallbacks.
 
-`src/lib/components/leaflet/LeafletFacets.astro` handles rich-text facets using UTF-8 byte offsets rather than JavaScript character offsets. This is important for correctly interpreting AT Protocol text data containing non-ASCII characters.
+`src/lib/components/leaflet/LeafletFacets.svelte` handles rich-text facets using UTF-8 byte offsets rather than JavaScript character offsets. This is important for correctly interpreting AT Protocol text data containing non-ASCII characters.
 
 ### Caching
 
@@ -69,7 +69,7 @@ This keeps the site responsive without requiring every request to re-fetch the p
 
 ## Tech Stack
 
-- **Framework**: [Astro](https://astro.build) and the Vercel adapter
+- **Framework**: [SvelteKit](https://svelte.dev/docs/kit) (Svelte 5) and the Vercel adapter
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4 reset plus the hand-written almanac stylesheet ([src/styles/almanac.css](src/styles/almanac.css)); type is Fraunces and JetBrains Mono via Fontsource
 - **Package Manager**: pnpm
@@ -143,7 +143,7 @@ Other integrations may require additional environment variables. See the source 
 ## Configuration
 
 - **Site configuration**: [src/lib/config.ts](src/lib/config.ts)
-- **Astro configuration**: [astro.config.mjs](astro.config.mjs) (adapter and the `$lib`/`$env`/`$app` shims that keep `src/lib` working)
+- **SvelteKit configuration**: [svelte.config.js](svelte.config.js) (adapter) and [vite.config.ts](vite.config.ts)
 - **Static files**: `public/` (favicon, OAuth client metadata, lexicons, PGP key)
 
 ## Deployment

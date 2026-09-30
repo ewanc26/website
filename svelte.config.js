@@ -5,7 +5,10 @@ import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 const config = {
   preprocess: vitePreprocess(),
   kit: {
-    adapter: adapter(),
+    // Explicit runtime avoids adapter-vercel erroring on local Node versions
+    // it doesn't recognise (e.g. 26) — the actual deployed function always
+    // runs on Vercel's own infrastructure regardless of the local version.
+    adapter: adapter({ runtime: "nodejs24.x" }),
   },
 };
 
