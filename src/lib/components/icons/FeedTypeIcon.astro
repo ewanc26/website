@@ -5,7 +5,7 @@ interface Props {
 const { kind } = Astro.props;
 ---
 
-<svg class="feed-type-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
+<svg class="ui-icon feed-type-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
   {kind === "images" && (
     <>
       <rect x="3" y="4" width="18" height="16" rx="1" />
@@ -35,10 +35,3 @@ const { kind } = Astro.props;
   )}
 </svg>
 
-<style>
-  .feed-type-icon {
-    width: 1em;
-    height: 1em;
-    flex: 0 0 1em;
-  }
-</style>
