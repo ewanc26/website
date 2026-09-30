@@ -119,37 +119,6 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
       </div>
     </section>
 
-    <SigilRule />
-    <h2 class="word"><span class="word-text" style="--n:4">Now</span><small>what's happening lately</small></h2>
-    <div class="cols thunk" style="--i:1">
-      <h3>Sky</h3>
-      <p class="prose" style="max-width:none">{almanac.weekday} {almanac.date}. {almanac.moon.name} moon, {almanac.sabbat.name}; {almanac.next.name} is {almanac.next.days} days off.</p>
-    </div>
-    <div class="cols thunk" style="--i:2">
-      <h3>Watching</h3>
-      {watching[0] ? (
-        <p class="prose" style="max-width:none">
-          {watching[0].title}{watching[0].rating != null && <> — {String(watching[0].rating).padStart(2, "0")}/10</>}.
-        </p>
-      ) : (
-        <p class="empty">Nothing logged lately.</p>
-      )}
-    </div>
-    <div class="cols thunk" style="--i:3">
-      <h3>Saying</h3>
-      {feed[0] ? (
-        <p class="prose" style="max-width:none">
-          <a href={`https://bsky.app/profile/${PUBLIC_ATPROTO_DID}/post/${feed[0].rkey}`} target="_blank" rel="noopener">
-            {feedTitle(feed[0])}
-          </a>
-          <br /><small class="pix">{dateFmt(feed[0].createdAt)}, on Bluesky<ArrowUpRight /></small>
-        </p>
-      ) : (
-        <p class="empty">Quiet on Bluesky.</p>
-      )}
-    </div>
-    <div class="btns"><a href="/blog" class="btn btn--small">Read the archive →</a></div>
-
     <h2 class="word"><span class="word-text" style="--n:5">Words</span><small>the newest six</small></h2>
     {writing.length > 0 ? (
       <div>
