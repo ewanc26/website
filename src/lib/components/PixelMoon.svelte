@@ -1,0 +1,52 @@
+<script lang="ts">
+  /**
+   * A moon in a 13×13 grid of square pixels, lit to tonight's real phase
+   * (0 new → 0.5 full → 1 new, waxing on the right as seen from the UK).
+   */
+  interface Props {
+    phase: number;
+    /** Rendered size in px. */
+    size?: number;
+    label?: string;
+  }
+  let { phase, size = 28, label }: Props = $props();
+
+  const N = 13;
+  const R = 6.4;
+  const c = (N - 1) / 2;
+
+  const cells = $derived.by(() => {
+    const k = Math.cos(phase * Math.PI * 2);
+    const waxing = phase < 0.5;
+    const out: { x: number; y: number; lit: boolean }[] = [];
+    for (let y = 0; y < N; y++) {
+      for (let x = 0; x < N; x++) {
+        const dx = x - c;
+        const dy = y - c;
+        if (dx * dx + dy * dy > R * R) continue;
+        const ny = dy / R;
+        const nx = dx / R;
+        const edge = Math.sqrt(Math.max(0, 1 - ny * ny));
+        const t = k * edge;
+        const lit = waxing ? nx > t : nx < -t;
+        out.push({ x, y, lit });
+      }
+    }
+    return out;
+  });
+</script>
+
+<svg
+  width={size}
+  height={size}
+  viewBox={`0 0 ${N} ${N}`}
+  shape-rendering="crispEdges"
+  role={label ? "img" : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : "true"}
+  focusable="false"
+>
+  {#each cells as p (p.x + "," + p.y)}
+    <rect x={p.x} y={p.y} width="1" height="1" fill="currentColor" opacity={p.lit ? 1 : 0.3} />
+  {/each}
+</svg>
