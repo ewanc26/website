@@ -573,7 +573,7 @@
     z-index: 2;
     display: grid;
     gap: var(--space-lg);
-    margin-top: var(--space-lg);
+    margin-top: calc(var(--space-lg) + var(--space-sm));
     align-items: start;
   }
   @media (min-width: 60rem) {
