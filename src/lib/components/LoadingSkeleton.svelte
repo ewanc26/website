@@ -1,0 +1,69 @@
+<script lang="ts">
+  interface Props {
+    count?: number;
+    label?: string;
+  }
+  let { count = 1, label = "Loading content" }: Props = $props();
+</script>
+
+<div class="loading-skeleton-group" role="status" aria-label={label}>
+  {#each Array.from({ length: count }) as _, i (i)}
+    <div class="loading-skeleton" aria-hidden="true"><div class="skeleton-pulse"></div></div>
+  {/each}
+</div>
+
+<style>
+  .loading-skeleton-group {
+    width: 100%;
+    animation: skeleton-enter var(--duration-fast) var(--ease-out-quart) both;
+  }
+
+  .loading-skeleton {
+    width: 100%;
+    height: 1.5rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--surface-color);
+    overflow: hidden;
+    margin: var(--space-xs) 0;
+  }
+
+  .loading-skeleton:nth-child(3n + 2) {
+    width: 91%;
+  }
+
+  .loading-skeleton:nth-child(3n) {
+    width: 76%;
+  }
+
+  .skeleton-pulse {
+    width: 60%;
+    height: 100%;
+    background: color-mix(in oklab, var(--rule) 40%, transparent);
+    animation: skeleton-sweep 1.6s infinite var(--ease-out-quart);
+    will-change: transform;
+  }
+
+  @keyframes skeleton-enter {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes skeleton-sweep {
+    from {
+      transform: translateX(-120%);
+    }
+    to {
+      transform: translateX(280%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton-pulse {
+      animation: none;
+    }
+  }
+</style>
