@@ -1,0 +1,158 @@
+<script lang="ts">
+  import { X } from "@lucide/svelte";
+  import { onMount } from "svelte";
+  import type { Snippet } from "svelte";
+
+  interface Props {
+    id: string;
+    title: string;
+    children?: Snippet;
+    footer?: Snippet;
+  }
+  let { id, title, children, footer }: Props = $props();
+
+  // Any [data-modal-open="<id>"] anywhere on the page opens the matching
+  // <dialog>, so this listens globally rather than taking an explicit opener
+  // prop — callers (e.g. BacklinkAvatars) stay decoupled from this component.
+  onMount(() => {
+    function handleClick(e: MouseEvent) {
+      const target = e.target as Element;
+      const opener = target.closest<HTMLElement>("[data-modal-open]");
+      if (opener) {
+        const dialog = document.getElementById(opener.dataset.modalOpen ?? "") as HTMLDialogElement | null;
+        if (!dialog) return;
+        if (dialog.parentElement !== document.body) document.body.append(dialog);
+        dialog.showModal();
+        opener.setAttribute("aria-expanded", "true");
+        dialog.addEventListener("close", () => opener.setAttribute("aria-expanded", "false"), { once: true });
+        return;
+      }
+      if (target.closest("[data-modal-close]")) {
+        target.closest("dialog")?.close();
+      } else if (target instanceof HTMLDialogElement && target.classList.contains("base-modal")) {
+        target.close(); // click on the backdrop
+      }
+    }
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  });
+</script>
+
+<dialog {id} class="base-modal" aria-label={title}>
+  <div class="modal-content">
+    <header class="modal-header">
+      <h2 class="modal-title" data-modal-title>{title}</h2>
+      <button type="button" class="close-btn" aria-label="Close" data-modal-close><X size={20} /></button>
+    </header>
+    <div class="modal-body">{@render children?.()}</div>
+    {#if footer}
+      <footer class="modal-footer">{@render footer()}</footer>
+    {/if}
+  </div>
+</dialog>
+
+<style>
+  .base-modal {
+    margin: auto;
+    width: min(90vw, 420px);
+    max-height: min(86vh, 760px);
+    padding: 0;
+    background: var(--color-background-50);
+    color: var(--color-text-800);
+    border: 1px solid var(--surface-color);
+    border-radius: var(--radius-lg);
+    /* Reset anything inherited from a heading the dialog was authored inside. */
+    font: 400 1rem/1.6 var(--font-body, system-ui, sans-serif);
+    letter-spacing: normal;
+    text-transform: none;
+    text-align: start;
+  }
+
+  .base-modal[open] {
+    animation: modal-in 260ms var(--ease-out-expo) both;
+  }
+
+  .base-modal[open]::backdrop {
+    animation: modal-fade 260ms var(--ease-out-expo) both;
+  }
+
+  @keyframes modal-in {
+    from {
+      opacity: 0;
+      translate: 0 14px;
+      scale: 1.02;
+    }
+  }
+
+  @keyframes modal-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .base-modal::backdrop {
+    background-color: color-mix(in oklch, var(--color-text-950) 20%, transparent);
+  }
+
+  .modal-content {
+    padding: var(--space-lg);
+  }
+
+  /* Programmatic container focus only — the ring would read as a bug. */
+  .base-modal:focus {
+    outline: none;
+  }
+
+  .close-btn:focus-visible {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+  }
+
+  .modal-title {
+    font-size: var(--text-lg);
+    margin: 0;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-700);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-right: calc(-1 * var(--space-sm));
+  }
+
+  .close-btn:hover {
+    color: var(--color-primary-500);
+  }
+
+  .modal-body {
+    color: var(--color-text-800);
+    line-height: 1.6;
+    max-height: calc(min(86vh, 760px) - 112px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .modal-footer {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: flex-end;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--surface-color);
+  }
+</style>

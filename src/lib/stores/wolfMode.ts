@@ -10,7 +10,7 @@
  */
 
 import { browser } from "$app/environment";
-import { writable } from "./store";
+import { get, writable } from "svelte/store";
 
 // Refined English onomatopoeic wolf/canine sounds
 const wolfSounds = [
@@ -233,7 +233,7 @@ const wolfStore = writable(false);
 
 export const wolfMode = {
   subscribe: wolfStore.subscribe,
-  get: wolfStore.get,
+  get: () => get(wolfStore),
   toggle() {
     wolfStore.update((value) => {
       const newValue = !value;

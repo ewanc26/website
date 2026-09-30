@@ -1,0 +1,17 @@
+{
+  "id": "click.croft.tools.bismuth",
+  "defs": {
+    "main": {
+      "type": "object",
+      "properties": {
+        "documentsConverted": {
+          "type": "integer",
+          "description": "The number of AT Proto documents converted to Markdown."
+        }
+      },
+      "description": "Metadata for the Bismuth tool usage."
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}

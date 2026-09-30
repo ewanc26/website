@@ -4,7 +4,7 @@ my website at ewancroft.uk
 
 ## Project context
 
-- Primary language: Astro (Svelte islands)
+- Primary language: SvelteKit (Svelte 5, runes)
 - Default branch: main
 
 ## Before submitting changes

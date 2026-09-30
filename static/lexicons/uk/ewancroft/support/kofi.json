@@ -1,0 +1,30 @@
+{
+  "id": "uk.ewancroft.support.kofi",
+  "defs": {
+    "main": {
+      "key": "tid",
+      "type": "record",
+      "record": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Display name from Ko-fi."
+          },
+          "tier": {
+            "type": "string",
+            "description": "Subscription tier name, if applicable."
+          },
+          "type": {
+            "type": "string",
+            "description": "Ko-fi event type: Donation, Subscription, Commission, or Shop Order."
+          }
+        }
+      },
+      "description": "A single Ko-fi payment event. One record per event, rkey is a TID."
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}

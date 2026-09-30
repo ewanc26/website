@@ -1,0 +1,38 @@
+{
+  "id": "uk.ewancroft.support.github",
+  "defs": {
+    "main": {
+      "key": "tid",
+      "type": "record",
+      "record": {
+        "type": "object",
+        "required": ["login", "action", "tierName", "monthlyUsd"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Display name of the sponsor, if known."
+          },
+          "login": {
+            "type": "string",
+            "description": "GitHub username of the sponsor."
+          },
+          "action": {
+            "type": "string",
+            "description": "Sponsorship action: created, cancelled, edited, tier_changed, pending_cancellation, or pending_tier_change."
+          },
+          "tierName": {
+            "type": "string",
+            "description": "Name of the sponsorship tier at the time of this event."
+          },
+          "monthlyUsd": {
+            "type": "integer",
+            "description": "Monthly sponsorship amount in USD at the time of this event."
+          }
+        }
+      },
+      "description": "A single GitHub Sponsors event. One record per event, rkey is a TID."
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}

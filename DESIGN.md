@@ -21,18 +21,18 @@ Not a documentation site, not a portfolio template. This is a two-ink risograph 
 
 ## Colour
 
-`src/lib/server/theme.ts`'s `getDynamicThemeCSS()` still runs the seasonal engine; it now emits `--riso-a`/`--riso-b` alongside the old token scales, refreshed hourly by `SeasonalThemeUpdater` and recomputed per request in `Base.astro`. `--blend` is `multiply` on newsprint by day and `screen` on black stock by night (`prefers-color-scheme`), so overprints always read as ink on the medium beneath them, not as a flat colour.
+`src/lib/server/theme.ts`'s `getDynamicThemeCSS()` still runs the seasonal engine; it now emits `--riso-a`/`--riso-b` alongside the old token scales, refreshed hourly by `SeasonalThemeUpdater` and recomputed per request in `+layout.server.ts`. `--blend` is `multiply` on newsprint by day and `screen` on black stock by night (`prefers-color-scheme`), so overprints always read as ink on the medium beneath them, not as a flat colour.
 
 ## Layout
 
 - `.wrap` (82rem, fluid gutters) wraps every page.
-- **The spine** (`Header.astro`) is a solid ink strip down the left edge on desktop (nav set vertically) and a bar pinned to the bottom on phones — no hamburger menu.
-- **The press** (`Colophon.astro`) replaces a conventional footer: colophon, correspondence, small print, a calibration colour bar, and the eight moon phases with tonight's lit.
+- **The spine** (`Header.svelte`) is a solid ink strip down the left edge on desktop (nav set vertically) and a bar pinned to the bottom on phones — no hamburger menu.
+- **The press** (`Colophon.svelte`) replaces a conventional footer: colophon, correspondence, small print, a calibration colour bar, and the eight moon phases with tonight's lit.
 - Section layout is `.cols`: a sticky word-mark heading on the left, content on the right.
 
 ## Interactive islands
 
-Astro renders every page to static HTML; plain `<script>`s and native `<dialog>` handle the few interactive parts (comments, table of contents, share bar, backlinks, Leaflet blocks, the ambient soundscape, Easter eggs); there is no framework. Persistent elements use `transition:persist` in `Base.astro` so audio and eggs survive navigation.
+SvelteKit server-renders every page; Svelte components (comments, table of contents, share bar, backlinks, the ambient soundscape, Easter eggs) drive the interactive parts with real reactive state, and native `<dialog>` still handles modals. Persistent widgets mount once in the root layout (`+layout.svelte`), which doesn't remount across client-side navigation, so audio and eggs survive navigation without needing anything like Astro's `transition:persist`.
 
 ## Anti-references
 

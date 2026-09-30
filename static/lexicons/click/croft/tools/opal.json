@@ -1,0 +1,17 @@
+{
+  "id": "click.croft.tools.opal",
+  "defs": {
+    "main": {
+      "type": "object",
+      "properties": {
+        "postsImported": {
+          "type": "integer",
+          "description": "The number of posts imported to Bluesky."
+        }
+      },
+      "description": "Metadata for the Opal tool usage."
+    }
+  },
+  "$type": "com.atproto.lexicon.schema",
+  "lexicon": 1
+}

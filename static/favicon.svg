@@ -1,0 +1,13 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    /* Baseline colors derived from Ostara/baseline green */
+    .bg { fill: oklch(23.5% 0.036 136.87); }
+    .fg { fill: oklch(69.5% 0.157 138.19); }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: oklch(93.5% 0.026 136.58); }
+    }
+  </style>
+  <rect class="bg" width="32" height="32" rx="7"/>
+  <!-- Refined E: Symmetrical bars for better balance -->
+  <path class="fg" d="M7 26V6H25V10H13V14H25V18H13V22H25V26H7Z"/>
+</svg>
