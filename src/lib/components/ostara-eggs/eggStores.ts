@@ -3,7 +3,7 @@
  * Currently manages the "three clicks" triskele toast.
  */
 
-import { writable } from "../../stores/store";
+import { writable } from "svelte/store";
 
 // ── Easter egg #3: three clicks on the triskele ──────────────────
 let _threeTimer: ReturnType<typeof setTimeout> | null = null;

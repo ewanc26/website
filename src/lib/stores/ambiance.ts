@@ -12,7 +12,7 @@
  */
 
 import { browser } from "$app/environment";
-import { writable } from "./store";
+import { get, writable } from "svelte/store";
 
 const STORAGE_KEY = "ambiance-enabled";
 
@@ -38,7 +38,7 @@ const ambianceStore = writable(readStoredPreference());
 
 export const ambianceEnabled = {
   subscribe: ambianceStore.subscribe,
-  get: ambianceStore.get,
+  get: () => get(ambianceStore),
   toggle() {
     ambianceStore.update((value) => {
       const newValue = !value;
