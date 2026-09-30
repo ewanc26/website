@@ -9,10 +9,10 @@ interface Props {
 type Mark = {
   kind: "p" | "t";
   side: "left" | "right";
+  x: number;
   y: number;
   size: number;
   rotate: number;
-  inset: number;
 };
 
 const { seed = "" } = Astro.props;
@@ -32,29 +32,35 @@ const next = () => {
 const marks: Mark[] = [];
 
 for (const side of ["left", "right"] as const) {
-  const positions: number[] = [];
-  const count = 5 + Math.floor(next() * 3);
+  const positions: Array<[number, number]> = [];
+  const count = 10 + Math.floor(next() * 3);
 
   for (let i = 0; i < count; i++) {
-    let y = 8 + next() * 84;
+    let x = 0.14 + next() * 0.72;
+    let y = 0.06 + next() * 0.88;
     let attempts = 0;
 
     while (
-      positions.some((existing) => Math.abs(existing - y) < 9) &&
-      attempts < 24
+      positions.some(([existingX, existingY]) => {
+        const dx = existingX - x;
+        const dy = existingY - y;
+        return Math.sqrt(dx * dx + dy * dy) < 0.13;
+      }) &&
+      attempts < 80
     ) {
-      y = 8 + next() * 84;
+      x = 0.14 + next() * 0.72;
+      y = 0.06 + next() * 0.88;
       attempts++;
     }
 
-    positions.push(y);
+    positions.push([x, y]);
     marks.push({
       kind: next() > 0.5 ? "p" : "t",
       side,
+      x,
       y,
-      size: 1.5 + next() * 1,
+      size: 1.45 + next() * 1.05,
       rotate: -30 + next() * 60,
-      inset: 0.25 + next() * 1.25,
     });
   }
 }
@@ -62,17 +68,17 @@ for (const side of ["left", "right"] as const) {
 
 <aside class="margin-sigils" aria-hidden="true">
   {
-    marks.map(({ kind, side, y, size, rotate, inset }) => {
+    marks.map(({ kind, side, x, y, size, rotate }) => {
       const style =
-        "--y:" +
-        y +
+        "--x:" +
+        x +
+        ";--y:" +
+        y * 100 +
         "%;--s:" +
         size +
         "rem;--r:" +
         rotate +
-        "deg;--i:" +
-        inset +
-        "rem";
+        "deg";
 
       return kind === "p" ? (
         <span class:list={["margin-sigil", "margin-sigil--" + side, "margin-sigil--pentacle"]} style={style}>
@@ -103,7 +109,7 @@ for (const side of ["left", "right"] as const) {
     height: var(--s);
     opacity: 1;
     rotate: var(--r);
-    translate: 0 -50%;
+    translate: -50% -50%;
   }
 
   .margin-sigil--pentacle {
@@ -115,17 +121,11 @@ for (const side of ["left", "right"] as const) {
   }
 
   .margin-sigil--left {
-    left: max(
-      1rem,
-      calc((100vw - var(--wrap)) / 2 - var(--s) - var(--i))
-    );
+    left: calc((100vw - var(--wrap)) / 2 * var(--x));
   }
 
   .margin-sigil--right {
-    right: max(
-      1rem,
-      calc((100vw - var(--wrap)) / 2 - var(--s) - var(--i))
-    );
+    right: calc((100vw - var(--wrap)) / 2 * var(--x));
   }
 
   .margin-sigil :global(svg) {
