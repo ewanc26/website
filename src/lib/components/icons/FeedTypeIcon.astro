@@ -1,0 +1,37 @@
+---
+interface Props {
+  kind: "text" | "images" | "external" | "video" | "quote" | "quote-media";
+}
+const { kind } = Astro.props;
+---
+
+<svg class="ui-icon feed-type-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
+  {kind === "images" && (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="1" />
+      <circle cx="8" cy="9" r="1.5" />
+      <path d="m3 17 5-5 4 4 3-3 6 5" />
+    </>
+  )}
+  {kind === "external" && (
+    <>
+      <path d="M14 5h5v5" />
+      <path d="m19 5-8 8" />
+      <path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" />
+    </>
+  )}
+  {kind === "video" && (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="1" />
+      <path d="m10 9 5 3-5 3z" />
+    </>
+  )}
+  {(kind === "quote" || kind === "quote-media") && (
+    <>
+      <path d="M6 17h4V9H6a3 3 0 0 0-3 3v1h3z" />
+      <path d="M16 17h4V9h-4a3 3 0 0 0-3 3v1h3z" />
+      {kind === "quote-media" && <path d="M18 4v3M16.5 5.5h3" />}
+    </>
+  )}
+</svg>
+

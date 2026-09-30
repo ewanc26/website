@@ -1,5 +1,6 @@
 ---
 import Link from "../lib/components/icons/Link.astro";
+import FeedTypeIcon from "../lib/components/icons/FeedTypeIcon.astro";
 import ArrowUpRight from "../lib/components/icons/ArrowUpRight.astro";
 import Base from "../layouts/Base.astro";
 import HalftoneMoon from "../components/HalftoneMoon.astro";
@@ -61,11 +62,11 @@ const feedTitle = (post: (typeof feed)[number]) => {
   }
 };
 const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
-  images: "photo",
-  external: "link",
-  video: "video",
-  quote: "quote",
-  "quote-media": "quote + media",
+  images: "Photo",
+  external: "Link",
+  video: "Video",
+  quote: "Quote",
+  "quote-media": "Quote with media",
 };
 ---
 
@@ -152,7 +153,12 @@ const feedTag: Partial<Record<(typeof feed)[number]["kind"], string>> = {
                   <a href={`https://bsky.app/profile/${PUBLIC_ATPROTO_DID}/post/${post.rkey}`} class="track" target="_blank" rel="noopener">
                     <span class="track-when"><span class="track-day">{w.day}</span><span class="track-mon">{w.mon}</span></span>
                     <span class="track-title">{feedTitle(post)}</span>
-                    {tag && <span class="track-meta">{tag}</span>}
+                    {tag && (
+                      <span class="track-meta shelf-meta shelf-chip" title={tag}>
+                        <FeedTypeIcon kind={post.kind} />
+                        <span class="sr-only">{tag}</span>
+                      </span>
+                    )}
                     {post.quoted?.text && <span class="track-note">“{post.quoted.text.length > 140 ? post.quoted.text.slice(0, 139) + "…" : post.quoted.text}”</span>}
                   </a>
                 </li>

@@ -10,7 +10,7 @@ const { size = "1em", class: className = "" } = Astro.props as Props;
 	xmlns="http://www.w3.org/2000/svg"
 	width={size}
 	height={size}
-	class={className}
+	class={`ui-icon ${className}`.trim()}
 	aria-hidden="true"
 	fill="none"
 	stroke="currentColor"
