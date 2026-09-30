@@ -1,0 +1,105 @@
+---
+import Pentacle from "$lib/components/icons/Pentacle.astro";
+import Triskele from "$lib/components/icons/Triskele.astro";
+
+interface Props {
+  seed?: string;
+}
+
+type Mark = {
+  kind: "p" | "t";
+  side: "left" | "right";
+  y: number;
+  size: number;
+  rotate: number;
+};
+
+const { seed = "" } = Astro.props;
+
+let hash = 2166136261;
+for (const char of seed) {
+  hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
+}
+const next = () => {
+  hash = Math.imul(hash + 0x6d2b79f5, 1);
+  let value = Math.imul(hash ^ (hash >>> 15), 1 | hash);
+  value ^= value + Math.imul(value ^ (value >>> 7), 61 | value);
+  return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+};
+
+const marks: Mark[] = [
+  {
+    kind: next() > 0.5 ? "p" : "t",
+    side: next() > 0.5 ? "left" : "right",
+    y: 12 + next() * 76,
+    size: 1.75 + next() * 1.5,
+    rotate: -24 + next() * 48,
+  },
+  {
+    kind: next() > 0.5 ? "p" : "t",
+    side: next() > 0.5 ? "left" : "right",
+    y: 12 + next() * 76,
+    size: 1.75 + next() * 1.5,
+    rotate: -24 + next() * 48,
+  },
+];
+
+if (marks[0].kind === marks[1].kind) {
+  marks[1].kind = marks[0].kind === "p" ? "t" : "p";
+}
+---
+
+<aside class="margin-sigils" aria-hidden="true">
+  {
+    marks.map(({ kind, side, y, size, rotate }) => {
+      const style = "--y:" + y + "%;--s:" + size + "rem;--r:" + rotate + "deg";
+      const Icon = kind === "p" ? Pentacle : Triskele;
+      return (
+        <span class:list={["margin-sigil", "margin-sigil--" + side]} style={style}>
+          <Icon size={48} />
+        </span>
+      );
+    })
+  }
+</aside>
+
+<style>
+  .margin-sigils {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .margin-sigil {
+    position: absolute;
+    top: var(--y);
+    width: var(--s);
+    height: var(--s);
+    color: var(--riso-a);
+    opacity: 0.28;
+    rotate: var(--r);
+    translate: 0 -50%;
+  }
+
+  .margin-sigil--left {
+    left: max(1rem, calc((100vw - var(--wrap)) / 2 - var(--s) - 1rem));
+  }
+
+  .margin-sigil--right {
+    right: max(1rem, calc((100vw - var(--wrap)) / 2 - var(--s) - 1rem));
+  }
+
+  .margin-sigil :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (min-width: 100rem) {
+    .margin-sigils {
+      display: block;
+    }
+  }
+</style>
