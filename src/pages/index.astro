@@ -47,8 +47,6 @@ const when = (iso: string) => {
   };
 };
 const pad = (n: number) => String(n).padStart(2, "0");
-const dateFmt = (iso: string) =>
-  new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "long", timeZone: "Europe/London" }).format(new Date(iso));
 const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
 
 const feedTitle = (post: (typeof feed)[number]) => {
