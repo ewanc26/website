@@ -16,7 +16,7 @@ import { resolveDid } from "$lib/services/atproto/did";
 Astro.response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=3600");
 
 const did = PUBLIC_ATPROTO_DID;
-const [profile, links, sifa, skills, education, languages, projects, pds] = await Promise.all([
+const [profile, links, sifa, skills, education, languages, professional, projects, pds] = await Promise.all([
   fetchProfile(did, fetch).catch(() => ({ displayName: "", description: "", avatar: "", handle: "", did, pronouns: "" }) as any),
   fetchLinks(did, fetch).catch(() => null),
   fetchSifaProfile(did, fetch).catch(() => null),
