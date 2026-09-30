@@ -13,7 +13,7 @@ const { size = 24, class: className = "", style = "", "aria-hidden": ariaHidden 
 	xmlns="http://www.w3.org/2000/svg"
 	width={size}
 	height={size}
-	class={className}
+	class={`ui-icon ${className}`.trim()}
 	style={style}
 	aria-hidden={ariaHidden ? "true" : undefined}
 	aria-label={ariaLabel}
