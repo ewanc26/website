@@ -1,11 +1,24 @@
 <script lang="ts">
   import "../styles/riso.css";
+  import { page } from "$app/state";
   import { ME_LINKS } from "$lib/config";
   import { pulseAmbiance } from "$lib/stores/ambiance";
+  import { extraBacklinkTargets } from "$lib/stores/backlinkTargets";
   import Header from "$lib/components/Header.svelte";
   import Colophon from "$lib/components/Colophon.svelte";
+  import BacklinkAvatars from "$lib/components/BacklinkAvatars.svelte";
+  import SeasonalThemeUpdater from "$lib/components/SeasonalThemeUpdater.svelte";
+  import AmbianceEngine from "$lib/components/AmbianceEngine.svelte";
+  import WolfPawTrail from "$lib/components/WolfPawTrail.svelte";
+  import MondayEgg from "$lib/components/ostara-eggs/MondayEgg.svelte";
+  import IdleEgg from "$lib/components/ostara-eggs/IdleEgg.svelte";
+  import ThreeToast from "$lib/components/ostara-eggs/ThreeToast.svelte";
+  import BlogArchiveEggs from "$lib/components/ostara-eggs/BlogArchiveEggs.svelte";
+  import HeritageEggs from "$lib/components/ostara-eggs/HeritageEggs.svelte";
 
   let { data, children } = $props();
+
+  const backlinks = $derived([`https://ewancroft.uk${page.url.pathname}`, ...$extraBacklinkTargets]);
 
   function handleClick(event: MouseEvent) {
     const el = (event.target as HTMLElement).closest<HTMLElement>("[data-copy]");
@@ -35,6 +48,21 @@
 
 <svelte:body onclick={handleClick} />
 
+<!--
+  Persistent widgets: no transition:persist equivalent is needed here —
+  SvelteKit's root layout instance doesn't remount across client-side
+  navigation, so these mount once per session, same end result as Astro's
+  transition:persist achieved with an extra mechanism.
+-->
+<SeasonalThemeUpdater />
+<AmbianceEngine />
+<WolfPawTrail />
+<MondayEgg />
+<IdleEgg />
+<ThreeToast />
+<BlogArchiveEggs />
+<HeritageEggs />
+
 <!-- Shared SVG filters, kept for .text-outline consumers. -->
 <svg class="svg-defs" aria-hidden="true" focusable="false">
   <filter id="text-outline" x="-20%" y="-60%" width="140%" height="220%" color-interpolation-filters="sRGB">
@@ -48,4 +76,7 @@
 <div class="shell-main" id="main-content" tabindex="-1">
   {@render children?.()}
 </div>
+{#if page.status !== 404}
+  <div class="wrap backlinks"><BacklinkAvatars targets={backlinks} /></div>
+{/if}
 <Colophon almanac={data.almanac} siteInfo={data.siteInfo} />
