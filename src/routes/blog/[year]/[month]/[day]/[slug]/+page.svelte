@@ -81,7 +81,7 @@
       <div class="post-after">
         <CommentSection comments={data.comments} subjectUri={post.uri} />
         {#if blog}
-          <footer>
+          <footer class="publication">
             <h2>Published in</h2>
             <p>
               {#if blog.url}<a href={blog.url} rel="noopener noreferrer">{blog.title}</a>{:else}{blog.title}{/if}
@@ -90,7 +90,7 @@
             <ul class="chips">
               <li class="chip">Standard.site</li>
               <li class="chip">Leaflet</li>
-              {#if blog.rss}<li><a class="chip" href={blog.rss} rel="noopener noreferrer">RSS</a></li>{/if}
+              {#if blog.rss}<li><a class="btn btn--small btn--a" href={blog.rss} rel="noopener noreferrer">RSS</a></li>{/if}
             </ul>
           </footer>
         {/if}
