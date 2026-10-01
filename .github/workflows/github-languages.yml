@@ -24,12 +24,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_USERNAME: ${{ github.repository_owner }}
+          OUT_FILE: ${{ runner.temp }}/github-languages.json
 
-      - name: Commit if changed
+      # main is protected, so the snapshot lives on an unprotected `data` branch
+      # that the site reads from raw.githubusercontent.com.
+      - name: Publish to data branch
         run: |
-          if git diff --quiet -- src/lib/data/github-languages.json; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/lib/data/github-languages.json
+          if git ls-remote --exit-code --heads origin data >/dev/null; then
+            git fetch origin data:data
+            git worktree add "$RUNNER_TEMP/data" data
+          else
+            git worktree add --orphan -b data "$RUNNER_TEMP/data"
+          fi
+          cd "$RUNNER_TEMP/data"
+          cp "$RUNNER_TEMP/github-languages.json" github-languages.json
+          git add github-languages.json
+          if git diff --cached --quiet; then exit 0; fi
           git commit -m "chore: refresh GitHub language breakdown"
-          git push
+          git push origin data

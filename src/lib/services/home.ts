@@ -50,6 +50,31 @@ async function fetchVerifications() {
   }
 }
 
+const LANGUAGE_SNAPSHOT_URL =
+  "https://raw.githubusercontent.com/ewanc26/website/data/github-languages.json";
+
+type LanguageSnapshot = typeof languageSnapshot;
+
+const usable = (snap: LanguageSnapshot | null | undefined, username: string) =>
+  !!snap &&
+  snap.username?.toLowerCase() === username.toLowerCase() &&
+  Array.isArray(snap.languages) &&
+  snap.languages.length > 0;
+
+async function loadLanguages(username: string) {
+  try {
+    const res = await fetch(LANGUAGE_SNAPSHOT_URL);
+    if (res.ok) {
+      const remote = (await res.json()) as LanguageSnapshot;
+      if (usable(remote, username)) return remote.languages;
+    }
+  } catch {}
+  if (usable(languageSnapshot, username)) return languageSnapshot.languages;
+  return fetchGitHubLanguages(username, fetch, env.GITHUB_TOKEN).catch(
+    () => [],
+  );
+}
+
 export async function getHomeData() {
   const githubUsername = env.GITHUB_USERNAME || "ewanc26";
   const [
@@ -82,12 +107,7 @@ export async function getHomeData() {
     fetchGitHubContributions(githubUsername, fetch, env.GITHUB_TOKEN).catch(
       () => null,
     ),
-    languageSnapshot.username.toLowerCase() === githubUsername.toLowerCase() &&
-    languageSnapshot.languages.length > 0
-      ? Promise.resolve(languageSnapshot.languages)
-      : fetchGitHubLanguages(githubUsername, fetch, env.GITHUB_TOKEN).catch(
-          () => [],
-        ),
+    loadLanguages(githubUsername),
     fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
       publications: [],
     })),
