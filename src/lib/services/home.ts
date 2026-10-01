@@ -16,6 +16,7 @@ import { env } from "$env/dynamic/private";
 import {
   fetchPinnedGitHubProjects,
   fetchGitHubContributions,
+  fetchGitHubCommitTotal,
   fetchGitHubLanguages,
 } from "$lib/services/github";
 import languageSnapshot from "$lib/data/github-languages.json";
@@ -50,37 +51,23 @@ async function fetchVerifications() {
   }
 }
 
-const LANGUAGE_SNAPSHOT_URL =
-  "https://raw.githubusercontent.com/ewanc26/website/data/github-languages.json";
-
-type LanguageSnapshot = typeof languageSnapshot & { commits?: number | null };
-
-const usable = (snap: LanguageSnapshot | null | undefined, username: string) =>
-  !!snap &&
-  snap.username?.toLowerCase() === username.toLowerCase() &&
-  Array.isArray(snap.languages) &&
-  snap.languages.length > 0;
+type LanguageSnapshot = typeof languageSnapshot;
 
 async function loadSnapshot(username: string) {
-  try {
-    const res = await fetch(LANGUAGE_SNAPSHOT_URL);
-    if (res.ok) {
-      const remote = (await res.json()) as LanguageSnapshot;
-      if (usable(remote, username)) {
-        return { languages: remote.languages, commits: remote.commits ?? null };
-      }
-    }
-  } catch {}
+  const token = env.GITHUB_TOKEN;
   const bundled = languageSnapshot as LanguageSnapshot;
-  if (usable(bundled, username)) {
-    return { languages: bundled.languages, commits: bundled.commits ?? null };
-  }
-  const languages = await fetchGitHubLanguages(
-    username,
-    fetch,
-    env.GITHUB_TOKEN,
-  ).catch(() => []);
-  return { languages, commits: null };
+  const hasBundled =
+    bundled.username?.toLowerCase() === username.toLowerCase() &&
+    bundled.languages.length > 0;
+  const [languages, commits] = await Promise.all([
+    hasBundled
+      ? Promise.resolve(bundled.languages)
+      : fetchGitHubLanguages(username, fetch, token).catch(() => []),
+    token
+      ? fetchGitHubCommitTotal(username, fetch, token).catch(() => null)
+      : Promise.resolve(null),
+  ]);
+  return { languages, commits };
 }
 
 export async function getHomeData() {
