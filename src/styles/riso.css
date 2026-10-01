@@ -1271,61 +1271,24 @@
     gap: var(--space-sm) var(--space-md);
     align-items: center;
   }
+  /* RSS is the one actionable item in the row, so it gets the ink-filled
+     treatment rather than the outline the passive platform labels use. It
+     keeps the shared .chip geometry so the baseline and pill shape match. */
   .publication-rss {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-md);
-    min-width: 5.5rem;
-    padding: 0.45rem 0.7rem;
-    color: var(--ink);
-    font-family: var(--font-pixel);
-    font-size: var(--text-xs);
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
     font-weight: 600;
     text-decoration: none;
-    text-transform: uppercase;
-    isolation: isolate;
-  }
-  .publication-rss::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    inset: -0.15rem -0.3rem;
-    background: var(--riso-a);
-    transform: rotate(-1deg);
   }
   .publication-rss:hover {
-    color: var(--riso-a-text);
+    background: var(--riso-a);
+    border-color: var(--riso-a);
+    color: var(--on-ink);
   }
-  .publication-external {
-    position: relative;
-    width: 0.7rem;
-    height: 0.7rem;
-    flex: 0 0 0.7rem;
-    border: 1.5px solid currentColor;
-    border-left: 0;
-    border-bottom: 0;
-  }
-  .publication-external::before {
-    content: "";
-    position: absolute;
-    top: -0.12rem;
-    right: 0.02rem;
-    width: 0.62rem;
-    height: 1.5px;
-    background: currentColor;
-    transform: rotate(-45deg);
-    transform-origin: right center;
-  }
-  .publication-external::after {
-    content: "";
-    position: absolute;
-    top: -0.23rem;
-    right: -0.06rem;
-    width: 0.3rem;
-    height: 0.3rem;
-    border-top: 1.5px solid currentColor;
-    border-right: 1.5px solid currentColor;
+  .publication-rss > .arrow-ur {
+    margin-inline-start: 0;
+    color: currentColor;
   }
 
   /* ── Finder (blog filter) ────────────────────────────────────── */

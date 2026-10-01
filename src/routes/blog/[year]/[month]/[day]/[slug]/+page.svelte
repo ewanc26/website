@@ -7,6 +7,7 @@
   import CommentSection from "$lib/components/CommentSection.svelte";
   import LeafletBlocks from "$lib/components/leaflet/LeafletBlocks.svelte";
   import AtMentions from "$lib/components/AtMentions.svelte";
+  import ArrowUpRight from "$lib/components/icons/ArrowUpRight.svelte";
   import { extraBacklinkTargets } from "$lib/stores/backlinkTargets";
 
   let { data } = $props();
@@ -92,8 +93,8 @@
               <li class="chip">Leaflet</li>
               {#if blog.rss}
                 <li>
-                  <a class="publication-rss" href={blog.rss} rel="noopener noreferrer">
-                    <span>RSS</span><span class="publication-external" aria-hidden="true"></span>
+                  <a class="chip publication-rss" href={blog.rss} rel="noopener noreferrer">
+                    <span>RSS</span><ArrowUpRight />
                   </a>
                 </li>
               {/if}
