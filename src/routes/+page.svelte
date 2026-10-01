@@ -8,12 +8,13 @@
   import Triskele from "$lib/components/icons/Triskele.svelte";
   import SeoHead from "$lib/components/SeoHead.svelte";
   import KibunStatus from "$lib/components/KibunStatus.svelte";
+  import NowPlayingChip from "$lib/components/NowPlayingChip.svelte";
   import { normalizeSlug } from "$lib/utils/slugify";
   import { blogDateParts } from "$lib/utils/date";
   import { PUBLIC_LEAFLET_BLOG_PUBLICATION, PUBLIC_ATPROTO_DID } from "$env/static/public";
 
   let { data } = $props();
-  const { profile, kibunStatus, musicStatus, posts, githubProjects, githubUsername, publications, links, apps, watching, feed } = $derived(data);
+  const { profile, kibunStatus, musicStatus, posts, githubProjects, githubUsername, publications, links, apps, watching, feed, latestPlay } = $derived(data);
 
   const almanac = $derived(data.almanac);
   const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -78,6 +79,12 @@
       <Pentacle size={96} class="ps-a" style="--x:58%;--y:6%;--w:13%;--r:9deg" />
       <Triskele size={96} class="ps-b" style="--x:82%;--y:34%;--w:11%;--r:40deg" />
     </div>
+    {#if kibunStatus || latestPlay}
+      <div class="poster-chips">
+        <KibunStatus status={kibunStatus} />
+        <NowPlayingChip play={latestPlay} />
+      </div>
+    {/if}
     <h1 class="poster-name" data-t={name} style={`--n:${Math.max(3, name.length)}`}>
       {name}
     </h1>
@@ -295,3 +302,18 @@
     </ul>
   {/if}
 </main>
+
+
+<style>
+  .poster-chips {
+    position: absolute;
+    z-index: 1;
+    top: clamp(1rem, 6vw, 3rem);
+    right: clamp(0.5rem, 6vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.85rem;
+    max-width: min(48vw, 17rem);
+  }
+</style>
