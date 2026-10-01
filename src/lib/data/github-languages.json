@@ -1,0 +1,59 @@
+{
+  "username": "ewanc26",
+  "updatedAt": "2026-10-01",
+  "languages": [
+    {
+      "name": "C",
+      "color": "#555555",
+      "size": 15039453,
+      "percent": 40.580410011961405
+    },
+    {
+      "name": "C++",
+      "color": "#f34b7d",
+      "size": 3817152,
+      "percent": 10.299682657206914
+    },
+    {
+      "name": "TypeScript",
+      "color": "#3178c6",
+      "size": 3248451,
+      "percent": 8.76517739599745
+    },
+    {
+      "name": "Kotlin",
+      "color": "#A97BFF",
+      "size": 2802173,
+      "percent": 7.561001671034706
+    },
+    {
+      "name": "Makefile",
+      "color": "#427819",
+      "size": 2494337,
+      "percent": 6.7303789684376
+    },
+    {
+      "name": "JavaScript",
+      "color": "#f1e05a",
+      "size": 2302839,
+      "percent": 6.213666867507428
+    },
+    {
+      "name": "Svelte",
+      "color": "#ff3e00",
+      "size": 1710137,
+      "percent": 4.61440057937118
+    },
+    {
+      "name": "Swift",
+      "color": "#F05138",
+      "size": 1121063,
+      "percent": 3.0249235919178368
+    },
+    {
+      "name": "Other",
+      "size": 4525265,
+      "percent": 12.210358256565483
+    }
+  ]
+}

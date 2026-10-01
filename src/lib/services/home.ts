@@ -13,7 +13,12 @@ import {
 } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 import { env } from "$env/dynamic/private";
-import { fetchPinnedGitHubProjects } from "$lib/services/github";
+import {
+  fetchPinnedGitHubProjects,
+  fetchGitHubContributions,
+  fetchGitHubLanguages,
+} from "$lib/services/github";
+import languageSnapshot from "$lib/data/github-languages.json";
 
 const CONSTELLATION =
   "https://constellation.microcosm.blue/xrpc/blue.microcosm.links.getBacklinks";
@@ -54,6 +59,8 @@ export async function getHomeData() {
     musicStatus,
     postsData,
     githubProjects,
+    githubContributions,
+    githubLanguages,
     publicationsData,
     links,
   ] = await Promise.all([
@@ -72,6 +79,15 @@ export async function getHomeData() {
     fetchPinnedGitHubProjects(githubUsername, fetch, env.GITHUB_TOKEN).catch(
       () => [],
     ),
+    fetchGitHubContributions(githubUsername, fetch, env.GITHUB_TOKEN).catch(
+      () => null,
+    ),
+    languageSnapshot.username.toLowerCase() === githubUsername.toLowerCase() &&
+    languageSnapshot.languages.length > 0
+      ? Promise.resolve(languageSnapshot.languages)
+      : fetchGitHubLanguages(githubUsername, fetch, env.GITHUB_TOKEN).catch(
+          () => [],
+        ),
     fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
       publications: [],
     })),
@@ -86,6 +102,8 @@ export async function getHomeData() {
     posts: (postsData?.posts ?? []) as any[],
     githubProjects: githubProjects as any[],
     githubUsername,
+    githubContributions,
+    githubLanguages,
     publications: (publicationsData?.publications ?? []) as any[],
     links: (links ?? { cards: [] }) as { cards: any[] },
   };
