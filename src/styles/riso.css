@@ -1249,12 +1249,22 @@
     margin-top: var(--space-xl);
   }
   .post-after h2 {
-    margin-bottom: var(--space-sm);
     font-variation-settings: "wdth" 125;
     font-weight: 900;
     font-size: 1.5rem;
     text-transform: uppercase;
     letter-spacing: -0.02em;
+  }
+  .publication {
+    display: grid;
+    gap: var(--space-md);
+  }
+  .publication h2,
+  .publication p {
+    margin: 0;
+  }
+  .publication .chips {
+    gap: var(--space-sm) var(--space-md);
   }
 
   /* ── Finder (blog filter) ────────────────────────────────────── */
