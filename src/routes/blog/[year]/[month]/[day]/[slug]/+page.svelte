@@ -82,16 +82,29 @@
         <CommentSection comments={data.comments} subjectUri={post.uri} />
         {#if blog}
           <footer class="publication">
-            <h2>Published in</h2>
-            <p>
-              {#if blog.url}<a href={blog.url} rel="noopener noreferrer">{blog.title}</a>{:else}{blog.title}{/if}
-              {#if blog.description}&mdash; <em>{blog.description}</em>{/if}
-            </p>
-            <ul class="chips">
-              <li class="chip">Standard.site</li>
-              <li class="chip">Leaflet</li>
-              {#if blog.rss}<li><a class="btn btn--small btn--a" href={blog.rss} rel="noopener noreferrer">RSS</a></li>{/if}
-            </ul>
+            <div class="publication-kicker">
+              <span>Published in</span>
+              <span class="publication-rule" aria-hidden="true"></span>
+            </div>
+            <div class="publication-grid">
+              <div class="publication-copy">
+                <h2>
+                  {#if blog.url}<a href={blog.url} rel="noopener noreferrer">{blog.title}</a>{:else}{blog.title}{/if}
+                </h2>
+                {#if blog.description}<p>{blog.description}</p>{/if}
+              </div>
+              <div class="publication-meta">
+                <div class="publication-platforms" aria-label="Publication platforms">
+                  <span><i aria-hidden="true"></i>Standard.site</span>
+                  <span><i aria-hidden="true"></i>Leaflet</span>
+                </div>
+                {#if blog.rss}
+                  <a class="publication-rss" href={blog.rss} rel="noopener noreferrer">
+                    <span>RSS feed</span><span aria-hidden="true">↗</span>
+                  </a>
+                {/if}
+              </div>
+            </div>
           </footer>
         {/if}
       </div>
