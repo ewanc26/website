@@ -53,7 +53,7 @@ async function fetchVerifications() {
 const LANGUAGE_SNAPSHOT_URL =
   "https://raw.githubusercontent.com/ewanc26/website/data/github-languages.json";
 
-type LanguageSnapshot = typeof languageSnapshot;
+type LanguageSnapshot = typeof languageSnapshot & { commits?: number | null };
 
 const usable = (snap: LanguageSnapshot | null | undefined, username: string) =>
   !!snap &&
@@ -61,18 +61,26 @@ const usable = (snap: LanguageSnapshot | null | undefined, username: string) =>
   Array.isArray(snap.languages) &&
   snap.languages.length > 0;
 
-async function loadLanguages(username: string) {
+async function loadSnapshot(username: string) {
   try {
     const res = await fetch(LANGUAGE_SNAPSHOT_URL);
     if (res.ok) {
       const remote = (await res.json()) as LanguageSnapshot;
-      if (usable(remote, username)) return remote.languages;
+      if (usable(remote, username)) {
+        return { languages: remote.languages, commits: remote.commits ?? null };
+      }
     }
   } catch {}
-  if (usable(languageSnapshot, username)) return languageSnapshot.languages;
-  return fetchGitHubLanguages(username, fetch, env.GITHUB_TOKEN).catch(
-    () => [],
-  );
+  const bundled = languageSnapshot as LanguageSnapshot;
+  if (usable(bundled, username)) {
+    return { languages: bundled.languages, commits: bundled.commits ?? null };
+  }
+  const languages = await fetchGitHubLanguages(
+    username,
+    fetch,
+    env.GITHUB_TOKEN,
+  ).catch(() => []);
+  return { languages, commits: null };
 }
 
 export async function getHomeData() {
@@ -85,7 +93,7 @@ export async function getHomeData() {
     postsData,
     githubProjects,
     githubContributions,
-    githubLanguages,
+    githubSnapshot,
     publicationsData,
     links,
   ] = await Promise.all([
@@ -107,7 +115,7 @@ export async function getHomeData() {
     fetchGitHubContributions(githubUsername, fetch, env.GITHUB_TOKEN).catch(
       () => null,
     ),
-    loadLanguages(githubUsername),
+    loadSnapshot(githubUsername),
     fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
       publications: [],
     })),
@@ -123,7 +131,8 @@ export async function getHomeData() {
     githubProjects: githubProjects as any[],
     githubUsername,
     githubContributions,
-    githubLanguages,
+    githubLanguages: githubSnapshot.languages,
+    githubCommits: githubSnapshot.commits,
     publications: (publicationsData?.publications ?? []) as any[],
     links: (links ?? { cards: [] }) as { cards: any[] },
   };

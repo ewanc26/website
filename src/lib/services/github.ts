@@ -321,6 +321,20 @@ export async function fetchGitHubContributions(
   return fetchContributionsFromProfile(username, fetchFn);
 }
 
+export async function fetchGitHubCommitTotal(
+  username: string,
+  fetchFn: typeof fetch,
+  token: string,
+): Promise<number> {
+  const data = await graphql(
+    `query Commits($login: String!) { user(login: $login) { contributionsCollection { totalCommitContributions } } }`,
+    username,
+    token,
+    fetchFn,
+  );
+  return data.user.contributionsCollection.totalCommitContributions;
+}
+
 const LINGUIST_COLORS: Record<string, string> = {
   Assembly: "#6E4C13", Astro: "#ff5a03", Batchfile: "#C1F12E", C: "#555555", "C#": "#178600",
   "C++": "#f34b7d", CMake: "#DA3434", CSS: "#663399", Clojure: "#db5855", Dart: "#00B4AB",

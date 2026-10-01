@@ -5,8 +5,9 @@
     username: string;
     contributions: ContributionCalendar | null;
     languages: LanguageShare[];
+    commits?: number | null;
   }
-  let { username, contributions, languages }: Props = $props();
+  let { username, contributions, languages, commits = null }: Props = $props();
 
   const fmtDate = (iso: string) =>
     new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
@@ -57,8 +58,8 @@
     {#if contributions && stats}
       <dl class="stats">
         <div>
-          <dt class="pix">Contributions</dt>
-          <dd>{stats.total.toLocaleString("en-GB")}</dd>
+          <dt class="pix">{commits === null ? "Contributions" : "Commits"}</dt>
+          <dd>{(commits ?? stats.total).toLocaleString("en-GB")}</dd>
         </div>
         <div>
           <dt class="pix">Days active</dt>

@@ -15,7 +15,7 @@
   import { PUBLIC_LEAFLET_BLOG_PUBLICATION, PUBLIC_ATPROTO_DID } from "$env/static/public";
 
   let { data } = $props();
-  const { profile, kibunStatus, musicStatus, posts, githubProjects, githubUsername, githubContributions, githubLanguages, publications, links, apps, watching, feed, latestPlay } = $derived(data);
+  const { profile, kibunStatus, musicStatus, posts, githubProjects, githubUsername, githubContributions, githubLanguages, githubCommits, publications, links, apps, watching, feed, latestPlay } = $derived(data);
 
   const almanac = $derived(data.almanac);
   const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -233,7 +233,7 @@
   {/if}
 
   <SigilRule /><h2 class="word"><span class="word-text" style="--n:7">Commits</span><small>a year of GitHub</small></h2>
-  <GithubActivity username={githubUsername} contributions={githubContributions} languages={githubLanguages} />
+  <GithubActivity username={githubUsername} contributions={githubContributions} languages={githubLanguages} commits={githubCommits} />
 
   {#if watching.length > 0}
     <SigilRule /><h2 class="word"><span class="word-text" style="--n:8">Watching</span><small>logged on Popfeed</small></h2>
