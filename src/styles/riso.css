@@ -1249,12 +1249,46 @@
     margin-top: var(--space-xl);
   }
   .post-after h2 {
-    margin-bottom: var(--space-sm);
     font-variation-settings: "wdth" 125;
     font-weight: 900;
     font-size: 1.5rem;
     text-transform: uppercase;
     letter-spacing: -0.02em;
+  }
+  .publication h2 {
+    margin-bottom: var(--space-md);
+    font-variation-settings: "wdth" 125;
+    font-weight: 900;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+  .publication p {
+    margin: 0 0 var(--space-lg);
+    max-width: 48rem;
+  }
+  .publication-links {
+    gap: var(--space-sm) var(--space-md);
+    align-items: center;
+  }
+  /* RSS is the one actionable item in the row, so it gets the ink-filled
+     treatment rather than the outline the passive platform labels use. It
+     keeps the shared .chip geometry so the baseline and pill shape match. */
+  .publication-rss {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .publication-rss:hover {
+    background: var(--riso-a);
+    border-color: var(--riso-a);
+    color: var(--on-ink);
+  }
+  .publication-rss > .arrow-ur {
+    margin-inline-start: 0;
+    color: currentColor;
   }
 
   /* ── Finder (blog filter) ────────────────────────────────────── */

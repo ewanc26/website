@@ -7,6 +7,7 @@
   import CommentSection from "$lib/components/CommentSection.svelte";
   import LeafletBlocks from "$lib/components/leaflet/LeafletBlocks.svelte";
   import AtMentions from "$lib/components/AtMentions.svelte";
+  import ArrowUpRight from "$lib/components/icons/ArrowUpRight.svelte";
   import { extraBacklinkTargets } from "$lib/stores/backlinkTargets";
 
   let { data } = $props();
@@ -81,16 +82,22 @@
       <div class="post-after">
         <CommentSection comments={data.comments} subjectUri={post.uri} />
         {#if blog}
-          <footer>
+          <footer class="publication">
             <h2>Published in</h2>
             <p>
               {#if blog.url}<a href={blog.url} rel="noopener noreferrer">{blog.title}</a>{:else}{blog.title}{/if}
               {#if blog.description}&mdash; <em>{blog.description}</em>{/if}
             </p>
-            <ul class="chips">
+            <ul class="chips publication-links">
               <li class="chip">Standard.site</li>
               <li class="chip">Leaflet</li>
-              {#if blog.rss}<li><a class="chip" href={blog.rss} rel="noopener noreferrer">RSS</a></li>{/if}
+              {#if blog.rss}
+                <li>
+                  <a class="chip publication-rss" href={blog.rss} rel="noopener noreferrer">
+                    <span>RSS</span><ArrowUpRight />
+                  </a>
+                </li>
+              {/if}
             </ul>
           </footer>
         {/if}
