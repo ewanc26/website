@@ -70,7 +70,7 @@
 <SeoHead title="" ogType="HOME" siteInfo={data.siteInfo} />
 
 <main class="wrap">
-  <section class="poster">
+  <section class="poster" class:poster--chips={kibunStatus || latestPlay}>
     <div class="poster-moon"><HalftoneMoon phase={almanac.moon.phase} id="pm" /></div>
     <div class="poster-sigils" aria-hidden="true">
       <Pentacle size={96} class="ps-a" style="--x:2%;--y:14%;--w:20%;--r:-12deg" />
@@ -312,5 +312,16 @@
     align-items: flex-end;
     gap: 0.85rem;
     max-width: min(48vw, 17rem);
+  }
+
+  /* Reserve extra headroom above the name so the stamped chips on the
+     moon never crowd/overlap the huge display letters below them. */
+  .poster--chips {
+    padding-top: max(var(--space-2xl), 13rem);
+  }
+  @media (max-width: 40rem) {
+    .poster--chips {
+      padding-top: 14rem;
+    }
   }
 </style>
