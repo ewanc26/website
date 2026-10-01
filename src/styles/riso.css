@@ -1370,13 +1370,14 @@
     rotate: 5deg;
   }
   .publication-rss {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-md);
     width: fit-content;
     min-width: 9rem;
-    padding-block: var(--space-sm);
+    padding: var(--space-sm) 0;
     border-top: 3px solid var(--ink);
     color: var(--ink);
     font-family: var(--font-display);
@@ -1386,14 +1387,49 @@
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    isolation: isolate;
+  }
+  .publication-rss::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: var(--space-xs) -0.3rem;
+    background: var(--riso-a);
+    transform: rotate(-1deg);
   }
   .publication-rss:hover {
     color: var(--riso-a-text);
-    border-color: var(--riso-a);
+    border-color: var(--ink);
   }
-  .publication-rss span:last-child {
-    font-size: 1.25em;
-    line-height: 1;
+  .publication-external {
+    position: relative;
+    width: 0.8rem;
+    height: 0.8rem;
+    flex: 0 0 0.8rem;
+    border: 2px solid currentColor;
+    border-left: 0;
+    border-bottom: 0;
+  }
+  .publication-external::before {
+    content: "";
+    position: absolute;
+    top: -0.15rem;
+    right: 0.05rem;
+    width: 0.75rem;
+    height: 2px;
+    background: currentColor;
+    transform: rotate(-45deg);
+    transform-origin: right center;
+  }
+  .publication-external::after {
+    content: "";
+    position: absolute;
+    top: -0.28rem;
+    right: -0.08rem;
+    width: 0.35rem;
+    height: 0.35rem;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
   }
 
   /* ── Finder (blog filter) ────────────────────────────────────── */
