@@ -100,7 +100,7 @@
                 </div>
                 {#if blog.rss}
                   <a class="publication-rss" href={blog.rss} rel="noopener noreferrer">
-                    <span>RSS feed</span><span aria-hidden="true">↗</span>
+                    <span>RSS feed</span><span class="publication-external" aria-hidden="true"></span>
                   </a>
                 {/if}
               </div>
