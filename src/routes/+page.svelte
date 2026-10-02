@@ -235,7 +235,9 @@
 
   <SigilRule /><h2 class="word"><span class="word-text" style="--n:7">Commits</span><small>a year of GitHub</small></h2>
   <GithubActivity username={githubUsername} contributions={githubContributions} languages={githubLanguages} commits={githubCommits} />
-  <GithubProfileSummary summary={githubProfileSummary} />
+  {#if githubProfileSummary}
+    <GithubProfileSummary summary={githubProfileSummary} />
+  {/if}
 
   {#if watching.length > 0}
     <SigilRule /><h2 class="word"><span class="word-text" style="--n:8">Watching</span><small>logged on Popfeed</small></h2>
