@@ -750,6 +750,7 @@
     font-size: var(--text-xs);
   }
   .track-title {
+    min-width: 0;
     font-family: var(--font-display);
     font-variation-settings: "wdth" 100;
     font-weight: 800;
@@ -757,6 +758,7 @@
     line-height: 1.08;
     letter-spacing: -0.015em;
     text-wrap: balance;
+    overflow-wrap: anywhere;
   }
   .track-note {
     grid-column: 2;
