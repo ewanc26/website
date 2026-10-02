@@ -406,3 +406,322 @@ export async function fetchGitHubLanguages(
   }
   return toShares(totals);
 }
+
+
+export interface GitHubMetric {
+  name: string;
+  value: number;
+  percent: number;
+  color?: string;
+  description?: string;
+  url?: string;
+}
+
+export interface GitHubProfileSummary {
+  user: {
+    login: string;
+    name?: string;
+    avatarUrl: string;
+    htmlUrl: string;
+    publicRepos: number;
+    createdAt: string;
+  };
+  allTimeCommits: number;
+  quarterCommits: GitHubMetric[];
+  repoLanguage: GitHubMetric[];
+  starLanguage: GitHubMetric[];
+  commitLanguage: GitHubMetric[];
+  repoCommits: GitHubMetric[];
+  repoStars: GitHubMetric[];
+}
+
+const PROFILE_SUMMARY_QUERY = `
+  query ProfileSummary($login: String!) {
+    user(login: $login) {
+      login
+      name
+      avatarUrl(size: 176)
+      url
+      createdAt
+      repositories(
+        first: 100
+        ownerAffiliations: OWNER
+        isFork: false
+        visibility: PUBLIC
+        orderBy: { field: PUSHED_AT, direction: DESC }
+      ) {
+        totalCount
+        nodes {
+          name
+          description
+          url
+          isEmpty
+          stargazerCount
+          primaryLanguage { name color }
+        }
+      }
+    }
+  }
+`;
+
+const PROFILE_SUMMARY_YEAR_QUERY = `
+  query ProfileSummaryYear($login: String!, $from: DateTime!, $to: DateTime!) {
+    user(login: $login) {
+      contributionsCollection(from: $from, to: $to) {
+        totalCommitContributions
+        contributionCalendar {
+          weeks {
+            contributionDays {
+              date
+              contributionCount
+            }
+          }
+        }
+        commitContributionsByRepository(maxRepositories: 100) {
+          repository {
+            name
+            description
+            url
+            primaryLanguage { name color }
+          }
+          contributions {
+            totalCount
+          }
+        }
+      }
+    }
+  }
+`;
+
+type SummaryRepository = {
+  name: string;
+  description?: string | null;
+  url: string;
+  isEmpty: boolean;
+  stargazerCount: number;
+  primaryLanguage?: { name: string; color?: string | null } | null;
+};
+
+type SummaryCommitRepository = {
+  repository: {
+    name: string;
+    description?: string | null;
+    url: string;
+    primaryLanguage?: { name: string; color?: string | null } | null;
+  };
+  contributions: { totalCount: number };
+};
+
+const metricShares = (
+  entries: Map<string, { value: number; color?: string; description?: string; url?: string }>,
+): GitHubMetric[] => {
+  const sorted = [...entries.entries()]
+    .filter(([, item]) => item.value > 0)
+    .sort((a, b) => b[1].value - a[1].value);
+  const total = sorted.reduce((sum, [, item]) => sum + item.value, 0);
+  if (total === 0) return [];
+
+  return sorted.map(([name, item]) => ({
+    name,
+    value: item.value,
+    percent: (item.value / total) * 100,
+    color: normalizeLanguageColor(item.color),
+    description: item.description,
+    url: item.url,
+  }));
+};
+
+const quarterKey = (date: string) =>
+  `${date.slice(0, 4)}-Q${Math.floor((Number.parseInt(date.slice(5, 7), 10) - 1) / 3) + 1}`;
+
+const addMetric = (
+  map: Map<string, { value: number; color?: string; description?: string; url?: string }>,
+  name: string,
+  value: number,
+  extra: { color?: string; description?: string; url?: string } = {},
+) => {
+  const previous = map.get(name);
+  map.set(name, {
+    value: (previous?.value ?? 0) + value,
+    color: previous?.color ?? extra.color,
+    description: previous?.description ?? extra.description,
+    url: previous?.url ?? extra.url,
+  });
+};
+
+let profileSummaryCache: { key: string; expiresAt: number; value: GitHubProfileSummary } | null = null;
+
+export async function fetchGitHubProfileSummary(
+  username: string,
+  fetchFn: Fetch,
+  token?: string,
+): Promise<GitHubProfileSummary | null> {
+  if (!token) return null;
+
+  const now = Date.now();
+  if (
+    profileSummaryCache &&
+    profileSummaryCache.key.toLowerCase() === username.toLowerCase() &&
+    profileSummaryCache.expiresAt > now
+  ) {
+    return profileSummaryCache.value;
+  }
+
+  try {
+    const profile = await graphql(PROFILE_SUMMARY_QUERY, username, token, fetchFn);
+    const user = profile.user;
+    if (!user) return null;
+
+    const repositories = (user.repositories.nodes ?? []).filter(
+      (repo: SummaryRepository) => !repo.isEmpty,
+    ) as SummaryRepository[];
+
+    const repoLanguage = new Map<string, { value: number; color?: string }>();
+    const starLanguage = new Map<string, { value: number; color?: string }>();
+
+    for (const repo of repositories) {
+      const language = repo.primaryLanguage?.name ?? "Unknown";
+      const color = normalizeLanguageColor(repo.primaryLanguage?.color);
+      addMetric(repoLanguage, language, 1, { color });
+      if (repo.stargazerCount > 0) {
+        addMetric(starLanguage, language, repo.stargazerCount, { color });
+      }
+    }
+
+    const commitByRepo = new Map<
+      string,
+      { value: number; description?: string; url?: string; color?: string; language: string }
+    >();
+    const commitByLanguage = new Map<string, { value: number; color?: string }>();
+    const quarterTotals = new Map<string, number>();
+    let allTimeCommits = 0;
+
+    const createdYear = new Date(user.createdAt).getUTCFullYear();
+    const currentYear = new Date().getUTCFullYear();
+    const years = Array.from(
+      { length: currentYear - createdYear + 1 },
+      (_, index) => createdYear + index,
+    );
+
+    const yearResults = await Promise.all(
+      years.map(async (year) => {
+        const data = await graphql(
+          PROFILE_SUMMARY_YEAR_QUERY,
+          username,
+          token,
+          fetchFn,
+          {
+            from: `${year}-01-01T00:00:00Z`,
+            to: `${year}-12-31T23:59:59Z`,
+          },
+        );
+        return { collection: data.user?.contributionsCollection };
+      }),
+    );
+
+    for (const { collection } of yearResults) {
+      if (!collection) continue;
+
+      allTimeCommits += collection.totalCommitContributions ?? 0;
+
+      for (const week of collection.contributionCalendar?.weeks ?? []) {
+        for (const day of week.contributionDays ?? []) {
+          const key = quarterKey(day.date);
+          quarterTotals.set(key, (quarterTotals.get(key) ?? 0) + day.contributionCount);
+        }
+      }
+
+      for (const item of (collection.commitContributionsByRepository ??
+        []) as SummaryCommitRepository[]) {
+        const repo = item.repository;
+        const count = item.contributions?.totalCount ?? 0;
+        if (count === 0) continue;
+
+        const language = repo.primaryLanguage?.name ?? "Unknown";
+        const color = normalizeLanguageColor(repo.primaryLanguage?.color);
+        const existing = commitByRepo.get(repo.name);
+        commitByRepo.set(repo.name, {
+          value: (existing?.value ?? 0) + count,
+          description: existing?.description ?? repo.description ?? undefined,
+          url: existing?.url ?? repo.url,
+          color: existing?.color ?? color,
+          language,
+        });
+        addMetric(commitByLanguage, language, count, { color });
+      }
+    }
+
+    const makeShares = (
+      entries: Map<string, { value: number; color?: string; description?: string; url?: string }>,
+      limit?: number,
+    ) => {
+      const items = metricShares(entries);
+      return limit ? items.slice(0, limit) : items;
+    };
+
+    const commitEntries = new Map<
+      string,
+      { value: number; color?: string; description?: string; url?: string }
+    >();
+    for (const [name, item] of commitByRepo) {
+      commitEntries.set(name, {
+        value: item.value,
+        color: item.color,
+        description: item.description,
+        url: item.url,
+      });
+    }
+
+    const quarterEntries = [...quarterTotals.entries()]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([name, value]) => ({
+        name,
+        value,
+        percent: 0,
+      }));
+
+    const summary: GitHubProfileSummary = {
+      user: {
+        login: user.login,
+        name: user.name ?? undefined,
+        avatarUrl: user.avatarUrl,
+        htmlUrl: user.url,
+        publicRepos: user.repositories.totalCount,
+        createdAt: user.createdAt,
+      },
+      allTimeCommits,
+      quarterCommits: quarterEntries,
+      repoLanguage: makeShares(repoLanguage),
+      starLanguage: makeShares(starLanguage),
+      commitLanguage: makeShares(commitByLanguage),
+      repoCommits: makeShares(commitEntries, 10),
+      repoStars: makeShares(
+        new Map(
+          repositories
+            .filter((repo) => repo.stargazerCount > 0)
+            .map((repo) => [
+              repo.name,
+              {
+                value: repo.stargazerCount,
+                color: normalizeLanguageColor(repo.primaryLanguage?.color),
+                description: repo.description ?? undefined,
+                url: repo.url,
+              },
+            ]),
+        ),
+        10,
+      ),
+    };
+
+    profileSummaryCache = {
+      key: username,
+      expiresAt: now + 6 * 60 * 60 * 1000,
+      value: summary,
+    };
+
+    return summary;
+  } catch (error) {
+    console.warn("GitHub profile summary unavailable", error);
+    return null;
+  }
+}
