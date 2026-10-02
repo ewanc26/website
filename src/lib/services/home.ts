@@ -18,6 +18,7 @@ import {
   fetchGitHubContributions,
   fetchGitHubCommitTotal,
   fetchGitHubLanguages,
+  fetchGitHubProfileSummary,
 } from "$lib/services/github";
 import languageSnapshot from "$lib/data/github-languages.json";
 
@@ -81,6 +82,7 @@ export async function getHomeData() {
     githubProjects,
     githubContributions,
     githubSnapshot,
+    githubProfileSummary,
     publicationsData,
     links,
   ] = await Promise.all([
@@ -103,6 +105,7 @@ export async function getHomeData() {
       () => null,
     ),
     loadSnapshot(githubUsername),
+    fetchGitHubProfileSummary(githubUsername, fetch, env.GITHUB_TOKEN).catch(() => null),
     fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
       publications: [],
     })),
@@ -120,6 +123,7 @@ export async function getHomeData() {
     githubContributions,
     githubLanguages: githubSnapshot.languages,
     githubCommits: githubSnapshot.commits,
+    githubProfileSummary,
     publications: (publicationsData?.publications ?? []) as any[],
     links: (links ?? { cards: [] }) as { cards: any[] },
   };
