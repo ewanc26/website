@@ -9,13 +9,14 @@
   import SeoHead from "$lib/components/SeoHead.svelte";
   import KibunStatus from "$lib/components/KibunStatus.svelte";
   import GithubActivity from "$lib/components/GithubActivity.svelte";
+  import GithubProfileSummary from "$lib/components/GithubProfileSummary.svelte";
   import NowPlayingChip from "$lib/components/NowPlayingChip.svelte";
   import { normalizeSlug } from "$lib/utils/slugify";
   import { blogDateParts } from "$lib/utils/date";
   import { PUBLIC_LEAFLET_BLOG_PUBLICATION, PUBLIC_ATPROTO_DID } from "$env/static/public";
 
   let { data } = $props();
-  const { profile, kibunStatus, musicStatus, posts, githubProjects, githubUsername, githubContributions, githubLanguages, githubCommits, publications, links, apps, watching, feed, latestPlay } = $derived(data);
+  const { profile, kibunStatus, musicStatus, posts, githubProjects, githubUsername, githubContributions, githubLanguages, githubCommits, githubProfileSummary, publications, links, apps, watching, feed, latestPlay } = $derived(data);
 
   const almanac = $derived(data.almanac);
   const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -234,6 +235,7 @@
 
   <SigilRule /><h2 class="word"><span class="word-text" style="--n:7">Commits</span><small>a year of GitHub</small></h2>
   <GithubActivity username={githubUsername} contributions={githubContributions} languages={githubLanguages} commits={githubCommits} />
+  <GithubProfileSummary summary={githubProfileSummary} />
 
   {#if watching.length > 0}
     <SigilRule /><h2 class="word"><span class="word-text" style="--n:8">Watching</span><small>logged on Popfeed</small></h2>
