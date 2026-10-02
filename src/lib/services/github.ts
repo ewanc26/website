@@ -469,14 +469,6 @@ const PROFILE_SUMMARY_YEAR_QUERY = `
     user(login: $login) {
       contributionsCollection(from: $from, to: $to) {
         totalCommitContributions
-        contributionCalendar {
-          weeks {
-            contributionDays {
-              date
-              contributionCount
-            }
-          }
-        }
         commitContributionsByRepository(maxRepositories: 100) {
           repository {
             name
@@ -484,8 +476,15 @@ const PROFILE_SUMMARY_YEAR_QUERY = `
             url
             primaryLanguage { name color }
           }
-          contributions {
+          contributions(
+            first: 100
+            orderBy: { field: OCCURRED_AT, direction: ASC }
+          ) {
             totalCount
+            nodes {
+              occurredAt
+              commitCount
+            }
           }
         }
       }
@@ -509,7 +508,10 @@ type SummaryCommitRepository = {
     url: string;
     primaryLanguage?: { name: string; color?: string | null } | null;
   };
-  contributions: { totalCount: number };
+  contributions: {
+    totalCount: number;
+    nodes: Array<{ occurredAt: string; commitCount: number }>;
+  };
 };
 
 const metricShares = (
@@ -648,6 +650,14 @@ export async function fetchGitHubProfileSummary(
           language,
         });
         addMetric(commitByLanguage, language, count, { color });
+
+        for (const contribution of item.contributions.nodes ?? []) {
+          const key = quarterKey(contribution.occurredAt.slice(0, 10));
+          quarterTotals.set(
+            key,
+            (quarterTotals.get(key) ?? 0) + contribution.commitCount,
+          );
+        }
       }
     }
 
