@@ -54,7 +54,7 @@ function decodeHtml(value: string): string {
     .trim();
 }
 
-function normalizeLanguageColor(value?: string): string | undefined {
+function normalizeLanguageColor(value?: string | null): string | undefined {
   return value && /^#[\da-f]{6}$/i.test(value) ? value : undefined;
 }
 
