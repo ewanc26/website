@@ -122,14 +122,14 @@
   </section>
 
   <div class="chart-grid chart-grid--thirds">
-    <MetricDonut title="Repos per language" items={summary.repoLanguage} />
-    <MetricDonut title="Stars per language" items={summary.starLanguage} />
-    <MetricDonut title="Commits per language" items={summary.commitLanguage} />
+    {@render MetricDonut("Repos per language", summary.repoLanguage)}
+    {@render MetricDonut("Stars per language", summary.starLanguage)}
+    {@render MetricDonut("Commits per language", summary.commitLanguage)}
   </div>
 
   <div class="chart-grid chart-grid--halves">
-    <MetricList title="Commits per repo" items={repoRows(summary.repoCommits)} note="top 10" />
-    <MetricList title="Stars per repo" items={repoRows(summary.repoStars)} note="top 10" />
+    {@render MetricList("Commits per repo", repoRows(summary.repoCommits), "top 10")}
+    {@render MetricList("Stars per repo", repoRows(summary.repoStars), "top 10")}
   </div>
 {:else}
   <p class="empty">The extended GitHub profile summary could not be loaded just now.</p>
@@ -502,6 +502,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     overflow: hidden;
   }
 
