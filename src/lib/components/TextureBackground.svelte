@@ -1,53 +1,33 @@
 <script lang="ts">
   /**
-   * TextureBackground — a full-viewport field of flowing arcs behind the page.
+   * TextureBackground — a full-viewport field of flowing contour lines behind
+   * the page, like the lines of a relief map or a tide pattern.
    *
-   * Each square tile holds six quarter-circle arcs. Every tile is either
-   * unflipped or flipped, which is fixed by a hash of its position, and the
-   * arcs meet each tile edge at the same three points, so they join up across
-   * tiles and run on as long unbroken curves. No grid is ever drawn.
+   * The lines are contours of one smooth field made of a few overlapping waves
+   * (see $lib/utils/texture). There are no tiles and no grid, and nothing ever
+   * switches: the pattern is a continuous function of the date, so it can only
+   * transition. Lines never cross.
    *
-   * The degree comes from the calendar (see $lib/utils/texture). It tilts the
-   * whole field by that many degrees and sets what share of tiles are flipped,
-   * sliding the texture between long ordered diagonal waves and a denser maze
-   * as the day, month, season and Moon change. Every rule is a smooth window on
-   * continuous time, so the degree drifts and never jumps, and a tile that is
-   * turning over cross-fades between its two orientations instead of popping.
-   * It is computed in the browser, so it reflects the visitor's own date, and
-   * is re-checked once a minute (a minute moves the degree by under 0.01°). It
-   * is redrawn when the window is resized.
+   * The degree comes from the calendar. It tilts the whole field by that many
+   * degrees and sets how far it morphs, from long parallel wavy bands into a
+   * lattice of closed loops, as the day, month, season and Moon change. Every
+   * rule is a smooth window on continuous time, so the degree drifts and never
+   * jumps. It is computed in the browser, so it reflects the visitor's own
+   * date, and is re-checked once a minute (a minute moves the degree by under
+   * 0.01°, so the lines creep rather than jump). It is redrawn when the window
+   * is resized.
    */
   import { onMount } from "svelte";
-  import { arcsPathOf, degreeFor, textureLayers } from "$lib/utils/texture";
+  import { degreeFor, texturePath } from "$lib/utils/texture";
 
   const REFRESH_INTERVAL_MS = 60 * 1000;
-  /** Tile size scales with the window, within a sensible range. */
-  const TILE_MIN = 72;
-  const TILE_MAX = 110;
 
   let now = $state<Date | null>(null);
   let width = $state(0);
   let height = $state(0);
 
-  const tile = $derived(
-    Math.min(TILE_MAX, Math.max(TILE_MIN, Math.round(width / 14))),
-  );
-  const degree = $derived(now ? degreeFor(now) : null);
-  const layers = $derived(
-    degree !== null && width > 0
-      ? textureLayers(width, height, tile, degree)
-      : null,
-  );
-  // Tiles that are wholly one way or the other share a single path; the few
-  // mid-fade get a path each at their own strength.
-  const solid = $derived(layers ? arcsPathOf(layers.solid) : "");
-  const fades = $derived(
-    layers
-      ? layers.fades.map((fade) => ({
-          opacity: fade.opacity,
-          d: arcsPathOf(fade.arcs),
-        }))
-      : [],
+  const path = $derived(
+    now && width > 0 ? texturePath(width, height, degreeFor(now)) : "",
   );
 
   onMount(() => {
@@ -75,13 +55,10 @@
 </script>
 
 <svg class="texture-bg" aria-hidden="true" focusable="false">
-  {#if layers}
-    <!-- The arcs are drawn around the window's centre, then tilted by the degree. -->
-    <g transform="translate({width / 2} {height / 2}) rotate({layers.angle})">
-      <path d={solid} />
-      {#each fades as fade, k (k)}
-        <path d={fade.d} opacity={fade.opacity} />
-      {/each}
+  {#if path}
+    <!-- The lines are drawn around the window's centre. -->
+    <g transform="translate({width / 2} {height / 2})">
+      <path d={path} />
     </g>
   {/if}
 </svg>
@@ -105,6 +82,7 @@
     stroke: var(--ink);
     stroke-width: 1;
     stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   /* Anyone asking for more contrast gets plain paper behind the text. */

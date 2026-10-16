@@ -1,8 +1,9 @@
 /**
  * texture.ts — the degree rules and geometry behind the background texture.
  *
- * The texture is a field of flowing arcs (Truchet tiles). The "degree" tilts
- * it and sets how many tiles are flipped. The degree starts at BASE_DEGREE and
+ * The texture is the contour lines of one smooth field. The "degree" tilts
+ * the field and sets how far it morphs from parallel wavy bands into a lattice
+ * of loops. The degree starts at BASE_DEGREE and
  * each rule in DEGREE_RULES adds its delta times a weight between 0 and 1. The
  * rules follow the cycles the site already tracks: the day of the month, the
  * month, the season, the weekday, the time of day, the Moon, and the Sabbats.
@@ -259,159 +260,271 @@ export function textureAngle(degree: number): number {
 }
 
 /**
- * The share of tiles that are flipped, from 0 at MIN_ANGLE to 1 at MAX_ANGLE.
- * Few flips make long ordered diagonal waves; about half make a dense maze.
- * Tiles turn over one at a time as it rises, each with a smooth cross-fade.
+ * How far the field has morphed, from 0 at MIN_ANGLE to 1 at MAX_ANGLE. At 0
+ * it is long parallel wavy bands; at 1 it is a lattice of closed loops; in
+ * between the bands pinch and break into loops. It is a continuous function of
+ * the degree, so the texture only ever transitions and never switches.
  */
-export function flipShare(degree: number): number {
+export function textureMorph(degree: number): number {
   return (textureAngle(degree) - MIN_ANGLE) / (MAX_ANGLE - MIN_ANGLE);
 }
 
-/**
- * A fixed pseudo-random number in [0, 1) for the tile at column `i`, row `j`.
- * It depends only on the tile's position, so a tile never changes its mind as
- * the window resizes, and a small change in the degree flips only a few tiles.
- */
-export function cellHash(i: number, j: number): number {
-  let h = Math.imul(i | 0, 0x27d4eb2d) ^ Math.imul(j | 0, 0x165667b1);
-  h = Math.imul(h ^ (h >>> 15), 0x85ebca6b);
-  h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
-  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-}
-
-/** An arc of a circle: centre, radius, and start/end angles in radians. */
-export interface Arc {
-  cx: number;
-  cy: number;
-  r: number;
-  a0: number;
-  a1: number;
-}
-
-/**
- * Where an arc's three lines meet a tile edge, as a fraction of the tile:
- * 1/2 and 1/2 ± ARC_SPACING. The same three points sit on all four edges, so
- * arcs join across any two neighbouring tiles however each is flipped.
- */
-export const ARC_SPACING = 0.16;
-
-const RADII = [0.5 - ARC_SPACING, 0.5, 0.5 + ARC_SPACING];
-
-/**
- * The six arcs of the tile in column `i`, row `j` (a square `size` across, with
- * its top-left corner at (i·size, j·size)). Unflipped, the arcs wrap two
- * opposite corners (top-left and bottom-right); flipped, the other two.
- *
- * Within a tile, arcs round the same corner are concentric, and arcs round
- * opposite corners stay apart because their largest radii sum to less than the
- * diagonal (2·(0.5 + ARC_SPACING) < √2), so no two arcs ever cross.
- */
-export function tileArcs(
-  size: number,
-  i: number,
-  j: number,
-  flipped: boolean,
-): Arc[] {
-  const x0 = i * size;
-  const y0 = j * size;
-  const x1 = x0 + size;
-  const y1 = y0 + size;
-  const half = Math.PI / 2;
-  const corners = flipped
-    ? [
-        // top-right and bottom-left
-        { cx: x1, cy: y0, a0: Math.PI, a1: half },
-        { cx: x0, cy: y1, a0: 0, a1: -half },
-      ]
-    : [
-        // top-left and bottom-right
-        { cx: x0, cy: y0, a0: 0, a1: half },
-        { cx: x1, cy: y1, a0: Math.PI, a1: Math.PI + half },
-      ];
-  return corners.flatMap((corner) =>
-    RADII.map((r) => ({ ...corner, r: r * size })),
-  );
-}
-
-/**
- * How wide the cross-fade is, in units of the flip share. A tile is plain
- * once the share is half a band below its hash and flipped once it is half a
- * band above, and eases from one to the other in between.
- */
-export const BLEND_BAND = 0.1;
-
-/**
- * How flipped the tile with this hash is at this share, from 0 (plain) to 1
- * (flipped). It changes smoothly as the share moves, so no tile ever pops.
- */
-export function tileWeight(hash: number, share: number): number {
-  return smootherstep((share - hash) / BLEND_BAND + 0.5);
-}
-
-export interface TextureLayers {
-  /** The tilt to draw the field at, in degrees. */
+export interface FieldParams {
+  /** Tilt of the field in degrees; the field turns about the window centre. */
   angle: number;
-  /** Arcs drawn at full strength: every tile that is wholly plain or flipped. */
-  solid: Arc[];
-  /**
-   * Tiles in the middle of a cross-fade, as pairs of layers. A tile's plain
-   * layer is drawn at 1 − w and its flipped layer at w, so its total strength
-   * stays constant and it never flashes or dims as it turns over.
-   */
-  fades: { opacity: number; arcs: Arc[] }[];
+  /** 0 for parallel bands up to 1 for a lattice of loops. */
+  morph: number;
+  /** Distance between repeats of the main wave, in pixels. */
+  wavelength: number;
+}
+
+const TAU = Math.PI * 2;
+const COS_60 = 0.5;
+const SIN_60 = Math.sqrt(3) / 2;
+
+/**
+ * The field at (x, y), measured in pixels from the window centre. A main wave
+ * plus two more at 60° and 120° that fade in with the morph (with all three
+ * at full weight they make a hexagonal lattice of blobs), seen through a
+ * gentle domain warp so the contours flow instead of forming a regular grid.
+ * The result is scaled to stay within [-1, 1].
+ *
+ * Every term is a smooth function of position, tilt and morph, so a contour
+ * moves smoothly as either changes.
+ */
+export function fieldAt(x: number, y: number, params: FieldParams): number {
+  const k = TAU / params.wavelength;
+  const theta = (params.angle * Math.PI) / 180;
+  const cos = Math.cos(theta);
+  const sin = Math.sin(theta);
+  // Into the field's own frame, which turns with the degree.
+  const u = x * cos + y * sin;
+  const v = -x * sin + y * cos;
+  // A slow, small warp, a few wavelengths long, bends the waves just enough
+  // that the lattice flows without losing its geometry.
+  const q = TAU / (2.6 * params.wavelength);
+  const reach = 0.1 * params.wavelength;
+  const pu = u + reach * Math.sin(q * v + 1.3);
+  const pv = v + reach * Math.sin(q * u + 4.1);
+  const main = Math.cos(k * pu);
+  const second = Math.cos(k * (COS_60 * pu + SIN_60 * pv) + 0.7);
+  const third = Math.cos(k * (-COS_60 * pu + SIN_60 * pv) + 2.1);
+  return (main + params.morph * (second + third)) / (1 + 2 * params.morph);
 }
 
 /**
- * Everything needed to cover a `width`×`height` window when the texture is
- * turned by the degree. Coordinates are in the texture's own (unturned) frame,
- * centred on the window's centre; the caller applies the turn. Cover is
- * measured in the turned frame, so no tile is wasted outside the window.
+ * The levels contour lines are drawn at. None is 0, where the field's saddles
+ * sit for the lattice, so lines meet only at the instant a band pinches off.
  */
-export function textureLayers(
+export const CONTOUR_LEVELS = [-0.75, -0.45, -0.15, 0.15, 0.45, 0.75];
+
+export interface Point {
+  x: number;
+  y: number;
+}
+
+export interface Polyline {
+  points: Point[];
+  /** True for a loop; its last point joins back to its first. */
+  closed: boolean;
+  /** The field value along the line. */
+  level: number;
+}
+
+/**
+ * The contour lines of the field over a `width`×`height` window, found by
+ * marching squares on a grid of `step` pixels (with a margin so lines run off
+ * the edges). Coordinates are in pixels from the window centre.
+ *
+ * Lines at different levels can never cross, because the field has one value
+ * at each point, and each line is a chain of short straight segments whose
+ * ends sit on grid edges.
+ */
+export function contourLines(
   width: number,
   height: number,
-  size: number,
-  degree: number,
-): TextureLayers {
-  const angle = textureAngle(degree);
-  const theta = (angle * Math.PI) / 180;
-  const cos = Math.abs(Math.cos(theta));
-  const sin = Math.abs(Math.sin(theta));
-  const halfW = (width * cos + height * sin) / 2 + size;
-  const halfH = (width * sin + height * cos) / 2 + size;
-  const share = flipShare(degree);
-  const solid: Arc[] = [];
-  const fades: TextureLayers["fades"] = [];
-  for (let j = Math.floor(-halfH / size); j < Math.ceil(halfH / size); j++) {
-    for (let i = Math.floor(-halfW / size); i < Math.ceil(halfW / size); i++) {
-      const w = tileWeight(cellHash(i, j), share);
-      if (w <= 0) solid.push(...tileArcs(size, i, j, false));
-      else if (w >= 1) solid.push(...tileArcs(size, i, j, true));
-      else {
-        fades.push({ opacity: 1 - w, arcs: tileArcs(size, i, j, false) });
-        fades.push({ opacity: w, arcs: tileArcs(size, i, j, true) });
-      }
+  params: FieldParams,
+  step: number = Math.max(4, Math.round(params.wavelength / 16)),
+  levels: readonly number[] = CONTOUR_LEVELS,
+): Polyline[] {
+  const nx = Math.ceil(width / step) + 3;
+  const ny = Math.ceil(height / step) + 3;
+  const x0 = -((nx - 1) * step) / 2;
+  const y0 = -((ny - 1) * step) / 2;
+  const values = new Float64Array(nx * ny);
+  for (let j = 0; j < ny; j++) {
+    for (let i = 0; i < nx; i++) {
+      values[j * nx + i] = fieldAt(x0 + i * step, y0 + j * step, params);
     }
   }
-  return { angle, solid, fades };
+
+  const lines: Polyline[] = [];
+  for (const level of levels) {
+    // A crossing sits on a grid edge: id = 2·(j·nx + i) + (0 for the edge
+    // from vertex (i, j) to (i+1, j); 1 for the edge to (i, j+1)).
+    const links = new Map<number, number[]>();
+    const link = (a: number, b: number) => {
+      (links.get(a) ?? links.set(a, []).get(a)!).push(b);
+      (links.get(b) ?? links.set(b, []).get(b)!).push(a);
+    };
+    for (let j = 0; j < ny - 1; j++) {
+      for (let i = 0; i < nx - 1; i++) {
+        const tl = values[j * nx + i] - level;
+        const tr = values[j * nx + i + 1] - level;
+        const bl = values[(j + 1) * nx + i] - level;
+        const br = values[(j + 1) * nx + i + 1] - level;
+        const bits =
+          (tl > 0 ? 1 : 0) |
+          (tr > 0 ? 2 : 0) |
+          (br > 0 ? 4 : 0) |
+          (bl > 0 ? 8 : 0);
+        if (bits === 0 || bits === 15) continue;
+        const cell = j * nx + i;
+        const T = 2 * cell;
+        const B = 2 * (cell + nx);
+        const L = 2 * cell + 1;
+        const R = 2 * (cell + 1) + 1;
+        const inside = tl + tr + br + bl > 0; // centre, for the two saddle cases
+        switch (bits) {
+          case 1:
+          case 14:
+            link(L, T);
+            break;
+          case 2:
+          case 13:
+            link(T, R);
+            break;
+          case 3:
+          case 12:
+            link(L, R);
+            break;
+          case 4:
+          case 11:
+            link(R, B);
+            break;
+          case 6:
+          case 9:
+            link(T, B);
+            break;
+          case 7:
+          case 8:
+            link(L, B);
+            break;
+          case 5:
+            if (inside) {
+              link(T, R);
+              link(L, B);
+            } else {
+              link(L, T);
+              link(R, B);
+            }
+            break;
+          case 10:
+            if (inside) {
+              link(L, T);
+              link(R, B);
+            } else {
+              link(T, R);
+              link(L, B);
+            }
+            break;
+        }
+      }
+    }
+
+    const at = (id: number): Point => {
+      const cell = id >> 1;
+      const i = cell % nx;
+      const j = (cell - i) / nx;
+      const a = values[cell] - level;
+      if (id & 1) {
+        const t = a / (a - (values[cell + nx] - level));
+        return { x: x0 + i * step, y: y0 + (j + t) * step };
+      }
+      const t = a / (a - (values[cell + 1] - level));
+      return { x: x0 + (i + t) * step, y: y0 + j * step };
+    };
+
+    const visited = new Set<number>();
+    const walk = (start: number): Polyline => {
+      const ids = [start];
+      visited.add(start);
+      let previous = -1;
+      let current = start;
+      for (;;) {
+        const next = links
+          .get(current)!
+          .find((n) => n !== previous && !visited.has(n));
+        if (next === undefined) break;
+        ids.push(next);
+        visited.add(next);
+        previous = current;
+        current = next;
+      }
+      const closed = ids.length > 2 && links.get(current)!.includes(start);
+      return { points: ids.map(at), closed, level };
+    };
+    // Lines that run off the edge start at a crossing with one neighbour.
+    for (const [id, neighbours] of links) {
+      if (neighbours.length === 1 && !visited.has(id)) lines.push(walk(id));
+    }
+    for (const id of links.keys()) {
+      if (!visited.has(id)) lines.push(walk(id));
+    }
+  }
+  return lines;
 }
 
-export function arcPoint(arc: Arc, angle: number) {
-  return {
-    x: arc.cx + arc.r * Math.cos(angle),
-    y: arc.cy + arc.r * Math.sin(angle),
+/**
+ * Contour lines as one SVG path `d` string. Each line is drawn as a chain of
+ * quadratic curves that use the line's points as controls and the midpoints
+ * between them as joins, so it is smooth rather than faceted.
+ */
+export function linesPathOf(lines: readonly Polyline[]): string {
+  const f = (n: number) => n.toFixed(1);
+  const mid = (a: Point, b: Point): Point => ({
+    x: (a.x + b.x) / 2,
+    y: (a.y + b.y) / 2,
+  });
+  let d = "";
+  for (const { points: p, closed } of lines) {
+    if (p.length < 2) continue;
+    if (closed) {
+      const start = mid(p[p.length - 1], p[0]);
+      d += `M${f(start.x)} ${f(start.y)}`;
+      for (let n = 0; n < p.length; n++) {
+        const m = mid(p[n], p[(n + 1) % p.length]);
+        d += `Q${f(p[n].x)} ${f(p[n].y)} ${f(m.x)} ${f(m.y)}`;
+      }
+      d += "Z";
+    } else {
+      d += `M${f(p[0].x)} ${f(p[0].y)}`;
+      for (let n = 1; n < p.length - 1; n++) {
+        const m = mid(p[n], p[n + 1]);
+        d += `Q${f(p[n].x)} ${f(p[n].y)} ${f(m.x)} ${f(m.y)}`;
+      }
+      d += `L${f(p[p.length - 1].x)} ${f(p[p.length - 1].y)}`;
+    }
+  }
+  return d;
+}
+
+/** The wavelength to use for a window of this width, in pixels. */
+export function wavelengthFor(width: number): number {
+  return Math.min(220, Math.max(140, Math.round(width / 7.5)));
+}
+
+/** The texture for a window, as one SVG path, centred on the window centre. */
+export function texturePath(
+  width: number,
+  height: number,
+  degree: number,
+  step?: number,
+): string {
+  const params: FieldParams = {
+    angle: textureAngle(degree),
+    morph: textureMorph(degree),
+    wavelength: wavelengthFor(width),
   };
-}
-
-/** Arcs as one SVG path `d` string, so the whole texture is one DOM node. */
-export function arcsPathOf(arcs: readonly Arc[]): string {
-  return arcs
-    .map((arc) => {
-      const from = arcPoint(arc, arc.a0);
-      const to = arcPoint(arc, arc.a1);
-      const sweep = arc.a1 > arc.a0 ? 1 : 0;
-      const r = arc.r.toFixed(1);
-      return `M${from.x.toFixed(1)} ${from.y.toFixed(1)}A${r} ${r} 0 0 ${sweep} ${to.x.toFixed(1)} ${to.y.toFixed(1)}`;
-    })
-    .join("");
+  return linesPathOf(contourLines(width, height, params, step));
 }
