@@ -114,7 +114,8 @@ export function degreeFor(date: Date): number {
 
 /**
  * The tree is a symmetric binary tree growing upward from the bottom centre of
- * a 1000×1000 viewBox. Each level shrinks by SHRINK and splits by ±angle.
+ * a 1000×1000 box. Each level shrinks by SHRINK and splits by ±angle. The
+ * background tiles it as wallpaper (see fitTree and FractalBackground).
  *
  * Branches must never cross or touch (apart from sharing a fork). At a shrink
  * of 0.72 they do at every angle; at 0.5 they stay clear for every angle in
@@ -167,15 +168,86 @@ export function buildFractalSegments(
   return segments;
 }
 
-/** The tree as one SVG path `d` string, so the whole fractal is one DOM node. */
-export function buildFractalPath(
-  angleDeg: number,
-  depth: number = FRACTAL_DEPTH,
-): string {
-  return buildFractalSegments(angleDeg, depth)
+/** Segments as one SVG path `d` string, so a whole tree is one DOM node. */
+export function fractalPathOf(segments: readonly FractalSegment[]): string {
+  return segments
     .map(
       (s) =>
         `M${s.x1.toFixed(1)} ${s.y1.toFixed(1)}L${s.x2.toFixed(1)} ${s.y2.toFixed(1)}`,
     )
     .join("");
+}
+
+export function buildFractalPath(
+  angleDeg: number,
+  depth: number = FRACTAL_DEPTH,
+): string {
+  return fractalPathOf(buildFractalSegments(angleDeg, depth));
+}
+
+export interface Bounds {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+}
+
+export function fractalBounds(segments: readonly FractalSegment[]): Bounds {
+  const bounds = {
+    minX: Infinity,
+    minY: Infinity,
+    maxX: -Infinity,
+    maxY: -Infinity,
+  };
+  for (const s of segments) {
+    bounds.minX = Math.min(bounds.minX, s.x1, s.x2);
+    bounds.maxX = Math.max(bounds.maxX, s.x1, s.x2);
+    bounds.minY = Math.min(bounds.minY, s.y1, s.y2);
+    bounds.maxY = Math.max(bounds.maxY, s.y1, s.y2);
+  }
+  return bounds;
+}
+
+/**
+ * The cell width at which a tree of this shape fills a cell `cellH` tall as
+ * tightly as fitTree allows, so wallpaper cells hug their trees instead of
+ * leaving wide empty gutters. Whole pixels, so tile seams land on pixel edges.
+ */
+export function cellWidthFor(
+  segments: readonly FractalSegment[],
+  cellH: number,
+): number {
+  const { minX, minY, maxX, maxY } = fractalBounds(segments);
+  return Math.round((cellH * (maxX - minX)) / (maxY - minY));
+}
+
+/** Where a tree sits inside a cell:`x' = x * scale + tx`, `y' = y * scale + ty`. */
+export interface TreeFit {
+  scale: number;
+  tx: number;
+  ty: number;
+}
+
+/**
+ * Scale a tree to fit inside a `cellW`×`cellH` cell with `pad` (a fraction of
+ * each side) of empty margin all round, centred across and standing on the
+ * bottom margin. Wallpaper cells never intersect, so a tree that stays inside
+ * its padded cell can never touch its neighbours.
+ */
+export function fitTree(
+  segments: readonly FractalSegment[],
+  cellW: number,
+  cellH: number,
+  pad: number = 0.08,
+): TreeFit {
+  const { minX, minY, maxX, maxY } = fractalBounds(segments);
+  const scale = Math.min(
+    (cellW * (1 - 2 * pad)) / (maxX - minX),
+    (cellH * (1 - 2 * pad)) / (maxY - minY),
+  );
+  return {
+    scale,
+    tx: cellW / 2 - ((minX + maxX) / 2) * scale,
+    ty: cellH * (1 - pad) - maxY * scale,
+  };
 }

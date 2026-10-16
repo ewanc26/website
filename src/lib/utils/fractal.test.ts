@@ -5,10 +5,13 @@ import {
   buildFractalPath,
   buildFractalSegments,
   calendarOf,
+  cellWidthFor,
   DEGREE_RULES,
   degreeFor,
   degreeForCalendar,
+  fitTree,
   FRACTAL_DEPTH,
+  fractalBounds,
   MAX_ANGLE,
   MIN_ANGLE,
   seasonOf,
@@ -166,6 +169,98 @@ test("branches never overlap at any angle in the verified range", () => {
       clearance >= 0.5,
       `angle ${angle}: clearance ${clearance.toFixed(2)}`,
     );
+  }
+});
+
+/** Bounds of a tree after fitting it into the cell whose corner is (ox, oy). */
+function placedBounds(
+  angle: number,
+  cellW: number,
+  cellH: number,
+  ox: number,
+  oy: number,
+) {
+  const segments = buildFractalSegments(angle, FRACTAL_DEPTH);
+  const fit = fitTree(segments, cellW, cellH);
+  const b = fractalBounds(segments);
+  return {
+    minX: ox + b.minX * fit.scale + fit.tx,
+    maxX: ox + b.maxX * fit.scale + fit.tx,
+    minY: oy + b.minY * fit.scale + fit.ty,
+    maxY: oy + b.maxY * fit.scale + fit.ty,
+  };
+}
+
+test("a fitted tree stays inside its padded cell at every angle and size", () => {
+  for (const [w, h] of [
+    [120, 144],
+    [180, 216],
+    [240, 288],
+    [200, 200],
+  ]) {
+    for (const angle of [MIN_ANGLE, 16.5, 20, 26, MAX_ANGLE]) {
+      const b = placedBounds(angle, w, h, 0, 0);
+      const label = `angle ${angle}, cell ${w}x${h}`;
+      assert.ok(b.minX >= w * 0.08 - 1e-6, `${label}: left ${b.minX}`);
+      assert.ok(b.maxX <= w * 0.92 + 1e-6, `${label}: right ${b.maxX}`);
+      assert.ok(b.minY >= h * 0.08 - 1e-6, `${label}: top ${b.minY}`);
+      assert.ok(b.maxY <= h * 0.92 + 1e-6, `${label}: bottom ${b.maxY}`);
+    }
+  }
+});
+
+test("trees in the half-drop wallpaper layout never touch each other", () => {
+  const w = 180;
+  const h = 216;
+  const trees = [];
+  // Rows alternate between whole cells and cells shifted half a cell across.
+  for (let row = 0; row < 4; row++) {
+    for (let col = -1; col < 4; col++) {
+      const shift = row % 2 === 0 ? 0 : w / 2;
+      trees.push(placedBounds(20, w, h, col * w + shift, row * h));
+    }
+  }
+  for (let i = 0; i < trees.length; i++) {
+    for (let j = i + 1; j < trees.length; j++) {
+      const a = trees[i];
+      const b = trees[j];
+      const apart =
+        a.maxX < b.minX ||
+        b.maxX < a.minX ||
+        a.maxY < b.minY ||
+        b.maxY < a.minY;
+      assert.ok(apart, `trees ${i} and ${j} share space`);
+    }
+  }
+});
+
+test("tight cells hug their trees and still never touch in the wallpaper", () => {
+  for (const angle of [MIN_ANGLE, 20, 26, MAX_ANGLE]) {
+    const h = 180;
+    const w = cellWidthFor(buildFractalSegments(angle, FRACTAL_DEPTH), h);
+    const own = placedBounds(angle, w, h, 0, 0);
+    // The tree fills its cell edge to edge, apart from the margin.
+    assert.ok(own.maxY - own.minY >= h * 0.84 - 1);
+    assert.ok(own.maxX - own.minX >= w * 0.84 - 2);
+    const trees = [];
+    for (let row = 0; row < 4; row++) {
+      for (let col = -1; col < 4; col++) {
+        const shift = row % 2 === 0 ? 0 : w / 2;
+        trees.push(placedBounds(angle, w, h, col * w + shift, row * h));
+      }
+    }
+    for (let i = 0; i < trees.length; i++) {
+      for (let j = i + 1; j < trees.length; j++) {
+        const a = trees[i];
+        const b = trees[j];
+        const apart =
+          a.maxX < b.minX ||
+          b.maxX < a.minX ||
+          a.maxY < b.minY ||
+          b.maxY < a.minY;
+        assert.ok(apart, `angle ${angle}: trees ${i} and ${j} share space`);
+      }
+    }
   }
 });
 
