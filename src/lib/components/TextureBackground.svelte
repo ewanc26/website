@@ -14,7 +14,7 @@
    * rule is a smooth window on continuous time, so the degree drifts and never
    * jumps. It is computed in the browser, so it reflects the visitor's own
    * date, and is re-checked once a minute (a minute moves the degree by under
-   * 0.01°, so the lines creep rather than jump). It is redrawn when the window
+   * 0.03°, so the lines creep rather than jump). It is redrawn when the window
    * is resized.
    */
   import { onMount } from "svelte";

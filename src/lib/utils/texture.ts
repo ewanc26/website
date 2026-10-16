@@ -83,72 +83,80 @@ export interface DegreeRule {
   delta: number;
 }
 
-export const BASE_DEGREE = 20;
+/**
+ * Where the degree starts. The rules below add up to a swing of about -13 to
+ * +26 around it, so the degree runs from the high teens to the mid fifties:
+ * wide enough that the texture looks quite different from season to season.
+ * The slow rules (day of month, month, season, Sabbat) are strong, so the year
+ * has a clear shape; the fast ones (weekday, hour, Moon) are gentler, so they
+ * add life without making each day jerk.
+ */
+export const BASE_DEGREE = 30;
 
 export const DEGREE_RULES: readonly DegreeRule[] = [
   {
     label: "day <= 15",
     weight: (c) => smoothWindow(c.monthPos, 0, 15, 3, c.monthLength),
-    delta: 1,
+    delta: 6,
   },
   {
     label: "month <= 6",
     weight: (c) => smoothWindow(c.yearMonth, 0, 6, 0.7, 12),
-    delta: -1,
+    delta: -6,
   },
   {
     label: "season <= 2",
     weight: (c) => smoothWindow(c.yearMonth, 2, 8, 0.7, 12),
-    delta: 0.5,
+    delta: 3,
   },
   {
     label: "season >= 3",
     weight: (c) => smoothWindow(c.yearMonth, 8, 14, 0.7, 12),
-    delta: -0.5,
+    delta: -3,
   },
   // Monday has its own egg on the site; start the week tightly folded.
   {
     label: "weekday = Monday",
     weight: (c) => smoothWindow(c.weekPos, 0, 1, 1, 7),
-    delta: -1,
+    delta: -2,
   },
   {
     label: "weekday >= 6",
     weight: (c) => smoothWindow(c.weekPos, 5, 7, 1, 7),
-    delta: 0.5,
+    delta: 1,
   },
   {
     label: "hour < 12",
     weight: (c) => smoothWindow(c.hourPos, 0, 12, 4, 24),
-    delta: 0.5,
+    delta: 1,
   },
   {
     label: "hour >= 12",
     weight: (c) => smoothWindow(c.hourPos, 12, 24, 4, 24),
-    delta: -0.5,
+    delta: -1,
   },
   // The Moon: opening while it waxes, closing while it wanes, wide at full.
   {
     label: "moon waxing",
     weight: (c) => smoothWindow(c.moonPhase, 0, 0.5, 0.1, 1),
-    delta: 0.5,
+    delta: 1,
   },
   {
     label: "moon waning",
     weight: (c) => smoothWindow(c.moonPhase, 0.5, 1, 0.1, 1),
-    delta: -0.5,
+    delta: -1,
   },
   {
     label: "full moon",
     weight: (c) => smootherstep((c.moonFraction - 0.85) / 0.14),
-    delta: 1,
+    delta: 2,
   },
   // The eight festival days are the biggest single shift: a swell that
   // peaks on the day and has faded within four days either side.
   {
     label: "sabbat day",
     weight: (c) => 1 - smootherstep(c.sabbatDistance / 4),
-    delta: 2,
+    delta: 12,
   },
 ];
 
@@ -251,8 +259,11 @@ export function averageDegreeFor(date: Date, spanDays: number): number {
 }
 
 /** Bounds the degree is clamped to when drawing; the rules never leave it. */
-export const MIN_ANGLE = 10;
-export const MAX_ANGLE = 35;
+export const MIN_ANGLE = 0;
+export const MAX_ANGLE = 60;
+/** The degrees over which the morph runs from 0 (bands) to 1 (loops). */
+export const MORPH_FROM = 10;
+export const MORPH_TO = 50;
 
 /** The degree as the angle the texture is drawn at, kept in the safe range. */
 export function textureAngle(degree: number): number {
@@ -260,13 +271,16 @@ export function textureAngle(degree: number): number {
 }
 
 /**
- * How far the field has morphed, from 0 at MIN_ANGLE to 1 at MAX_ANGLE. At 0
+ * How far the field has morphed, from 0 at MORPH_FROM to 1 at MORPH_TO. At 0
  * it is long parallel wavy bands; at 1 it is a lattice of closed loops; in
  * between the bands pinch and break into loops. It is a continuous function of
  * the degree, so the texture only ever transitions and never switches.
  */
 export function textureMorph(degree: number): number {
-  return (textureAngle(degree) - MIN_ANGLE) / (MAX_ANGLE - MIN_ANGLE);
+  return Math.min(
+    1,
+    Math.max(0, (degree - MORPH_FROM) / (MORPH_TO - MORPH_FROM)),
+  );
 }
 
 export interface FieldParams {

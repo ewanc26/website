@@ -13,6 +13,8 @@ import {
   linesPathOf,
   MAX_ANGLE,
   MIN_ANGLE,
+  MORPH_FROM,
+  MORPH_TO,
   seasonOf,
   smootherstep,
   smoothWindow,
@@ -209,9 +211,9 @@ test("the degree never jumps: it moves smoothly through a whole year", () => {
     previous = c;
     previousDegree = degree;
   }
-  // The steepest edge is the noon-and-midnight hour ramp, about 0.08° in ten
-  // minutes. A step function would show up here as a jump of 0.5° or more.
-  assert.ok(largest < 0.1, `largest ten-minute step ${largest.toFixed(4)}°`);
+  // The steepest edge is the noon-and-midnight hour ramp, about 0.2° in ten
+  // minutes. A step function would show up here as a jump of 1° or more.
+  assert.ok(largest < 0.3, `largest ten-minute step ${largest.toFixed(4)}°`);
 });
 
 test("the degree stays between the rules' lowest and highest sums", () => {
@@ -276,6 +278,29 @@ test("a week's average cancels the weekly rhythm but keeps the slow drift", () =
   assert.ok(Math.abs(averageDegreeFor(date, 0.01) - degreeFor(date)) < 0.01);
 });
 
+test("the degree is varied: the year spans a wide range and most of the morph", () => {
+  const dates = Array.from(
+    { length: 365 },
+    (_, d) => new Date(2026, 0, 1 + d, 9),
+  );
+  const averaged = dates.map((date) => averageDegreeFor(date, 7));
+  const raw = dates.map((date) => degreeFor(date));
+  const span = (v: number[]) => Math.max(...v) - Math.min(...v);
+  // Even smoothed over a week, the degree sweeps more than 20° over the year.
+  assert.ok(span(averaged) > 20, `averaged span ${span(averaged).toFixed(1)}°`);
+  assert.ok(span(raw) > 30, `raw span ${span(raw).toFixed(1)}°`);
+  // And that is most of the way from bands to loops.
+  const morphs = averaged.map(textureMorph);
+  assert.ok(
+    Math.max(...morphs) - Math.min(...morphs) > 0.4,
+    "morph barely changes",
+  );
+  // The spread is comfortably inside the range the texture can draw.
+  assert.ok(
+    Math.min(...raw) > MIN_ANGLE + 5 && Math.max(...raw) < MAX_ANGLE - 2,
+  );
+});
+
 test("the degree agrees with its calendar and is a number on 29 Feb", () => {
   const date = new Date(2028, 1, 29, 12);
   assert.equal(degreeFor(date), degreeForCalendar(calendarOf(date)));
@@ -289,15 +314,22 @@ const params = (degree: number, wavelength = 150): FieldParams => ({
 });
 
 test("the degree is clamped to the safe range and sets the morph", () => {
-  assert.equal(textureAngle(1), MIN_ANGLE);
+  assert.equal(textureAngle(-5), MIN_ANGLE);
   assert.equal(textureAngle(80), MAX_ANGLE);
-  assert.equal(textureMorph(MIN_ANGLE), 0);
-  assert.equal(textureMorph(MAX_ANGLE), 1);
-  assert.ok(textureMorph(19.5) < textureMorph(20.5));
+  assert.equal(textureAngle(33), 33);
+  assert.equal(textureMorph(MORPH_FROM), 0);
+  assert.equal(textureMorph(MORPH_TO), 1);
+  assert.equal(textureMorph(-20), 0);
+  assert.equal(textureMorph(99), 1);
+  let previous = 0;
+  for (let degree = MORPH_FROM; degree <= MORPH_TO; degree += 0.5) {
+    assert.ok(textureMorph(degree) >= previous, "morph went backwards");
+    previous = textureMorph(degree);
+  }
 });
 
 test("the field stays within [-1, 1]", () => {
-  for (const degree of [MIN_ANGLE, 16.5, 20, 26, MAX_ANGLE]) {
+  for (const degree of [MIN_ANGLE, 17, 30, 44, 56, MAX_ANGLE]) {
     for (let x = -600; x <= 600; x += 47) {
       for (let y = -400; y <= 400; y += 53) {
         const f = fieldAt(x, y, params(degree));
@@ -312,7 +344,7 @@ test("a small change in the degree moves the field and its lines only a little",
   // point of the field, and every contour line, moves by a hair.
   const delta = 0.01;
   let worstField = 0;
-  for (let degree = 10; degree <= 35; degree += 0.37) {
+  for (let degree = MIN_ANGLE; degree <= MAX_ANGLE; degree += 0.61) {
     for (let x = -640; x <= 640; x += 71) {
       for (let y = -400; y <= 400; y += 67) {
         const change = Math.abs(
@@ -324,7 +356,7 @@ test("a small change in the degree moves the field and its lines only a little",
   }
   assert.ok(worstField < 0.01, `largest field change per 0.01°: ${worstField}`);
   // The lines found at one degree still lie on their level at the next.
-  for (const degree of [16.5, 19.5, 26]) {
+  for (const degree of [17, 30, 44, 56]) {
     let off = 0;
     for (const line of contourLines(640, 400, params(degree))) {
       for (const p of line.points) {
@@ -365,7 +397,7 @@ const sameSpot = (p: Point, q: Point) =>
   Math.hypot(p.x - q.x, p.y - q.y) < 1e-6;
 
 test("no two contour lines ever cross, at any degree in the range", () => {
-  for (const degree of [MIN_ANGLE, 16.5, 19.5, 23, 26, MAX_ANGLE]) {
+  for (const degree of [MIN_ANGLE, 17, 30, 44, 56, MAX_ANGLE]) {
     const segments = segmentsOf(contourLines(480, 320, params(degree)));
     assert.ok(
       segments.length > 100,
@@ -393,14 +425,14 @@ test("no two contour lines ever cross, at any degree in the range", () => {
 });
 
 test("every contour line sits on its level and the levels are all used", () => {
-  const lines = contourLines(640, 400, params(19.5));
+  const lines = contourLines(640, 400, params(30));
   const used = new Set<number>();
   for (const line of lines) {
     used.add(line.level);
     assert.ok(CONTOUR_LEVELS.includes(line.level));
     for (const p of line.points) {
       assert.ok(
-        Math.abs(fieldAt(p.x, p.y, params(19.5)) - line.level) < 0.06,
+        Math.abs(fieldAt(p.x, p.y, params(30)) - line.level) < 0.06,
         "point off its level",
       );
     }
@@ -414,7 +446,7 @@ test("every contour line sits on its level and the levels are all used", () => {
 
 test("closed lines have enough points and open lines run off the window", () => {
   const [width, height] = [640, 400];
-  for (const line of contourLines(width, height, params(21))) {
+  for (const line of contourLines(width, height, params(34))) {
     assert.ok(line.points.length >= (line.closed ? 3 : 2));
     if (!line.closed) {
       // An open line's two ends are on the edge of the grid, past the window.
@@ -430,7 +462,7 @@ test("closed lines have enough points and open lines run off the window", () => 
 
 test("the texture covers the whole window", () => {
   const [width, height] = [900, 600];
-  for (const degree of [16.5, 21, 26]) {
+  for (const degree of [17, 30, 56]) {
     const points = contourLines(
       width,
       height,
@@ -451,13 +483,13 @@ test("the texture covers the whole window", () => {
 });
 
 test("the texture path is finite, one move per line, and changes with the degree", () => {
-  const lines = contourLines(500, 300, params(19.5));
+  const lines = contourLines(500, 300, params(30));
   const d = linesPathOf(lines);
   assert.ok(!/NaN|Infinity/.test(d));
   assert.equal(d.match(/M/g)?.length, lines.length);
   assert.equal(d.match(/Z/g)?.length, lines.filter((l) => l.closed).length);
-  assert.notEqual(texturePath(500, 300, 19.5), texturePath(500, 300, 20.5));
-  assert.equal(texturePath(500, 300, 1), texturePath(500, 300, MIN_ANGLE));
+  assert.notEqual(texturePath(500, 300, 30), texturePath(500, 300, 31));
+  assert.equal(texturePath(500, 300, -5), texturePath(500, 300, MIN_ANGLE));
 });
 
 test("the wavelength follows the window width within bounds", () => {
