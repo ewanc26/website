@@ -9,6 +9,7 @@
   import BacklinkAvatars from "$lib/components/BacklinkAvatars.svelte";
   import SeasonalThemeUpdater from "$lib/components/SeasonalThemeUpdater.svelte";
   import AmbianceEngine from "$lib/components/AmbianceEngine.svelte";
+  import FractalBackground from "$lib/components/FractalBackground.svelte";
   import WolfPawTrail from "$lib/components/WolfPawTrail.svelte";
   import MondayEgg from "$lib/components/ostara-eggs/MondayEgg.svelte";
   import IdleEgg from "$lib/components/ostara-eggs/IdleEgg.svelte";
@@ -56,6 +57,7 @@
 -->
 <SeasonalThemeUpdater />
 <AmbianceEngine />
+<FractalBackground />
 <WolfPawTrail />
 <MondayEgg />
 <IdleEgg />
