@@ -10,13 +10,17 @@ import {
   degreeFor,
   degreeForCalendar,
   fitTree,
+  fractalTips,
   FRACTAL_DEPTH,
   fractalBounds,
   MAX_ANGLE,
   MIN_ANGLE,
+  linksPathOf,
   seasonOf,
+  wallpaperLinks,
   type CalendarContext,
   type FractalSegment,
+  type Link,
 } from "./fractal.ts";
 
 // A calendar where only season<=2 (+0.5), hour>=12 (-0.5) and moon waning
@@ -88,7 +92,7 @@ test("degreeFor agrees with degreeForCalendar and stays in a drawable range", ()
 
 const length = (s: FractalSegment) => Math.hypot(s.x2 - s.x1, s.y2 - s.y1);
 
-function pointToSegment(px: number, py: number, s: FractalSegment) {
+function pointToSegment(px: number, py: number, s: Link) {
   const dx = s.x2 - s.x1;
   const dy = s.y2 - s.y1;
   const t = Math.max(
@@ -108,7 +112,7 @@ const side = (
 ) => Math.sign((bx - ax) * (cy - ay) - (by - ay) * (cx - ax));
 
 /** Distance between two segments; 0 if they cross. */
-function segmentDistance(a: FractalSegment, b: FractalSegment) {
+function segmentDistance(a: Link, b: Link) {
   const crosses =
     side(a.x1, a.y1, a.x2, a.y2, b.x1, b.y1) *
       side(a.x1, a.y1, a.x2, a.y2, b.x2, b.y2) <
@@ -237,7 +241,7 @@ test("trees in the half-drop wallpaper layout never touch each other", () => {
 test("tight cells hug their trees and still never touch in the wallpaper", () => {
   for (const angle of [MIN_ANGLE, 20, 26, MAX_ANGLE]) {
     const h = 180;
-    const w = cellWidthFor(buildFractalSegments(angle, FRACTAL_DEPTH), h);
+    const w = cellWidthFor(buildFractalSegments(angle, FRACTAL_DEPTH), h, 1);
     const own = placedBounds(angle, w, h, 0, 0);
     // The tree fills its cell edge to edge, apart from the margin.
     assert.ok(own.maxY - own.minY >= h * 0.84 - 1);
@@ -262,6 +266,141 @@ test("tight cells hug their trees and still never touch in the wallpaper", () =>
       }
     }
   }
+});
+
+/** One wallpaper tile at the given angle and cell height, with its trees placed. */
+function wallpaperTile(angle: number, h: number) {
+  const segments = buildFractalSegments(angle, FRACTAL_DEPTH);
+  const w = cellWidthFor(segments, h);
+  const fit = fitTree(segments, w, h);
+  const tips = fractalTips(segments);
+  const at = (ox: number, oy: number, p: { x: number; y: number }) => ({
+    x: ox + p.x * fit.scale + fit.tx,
+    y: oy + p.y * fit.scale + fit.ty,
+  });
+  // Row 0: one tree centred in the tile. Row 1: two half trees at its edges.
+  const trees = [
+    [0, 0],
+    [-w / 2, h],
+    [w / 2, h],
+  ].map(([ox, oy]) => ({
+    segments: segments.map((s) => ({
+      x1: ox + s.x1 * fit.scale + fit.tx,
+      y1: oy + s.y1 * fit.scale + fit.ty,
+      x2: ox + s.x2 * fit.scale + fit.tx,
+      y2: oy + s.y2 * fit.scale + fit.ty,
+    })),
+    points: [
+      at(ox, oy, tips.left),
+      at(ox, oy, tips.right),
+      at(ox, oy, tips.base),
+    ],
+  }));
+  return { w, h, trees, links: wallpaperLinks(tips, fit, w, h) };
+}
+
+/** The tile repeated 3×3 (it repeats every cellW across and 2·cellH down). */
+function tileBlock(angle: number, h: number) {
+  const tile = wallpaperTile(angle, h);
+  const shifted = (dx: number, dy: number) => ({
+    trees: tile.trees.map((t) => ({
+      segments: t.segments.map((s) => ({
+        x1: s.x1 + dx,
+        y1: s.y1 + dy,
+        x2: s.x2 + dx,
+        y2: s.y2 + dy,
+      })),
+      points: t.points.map((p) => ({ x: p.x + dx, y: p.y + dy })),
+    })),
+    links: tile.links.map((l) => ({
+      x1: l.x1 + dx,
+      y1: l.y1 + dy,
+      x2: l.x2 + dx,
+      y2: l.y2 + dy,
+    })),
+  });
+  const parts = [];
+  for (const i of [-1, 0, 1]) {
+    for (const j of [-1, 0, 1]) parts.push(shifted(i * tile.w, j * 2 * tile.h));
+  }
+  return {
+    tile,
+    trees: parts.flatMap((p) => p.trees),
+    links: parts.flatMap((p) => p.links),
+  };
+}
+
+const sharesEndpoint = (a: Link, b: Link) =>
+  [
+    [a.x1, a.y1],
+    [a.x2, a.y2],
+  ].some(([ax, ay]) =>
+    [
+      [b.x1, b.y1],
+      [b.x2, b.y2],
+    ].some(([bx, by]) => Math.hypot(ax - bx, ay - by) < 1e-6),
+  );
+
+test("links join trees without crossing or touching any branch", () => {
+  for (const angle of [MIN_ANGLE, 20, MAX_ANGLE]) {
+    const { trees, links } = tileBlock(angle, 180);
+    for (const l of links) {
+      for (const tree of trees) {
+        for (const s of tree.segments) {
+          if (sharesEndpoint(l, s)) continue;
+          assert.ok(
+            segmentDistance(l, s) > 1e-3,
+            `angle ${angle}: a link touches a branch`,
+          );
+        }
+      }
+      for (const other of links) {
+        if (other === l || sharesEndpoint(l, other)) continue;
+        assert.ok(
+          segmentDistance(l, other) > 1e-3,
+          `angle ${angle}: two links touch away from a joint`,
+        );
+      }
+    }
+  }
+});
+
+test("every tree in the wallpaper is joined to its neighbours", () => {
+  for (const angle of [MIN_ANGLE, 20, MAX_ANGLE]) {
+    const { tile, trees, links } = tileBlock(angle, 180);
+    // Union-find over anchor points: a tree joins its three anchors, a link
+    // joins its two ends.
+    const parent = new Map<string, string>();
+    const key = (x: number, y: number) => `${x.toFixed(3)},${y.toFixed(3)}`;
+    const find = (k: string): string => {
+      if (!parent.has(k)) parent.set(k, k);
+      const p = parent.get(k) as string;
+      if (p === k) return k;
+      const root = find(p);
+      parent.set(k, root);
+      return root;
+    };
+    const union = (a: string, b: string) => parent.set(find(a), find(b));
+    for (const t of trees) {
+      const [first, ...rest] = t.points.map((p) => key(p.x, p.y));
+      for (const k of rest) union(first, k);
+    }
+    for (const l of links) union(key(l.x1, l.y1), key(l.x2, l.y2));
+    // The three trees in the middle tile sit in one network.
+    const middle = trees.slice(12, 15);
+    assert.equal(middle.length, 3);
+    const roots = new Set(
+      middle.map((t) => find(key(t.points[0].x, t.points[0].y))),
+    );
+    assert.equal(roots.size, 1, `angle ${angle}: trees are not joined`);
+    assert.ok(tile.links.length > 0);
+  }
+});
+
+test("links render as one path", () => {
+  const { tile } = tileBlock(20, 180);
+  const d = linksPathOf(tile.links);
+  assert.equal(d.match(/M/g)?.length, tile.links.length);
 });
 
 test("angles outside the verified range are clamped, not drawn", () => {

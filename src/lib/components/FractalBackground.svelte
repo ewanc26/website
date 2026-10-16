@@ -20,6 +20,9 @@
     degreeFor,
     fitTree,
     fractalPathOf,
+    fractalTips,
+    linksPathOf,
+    wallpaperLinks,
   } from "$lib/utils/fractal";
 
   const REFRESH_INTERVAL_MS = 60 * 1000;
@@ -42,6 +45,13 @@
   );
   const fit = $derived(
     segments.length ? fitTree(segments, cellW, cellH) : null,
+  );
+
+  // The lines that join the trees into one network (see wallpaperLinks).
+  const linkPath = $derived(
+    fit
+      ? linksPathOf(wallpaperLinks(fractalTips(segments), fit, cellW, cellH))
+      : "",
   );
 
   /** A tree in the cell whose top-left corner is (x, y) in the tile. */
@@ -86,6 +96,7 @@
         <use href="#fractal-tree" transform={place(0, 0)} />
         <use href="#fractal-tree" transform={place(-cellW / 2, cellH)} />
         <use href="#fractal-tree" transform={place(cellW / 2, cellH)} />
+        <path d={linkPath} stroke-width="1" />
       </pattern>
     </defs>
     <rect width="100%" height="100%" fill="url(#fractal-wallpaper)" />

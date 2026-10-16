@@ -209,16 +209,25 @@ export function fractalBounds(segments: readonly FractalSegment[]): Bounds {
 }
 
 /**
+ * How much wider than its tree a wallpaper cell is. 1 packs trees tightly; 1.5
+ * leaves room for the triangles that join them to read as a pattern; 2 is too
+ * sparse to feel like wallpaper.
+ */
+export const CELL_SPREAD = 1.5;
+
+/**
  * The cell width at which a tree of this shape fills a cell `cellH` tall as
- * tightly as fitTree allows, so wallpaper cells hug their trees instead of
- * leaving wide empty gutters. Whole pixels, so tile seams land on pixel edges.
+ * tightly as fitTree allows, scaled by `spread` (see CELL_SPREAD), which sets the
+ * gaps, and so the triangles that join the trees, between neighbours.
+ * Whole pixels, so tile seams land on pixel edges.
  */
 export function cellWidthFor(
   segments: readonly FractalSegment[],
   cellH: number,
+  spread: number = CELL_SPREAD,
 ): number {
   const { minX, minY, maxX, maxY } = fractalBounds(segments);
-  return Math.round((cellH * (maxX - minX)) / (maxY - minY));
+  return Math.round((spread * cellH * (maxX - minX)) / (maxY - minY));
 }
 
 /** Where a tree sits inside a cell:`x' = x * scale + tx`, `y' = y * scale + ty`. */
@@ -250,4 +259,113 @@ export function fitTree(
     tx: cellW / 2 - ((minX + maxX) / 2) * scale,
     ty: cellH * (1 - pad) - maxY * scale,
   };
+}
+
+export interface Point {
+  x: number;
+  y: number;
+}
+
+export interface TreeTips {
+  /** The leftmost and rightmost points of the crown. */
+  left: Point;
+  right: Point;
+  /** Where the trunk starts. */
+  base: Point;
+}
+
+/** The anchor points a tree joins its neighbours at, in tree coordinates. */
+export function fractalTips(segments: readonly FractalSegment[]): TreeTips {
+  let left: Point = { x: Infinity, y: 0 };
+  let right: Point = { x: -Infinity, y: 0 };
+  for (const s of segments) {
+    for (const p of [
+      { x: s.x1, y: s.y1 },
+      { x: s.x2, y: s.y2 },
+    ]) {
+      if (p.x < left.x) left = p;
+      if (p.x > right.x) right = p;
+    }
+  }
+  return { left, right, base: { ...ORIGIN } };
+}
+
+export interface Link {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+/**
+ * The lines that join the wallpaper's trees into one network, in tile
+ * coordinates. A tile is `cellW` wide and two cells (`2 * cellH`) tall: one
+ * tree in row 0, and row 1 offset by half a cell. Links that cross the tile
+ * edge are drawn in full here and completed by the neighbouring tile, so the
+ * pattern is seamless.
+ *
+ *  - Row links: each crown's outermost tips meet its row neighbours' tips.
+ *  - Roots: each trunk base forks to the two nearest crown tips in the next
+ *    row, closing a triangle with the row link between them.
+ *
+ * Every link leaves a tree from its extreme left, right or base point, heading
+ * away from the tree, so a link can only ever touch its own tree at that point.
+ */
+export function wallpaperLinks(
+  tips: TreeTips,
+  fit: TreeFit,
+  cellW: number,
+  cellH: number,
+): Link[] {
+  const at = (ox: number, oy: number, p: Point): Point => ({
+    x: ox + p.x * fit.scale + fit.tx,
+    y: oy + p.y * fit.scale + fit.ty,
+  });
+  const link = (a: Point, b: Point): Link => ({
+    x1: a.x,
+    y1: a.y,
+    x2: b.x,
+    y2: b.y,
+  });
+  const down = (p: Point, dy: number): Point => ({ x: p.x, y: p.y + dy });
+  const W = cellW;
+  const H = cellH;
+  const links: Link[] = [];
+
+  // Row 0 trees sit in cells at x = k·W, y = 0. Row 1 trees sit at x = ±W/2.
+  links.push(link(at(-W, 0, tips.right), at(0, 0, tips.left)));
+  links.push(link(at(0, 0, tips.right), at(W, 0, tips.left)));
+  links.push(link(at(-W / 2, H, tips.right), at(W / 2, H, tips.left)));
+
+  // Roots: row 0's base down to the inner tips of the two row-1 trees below.
+  const base0 = at(0, 0, tips.base);
+  links.push(link(base0, at(-W / 2, H, tips.right)));
+  links.push(link(base0, at(W / 2, H, tips.left)));
+
+  // Roots: each row-1 base down to the next tile's row-0 trees (2H lower).
+  // Drawn again 2H higher so the part that spills into the tile below shows
+  // here as the part that spills in from the tile above.
+  for (const ox of [-W / 2, W / 2]) {
+    const base = at(ox, H, tips.base);
+    const roots = [
+      at(ox - W / 2, 2 * H, tips.right),
+      at(ox + W / 2, 2 * H, tips.left),
+    ];
+    for (const shift of [0, -2 * H]) {
+      for (const root of roots) {
+        links.push(link(down(base, shift), down(root, shift)));
+      }
+    }
+  }
+  return links;
+}
+
+/** Links as one SVG path `d` string. */
+export function linksPathOf(links: readonly Link[]): string {
+  return links
+    .map(
+      (l) =>
+        `M${l.x1.toFixed(2)} ${l.y1.toFixed(2)}L${l.x2.toFixed(2)} ${l.y2.toFixed(2)}`,
+    )
+    .join("");
 }
