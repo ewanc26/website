@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  ANCHOR,
   averageDegreeFor,
   BASE_DEGREE,
   calendarOf,
@@ -102,12 +103,12 @@ test("windows that meet add up to exactly 1, so swapping them never jumps", () =
   }
 });
 
-test("calendarOf reads continuous positions from the date", () => {
-  // 16 Oct 2026 is a Friday; 09:00 is 0.375 of a day.
+test("calendarOf reads continuous positions on the calendar anchored on 22 Aug", () => {
+  // 16 Oct 2026 09:00 is a Friday, 24.375 days into the month that began on 22 Sep.
   const c = calendarOf(new Date(2026, 9, 16, 9));
-  assert.ok(Math.abs(c.monthPos - 15.375) < 1e-9);
-  assert.equal(c.monthLength, 31);
-  assert.ok(Math.abs(c.yearMonth - (9 + 15.375 / 31)) < 1e-9);
+  assert.ok(Math.abs(c.monthPos - 24.375) < 1e-9);
+  assert.equal(c.monthLength, 30);
+  assert.ok(Math.abs(c.yearMonth - (1 + 24.375 / 30)) < 1e-9);
   assert.ok(Math.abs(c.weekPos - 4.375) < 1e-9);
   assert.ok(Math.abs(c.hourPos - 9) < 1e-9);
   assert.equal(c.season, 3);
@@ -115,6 +116,19 @@ test("calendarOf reads continuous positions from the date", () => {
   assert.ok(Math.abs(c.sabbatDistance - 15.125) < 1e-9);
   assert.ok(c.moonPhase >= 0 && c.moonPhase < 1);
   assert.ok(c.moonFraction >= 0 && c.moonFraction <= 1);
+  // The anchor: the year begins at midnight on 22 Aug.
+  assert.equal(ANCHOR.month, 8);
+  assert.equal(ANCHOR.day, 22);
+  assert.equal(calendarOf(new Date(2026, 7, 22)).yearMonth, 0);
+  assert.equal(calendarOf(new Date(2026, 7, 22)).monthPos, 0);
+  // The second before it is the very end of the year before.
+  const before = calendarOf(new Date(2026, 7, 21, 23, 59, 59));
+  assert.ok(before.yearMonth > 11.999 && before.yearMonth < 12);
+  // Every month starts on the 22nd: 22 Dec begins month 4, and 1 Jan is 10 days in.
+  assert.equal(calendarOf(new Date(2026, 11, 22)).yearMonth, 4);
+  const newYear = calendarOf(new Date(2027, 0, 1));
+  assert.equal(newYear.monthPos, 10);
+  assert.ok(Math.abs(newYear.yearMonth - (4 + 10 / 31)) < 1e-9);
   // Monday starts the week and Sunday ends it.
   assert.ok(Math.abs(calendarOf(new Date(2026, 9, 12)).weekPos) < 1e-9);
   assert.ok(
@@ -152,13 +166,15 @@ test("the moon cycle moves steadily and never jumps at new or full moon", () => 
 });
 
 test("each rule keeps its original meaning in the middle of its window", () => {
-  assert.equal(weightAt("day <= 15", 2026, 2, 8, 12), 1);
-  assert.equal(weightAt("day <= 15", 2026, 2, 23, 12), 0);
-  assert.equal(weightAt("month <= 6", 2026, 2, 15, 12), 1);
-  assert.equal(weightAt("month <= 6", 2026, 8, 15, 12), 0);
-  assert.equal(weightAt("season <= 2", 2026, 5, 15, 12), 1);
-  assert.equal(weightAt("season >= 3", 2026, 10, 15, 12), 1);
-  assert.equal(weightAt("season >= 3", 2026, 0, 15, 12), 1);
+  // Months run 22nd to 21st, and the year runs 22 Aug to 21 Aug.
+  assert.equal(weightAt("day <= 15", 2026, 9, 29, 12), 1); // 7.5 days into the month
+  assert.equal(weightAt("day <= 15", 2026, 10, 13, 12), 0); // 22.5 days in
+  assert.equal(weightAt("month <= 6", 2026, 10, 6, 12), 1); // month 3 of 12
+  assert.equal(weightAt("month <= 6", 2027, 5, 6, 12), 0); // month 10
+  assert.equal(weightAt("season <= 2", 2027, 1, 6, 12), 1); // month 6
+  assert.equal(weightAt("season <= 2", 2027, 7, 6, 12), 0); // month 12
+  assert.equal(weightAt("season >= 3", 2027, 7, 6, 12), 1);
+  assert.equal(weightAt("season >= 3", 2026, 9, 6, 12), 1); // month 2
   assert.equal(weightAt("weekday = Monday", 2026, 9, 12, 12), 1);
   assert.equal(weightAt("weekday = Monday", 2026, 9, 16, 12), 0);
   assert.equal(weightAt("weekday >= 6", 2026, 9, 17, 12), 1);
@@ -259,7 +275,9 @@ test("a week's average cancels the weekly rhythm but keeps the slow drift", () =
       `${label}: ${values}`,
     );
   }
-  // Day to day, the averaged degree moves several times less than the raw one.
+  // Day to day, the averaged degree moves less than half as much as the raw one.
+  // (Anchoring on the 22nd puts the solstice and equinox Sabbats, which fall
+  // on the 21st, on the day-of-month rule's rising edge, so they stack.)
   const rms = (f: (d: Date) => number) => {
     const v = Array.from({ length: 365 }, (_, d) =>
       f(new Date(2026, 0, 1 + d, 9)),
@@ -270,7 +288,7 @@ test("a week's average cancels the weekly rhythm but keeps the slow drift", () =
   const raw = rms(degreeFor);
   const averaged = rms((d) => averageDegreeFor(d, 7));
   assert.ok(
-    averaged < raw / 3,
+    averaged < raw / 2,
     `raw ${raw.toFixed(2)}° vs averaged ${averaged.toFixed(2)}°`,
   );
   // A very short span is just the degree at that moment.

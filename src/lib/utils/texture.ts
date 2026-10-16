@@ -13,8 +13,14 @@
  * played back. Inside a rule's window (say, the first half of the month) the
  * weight is a flat 1; at its edges it eases to 0 along a smootherstep curve.
  *
- * Seasons are the four northern-hemisphere quarters, numbered 1–4:
- *   1 Spring (Mar–May), 2 Summer (Jun–Aug), 3 Autumn (Sep–Nov), 4 Winter (Dec–Feb)
+ * The calendar is anchored on 22 August (ANCHOR). The year starts on that day,
+ * and every "month" runs from one 22nd to the next, so the day-of-month, month
+ * and season rules all count from it. The week, the hour, the Moon and the
+ * Sabbats are real and do not move.
+ *
+ * The "season" in a rule's name is a quarter of that anchored year: the first
+ * half-year is "season <= 2". (The seasons shown as labels stay the real
+ * northern-hemisphere ones, 1 Spring (Mar–May) to 4 Winter (Dec–Feb).)
  */
 
 import { getMoonCycle, getMoonIllumination } from "./moonPhase.ts";
@@ -55,12 +61,21 @@ export function smoothWindow(
   return smootherstep(((end - start) / 2 + soft / 2 - reach) / soft);
 }
 
+/**
+ * The day the calendar is anchored on: 22 August. The year starts on it, and
+ * every month starts on the 22nd. Change it here and everything follows.
+ */
+export const ANCHOR = { month: 8, day: 22 } as const;
+
 export interface CalendarContext {
-  /** Days since the start of the month, with the time of day as a fraction. */
+  /** Days since the start of this month (the last 22nd), time of day included. */
   monthPos: number;
-  /** Days in this month. */
+  /** Days in this month, from one 22nd to the next. */
   monthLength: number;
-  /** Months since 1 Jan, continuous: 0 on 1 Jan, 2.5 in mid-March, up to 12. */
+  /**
+   * Months since the anchored year began, continuous: 0 on 22 Aug, 1 on 22 Sep,
+   * 2.5 half way through the month that starts on 22 Oct, up to 12.
+   */
   yearMonth: number;
   /** Days since Monday 00:00, from 0 up to 7. */
   weekPos: number;
@@ -183,6 +198,16 @@ function sabbatNoons(year: number): number[] {
   return noons;
 }
 
+/** Midnight on the most recent 22nd (the anchor day) at or before `date`. */
+function monthStartOf(date: Date): Date {
+  const before = date.getDate() < ANCHOR.day;
+  return new Date(
+    date.getFullYear(),
+    date.getMonth() - (before ? 1 : 0),
+    ANCHOR.day,
+  );
+}
+
 export function calendarOf(date: Date): CalendarContext {
   const month = date.getMonth();
   const dayFraction =
@@ -191,8 +216,20 @@ export function calendarOf(date: Date): CalendarContext {
       date.getSeconds() +
       date.getMilliseconds() / 1000) /
     86_400;
-  const monthLength = new Date(date.getFullYear(), month + 1, 0).getDate();
-  const monthPos = date.getDate() - 1 + dayFraction;
+
+  const start = monthStartOf(date);
+  const next = new Date(start.getFullYear(), start.getMonth() + 1, ANCHOR.day);
+  const monthLength = (next.getTime() - start.getTime()) / DAY_MS;
+  const monthPos = (date.getTime() - start.getTime()) / DAY_MS;
+  // Whole months from 22 Aug up to this month's 22nd.
+  const yearStartYear =
+    start.getMonth() >= ANCHOR.month - 1
+      ? start.getFullYear()
+      : start.getFullYear() - 1;
+  const monthIndex =
+    (start.getFullYear() - yearStartYear) * 12 +
+    start.getMonth() -
+    (ANCHOR.month - 1);
 
   let sabbatDistance = Infinity;
   for (const year of [
@@ -211,7 +248,7 @@ export function calendarOf(date: Date): CalendarContext {
   return {
     monthPos,
     monthLength,
-    yearMonth: month + monthPos / monthLength,
+    yearMonth: monthIndex + monthPos / monthLength,
     // getDay() is 0 for Sunday; shift so the week starts on Monday.
     weekPos: ((date.getDay() + 6) % 7) + dayFraction,
     hourPos: dayFraction * 24,
