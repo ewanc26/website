@@ -10,18 +10,15 @@
    * The degree comes from the calendar (see $lib/utils/texture). It tilts the
    * whole field by that many degrees and sets what share of tiles are flipped,
    * sliding the texture between long ordered diagonal waves and a denser maze
-   * as the day, month, season and Moon change. It is computed in the browser,
-   * so it reflects the visitor's own date, and is re-checked once a minute so a
-   * page left open across midnight picks up the new rules. It is redrawn when
-   * the window is resized.
+   * as the day, month, season and Moon change. Every rule is a smooth window on
+   * continuous time, so the degree drifts and never jumps, and a tile that is
+   * turning over cross-fades between its two orientations instead of popping.
+   * It is computed in the browser, so it reflects the visitor's own date, and
+   * is re-checked once a minute (a minute moves the degree by under 0.01°). It
+   * is redrawn when the window is resized.
    */
   import { onMount } from "svelte";
-  import {
-    arcsPathOf,
-    degreeFor,
-    textureAngle,
-    textureArcs,
-  } from "$lib/utils/texture";
+  import { arcsPathOf, degreeFor, textureLayers } from "$lib/utils/texture";
 
   const REFRESH_INTERVAL_MS = 60 * 1000;
   /** Tile size scales with the window, within a sensible range. */
@@ -36,12 +33,22 @@
     Math.min(TILE_MAX, Math.max(TILE_MIN, Math.round(width / 14))),
   );
   const degree = $derived(now ? degreeFor(now) : null);
-  const path = $derived(
+  const layers = $derived(
     degree !== null && width > 0
-      ? arcsPathOf(textureArcs(width, height, tile, degree))
-      : "",
+      ? textureLayers(width, height, tile, degree)
+      : null,
   );
-  const tilt = $derived(degree === null ? 0 : textureAngle(degree));
+  // Tiles that are wholly one way or the other share a single path; the few
+  // mid-fade get a path each at their own strength.
+  const solid = $derived(layers ? arcsPathOf(layers.solid) : "");
+  const fades = $derived(
+    layers
+      ? layers.fades.map((fade) => ({
+          opacity: fade.opacity,
+          d: arcsPathOf(fade.arcs),
+        }))
+      : [],
+  );
 
   onMount(() => {
     const measure = () => {
@@ -68,10 +75,13 @@
 </script>
 
 <svg class="texture-bg" aria-hidden="true" focusable="false">
-  {#if path}
+  {#if layers}
     <!-- The arcs are drawn around the window's centre, then tilted by the degree. -->
-    <g transform="translate({width / 2} {height / 2}) rotate({tilt})">
-      <path d={path} />
+    <g transform="translate({width / 2} {height / 2}) rotate({layers.angle})">
+      <path d={solid} />
+      {#each fades as fade, k (k)}
+        <path d={fade.d} opacity={fade.opacity} />
+      {/each}
     </g>
   {/if}
 </svg>

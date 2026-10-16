@@ -105,6 +105,34 @@ export function getMoonIllumination(date = new Date()) {
   };
 }
 
+/**
+ * Where the Moon is in its cycle, from 0 (new) through 0.5 (full) back to 1,
+ * as the Moon's ecliptic longitude minus the Sun's.
+ *
+ * Unlike `phase` from getMoonIllumination, this never jumps. That one picks
+ * waxing or waning from the sign of an angle, which flips near new and full
+ * moon while the Moon is still a few degrees off the Sun-Earth line (its orbit
+ * is tilted), so the phase jumps by up to about 0.03 there. This one is a
+ * plain difference of two smoothly growing longitudes.
+ */
+export function getMoonCycle(date = new Date()) {
+  const days = toDays(date);
+  const sunAnomaly = RAD * (357.5291 + 0.98560028 * days);
+  const sunLongitude =
+    sunAnomaly +
+    RAD *
+      (1.9148 * Math.sin(sunAnomaly) +
+        0.02 * Math.sin(2 * sunAnomaly) +
+        0.0003 * Math.sin(3 * sunAnomaly)) +
+    RAD * 102.9372 +
+    PI;
+  const moonLongitude =
+    RAD * (218.316 + 13.176396 * days) +
+    RAD * 6.289 * Math.sin(RAD * (134.963 + 13.064993 * days));
+  const turns = (moonLongitude - sunLongitude) / (2 * PI);
+  return ((turns % 1) + 1) % 1;
+}
+
 const MOON_PHASES = [
   "New moon",
   "Waxing crescent",
