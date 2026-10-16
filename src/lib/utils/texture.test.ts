@@ -1,19 +1,24 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  ARC_SPACING,
+  arcPoint,
+  arcsPathOf,
   BASE_DEGREE,
   calendarOf,
+  cellHash,
   DEGREE_RULES,
   degreeFor,
   degreeForCalendar,
-  linesPathOf,
+  flipShare,
   MAX_ANGLE,
   MIN_ANGLE,
-  nestedSquares,
   seasonOf,
-  textureTile,
+  textureAngle,
+  textureArcs,
+  tileArcs,
+  type Arc,
   type CalendarContext,
-  type Line,
 } from "./texture.ts";
 
 // A calendar where only season<=2 (+0.5), hour>=12 (-0.5) and moon waning
@@ -96,153 +101,223 @@ test("every degree the rules can produce stays inside the verified angle range",
   assert.ok(highest <= MAX_ANGLE, `highest degree ${highest}`);
 });
 
-const corners = (squareLines: Line[], level: number) =>
-  squareLines.slice(level * 4, level * 4 + 4);
+test("the degree is clamped to the safe range and sets the flip share", () => {
+  assert.equal(textureAngle(1), MIN_ANGLE);
+  assert.equal(textureAngle(80), MAX_ANGLE);
+  assert.equal(flipShare(MIN_ANGLE), 0);
+  assert.equal(flipShare(MAX_ANGLE), 1);
+  assert.ok(flipShare(19.5) < flipShare(20.5));
+});
 
-/** Distance from a point to the infinite line through a line's endpoints. */
-function distanceToLine(px: number, py: number, l: Line) {
-  const dx = l.x2 - l.x1;
-  const dy = l.y2 - l.y1;
-  return Math.abs(dx * (py - l.y1) - dy * (px - l.x1)) / Math.hypot(dx, dy);
-}
+test("tile hashes are deterministic and spread evenly", () => {
+  assert.equal(cellHash(3, -7), cellHash(3, -7));
+  assert.notEqual(cellHash(3, -7), cellHash(-7, 3));
+  let sum = 0;
+  const n = 100;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      const h = cellHash(i - 50, j - 50);
+      assert.ok(h >= 0 && h < 1);
+      sum += h;
+    }
+  }
+  assert.ok(Math.abs(sum / (n * n) - 0.5) < 0.02, `mean ${sum / (n * n)}`);
+});
 
-test("each square is turned by the degree and its corners sit on its parent's edges", () => {
-  const size = 200;
-  for (const angle of [MIN_ANGLE, 16.5, 20, 26, MAX_ANGLE]) {
-    const lines = nestedSquares(angle, size);
-    const levels = lines.length / 4;
-    assert.ok(levels >= 8, `angle ${angle}: only ${levels} squares`);
-    for (let level = 1; level < levels; level++) {
-      const parent = corners(lines, level - 1);
-      const inner = corners(lines, level);
-      // The edge direction turns by exactly the degree each level.
-      const heading = (l: Line) => Math.atan2(l.y2 - l.y1, l.x2 - l.x1);
-      const radians = heading(inner[0]) - heading(parent[0]);
-      // Headings wrap around, so compare the turn modulo a full circle.
-      const turn = ((((radians * 180) / Math.PI) % 360) + 360) % 360;
-      assert.ok(
-        Math.abs(turn - angle) < 1e-6,
-        `angle ${angle}: turned ${turn}`,
-      );
-      for (const edge of inner) {
-        // The corner is on the parent square's boundary: on one of its edges.
-        const onBoundary = parent.some(
-          (p) =>
-            distanceToLine(edge.x1, edge.y1, p) < 1e-6 &&
-            Math.min(p.x1, p.x2) - 1e-6 <= edge.x1 &&
-            edge.x1 <= Math.max(p.x1, p.x2) + 1e-6 &&
-            Math.min(p.y1, p.y2) - 1e-6 <= edge.y1 &&
-            edge.y1 <= Math.max(p.y1, p.y2) + 1e-6,
-        );
+test("the share of flipped tiles follows the degree", () => {
+  for (const share of [0.25, 0.5, 0.75]) {
+    let flipped = 0;
+    const n = 100;
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) if (cellHash(i, j) < share) flipped++;
+    }
+    assert.ok(Math.abs(flipped / (n * n) - share) < 0.03, `share ${share}`);
+  }
+});
+
+const SIZE = 100;
+const ends = (arc: Arc) => [arcPoint(arc, arc.a0), arcPoint(arc, arc.a1)];
+
+test("every arc leaves a tile at one of three points on its edges", () => {
+  const allowed = [0.5 - ARC_SPACING, 0.5, 0.5 + ARC_SPACING].map(
+    (f) => f * SIZE,
+  );
+  const x0 = 2 * SIZE;
+  const y0 = -3 * SIZE;
+  for (const flipped of [false, true]) {
+    const arcs = tileArcs(SIZE, 2, -3, flipped);
+    assert.equal(arcs.length, 6);
+    for (const arc of arcs) {
+      for (const { x, y } of ends(arc)) {
+        const onVertical =
+          Math.abs(x - x0) < 1e-9 || Math.abs(x - x0 - SIZE) < 1e-9;
+        const onHorizontal =
+          Math.abs(y - y0) < 1e-9 || Math.abs(y - y0 - SIZE) < 1e-9;
+        assert.ok(onVertical !== onHorizontal, "arc end is not on an edge");
+        const along = onVertical ? y - y0 : x - x0;
         assert.ok(
-          onBoundary,
-          `angle ${angle}, level ${level}: corner off the edge`,
+          allowed.some((a) => Math.abs(a - along) < 1e-9),
+          `arc leaves at ${along}`,
         );
       }
     }
   }
 });
 
-test("squares stay inside their cell and shrink every level", () => {
-  const size = 180;
-  const lines = nestedSquares(20, size, 1, 50, 70);
-  for (const l of lines) {
-    for (const [x, y] of [
-      [l.x1, l.y1],
-      [l.x2, l.y2],
-    ]) {
-      assert.ok(x >= 50 - 1e-9 && x <= 50 + size + 1e-9, `x ${x}`);
-      assert.ok(y >= 70 - 1e-9 && y <= 70 + size + 1e-9, `y ${y}`);
+/** A block of tiles with a mix of flips, as the texture would draw. */
+function block(columns: number, rows: number, share: number) {
+  const tiles: { i: number; j: number; arcs: Arc[] }[] = [];
+  for (let j = 0; j < rows; j++) {
+    for (let i = 0; i < columns; i++) {
+      tiles.push({ i, j, arcs: tileArcs(SIZE, i, j, cellHash(i, j) < share) });
     }
   }
-  const side = (level: number) =>
-    Math.hypot(
-      corners(lines, level)[0].x2 - corners(lines, level)[0].x1,
-      corners(lines, level)[0].y2 - corners(lines, level)[0].y1,
-    );
-  for (let level = 1; level < lines.length / 4; level++) {
-    assert.ok(side(level) < side(level - 1));
-  }
-});
-
-/** Which side of the line a→b the point c is on: -1, 0 (on it) or 1. */
-const side = (
-  ax: number,
-  ay: number,
-  bx: number,
-  by: number,
-  cx: number,
-  cy: number,
-) => {
-  const cross = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
-  // Corners are meant to sit exactly on their parent's edge; ignore the
-  // floating-point dust so touching is not mistaken for crossing.
-  return Math.abs(cross) < 1e-7 ? 0 : Math.sign(cross);
-};
-
-/** True if the lines properly cross, as opposed to touching at an end. */
-function crosses(a: Line, b: Line) {
-  return (
-    side(a.x1, a.y1, a.x2, a.y2, b.x1, b.y1) *
-      side(a.x1, a.y1, a.x2, a.y2, b.x2, b.y2) <
-      0 &&
-    side(b.x1, b.y1, b.x2, b.y2, a.x1, a.y1) *
-      side(b.x1, b.y1, b.x2, b.y2, a.x2, a.y2) <
-      0
-  );
+  return tiles;
 }
 
-test("no two lines ever cross, anywhere in the repeated texture", () => {
-  const size = 120;
-  for (const angle of [MIN_ANGLE, 16.5, 20, 26, MAX_ANGLE]) {
-    const tile = textureTile(angle, size);
-    // The tile repeats every 2·size, so check it with its neighbours.
-    const lines: Line[] = [];
-    for (const i of [-1, 0, 1]) {
-      for (const j of [-1, 0, 1]) {
-        for (const l of tile) {
-          lines.push({
-            x1: l.x1 + i * 2 * size,
-            y1: l.y1 + j * 2 * size,
-            x2: l.x2 + i * 2 * size,
-            y2: l.y2 + j * 2 * size,
-          });
+test("arcs join up across every tile edge, so curves run on unbroken", () => {
+  for (const share of [0, 0.5, 1]) {
+    const columns = 8;
+    const rows = 8;
+    const counts = new Map<string, number>();
+    for (const { arcs } of block(columns, rows, share)) {
+      for (const arc of arcs) {
+        for (const { x, y } of ends(arc)) {
+          const key = `${x.toFixed(6)},${y.toFixed(6)}`;
+          counts.set(key, (counts.get(key) ?? 0) + 1);
         }
       }
     }
-    for (let a = 0; a < lines.length; a++) {
-      for (let b = a + 1; b < lines.length; b++) {
-        assert.ok(!crosses(lines[a], lines[b]), `angle ${angle}: lines cross`);
+    for (const [key, count] of counts) {
+      const [x, y] = key.split(",").map(Number);
+      const outside =
+        Math.abs(x) < 1e-6 ||
+        Math.abs(y) < 1e-6 ||
+        Math.abs(x - columns * SIZE) < 1e-6 ||
+        Math.abs(y - rows * SIZE) < 1e-6;
+      // Inside the block every end meets exactly one other; on its rim, none.
+      assert.equal(
+        count,
+        outside ? 1 : 2,
+        `share ${share}: end ${key} met ${count}`,
+      );
+    }
+  }
+});
+
+const sample = (arc: Arc, steps: number) =>
+  Array.from({ length: steps + 1 }, (_, k) =>
+    arcPoint(arc, arc.a0 + ((arc.a1 - arc.a0) * k) / steps),
+  );
+
+type Point = { x: number; y: number };
+
+const side = (a: Point, b: Point, c: Point) => {
+  const cross = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+  return Math.abs(cross) < 1e-9 ? 0 : Math.sign(cross);
+};
+
+function pointToSegment(p: Point, a: Point, b: Point) {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const t = Math.max(
+    0,
+    Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy)),
+  );
+  return Math.hypot(p.x - (a.x + t * dx), p.y - (a.y + t * dy));
+}
+
+/** Distance between two segments; 0 if they cross. */
+function segmentDistance(a: Point, b: Point, c: Point, d: Point) {
+  if (side(a, b, c) * side(a, b, d) < 0 && side(c, d, a) * side(c, d, b) < 0) {
+    return 0;
+  }
+  return Math.min(
+    pointToSegment(a, c, d),
+    pointToSegment(b, c, d),
+    pointToSegment(c, a, b),
+    pointToSegment(d, a, b),
+  );
+}
+
+/** Closest approach of two arcs, drawn as polylines. */
+function arcDistance(p: Arc, q: Arc) {
+  const a = sample(p, 12);
+  const b = sample(q, 12);
+  let min = Infinity;
+  for (let i = 0; i < a.length - 1; i++) {
+    for (let j = 0; j < b.length - 1; j++) {
+      min = Math.min(min, segmentDistance(a[i], a[i + 1], b[j], b[j + 1]));
+    }
+  }
+  return min;
+}
+
+const sharesEnd = (p: Arc, q: Arc) =>
+  ends(p).some((a) =>
+    ends(q).some((b) => Math.hypot(a.x - b.x, a.y - b.y) < 1e-6),
+  );
+
+test("no two arcs cross or come near each other except where they join", () => {
+  const gap = 0.05 * SIZE;
+  for (const share of [0, 0.5, 1]) {
+    const tiles = block(6, 6, share);
+    for (const a of tiles) {
+      for (const b of tiles) {
+        if (b.j < a.j || (b.j === a.j && b.i < a.i)) continue;
+        if (Math.abs(a.i - b.i) > 1 || Math.abs(a.j - b.j) > 1) continue;
+        for (const p of a.arcs) {
+          for (const q of b.arcs) {
+            if (p === q || sharesEnd(p, q)) continue;
+            assert.ok(
+              arcDistance(p, q) > gap,
+              `share ${share}: arcs come within ${gap}`,
+            );
+          }
+        }
       }
     }
   }
 });
 
-test("neighbouring cells turn in opposite directions", () => {
-  const size = 100;
-  const tile = textureTile(20, size);
-  const perCell = tile.length / 4;
-  const heading = (l: Line) => Math.atan2(l.y2 - l.y1, l.x2 - l.x1);
-  // The second square of each cell, relative to its outline.
-  const turnOf = (cell: number) =>
-    heading(tile[cell * perCell + 4]) - heading(tile[cell * perCell]);
-  assert.ok(turnOf(0) > 0 && turnOf(3) > 0);
-  assert.ok(turnOf(1) < 0 && turnOf(2) < 0);
-});
-
-test("angles outside the verified range are clamped", () => {
-  assert.deepEqual(nestedSquares(1, 100), nestedSquares(MIN_ANGLE, 100));
-  assert.deepEqual(nestedSquares(80, 100), nestedSquares(MAX_ANGLE, 100));
-});
-
-test("the texture renders as one path with a move per line", () => {
-  const tile = textureTile(20, 100);
-  assert.equal(linesPathOf(tile).match(/M/g)?.length, tile.length);
+test("the texture covers the whole window at any tilt", () => {
+  const [width, height, size] = [1280, 800, 90];
+  for (const degree of [MIN_ANGLE, 19.5, 26, MAX_ANGLE]) {
+    const arcs = textureArcs(width, height, size, degree);
+    const xs = arcs.map((a) => a.cx);
+    const ys = arcs.map((a) => a.cy);
+    const theta = (textureAngle(degree) * Math.PI) / 180;
+    // Map each window corner back into the texture's own, untilted frame.
+    for (const [cx, cy] of [
+      [-width / 2, -height / 2],
+      [width / 2, -height / 2],
+      [width / 2, height / 2],
+      [-width / 2, height / 2],
+    ]) {
+      const x = cx * Math.cos(theta) + cy * Math.sin(theta);
+      const y = -cx * Math.sin(theta) + cy * Math.cos(theta);
+      assert.ok(
+        x > Math.min(...xs) && x < Math.max(...xs),
+        `degree ${degree}: x`,
+      );
+      assert.ok(
+        y > Math.min(...ys) && y < Math.max(...ys),
+        `degree ${degree}: y`,
+      );
+    }
+  }
 });
 
 test("the texture changes with the degree", () => {
   assert.notEqual(
-    linesPathOf(textureTile(19.5, 100)),
-    linesPathOf(textureTile(20.5, 100)),
+    arcsPathOf(textureArcs(600, 400, 80, 19.5)),
+    arcsPathOf(textureArcs(600, 400, 80, 20.5)),
   );
+});
+
+test("the texture renders as one path with an arc per arc", () => {
+  const arcs = tileArcs(SIZE, 0, 0, false);
+  const d = arcsPathOf(arcs);
+  assert.equal(d.match(/M/g)?.length, arcs.length);
+  assert.equal(d.match(/A/g)?.length, arcs.length);
 });

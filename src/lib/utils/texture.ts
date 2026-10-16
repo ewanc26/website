@@ -1,9 +1,9 @@
 /**
  * texture.ts — the degree rules and geometry behind the background texture.
  *
- * The texture is nested squares, each turned by the "degree" from the one
- * outside it. The degree starts at BASE_DEGREE and each rule in DEGREE_RULES adds its delta when its
- * condition holds for the current moment. Rules are summed, so the degree
+ * The texture is a field of flowing arcs (Truchet tiles). The "degree" tilts
+ * it and sets how many tiles are flipped. The degree starts at BASE_DEGREE and
+ * each rule in DEGREE_RULES adds its delta when its condition holds for the current moment. Rules are summed, so the degree
  * moves with the cycles the site already tracks: the day of the month, the
  * month, the season, the weekday, the time of day, the Moon, and the Sabbats.
  *
@@ -114,81 +114,129 @@ export function degreeFor(date: Date): number {
 /** Bounds the degree is clamped to when drawing; the rules never leave it. */
 export const MIN_ANGLE = 10;
 export const MAX_ANGLE = 35;
-/** Stop nesting at this many squares, or once a square is under 2px across. */
-const MAX_LEVELS = 16;
 
-export interface Line {
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
+/** The degree as the angle the texture is drawn at, kept in the safe range. */
+export function textureAngle(degree: number): number {
+  return Math.min(MAX_ANGLE, Math.max(MIN_ANGLE, degree));
 }
 
 /**
- * Concentric squares filling a `size`×`size` cell whose top-left corner is
- * (ox, oy). Each square is turned by `angleDeg` (the degree) from the one
- * outside it, and is the largest square that fits inside it: its corners land
- * exactly on the outer square's edges. Lines therefore only ever meet at those
- * corners and never cross, whatever the angle. `turn` picks the direction.
+ * The share of tiles that are flipped, from 0 at MIN_ANGLE to 1 at MAX_ANGLE.
+ * Few flips make long ordered diagonal waves; about half make a dense maze.
  */
-export function nestedSquares(
-  angleDeg: number,
+export function flipShare(degree: number): number {
+  return (textureAngle(degree) - MIN_ANGLE) / (MAX_ANGLE - MIN_ANGLE);
+}
+
+/**
+ * A fixed pseudo-random number in [0, 1) for the tile at column `i`, row `j`.
+ * It depends only on the tile's position, so a tile never changes its mind as
+ * the window resizes, and a small change in the degree flips only a few tiles.
+ */
+export function cellHash(i: number, j: number): number {
+  let h = Math.imul(i | 0, 0x27d4eb2d) ^ Math.imul(j | 0, 0x165667b1);
+  h = Math.imul(h ^ (h >>> 15), 0x85ebca6b);
+  h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+
+/** An arc of a circle: centre, radius, and start/end angles in radians. */
+export interface Arc {
+  cx: number;
+  cy: number;
+  r: number;
+  a0: number;
+  a1: number;
+}
+
+/**
+ * Where an arc's three lines meet a tile edge, as a fraction of the tile:
+ * 1/2 and 1/2 ± ARC_SPACING. The same three points sit on all four edges, so
+ * arcs join across any two neighbouring tiles however each is flipped.
+ */
+export const ARC_SPACING = 0.16;
+
+const RADII = [0.5 - ARC_SPACING, 0.5, 0.5 + ARC_SPACING];
+
+/**
+ * The six arcs of the tile in column `i`, row `j` (a square `size` across, with
+ * its top-left corner at (i·size, j·size)). Unflipped, the arcs wrap two
+ * opposite corners (top-left and bottom-right); flipped, the other two.
+ *
+ * Within a tile, arcs round the same corner are concentric, and arcs round
+ * opposite corners stay apart because their largest radii sum to less than the
+ * diagonal (2·(0.5 + ARC_SPACING) < √2), so no two arcs ever cross.
+ */
+export function tileArcs(
   size: number,
-  turn: 1 | -1 = 1,
-  ox = 0,
-  oy = 0,
-): Line[] {
-  const clamped = Math.min(MAX_ANGLE, Math.max(MIN_ANGLE, angleDeg));
-  const theta = (clamped * Math.PI) / 180;
-  const shrink = 1 / (Math.cos(theta) + Math.sin(theta));
-  const cx = ox + size / 2;
-  const cy = oy + size / 2;
-  const lines: Line[] = [];
-  let half = size / 2;
-  let rotation = 0;
-  for (let level = 0; level < MAX_LEVELS && half >= 1; level++) {
-    const cos = Math.cos(rotation);
-    const sin = Math.sin(rotation);
-    const corners = [
-      [-1, -1],
-      [1, -1],
-      [1, 1],
-      [-1, 1],
-    ].map(([sx, sy]) => ({
-      x: cx + sx * half * cos - sy * half * sin,
-      y: cy + sx * half * sin + sy * half * cos,
-    }));
-    for (let i = 0; i < 4; i++) {
-      const a = corners[i];
-      const b = corners[(i + 1) % 4];
-      lines.push({ x1: a.x, y1: a.y, x2: b.x, y2: b.y });
-    }
-    rotation += turn * theta;
-    half *= shrink;
-  }
-  return lines;
+  i: number,
+  j: number,
+  flipped: boolean,
+): Arc[] {
+  const x0 = i * size;
+  const y0 = j * size;
+  const x1 = x0 + size;
+  const y1 = y0 + size;
+  const half = Math.PI / 2;
+  const corners = flipped
+    ? [
+        // top-right and bottom-left
+        { cx: x1, cy: y0, a0: Math.PI, a1: half },
+        { cx: x0, cy: y1, a0: 0, a1: -half },
+      ]
+    : [
+        // top-left and bottom-right
+        { cx: x0, cy: y0, a0: 0, a1: half },
+        { cx: x1, cy: y1, a0: Math.PI, a1: Math.PI + half },
+      ];
+  return corners.flatMap((corner) =>
+    RADII.map((r) => ({ ...corner, r: r * size })),
+  );
 }
 
 /**
- * One repeating tile of the texture: 2×2 cells, 2·size across and down, with
- * neighbouring cells turning in opposite directions (a checkerboard), so the
- * squares counter-rotate from cell to cell.
+ * Every arc needed to cover a `width`×`height` window when the texture is
+ * turned by the degree. Coordinates are in the texture's own (unturned) frame,
+ * centred on the window's centre; the caller applies the turn. Cover is
+ * measured in the turned frame, so no tile is wasted outside the window.
  */
-export function textureTile(angleDeg: number, size: number): Line[] {
-  return [
-    nestedSquares(angleDeg, size, 1, 0, 0),
-    nestedSquares(angleDeg, size, -1, size, 0),
-    nestedSquares(angleDeg, size, -1, 0, size),
-    nestedSquares(angleDeg, size, 1, size, size),
-  ].flat();
+export function textureArcs(
+  width: number,
+  height: number,
+  size: number,
+  degree: number,
+): Arc[] {
+  const theta = (textureAngle(degree) * Math.PI) / 180;
+  const cos = Math.abs(Math.cos(theta));
+  const sin = Math.abs(Math.sin(theta));
+  const halfW = (width * cos + height * sin) / 2 + size;
+  const halfH = (width * sin + height * cos) / 2 + size;
+  const share = flipShare(degree);
+  const arcs: Arc[] = [];
+  for (let j = Math.floor(-halfH / size); j < Math.ceil(halfH / size); j++) {
+    for (let i = Math.floor(-halfW / size); i < Math.ceil(halfW / size); i++) {
+      arcs.push(...tileArcs(size, i, j, cellHash(i, j) < share));
+    }
+  }
+  return arcs;
 }
 
-/** Lines as one SVG path `d` string, so a whole tile is one DOM node. */
-export function linesPathOf(lines: readonly Line[]): string {
-  return lines
-    .map(
-      (l) =>
-        `M${l.x1.toFixed(2)} ${l.y1.toFixed(2)}L${l.x2.toFixed(2)} ${l.y2.toFixed(2)}`,
-    )
+export function arcPoint(arc: Arc, angle: number) {
+  return {
+    x: arc.cx + arc.r * Math.cos(angle),
+    y: arc.cy + arc.r * Math.sin(angle),
+  };
+}
+
+/** Arcs as one SVG path `d` string, so the whole texture is one DOM node. */
+export function arcsPathOf(arcs: readonly Arc[]): string {
+  return arcs
+    .map((arc) => {
+      const from = arcPoint(arc, arc.a0);
+      const to = arcPoint(arc, arc.a1);
+      const sweep = arc.a1 > arc.a0 ? 1 : 0;
+      const r = arc.r.toFixed(1);
+      return `M${from.x.toFixed(1)} ${from.y.toFixed(1)}A${r} ${r} 0 0 ${sweep} ${to.x.toFixed(1)} ${to.y.toFixed(1)}`;
+    })
     .join("");
 }

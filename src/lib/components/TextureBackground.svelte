@@ -1,46 +1,61 @@
 <script lang="ts">
   /**
-   * TextureBackground — a full-viewport geometric texture behind the page.
+   * TextureBackground — a full-viewport field of flowing arcs behind the page.
    *
-   * Every cell holds concentric squares, each turned by the "degree" from the
-   * one outside it, with neighbouring cells turning in opposite directions. The
-   * squares are inscribed in each other, so lines only meet at corners and
-   * never cross.
+   * Each square tile holds six quarter-circle arcs. Every tile is either
+   * unflipped or flipped, which is fixed by a hash of its position, and the
+   * arcs meet each tile edge at the same three points, so they join up across
+   * tiles and run on as long unbroken curves. No grid is ever drawn.
    *
-   * The degree comes from the calendar (see $lib/utils/texture), so the pattern
-   * drifts as the day, month, season and Moon change. It is computed in the
-   * browser, so it reflects the visitor's own date. It re-checks the date once
-   * a minute, so a page left open across midnight picks up the new rules, and
-   * re-tiles when the window is resized.
+   * The degree comes from the calendar (see $lib/utils/texture). It tilts the
+   * whole field by that many degrees and sets what share of tiles are flipped,
+   * sliding the texture between long ordered diagonal waves and a denser maze
+   * as the day, month, season and Moon change. It is computed in the browser,
+   * so it reflects the visitor's own date, and is re-checked once a minute so a
+   * page left open across midnight picks up the new rules. It is redrawn when
+   * the window is resized.
    */
   import { onMount } from "svelte";
-  import { degreeFor, linesPathOf, textureTile } from "$lib/utils/texture";
+  import {
+    arcsPathOf,
+    degreeFor,
+    textureAngle,
+    textureArcs,
+  } from "$lib/utils/texture";
 
   const REFRESH_INTERVAL_MS = 60 * 1000;
-  /** Cell size scales with the window, within a sensible range. */
-  const CELL_MIN = 120;
-  const CELL_MAX = 200;
+  /** Tile size scales with the window, within a sensible range. */
+  const TILE_MIN = 72;
+  const TILE_MAX = 110;
 
   let now = $state<Date | null>(null);
-  let viewportWidth = $state(0);
+  let width = $state(0);
+  let height = $state(0);
 
-  // Whole, even pixels, so tile seams land on pixel edges.
-  const cell = $derived(
-    Math.min(CELL_MAX, Math.max(CELL_MIN, 2 * Math.round(viewportWidth / 16))),
-  );
   const tile = $derived(
-    now ? linesPathOf(textureTile(degreeFor(now), cell)) : "",
+    Math.min(TILE_MAX, Math.max(TILE_MIN, Math.round(width / 14))),
   );
+  const degree = $derived(now ? degreeFor(now) : null);
+  const path = $derived(
+    degree !== null && width > 0
+      ? arcsPathOf(textureArcs(width, height, tile, degree))
+      : "",
+  );
+  const tilt = $derived(degree === null ? 0 : textureAngle(degree));
 
   onMount(() => {
+    const measure = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+    };
+    measure();
     now = new Date();
-    viewportWidth = window.innerWidth;
     const interval = setInterval(() => (now = new Date()), REFRESH_INTERVAL_MS);
 
     let frame = 0;
     const handleResize = () => {
       cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => (viewportWidth = window.innerWidth));
+      frame = requestAnimationFrame(measure);
     };
     window.addEventListener("resize", handleResize, { passive: true });
 
@@ -53,20 +68,11 @@
 </script>
 
 <svg class="texture-bg" aria-hidden="true" focusable="false">
-  {#if tile}
-    <defs>
-      <!-- A tile is 2×2 cells: the alternating turn repeats every two. -->
-      <pattern
-        id="texture-wallpaper"
-        width={cell * 2}
-        height={cell * 2}
-        patternUnits="userSpaceOnUse"
-        patternTransform="translate(0.5 0.5)"
-      >
-        <path d={tile} />
-      </pattern>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#texture-wallpaper)" />
+  {#if path}
+    <!-- The arcs are drawn around the window's centre, then tilted by the degree. -->
+    <g transform="translate({width / 2} {height / 2}) rotate({tilt})">
+      <path d={path} />
+    </g>
   {/if}
 </svg>
 
@@ -88,7 +94,7 @@
     fill: none;
     stroke: var(--ink);
     stroke-width: 1;
-    stroke-linejoin: round;
+    stroke-linecap: round;
   }
 
   /* Anyone asking for more contrast gets plain paper behind the text. */
