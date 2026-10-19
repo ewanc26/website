@@ -11,6 +11,7 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "test:site-info": "node --experimental-strip-types --test src/lib/services/atproto/siteInfo.test.ts",
     "test:blog": "node --experimental-strip-types --test src/lib/utils/tags.test.ts src/lib/utils/coverImage.test.ts",
+    "test:popfeed": "node --experimental-strip-types --test src/lib/services/atproto/popfeedShelves.test.ts",
     "audit:site": "node scripts/audit-site.mjs"
   },
   "devDependencies": {

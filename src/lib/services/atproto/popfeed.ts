@@ -1,14 +1,14 @@
 /**
- * "What I'm watching" — sourced from `social.popfeed.feed.review`, Popfeed's
- * film/TV review lexicon. Poster/backdrop URLs come pre-resolved as plain
- * https:// links on the record (unlike the atstore icons), so no blob CID
- * handling is needed here.
+ * Popfeed reviews — sourced from `social.popfeed.feed.review`, Popfeed's
+ * review lexicon for everything it logs (films, TV, books, games, music).
+ * Poster/cover URLs come pre-resolved as plain https:// links on the record
+ * (unlike the atstore icons), so no blob CID handling is needed here.
  */
 
 import { getPDSAgent } from "@ewanc26/atproto";
 import { getCache, setCache } from "$lib/utils/cache";
 
-export interface WatchingEntry {
+export interface PopfeedEntry {
   uri: string;
   title: string;
   rating?: number;
@@ -21,15 +21,14 @@ export interface WatchingEntry {
   createdAt: string;
 }
 
-// Popfeed logs books, games, etc. too; this row is TV and films only.
 const CACHE_TTL_MS = 1000 * 60 * 10; // 10 minutes
 
-export async function fetchWatching(
+export async function fetchPopfeedReviews(
   did: string,
   fetchFn: typeof fetch = fetch,
-): Promise<WatchingEntry[]> {
-  const cacheKey = `watching:${did}`;
-  const cached = getCache<WatchingEntry[]>(cacheKey);
+): Promise<PopfeedEntry[]> {
+  const cacheKey = `popfeed:${did}`;
+  const cached = getCache<PopfeedEntry[]>(cacheKey);
   if (cached) return cached;
 
   const agent = await getPDSAgent(did, fetchFn);
@@ -46,7 +45,7 @@ export async function fetchWatching(
     cursor = resp.data.cursor;
   } while (cursor);
 
-  const entries: WatchingEntry[] = records
+  const entries: PopfeedEntry[] = records
     .map(({ uri, value }) => ({
       uri,
       title: value.title as string,
@@ -58,11 +57,7 @@ export async function fetchWatching(
       imdbId: value.identifiers?.imdbId as string | undefined,
       createdAt: (value.createdAt as string) ?? "",
     }))
-    .filter(
-      (e) =>
-        e.title &&
-        (e.creativeWorkType === "movie" || e.creativeWorkType === "tv_show"),
-    )
+    .filter((e) => e.title)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
   setCache(cacheKey, entries, CACHE_TTL_MS);

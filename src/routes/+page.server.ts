@@ -1,6 +1,7 @@
 import { getHomeData } from "$lib/services/home";
 import { fetchShippedApps } from "$lib/services/atproto/apps";
-import { fetchWatching } from "$lib/services/atproto/watching";
+import { fetchPopfeedReviews } from "$lib/services/atproto/popfeed";
+import { popfeedShelves } from "$lib/services/atproto/popfeedShelves";
 import { fetchRecentPosts } from "$lib/services/atproto/feed";
 import { fetchRecentPlays } from "$lib/services/atproto/plays";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
@@ -9,10 +10,12 @@ import type { PageServerLoad } from "./$types";
 export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
   setHeaders({ "cache-control": "public, s-maxage=60, stale-while-revalidate=300" });
 
-  const [homeData, apps, watching, feed, plays] = await Promise.all([
+  const [homeData, apps, popfeed, feed, plays] = await Promise.all([
     getHomeData(),
     fetchShippedApps(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
-    fetchWatching(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
+    fetchPopfeedReviews(PUBLIC_ATPROTO_DID, fetch)
+      .then(popfeedShelves)
+      .catch(() => []),
     fetchRecentPosts(PUBLIC_ATPROTO_DID, fetch).catch(() => []),
     fetchRecentPlays(PUBLIC_ATPROTO_DID, 1, fetch).catch(() => []),
   ]);
@@ -31,5 +34,5 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
     rkey: p.rkey,
   }));
 
-  return { ...homeData, posts, apps, watching, feed, latestPlay };
+  return { ...homeData, posts, apps, popfeed, feed, latestPlay };
 };
