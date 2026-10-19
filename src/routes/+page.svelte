@@ -44,7 +44,7 @@
   };
   const pad = (n: number) => String(n).padStart(2, "0");
   const tilts = [-1.1, 0.8, -0.5, 1.2, -0.9, 0.6];
-  const kindLabel: Record<string, string> = { movie: "Film", tv_show: "TV", book: "Book", game: "Game", album: "Album" };
+  const kindLabel: Record<string, string> = { movie: "Film", tv_show: "TV", tv_season: "TV", book: "Book", video_game: "Game", album: "Album", ep: "EP", music: "Music" };
 
   const feedTitle = (post: (typeof feed)[number]) => {
     if (post.text) return post.text;

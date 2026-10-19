@@ -10,10 +10,15 @@ import type { PopfeedEntry } from "./popfeed";
  * collects; `n` sizes the heading word to its length (see `.word` in riso.css).
  */
 export const POPFEED_SHELVES = [
-  { word: "Watching", verb: "watch", n: 8, types: ["movie", "tv_show"] },
+  {
+    word: "Watching",
+    verb: "watch",
+    n: 8,
+    types: ["movie", "tv_show", "tv_season"],
+  },
   { word: "Reading", verb: "read", n: 7, types: ["book"] },
-  { word: "Playing", verb: "play", n: 7, types: ["game"] },
-  { word: "Listening", verb: "listen", n: 9, types: ["album"] },
+  { word: "Playing", verb: "play", n: 7, types: ["video_game"] },
+  { word: "Listening", verb: "listen", n: 9, types: ["album", "ep", "music"] },
 ];
 
 export interface PopfeedShelf {
