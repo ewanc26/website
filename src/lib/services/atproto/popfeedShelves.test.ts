@@ -19,7 +19,7 @@ test("groups reviews by creative work type into their shelves", () => {
     entry("Heat", "movie"),
     entry("The Wire", "tv_show"),
     entry("Dune", "book"),
-    entry("Hades", "game"),
+    entry("Hades", "video_game"),
     entry("Blue", "album"),
   ]);
 
