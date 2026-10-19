@@ -51,6 +51,7 @@ jobs:
         run: |
           pnpm test:site-info
           pnpm test:blog
+          pnpm test:popfeed
 
       - name: Build
         run: pnpm build
