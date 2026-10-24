@@ -9,8 +9,8 @@ import {
   fetchBlogPosts,
   fetchPublications,
   fetchMusicStatus,
-  fetchLinks,
 } from "@ewanc26/atproto";
+import { fetchProfileLinks } from "$lib/services/atproto/fetch";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 import { env } from "$env/dynamic/private";
 import {
@@ -109,7 +109,7 @@ export async function getHomeData() {
     fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
       publications: [],
     })),
-    fetchLinks(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ cards: [] })),
+    fetchProfileLinks(fetch).catch(() => ({ cards: [] })),
   ]);
 
   return {

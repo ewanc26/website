@@ -1,8 +1,9 @@
-import { fetchProfile, fetchLinks, fetchSifaProfile, fetchSifaSkills, fetchSifaEducation, fetchSifaLanguages, fetchSifaExternalAccounts } from "@ewanc26/atproto";
+import { fetchProfile, fetchSifaProfile, fetchSifaSkills, fetchSifaEducation, fetchSifaLanguages, fetchSifaExternalAccounts } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 import { env } from "$env/dynamic/private";
 import { fetchPinnedGitHubProjects } from "$lib/services/github";
 import { resolveDid } from "$lib/services/atproto/did";
+import { fetchProfileLinks } from "$lib/services/atproto/fetch";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
@@ -11,7 +12,7 @@ export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
   const did = PUBLIC_ATPROTO_DID;
   const [profile, links, sifa, skills, education, languages, professional, projects, pds] = await Promise.all([
     fetchProfile(did, fetch).catch(() => ({ displayName: "", description: "", avatar: "", handle: "", did, pronouns: "" }) as any),
-    fetchLinks(did, fetch).catch(() => null),
+    fetchProfileLinks(fetch).catch(() => null),
     fetchSifaProfile(did, fetch).catch(() => null),
     fetchSifaSkills(did, fetch).catch(() => []),
     fetchSifaEducation(did, fetch).catch(() => []),

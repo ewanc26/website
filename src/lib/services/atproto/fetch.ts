@@ -49,6 +49,52 @@ export async function fetchPublications(fetchFn?: typeof fetch) {
   return _fetchPublications(PUBLIC_ATPROTO_DID, fetchFn);
 }
 
+export interface ProfileLinkCard {
+  url: string;
+  text: string;
+  emoji: string;
+}
+
+function profileLinkLabel(url: string): string {
+  const parsed = new URL(url);
+  return `${parsed.host}${parsed.pathname.replace(/\/$/, "")}`;
+}
+
+export async function fetchProfileLinks(
+  fetchFn?: typeof fetch,
+): Promise<{ cards: ProfileLinkCard[] }> {
+  const cacheKey = "profile-links";
+  const cached = getCache<{ cards: ProfileLinkCard[] }>(cacheKey);
+  if (cached) return cached;
+
+  const agent = await getPDSAgent(PUBLIC_ATPROTO_DID, fetchFn);
+  const [profile, linkRecords] = await Promise.all([
+    agent.com.atproto.repo.getRecord({
+      repo: PUBLIC_ATPROTO_DID,
+      collection: "app.bsky.actor.profile",
+      rkey: "self",
+    }),
+    agent.com.atproto.repo.listRecords({
+      repo: PUBLIC_ATPROTO_DID,
+      collection: "app.bsky.actor.link",
+      limit: 100,
+    }),
+  ]);
+
+  const urlByUri = new Map<string, string>(
+    linkRecords.data.records.map((r: any) => [r.uri, r.value.url as string]),
+  );
+  const refs = ((profile.data.value as any).links ?? []) as { uri: string }[];
+  const cards = refs.flatMap((ref): ProfileLinkCard[] => {
+    const url = urlByUri.get(ref.uri);
+    return url ? [{ url, text: profileLinkLabel(url), emoji: "" }] : [];
+  });
+
+  const data = { cards };
+  setCache(cacheKey, data, CACHE_TTL_MS);
+  return data;
+}
+
 export async function fetchSiteInfo(fetchFn?: typeof fetch) {
   return _fetchSiteInfo(PUBLIC_ATPROTO_DID, fetchFn);
 }
