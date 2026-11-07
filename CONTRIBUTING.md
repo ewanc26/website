@@ -16,4 +16,4 @@ my website at ewancroft.uk
 
 ## Recent direction
 
-Recent commits: Sync AGENTS.md from zincfox; Sync AGENTS.md from zincfox; Sync CONTRIBUTING.md from zincfox; Sync CONTRIBUTING.md from zincfox; Align Leaflet block rendering with current records
+Recent commits: Align Leaflet block rendering with current records

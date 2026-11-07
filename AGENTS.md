@@ -20,4 +20,4 @@ my website at ewancroft.uk
 
 ## Recent history
 
-Sync AGENTS.md from zincfox; Sync AGENTS.md from zincfox; Sync CONTRIBUTING.md from zincfox; Sync CONTRIBUTING.md from zincfox; Align Leaflet block rendering with current records
+Align Leaflet block rendering with current records
