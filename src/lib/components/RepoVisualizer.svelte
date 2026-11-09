@@ -429,7 +429,7 @@
             y,
             vx: vx + (Math.random() - 0.5) * 0.5,
             vy: vy + (Math.random() - 0.5) * 0.5,
-            size: 3 + Math.random() * 4,
+            size: 5 + Math.random() * 7,
             color: "#ec4899", // Special pink/purple color for teal records
             type: "music",
             age: 0,
@@ -571,13 +571,13 @@
 </svelte:head>
 
 <div class="repo-visualizer-container">
-  <div class="visualizer-header">
-    <h2>Live Repository Activity</h2>
-    <div class="controls">
-      <button type="button" onclick={() => fetchInitialEvents()} disabled={loading} class:loading>
+  <div class="visualizer-header flex-col sm:flex-row gap-2 sm:gap-0">
+    <h2 class="text-base sm:text-lg">Live Repository Activity</h2>
+    <div class="controls flex-wrap gap-1">
+      <button type="button" onclick={() => fetchInitialEvents()} disabled={loading} class:loading class="px-3 py-1.5 sm:px-4 sm:py-2">
         {loading ? "Refreshing..." : "Refresh"}
       </button>
-      <button type="button" onclick={reconnect} class:active={socketStatus === 'open'} class:error={socketStatus === 'error'}>
+      <button type="button" onclick={reconnect} class:active={socketStatus === 'open'} class:error={socketStatus === 'error'} class="px-3 py-1.5 sm:px-4 sm:py-2">
         WebSocket: {socketStatus === 'open' ? 'Live' : socketStatus === 'connecting' ? 'Connecting...' : socketStatus === 'closed' ? 'Disconnected' : 'Error'}
       </button>
     </div>
@@ -586,11 +586,11 @@
   {#if error}
     <div class="error-message">
       <p>Error: {error}</p>
-      <button type="button" onclick={() => fetchInitialEvents()}>Retry</button>
+      <button type="button" onclick={() => fetchInitialEvents()} class="px-3 py-1.5">Retry</button>
     </div>
   {/if}
 
-  <div id="repo-visualizer" class="visualizer-canvas" bind:clientWidth={containerWidth} bind:clientHeight={containerHeight}>
+  <div id="repo-visualizer" class="visualizer-canvas md:h-[400px] h-[300px]" bind:clientWidth={containerWidth} bind:clientHeight={containerHeight}>
     <!-- Particle visualization -->
     <svg width="100%" height="100%" viewBox={`0 0 ${containerWidth} ${containerHeight}`}>
       {#each particles as p, i (i)}
@@ -606,7 +606,7 @@
     </svg>
 
     <!-- Event list overlay -->
-    <div class="event-list">
+    <div class="event-list max-h-[40%] sm:max-h-[50%]">
       {#if events.length === 0 && !loading}
         <p class="empty-state">No events yet. Your repository is quiet.</p>
       {:else}
@@ -616,7 +616,7 @@
           {@const color = getCollectionColor(event.collection)}
           
           {#if event.type === 'teal' && event.tealData}
-            <div class="event-item teal-event" style={`--event-color: ${color}`}>
+            <div class="event-item teal-event p-2 sm:p-3" style={`--event-color: ${color}`}>
               <div class="event-icon" style={`background-color: ${color}`}>
                 <Music size={16} />
               </div>
@@ -635,7 +635,7 @@
             </div>
           {:else}
             {@const Icon = collectionIcons[event.collection] || FileText}
-            <div class="event-item" style={`--event-color: ${color}`}>
+            <div class="event-item p-2 sm:p-3" style={`--event-color: ${color}`}>
               <div class="event-icon" style={`background-color: ${color}`}>
                 <Icon size={16} />
               </div>
@@ -655,7 +655,7 @@
 
   {#if hasMore}
     <div class="load-more">
-      <button type="button" onclick={loadMore} disabled={loading}>
+      <button type="button" onclick={loadMore} disabled={loading} class="px-4 py-2">
         {loading ? "Loading..." : "Load More"}
       </button>
     </div>
@@ -680,7 +680,7 @@
     </div>
   {/if}
 
-  <div class="stats">
+  <div class="stats flex-col sm:flex-row gap-1 sm:gap-0 text-center sm:text-left">
     <span>Total events: {events.length}</span>
     {#if lastFetch}
       <span>Last updated: {lastFetch.toLocaleTimeString()}</span>
@@ -917,8 +917,14 @@
 
   .lexicon-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: var(--space-sm);
+  }
+
+  @media (min-width: 640px) {
+    .lexicon-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
   }
 
   .lexicon-item {
