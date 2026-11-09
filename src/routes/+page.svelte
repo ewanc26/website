@@ -11,6 +11,7 @@
   import GithubActivity from "$lib/components/GithubActivity.svelte";
   import GithubProfileSummary from "$lib/components/GithubProfileSummary.svelte";
   import NowPlayingChip from "$lib/components/NowPlayingChip.svelte";
+  import SupportCTA from "$lib/components/SupportCTA.svelte";
   import type { PopfeedShelf } from "$lib/services/atproto/popfeedShelves";
   import { normalizeSlug } from "$lib/utils/slugify";
   import { blogDateParts } from "$lib/utils/date";
@@ -147,6 +148,9 @@
   {:else}
     <p class="empty">The publishing service isn't answering. Try again in a bit.</p>
   {/if}
+
+  <SigilRule />
+  <SupportCTA />
 
   {#if feed.length > 0}
     <SigilRule /><h2 class="word"><span class="word-text" style="--n:4">Feed</span><small>lately, on Bluesky</small></h2>
