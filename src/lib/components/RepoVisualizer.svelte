@@ -42,20 +42,21 @@
     service?: string;
   }
 
-  // Jetstream event types
+  // Jetstream event types (v2 format)
   interface JetstreamEvent {
-    seq: number;
-    time: string;
-    did: string;
-    type: string;
-    ops: Array<{
-      action: 'create' | 'update' | 'delete';
+    $type: string;
+    payload: {
+      $type: string;
+      did: string;
+      seq: number;
+      time: string;
+      operation: 'create' | 'update' | 'delete';
       collection: string;
       rkey: string;
-      uri: string;
+      uri?: string;
       cid?: string;
-      value?: any;
-    }>;
+      record?: any;
+    };
   }
 
   // Use the actual DID from config
@@ -283,13 +284,13 @@
       socket.close();
     }
 
-    const jetstreamUrl = `wss://jetstream1.us-east.bsky.network?dids=${encodeURIComponent(DID)}`;
+        const jetstreamUrl = `wss://jetstream.us-east.bsky.network/xrpc/network.bsky.jetstream.subscribeEvents?dids=${encodeURIComponent(DID)}&kinds=commit`;
     
     console.log("Connecting to Jetstream:", jetstreamUrl);
     socketStatus = 'connecting';
     
     try {
-      socket = new WebSocket(jetstreamUrl);
+      socket = new WebSocket(jetstreamUrl, ['xrpc.v1.json']);
 
       socket.onopen = () => {
         console.log("Jetstream WebSocket connected");
@@ -334,41 +335,45 @@
     }
   }
 
-  // Handle incoming Jetstream event
+  // Handle incoming Jetstream event (v2 format)
   function handleJetstreamEvent(jetstreamEvent: JetstreamEvent) {
-    const timestamp = new Date(jetstreamEvent.time).toISOString();
+    // v2 format: events are wrapped in a message envelope with payload
+    const payload = jetstreamEvent.payload;
     
-    for (const op of jetstreamEvent.ops) {
-      // Only handle create operations
-      if (op.action !== 'create') continue;
-      
-      // Check if this is for our DID
-      if (jetstreamEvent.did !== DID) continue;
+    // Only handle commit events
+    if (payload.$type !== 'network.bsky.jetstream.subscribeEvents#commit') return;
+    
+    const timestamp = new Date(payload.time).toISOString();
+    
+    // Only handle create operations
+    if (payload.operation !== 'create') return;
+    
+    // Check if this is for our DID
+    if (payload.did !== DID) return;
 
-      // Create event from operation
-      const newEvent: Event = {
-        collection: op.collection,
-        uri: op.uri,
-        cid: op.cid || '',
-        createdAt: timestamp,
-        author: jetstreamEvent.did,
-        record: op.value || null,
-      };
+    // Create event from payload
+    const newEvent: Event = {
+      collection: payload.collection,
+      uri: payload.uri || '',
+      cid: payload.cid || '',
+      createdAt: timestamp,
+      author: payload.did,
+      record: payload.record || null,
+    };
 
-      // Track discovered collection
-      discoveredCollections.add(op.collection);
-      
-      // Process event to extract teal data
-      const processedEvent = extractTealData(newEvent);
-      
-      // Add to events at the beginning (most recent)
-      events = [processedEvent, ...events.slice(0, 199)]; // Keep max 200 events
-      
-      // Create particles for the new event
-      createParticlesFromEvents([processedEvent]);
-      pulseAmbiance();
-      lastFetch = new Date();
-    }
+    // Track discovered collection
+    discoveredCollections.add(payload.collection);
+    
+    // Process event to extract teal data
+    const processedEvent = extractTealData(newEvent);
+    
+    // Add to events at the beginning (most recent)
+    events = [processedEvent, ...events.slice(0, 199)]; // Keep max 200 events
+    
+    // Create particles for the new event
+    createParticlesFromEvents([processedEvent]);
+    pulseAmbiance();
+    lastFetch = new Date();
   }
 
   // Create particles from events
