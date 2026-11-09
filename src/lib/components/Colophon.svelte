@@ -9,6 +9,7 @@
   import TriskeleEgg from "$lib/components/ostara-eggs/TriskeleEgg.svelte";
   import SigilRule from "$lib/components/SigilRule.svelte";
   import Pentacle from "$lib/components/icons/Pentacle.svelte";
+  import { SITE } from "$lib/config";
   import type { Almanac } from "$lib/utils/almanac";
   import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
   import { PUBLIC_ATPROTO_DID } from "$env/static/public";
@@ -27,7 +28,7 @@
       siteInfo?.openSourceInfo?.repositories[0],
   );
   const license = $derived(siteInfo?.openSourceInfo?.license);
-  const email = $derived(siteInfo?.additionalInfo?.contact?.email ?? "contact@ewancroft.uk");
+  const email = $derived(siteInfo?.additionalInfo?.contact?.email ?? SITE.contactEmail);
 
   const phases = Array.from({ length: 8 }, (_, i) => i / 8);
   const current = $derived(Math.round(almanac.moon.phase * 8) % 8);

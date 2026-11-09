@@ -56,9 +56,9 @@
 
   const person = {
     "@type": "Person",
-    "@id": "https://ewancroft.uk/#me",
-    name: "Ewan Croft",
-    url: "https://ewancroft.uk",
+    "@id": SITE.authorUrl,
+    name: SITE.author,
+    url: SITE.url,
     description: SITE.description,
     sameAs: ME_LINKS,
   };

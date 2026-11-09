@@ -11,6 +11,10 @@ export const SITE = {
   description:
     PUBLIC_SITE_DESCRIPTION ||
     "Ewan Croft is an Anglo-Scottish pagan, poet, and programmer exploring the intersections of tradition and technology.",
+  contactEmail: "contact@ewancroft.uk",
+  url: "https://ewancroft.uk",
+  author: "Ewan Croft",
+  authorUrl: "https://ewancroft.uk/#me",
 };
 
 /** Identity links, used for rel="me" and structured data sameAs. */

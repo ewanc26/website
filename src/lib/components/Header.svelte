@@ -7,6 +7,7 @@
    */
   import { page } from "$app/state";
   import PixelMoon from "$lib/components/PixelMoon.svelte";
+  import { NAV_LINKS } from "$lib/config";
   import type { Almanac } from "$lib/utils/almanac";
 
   interface Props {
@@ -14,13 +15,7 @@
   }
   let { almanac }: Props = $props();
 
-  const links = [
-    { label: "Home", url: "/" },
-    { label: "About", url: "/about" },
-    { label: "Blog", url: "/blog" },
-    { label: "Projects", url: "https://docs.ewancroft.uk" },
-    { label: "Support", url: "/support" },
-  ];
+  const links = NAV_LINKS;
 
   function isActive(url: string) {
     const pathname = page.url.pathname;
