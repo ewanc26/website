@@ -57,8 +57,11 @@
   let animationFrame: number | null = null;
   let particles: Array<{ x: number; y: number; vx: number; vy: number; size: number; color: string; type: string; age: number }> = $state([]);
 
-  // Collection colors
-  const collectionColors: Record<string, string> = {
+  // Track all discovered collections dynamically
+  let discoveredCollections = $state<Set<string>>(new Set());
+
+  // Predefined colors for known collections (fallback to dynamic generation)
+  const knownCollectionColors: Record<string, string> = {
     "app.bsky.feed.post": "#3b82f6",
     "app.bsky.feed.like": "#10b981",
     "app.bsky.feed.repost": "#8b5cf6",
@@ -67,8 +70,8 @@
     "site.standard.document": "#6366f1",
   };
 
-  // Collection icons/labels
-  const collectionLabels: Record<string, string> = {
+  // Predefined labels for known collections (fallback to dynamic generation)
+  const knownCollectionLabels: Record<string, string> = {
     "app.bsky.feed.post": "Post",
     "app.bsky.feed.like": "Like",
     "app.bsky.feed.repost": "Repost",
@@ -76,6 +79,54 @@
     "pub.leaflet.comment": "Comment",
     "site.standard.document": "Document",
   };
+
+  // Generate a consistent color for any collection using its name
+  function getCollectionColor(collection: string): string {
+    // Use predefined color if available
+    if (knownCollectionColors[collection]) {
+      return knownCollectionColors[collection];
+    }
+    
+    // Generate a deterministic color based on collection name
+    let hash = 0;
+    for (let i = 0; i < collection.length; i++) {
+      hash = collection.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    // Use the hash to pick from a palette of distinct colors
+    const colors = [
+      "#ef4444", "#f97316", "#f59e0b", "#eab308", "#84cc16",
+      "#22c55e", "#10b981", "#14b8a6", "#06b6d4", "#0ea5e9",
+      "#3b82f6", "#6366f1", "#8b5cf6", "#a855f7", "#d946ef",
+      "#ec4899", "#f43f5e", "#991b1b", "#78716c", "#57534e",
+    ];
+    const index = Math.abs(hash) % colors.length;
+    return colors[index];
+  }
+
+  // Generate a human-readable label from a collection name
+  function getCollectionLabel(collection: string): string {
+    // Use predefined label if available
+    if (knownCollectionLabels[collection]) {
+      return knownCollectionLabels[collection];
+    }
+    
+    // Extract the last part of the collection name
+    const parts = collection.split(".");
+    if (parts.length > 0) {
+      const lastPart = parts[parts.length - 1];
+      // Capitalize first letter
+      return lastPart.charAt(0).toUpperCase() + lastPart.slice(1);
+    }
+    return collection;
+  }
+
+  // Update discovered collections when new events arrive
+  function updateDiscoveredCollections(newEvents: Event[]) {
+    for (const event of newEvents) {
+      discoveredCollections.add(event.collection);
+    }
+  }
 
   // Fetch initial events from the API (for historical data)
   async function fetchInitialEvents() {
@@ -97,8 +148,9 @@
       cursor = data.cursor;
       hasMore = !!data.cursor;
 
-      // Create particles from initial events
+      // Track discovered collections and create particles
       if (data.events.length > 0) {
+        updateDiscoveredCollections(data.events);
         createParticlesFromEvents(data.events);
       }
     } catch (err) {
@@ -132,8 +184,9 @@
       cursor = data.cursor;
       hasMore = !!data.cursor;
 
-      // Create particles from new events
+      // Track discovered collections and create particles
       if (data.events.length > 0) {
+        updateDiscoveredCollections(data.events);
         createParticlesFromEvents(data.events);
         pulseAmbiance();
       }
@@ -224,6 +277,9 @@
         record: op.value || null,
       };
 
+      // Track discovered collection
+      discoveredCollections.add(op.collection);
+      
       // Add to events at the beginning (most recent)
       events = [newEvent, ...events.slice(0, 199)]; // Keep max 200 events
       
@@ -241,8 +297,11 @@
 
     for (const event of newEvents) {
       const collection = event.collection;
-      const color = collectionColors[collection] || "#9ca3af";
-      const label = collectionLabels[collection] || collection.split(".").pop() || "Event";
+      const color = getCollectionColor(collection);
+      const label = getCollectionLabel(collection);
+      
+      // Track discovered collections
+      discoveredCollections.add(collection);
 
       // Spawn particles from the edges towards the center
       const spawnSide = Math.floor(Math.random() * 4);
@@ -432,8 +491,8 @@
       {:else}
         {#each events.slice(0, 20) as event, i (event.uri)}
           {@const date = new Date(event.createdAt)}
-          {@const label = collectionLabels[event.collection] || event.collection.split(".").pop() || "Event"}
-          {@const color = collectionColors[event.collection] || "#9ca3af"}
+          {@const label = getCollectionLabel(event.collection)}
+          {@const color = getCollectionColor(event.collection)}
           <div class="event-item" style={`--event-color: ${color}`}>
             <div class="event-icon" style={`background-color: ${color}`}>
               {label.slice(0, 1)}
@@ -456,6 +515,25 @@
       <button type="button" onclick={loadMore} disabled={loading}>
         {loading ? "Loading..." : "Load More"}
       </button>
+    </div>
+  {/if}
+
+  {#if discoveredCollections.size > 0}
+    <div class="lexicon-visualizer">
+      <h3>Discovered Lexicons ({discoveredCollections.size})</h3>
+      <div class="lexicon-grid">
+        {#each Array.from(discoveredCollections) as collection}
+          {@const color = getCollectionColor(collection)}
+          {@const label = getCollectionLabel(collection)}
+          <div class="lexicon-item" style={`--lexicon-color: ${color}`}>
+            <div class="lexicon-color" style={`background-color: ${color}`}></div>
+            <div class="lexicon-info">
+              <div class="lexicon-label">{label}</div>
+              <div class="lexicon-name">{collection}</div>
+            </div>
+          </div>
+        {/each}
+      </div>
     </div>
   {/if}
 
@@ -678,5 +756,66 @@
     border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: var(--text-sm);
+  }
+
+  .lexicon-visualizer {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    background: var(--surface-raised);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--surface-color);
+  }
+
+  .lexicon-visualizer h3 {
+    margin: 0 0 var(--space-md);
+    font-size: var(--text-md);
+    color: var(--color-text-800);
+  }
+
+  .lexicon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-sm);
+  }
+
+  .lexicon-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    background: var(--surface-color);
+    border-radius: var(--radius-sm);
+    transition: all var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .lexicon-item:hover {
+    background: var(--surface-hover);
+    transform: translateX(4px);
+  }
+
+  .lexicon-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .lexicon-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .lexicon-label {
+    font-weight: 500;
+    color: var(--color-text-800);
+    font-size: var(--text-sm);
+  }
+
+  .lexicon-name {
+    font-size: var(--text-xs);
+    color: var(--color-text-500);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>
