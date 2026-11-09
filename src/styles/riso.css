@@ -251,9 +251,10 @@
 
   /* Phones: seven links don't fit one equal-width row of the bottom bar
      ("SUBSCRIPTIONS" alone needs more than two such cells), so the bar
-     wraps into two rows (4 + 3). Cell separators become 2px grid gaps
-     showing the spine ink behind the nav; each cell keeps the full bar
-     height as its touch target. */
+     wraps into two rows (4 + 3). The nav is painted with the separator
+     ink and shows through 2px grid gaps between the cells; each link
+     carries the spine's riso-a so its label stays readable, and keeps
+     the full bar height as its touch target. */
   @media (max-width: 39.9375rem) {
     .spine {
       height: auto;
@@ -264,8 +265,10 @@
       background: var(--on-ink);
     }
     .spine-nav a {
-      flex: 1 1 25%;
+      /* calc basis leaves room for the 2px gaps so exactly four fit a row. */
+      flex: 1 1 calc(25% - 2px);
       min-height: var(--bar);
+      background: var(--riso-a);
       border-right: 0;
       font-size: clamp(0.68rem, 2.4vw, 0.8rem);
     }
