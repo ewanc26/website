@@ -58,6 +58,16 @@
       padding-left: var(--spine);
     }
   }
+  /* The phone spine bar wraps into two rows (see the spine rules), so the
+     page must clear twice the bar height plus the grid gap. */
+  @media (max-width: 39.9375rem) {
+    body {
+      padding-bottom: calc(2 * var(--bar) + 2px);
+    }
+    html {
+      scroll-padding-bottom: calc(2 * var(--bar) + 2px);
+    }
+  }
 
   /* No paper-grain overlay: a screen-wide static noise texture is
      uncomfortable for visual snow, which is a real, stated concern here —
@@ -213,7 +223,7 @@
     flex: 1;
   }
   .spine-nav a {
-    flex: 1;
+    flex: 1 1 auto;
     display: grid;
     place-items: center;
     padding: 0 var(--space-xs);
@@ -237,6 +247,28 @@
   }
   .spine-dev {
     display: none;
+  }
+
+  /* Phones: seven links don't fit one equal-width row of the bottom bar
+     ("SUBSCRIPTIONS" alone needs more than two such cells), so the bar
+     wraps into two rows (4 + 3). Cell separators become 2px grid gaps
+     showing the spine ink behind the nav; each cell keeps the full bar
+     height as its touch target. */
+  @media (max-width: 39.9375rem) {
+    .spine {
+      height: auto;
+    }
+    .spine-nav {
+      flex-wrap: wrap;
+      gap: 2px;
+      background: var(--on-ink);
+    }
+    .spine-nav a {
+      flex: 1 1 25%;
+      min-height: var(--bar);
+      border-right: 0;
+      font-size: clamp(0.68rem, 2.4vw, 0.8rem);
+    }
   }
 
   @media (min-width: 64rem) {
