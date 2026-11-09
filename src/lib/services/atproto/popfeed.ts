@@ -7,6 +7,7 @@
 
 import { getPDSAgent } from "@ewanc26/atproto";
 import { getCache, setCache } from "$lib/utils/cache";
+import { com } from "@bsky/sdk/lexicons";
 
 export interface PopfeedEntry {
   uri: string;
@@ -35,12 +36,12 @@ export async function fetchPopfeedReviews(
   const records: { uri: string; value: any }[] = [];
   let cursor: string | undefined;
   do {
-    const resp = await agent.com.atproto.repo.listRecords({
+    const resp = (await agent.call(com.atproto.repo.listRecords.main as any, {
       repo: did,
       collection: "social.popfeed.feed.review",
       limit: 100,
       cursor,
-    });
+    })) as any;
     records.push(...resp.data.records);
     cursor = resp.data.cursor;
   } while (cursor);

@@ -76,7 +76,6 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
 
   css += `    --riso-b-text: light-dark(oklch(58% 0.12 ${hueB.toFixed(2)}), oklch(62% 0.15 ${hueB.toFixed(2)}));\n`;
 
-
   css += "    /* ── Blend mode and surfaces ── */\n";
   css += "    --blend: light-dark(multiply, screen);\n";
   css += `    --surface-color: light-dark(oklch(90.5% 0.014 ${secondaryHue.toFixed(2)}), oklch(20.5% 0.02 ${secondaryHue.toFixed(2)}));\n`;
@@ -89,21 +88,13 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
   // The pattern creates a subtle textured effect that shifts with the Sabbat cycle.
   css += "    /* ── Background Pattern ── */\n";
   css += `    --bg-pattern-size: 40px;\n`;
-  css += `    --bg-pattern: repeating-radial-gradient(`
-      `circle at 0 0, `
-      `oklch(98% 0.005 ${primaryHue.toFixed(2)}) 0%, `
-      `oklch(95% 0.01 ${primaryHue.toFixed(2)}) 10%, `
-      `oklch(90% 0.015 ${accentHue.toFixed(2)}) 15%, `
-      `oklch(85% 0.02 ${accentHue.toFixed(2)}) 20%, `
-      `transparent 25% `
-    `);\n`;
+  css += `    --bg-pattern: repeating-radial-gradient(circle at 0 0, oklch(98% 0.005 ${primaryHue.toFixed(2)}) 0%, oklch(95% 0.01 ${primaryHue.toFixed(2)}) 10%, oklch(90% 0.015 ${accentHue.toFixed(2)}) 15%, oklch(85% 0.02 ${accentHue.toFixed(2)}) 20%, transparent 25%);\n`;
   css += `    --color-primary-text: light-dark(var(--color-primary-700), var(--color-primary-500));\n`;
   css += `    --color-primary-text-hover: light-dark(var(--color-primary-800), var(--color-primary-400));\n`;
   css += "    /* ── Aliases ── */\n";
   [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].forEach((step) => {
     css += `    --ink-${step}: var(--text-${step});\n    --canvas-${step}: var(--background-${step});\n`;
   });
-
 
   // Apply the seasonal background pattern to the body.
   css += "  }\n";

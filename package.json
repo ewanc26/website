@@ -33,9 +33,10 @@
     "vite": "^8.1.0"
   },
   "dependencies": {
-    "@atproto/lex": "^0.1.4",
+    "@atproto/lex": "^0.3.0",
     "@atproto/oauth-client-browser": "^0.5.4",
-    "@ewanc26/atproto": "^0.2.12",
+    "@bsky/sdk": "latest",
+    "@ewanc26/atproto": "^0.2.13",
     "@fontsource-variable/archivo": "^5.3.0",
     "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",
     "@fontsource-variable/pixelify-sans": "^5.3.0",

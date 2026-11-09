@@ -8,7 +8,8 @@
    */
   import { page } from "$app/state";
   import { SITE, ME_LINKS } from "$lib/config";
-  import { PUBLIC_ATPROTO_DID, PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
+  import { ATPROTO_DID } from "$lib/config/atproto";
+  import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
   import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
 
   interface Props {
@@ -87,13 +88,13 @@
   );
 
   const publicationAtUri = $derived(
-    (!title || ogType === "BLOG") && PUBLIC_ATPROTO_DID && PUBLIC_LEAFLET_BLOG_PUBLICATION
-      ? `at://${PUBLIC_ATPROTO_DID}/site.standard.publication/${PUBLIC_LEAFLET_BLOG_PUBLICATION}`
+    (!title || ogType === "BLOG") && ATPROTO_DID && PUBLIC_LEAFLET_BLOG_PUBLICATION
+      ? `at://${ATPROTO_DID}/site.standard.publication/${PUBLIC_LEAFLET_BLOG_PUBLICATION}`
       : undefined,
   );
   const documentAtUri = $derived(
-    documentRkey && PUBLIC_ATPROTO_DID
-      ? `at://${PUBLIC_ATPROTO_DID}/site.standard.document/${documentRkey}`
+    documentRkey && ATPROTO_DID
+      ? `at://${ATPROTO_DID}/site.standard.document/${documentRkey}`
       : undefined,
   );
 

@@ -14,6 +14,7 @@
 
 import { getPDSAgent } from "@ewanc26/atproto";
 import { getCache, setCache } from "$lib/utils/cache";
+import { com } from "@bsky/sdk/lexicons";
 
 export type FeedPostKind =
   | "text"
@@ -124,13 +125,13 @@ export async function fetchRecentPosts(
   let cursor: string | undefined;
 
   for (let page = 0; page < MAX_PAGES && posts.length < want; page++) {
-    const resp = await agent.com.atproto.repo.listRecords({
+    const resp = (await agent.call(com.atproto.repo.listRecords.main as any, {
       repo: did,
       collection: "app.bsky.feed.post",
       limit: PAGE_SIZE,
       cursor,
       reverse: false,
-    });
+    })) as any;
     for (const { uri, value } of resp.data.records) {
       const v = value as {
         text?: string;

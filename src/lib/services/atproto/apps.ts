@@ -13,6 +13,7 @@ import {
 } from "@ewanc26/atproto";
 import { resolveDid } from "./did";
 import { getCache, setCache } from "$lib/utils/cache";
+import { com } from "@bsky/sdk/lexicons";
 
 export interface ShippedApp {
   uri: string;
@@ -43,12 +44,12 @@ export async function fetchShippedApps(
   const records: { uri: string; value: any }[] = [];
   let cursor: string | undefined;
   do {
-    const resp = await agent.com.atproto.repo.listRecords({
+    const resp = (await agent.call(com.atproto.repo.listRecords.main as any, {
       repo: did,
       collection: "fyi.atstore.listing.detail",
       limit: 100,
       cursor,
-    });
+    })) as any;
     records.push(...resp.data.records);
     cursor = resp.data.cursor;
   } while (cursor);

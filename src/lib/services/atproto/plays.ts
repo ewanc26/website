@@ -7,6 +7,7 @@
  */
 
 import { getPDSAgent, findArtwork } from "@ewanc26/atproto";
+import { com } from "@bsky/sdk/lexicons";
 
 export interface Play {
   rkey: string;
@@ -72,14 +73,14 @@ export async function fetchRecentPlays(
     return cached.plays;
 
   const agent = await getPDSAgent(did, fetchFn);
-  const resp = await agent.com.atproto.repo.listRecords({
+  const resp = (await agent.call(com.atproto.repo.listRecords.main as any, {
     repo: did,
     collection: COLLECTION,
     limit: Math.min(50, limit * 2),
-  });
+  })) as any;
 
-  const plays = resp.data.records
-    .map(({ uri, value }) => {
+  const plays = (resp.data.records as Array<{ uri: string; value: any }>)
+    .map(({ uri, value }: { uri: string; value: any }) => {
       const v = value as {
         trackName?: string;
         artists?: { artistName?: string }[];
@@ -104,14 +105,15 @@ export async function fetchRecentPlays(
         service: v.musicServiceUri,
       };
     })
-    .filter((p) => p.track && p.playedAt)
+    .filter((p: any) => p.track && p.playedAt)
     .sort(
-      (a, b) => new Date(b.playedAt).getTime() - new Date(a.playedAt).getTime(),
+      (a: any, b: any) =>
+        new Date(b.playedAt).getTime() - new Date(a.playedAt).getTime(),
     )
     .slice(0, limit);
 
   const result: Play[] = await Promise.all(
-    plays.map(async ({ releaseMbId, ...p }) => ({
+    plays.map(async ({ releaseMbId, ...p }: any) => ({
       ...p,
       artworkUrl: await artworkFor(
         p.track,

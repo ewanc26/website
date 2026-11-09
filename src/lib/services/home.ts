@@ -11,7 +11,7 @@ import {
   fetchMusicStatus,
 } from "@ewanc26/atproto";
 import { fetchProfileLinks } from "$lib/services/atproto/fetch";
-import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { ATPROTO_DID } from "$lib/config/atproto";
 import { env } from "$env/dynamic/private";
 import {
   fetchPinnedGitHubProjects,
@@ -27,7 +27,7 @@ const CONSTELLATION =
 
 async function fetchVerifications() {
   try {
-    const url = `${CONSTELLATION}?subject=${encodeURIComponent(PUBLIC_ATPROTO_DID)}&source=app.bsky.graph.verification:subject`;
+    const url = `${CONSTELLATION}?subject=${encodeURIComponent(ATPROTO_DID)}&source=app.bsky.graph.verification:subject`;
     const response = await fetch(url, {
       headers: { Accept: "application/json" },
     });
@@ -86,7 +86,7 @@ export async function getHomeData() {
     publicationsData,
     links,
   ] = await Promise.all([
-    fetchProfile(PUBLIC_ATPROTO_DID, fetch).catch(
+    fetchProfile(ATPROTO_DID, fetch).catch(
       () =>
         ({
           displayName: "Ewan Croft",
@@ -95,9 +95,9 @@ export async function getHomeData() {
         }) as Awaited<ReturnType<typeof fetchProfile>>,
     ),
     fetchVerifications(),
-    fetchKibunStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
-    fetchMusicStatus(PUBLIC_ATPROTO_DID, fetch).catch(() => null),
-    fetchBlogPosts(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ posts: [] })),
+    fetchKibunStatus(ATPROTO_DID, fetch).catch(() => null),
+    fetchMusicStatus(ATPROTO_DID, fetch).catch(() => null),
+    fetchBlogPosts(ATPROTO_DID, fetch).catch(() => ({ posts: [] })),
     fetchPinnedGitHubProjects(githubUsername, fetch, env.GITHUB_TOKEN).catch(
       () => [],
     ),
@@ -105,8 +105,10 @@ export async function getHomeData() {
       () => null,
     ),
     loadSnapshot(githubUsername),
-    fetchGitHubProfileSummary(githubUsername, fetch, env.GITHUB_TOKEN).catch(() => null),
-    fetchPublications(PUBLIC_ATPROTO_DID, fetch).catch(() => ({
+    fetchGitHubProfileSummary(githubUsername, fetch, env.GITHUB_TOKEN).catch(
+      () => null,
+    ),
+    fetchPublications(ATPROTO_DID, fetch).catch(() => ({
       publications: [],
     })),
     fetchProfileLinks(fetch).catch(() => ({ cards: [] })),

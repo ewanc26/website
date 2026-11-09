@@ -10,7 +10,6 @@
  * server-side request context is respected. (Moved to Astro from SvelteKit.)
  */
 
-import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 import { mapWithConcurrency } from "$lib/utils/promise";
 import {
   fetchKibunStatus as _fetchKibunStatus,
@@ -24,29 +23,31 @@ import { resolveDid } from "./did";
 import { getPDSAgent } from "./agents";
 import { fetchAtRecords, type AtRecord } from "./records";
 import { getCache, setCache } from "$lib/utils/cache";
+import { ATPROTO_DID } from "$lib/config/atproto";
+import { com, app } from "@bsky/sdk/lexicons";
 
-// ── Simple wrappers (delegate to @ewanc26/atproto) ──────
+//  Simple wrappers (delegate to @ewanc26/atproto) 
 
 const CACHE_TTL_MS = 1000 * 60 * 5; // 5 minutes
 
 export async function fetchKibunStatus(fetchFn?: typeof fetch) {
-  return _fetchKibunStatus(PUBLIC_ATPROTO_DID, fetchFn);
+  return _fetchKibunStatus(ATPROTO_DID, fetchFn);
 }
 
 export async function fetchBlogPosts(fetchFn?: typeof fetch) {
-  return _fetchBlogPosts(PUBLIC_ATPROTO_DID, fetchFn);
+  return _fetchBlogPosts(ATPROTO_DID, fetchFn);
 }
 
 export async function fetchProfile(fetchFn?: typeof fetch) {
-  return _fetchProfile(PUBLIC_ATPROTO_DID, fetchFn);
+  return _fetchProfile(ATPROTO_DID, fetchFn);
 }
 
 export async function fetchDocuments(fetchFn?: typeof fetch) {
-  return _fetchDocuments(PUBLIC_ATPROTO_DID, fetchFn);
+  return _fetchDocuments(ATPROTO_DID, fetchFn);
 }
 
 export async function fetchPublications(fetchFn?: typeof fetch) {
-  return _fetchPublications(PUBLIC_ATPROTO_DID, fetchFn);
+  return _fetchPublications(ATPROTO_DID, fetchFn);
 }
 
 export interface ProfileLinkCard {
@@ -67,22 +68,24 @@ export async function fetchProfileLinks(
   const cached = getCache<{ cards: ProfileLinkCard[] }>(cacheKey);
   if (cached) return cached;
 
-  const agent = await getPDSAgent(PUBLIC_ATPROTO_DID, fetchFn);
+  const agent = await getPDSAgent(ATPROTO_DID, fetchFn);
   const [profile, linkRecords] = await Promise.all([
-    agent.com.atproto.repo.getRecord({
-      repo: PUBLIC_ATPROTO_DID,
+    agent.call(com.atproto.repo.getRecord.main as any, {
+      repo: ATPROTO_DID,
       collection: "app.bsky.actor.profile",
       rkey: "self",
-    }),
-    agent.com.atproto.repo.listRecords({
-      repo: PUBLIC_ATPROTO_DID,
+    }) as Promise<{ data: { value: any } }>,
+    agent.call(com.atproto.repo.listRecords.main as any, {
+      repo: ATPROTO_DID,
       collection: "app.bsky.actor.link",
       limit: 100,
-    }),
+    }) as Promise<{
+      data: { records: Array<{ uri: string; value: { url?: string } }> };
+    }>,
   ]);
 
   const urlByUri = new Map<string, string>(
-    linkRecords.data.records.map((r: any) => [r.uri, r.value.url as string]),
+    linkRecords.data.records.map((r) => [r.uri, r.value.url as string]),
   );
   const refs = ((profile.data.value as any).links ?? []) as { uri: string }[];
   const cards = refs.flatMap((ref): ProfileLinkCard[] => {
@@ -96,10 +99,10 @@ export async function fetchProfileLinks(
 }
 
 export async function fetchSiteInfo(fetchFn?: typeof fetch) {
-  return _fetchSiteInfo(PUBLIC_ATPROTO_DID, fetchFn);
+  return _fetchSiteInfo(ATPROTO_DID, fetchFn);
 }
 
-// ── Subscriptions & Recommendations ────────────────────
+//  Subscriptions & Recommendations 
 
 export interface SubscriptionPublication {
   uri: string;
@@ -118,17 +121,17 @@ export async function fetchSubscriptions(
   const cached = getCache<SubscriptionPublication[]>(cacheKey);
   if (cached) return cached;
 
-  const agent = await getPDSAgent(PUBLIC_ATPROTO_DID, fetchFn);
+  const agent = await getPDSAgent(ATPROTO_DID, fetchFn);
   const allRecords: { uri: string; value: { publication: string } }[] = [];
   let cursor: string | undefined;
 
   do {
-    const resp = await agent.com.atproto.repo.listRecords({
-      repo: PUBLIC_ATPROTO_DID,
+    const resp = (await agent.call(com.atproto.repo.listRecords.main as any, {
+      repo: ATPROTO_DID,
       collection: "site.standard.graph.subscription",
       limit: 100,
       cursor,
-    });
+    })) as any;
     allRecords.push(
       ...resp.data.records.map((r: any) => ({
         uri: r.uri,
@@ -213,17 +216,17 @@ export async function fetchRecommendations(
   const cached = getCache<RecommendationItem[]>(cacheKey);
   if (cached) return cached;
 
-  const agent = await getPDSAgent(PUBLIC_ATPROTO_DID, fetchFn);
+  const agent = await getPDSAgent(ATPROTO_DID, fetchFn);
   const allRecords: { uri: string; value: { document: string } }[] = [];
   let cursor: string | undefined;
 
   do {
-    const resp = await agent.com.atproto.repo.listRecords({
-      repo: PUBLIC_ATPROTO_DID,
+    const resp = (await agent.call(com.atproto.repo.listRecords.main as any, {
+      repo: ATPROTO_DID,
       collection: "site.standard.graph.recommend",
       limit: 100,
       cursor,
-    });
+    })) as any;
     allRecords.push(
       ...resp.data.records.map((r: any) => ({
         uri: r.uri,
@@ -294,16 +297,16 @@ export async function fetchPublicationRecommendations(
   const cached = getCache<AtRecord[]>(cacheKey);
   if (cached) return cached;
 
-  const agent = await getPDSAgent(PUBLIC_ATPROTO_DID, fetchFn);
+  const agent = await getPDSAgent(ATPROTO_DID, fetchFn);
   const uris: string[] = [];
   let cursor: string | undefined;
   do {
-    const resp = await agent.com.atproto.repo.listRecords({
-      repo: PUBLIC_ATPROTO_DID,
+    const resp = (await agent.call(com.atproto.repo.listRecords.main as any, {
+      repo: ATPROTO_DID,
       collection: "pub.leaflet.graph.recommendations",
       limit: 100,
       cursor,
-    });
+    })) as any;
     for (const record of resp.data.records) {
       const value = record.value as {
         publication?: unknown;
@@ -324,7 +327,7 @@ export async function fetchPublicationRecommendations(
   return data;
 }
 
-// ── Comments ──────────────────────────────────────────
+//  Comments 
 
 export interface LeafletComment {
   uri: string;
@@ -650,11 +653,11 @@ export async function fetchComments(
 }
 
 export async function fetchBlob(ref: any) {
-  const agent = await getPDSAgent(PUBLIC_ATPROTO_DID);
+  const agent = await getPDSAgent(ATPROTO_DID);
   const cid = ref.$link || ref.ref?.$link || ref;
-  const blob = await agent.com.atproto.sync.getBlob({
-    did: PUBLIC_ATPROTO_DID,
+  const blob = (await agent.call(com.atproto.sync.getBlob.main as any, {
+    did: ATPROTO_DID,
     cid,
-  });
+  })) as any;
   return new Uint8Array(blob.data);
 }

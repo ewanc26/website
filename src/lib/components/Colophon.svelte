@@ -12,7 +12,7 @@
   import { SITE } from "$lib/config";
   import type { Almanac } from "$lib/utils/almanac";
   import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
-  import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+  import { ATPROTO_DID } from "$lib/config/atproto";
 
   interface Props {
     almanac: Almanac;
@@ -54,7 +54,7 @@
         <h2>Write to me</h2>
         <ul>
           <li><a href={`mailto:${email}`}>{email}</a></li>
-          <li><a href={`https://bsky.app/profile/${PUBLIC_ATPROTO_DID}`} rel="noopener">Bluesky</a></li>
+          <li><a href={`https://bsky.app/profile/${ATPROTO_DID}`} rel="noopener">Bluesky</a></li>
           <li>
             <a href="https://ko-fi.com/ewancroft" rel="noopener">Ko-fi</a> ·
             <a href="https://github.com/sponsors/ewanc26" rel="noopener">GitHub Sponsors</a>
