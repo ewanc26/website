@@ -8,6 +8,17 @@
    */
   import { onMount, onDestroy } from "svelte";
   import { pulseAmbiance } from "$lib/stores/ambiance";
+  import {
+    FileText,
+    Heart,
+    Repeat,
+    UserPlus,
+    MessageCircle,
+    File,
+    Music,
+    MessageSquare,
+    PlayCircle,
+  } from "@lucide/svelte";
 
   interface Event {
     collection: string;
@@ -91,6 +102,17 @@
     "app.bsky.graph.follow": "Follow",
     "pub.leaflet.comment": "Comment",
     "site.standard.document": "Document",
+  };
+
+  // Map collections to Lucide icons
+  const collectionIcons: Record<string, any> = {
+    "app.bsky.feed.post": MessageSquare,
+    "app.bsky.feed.like": Heart,
+    "app.bsky.feed.repost": Repeat,
+    "app.bsky.graph.follow": UserPlus,
+    "pub.leaflet.comment": MessageCircle,
+    "site.standard.document": File,
+    "fm.teal.feed.play": Music,
   };
 
   // Generate a consistent color for any collection using its name
@@ -591,7 +613,7 @@
           {#if event.type === 'teal' && event.tealData}
             <div class="event-item teal-event" style={`--event-color: ${color}`}>
               <div class="event-icon" style={`background-color: ${color}`}>
-                🎵
+                <Music size={16} />
               </div>
               <div class="event-content">
                 <div class="event-type">
@@ -607,9 +629,10 @@
               </div>
             </div>
           {:else}
+            {@const Icon = collectionIcons[event.collection] || FileText}
             <div class="event-item" style={`--event-color: ${color}`}>
               <div class="event-icon" style={`background-color: ${color}`}>
-                {label.slice(0, 1)}
+                <Icon size={16} />
               </div>
               <div class="event-content">
                 <div class="event-type">{label}</div>
