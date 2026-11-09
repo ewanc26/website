@@ -3,6 +3,7 @@
    * A call-to-action card for supporting the work.
    * Designed to fit the risograph zine aesthetic with two-ink styling.
    */
+  import { Heart } from "@lucide/svelte";
   import ArrowUpRight from "$lib/components/icons/ArrowUpRight.svelte";
 
   interface Props {
@@ -27,7 +28,7 @@
 
 <div class="support-cta" class:support-cta--compact={compact}>
   <div class="support-cta-header">
-    <span class="support-cta-icon" aria-hidden="true">F496</span>
+    <Heart size="1.5em" aria-hidden="true" />
     <h2 class="support-cta-title">
       {compact ? "Support my work" : "Support this work"}
     </h2>
@@ -73,11 +74,6 @@
     align-items: center;
     gap: var(--space-sm);
     margin-bottom: var(--space-sm);
-  }
-
-  .support-cta-icon {
-    font-size: 1.5em;
-    line-height: 1;
   }
 
   .support-cta-title {
