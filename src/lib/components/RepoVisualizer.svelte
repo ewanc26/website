@@ -284,7 +284,7 @@
       socket.close();
     }
 
-        const jetstreamUrl = `wss://jetstream.us-east.bsky.network/xrpc/network.bsky.jetstream.subscribeEvents?dids=${encodeURIComponent(DID)}&kinds=commit`;
+        const jetstreamUrl = `wss://jetstream.us-east.bsky.network/xrpc/network.bsky.jetstream.subscribeEvents?dids=${encodeURIComponent(DID)}&collections=app.bsky.feed.post&collections=app.bsky.feed.like&collections=app.bsky.feed.repost&collections=app.bsky.graph.follow&collections=pub.leaflet.comment&collections=site.standard.document&collections=fm.teal.feed.play&kinds=commit`;
     
     console.log("Connecting to Jetstream:", jetstreamUrl);
     socketStatus = 'connecting';
