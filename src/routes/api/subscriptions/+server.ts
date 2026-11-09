@@ -6,7 +6,7 @@ import type { RequestHandler } from "./$types";
 // owner opted into making /subscriptions genuinely live during this
 // migration, matching the Astro route's response shape/caching exactly.
 export const GET: RequestHandler = async ({ fetch, setHeaders }) => {
-  const subscriptions = await fetchSubscriptions(fetch);
+  const subscriptions = await fetchSubscriptions(fetch).catch(() => []);
   setHeaders({ "cache-control": "public, s-maxage=300, stale-while-revalidate=600" });
   return json(subscriptions);
 };

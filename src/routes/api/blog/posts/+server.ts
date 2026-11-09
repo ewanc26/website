@@ -19,7 +19,7 @@ export const GET: RequestHandler = async ({ url }) => {
   const limit = Math.min(100, Math.max(1, intParam("limit", 20)));
   const query = (url.searchParams.get("q") ?? "").trim().toLocaleLowerCase();
 
-  const { posts } = await fetchBlogPosts();
+  const { posts } = await fetchBlogPosts().catch(() => ({ posts: [] }));
   const publicationPosts = posts
     .filter((p) => p.publicationRkey === PUBLIC_LEAFLET_BLOG_PUBLICATION)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());

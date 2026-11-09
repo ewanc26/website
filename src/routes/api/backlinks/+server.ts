@@ -22,7 +22,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
 
   if (targets.length === 0) return json({ people: [], mentions: 0 });
 
-  const backlinks = await fetchBacklinks(targets, fetch);
+  const backlinks = await fetchBacklinks(targets, fetch).catch(() => []);
   const people = new Map<
     string,
     {
