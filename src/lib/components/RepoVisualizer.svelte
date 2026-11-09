@@ -8,6 +8,7 @@
    */
   import { onMount, onDestroy } from "svelte";
   import { pulseAmbiance } from "$lib/stores/ambiance";
+  import { ATPROTO_DID } from "$lib/config/atproto";
   import {
     FileText,
     Heart,
@@ -17,7 +18,6 @@
     File,
     Music,
     MessageSquare,
-    PlayCircle,
   } from "@lucide/svelte";
 
   interface Event {
@@ -42,25 +42,39 @@
     service?: string;
   }
 
-  // Jetstream event types (v2 format)
+  // Jetstream event types (based on pdsls implementation)
+  // Events from Jetstream have: kind, did, commit (with collection, rkey, operation, etc.)
   interface JetstreamEvent {
-    $type: string;
-    payload: {
-      $type: string;
-      did: string;
-      seq: number;
-      time: string;
-      operation: 'create' | 'update' | 'delete';
+    kind: 'commit' | 'identity' | 'account';
+    did: string;
+    time_us?: string;
+    commit?: {
       collection: string;
       rkey: string;
-      uri?: string;
+      operation: 'create' | 'update' | 'delete';
       cid?: string;
       record?: any;
+      uri?: string;
     };
+    // For identity and account events
+    operation?: string;
+    collection?: string;
+    rkey?: string;
+    uri?: string;
+    cid?: string;
+    record?: any;
   }
 
   // Use the actual DID from config
-  const DID = "did:plc:ofrbh253gwicbkc5nktqepol";
+  const DID = ATPROTO_DID;
+
+  // Jetstream endpoints to try (fallback list)
+  // Based on pdsls implementation: uses /subscribe endpoint with wantedCollections and wantedDids
+  const JETSTREAM_ENDPOINTS = [
+    'wss://jetstream.us-east.bsky.network/subscribe',
+    'wss://jetstream1.us-east.bsky.network/subscribe',
+    'wss://jetstream2.us-east.bsky.network/subscribe',
+  ];
 
   let events = $state<Event[]>([]);
   let loading = $state(true);
@@ -72,9 +86,11 @@
   // WebSocket state
   let socket = $state<WebSocket | null>(null);
   let socketStatus = $state<'connecting' | 'open' | 'closed' | 'error'>('closed');
+  let currentEndpointIndex = $state(0);
   let reconnectAttempts = $state(0);
   let maxReconnectAttempts = $state(5);
   let reconnectDelay = $state(3000);
+  let lastConnectionError = $state<string | null>(null);
 
   // Visualization state
   let containerWidth = $state(800);
@@ -282,12 +298,29 @@
     // Close existing connection if any
     if (socket) {
       socket.close();
+      socket = null;
     }
 
-        const jetstreamUrl = `wss://jetstream.us-east.bsky.network/xrpc/network.bsky.jetstream.subscribeEvents?dids=${encodeURIComponent(DID)}&collections=app.bsky.feed.post&collections=app.bsky.feed.like&collections=app.bsky.feed.repost&collections=app.bsky.graph.follow&collections=pub.leaflet.comment&collections=site.standard.document&collections=fm.teal.feed.play&kinds=commit`;
+    // Try the next endpoint in the fallback list
+    const baseUrl = JETSTREAM_ENDPOINTS[currentEndpointIndex];
+    const collections = [
+      'app.bsky.feed.post',
+      'app.bsky.feed.like',
+      'app.bsky.feed.repost',
+      'app.bsky.graph.follow',
+      'pub.leaflet.comment',
+      'site.standard.document',
+      'fm.teal.feed.play',
+    ];
     
-    console.log("Connecting to Jetstream:", jetstreamUrl);
+    // Build URL with pdsls-style parameters: wantedCollections and wantedDids
+    // This matches the pdsls implementation at https://tangled.org/pds.ls/pdsls
+    const collectionsParam = collections.map(c => `wantedCollections=${encodeURIComponent(c)}`).join('&');
+    const jetstreamUrl = `${baseUrl}?${collectionsParam}&wantedDids=${encodeURIComponent(DID)}`;
+    
+    console.log(`Connecting to Jetstream endpoint ${currentEndpointIndex + 1}/${JETSTREAM_ENDPOINTS.length}:`, jetstreamUrl);
     socketStatus = 'connecting';
+    lastConnectionError = null;
     
     try {
       socket = new WebSocket(jetstreamUrl, ['xrpc.v1.json']);
@@ -311,21 +344,31 @@
       socket.onclose = () => {
         console.log("Jetstream WebSocket closed");
         socketStatus = 'closed';
-        // Attempt to reconnect
-        if (reconnectAttempts < maxReconnectAttempts) {
+        
+        // Try next endpoint or reconnect
+        if (currentEndpointIndex < JETSTREAM_ENDPOINTS.length - 1) {
+          // Try next endpoint immediately
+          currentEndpointIndex++;
+          reconnectAttempts = 0;
+          console.log(`Trying next Jetstream endpoint...`);
+          setTimeout(connectWebSocket, 1000);
+        } else if (reconnectAttempts < maxReconnectAttempts) {
+          // All endpoints tried, reconnect with exponential backoff
           const delay = reconnectDelay * Math.pow(2, reconnectAttempts);
           reconnectAttempts++;
-          console.log(`Reconnecting in ${delay}ms (attempt ${reconnectAttempts})`);
+          currentEndpointIndex = 0; // Reset to first endpoint
+          console.log(`All endpoints failed. Reconnecting in ${delay}ms (attempt ${reconnectAttempts})`);
           setTimeout(connectWebSocket, delay);
         } else {
-          error = 'WebSocket disconnected. Please refresh the page.';
+          error = 'All Jetstream endpoints failed. Please refresh the page.';
         }
       };
 
       socket.onerror = (err) => {
         console.error("Jetstream WebSocket error:", err);
         socketStatus = 'error';
-        error = 'WebSocket connection error. Retrying...';
+        lastConnectionError = err instanceof Error ? err.message : 'Unknown error';
+        error = `WebSocket error: ${lastConnectionError}. Retrying...`;
       };
     } catch (err) {
       console.error("Failed to create WebSocket:", err);
@@ -335,45 +378,53 @@
     }
   }
 
-  // Handle incoming Jetstream event (v2 format)
+  // Handle incoming Jetstream event (based on pdsls format)
   function handleJetstreamEvent(jetstreamEvent: JetstreamEvent) {
-    // v2 format: events are wrapped in a message envelope with payload
-    const payload = jetstreamEvent.payload;
-    
-    // Only handle commit events
-    if (payload.$type !== 'network.bsky.jetstream.subscribeEvents#commit') return;
-    
-    const timestamp = new Date(payload.time).toISOString();
-    
-    // Only handle create operations
-    if (payload.operation !== 'create') return;
-    
-    // Check if this is for our DID
-    if (payload.did !== DID) return;
+    // Handle commit events (most common)
+    if (jetstreamEvent.kind === 'commit') {
+      const commit = jetstreamEvent.commit;
+      if (!commit) return;
+      
+      // Check if this is for our DID
+      if (jetstreamEvent.did !== DID) return;
+      
+      // Convert microseconds to ISO string
+      const timestamp = jetstreamEvent.time_us 
+        ? new Date(parseInt(jetstreamEvent.time_us) / 1000).toISOString()
+        : new Date().toISOString();
+      
+      // Only handle create operations for now (can be expanded later)
+      if (commit.operation !== 'create') return;
+      
+      // Create event from commit
+      const newEvent: Event = {
+        collection: commit.collection,
+        uri: commit.uri || `at://${DID}/${commit.collection}/${commit.rkey}`,
+        cid: commit.cid || '',
+        createdAt: timestamp,
+        author: jetstreamEvent.did,
+        record: commit.record || null,
+      };
 
-    // Create event from payload
-    const newEvent: Event = {
-      collection: payload.collection,
-      uri: payload.uri || '',
-      cid: payload.cid || '',
-      createdAt: timestamp,
-      author: payload.did,
-      record: payload.record || null,
-    };
-
-    // Track discovered collection
-    discoveredCollections.add(payload.collection);
-    
-    // Process event to extract teal data
-    const processedEvent = extractTealData(newEvent);
-    
-    // Add to events at the beginning (most recent)
-    events = [processedEvent, ...events.slice(0, 199)]; // Keep max 200 events
-    
-    // Create particles for the new event
-    createParticlesFromEvents([processedEvent]);
-    pulseAmbiance();
-    lastFetch = new Date();
+      // Track discovered collection
+      discoveredCollections.add(commit.collection);
+      
+      // Process event to extract teal data
+      const processedEvent = extractTealData(newEvent);
+      
+      // Add to events at the beginning (most recent)
+      events = [processedEvent, ...events.slice(0, 199)]; // Keep max 200 events
+      
+      // Create particles for the new event
+      createParticlesFromEvents([processedEvent]);
+      pulseAmbiance();
+      lastFetch = new Date();
+    }
+    // Handle identity and account events (optional)
+    else if (jetstreamEvent.kind === 'identity' || jetstreamEvent.kind === 'account') {
+      // For now, skip these as they're not repository records
+      console.log('Received identity/account event:', jetstreamEvent);
+    }
   }
 
   // Create particles from events
@@ -495,6 +546,7 @@
 
   // Reconnect WebSocket
   function reconnect() {
+    currentEndpointIndex = 0;
     if (socket) {
       socket.close();
     }
@@ -577,8 +629,8 @@
       <button type="button" onclick={() => fetchInitialEvents()} disabled={loading} class:loading class="px-3 py-1.5 sm:px-4 sm:py-2">
         {loading ? "Refreshing..." : "Refresh"}
       </button>
-      <button type="button" onclick={reconnect} class:active={socketStatus === 'open'} class:error={socketStatus === 'error'} class="px-3 py-1.5 sm:px-4 sm:py-2">
-        WebSocket: {socketStatus === 'open' ? 'Live' : socketStatus === 'connecting' ? 'Connecting...' : socketStatus === 'closed' ? 'Disconnected' : 'Error'}
+      <button type="button" onclick={reconnect} class:active={socketStatus === 'open'} class:error={socketStatus === 'error'} class="px-3 py-1.5 sm:px-4 sm:py-2" title={JETSTREAM_ENDPOINTS[currentEndpointIndex]}>
+        WebSocket: {socketStatus === 'open' ? 'Live' : socketStatus === 'connecting' ? 'Connecting...' : socketStatus === 'closed' ? 'Disconnected' : 'Error'} ({currentEndpointIndex + 1}/{JETSTREAM_ENDPOINTS.length})
       </button>
     </div>
   </div>
@@ -586,7 +638,11 @@
   {#if error}
     <div class="error-message">
       <p>Error: {error}</p>
-      <button type="button" onclick={() => fetchInitialEvents()} class="px-3 py-1.5">Retry</button>
+      {#if lastConnectionError}
+        <p class="error-detail">Connection error: {lastConnectionError}</p>
+        <p class="error-detail">Endpoint: {JETSTREAM_ENDPOINTS[currentEndpointIndex]}</p>
+      {/if}
+      <button type="button" onclick={() => { currentEndpointIndex = 0; reconnectAttempts = 0; fetchInitialEvents(); connectWebSocket(); }} class="px-3 py-1.5">Retry</button>
     </div>
   {/if}
 
@@ -698,13 +754,21 @@
 
   .visualizer-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: var(--space-sm);
     margin-bottom: var(--space-md);
     padding: var(--space-md);
     background: var(--surface-raised);
     border-radius: var(--radius-md);
     border: 1px solid var(--surface-color);
+  }
+
+  @media (min-width: 640px) {
+    .visualizer-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 
   .visualizer-header h2 {
@@ -715,7 +779,15 @@
 
   .controls {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--space-sm);
+    justify-content: center;
+  }
+
+  @media (min-width: 640px) {
+    .controls {
+      justify-content: flex-end;
+    }
   }
 
   .controls button {
@@ -782,9 +854,16 @@
     right: 0;
     max-height: 50%;
     overflow-y: auto;
-    padding: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
     background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
     backdrop-filter: blur(10px);
+  }
+
+  @media (min-width: 640px) {
+    .event-list {
+      padding: var(--space-md);
+      max-height: 50%;
+    }
   }
 
   .empty-state {
@@ -806,9 +885,15 @@
     font-size: var(--text-sm);
   }
 
+  @media (min-width: 640px) {
+    .event-item {
+      padding: var(--space-sm) var(--space-md);
+    }
+  }
+
   .event-icon {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -817,6 +902,13 @@
     font-weight: 600;
     font-size: 12px;
     flex-shrink: 0;
+  }
+
+  @media (min-width: 640px) {
+    .event-icon {
+      width: 28px;
+      height: 28px;
+    }
   }
 
   .event-content {
@@ -873,11 +965,21 @@
 
   .stats {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: var(--space-xs);
     padding: var(--space-sm) var(--space-md);
     color: var(--color-text-600);
     font-size: var(--text-xs);
     margin-top: var(--space-sm);
+    text-align: center;
+  }
+
+  @media (min-width: 640px) {
+    .stats {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
   }
 
   .error-message {
@@ -887,8 +989,16 @@
     border-radius: var(--radius-md);
     color: var(--color-error-700);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: flex-start;
+  }
+
+  .error-detail {
+    font-size: var(--text-xs);
+    color: var(--color-error-600);
+    margin: 0;
+    font-family: monospace;
   }
 
   .error-message button {
