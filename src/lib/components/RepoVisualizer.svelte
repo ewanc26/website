@@ -6,7 +6,7 @@
    * Uses Jetstream WebSocket for real-time updates.
    * Shows events from multiple collections in a dynamic, engaging interface.
    */
-  import { onMount, onDestroy } from "svelte";
+  import { onMount, onDestroy, createEventDispatcher } from "svelte";
   import { pulseAmbiance } from "$lib/stores/ambiance";
   import { ATPROTO_DID } from "$lib/config/atproto";
   import {
@@ -19,6 +19,8 @@
     Music,
     MessageSquare,
   } from "@lucide/svelte";
+
+  const dispatch = createEventDispatcher();
 
   interface Event {
     collection: string;
@@ -76,9 +78,23 @@
     'wss://jetstream2.us-east.bsky.network/subscribe',
   ];
 
+  // Allow events to be passed in as prop or fetched internally
+  interface Props {
+    initialEvents?: Event[];
+  }
+  let { initialEvents = [] }: Props = $props();
+
   let events = $state<Event[]>([]);
   let loading = $state(true);
   let error = $state<string | null>(null);
+
+  // Initialize events from prop if provided
+  $effect(() => {
+    if (initialEvents.length > 0) {
+      events = initialEvents;
+      loading = false;
+    }
+  });
   let cursor = $state<string | null>(null);
   let hasMore = $state(true);
   let lastFetch = $state<Date | null>(null);
@@ -672,7 +688,7 @@
           {@const color = getCollectionColor(event.collection)}
           
           {#if event.type === 'teal' && event.tealData}
-            <div class="event-item teal-event p-2 sm:p-3" style={`--event-color: ${color}`}>
+            <button type="button" class="event-item teal-event p-2 sm:p-3" style={`--event-color: ${color}`} onclick={() => dispatch('select', event)}>
               <div class="event-icon" style={`background-color: ${color}`}>
                 <Music size={16} />
               </div>
@@ -688,10 +704,10 @@
               <div class="event-meta">
                 {event.collection}
               </div>
-            </div>
+            </button>
           {:else}
             {@const Icon = collectionIcons[event.collection] || FileText}
-            <div class="event-item p-2 sm:p-3" style={`--event-color: ${color}`}>
+            <button type="button" class="event-item p-2 sm:p-3" style={`--event-color: ${color}`} onclick={() => dispatch('select', event)}>
               <div class="event-icon" style={`background-color: ${color}`}>
                 <Icon size={16} />
               </div>
@@ -702,7 +718,7 @@
               <div class="event-meta">
                 {event.collection}
               </div>
-            </div>
+            </button>
           {/if}
         {/each}
       {/if}
@@ -878,11 +894,26 @@
     gap: var(--space-sm);
     padding: var(--space-xs) var(--space-sm);
     background: rgba(255, 255, 255, 0.1);
+    border: none;
     border-radius: var(--radius-sm);
     margin-bottom: var(--space-xs);
     animation: fadeIn 0.3s ease-out;
     color: var(--color-text-800);
     font-size: var(--text-sm);
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: all var(--duration-fast);
+  }
+
+  .event-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(4px);
+  }
+
+  .event-item:focus {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
   }
 
   @media (min-width: 640px) {
