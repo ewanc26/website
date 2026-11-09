@@ -7,6 +7,7 @@
 
 import chroma from "chroma-js";
 import { getCurrentSabbat } from "$lib/utils/sabbats";
+import { getMoonPhase } from "$lib/utils/moonPhase";
 import {
   baseline,
   getSabbatContext,
@@ -27,6 +28,7 @@ export type { Baseline, ModeColors, Scale } from "$lib/utils/theme";
 export function getDynamicThemeCSS(now: Date = new Date()): string {
   const { prev, next, progress } = getSabbatContext(now);
   const currentSabbat = getCurrentSabbat(now);
+  const moon = getMoonPhase(now);
 
   // Calculate year progress (0-1) for overall shifting
   const yearStart = new Date(now.getFullYear(), 0, 1);
@@ -100,7 +102,7 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
       `oklch(95% 0.01 ${primaryHue.toFixed(2)}) 10%, `
       `oklch(90% 0.015 ${accentHue.toFixed(2)}) 15%, `
       `oklch(85% 0.02 ${accentHue.toFixed(2)}) 20%, `
-      `transparent 25% `
+      `transparent ${(25 + moon.fraction * 10).toFixed(2)}% `
     `);\n`;
   css += `    --color-primary-text: light-dark(var(--color-primary-700), var(--color-primary-500));\n`;
   css += `    --color-primary-text-hover: light-dark(var(--color-primary-800), var(--color-primary-400));\n`;
@@ -112,7 +114,7 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
 
   // Apply the seasonal background pattern to the body.
   css += "  }\n";
-  css += `  body { background: var(--paper), var(--bg-pattern); background-size: var(--bg-pattern-size) var(--bg-pattern-size); background-position: ${(yearProgress * 100).toFixed(2)}% ${(yearProgress * 50).toFixed(2)}%; }\n`;
+  css += `  body { background: var(--paper), var(--bg-pattern); background-size: var(--bg-pattern-size) var(--bg-pattern-size); background-position: ${((yearProgress + moon.phase) * 100).toFixed(2)}% ${((yearProgress * 0.5 + moon.phase * 0.25) * 100).toFixed(2)}%; }\n`;
   return css;
 }
 
