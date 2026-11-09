@@ -89,7 +89,7 @@ export async function getHomeData() {
     fetchProfile(ATPROTO_DID, fetch).catch(
       () =>
         ({
-          displayName: "Ewan Croft",
+          displayName: "Ewan",
           handle: "ewancroft.uk",
           description: "",
         }) as Awaited<ReturnType<typeof fetchProfile>>,
