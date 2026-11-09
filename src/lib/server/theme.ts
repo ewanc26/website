@@ -56,6 +56,17 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
   // inks are printed on black stock (screen blend), so B is darker there.
   const hueA = getThemeHue(now, "primary");
   const hueB = (hueA + 150) % 360;
+
+  // Paper and ink base colours also follow the seasonal hue, but with very
+  // low chroma so they read as near-neutral. Lightness flips between light
+  // and dark mode: paper is light in light mode, dark in dark mode.
+  css += "    /* ── Paper & Ink (seasonal base) ── */\n";
+  css += `    --paper: light-dark(oklch(95.5% 0.008 ${hueA.toFixed(2)}), oklch(14.5% 0.014 ${hueA.toFixed(2)}));\n`;
+  css += `    --paper-deep: light-dark(oklch(90.5% 0.014 ${hueA.toFixed(2)}), oklch(20.5% 0.02 ${hueA.toFixed(2)}));\n`;
+  css += `    --ink: light-dark(oklch(19% 0.025 ${hueA.toFixed(2)}), oklch(95% 0.01 ${hueA.toFixed(2)}));\n`;
+  css += `    --ink-soft: light-dark(oklch(38% 0.025 ${hueA.toFixed(2)}), oklch(80% 0.012 ${hueA.toFixed(2)}));\n`;
+  css += `    --on-ink: light-dark(oklch(15% 0.02 ${hueA.toFixed(2)}), oklch(95% 0.01 ${hueA.toFixed(2)}));\n`;
+
   css += "    /* ── Riso inks ── */\n";
   css += `    --riso-a: light-dark(oklch(68% 0.205 ${hueA.toFixed(2)}), oklch(66% 0.215 ${hueA.toFixed(2)}));\n`;
   css += `    --riso-a-text: light-dark(oklch(52% 0.2 ${hueA.toFixed(2)}), oklch(66% 0.215 ${hueA.toFixed(2)}));\n`;
@@ -63,6 +74,16 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
 
   css += `    --riso-b-text: light-dark(oklch(58% 0.12 ${hueB.toFixed(2)}), oklch(62% 0.15 ${hueB.toFixed(2)}));\n`;
 
+
+  css += "    /* ── Blend mode and surfaces ── */\n";
+  css += "    --blend: light-dark(multiply, screen);\n";
+  css += "    --surface-color: var(--paper-deep);\n";
+  css += "    --surface-raised: var(--paper);\n";
+  css += "    --surface-sunken: var(--paper-deep);\n";
+  css += "    --rule: var(--ink);\n";
+  css += `    --stamp: var(--color-primary-text);\n`;
+  css += `    --color-primary-text: light-dark(var(--color-primary-700), var(--color-primary-500));\n`;
+  css += `    --color-primary-text-hover: light-dark(var(--color-primary-800), var(--color-primary-400));\n`;
   css += "    /* ── Aliases ── */\n";
   [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].forEach((step) => {
     css += `    --ink-${step}: var(--text-${step});\n    --canvas-${step}: var(--background-${step});\n`;
