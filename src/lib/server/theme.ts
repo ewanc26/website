@@ -25,8 +25,13 @@ export {
 export type { Baseline, ModeColors, Scale } from "$lib/utils/theme";
 
 export function getDynamicThemeCSS(now: Date = new Date()): string {
-  const { prev, next } = getSabbatContext(now);
+  const { prev, next, progress } = getSabbatContext(now);
   const currentSabbat = getCurrentSabbat(now);
+
+  // Calculate year progress (0-1) for overall shifting
+  const yearStart = new Date(now.getFullYear(), 0, 1);
+  const yearEnd = new Date(now.getFullYear() + 1, 0, 1);
+  const yearProgress = (now.getTime() - yearStart.getTime()) / (yearEnd.getTime() - yearStart.getTime());
 
   let css = "  :root {\n";
 
@@ -107,7 +112,7 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
 
   // Apply the seasonal background pattern to the body.
   css += "  }\n";
-  css += `  body { background: var(--paper), var(--bg-pattern); background-size: var(--bg-pattern-size) var(--bg-pattern-size); }\n`;
+  css += `  body { background: var(--paper), var(--bg-pattern); background-size: var(--bg-pattern-size) var(--bg-pattern-size); background-position: ${(yearProgress * 100).toFixed(2)}% ${(yearProgress * 50).toFixed(2)}%; }\n`;
   return css;
 }
 
