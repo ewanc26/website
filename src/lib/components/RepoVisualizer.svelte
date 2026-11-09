@@ -16,6 +16,19 @@
     createdAt: string;
     author: string;
     record: any;
+    // Special type for teal records
+    type?: 'teal' | 'standard';
+    tealData?: TealPlayData;
+  }
+
+  // Teal record data structure for fm.teal.feed.play
+  interface TealPlayData {
+    track: string;
+    artists: string[];
+    release?: string;
+    playedAt: string;
+    durationSec?: number;
+    service?: string;
   }
 
   // Jetstream event types
@@ -55,7 +68,7 @@
   let containerWidth = $state(800);
   let containerHeight = $state(600);
   let animationFrame: number | null = null;
-  let particles: Array<{ x: number; y: number; vx: number; vy: number; size: number; color: string; type: string; age: number }> = $state([]);
+  let particles: Array<{ x: number; y: number; vx: number; vy: number; size: number; color: string; type: string; age: number; isTeal?: boolean }> = $state([]);
 
   // Track all discovered collections dynamically
   let discoveredCollections = $state<Set<string>>(new Set());
@@ -128,6 +141,46 @@
     }
   }
 
+  // Extract Teal play data from record if it's a teal record
+  function extractTealData(event: Event): Event {
+    // Check if this is a teal.fm play record
+    if (event.collection === "fm.teal.feed.play" && event.record) {
+      const record = event.record as {
+        trackName?: string;
+        artists?: { artistName?: string }[];
+        releaseName?: string;
+        playedTime?: string;
+        duration?: number;
+        musicServiceUri?: string;
+      };
+      
+      const tealData: TealPlayData = {
+        track: record.trackName?.trim() || "",
+        artists: (record.artists ?? [])
+          .map((a) => a.artistName?.trim() || "")
+          .filter(Boolean),
+        release: record.releaseName?.trim(),
+        playedAt: record.playedTime || event.createdAt,
+        durationSec: typeof record.duration === "number" ? record.duration : undefined,
+        service: record.musicServiceUri,
+      };
+      
+      // Only add tealData if we have a track
+      if (tealData.track) {
+        return {
+          ...event,
+          type: "teal",
+          tealData,
+        };
+      }
+    }
+    
+    return {
+      ...event,
+      type: "standard",
+    };
+  }
+
   // Fetch initial events from the API (for historical data)
   async function fetchInitialEvents() {
     try {
@@ -144,14 +197,15 @@
       const data = await response.json();
       lastFetch = new Date();
 
-      events = data.events;
+      // Process events to extract teal data
+      events = data.events.map(extractTealData);
       cursor = data.cursor;
       hasMore = !!data.cursor;
 
       // Track discovered collections and create particles
       if (data.events.length > 0) {
         updateDiscoveredCollections(data.events);
-        createParticlesFromEvents(data.events);
+        createParticlesFromEvents(events);
       }
     } catch (err) {
       error = err instanceof Error ? err.message : "Unknown error";
@@ -180,14 +234,16 @@
       const data = await response.json();
       lastFetch = new Date();
 
-      events = [...events, ...data.events];
+      // Process events to extract teal data
+      const processedEvents = data.events.map(extractTealData);
+      events = [...events, ...processedEvents];
       cursor = data.cursor;
       hasMore = !!data.cursor;
 
       // Track discovered collections and create particles
       if (data.events.length > 0) {
         updateDiscoveredCollections(data.events);
-        createParticlesFromEvents(data.events);
+        createParticlesFromEvents(processedEvents);
         pulseAmbiance();
       }
     } catch (err) {
@@ -280,11 +336,14 @@
       // Track discovered collection
       discoveredCollections.add(op.collection);
       
+      // Process event to extract teal data
+      const processedEvent = extractTealData(newEvent);
+      
       // Add to events at the beginning (most recent)
-      events = [newEvent, ...events.slice(0, 199)]; // Keep max 200 events
+      events = [processedEvent, ...events.slice(0, 199)]; // Keep max 200 events
       
       // Create particles for the new event
-      createParticlesFromEvents([newEvent]);
+      createParticlesFromEvents([processedEvent]);
       pulseAmbiance();
       lastFetch = new Date();
     }
@@ -299,6 +358,7 @@
       const collection = event.collection;
       const color = getCollectionColor(collection);
       const label = getCollectionLabel(collection);
+      const isTeal = event.type === "teal";
       
       // Track discovered collections
       discoveredCollections.add(collection);
@@ -333,16 +393,35 @@
           vy = (Math.random() - 0.5) * 2;
       }
 
-      particles.push({
-        x,
-        y,
-        vx,
-        vy,
-        size: 4 + Math.random() * 6,
-        color,
-        type: label,
-        age: 0,
-      });
+      // Special handling for teal records (music plays)
+      if (isTeal) {
+        // Create multiple particles for teal records to represent music notes
+        for (let i = 0; i < 3; i++) {
+          particles.push({
+            x,
+            y,
+            vx: vx + (Math.random() - 0.5) * 0.5,
+            vy: vy + (Math.random() - 0.5) * 0.5,
+            size: 3 + Math.random() * 4,
+            color: "#ec4899", // Special pink/purple color for teal records
+            type: "music",
+            age: 0,
+            isTeal: true,
+          });
+        }
+      } else {
+        particles.push({
+          x,
+          y,
+          vx,
+          vy,
+          size: 4 + Math.random() * 6,
+          color,
+          type: label,
+          age: 0,
+          isTeal: false,
+        });
+      }
     }
   }
 
@@ -446,7 +525,22 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-5px); }
     }
-  </style>
+  
+  .teal-event {
+    border-left: 3px solid #ec4899;
+  }
+
+  .teal-event .event-icon {
+    font-size: 1.2em;
+  }
+
+  .event-artist {
+    font-size: var(--text-xs);
+    color: var(--color-text-600);
+    margin-top: 2px;
+  }
+
+</style>
 </svelte:head>
 
 <div class="repo-visualizer-container">
@@ -493,18 +587,39 @@
           {@const date = new Date(event.createdAt)}
           {@const label = getCollectionLabel(event.collection)}
           {@const color = getCollectionColor(event.collection)}
-          <div class="event-item" style={`--event-color: ${color}`}>
-            <div class="event-icon" style={`background-color: ${color}`}>
-              {label.slice(0, 1)}
+          
+          {#if event.type === 'teal' && event.tealData}
+            <div class="event-item teal-event" style={`--event-color: ${color}`}>
+              <div class="event-icon" style={`background-color: ${color}`}>
+                🎵
+              </div>
+              <div class="event-content">
+                <div class="event-type">
+                  Now Playing: {event.tealData.track}
+                </div>
+                <div class="event-artist">
+                  {event.tealData.artists.join(', ')}
+                </div>
+                <div class="event-time">{date.toLocaleTimeString()}</div>
+              </div>
+              <div class="event-meta">
+                {event.collection}
+              </div>
             </div>
-            <div class="event-content">
-              <div class="event-type">{label}</div>
-              <div class="event-time">{date.toLocaleTimeString()}</div>
+          {:else}
+            <div class="event-item" style={`--event-color: ${color}`}>
+              <div class="event-icon" style={`background-color: ${color}`}>
+                {label.slice(0, 1)}
+              </div>
+              <div class="event-content">
+                <div class="event-type">{label}</div>
+                <div class="event-time">{date.toLocaleTimeString()}</div>
+              </div>
+              <div class="event-meta">
+                {event.collection}
+              </div>
             </div>
-            <div class="event-meta">
-              {event.collection}
-            </div>
-          </div>
+          {/if}
         {/each}
       {/if}
     </div>
