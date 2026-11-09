@@ -3,11 +3,11 @@
    * Live Repository Visualizer
    * 
    * An interactive, animated visualization of AT Protocol repository events.
+   * Uses Jetstream WebSocket for real-time updates.
    * Shows events from multiple collections in a dynamic, engaging interface.
    */
-  import { onMount, afterUpdate } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { pulseAmbiance } from "$lib/stores/ambiance";
-  import { PUBLIC_ATPROTO_DID } from "$env/static/public";
 
   interface Event {
     collection: string;
@@ -18,13 +18,38 @@
     record: any;
   }
 
+  // Jetstream event types
+  interface JetstreamEvent {
+    seq: number;
+    time: string;
+    did: string;
+    type: string;
+    ops: Array<{
+      action: 'create' | 'update' | 'delete';
+      collection: string;
+      rkey: string;
+      uri: string;
+      cid?: string;
+      value?: any;
+    }>;
+  }
+
+  // Use the actual DID from config
+  const DID = "did:plc:ofrbh253gwicbkc5nktqepol";
+
   let events = $state<Event[]>([]);
   let loading = $state(true);
   let error = $state<string | null>(null);
   let cursor = $state<string | null>(null);
   let hasMore = $state(true);
-  let autoRefresh = $state(true);
   let lastFetch = $state<Date | null>(null);
+  
+  // WebSocket state
+  let socket = $state<WebSocket | null>(null);
+  let socketStatus = $state<'connecting' | 'open' | 'closed' | 'error'>('closed');
+  let reconnectAttempts = $state(0);
+  let maxReconnectAttempts = $state(5);
+  let reconnectDelay = $state(3000);
 
   // Visualization state
   let containerWidth = $state(800);
@@ -52,16 +77,15 @@
     "site.standard.document": "Document",
   };
 
-  // Fetch events from the API
-  async function fetchEvents(append: boolean = false) {
+  // Fetch initial events from the API (for historical data)
+  async function fetchInitialEvents() {
     try {
-      loading = !append;
+      loading = true;
       error = null;
 
       const params = new URLSearchParams({
         limit: "50",
       });
-      if (cursor && append) params.set("cursor", cursor);
 
       const response = await fetch(`/api/repo/events?${params}`);
       if (!response.ok) throw new Error("Failed to fetch events");
@@ -69,12 +93,42 @@
       const data = await response.json();
       lastFetch = new Date();
 
-      if (append) {
-        events = [...events, ...data.events];
-      } else {
-        events = data.events;
-      }
+      events = data.events;
+      cursor = data.cursor;
+      hasMore = !!data.cursor;
 
+      // Create particles from initial events
+      if (data.events.length > 0) {
+        createParticlesFromEvents(data.events);
+      }
+    } catch (err) {
+      error = err instanceof Error ? err.message : "Unknown error";
+      console.error("Error fetching initial events:", err);
+    } finally {
+      loading = false;
+    }
+  }
+
+  // Load more historical events
+  async function fetchMoreEvents() {
+    if (loading || !hasMore) return;
+    
+    try {
+      loading = true;
+      error = null;
+
+      const params = new URLSearchParams({
+        limit: "50",
+      });
+      if (cursor) params.set("cursor", cursor);
+
+      const response = await fetch(`/api/repo/events?${params}`);
+      if (!response.ok) throw new Error("Failed to fetch events");
+
+      const data = await response.json();
+      lastFetch = new Date();
+
+      events = [...events, ...data.events];
       cursor = data.cursor;
       hasMore = !!data.cursor;
 
@@ -85,9 +139,98 @@
       }
     } catch (err) {
       error = err instanceof Error ? err.message : "Unknown error";
-      console.error("Error fetching events:", err);
+      console.error("Error fetching more events:", err);
     } finally {
       loading = false;
+    }
+  }
+
+  // Connect to Jetstream WebSocket
+  function connectWebSocket() {
+    // Close existing connection if any
+    if (socket) {
+      socket.close();
+    }
+
+    const jetstreamUrl = `wss://jetstream1.us-east.bsky.network?dids=${encodeURIComponent(DID)}`;
+    
+    console.log("Connecting to Jetstream:", jetstreamUrl);
+    socketStatus = 'connecting';
+    
+    try {
+      socket = new WebSocket(jetstreamUrl);
+
+      socket.onopen = () => {
+        console.log("Jetstream WebSocket connected");
+        socketStatus = 'open';
+        reconnectAttempts = 0;
+        error = null;
+      };
+
+      socket.onmessage = (event) => {
+        try {
+          const jetstreamEvent: JetstreamEvent = JSON.parse(event.data);
+          handleJetstreamEvent(jetstreamEvent);
+        } catch (err) {
+          console.error("Error parsing Jetstream event:", err);
+        }
+      };
+
+      socket.onclose = () => {
+        console.log("Jetstream WebSocket closed");
+        socketStatus = 'closed';
+        // Attempt to reconnect
+        if (reconnectAttempts < maxReconnectAttempts) {
+          const delay = reconnectDelay * Math.pow(2, reconnectAttempts);
+          reconnectAttempts++;
+          console.log(`Reconnecting in ${delay}ms (attempt ${reconnectAttempts})`);
+          setTimeout(connectWebSocket, delay);
+        } else {
+          error = 'WebSocket disconnected. Please refresh the page.';
+        }
+      };
+
+      socket.onerror = (err) => {
+        console.error("Jetstream WebSocket error:", err);
+        socketStatus = 'error';
+        error = 'WebSocket connection error. Retrying...';
+      };
+    } catch (err) {
+      console.error("Failed to create WebSocket:", err);
+      socketStatus = 'error';
+      error = 'Failed to connect to Jetstream.';
+      socket = null;
+    }
+  }
+
+  // Handle incoming Jetstream event
+  function handleJetstreamEvent(jetstreamEvent: JetstreamEvent) {
+    const timestamp = new Date(jetstreamEvent.time).toISOString();
+    
+    for (const op of jetstreamEvent.ops) {
+      // Only handle create operations
+      if (op.action !== 'create') continue;
+      
+      // Check if this is for our DID
+      if (jetstreamEvent.did !== DID) continue;
+
+      // Create event from operation
+      const newEvent: Event = {
+        collection: op.collection,
+        uri: op.uri,
+        cid: op.cid || '',
+        createdAt: timestamp,
+        author: jetstreamEvent.did,
+        record: op.value || null,
+      };
+
+      // Add to events at the beginning (most recent)
+      events = [newEvent, ...events.slice(0, 199)]; // Keep max 200 events
+      
+      // Create particles for the new event
+      createParticlesFromEvents([newEvent]);
+      pulseAmbiance();
+      lastFetch = new Date();
     }
   }
 
@@ -180,43 +323,26 @@
     }
   }
 
-  // Load more events
+  // Load more historical events
   async function loadMore() {
-    if (loading || !hasMore) return;
-    await fetchEvents(true);
+    await fetchMoreEvents();
   }
 
-  // Toggle auto-refresh
-  function toggleAutoRefresh() {
-    autoRefresh = !autoRefresh;
-    if (autoRefresh) {
-      startAutoRefresh();
+  // Reconnect WebSocket
+  function reconnect() {
+    if (socket) {
+      socket.close();
     }
-  }
-
-  // Auto-refresh interval
-  let refreshInterval: number | null = null;
-
-  function startAutoRefresh() {
-    if (refreshInterval) clearInterval(refreshInterval);
-    refreshInterval = window.setInterval(() => {
-      if (!loading) fetchEvents(false);
-    }, 30000); // Refresh every 30 seconds
-  }
-
-  function stopAutoRefresh() {
-    if (refreshInterval) {
-      clearInterval(refreshInterval);
-      refreshInterval = null;
-    }
+    reconnectAttempts = 0;
+    connectWebSocket();
   }
 
   // Initialize
   onMount(() => {
     handleResize();
-    fetchEvents(false);
+    fetchInitialEvents();
     animate();
-    startAutoRefresh();
+    connectWebSocket();
 
     if (typeof window !== "undefined") {
       window.addEventListener("resize", handleResize);
@@ -224,17 +350,26 @@
 
     return () => {
       if (animationFrame) cancelAnimationFrame(animationFrame);
-      stopAutoRefresh();
+      if (socket) {
+        socket.close();
+      }
       if (typeof window !== "undefined") {
         window.removeEventListener("resize", handleResize);
       }
     };
   });
 
-  // Re-fetch when auto-refresh toggle changes
+  // Reconnect when DID changes or on error
   $effect(() => {
-    if (!autoRefresh) stopAutoRefresh();
-    else startAutoRefresh();
+    if (socketStatus === 'error' || socketStatus === 'closed') {
+      const timer = setTimeout(() => {
+        if (socketStatus !== 'open' && socketStatus !== 'connecting') {
+          connectWebSocket();
+        }
+      }, reconnectDelay);
+      
+      return () => clearTimeout(timer);
+    }
   });
 </script>
 
@@ -259,11 +394,11 @@
   <div class="visualizer-header">
     <h2>Live Repository Activity</h2>
     <div class="controls">
-      <button type="button" onclick={() => fetchEvents(false)} disabled={loading} class:loading>
+      <button type="button" onclick={() => fetchInitialEvents()} disabled={loading} class:loading>
         {loading ? "Refreshing..." : "Refresh"}
       </button>
-      <button type="button" onclick={toggleAutoRefresh} class:active={autoRefresh}>
-        Auto-refresh: {autoRefresh ? "On" : "Off"}
+      <button type="button" onclick={reconnect} class:active={socketStatus === 'open'} class:error={socketStatus === 'error'}>
+        WebSocket: {socketStatus === 'open' ? 'Live' : socketStatus === 'connecting' ? 'Connecting...' : socketStatus === 'closed' ? 'Disconnected' : 'Error'}
       </button>
     </div>
   </div>
@@ -271,7 +406,7 @@
   {#if error}
     <div class="error-message">
       <p>Error: {error}</p>
-      <button type="button" onclick={() => fetchEvents(false)}>Retry</button>
+      <button type="button" onclick={() => fetchInitialEvents()}>Retry</button>
     </div>
   {/if}
 
@@ -329,6 +464,7 @@
     {#if lastFetch}
       <span>Last updated: {lastFetch.toLocaleTimeString()}</span>
     {/if}
+    <span>Connection: {socketStatus}</span>
   </div>
 </div>
 
@@ -386,6 +522,12 @@
     background: var(--color-primary-500);
     color: white;
     border-color: var(--color-primary-500);
+  }
+
+  .controls button.error {
+    background: var(--color-error-500);
+    color: white;
+    border-color: var(--color-error-500);
   }
 
   .visualizer-canvas {
