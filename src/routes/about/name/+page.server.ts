@@ -8,7 +8,8 @@ import type { PageServerLoad } from "./$types";
 
 const RKEY = "3mnivbrtqc22b";
 
-export const load: PageServerLoad = async ({ fetch }) => {
+export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
+  setHeaders({ "cache-control": "public, s-maxage=300, stale-while-revalidate=3600" });
   const { documents } = await fetchDocuments(PUBLIC_ATPROTO_DID, fetch).catch(() => ({ documents: [] as any[] }));
   const post = documents.find((d) => d.uri.endsWith(`/${RKEY}`));
   if (!post) error(404);
