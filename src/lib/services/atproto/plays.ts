@@ -79,7 +79,9 @@ export async function fetchRecentPlays(
     limit: Math.min(50, limit * 2),
   })) as any;
 
-  const plays = (resp.data.records as Array<{ uri: string; value: any }>)
+  const plays = (((resp.data ?? resp).records ?? []) as Array<
+    { uri: string; value: any }
+  >)
     .map(({ uri, value }: { uri: string; value: any }) => {
       const v = value as {
         trackName?: string;

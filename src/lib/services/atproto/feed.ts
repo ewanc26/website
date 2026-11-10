@@ -132,7 +132,8 @@ export async function fetchRecentPosts(
       cursor,
       reverse: false,
     })) as any;
-    for (const { uri, value } of resp.data.records) {
+    const body = resp.data ?? resp;
+    for (const { uri, value } of body.records ?? []) {
       const v = value as {
         text?: string;
         reply?: unknown;
@@ -154,7 +155,7 @@ export async function fetchRecentPosts(
       });
       if (posts.length >= want) break;
     }
-    cursor = resp.data.cursor;
+    cursor = body.cursor;
     if (!cursor) break;
   }
 

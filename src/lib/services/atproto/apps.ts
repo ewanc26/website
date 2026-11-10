@@ -50,8 +50,9 @@ export async function fetchShippedApps(
       limit: 100,
       cursor,
     })) as any;
-    records.push(...resp.data.records);
-    cursor = resp.data.cursor;
+    const body = resp.data ?? resp;
+    records.push(...(body.records ?? []));
+    cursor = body.cursor;
   } while (cursor);
 
   const apps: ShippedApp[] = records

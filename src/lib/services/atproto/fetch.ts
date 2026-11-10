@@ -133,25 +133,31 @@ export async function fetchProfileLinks(
   if (cached) return cached;
 
   const agent = await getPDSAgent(ATPROTO_DID, fetchFn);
-  const [profile, linkRecords] = await Promise.all([
+  const [profileResp, linkRecordsResp] = await Promise.all([
     agent.call(com.atproto.repo.getRecord.main as any, {
       repo: ATPROTO_DID,
       collection: "app.bsky.actor.profile",
       rkey: "self",
-    }) as Promise<{ data: { value: any } }>,
+    }) as any,
     agent.call(com.atproto.repo.listRecords.main as any, {
       repo: ATPROTO_DID,
       collection: "app.bsky.actor.link",
       limit: 100,
-    }) as Promise<{
-      data: { records: Array<{ uri: string; value: { url?: string } }> };
-    }>,
+    }) as any,
   ]);
 
+  // @atproto/lex returns the response body itself; older clients wrapped it
+  // in {data}.
+  const profile = profileResp?.data ?? profileResp;
+  const linkRecords = linkRecordsResp?.data ?? linkRecordsResp;
+
   const urlByUri = new Map<string, string>(
-    linkRecords.data.records.map((r) => [r.uri, r.value.url as string]),
+    linkRecords.records.map(
+      (r: { uri: string; value: { url?: string } }) =>
+        [r.uri, r.value.url as string],
+    ),
   );
-  const refs = ((profile.data.value as any).links ?? []) as { uri: string }[];
+  const refs = ((profile?.value as any)?.links ?? []) as { uri: string }[];
   const cards = refs.flatMap((ref): ProfileLinkCard[] => {
     const url = urlByUri.get(ref.uri);
     return url ? [{ url, text: profileLinkLabel(url), emoji: "" }] : [];
@@ -162,8 +168,33 @@ export async function fetchProfileLinks(
   return data;
 }
 
+// TEMPORARY until @ewanc26/atproto@0.2.14 (which unwraps the lexicon client
+// response body inside fetchSiteInfo) is published and pinned in the
+// lockfile: the package version currently swallows the misread response and
+// returns null, so read the uk.ewancroft.site.info record straight from the
+// PDS in that case.
+async function fetchSiteInfoFromRecord(fetchFn: typeof fetch) {
+  const cacheKey = "siteinfo-record";
+  const cached = getCache(cacheKey);
+  if (cached) return cached;
+
+  const agent = await getPDSAgent(ATPROTO_DID, fetchFn);
+  const record = (await agent.call(com.atproto.repo.getRecord.main as any, {
+    repo: ATPROTO_DID,
+    collection: "uk.ewancroft.site.info",
+    rkey: "self",
+  })) as any;
+  const value = ((record?.data ?? record)?.value ?? null) as any;
+
+  setCache(cacheKey, value, CACHE_TTL_MS);
+  return value;
+}
+
 export async function fetchSiteInfo(fetchFn?: typeof fetch) {
-  return _fetchSiteInfo(ATPROTO_DID, fetchFn);
+  const info = await _fetchSiteInfo(ATPROTO_DID, fetchFn);
+  // TEMPORARY local safety net until @ewanc26/atproto@0.2.14 is in the
+  // lockfile.
+  return info ?? fetchSiteInfoFromRecord(fetchFn ?? fetch);
 }
 
 //  Subscriptions & Recommendations 
@@ -196,13 +227,14 @@ export async function fetchSubscriptions(
       limit: 100,
       cursor,
     })) as any;
+    const body = resp.data ?? resp;
     allRecords.push(
-      ...resp.data.records.map((r: any) => ({
+      ...body.records.map((r: any) => ({
         uri: r.uri,
         value: r.value as { publication: string },
       })),
     );
-    cursor = resp.data.cursor;
+    cursor = body.cursor;
   } while (cursor);
 
   const resolved = await mapWithConcurrency(
@@ -291,13 +323,14 @@ export async function fetchRecommendations(
       limit: 100,
       cursor,
     })) as any;
+    const body = resp.data ?? resp;
     allRecords.push(
-      ...resp.data.records.map((r: any) => ({
+      ...body.records.map((r: any) => ({
         uri: r.uri,
         value: r.value as { document: string },
       })),
     );
-    cursor = resp.data.cursor;
+    cursor = body.cursor;
   } while (cursor);
 
   const resolved = await mapWithConcurrency(
@@ -371,7 +404,8 @@ export async function fetchPublicationRecommendations(
       limit: 100,
       cursor,
     })) as any;
-    for (const record of resp.data.records) {
+    const body = resp.data ?? resp;
+    for (const record of body.records) {
       const value = record.value as {
         publication?: unknown;
         recommendations?: unknown;
@@ -382,7 +416,7 @@ export async function fetchPublicationRecommendations(
         if (typeof uri === "string" && !uris.includes(uri)) uris.push(uri);
       }
     }
-    cursor = resp.data.cursor;
+    cursor = body.cursor;
   } while (cursor);
 
   const found = await fetchAtRecords(uris, fetchFn);
@@ -718,10 +752,18 @@ export async function fetchComments(
 
 export async function fetchBlob(ref: any) {
   const agent = await getPDSAgent(ATPROTO_DID);
-  const cid = ref.$link || ref.ref?.$link || ref;
+  // Blob refs can be plain {$link} objects, embedded as {ref: {$link}}, or
+  // CID instances (whose string form is the CID) after parsing.
+  const cid =
+    ref?.$link ??
+    ref?.ref?.$link ??
+    (typeof ref === "string" ? ref : String(ref ?? ""));
   const blob = (await agent.call(com.atproto.sync.getBlob.main as any, {
     did: ATPROTO_DID,
     cid,
   })) as any;
-  return new Uint8Array(blob.data);
+  // getBlob resolves to the bytes in `body` via @atproto/lex, `data` on the
+  // older clients.
+  const bytes = blob?.body ?? blob?.data;
+  return new Uint8Array(bytes ?? []);
 }
