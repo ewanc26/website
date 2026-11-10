@@ -8,6 +8,10 @@
   let { data } = $props();
   const { profile, links, sifa, skills, education, languages, professional, projects, pds } = $derived(data);
 
+  /** True when the ATProto profile fetch failed and the server passed the
+      empty fallback — a real profile always carries a handle. */
+  const profileDown = $derived(!profile.handle);
+
   const CATEGORY: Record<string, string> = {
     "id.sifa.defs#technical": "Technical",
     "id.sifa.defs#creative": "Creative",
@@ -46,12 +50,29 @@
     <div class="idcard thunk">
       <div class="idcard-hd"><span>ID CARD</span><span>{sifa?.headline ?? "Software developer"}</span></div>
       <div class="photo">
-        {#if profile.avatar}<img src={profile.avatar} alt={`Portrait of ${profile.displayName ?? profile.handle}`} />{/if}
+        {#if profile.avatar}
+          <img src={profile.avatar} alt={`Portrait of ${profile.displayName ?? profile.handle}`} />
+        {:else}
+          <!-- The "no photo" treatment: a silhouette in the ink frame. -->
+          <svg class="photo-silhouette" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4.4" />
+            <path d="M2.5 24a9.5 9.5 0 0 1 19 0z" />
+          </svg>
+          <span class="sr-only">No photo available.</span>
+        {/if}
       </div>
       <div>
-        <p class="idcard-name">{profile.displayName ?? profile.handle}<br /><span lang="gd" style="font-size:0.55em">eòghann</span></p>
-        {#if profile.pronouns}<p class="chip" style="width:fit-content;margin-top:.5rem">{profile.pronouns}</p>{/if}
-        <p class="lede" style="margin-top:1rem;font-size:1.1rem">{profile.description}</p>
+        {#if profileDown}
+          <!-- Profile fetch failed: keep the card's fixed identity on show
+               and say so, instead of rendering hollow fields. -->
+          <p class="idcard-name"><span lang="gd">eòghann</span></p>
+          <p class="tape tape--a" style="margin-top:.6rem">Profile offline</p>
+          <p class="note" style="margin-top:.75rem">The ID service isn't answering right now — try again in a bit.</p>
+        {:else}
+          <p class="idcard-name">{profile.displayName ?? profile.handle}<br /><span lang="gd" style="font-size:0.55em">eòghann</span></p>
+          {#if profile.pronouns}<p class="chip" style="width:fit-content;margin-top:.5rem">{profile.pronouns}</p>{/if}
+          <p class="lede" style="margin-top:1rem;font-size:1.1rem">{profile.description}</p>
+        {/if}
       </div>
       <div style="grid-column:1/-1"><Barcode value={profile.did} /></div>
     </div>
@@ -145,7 +166,7 @@
       <dt>DID</dt>
       <dd><code>{profile.did}</code> <button type="button" class="btn btn--small" data-copy={profile.did}>Copy</button></dd>
       <dt>Handle</dt>
-      <dd><code>{profile.handle}</code></dd>
+      <dd><code>{profile.handle || "—"}</code></dd>
       <dt>PDS</dt>
       <dd><code>{pds ?? "Unknown"}</code></dd>
       <dt>PGP</dt>
@@ -168,5 +189,17 @@
   .idcard-row > :global(.idcard) {
     flex: 0 1 44rem;
     min-width: 0;
+  }
+  /* "No photo" silhouette for the ink frame when no avatar is available.
+     Paper-on-ink, so it inverts correctly in both schemes. */
+  .photo-silhouette {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    width: 62%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    fill: var(--paper);
+    opacity: 0.9;
   }
 </style>
