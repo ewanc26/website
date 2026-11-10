@@ -38,8 +38,72 @@ export async function fetchBlogPosts(fetchFn?: typeof fetch) {
   return _fetchBlogPosts(ATPROTO_DID, fetchFn);
 }
 
-export async function fetchProfile(fetchFn?: typeof fetch) {
-  return _fetchProfile(ATPROTO_DID, fetchFn);
+// TEMPORARY until @ewanc26/atproto@0.2.14 (which carries this same fallback
+// behind fetchProfile) is published and pinned in the lockfile: remove this
+// helper and the catch in fetchProfile once that version is live.
+//
+// app.bsky.actor.getProfile fails from the site's Vercel egress (per-IP
+// AppView rate limiting) and PDS app.bsky.* calls require auth, so read
+// app.bsky.actor.profile/self straight from the PDS via
+// com.atproto.repo.getRecord, which is served anonymously. Follower/follow
+// counts are not available that way.
+//
+// Blob refs arrive as {ref: {$link}} over raw HTTP, but @atproto/lex's
+// client parses dag-json CIDs into CID instances whose string form is the
+// CID. Accept both shapes.
+function profileBlobCid(ref: any): string | undefined {
+  if (!ref) return undefined;
+  if (typeof ref === "string") return ref;
+  if (typeof ref.$link === "string") return ref.$link;
+  const candidate = typeof ref["/"] === "string" ? ref["/"] : String(ref);
+  return /^[A-Za-z0-9]{20,}$/.test(candidate) ? candidate : undefined;
+}
+
+async function fetchProfileFromRecord(did: string, fetchFn: typeof fetch) {
+  const didDoc = await resolveDid(did, fetchFn);
+  const pdsUrl = didDoc.service?.[0]?.serviceEndpoint;
+  if (!pdsUrl) throw new Error(`No PDS for ${did}`);
+
+  const handleEntry: string | undefined = didDoc.alsoKnownAs?.find((a: string) =>
+    a.startsWith("at://"),
+  );
+  const handle = handleEntry ? handleEntry.replace("at://", "") : did;
+
+  const agent = await getPDSAgent(did, fetchFn);
+  const record = (await agent.call(com.atproto.repo.getRecord.main as any, {
+    repo: did,
+    collection: "app.bsky.actor.profile",
+    rkey: "self",
+  })) as any;
+  // @atproto/lex returns the body itself; older clients wrapped it in {data}.
+  const value = ((record?.data ?? record)?.value ?? {}) as any;
+
+  const avatarCid = profileBlobCid(value.avatar?.ref);
+  const bannerCid = profileBlobCid(value.banner?.ref);
+
+  return {
+    did,
+    handle,
+    displayName: value.displayName,
+    description: value.description,
+    avatar: avatarCid
+      ? `${pdsUrl}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(avatarCid)}`
+      : undefined,
+    banner: bannerCid
+      ? `${pdsUrl}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(bannerCid)}`
+      : undefined,
+    pronouns: value.pronouns,
+  };
+}
+
+export async function fetchProfile(did: string, fetchFn: typeof fetch = fetch) {
+  try {
+    return await _fetchProfile(did, fetchFn);
+  } catch {
+    // TEMPORARY local safety net until @ewanc26/atproto@0.2.14 ships this
+    // fallback in the package itself.
+    return fetchProfileFromRecord(did, fetchFn);
+  }
 }
 
 export async function fetchDocuments(fetchFn?: typeof fetch) {
@@ -460,7 +524,7 @@ async function resolveBacklinkAuthor(did: string, fetchFn: typeof fetch) {
   let authorAvatarUrl: string | undefined;
 
   try {
-    const profile = await _fetchProfile(did, fetchFn);
+    const profile = await fetchProfile(did, fetchFn);
     authorHandle = profile.handle || did;
     authorDisplayName = profile.displayName || undefined;
     authorAvatarUrl = profile.avatar || undefined;

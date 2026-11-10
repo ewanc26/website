@@ -4,13 +4,12 @@
  */
 
 import {
-  fetchProfile,
   fetchKibunStatus,
   fetchBlogPosts,
   fetchPublications,
   fetchMusicStatus,
 } from "@ewanc26/atproto";
-import { fetchProfileLinks } from "$lib/services/atproto/fetch";
+import { fetchProfile, fetchProfileLinks } from "$lib/services/atproto/fetch";
 import { ATPROTO_DID } from "$lib/config/atproto";
 import { env } from "$env/dynamic/private";
 import {
