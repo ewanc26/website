@@ -40,7 +40,7 @@ while (queue.length && seen.size < 60) {
     continue;
   }
   if (!(probe.headers()["content-type"] ?? "").includes("text/html")) continue;
-  await page.goto(base + path, { waitUntil: "networkidle" });
+  await page.goto(base + path, { waitUntil: "domcontentloaded" });
   let results;
   for (let attempt = 0; attempt < 3 && !results; attempt++) {
     try {
@@ -49,7 +49,7 @@ while (queue.length && seen.size < 60) {
         .withTags(["wcag2a", "wcag2aa"])
         .analyze();
     } catch {
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("load");
     }
   }
   if (!results) {

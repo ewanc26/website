@@ -144,6 +144,12 @@
     font-size: var(--text-xs);
   }
 
+  /* The copy is small text on a light surface, so it needs the darkest text
+   * step: text-600 only reaches ~2.8:1 contrast there and fails axe. */
+  .backlink-copy {
+    color: var(--color-text-900);
+  }
+
   .backlink-avatars--loading {
     opacity: 0.65;
   }
