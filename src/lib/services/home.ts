@@ -7,7 +7,6 @@ import {
   fetchKibunStatus,
   fetchBlogPosts,
   fetchPublications,
-  fetchMusicStatus,
 } from "@ewanc26/atproto";
 import { fetchProfile, fetchProfileLinks } from "$lib/services/atproto/fetch";
 import { ATPROTO_DID } from "$lib/config/atproto";
@@ -76,7 +75,6 @@ export async function getHomeData() {
     profile,
     verifications,
     kibunStatus,
-    musicStatus,
     postsData,
     githubProjects,
     githubContributions,
@@ -95,7 +93,6 @@ export async function getHomeData() {
     ),
     fetchVerifications(),
     fetchKibunStatus(ATPROTO_DID, fetch).catch(() => null),
-    fetchMusicStatus(ATPROTO_DID, fetch).catch(() => null),
     fetchBlogPosts(ATPROTO_DID, fetch).catch(() => ({ posts: [] })),
     fetchPinnedGitHubProjects(githubUsername, fetch, env.GITHUB_TOKEN).catch(
       () => [],
@@ -117,7 +114,6 @@ export async function getHomeData() {
     profile,
     verifications,
     kibunStatus,
-    musicStatus,
     posts: (postsData?.posts ?? []) as any[],
     githubProjects: githubProjects as any[],
     githubUsername,
