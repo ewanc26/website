@@ -61,7 +61,7 @@
           alt=""
           aria-hidden="true"
         />
-        <figcaption class="hud">EWANCROFT.UK · 88×31 · SVG · 5.4 KB</figcaption>
+        <figcaption class="hud">88×31 · SVG · 5.4 KB</figcaption>
       </figure>
 
       <div class="snippet">
@@ -109,6 +109,13 @@
     align-items: flex-start;
     gap: var(--space-md);
     width: fit-content;
+    max-width: 100%;
+  }
+
+  @media (max-width: 30rem) {
+    .plate {
+      padding: var(--space-md);
+    }
   }
 
   .badge {
