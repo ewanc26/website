@@ -66,6 +66,7 @@
         <h2>Small print</h2>
         <ul>
           <li><a href="/subscriptions">What I read</a></li>
+          <li><a href="/buttons">Buttons</a></li>
           {#if repo}
             <li><a href={repo.url} rel="noopener">Source code</a></li>
           {/if}
