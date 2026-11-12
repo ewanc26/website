@@ -18,7 +18,7 @@
   import { PUBLIC_LEAFLET_BLOG_PUBLICATION, PUBLIC_ATPROTO_DID } from "$env/static/public";
 
   let { data } = $props();
-  const { profile, kibunStatus, musicStatus, posts, githubProjects, githubUsername, githubContributions, githubLanguages, githubCommits, githubProfileSummary, publications, links, apps, popfeed, feed, latestPlay } = $derived(data);
+  const { profile, kibunStatus, posts, githubProjects, githubUsername, githubContributions, githubLanguages, githubCommits, githubProfileSummary, publications, links, apps, popfeed, feed, latestPlay } = $derived(data);
 
   const almanac = $derived(data.almanac);
   const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -97,18 +97,6 @@
     <div class="poster-row">
       <div class="thunk">
         <p class="bio">{@html bio}</p>
-        {#if musicStatus}
-          <div class="poster-statuses">
-            <span class="now now--track">
-              {#if musicStatus.artworkUrl}
-                <img src={musicStatus.artworkUrl} alt={`Album art for ${musicStatus.trackName}`} width="36" height="36" loading="lazy" decoding="async" />
-              {:else}
-                <span aria-hidden="true">♪</span>
-              {/if}
-              <span>{musicStatus.trackName} — {musicStatus.artists.map((a: any) => a.artistName).join(", ")}</span>
-            </span>
-          </div>
-        {/if}
       </div>
 
       <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
