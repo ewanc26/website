@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://github.com/ewanc26/website/actions/workflows/ci.yml"><img src="https://github.com/ewanc26/website/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/ewanc26/website?label=licence" alt="Licence"></a>
+  <a href="https://github.com/sponsors/ewanc26"><img src="https://img.shields.io/github/sponsors/ewanc26?logo=githubsponsors&logoColor=white&label=sponsors" alt="Sponsor"></a>
+</p>
+
 # Website
 
 A personal website and blog built with [SvelteKit](https://svelte.dev/docs/kit), with an AT Protocol-native publishing stack built around [Standard.site](https://standard.site/) and [Leaflet](https://leaflet.pub/).
@@ -166,7 +172,7 @@ If you find this project useful, consider supporting its development:
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/ewancroft)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-30363D?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sponsors/ewanc26)
 
-## License
+## Licence
 
 See LICENSE file for details.
 
