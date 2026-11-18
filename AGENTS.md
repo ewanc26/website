@@ -4,7 +4,7 @@ Guidance for AI coding agents working in **website**.
 
 ## Project overview
 
-my website at ewancroft.uk
+My website at ewancroft.uk
 
 - Language: SvelteKit (Svelte 5, runes)
 - Default branch: main
