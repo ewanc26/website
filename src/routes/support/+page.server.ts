@@ -4,6 +4,7 @@ import type { PageServerLoad } from "./$types";
 const PLATFORM_URLS: Record<string, string> = {
   "ko-fi": "https://ko-fi.com/ewancroft",
   "gh-sponsors": "https://github.com/sponsors/ewanc26",
+  "liberapay": "https://liberapay.com/ewanc26/",
 };
 
 export const load: PageServerLoad = ({ url }) => {
