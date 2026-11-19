@@ -23,6 +23,11 @@
       url: "https://github.com/sponsors/ewanc26",
       description: "one-time or monthly",
     },
+    {
+      name: "Liberapay",
+      url: "https://liberapay.com/ewanc26/",
+      description: "recurring donations",
+    },
   ];
 </script>
 

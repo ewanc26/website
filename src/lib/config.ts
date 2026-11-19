@@ -23,6 +23,7 @@ export const ME_LINKS = [
   "https://github.com/ewanc26",
   "https://tangled.org/did:plc:ofrbh253gwicbkc5nktqepol",
   "https://ko-fi.com/ewancroft",
+  "https://liberapay.com/ewanc26/",
 ];
 
 export const NAV_LINKS = [

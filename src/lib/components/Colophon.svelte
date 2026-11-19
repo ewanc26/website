@@ -57,7 +57,8 @@
           <li><a href={`https://bsky.app/profile/${ATPROTO_DID}`} rel="noopener">Bluesky</a></li>
           <li>
             <a href="https://ko-fi.com/ewancroft" rel="noopener">Ko-fi</a> ·
-            <a href="https://github.com/sponsors/ewanc26" rel="noopener">GitHub Sponsors</a>
+            <a href="https://github.com/sponsors/ewanc26" rel="noopener">GitHub Sponsors</a> ·
+            <a href="https://liberapay.com/ewanc26/" rel="noopener">Liberapay</a>
           </li>
         </ul>
       </section>

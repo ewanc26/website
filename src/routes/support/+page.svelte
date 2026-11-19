@@ -8,8 +8,8 @@
 
 <SeoHead
   title="Support"
-  description="Support my open-source work via Ko-fi or GitHub Sponsors."
-  ogSubtitle="Ko-fi and GitHub Sponsors."
+  description="Support my open-source work via Ko-fi, Liberapay or GitHub Sponsors."
+  ogSubtitle="Ko-fi, Liberapay and GitHub Sponsors."
   ogType="SUPPORT"
   siteInfo={data.siteInfo}
 />
@@ -38,6 +38,11 @@
             <span class="shelf-name">GitHub Sponsors</span><span class="shelf-meta">one-time or monthly<ArrowUpRight /></span>
           </a>
         </li>
+        <li>
+          <a href="https://liberapay.com/ewanc26/" rel="noopener noreferrer" aria-label="Support with a recurring donation on Liberapay">
+            <span class="shelf-name">Liberapay</span><span class="shelf-meta">recurring donations<ArrowUpRight /></span>
+          </a>
+        </li>
       </ul>
       <iframe
         class="kofi-frame"
@@ -46,7 +51,7 @@
         loading="lazy"
         referrerpolicy="strict-origin-when-cross-origin"
       ></iframe>
-      <p class="note">Payments are handled securely by Ko-fi or GitHub. This site never receives your payment details.</p>
+      <p class="note">Payments are handled securely by Ko-fi, Liberapay or GitHub. This site never receives your payment details.</p>
     </div>
   </div>
 
