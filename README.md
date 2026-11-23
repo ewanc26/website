@@ -177,6 +177,8 @@ If you find this project useful, consider supporting its development:
 
 See LICENSE file for details.
 
+Copyright (C) 2025-2026 Ewan Croft (ewanc26).
+
 ## Star History
 
 <a href="https://www.star-history.com/?repos=ewanc26%2Fwebsite&type=date&legend=bottom-right">
