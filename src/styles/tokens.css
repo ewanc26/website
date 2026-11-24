@@ -157,18 +157,22 @@
     /* ── Riso zine roles ──────────────────────────────────────── */
     /* Newsprint (or black stock in the dark), one black, and two spot inks
        set by the seasonal engine (--riso-a / --riso-b, see theme.ts). The
-       fallbacks below are Mabon's; the engine overrides them per request. */
-    --paper: oklch(95.5% 0.008 205);
-    --paper-deep: oklch(90.5% 0.014 205);
-    --ink: oklch(19% 0.025 275);
-    --ink-soft: oklch(38% 0.025 275);
-    --on-ink: oklch(15% 0.02 275);
-    --riso-a: oklch(68% 0.205 28);
-    --riso-b: oklch(84% 0.125 178);
+       engine rides each sabbat's *second* colour and solves a WCAG-AA
+       lightness per hue (see contrast.ts); these fallbacks are Mabon's
+       exact values, and the engine overrides them per request. */
+    --paper: oklch(95.5% 0.012 50.27);
+    --paper-deep: oklch(90.5% 0.03 50.27);
+    --ink: oklch(19% 0.035 50.27);
+    --ink-soft: oklch(28.97% 0.03 50.27);
+    --on-ink: oklch(15% 0.02 50.27);
+    --riso-a: oklch(68% 0.205 50.27);
+    --riso-b: oklch(84% 0.125 200.27);
+    --riso-a-text: oklch(43.98% 0.2 50.27);
+    --riso-b-text: oklch(39.92% 0.12 200.27);
     /* Ink on newsprint subtracts (multiply); ink on black stock adds. */
     --blend: multiply;
 
-    --stamp: var(--color-primary-text);
+    --stamp: oklch(32.57% 0.1 50.27);
     --rule: var(--ink);
     --surface-color: var(--paper-deep);
     --surface-raised: var(--paper);
@@ -308,12 +312,16 @@
       --accent-800: rgb(193 228 180);
       --accent-900: rgb(224 241 218);
       --accent-950: rgb(239 248 236);
-      --paper: oklch(14.5% 0.014 275);
-      --paper-deep: oklch(20.5% 0.02 275);
-      --ink: oklch(95% 0.01 100);
-      --ink-soft: oklch(80% 0.012 100);
-      --riso-a: oklch(66% 0.215 28);
-      --riso-b: oklch(62% 0.15 178);
+      --paper: oklch(14.5% 0.02 50.27);
+      --paper-deep: oklch(20.5% 0.03 50.27);
+      --ink: oklch(95% 0.015 50.27);
+      --ink-soft: oklch(80% 0.02 50.27);
+      --on-ink: oklch(95% 0.01 50.27);
+      --riso-a: oklch(43.93% 0.2 50.27);
+      --riso-b: oklch(26.16% 0.15 200.27);
+      --riso-a-text: oklch(56.25% 0.2 50.27);
+      --riso-b-text: oklch(45% 0.15 200.27);
+      --stamp: oklch(49.2% 0.1 50.27);
       --color-primary-text: var(--color-primary-500);
       --color-primary-text-hover: var(--color-primary-400);
     }
