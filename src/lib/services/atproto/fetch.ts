@@ -11,6 +11,7 @@
  */
 
 import { mapWithConcurrency } from "$lib/utils/promise";
+import { profileLinkLabels } from "$lib/utils/profileLinkLabels";
 import {
   fetchKibunStatus as _fetchKibunStatus,
   fetchBlogPosts as _fetchBlogPosts,
@@ -56,11 +57,6 @@ export interface ProfileLinkCard {
   emoji: string;
 }
 
-function profileLinkLabel(url: string): string {
-  const parsed = new URL(url);
-  return `${parsed.host}${parsed.pathname.replace(/\/$/, "")}`;
-}
-
 export async function fetchProfileLinks(
   fetchFn?: typeof fetch,
 ): Promise<{ cards: ProfileLinkCard[] }> {
@@ -94,10 +90,19 @@ export async function fetchProfileLinks(
     ),
   );
   const refs = ((profile?.value as any)?.links ?? []) as { uri: string }[];
-  const cards = refs.flatMap((ref): ProfileLinkCard[] => {
+  const urls = refs.flatMap((ref): string[] => {
     const url = urlByUri.get(ref.uri);
-    return url ? [{ url, text: profileLinkLabel(url), emoji: "" }] : [];
+    return url ? [url] : [];
   });
+  // Host-only chips, extended just enough to keep same-host links
+  // distinct (see profileLinkLabels).
+  const cards: ProfileLinkCard[] = profileLinkLabels(urls).map(
+    (text, index) => ({
+      url: urls[index],
+      text,
+      emoji: "",
+    }),
+  );
 
   const data = { cards };
   setCache(cacheKey, data, CACHE_TTL_MS);
