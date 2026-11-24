@@ -9,7 +9,7 @@
   import TriskeleEgg from "$lib/components/ostara-eggs/TriskeleEgg.svelte";
   import SigilRule from "$lib/components/SigilRule.svelte";
   import Pentacle from "$lib/components/icons/Pentacle.svelte";
-    import type { Almanac } from "$lib/utils/almanac";
+  import type { Almanac } from "$lib/utils/almanac";
   import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
   import { ATPROTO_DID } from "$lib/config/atproto";
 
