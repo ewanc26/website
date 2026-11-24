@@ -86,7 +86,7 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
   css += `    --riso-b-text: light-dark(oklch(58% 0.12 ${hueB.toFixed(2)}), oklch(62% 0.15 ${hueB.toFixed(2)}));\n`;
 
   css += "    /* ── Blend mode and surfaces ── */\n";
-  css += "    --blend: light-dark(multiply, screen);\n";
+  css += "    --blend: multiply;\n";
   css += `    --surface-color: light-dark(oklch(90.5% 0.014 ${secondaryHue.toFixed(2)}), oklch(20.5% 0.02 ${secondaryHue.toFixed(2)}));\n`;
   css += `    --surface-raised: light-dark(oklch(95.5% 0.008 ${secondaryHue.toFixed(2)}), oklch(14.5% 0.014 ${secondaryHue.toFixed(2)}));\n`;
   css += `    --surface-sunken: light-dark(oklch(90.5% 0.014 ${secondaryHue.toFixed(2)}), oklch(20.5% 0.02 ${secondaryHue.toFixed(2)}));\n`;
@@ -108,6 +108,8 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
   // Apply the seasonal background pattern to the body.
   css += "  }\n";
   css += `  body { background: var(--paper), var(--bg-pattern); background-size: var(--bg-pattern-size) var(--bg-pattern-size); background-position: ${((yearProgress + moon.phase) * 100).toFixed(2)}% ${((yearProgress * 0.5 + moon.phase * 0.25) * 100).toFixed(2)}%; }\n`;
+  // The dark-stock side of the blend token: ink adds when printed on black.
+  css += "  @media (prefers-color-scheme: dark) {\n    :root {\n      --blend: screen;\n    }\n  }\n";
   return css;
 }
 
