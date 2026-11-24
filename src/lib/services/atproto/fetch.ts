@@ -7,7 +7,7 @@
  * backlinks.
  *
  * All fetch functions accept an optional `fetch` override so the
- * server-side request context is respected. (Moved to Astro from SvelteKit.)
+ * server-side request context is respected.
  */
 
 import { mapWithConcurrency } from "$lib/utils/promise";
@@ -364,7 +364,7 @@ const CONSTELLATION = "https://constellation.microcosm.blue";
 const SLINGSHOT = "https://slingshot.microcosm.blue";
 const CONSTELLATION_HEADERS = {
   Accept: "application/json",
-  "User-Agent": "ewancroft.uk/12.2 (https://ewancroft.uk)",
+  "User-Agent": "ewancroft.uk/12.10.0 (https://ewancroft.uk)",
 };
 
 interface BacklinkRef {
