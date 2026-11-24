@@ -4,6 +4,8 @@
 
   let { data } = $props();
 
+  const email = $derived(data.siteInfo?.additionalInfo?.contact?.email);
+
   const snippet = `<a href="https://ewancroft.uk">
   <img
     src="https://ewancroft.uk/assets/button-88x31.svg"
@@ -90,8 +92,10 @@
       <p class="note">
         Got a button of your own? Send it over on
         <a href="https://bsky.app/profile/ewancroft.uk" rel="noopener noreferrer">Bluesky</a>
-        or by email at
-        <a href="mailto:contact@ewancroft.uk">contact@ewancroft.uk</a>
+        {#if email}
+          or by email at
+          <a href={`mailto:${email}`}>{email}</a>
+        {/if}
         and it goes on the shelf.
       </p>
     </div>

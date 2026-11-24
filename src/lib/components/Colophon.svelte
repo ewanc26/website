@@ -9,8 +9,7 @@
   import TriskeleEgg from "$lib/components/ostara-eggs/TriskeleEgg.svelte";
   import SigilRule from "$lib/components/SigilRule.svelte";
   import Pentacle from "$lib/components/icons/Pentacle.svelte";
-  import { SITE } from "$lib/config";
-  import type { Almanac } from "$lib/utils/almanac";
+    import type { Almanac } from "$lib/utils/almanac";
   import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
   import { ATPROTO_DID } from "$lib/config/atproto";
 
@@ -28,7 +27,7 @@
       siteInfo?.openSourceInfo?.repositories[0],
   );
   const license = $derived(siteInfo?.openSourceInfo?.license);
-  const email = $derived(siteInfo?.additionalInfo?.contact?.email ?? SITE.contactEmail);
+  const email = $derived(siteInfo?.additionalInfo?.contact?.email);
 
   const phases = Array.from({ length: 8 }, (_, i) => i / 8);
   const current = $derived(Math.round(almanac.moon.phase * 8) % 8);
@@ -53,7 +52,9 @@
       <section>
         <h2>Write to me</h2>
         <ul>
-          <li><a href={`mailto:${email}`}>{email}</a></li>
+          {#if email}
+            <li><a href={`mailto:${email}`}>{email}</a></li>
+          {/if}
           <li><a href={`https://bsky.app/profile/${ATPROTO_DID}`} rel="noopener">Bluesky</a></li>
           <li>
             <a href="https://ko-fi.com/ewancroft" rel="noopener">Ko-fi</a> ·
