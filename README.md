@@ -77,7 +77,7 @@ This keeps the site responsive without requiring every request to re-fetch the p
 
 - **Framework**: [SvelteKit](https://svelte.dev/docs/kit) (Svelte 5) and the Vercel adapter
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS v4 reset plus the hand-written almanac stylesheet ([src/styles/almanac.css](src/styles/almanac.css)); type is Fraunces and JetBrains Mono via Fontsource
+- **Styling**: Tailwind CSS v4 reset plus the hand-written riso stylesheet ([src/styles/riso.css](src/styles/riso.css)); type is Archivo, Atkinson Hyperlegible Next, Pixelify Sans and JetBrains Mono via Fontsource
 - **Package Manager**: pnpm
 - **Publishing/data model**: AT Protocol + Standard.site
 - **Document model**: Leaflet-compatible structured blocks
