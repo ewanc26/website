@@ -24,14 +24,14 @@
     "@types/chroma-js": "^3.1.2",
     "@types/mdast": "^4.0.4",
     "@types/node": "^26.0.0",
-    "playwright": "^1.63.0",
-    "prettier": "3.8.3",
+    "playwright": "^1.65.1",
+    "prettier": "3.10.1",
     "prettier-plugin-svelte": "^4.1.1",
     "svelte": "^5.57.1",
     "svelte-check": "^4.7.6",
     "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",
-    "vite": "^8.1.0"
+    "vite": "^8.3.8"
   },
   "dependencies": {
     "@atproto/lex": "^0.3.0",
