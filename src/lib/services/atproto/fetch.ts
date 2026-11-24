@@ -57,8 +57,10 @@ export interface ProfileLinkCard {
 }
 
 function profileLinkLabel(url: string): string {
-  const parsed = new URL(url);
-  return `${parsed.host}${parsed.pathname.replace(/\/$/, "")}`;
+  // Just the domain: paths make the footer chips long enough to crowd
+  // the shelf, and the full URL still reaches screen readers via the
+  // sr-only span next to the link icon.
+  return new URL(url).host;
 }
 
 export async function fetchProfileLinks(
