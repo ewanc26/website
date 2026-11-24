@@ -13,6 +13,7 @@
     "test:site-info": "node --experimental-strip-types --test src/lib/services/atproto/siteInfo.test.ts",
     "test:blog": "node --experimental-strip-types --test src/lib/utils/tags.test.ts",
     "test:popfeed": "node --experimental-strip-types --test src/lib/services/atproto/popfeedShelves.test.ts",
+    "test:profile-links": "node --experimental-strip-types --test src/lib/utils/profileLinkLabels.test.ts",
     "audit:site": "node scripts/audit-site.mjs"
   },
   "devDependencies": {
