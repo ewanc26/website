@@ -90,7 +90,10 @@ export async function fetchProfileLinks(
     ),
   );
   const refs = ((profile?.value as any)?.links ?? []) as { uri: string }[];
-  const urls = refs.flatMap((ref): string[] => urlByUri.get(ref.uri) ?? []);
+  const urls = refs.flatMap((ref): string[] => {
+    const url = urlByUri.get(ref.uri);
+    return url ? [url] : [];
+  });
   // Host-only chips, extended just enough to keep same-host links
   // distinct (see profileLinkLabels).
   const cards: ProfileLinkCard[] = profileLinkLabels(urls).map(
