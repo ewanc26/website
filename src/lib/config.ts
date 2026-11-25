@@ -3,7 +3,7 @@
  * Single source of truth for nav structure and metadata defaults.
  */
 
-import { PUBLIC_SITE_TITLE, PUBLIC_SITE_DESCRIPTION } from "$env/static/public";
+import { PUBLIC_SITE_TITLE, PUBLIC_SITE_DESCRIPTION } from "$app/env/public";
 
 export const SITE = {
   title: PUBLIC_SITE_TITLE || "Ewan Croft",

@@ -149,7 +149,7 @@ Other integrations may require additional environment variables. See the source 
 ## Configuration
 
 - **Site configuration**: [src/lib/config.ts](src/lib/config.ts)
-- **SvelteKit configuration**: [svelte.config.js](svelte.config.js) (adapter) and [vite.config.ts](vite.config.ts)
+- **SvelteKit configuration**: [vite.config.ts](vite.config.ts) (SvelteKit, adapter and Vite)
 - **Static files**: `public/` (favicon, OAuth client metadata, lexicons, PGP key)
 
 ## Deployment

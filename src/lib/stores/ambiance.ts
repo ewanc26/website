@@ -11,7 +11,7 @@
  * once they interact with the page, per browser autoplay rules.
  */
 
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { get, writable } from "svelte/store";
 
 const STORAGE_KEY = "ambiance-enabled";

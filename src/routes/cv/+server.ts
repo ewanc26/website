@@ -6,7 +6,7 @@
  * records. `curl -fsSL ewancroft.uk/cv | bash` launches the menu;
  * `... | bash -s -- skills` prints a single section.
  */
-import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { PUBLIC_ATPROTO_DID } from "$app/env/public";
 import { gatherCvData } from "$lib/server/cv/data";
 import { generateCvScript } from "$lib/server/cv/script";
 import { redirect } from "@sveltejs/kit";

@@ -15,7 +15,7 @@
   import type { PopfeedShelf } from "$lib/services/atproto/popfeedShelves";
   import { normalizeSlug } from "$lib/utils/slugify";
   import { blogDateParts } from "$lib/utils/date";
-  import { PUBLIC_LEAFLET_BLOG_PUBLICATION, PUBLIC_ATPROTO_DID } from "$env/static/public";
+  import { PUBLIC_LEAFLET_BLOG_PUBLICATION, PUBLIC_ATPROTO_DID } from "$app/env/public";
 
   let { data } = $props();
   const { profile, kibunStatus, posts, githubProjects, githubUsername, githubContributions, githubLanguages, githubCommits, githubProfileSummary, publications, links, apps, popfeed, feed, latestPlay } = $derived(data);

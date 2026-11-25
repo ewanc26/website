@@ -1,5 +1,5 @@
 import { fetchBlogPosts } from "$lib/services/atproto/fetch";
-import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
+import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$app/env/public";
 import { blogDateParts } from "$lib/utils/date";
 import { normalizeSlug } from "$lib/utils/slugify";
 
