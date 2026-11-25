@@ -36,8 +36,8 @@
   },
   "dependencies": {
     "@atproto/lex": "^0.3.15",
-    "@atproto/oauth-client-browser": "^0.5.4",
-    "@bsky/sdk": "latest",
+    "@atproto/oauth-client-browser": "^0.5.15",
+    "@bsky/sdk": "^1.5.3",
     "@ewanc26/atproto": "^0.2.14",
     "@fontsource-variable/archivo": "^5.3.0",
     "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",
