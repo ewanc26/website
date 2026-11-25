@@ -10,7 +10,7 @@ import {
 } from "@ewanc26/atproto";
 import { fetchProfile, fetchProfileLinks } from "$lib/services/atproto/fetch";
 import { ATPROTO_DID } from "$lib/config/atproto";
-import { env } from "$env/dynamic/private";
+import { GITHUB_TOKEN, GITHUB_USERNAME } from "$app/env/private";
 import {
   fetchPinnedGitHubProjects,
   fetchGitHubContributions,
@@ -53,7 +53,7 @@ async function fetchVerifications() {
 type LanguageSnapshot = typeof languageSnapshot;
 
 async function loadSnapshot(username: string) {
-  const token = env.GITHUB_TOKEN;
+  const token = GITHUB_TOKEN;
   const bundled = languageSnapshot as LanguageSnapshot;
   const hasBundled =
     bundled.username?.toLowerCase() === username.toLowerCase() &&
@@ -70,7 +70,7 @@ async function loadSnapshot(username: string) {
 }
 
 export async function getHomeData() {
-  const githubUsername = env.GITHUB_USERNAME || "ewanc26";
+  const githubUsername = GITHUB_USERNAME || "ewanc26";
   const [
     profile,
     verifications,
@@ -94,14 +94,14 @@ export async function getHomeData() {
     fetchVerifications(),
     fetchKibunStatus(ATPROTO_DID, fetch).catch(() => null),
     fetchBlogPosts(ATPROTO_DID, fetch).catch(() => ({ posts: [] })),
-    fetchPinnedGitHubProjects(githubUsername, fetch, env.GITHUB_TOKEN).catch(
+    fetchPinnedGitHubProjects(githubUsername, fetch, GITHUB_TOKEN).catch(
       () => [],
     ),
-    fetchGitHubContributions(githubUsername, fetch, env.GITHUB_TOKEN).catch(
+    fetchGitHubContributions(githubUsername, fetch, GITHUB_TOKEN).catch(
       () => null,
     ),
     loadSnapshot(githubUsername),
-    fetchGitHubProfileSummary(githubUsername, fetch, env.GITHUB_TOKEN).catch(
+    fetchGitHubProfileSummary(githubUsername, fetch, GITHUB_TOKEN).catch(
       () => null,
     ),
     fetchPublications(ATPROTO_DID, fetch).catch(() => ({

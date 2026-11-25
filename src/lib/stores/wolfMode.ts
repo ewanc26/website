@@ -9,7 +9,7 @@
  * a consistent reading experience.
  */
 
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { get, writable } from "svelte/store";
 
 // Refined English onomatopoeic wolf/canine sounds

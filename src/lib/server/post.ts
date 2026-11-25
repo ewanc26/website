@@ -8,7 +8,7 @@ import { fetchAtRecords, type AtRecord } from "$lib/services/atproto/records";
 import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
-} from "$env/static/public";
+} from "$app/env/public";
 import { normalizeSlug } from "$lib/utils/slugify";
 import { blogDateParts } from "$lib/utils/date";
 import { safeResourceUrl } from "$lib/utils/url";

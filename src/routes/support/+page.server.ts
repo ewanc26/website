@@ -9,6 +9,6 @@ const PLATFORM_URLS: Record<string, string> = {
 
 export const load: PageServerLoad = ({ url }) => {
   const platform = url.searchParams.get("platform");
-  if (platform && PLATFORM_URLS[platform]) redirect(301, PLATFORM_URLS[platform]);
+  if (platform && PLATFORM_URLS[platform]) redirect(301, PLATFORM_URLS[platform], { external: true });
   return {};
 };

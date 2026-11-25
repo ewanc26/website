@@ -1,6 +1,6 @@
 import { fetchDocuments } from "@ewanc26/atproto";
 import { fetchBlob } from "$lib/services/atproto";
-import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { PUBLIC_ATPROTO_DID } from "$app/env/public";
 import { renderMarkdown } from "$lib/utils/markdown";
 import { leafletProvider, serialiseBlocks, type SerialisedBlock } from "$lib/providers";
 import { error } from "@sveltejs/kit";

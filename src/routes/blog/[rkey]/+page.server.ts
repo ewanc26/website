@@ -1,5 +1,5 @@
 import { fetchBlogPosts } from "@ewanc26/atproto";
-import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { PUBLIC_ATPROTO_DID } from "$app/env/public";
 import { normalizeSlug } from "$lib/utils/slugify";
 import { blogDateParts } from "$lib/utils/date";
 import { error, redirect } from "@sveltejs/kit";

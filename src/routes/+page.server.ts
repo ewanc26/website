@@ -4,7 +4,7 @@ import { fetchPopfeedReviews } from "$lib/services/atproto/popfeed";
 import { popfeedShelves } from "$lib/services/atproto/popfeedShelves";
 import { fetchRecentPosts } from "$lib/services/atproto/feed";
 import { fetchRecentPlays } from "$lib/services/atproto/plays";
-import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { PUBLIC_ATPROTO_DID } from "$app/env/public";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, setHeaders }) => {

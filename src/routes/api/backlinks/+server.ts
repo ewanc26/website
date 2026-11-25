@@ -1,4 +1,4 @@
-import { PUBLIC_ATPROTO_DID } from "$env/static/public";
+import { PUBLIC_ATPROTO_DID } from "$app/env/public";
 import { fetchBacklinks } from "$lib/services/atproto";
 import type { RequestHandler } from "./$types";
 

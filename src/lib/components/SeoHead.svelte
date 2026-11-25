@@ -9,7 +9,7 @@
   import { page } from "$app/state";
   import { SITE, ME_LINKS } from "$lib/config";
   import { ATPROTO_DID } from "$lib/config/atproto";
-  import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$env/static/public";
+  import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$app/env/public";
   import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
 
   interface Props {
