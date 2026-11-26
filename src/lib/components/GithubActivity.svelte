@@ -125,24 +125,16 @@
 
 <style>
   .sheet {
-    --gh-0: #ebedf0;
-    --gh-1: #9be9a8;
-    --gh-2: #40c463;
-    --gh-3: #30a14e;
-    --gh-4: #216e39;
+    /* Printed in the second ink: heavier coverage for busier days. */
+    --gh-0: var(--paper-deep);
+    --gh-1: color-mix(in oklab, var(--riso-b-text) 30%, var(--paper-deep));
+    --gh-2: color-mix(in oklab, var(--riso-b-text) 55%, var(--paper-deep));
+    --gh-3: color-mix(in oklab, var(--riso-b-text) 80%, var(--paper-deep));
+    --gh-4: color-mix(in oklab, var(--riso-b-text) 60%, var(--ink));
     min-width: 0;
     border: var(--edge, 3px) solid var(--ink);
     background: var(--paper);
     color: var(--ink);
-  }
-  @media (prefers-color-scheme: dark) {
-    .sheet {
-      --gh-0: #161b22;
-      --gh-1: #0e4429;
-      --gh-2: #006d32;
-      --gh-3: #26a641;
-      --gh-4: #39d353;
-    }
   }
   .sheet-hd {
     display: flex;
