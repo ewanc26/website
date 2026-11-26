@@ -11,6 +11,7 @@
  * for the preview.
  */
 
+import { blobRefCid } from "../utils/blobRef";
 import { getBlobCidString, type BlobRef } from "@atproto/lex";
 import type { Image, Root, RootContent } from "mdast";
 import { remark } from "remark";
@@ -48,7 +49,7 @@ function isBlobLike(v: unknown): v is BlobRef {
 /**
  * The blob's CID as a string. `getBlobCidString` handles the runtime BlobRef
  * (a CID instance), but records deserialised from plain JSON carry the CBOR
- * shape `{ ref: { $link } }` / `{ $link }`, so fall back to that.
+ * shapes, so fall back to reading those.
  */
 export function blobCid(ref: BlobRef): string | null {
   try {
@@ -57,15 +58,7 @@ export function blobCid(ref: BlobRef): string | null {
   } catch {
     /* fall through to the JSON shape */
   }
-  const r = (ref as { ref?: unknown }).ref ?? ref;
-  if (typeof r === "string") return r;
-  if (
-    r &&
-    typeof r === "object" &&
-    typeof (r as { $link?: unknown }).$link === "string"
-  )
-    return (r as { $link: string }).$link;
-  return null;
+  return blobRefCid(ref);
 }
 
 /**

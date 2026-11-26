@@ -1,4 +1,5 @@
 import { buildPdsBlobUrl, resolveIdentity } from "@ewanc26/atproto";
+import { blobRefCid } from "$lib/utils/blobRef";
 
 /**
  * Serialise Leaflet content for server→client transfer (moved to Astro from SvelteKit).
@@ -46,20 +47,6 @@ export function pdsBlobUrl(pds: string, did: string, cid: string): string {
 }
 
 /**
- * Extract CID string from a plain-object BlobRef (after JSON round-trip).
- * Shape: { $type: "blob", ref: { $link: "bafy..." }, mimeType, size }
- * or legacy: { ref: { $link: "bafy..." } } or { ref: "bafy..." }
- */
-function extractCid(obj: Obj): string | null {
-  const ref = obj.ref;
-  if (typeof ref === "string") return ref;
-  if (ref && typeof ref === "object" && "$link" in (ref as Obj)) {
-    return (ref as Obj).$link as string;
-  }
-  return null;
-}
-
-/**
  * Walk a plain-object tree, replacing image/previewImage BlobRefs
  * with blob URLs. This intentionally walks nested gallery/list/page data,
  * so new Leaflet containers inherit blob handling without special cases.
@@ -77,7 +64,7 @@ function replaceBlobs(obj: unknown, pds: string, did: string): void {
       const v = val as Obj;
       // Check if this is a BlobRef (after JSON round-trip).
       if (v.$type === "blob" || ("mimeType" in v && "ref" in v)) {
-        const cid = extractCid(v);
+        const cid = blobRefCid(v);
         if (cid) {
           const url = pdsBlobUrl(pds, did, cid);
           if (key === "image") {
