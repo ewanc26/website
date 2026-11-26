@@ -14,7 +14,6 @@ import {
   AA,
   AA_LARGE,
   INK_B_FILL_LIGHT,
-  INK_B_TEXT_DARK,
   INK_FILL_LIGHT,
   INK_LIGHT,
   ON_INK_DARK,
@@ -105,6 +104,7 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
   const stampLight = lightTextLightness(inkHue, 0.1, PAPER, AA, 0.52);
   const stampDark = darkTextLightness(inkHue, 0.1, PAPER_DARK, AA, 0.4, 0.7);
   const inkBTextLight = lightTextLightness(hueB, 0.12, PAPER, AA_LARGE, 0.62);
+  const inkBTextDark = darkTextLightness(hueB, 0.15, PAPER_DARK, AA_LARGE);
   const inkAFillDark = darkFillLightness(inkHue, 0.2);
   const inkBFillDark = darkFillLightness(hueB, 0.15);
 
@@ -124,7 +124,7 @@ export function getDynamicThemeCSS(now: Date = new Date()): string {
   css += `    --riso-a: light-dark(oklch(${(INK_FILL_LIGHT.lightness * 100).toFixed(0)}% ${INK_FILL_LIGHT.chroma} ${inkHue.toFixed(2)}), oklch(${(inkAFillDark * 100).toFixed(2)}% 0.2 ${inkHue.toFixed(2)}));\n`;
   css += `    --riso-a-text: light-dark(oklch(${(inkTextLight * 100).toFixed(2)}% 0.2 ${inkHue.toFixed(2)}), oklch(${(inkTextDark * 100).toFixed(2)}% 0.2 ${inkHue.toFixed(2)}));\n`;
   css += `    --riso-b: light-dark(oklch(${(INK_B_FILL_LIGHT.lightness * 100).toFixed(0)}% ${INK_B_FILL_LIGHT.chroma} ${hueB.toFixed(2)}), oklch(${(inkBFillDark * 100).toFixed(2)}% 0.15 ${hueB.toFixed(2)}));\n`;
-  css += `    --riso-b-text: light-dark(oklch(${(inkBTextLight * 100).toFixed(2)}% 0.12 ${hueB.toFixed(2)}), oklch(${(INK_B_TEXT_DARK.lightness * 100).toFixed(0)}% ${INK_B_TEXT_DARK.chroma} ${hueB.toFixed(2)}));\n`;
+  css += `    --riso-b-text: light-dark(oklch(${(inkBTextLight * 100).toFixed(2)}% 0.12 ${hueB.toFixed(2)}), oklch(${(inkBTextDark * 100).toFixed(2)}% 0.15 ${hueB.toFixed(2)}));\n`;
 
   // Ink on newsprint subtracts (multiply); ink on black stock adds
   // (screen). --blend is not a colour, so light-dark() cannot carry it:
