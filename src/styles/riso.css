@@ -61,6 +61,11 @@
   /* The phone spine bar wraps into two rows (see the spine rules), so the
      page must clear twice the bar height plus the grid gap. */
   @media (max-width: 39.9375rem) {
+    /* Two rows of nav: shallower cells (still 48px to touch) give the page
+       back some height. */
+    :root {
+      --bar: 3rem;
+    }
     body {
       padding-bottom: calc(2 * var(--bar) + 2px);
     }
