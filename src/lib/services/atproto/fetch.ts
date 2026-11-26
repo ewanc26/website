@@ -109,8 +109,23 @@ export async function fetchProfileLinks(
   return data;
 }
 
-export async function fetchSiteInfo(fetchFn?: typeof fetch) {
-  return _fetchSiteInfo(ATPROTO_DID, fetchFn);
+export async function fetchSiteInfo(fetchFn: typeof fetch = fetch) {
+  const bySelfKey = await _fetchSiteInfo(ATPROTO_DID, fetchFn);
+  if (bySelfKey) return bySelfKey;
+
+  // The package only reads the "self" key. A record written under a TID is
+  // just as valid, so take the newest one in the collection.
+  try {
+    const agent = await getPDSAgent(ATPROTO_DID, fetchFn);
+    const resp = (await agent.call(com.atproto.repo.listRecords.main as any, {
+      repo: ATPROTO_DID,
+      collection: "uk.ewancroft.site.info",
+      limit: 1,
+    })) as any;
+    return (resp.data ?? resp).records[0]?.value ?? null;
+  } catch {
+    return null;
+  }
 }
 
 //  Subscriptions & Recommendations 
