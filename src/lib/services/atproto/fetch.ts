@@ -10,6 +10,7 @@
  * server-side request context is respected.
  */
 
+import { blobRefCid } from "$lib/utils/blobRef";
 import { mapWithConcurrency } from "$lib/utils/promise";
 import { profileLinkLabels } from "$lib/utils/profileLinkLabels";
 import {
@@ -695,12 +696,8 @@ export async function fetchComments(
 
 export async function fetchBlob(ref: any) {
   const agent = await getPDSAgent(ATPROTO_DID);
-  // Blob refs can be plain {$link} objects, embedded as {ref: {$link}}, or
-  // CID instances (whose string form is the CID) after parsing.
-  const cid =
-    ref?.$link ??
-    ref?.ref?.$link ??
-    (typeof ref === "string" ? ref : String(ref ?? ""));
+  const cid = blobRefCid(ref);
+  if (!cid) throw new Error("Unreadable blob reference");
   const blob = (await agent.call(com.atproto.sync.getBlob.main as any, {
     did: ATPROTO_DID,
     cid,
