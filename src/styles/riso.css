@@ -461,6 +461,13 @@
     background: var(--riso-b);
     color: var(--on-ink);
   }
+  button.chip[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  button.chip--more {
+    border-style: dashed;
+  }
 
   .empty {
     margin: 0;

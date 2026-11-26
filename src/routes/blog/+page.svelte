@@ -21,7 +21,16 @@
   // hidden-toggling script with real reactive state.
   let query = $state("");
   const normalizedQuery = $derived(query.trim().toLowerCase());
+  // A pressed topic matches tags exactly: as free text, "ai" would also find
+  // every title with those two letters in it, and disagree with its count.
+  let topic = $state<string | null>(null);
+  let allTopics = $state(false);
+  const TOPIC_LIMIT = 8;
+  const shownTopics = $derived(
+    allTopics ? topics : topics.filter(([t], i) => i < TOPIC_LIMIT || t === topic),
+  );
   function matchesQuery(post: (typeof posts)[number]) {
+    if (topic && !post.tags.includes(topic)) return false;
     if (!normalizedQuery) return true;
     return `${post.title} ${post.tags.join(" ")}`.toLowerCase().includes(normalizedQuery);
   }
@@ -33,7 +42,9 @@
     }
     return entries;
   });
-  const noneMatch = $derived(normalizedQuery !== "" && visibleByYear.length === 0);
+  const filtering = $derived(normalizedQuery !== "" || topic !== null);
+  const matches = $derived(visibleByYear.reduce((n, [, list]) => n + list.length, 0));
+  const noneMatch = $derived(filtering && matches === 0);
 </script>
 
 <SeoHead
@@ -55,15 +66,25 @@
 
   {#if topics.length > 0}
     <ul class="chips" aria-label="Topics" style="margin-bottom:var(--space-md)">
-      {#each topics as [t, n] (t)}
-        <li><button type="button" class="chip" onclick={() => (query = t)}>{t} ({n})</button></li>
+      {#each shownTopics as [t, n] (t)}
+        <li>
+          <button type="button" class="chip" aria-pressed={topic === t} onclick={() => (topic = topic === t ? null : t)}>{t} ({n})</button>
+        </li>
       {/each}
+      {#if topics.length > TOPIC_LIMIT}
+        <li>
+          <button type="button" class="chip chip--more" aria-expanded={allTopics} onclick={() => (allTopics = !allTopics)}>
+            {allTopics ? "Fewer topics" : `+${topics.length - TOPIC_LIMIT} more`}
+          </button>
+        </li>
+      {/if}
     </ul>
   {/if}
   <div class="finder">
     <label class="sr-only" for="post-filter">Filter posts by title or topic</label>
     <input id="post-filter" type="search" placeholder="find a post…" autocomplete="off" bind:value={query} />
   </div>
+  <p class="pix" role="status">{filtering && matches > 0 ? `${matches} of ${posts.length} entries` : ""}</p>
   {#if noneMatch}<p class="empty">Nothing matches that.</p>{/if}
 
   {#if posts.length === 0}
