@@ -578,7 +578,7 @@
   .leaflet-members-gate,
   .leaflet-reader-fallback {
     margin-block: 1rem;
-    border: 1px solid currentColor;
+    border: 2px solid var(--ink);
     border-radius: 0;
     padding: 1rem;
   }

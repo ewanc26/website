@@ -67,10 +67,10 @@
       --bar: 3rem;
     }
     body {
-      padding-bottom: calc(2 * var(--bar) + 2px);
+      padding-bottom: calc(2 * var(--bar) + 2px + var(--edge));
     }
     html {
-      scroll-padding-bottom: calc(2 * var(--bar) + 2px);
+      scroll-padding-bottom: calc(2 * var(--bar) + 2px + var(--edge));
     }
   }
 
@@ -1608,7 +1608,7 @@
   .outline-link:hover,
   .outline-link.active {
     background: none;
-    border-left-color: var(--riso-a);
+    border-left-color: var(--riso-a-text);
     color: var(--ink);
   }
   .outline-link.h3 {
