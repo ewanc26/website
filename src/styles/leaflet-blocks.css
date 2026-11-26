@@ -28,7 +28,7 @@
   .leaflet-h4,
   .leaflet-h5,
   .leaflet-h6 {
-    color: var(--color-text-950);
+    color: var(--ink);
     font-weight: 800;
     letter-spacing: -0.025em;
     line-height: 1.2;
@@ -50,7 +50,6 @@
   .leaflet-h4 {
     font-size: var(--text-md);
     font-weight: 600;
-    opacity: 0.9;
   }
   .leaflet-h5 {
     font-size: var(--text-sm);
@@ -59,7 +58,7 @@
   .leaflet-h6 {
     font-size: var(--text-sm);
     font-weight: 600;
-    opacity: 0.7;
+    color: var(--ink-soft);
   }
 
   :is(
@@ -76,10 +75,10 @@
   /* ── Blockquote ────────────────────────────────────────────── */
 
   .leaflet-blockquote {
-    border-left: 3px solid var(--color-primary-500);
+    border-left: 14px solid var(--riso-a);
     padding: var(--space-sm) 0 var(--space-sm) var(--space-md);
     margin: var(--space-md) 0;
-    color: var(--color-text-700);
+    color: var(--ink);
     font-style: italic;
   }
 
@@ -101,10 +100,9 @@
       monospace;
     font-size: var(--text-sm);
     line-height: 1.7;
-    color: var(--color-text-800);
-    background-color: var(--surface-raised);
-    border: 1px solid var(--surface-color);
-    border-radius: var(--radius-md);
+    color: var(--ink);
+    background-color: var(--paper-deep);
+    border: 2px solid var(--ink);
     padding: var(--space-md);
     overflow-x: auto;
     margin: var(--space-md) 0;
@@ -118,10 +116,9 @@
       monospace;
     font-size: var(--text-sm);
     line-height: 1.7;
-    color: var(--color-text-800);
-    background-color: var(--surface-raised);
-    border: 1px solid var(--surface-color);
-    border-radius: var(--radius-md);
+    color: var(--ink);
+    background-color: var(--paper-deep);
+    border: 2px solid var(--ink);
     padding: var(--space-md);
     overflow-x: auto;
     margin: var(--space-md) 0;
@@ -131,7 +128,7 @@
 
   .leaflet-hr {
     border: none;
-    border-top: 1px solid var(--surface-color);
+    border-top: 2px solid var(--ink);
     margin: 0;
     flex: 1;
   }
@@ -144,8 +141,7 @@
   }
 
   .leaflet-hr-symbol {
-    color: var(--color-primary-500);
-    opacity: 0.4;
+    color: var(--riso-a-text);
     display: flex;
     align-items: center;
     flex-shrink: 0;
@@ -154,8 +150,8 @@
   .leaflet-hr-symbol::before,
   .leaflet-hr-symbol::after {
     content: "";
-    height: 1px;
-    background: var(--surface-color);
+    height: 2px;
+    background: var(--ink);
     width: var(--space-md);
   }
 
@@ -178,7 +174,6 @@
     display: block;
     max-width: 100%;
     height: auto;
-    border-radius: var(--radius-md);
   }
 
   .leaflet-image.full-bleed {
@@ -194,7 +189,7 @@
   .leaflet-image-alt {
     margin-top: var(--space-xs);
     font-size: var(--text-xs);
-    color: var(--color-text-600);
+    color: var(--ink-soft);
   }
 
   /* ── Lists ──────────────────────────────────────────────────── */
@@ -233,7 +228,7 @@
   }
 
   .leaflet-list-item input[type="checkbox"] {
-    accent-color: var(--color-primary-500);
+    accent-color: var(--riso-a-text);
     width: 1em;
     height: 1em;
     flex-shrink: 0;
@@ -241,11 +236,11 @@
 
   /* Marker colours */
   .leaflet-list:not(.ordered) > .leaflet-list-item::marker {
-    color: var(--color-primary-500);
+    color: var(--riso-a-text);
   }
 
   .leaflet-list.ordered > .leaflet-list-item::marker {
-    color: var(--color-text-600);
+    color: var(--ink-soft);
     font-weight: 600;
   }
 
@@ -254,9 +249,8 @@
   .leaflet-embed {
     position: relative;
     margin: var(--space-md) 0;
-    border-radius: var(--radius-md);
     overflow: hidden;
-    border: 1px solid var(--surface-color);
+    border: 2px solid var(--ink);
   }
 
   .leaflet-embed iframe {
@@ -278,7 +272,7 @@
     display: flex;
     align-items: center;
     padding: var(--space-md);
-    background: var(--surface-raised);
+    background: var(--paper);
     opacity: 1;
     visibility: visible;
     pointer-events: none;
@@ -296,11 +290,10 @@
 
   .leaflet-website-card {
     display: flex;
-    border: 1px solid var(--surface-color);
-    border-radius: var(--radius-lg);
+    border: 2px solid var(--ink);
     overflow: hidden;
     text-decoration: none;
-    color: var(--color-text-900);
+    color: var(--ink);
     margin: var(--space-md) 0;
     transition:
       background-color var(--duration-fast) var(--ease-out-quart),
@@ -308,8 +301,7 @@
   }
 
   .leaflet-website-card:hover {
-    background-color: var(--surface-raised);
-    border-color: var(--color-primary-500);
+    background-color: var(--paper-deep);
   }
 
   .website-card-image {
@@ -335,12 +327,12 @@
   .website-card-title {
     font-size: var(--text-sm);
     font-weight: 700;
-    color: var(--color-text-950);
+    color: var(--ink);
   }
 
   .website-card-desc {
     font-size: var(--text-xs);
-    color: var(--color-text-600);
+    color: var(--ink-soft);
     margin: 0;
     line-height: 1.5;
     display: -webkit-box;
@@ -355,7 +347,7 @@
     align-items: center;
     gap: var(--space-xs);
     font-size: var(--text-xs);
-    color: var(--color-text-500);
+    color: var(--ink-soft);
   }
 
   /* ── Button ─────────────────────────────────────────────────── */
@@ -367,9 +359,9 @@
   .leaflet-button a {
     display: inline-block;
     padding: var(--space-sm) var(--space-lg);
-    background-color: var(--color-primary-500);
-    color: var(--color-text-950);
-    border-radius: var(--radius-md);
+    border: var(--edge) solid var(--ink);
+    background-color: var(--riso-a);
+    color: var(--on-ink);
     text-decoration: none;
     font-weight: 600;
     font-size: var(--text-sm);
@@ -379,7 +371,7 @@
   }
 
   .leaflet-button a:hover {
-    background-color: var(--color-primary-400);
+    background-color: var(--riso-b);
   }
 
   /* ── Bluesky post embed ─────────────────────────────────────── */
@@ -387,13 +379,12 @@
   .leaflet-bsky-post {
     margin: var(--space-md) 0;
     padding: var(--space-md);
-    border: 1px solid var(--surface-color);
-    border-radius: var(--radius-lg);
-    background-color: var(--surface-raised);
+    border: 2px solid var(--ink);
+    background-color: var(--paper);
   }
 
   .bsky-post-link {
-    color: var(--color-primary-500);
+    color: var(--riso-a-text);
     text-decoration: none;
     font-size: var(--text-sm);
   }
@@ -407,14 +398,13 @@
   .leaflet-unsupported {
     margin: var(--space-md) 0;
     padding: var(--space-sm) var(--space-md);
-    border: 1px dashed var(--surface-color);
-    border-radius: var(--radius-md);
+    border: 2px dashed var(--ink);
     font-size: var(--text-xs);
-    color: var(--color-text-500);
+    color: var(--ink-soft);
     text-align: center;
   }
 
   .leaflet-unsupported a {
-    color: var(--color-primary-500);
+    color: var(--riso-a-text);
   }
 }
