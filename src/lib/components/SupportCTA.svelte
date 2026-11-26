@@ -83,7 +83,10 @@
 
   .support-cta-title {
     font-size: var(--text-xl);
-    font-weight: 700;
+    font-variation-settings: "wdth" 125;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
     margin: 0;
     line-height: 1.2;
   }
@@ -127,8 +130,7 @@
   }
 
   .support-link-meta {
-    font-size: 0.85em;
-    opacity: 0.85;
+    font-family: var(--font-pixel);
     display: inline-flex;
     align-items: center;
     gap: 0.25ch;
