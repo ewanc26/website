@@ -4,7 +4,6 @@ import {
   AA,
   AA_LARGE,
   INK_B_FILL_LIGHT,
-  INK_B_TEXT_DARK,
   INK_FILL_LIGHT,
   INK_LIGHT,
   INK_SOFT_DARK,
@@ -28,13 +27,11 @@ const hueB = (hue: number) => (hue + 150) % 360;
 
 test("the colour math anchors correctly", () => {
   assert.equal(contrastRatio(1, 0), 21);
-  assert.ok(Math.abs(wcagLuminance(1, 0, 260) - 1) < 1e-9);
-  // The old dark spine paint (oklch(66% 0.215)) sat under near-white text at ~1.6:1.
+  assert.ok(Math.abs(wcagLuminance(1, 0, 260) - 1) < 1e-6);
+  // sRGB red, whose relative luminance is the 0.2126 coefficient itself. Only
+  // true if the weights are applied to linear (not gamma-encoded) channels.
   assert.ok(
-    contrastRatio(
-      wcagLuminance(0.95, 0.01, 30),
-      wcagLuminance(0.66, 0.215, 30),
-    ) < 3,
+    Math.abs(wcagLuminance(0.627955, 0.257683, 29.2339) - 0.2126) < 1e-3,
   );
 });
 
@@ -172,18 +169,31 @@ test("fixed dark-mode pairs clear AA at every hue", () => {
       r >= AA,
       `hue ${hue}: dark ink-soft on paper-deep ${r.toFixed(2)} < ${AA}`,
     );
-    // Second plate display text on --paper, decorative but kept at the large-text ratio.
-    r = contrastRatio(
-      wcagLuminance(
-        INK_B_TEXT_DARK.lightness,
-        INK_B_TEXT_DARK.chroma,
-        hueB(hue),
-      ),
-      wcagLuminance(PAPER_DARK.lightness, PAPER_DARK.chroma, hueB(hue)),
-    );
-    assert.ok(
-      r >= AA_LARGE,
-      `hue ${hue}: dark riso-b-text ${r.toFixed(2)} < ${AA_LARGE}`,
-    );
+  }
+});
+
+test("solved dark-mode second-plate and stamp text clear their ratios", () => {
+  for (const hue of WHEEL) {
+    for (const [plate, chroma, target, floor, cap] of [
+      [hueB(hue), 0.15, AA_LARGE, 0.45, 0.72],
+      [hue, 0.1, AA, 0.4, 0.7],
+    ] as const) {
+      const lightness = darkTextLightness(
+        plate,
+        chroma,
+        PAPER_DARK,
+        target,
+        floor,
+        cap,
+      );
+      const ratio = contrastRatio(
+        wcagLuminance(lightness, chroma, plate),
+        wcagLuminance(PAPER_DARK.lightness, PAPER_DARK.chroma, plate),
+      );
+      assert.ok(
+        ratio >= target,
+        `hue ${plate}: dark text ${ratio.toFixed(2)} < ${target}`,
+      );
+    }
   }
 });

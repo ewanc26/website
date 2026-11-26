@@ -28,18 +28,17 @@ export const INK_FILL_LIGHT = { lightness: 0.68, chroma: 0.205 };
 export const INK_B_FILL_LIGHT = { lightness: 0.84, chroma: 0.125 };
 export const INK_LIGHT = { lightness: 0.19, chroma: 0.035 };
 export const INK_SOFT_DARK = { lightness: 0.8, chroma: 0.02 };
-export const INK_B_TEXT_DARK = { lightness: 0.45, chroma: 0.15 };
 
 const clamp01 = (c: number) => Math.min(1, Math.max(0, c));
 const encode = (c: number) =>
   c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
 
-/** WCAG 2.x relative luminance (0–1) of the clipped sRGB rendering of an oklch colour. */
-export function wcagLuminance(
+/** Linear-light channels of the clipped sRGB rendering of an oklch colour. */
+function linearRgb(
   lightness: number,
   chromaAmount: number,
   hue: number,
-): number {
+): number[] {
   const rad = (hue * Math.PI) / 180;
   const a = chromaAmount * Math.cos(rad);
   const b = chromaAmount * Math.sin(rad);
@@ -52,7 +51,32 @@ export function wcagLuminance(
   const r = clamp01(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s);
   const g = clamp01(-1.268438006 * l + 2.6097574011 * m - 0.3413193965 * s);
   const bl = clamp01(-0.0041960863 * l - 0.7034186147 * m + 1.707614694 * s);
-  return 0.2126 * encode(r) + 0.7152 * encode(g) + 0.0722 * encode(bl);
+  return [r, g, bl];
+}
+
+const weigh = ([r, g, b]: number[]) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+/** WCAG 2.x relative luminance (0–1), which weighs linear light. */
+export function wcagLuminance(
+  lightness: number,
+  chromaAmount: number,
+  hue: number,
+): number {
+  return weigh(linearRgb(lightness, chromaAmount, hue));
+}
+
+/**
+ * Weighs gamma-encoded channels instead. This is not WCAG: it errs on the
+ * strict side for dark text on paper and for fills under white text, where the
+ * palette is tuned to its output, so those two solvers keep it. It overstates
+ * the contrast of light text on black, which therefore must not use it.
+ */
+function encodedLuminance(
+  lightness: number,
+  chromaAmount: number,
+  hue: number,
+): number {
+  return weigh(linearRgb(lightness, chromaAmount, hue).map(encode));
 }
 
 export function contrastRatio(a: number, b: number): number {
@@ -76,12 +100,12 @@ export function lightTextLightness(
   target: number = AA,
   cap: number = 0.55,
 ): number {
-  const bg = wcagLuminance(background.lightness, background.chroma, hue);
+  const bg = encodedLuminance(background.lightness, background.chroma, hue);
   let floor = 0.2;
   let hi = cap;
   for (let i = 0; i < 50; i++) {
     const mid = (floor + hi) / 2;
-    if (contrastRatio(wcagLuminance(mid, chromaAmount, hue), bg) >= target)
+    if (contrastRatio(encodedLuminance(mid, chromaAmount, hue), bg) >= target)
       floor = mid;
     else hi = mid;
   }
@@ -117,12 +141,12 @@ export function darkFillLightness(
   target: number = AA,
   cap = 0.6,
 ): number {
-  const fg = wcagLuminance(foreground.lightness, foreground.chroma, hue);
+  const fg = encodedLuminance(foreground.lightness, foreground.chroma, hue);
   let floor = 0.2;
   let hi = cap;
   for (let i = 0; i < 50; i++) {
     const mid = (floor + hi) / 2;
-    if (contrastRatio(fg, wcagLuminance(mid, chromaAmount, hue)) >= target)
+    if (contrastRatio(fg, encodedLuminance(mid, chromaAmount, hue)) >= target)
       floor = mid;
     else hi = mid;
   }

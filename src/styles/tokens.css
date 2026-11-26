@@ -319,9 +319,9 @@
       --on-ink: oklch(95% 0.01 50.27);
       --riso-a: oklch(43.93% 0.2 50.27);
       --riso-b: oklch(26.16% 0.15 200.27);
-      --riso-a-text: oklch(56.25% 0.2 50.27);
-      --riso-b-text: oklch(45% 0.15 200.27);
-      --stamp: oklch(49.2% 0.1 50.27);
+      --riso-a-text: oklch(59.56% 0.2 50.27);
+      --riso-b-text: oklch(45.6% 0.15 200.27);
+      --stamp: oklch(58.75% 0.1 50.27);
       --color-primary-text: var(--color-primary-500);
       --color-primary-text-hover: var(--color-primary-400);
     }
