@@ -25,13 +25,16 @@ Not a documentation site, not a portfolio template. This is a two-ink risograph 
 
 Text-bearing inks have their lightness solved per hue in `src/lib/utils/contrast.ts`: at least 4.5:1 for accent text and filled controls, 3:1 for the second plate's display words. Night-mode text is solved against true WCAG luminance; the daytime and fill solvers use a stricter measure that the palette is tuned to. `contrast.test.ts` sweeps the whole wheel.
 
+Data graphics print in the inks too: the commit calendar is a coverage ramp of the second plate. Language swatches keep their conventional colours, which identify the language.
+
 ## Layout
 
 - `.wrap` (82rem, fluid gutters) wraps every page.
-- **The spine** (`Header.svelte`) is a solid ink strip down the left edge on desktop (nav set vertically) and a bar pinned to the bottom on phones — no hamburger menu. Its desktop type and padding scale with window height so every link stays on screen.
+- **The spine** (`Header.svelte`) is a solid ink strip down the left edge on desktop (nav set vertically) and a bar pinned to the bottom on phones (two shallower rows, 3rem each) — no hamburger menu. Its desktop type and padding scale with window height so every link stays on screen.
 - **The press** (`Colophon.svelte`) replaces a conventional footer: colophon, correspondence, small print, a calibration colour bar, and the eight moon phases with tonight's lit.
 - Section layout is `.cols`: a sticky word-mark heading on the left, content on the right.
-- A post's contents list sits in a scrollable sticky rail beside the article, and folds closed on narrower screens.
+- A post's contents list sits in a scrollable sticky rail beside the article, and folds closed on narrower screens. The section being read is marked in the first ink.
+- Posts end with the older and newer entries as two ruled boxes. The blog archive shows the eight busiest topics, with the rest behind a dashed "more" chip; a pressed topic filters by tag and prints solid.
 
 ## Interactive islands
 
