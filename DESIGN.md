@@ -7,7 +7,7 @@ Not a documentation site, not a portfolio template. This is a two-ink risograph 
 ## Principles
 
 - **Two inks, one black.** Everything on the page is those three colours (plus paper), overprinted with `mix-blend-mode: multiply` (screen at night) so overlaps make a third colour. The two inks (`--riso-a`, `--riso-b`) are generated in OKLCH from the site's seasonal hue — one direct, one ~150° round the wheel — so the palette still turns with the Wheel of the Year (`src/lib/server/theme.ts`). No gradients except the halftone dot screen, which is what a real riso press makes.
-- **Cut, not rounded.** Every corner is square (`--radius-*: 0`). Circles exist only for the moon, the deliberately punched "cartridge" corner-notch on project tiles, and the icon-only punches on list rows. Text chips (tags, skills, pronouns) are cut square.
+- **Cut, not rounded.** Every corner is square (`--radius-*: 0`). Circles exist only for the moon, the deliberately punched "cartridge" corner-notch on project tiles, and the icon and count punches on list rows. Text chips (tags, skills, pronouns) are cut square.
 - **Colossal or pixel.** Section headings (`.slab`, `.word`) print at poster scale, cropped by the sheet, doubled in the second ink a hair out of register. Everything small — labels, metadata, buttons, nav — is Pixelify Sans, styled like a game's HUD.
 - **Nothing floats.** No cards with shadows. Panels (`.cart`, `.idcard`, `.nametag`) sit flat on the page and are told apart by ink, rule weight and a few degrees of rotation, not elevation.
 - **Stepped motion.** Entrances use `steps()` easing (`.thunk`, `--ease-step`), like a print run advancing a frame at a time, not the eased motion of an app. Everything stops under `prefers-reduced-motion`.

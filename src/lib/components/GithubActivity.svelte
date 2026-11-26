@@ -136,6 +136,15 @@
     background: var(--paper);
     color: var(--ink);
   }
+  /* On black stock the ramp climbs towards the light ink instead. */
+  @media (prefers-color-scheme: dark) {
+    .sheet {
+      --gh-1: color-mix(in oklab, var(--riso-b-text) 65%, var(--paper-deep));
+      --gh-2: var(--riso-b-text);
+      --gh-3: color-mix(in oklab, var(--riso-b-text) 55%, var(--ink));
+      --gh-4: color-mix(in oklab, var(--riso-b-text) 15%, var(--ink));
+    }
+  }
   .sheet-hd {
     display: flex;
     justify-content: space-between;

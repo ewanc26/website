@@ -57,12 +57,11 @@
     width: min(90vw, 420px);
     max-height: min(86vh, 760px);
     padding: 0;
-    background: var(--color-background-50);
-    color: var(--color-text-800);
-    border: 1px solid var(--surface-color);
-    border-radius: var(--radius-lg);
+    background: var(--paper);
+    color: var(--ink);
+    border: var(--edge) solid var(--ink);
     /* Reset anything inherited from a heading the dialog was authored inside. */
-    font: 400 1rem/1.6 var(--font-body, system-ui, sans-serif);
+    font: 400 1rem/1.6 var(--font-family);
     letter-spacing: normal;
     text-transform: none;
     text-align: start;
@@ -91,7 +90,7 @@
   }
 
   .base-modal::backdrop {
-    background-color: color-mix(in oklch, var(--color-text-950) 20%, transparent);
+    background-color: color-mix(in oklab, var(--paper-deep) 75%, transparent);
   }
 
   .modal-content {
@@ -104,9 +103,8 @@
   }
 
   .close-btn:focus-visible {
-    outline: 2px solid var(--color-primary-500);
+    outline: 2px solid var(--riso-a-text);
     outline-offset: 2px;
-    border-radius: var(--radius-sm);
   }
 
   .modal-header {
@@ -117,6 +115,9 @@
   }
 
   .modal-title {
+    font-variation-settings: "wdth" 125;
+    font-weight: 900;
+    text-transform: uppercase;
     font-size: var(--text-lg);
     margin: 0;
   }
@@ -125,7 +126,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--color-text-700);
+    color: var(--ink);
     width: 44px;
     height: 44px;
     display: flex;
@@ -136,11 +137,11 @@
   }
 
   .close-btn:hover {
-    color: var(--color-primary-500);
+    color: var(--riso-a-text);
   }
 
   .modal-body {
-    color: var(--color-text-800);
+    color: var(--ink);
     line-height: 1.6;
     max-height: calc(min(86vh, 760px) - 112px);
     overflow-y: auto;
@@ -153,6 +154,6 @@
     justify-content: flex-end;
     margin-top: var(--space-lg);
     padding-top: var(--space-md);
-    border-top: 1px solid var(--surface-color);
+    border-top: 2px solid var(--ink);
   }
 </style>

@@ -295,8 +295,17 @@
 
   .comment-primary-button:disabled,
   .comment-link-button:disabled {
-    opacity: 0.55;
     cursor: not-allowed;
+  }
+
+  .comment-primary-button:disabled {
+    border: 2px dashed var(--ink-soft);
+    background: transparent;
+    color: var(--ink-soft);
+  }
+
+  .comment-link-button:disabled {
+    opacity: 0.55;
   }
 
   .comment-link-button,
