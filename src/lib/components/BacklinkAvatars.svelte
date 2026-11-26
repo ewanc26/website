@@ -140,14 +140,14 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: var(--space-sm);
-    color: var(--color-text-600);
+    color: var(--ink-soft);
     font-size: var(--text-xs);
   }
 
   /* The copy is small text on a light surface, so it needs the darkest text
    * step: text-600 only reaches ~2.8:1 contrast there and fails axe. */
   .backlink-copy {
-    color: var(--color-text-900);
+    color: var(--ink);
   }
 
   .backlink-avatars--loading {
@@ -171,17 +171,16 @@
 
   .backlink-trigger:hover,
   .backlink-trigger:focus-visible {
-    background: var(--surface-sunken);
-    color: var(--color-text-800);
+    background: var(--paper-deep);
+    color: var(--ink);
   }
 
   .backlink-label {
     display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-family: var(--font-pixel);
+    font-weight: 600;
   }
 
   .avatar-stack {
@@ -198,9 +197,9 @@
     flex: 0 0 34px;
     margin-left: calc(-1 * var(--space-sm));
     overflow: hidden;
-    border: 2px solid var(--color-canvas-50);
+    border: 2px solid var(--paper);
     border-radius: 0;
-    background: var(--surface-raised);
+    background: var(--paper);
   }
 
   .backlink-avatar {
@@ -225,9 +224,9 @@
     z-index: 0;
     display: grid;
     place-items: center;
-    color: var(--color-text-700);
-    font-family: var(--font-mono);
-    font-size: 10px;
+    color: var(--ink);
+    font-family: var(--font-pixel);
+    font-size: var(--text-micro);
     font-weight: 700;
   }
 
@@ -244,7 +243,7 @@
 
   .modal-intro {
     margin: 0 0 var(--space-md);
-    color: var(--color-text-600);
+    color: var(--ink-soft);
     font-size: var(--text-sm);
   }
 
@@ -259,9 +258,8 @@
 
   .backlink-record {
     padding: var(--space-md);
-    border: 1px solid var(--surface-color);
-    border-radius: var(--radius-md);
-    background: var(--surface-sunken);
+    border: 2px solid var(--ink);
+    background: var(--paper-deep);
   }
 
   .record-author {
@@ -294,7 +292,7 @@
 
   .record-identity span,
   .record-author time {
-    color: var(--color-text-600);
+    color: var(--ink-soft);
     font-size: var(--text-xs);
   }
 
@@ -318,7 +316,7 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
-    color: var(--color-primary-600);
+    color: var(--riso-a-text);
     font-size: var(--text-xs);
     font-weight: 650;
     text-decoration: none;
@@ -330,10 +328,10 @@
 
   @keyframes avatar-pulse {
     from {
-      background: var(--surface-color);
+      background: var(--paper-deep);
     }
     to {
-      background: var(--surface-raised);
+      background: var(--paper);
     }
   }
 

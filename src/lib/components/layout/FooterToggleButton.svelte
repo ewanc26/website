@@ -27,7 +27,7 @@
   .footer-link {
     background: none;
     border: none;
-    color: var(--color-text-600);
+    color: var(--ink-soft);
     text-decoration: none;
     white-space: nowrap;
     padding: var(--space-sm);
@@ -36,6 +36,6 @@
     transition: color var(--duration-fast) var(--ease-out-quart);
   }
   .footer-link:hover {
-    color: var(--color-primary-700);
+    color: var(--ink);
   }
 </style>
