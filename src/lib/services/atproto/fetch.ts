@@ -153,8 +153,14 @@ export async function fetchSubscriptions(
     cursor = body.cursor;
   } while (cursor);
 
+  // The same publication can be recorded more than once; the page keys its list
+  // by that URI, and a duplicate key crashes the render.
+  const unique = [
+    ...new Map(allRecords.map((r) => [r.value.publication, r])).values(),
+  ];
+
   const resolved = await mapWithConcurrency(
-    allRecords,
+    unique,
     async (record): Promise<SubscriptionPublication> => {
       const pubUri = record.value.publication;
       const parts = pubUri.replace("at://", "").split("/");
@@ -249,8 +255,14 @@ export async function fetchRecommendations(
     cursor = body.cursor;
   } while (cursor);
 
+  // The same document can be recorded more than once; the page keys its list
+  // by that URI, and a duplicate key crashes the render.
+  const unique = [
+    ...new Map(allRecords.map((r) => [r.value.document, r])).values(),
+  ];
+
   const resolved = await mapWithConcurrency(
-    allRecords,
+    unique,
     async (record): Promise<RecommendationItem> => {
       const docUri = record.value.document;
       const parts = docUri.replace("at://", "").split("/");
