@@ -287,7 +287,7 @@
     .spine-logo {
       display: grid;
       place-items: center;
-      padding: var(--space-md) 0;
+      padding: clamp(0.35rem, 1.5vh, var(--space-md)) 0;
       border-bottom: 2px solid var(--on-ink);
       color: var(--on-ink);
     }
@@ -298,15 +298,21 @@
     .spine-nav {
       flex-direction: column-reverse;
       justify-content: flex-end;
+      /* Last resort for very short windows: scroll, never cut a link off. */
+      min-height: 0;
+      overflow-y: auto;
+      scrollbar-width: none;
     }
     .spine-nav a {
       flex: 0 0 auto;
       writing-mode: vertical-rl;
       transform: rotate(180deg);
-      padding: var(--space-md) 0;
+      /* Seven sideways labels are tall, so type and padding track the
+         window height. */
+      padding: clamp(0.3rem, 1.6vh - 0.15rem, var(--space-md)) 0;
       border-right: 0;
       border-top: 2px solid var(--on-ink);
-      font-size: 1.05rem;
+      font-size: clamp(0.7rem, 1.5vh, 1.05rem);
     }
     .spine-nav a:first-child {
       border-top: 0;
@@ -462,6 +468,10 @@
     border: 2px dashed var(--ink);
     font-family: var(--font-pixel);
     color: var(--ink-soft);
+  }
+
+  .empty + .lede {
+    margin-top: var(--space-lg);
   }
 
   .note {
@@ -825,12 +835,16 @@
     min-block-size: clamp(2rem, 2.5vw, 2.25rem);
     padding: 0.35em 0.55em;
     border: 2px solid currentColor;
-    border-radius: 999px;
     background: transparent;
     color: inherit;
     line-height: 1;
     opacity: 1;
     white-space: nowrap;
+  }
+  /* Only the icon punches are round; text chips stay cut square. */
+  .shelf-chip,
+  .tag-chip {
+    border-radius: 999px;
   }
   .shelf-chip > svg,
   .tag-chip > svg,
@@ -1272,6 +1286,12 @@
       position: sticky;
       top: var(--space-lg);
       align-self: start;
+      max-height: calc(100dvh - 2 * var(--space-lg));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      /* Room for focus rings inside the scroll box. */
+      padding: 6px;
+      margin: -6px;
     }
   }
   .post-end {
@@ -1310,7 +1330,7 @@
   }
   /* RSS is the one actionable item in the row, so it gets the ink-filled
      treatment rather than the outline the passive platform labels use. It
-     keeps the shared .chip geometry so the baseline and pill shape match. */
+     keeps the shared .chip geometry so the baseline and shape match. */
   .publication-rss {
     background: var(--ink);
     border-color: var(--ink);
@@ -1498,8 +1518,26 @@
 
   /* ── Islands that ship without scoped styles ─────────────────── */
 
+  .page-outline summary {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    min-height: 2.75rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .page-outline summary::-webkit-details-marker {
+    display: none;
+  }
+  .page-outline summary::after {
+    content: "+";
+    font-family: var(--font-pixel);
+    font-size: var(--text-lg);
+  }
+  .page-outline details[open] summary::after {
+    content: "−";
+  }
   .page-outline h2 {
-    margin-bottom: var(--space-sm);
     font-family: var(--font-pixel);
     font-variation-settings: normal;
     font-weight: 600;

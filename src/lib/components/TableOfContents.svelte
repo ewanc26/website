@@ -46,13 +46,25 @@
     entries = found;
   }
 
+  // Open beside the article; folded away where it would sit on top of it and
+  // push the opening paragraph screens down. Matches the .article breakpoint.
+  let open = $state(false);
+  $effect(() => {
+    const wide = window.matchMedia("(min-width: 72rem)");
+    const sync = () => (open = wide.matches);
+    sync();
+    wide.addEventListener("change", sync);
+    return () => wide.removeEventListener("change", sync);
+  });
+
   // afterNavigate also fires once on initial mount, covering first load.
   afterNavigate(build);
 </script>
 
 {#if !hidden}
   <nav bind:this={navEl} aria-label="Table of contents" class="page-outline" class:outline-placeholder={!built}>
-    <h2>Contents</h2>
+    <details bind:open>
+    <summary><h2>Contents</h2></summary>
     <ol>
       {#if built}
         {#each entries as entry (entry.id)}
@@ -66,5 +78,6 @@
         {/each}
       {/if}
     </ol>
+    </details>
   </nav>
 {/if}
