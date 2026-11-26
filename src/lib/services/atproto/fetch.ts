@@ -114,8 +114,13 @@ export async function fetchSiteInfo(fetchFn: typeof fetch = fetch) {
   const bySelfKey = await _fetchSiteInfo(ATPROTO_DID, fetchFn);
   if (bySelfKey) return bySelfKey;
 
-  // The package only reads the "self" key. A record written under a TID is
-  // just as valid, so take the newest one in the collection.
+  // The lexicon keys this record "self", which is all the package reads. Fall
+  // back to whatever is in the collection when it was written under another key.
+  // The layout asks on every request, so remember the answer.
+  const cacheKey = "site-info-fallback";
+  const cached = getCache<NonNullable<typeof bySelfKey>>(cacheKey);
+  if (cached) return cached;
+
   try {
     const agent = await getPDSAgent(ATPROTO_DID, fetchFn);
     const resp = (await agent.call(com.atproto.repo.listRecords.main as any, {
@@ -123,7 +128,9 @@ export async function fetchSiteInfo(fetchFn: typeof fetch = fetch) {
       collection: "uk.ewancroft.site.info",
       limit: 1,
     })) as any;
-    return (resp.data ?? resp).records[0]?.value ?? null;
+    const value = (resp.data ?? resp).records[0]?.value ?? null;
+    if (value) setCache(cacheKey, value, CACHE_TTL_MS);
+    return value;
   } catch {
     return null;
   }
