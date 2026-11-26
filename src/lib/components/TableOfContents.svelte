@@ -57,6 +57,42 @@
     return () => wide.removeEventListener("change", sync);
   });
 
+  // Mark the section being read: the last heading to have passed the upper
+  // part of the window.
+  let current = $state("");
+  $effect(() => {
+    const ids = entries.map((e) => e.id);
+    let frame = 0;
+    const mark = () => {
+      frame = 0;
+      let found = "";
+      for (const id of ids) {
+        const heading = document.getElementById(id);
+        if (!heading || heading.getBoundingClientRect().top > window.innerHeight * 0.3) continue;
+        found = id;
+      }
+      current = found;
+    };
+    const queue = () => (frame ||= requestAnimationFrame(mark));
+    mark();
+    window.addEventListener("scroll", queue, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", queue);
+      cancelAnimationFrame(frame);
+    };
+  });
+
+  // Keep that entry in view inside the rail, without moving the page.
+  $effect(() => {
+    const link = current ? navEl?.querySelector<HTMLElement>(`a[href="#${CSS.escape(current)}"]`) : null;
+    const rail = navEl?.closest<HTMLElement>(".rail");
+    if (!link || !rail || rail.scrollHeight <= rail.clientHeight) return;
+    const a = link.getBoundingClientRect();
+    const b = rail.getBoundingClientRect();
+    if (a.top < b.top) rail.scrollTop -= b.top - a.top + 8;
+    else if (a.bottom > b.bottom) rail.scrollTop += a.bottom - b.bottom + 8;
+  });
+
   // afterNavigate also fires once on initial mount, covering first load.
   afterNavigate(build);
 </script>
@@ -69,7 +105,7 @@
       {#if built}
         {#each entries as entry (entry.id)}
           <li>
-            <a href={`#${entry.id}`} class="outline-link" class:h3={entry.level === 3} class:h4={entry.level === 4}>{entry.text}</a>
+            <a href={`#${entry.id}`} class="outline-link" class:active={current === entry.id} aria-current={current === entry.id ? "location" : undefined} class:h3={entry.level === 3} class:h4={entry.level === 4}>{entry.text}</a>
           </li>
         {/each}
       {:else}
