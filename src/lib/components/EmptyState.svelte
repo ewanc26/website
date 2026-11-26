@@ -20,9 +20,8 @@
 <style>
   .empty-state {
     padding: var(--space-lg);
-    border: 1px solid var(--surface-color);
-    border-radius: var(--radius-md);
-    background: var(--surface-raised);
+    border: 2px dashed var(--ink);
+    background: var(--paper);
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -31,20 +30,21 @@
   }
 
   .empty-state-icon {
-    color: var(--color-ink-500);
+    color: var(--ink-soft);
   }
 
   .empty-state-title {
     margin: 0;
     font-size: var(--text-md);
+    font-family: var(--font-pixel);
     font-weight: 600;
-    color: var(--color-ink-700);
+    color: var(--ink);
   }
 
   .empty-state-text {
     margin: 0;
     font-size: var(--text-sm);
-    color: var(--color-ink-600);
+    color: var(--ink-soft);
     line-height: 1.6;
     max-width: 55ch;
   }

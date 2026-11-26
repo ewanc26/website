@@ -210,7 +210,7 @@
   .comment-composer {
     margin: 0 0 1.5rem;
     padding: 1rem;
-    border: 1px solid var(--border-subtle, currentColor);
+    border: 2px solid var(--ink);
     border-radius: 0;
   }
 
@@ -232,9 +232,9 @@
   input {
     box-sizing: border-box;
     width: 100%;
-    border: 1px solid var(--border-subtle, currentColor);
+    border: 2px solid var(--ink);
     border-radius: 0;
-    background: var(--surface, transparent);
+    background: var(--paper);
     color: inherit;
     font: inherit;
   }
@@ -259,11 +259,9 @@
   .comment-signin-fields label {
     display: grid;
     gap: 0.35rem;
-    font-family: var(--font-mono);
-    font-size: var(--text-micro);
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font-family: var(--font-pixel);
+    font-size: var(--text-xs);
+    font-weight: 600;
   }
 
   .comment-primary-button,
@@ -279,20 +277,20 @@
   .comment-primary-button {
     flex: none;
     padding: 0.55rem 0.8rem;
-    border: 1px solid currentColor;
+    border: var(--edge) solid var(--ink);
     border-radius: 0;
-    background: transparent;
-    color: inherit;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    font-weight: 500;
-    letter-spacing: 0.12em;
+    background: var(--riso-a);
+    color: var(--on-ink);
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 110;
+    font-size: var(--text-micro);
+    font-weight: 900;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
   }
 
   .comment-primary-button:hover:not(:disabled) {
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--riso-b);
   }
 
   .comment-primary-button:disabled,
