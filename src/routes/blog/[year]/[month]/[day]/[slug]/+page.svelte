@@ -22,6 +22,16 @@
     extraBacklinkTargets.set([post.uri, post.url].filter((v): v is string => Boolean(v)));
     return () => extraBacklinkTargets.set([]);
   });
+
+  // readerPosts is newest first.
+  const neighbours = $derived.by(() => {
+    const i = data.readerPosts.findIndex((p) => p.uri === post.uri);
+    if (i < 0) return [];
+    return [
+      { label: "← Older", entry: data.readerPosts[i + 1], newer: false },
+      { label: "Newer →", entry: data.readerPosts[i - 1], newer: true },
+    ].filter((n) => n.entry);
+  });
 </script>
 
 <SeoHead
@@ -78,6 +88,17 @@
         {/if}
       </article>
       <p class="post-end" aria-hidden="true">◆ ◆ ◆</p>
+
+      {#if neighbours.length > 0}
+        <nav class="turn" aria-label="More entries">
+          {#each neighbours as n (n.entry.uri)}
+            <a href={n.entry.url} class:turn--newer={n.newer}>
+              <span class="pix">{n.label}</span>
+              <span class="turn-title">{n.entry.title}</span>
+            </a>
+          {/each}
+        </nav>
+      {/if}
 
       <div class="post-after">
         <CommentSection comments={data.comments} subjectUri={post.uri} />
