@@ -8,7 +8,6 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     sveltekit({
-      alias: { $lib: "src/lib" },
       preprocess: vitePreprocess(),
       // Explicit runtime avoids adapter-vercel erroring on local Node versions
       // it doesn't recognise (e.g. 26) — the actual deployed function always

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { FacetSchema } from "$lib/providers/facets";
-  import { renderFacets, type SerialisedFacet } from "$lib/utils/leafletFacets";
+  import type { FacetSchema } from "#lib/providers/facets.js";
+  import { renderFacets, type SerialisedFacet } from "#lib/utils/leafletFacets.js";
 
   interface Props {
     plaintext: string;

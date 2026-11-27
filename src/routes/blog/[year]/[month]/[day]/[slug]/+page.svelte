@@ -1,14 +1,14 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import SeoHead from "$lib/components/SeoHead.svelte";
-  import SigilBand from "$lib/components/SigilBand.svelte";
-  import ShareButtons from "$lib/components/ShareButtons.svelte";
-  import TableOfContents from "$lib/components/TableOfContents.svelte";
-  import CommentSection from "$lib/components/CommentSection.svelte";
-  import LeafletBlocks from "$lib/components/leaflet/LeafletBlocks.svelte";
-  import AtMentions from "$lib/components/AtMentions.svelte";
-  import ArrowUpRight from "$lib/components/icons/ArrowUpRight.svelte";
-  import { extraBacklinkTargets } from "$lib/stores/backlinkTargets";
+  import SeoHead from "#lib/components/SeoHead.svelte";
+  import SigilBand from "#lib/components/SigilBand.svelte";
+  import ShareButtons from "#lib/components/ShareButtons.svelte";
+  import TableOfContents from "#lib/components/TableOfContents.svelte";
+  import CommentSection from "#lib/components/CommentSection.svelte";
+  import LeafletBlocks from "#lib/components/leaflet/LeafletBlocks.svelte";
+  import AtMentions from "#lib/components/AtMentions.svelte";
+  import ArrowUpRight from "#lib/components/icons/ArrowUpRight.svelte";
+  import { extraBacklinkTargets } from "#lib/stores/backlinkTargets.js";
 
   let { data } = $props();
   const { post, blog } = $derived(data);

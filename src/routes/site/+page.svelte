@@ -1,10 +1,10 @@
 <script lang="ts">
-  import ArrowUpRight from "$lib/components/icons/ArrowUpRight.svelte";
-  import SeoHead from "$lib/components/SeoHead.svelte";
-  import Slab from "$lib/components/Slab.svelte";
-  import HalftoneMoon from "$lib/components/HalftoneMoon.svelte";
-  import PixelMoon from "$lib/components/PixelMoon.svelte";
-  import { sabbats } from "$lib/utils/sabbats";
+  import ArrowUpRight from "#lib/components/icons/ArrowUpRight.svelte";
+  import SeoHead from "#lib/components/SeoHead.svelte";
+  import Slab from "#lib/components/Slab.svelte";
+  import HalftoneMoon from "#lib/components/HalftoneMoon.svelte";
+  import PixelMoon from "#lib/components/PixelMoon.svelte";
+  import { sabbats } from "#lib/utils/sabbats.js";
 
   let { data } = $props();
   const info = $derived(data.info);

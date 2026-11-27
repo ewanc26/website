@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ExternalLink } from "@lucide/svelte";
-  import { safeHostname, safeLinkUrl, safeResourceUrl } from "$lib/utils/url";
+  import { safeHostname, safeLinkUrl, safeResourceUrl } from "#lib/utils/url.js";
 
   interface Props {
     src: string;

@@ -1,4 +1,4 @@
-import { fetchRecentPlays } from "$lib/services/atproto/plays";
+import { fetchRecentPlays } from "#lib/services/atproto/plays.js";
 import { PUBLIC_ATPROTO_DID } from "$app/env/public";
 import type { RequestHandler } from "./$types";
 

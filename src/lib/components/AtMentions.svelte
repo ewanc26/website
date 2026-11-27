@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
-  import LoadingSkeleton from "$lib/components/LoadingSkeleton.svelte";
+  import LoadingSkeleton from "#lib/components/LoadingSkeleton.svelte";
 
   interface Props {
     url: string;

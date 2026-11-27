@@ -2,7 +2,7 @@
  * OG-image template using Satori-compatible structure.
  */
 
-import { getMoonPhaseGeometry } from "$lib/utils/moonPhase";
+import { getMoonPhaseGeometry } from "#lib/utils/moonPhase.js";
 
 export type OgEntry = {
   title: string | null;

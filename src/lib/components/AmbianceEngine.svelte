@@ -24,9 +24,9 @@
    */
   import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
-  import { ambianceEnabled, onAmbiancePulse } from "$lib/stores/ambiance";
-  import { wolfMode } from "$lib/stores/wolfMode";
-  import { AmbianceEngine as Engine } from "$lib/music";
+  import { ambianceEnabled, onAmbiancePulse } from "#lib/stores/ambiance.js";
+  import { wolfMode } from "#lib/stores/wolfMode.js";
+  import { AmbianceEngine as Engine } from "#lib/music/index.js";
 
   const UPDATE_INTERVAL_MS = 5 * 60 * 1000;
   const VOLUME = 0.5;

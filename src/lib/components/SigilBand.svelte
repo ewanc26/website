@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Pentacle from "$lib/components/icons/Pentacle.svelte";
-  import Triskele from "$lib/components/icons/Triskele.svelte";
+  import Pentacle from "#lib/components/icons/Pentacle.svelte";
+  import Triskele from "#lib/components/icons/Triskele.svelte";
 
   interface Props {
     seed?: string;

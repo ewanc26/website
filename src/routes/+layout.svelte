@@ -1,20 +1,20 @@
 <script lang="ts">
   import "../styles/riso.css";
   import { page } from "$app/state";
-  import { ME_LINKS } from "$lib/config";
-  import { pulseAmbiance } from "$lib/stores/ambiance";
-  import { extraBacklinkTargets } from "$lib/stores/backlinkTargets";
-  import Header from "$lib/components/Header.svelte";
-  import Colophon from "$lib/components/Colophon.svelte";
-  import BacklinkAvatars from "$lib/components/BacklinkAvatars.svelte";
-  import SeasonalThemeUpdater from "$lib/components/SeasonalThemeUpdater.svelte";
-  import AmbianceEngine from "$lib/components/AmbianceEngine.svelte";
-  import WolfPawTrail from "$lib/components/WolfPawTrail.svelte";
-  import MondayEgg from "$lib/components/ostara-eggs/MondayEgg.svelte";
-  import IdleEgg from "$lib/components/ostara-eggs/IdleEgg.svelte";
-  import ThreeToast from "$lib/components/ostara-eggs/ThreeToast.svelte";
-  import BlogArchiveEggs from "$lib/components/ostara-eggs/BlogArchiveEggs.svelte";
-  import HeritageEggs from "$lib/components/ostara-eggs/HeritageEggs.svelte";
+  import { ME_LINKS } from "#lib/config.js";
+  import { pulseAmbiance } from "#lib/stores/ambiance.js";
+  import { extraBacklinkTargets } from "#lib/stores/backlinkTargets.js";
+  import Header from "#lib/components/Header.svelte";
+  import Colophon from "#lib/components/Colophon.svelte";
+  import BacklinkAvatars from "#lib/components/BacklinkAvatars.svelte";
+  import SeasonalThemeUpdater from "#lib/components/SeasonalThemeUpdater.svelte";
+  import AmbianceEngine from "#lib/components/AmbianceEngine.svelte";
+  import WolfPawTrail from "#lib/components/WolfPawTrail.svelte";
+  import MondayEgg from "#lib/components/ostara-eggs/MondayEgg.svelte";
+  import IdleEgg from "#lib/components/ostara-eggs/IdleEgg.svelte";
+  import ThreeToast from "#lib/components/ostara-eggs/ThreeToast.svelte";
+  import BlogArchiveEggs from "#lib/components/ostara-eggs/BlogArchiveEggs.svelte";
+  import HeritageEggs from "#lib/components/ostara-eggs/HeritageEggs.svelte";
 
   let { data, children } = $props();
 

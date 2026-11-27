@@ -17,7 +17,7 @@
  * rhythm.
  */
 
-import type { Sabbat } from "$lib/utils/sabbats";
+import type { Sabbat } from "#lib/utils/sabbats.js";
 
 export type MelodyStep = number | null;
 

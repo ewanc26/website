@@ -1,9 +1,9 @@
 <script lang="ts">
-  import ArrowUpRight from "$lib/components/icons/ArrowUpRight.svelte";
-  import SeoHead from "$lib/components/SeoHead.svelte";
-  import Slab from "$lib/components/Slab.svelte";
-  import SigilBand from "$lib/components/SigilBand.svelte";
-  import Barcode from "$lib/components/Barcode.svelte";
+  import ArrowUpRight from "#lib/components/icons/ArrowUpRight.svelte";
+  import SeoHead from "#lib/components/SeoHead.svelte";
+  import Slab from "#lib/components/Slab.svelte";
+  import SigilBand from "#lib/components/SigilBand.svelte";
+  import Barcode from "#lib/components/Barcode.svelte";
 
   let { data } = $props();
   const { profile, links, sifa, skills, education, languages, professional, projects, pds } = $derived(data);

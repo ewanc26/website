@@ -9,7 +9,7 @@
  * mechanical sweep.
  */
 
-import type { Sabbat } from "$lib/utils/sabbats";
+import type { Sabbat } from "#lib/utils/sabbats.js";
 import { chordHz } from "./notes";
 import { ramp } from "./ramp";
 import type { AudioBuses, ChordVoice, DetuneLfo } from "./types";

@@ -2,7 +2,7 @@
   import LeafletFacets from "./LeafletFacets.svelte";
   import LeafletImage from "./LeafletImage.svelte";
   import LeafletListItem from "./LeafletListItem.svelte";
-  import { B, MAX_PAGE_DEPTH, SCHEMA, getAspectRatio, getFacets, getPlaintext, type Obj } from "$lib/utils/leafletReader";
+  import { B, MAX_PAGE_DEPTH, SCHEMA, getAspectRatio, getFacets, getPlaintext, type Obj } from "#lib/utils/leafletReader.js";
 
   interface Props {
     item: Obj;

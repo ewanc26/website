@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { usePoller } from "$lib/utils/polling.svelte";
+  import { usePoller } from "#lib/utils/polling.svelte.js";
 
   const REFRESH_INTERVAL_MS = 60 * 60 * 1000;
 

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import ArrowUpRight from "$lib/components/icons/ArrowUpRight.svelte";
-  import SeoHead from "$lib/components/SeoHead.svelte";
-  import Slab from "$lib/components/Slab.svelte";
+  import ArrowUpRight from "#lib/components/icons/ArrowUpRight.svelte";
+  import SeoHead from "#lib/components/SeoHead.svelte";
+  import Slab from "#lib/components/Slab.svelte";
 
   let { data } = $props();
   const { blog, posts, topics } = $derived(data);

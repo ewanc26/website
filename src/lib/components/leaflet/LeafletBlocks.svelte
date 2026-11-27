@@ -18,13 +18,13 @@
   import LeafletBskyPost from "./LeafletBskyPost.svelte";
   import LeafletDrawing from "./LeafletDrawing.svelte";
   import LeafletBlocks from "./LeafletBlocks.svelte";
-  import Pentacle from "$lib/components/icons/Pentacle.svelte";
-  import Triskele from "$lib/components/icons/Triskele.svelte";
+  import Pentacle from "#lib/components/icons/Pentacle.svelte";
+  import Triskele from "#lib/components/icons/Triskele.svelte";
 
-  import type { SerialisedBlock, SerialisedPage } from "$lib/providers/serialise";
-  import type { SerialisedFacet } from "$lib/utils/leafletFacets";
-  import { safeLinkUrl } from "$lib/utils/url";
-  import { canvasBlockOrder, fixedMetrics, isPositioned, measure, stackOrders, styleFor } from "$lib/utils/leafletCanvas";
+  import type { SerialisedBlock, SerialisedPage } from "#lib/providers/serialise.js";
+  import type { SerialisedFacet } from "#lib/utils/leafletFacets.js";
+  import { safeLinkUrl } from "#lib/utils/url.js";
+  import { canvasBlockOrder, fixedMetrics, isPositioned, measure, stackOrders, styleFor } from "#lib/utils/leafletCanvas.js";
   import {
     B,
     CANVAS,
@@ -37,7 +37,7 @@
     getPlaintext,
     textSizeClass,
     type Obj,
-  } from "$lib/utils/leafletReader";
+  } from "#lib/utils/leafletReader.js";
 
   const NS = "pub.leaflet.richtext.facet";
 

@@ -1,20 +1,20 @@
 <script lang="ts">
-  import Link from "$lib/components/icons/Link.svelte";
-  import FeedTypeIcon from "$lib/components/icons/FeedTypeIcon.svelte";
-  import ArrowUpRight from "$lib/components/icons/ArrowUpRight.svelte";
-  import HalftoneMoon from "$lib/components/HalftoneMoon.svelte";
-  import SigilRule from "$lib/components/SigilRule.svelte";
-  import Pentacle from "$lib/components/icons/Pentacle.svelte";
-  import Triskele from "$lib/components/icons/Triskele.svelte";
-  import SeoHead from "$lib/components/SeoHead.svelte";
-  import KibunStatus from "$lib/components/KibunStatus.svelte";
-  import GithubActivity from "$lib/components/GithubActivity.svelte";
-  import GithubProfileSummary from "$lib/components/GithubProfileSummary.svelte";
-  import NowPlayingChip from "$lib/components/NowPlayingChip.svelte";
-  import SupportCTA from "$lib/components/SupportCTA.svelte";
-  import type { PopfeedShelf } from "$lib/services/atproto/popfeedShelves";
-  import { normalizeSlug } from "$lib/utils/slugify";
-  import { blogDateParts } from "$lib/utils/date";
+  import Link from "#lib/components/icons/Link.svelte";
+  import FeedTypeIcon from "#lib/components/icons/FeedTypeIcon.svelte";
+  import ArrowUpRight from "#lib/components/icons/ArrowUpRight.svelte";
+  import HalftoneMoon from "#lib/components/HalftoneMoon.svelte";
+  import SigilRule from "#lib/components/SigilRule.svelte";
+  import Pentacle from "#lib/components/icons/Pentacle.svelte";
+  import Triskele from "#lib/components/icons/Triskele.svelte";
+  import SeoHead from "#lib/components/SeoHead.svelte";
+  import KibunStatus from "#lib/components/KibunStatus.svelte";
+  import GithubActivity from "#lib/components/GithubActivity.svelte";
+  import GithubProfileSummary from "#lib/components/GithubProfileSummary.svelte";
+  import NowPlayingChip from "#lib/components/NowPlayingChip.svelte";
+  import SupportCTA from "#lib/components/SupportCTA.svelte";
+  import type { PopfeedShelf } from "#lib/services/atproto/popfeedShelves.js";
+  import { normalizeSlug } from "#lib/utils/slugify.js";
+  import { blogDateParts } from "#lib/utils/date.js";
   import { PUBLIC_LEAFLET_BLOG_PUBLICATION, PUBLIC_ATPROTO_DID } from "$app/env/public";
 
   let { data } = $props();

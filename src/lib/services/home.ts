@@ -8,8 +8,8 @@ import {
   fetchBlogPosts,
   fetchPublications,
 } from "@ewanc26/atproto";
-import { fetchProfile, fetchProfileLinks } from "$lib/services/atproto/fetch";
-import { ATPROTO_DID } from "$lib/config/atproto";
+import { fetchProfile, fetchProfileLinks } from "#lib/services/atproto/fetch.js";
+import { ATPROTO_DID } from "#lib/config/atproto.js";
 import { GITHUB_TOKEN, GITHUB_USERNAME } from "$app/env/private";
 import {
   fetchPinnedGitHubProjects,
@@ -17,8 +17,8 @@ import {
   fetchGitHubCommitTotal,
   fetchGitHubLanguages,
   fetchGitHubProfileSummary,
-} from "$lib/services/github";
-import languageSnapshot from "$lib/data/github-languages.json";
+} from "#lib/services/github.js";
+import languageSnapshot from "#lib/data/github-languages.json";
 
 const CONSTELLATION =
   "https://constellation.microcosm.blue/xrpc/blue.microcosm.links.getBacklinks";

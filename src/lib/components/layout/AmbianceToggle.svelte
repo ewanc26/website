@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Volume2, VolumeX } from "@lucide/svelte";
-  import { ambianceEnabled } from "$lib/stores/ambiance";
+  import { ambianceEnabled } from "#lib/stores/ambiance.js";
   import FooterToggleButton from "./FooterToggleButton.svelte";
 
   const label = $derived($ambianceEnabled ? "Mute background ambiance" : "Play background ambiance");

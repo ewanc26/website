@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { blueskyPostUrl } from "$lib/utils/bluesky";
+  import { blueskyPostUrl } from "#lib/utils/bluesky.js";
 
   interface RecordView {
     value?: Record<string, unknown>;

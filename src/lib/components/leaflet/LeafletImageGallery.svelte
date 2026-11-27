@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { safeResourceUrl } from "$lib/utils/url";
+  import { safeResourceUrl } from "#lib/utils/url.js";
 
   type Obj = Record<string, unknown>;
   interface Props {

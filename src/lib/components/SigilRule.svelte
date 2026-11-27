@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Pentacle from "$lib/components/icons/Pentacle.svelte";
-  import Triskele from "$lib/components/icons/Triskele.svelte";
+  import Pentacle from "#lib/components/icons/Pentacle.svelte";
+  import Triskele from "#lib/components/icons/Triskele.svelte";
 </script>
 
 <div class="sigil-rule" aria-hidden="true">

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import SeoHead from "$lib/components/SeoHead.svelte";
-  import Slab from "$lib/components/Slab.svelte";
-  import TableOfContents from "$lib/components/TableOfContents.svelte";
-  import LeafletBlocks from "$lib/components/leaflet/LeafletBlocks.svelte";
+  import SeoHead from "#lib/components/SeoHead.svelte";
+  import Slab from "#lib/components/Slab.svelte";
+  import TableOfContents from "#lib/components/TableOfContents.svelte";
+  import LeafletBlocks from "#lib/components/leaflet/LeafletBlocks.svelte";
 
   let { data } = $props();
   const { post, meta, blocks, html } = $derived(data);

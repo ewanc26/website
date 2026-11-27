@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ContributionCalendar, LanguageShare } from "$lib/services/github";
+  import type { ContributionCalendar, LanguageShare } from "#lib/services/github.js";
 
   interface Props {
     username: string;

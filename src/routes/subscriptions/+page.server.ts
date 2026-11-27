@@ -1,4 +1,4 @@
-import { fetchSubscriptions, fetchRecommendations } from "$lib/services/atproto/fetch";
+import { fetchSubscriptions, fetchRecommendations } from "#lib/services/atproto/fetch.js";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, setHeaders }) => {

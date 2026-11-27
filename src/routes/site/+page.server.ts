@@ -1,6 +1,6 @@
-import { fetchSiteInfo } from "$lib/services/atproto/fetch";
-import { normalizeSiteInfo } from "$lib/services/atproto/siteInfo";
-import { getAlmanac } from "$lib/utils/almanac";
+import { fetchSiteInfo } from "#lib/services/atproto/fetch.js";
+import { normalizeSiteInfo } from "#lib/services/atproto/siteInfo.js";
+import { getAlmanac } from "#lib/utils/almanac.js";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, setHeaders }) => {

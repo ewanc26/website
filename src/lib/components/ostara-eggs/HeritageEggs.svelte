@@ -7,7 +7,7 @@
   // Nights of a real full moon also tint the nav triskele.
   import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
-  import { getMoonPhase } from "$lib/utils/moonPhase";
+  import { getMoonPhase } from "#lib/utils/moonPhase.js";
 
   const FLAGS: Record<string, { svg: string; label: string }> = {
     saltire: {

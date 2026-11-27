@@ -1,6 +1,6 @@
 <script lang="ts">
   // Easter egg #3 — triple-click the nav triskele: three clicks within 1.5s fires.
-  import Triskele from "$lib/components/icons/Triskele.svelte";
+  import Triskele from "#lib/components/icons/Triskele.svelte";
   import { triggerThree } from "./eggStores";
 
   interface Props {

@@ -3,22 +3,22 @@ import {
   fetchBlob,
   fetchComments,
   fetchPublicationRecommendations,
-} from "$lib/services/atproto";
-import { fetchAtRecords, type AtRecord } from "$lib/services/atproto/records";
+} from "#lib/services/atproto/index.js";
+import { fetchAtRecords, type AtRecord } from "#lib/services/atproto/records.js";
 import {
   PUBLIC_ATPROTO_DID,
   PUBLIC_LEAFLET_BLOG_PUBLICATION,
 } from "$app/env/public";
-import { normalizeSlug } from "$lib/utils/slugify";
-import { blogDateParts } from "$lib/utils/date";
-import { safeResourceUrl } from "$lib/utils/url";
-import { renderMarkdown } from "$lib/utils/markdown";
+import { normalizeSlug } from "#lib/utils/slugify.js";
+import { blogDateParts } from "#lib/utils/date.js";
+import { safeResourceUrl } from "#lib/utils/url.js";
+import { renderMarkdown } from "#lib/utils/markdown.js";
 import {
   leafletProvider,
   serialiseContent,
   type SerialisedBlock,
   type SerialisedPage,
-} from "$lib/providers";
+} from "#lib/providers/index.js";
 
 const B = (name: string) => `pub.leaflet.blocks.${name}`;
 

@@ -1,9 +1,9 @@
-import { getHomeData } from "$lib/services/home";
-import { fetchShippedApps } from "$lib/services/atproto/apps";
-import { fetchPopfeedReviews } from "$lib/services/atproto/popfeed";
-import { popfeedShelves } from "$lib/services/atproto/popfeedShelves";
-import { fetchRecentPosts } from "$lib/services/atproto/feed";
-import { fetchRecentPlays } from "$lib/services/atproto/plays";
+import { getHomeData } from "#lib/services/home.js";
+import { fetchShippedApps } from "#lib/services/atproto/apps.js";
+import { fetchPopfeedReviews } from "#lib/services/atproto/popfeed.js";
+import { popfeedShelves } from "#lib/services/atproto/popfeedShelves.js";
+import { fetchRecentPosts } from "#lib/services/atproto/feed.js";
+import { fetchRecentPlays } from "#lib/services/atproto/plays.js";
 import { PUBLIC_ATPROTO_DID } from "$app/env/public";
 import type { PageServerLoad } from "./$types";
 

@@ -1,4 +1,4 @@
-import type { LeafletComment } from "$lib/services/atproto/fetch";
+import type { LeafletComment } from "#lib/services/atproto/fetch.js";
 
 export interface ThreadEntry {
   comment: LeafletComment;

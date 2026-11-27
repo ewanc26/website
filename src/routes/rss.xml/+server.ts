@@ -1,4 +1,4 @@
-import { getIndexedPosts, xmlEscape } from "$lib/server/blogIndex";
+import { getIndexedPosts, xmlEscape } from "#lib/server/blogIndex.js";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ url }) => {

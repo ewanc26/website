@@ -1,6 +1,6 @@
 <script lang="ts">
-  import SeoHead from "$lib/components/SeoHead.svelte";
-  import Slab from "$lib/components/Slab.svelte";
+  import SeoHead from "#lib/components/SeoHead.svelte";
+  import Slab from "#lib/components/Slab.svelte";
 
   let { data } = $props();
   const cv = $derived(data.cv);

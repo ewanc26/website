@@ -4,8 +4,8 @@
    * (via the `plays` prop), then refreshed from /api/plays while the tab
    * is visible, using the shared polling primitive.
    */
-  import type { Play } from "$lib/services/atproto/plays";
-  import { usePoller } from "$lib/utils/polling.svelte";
+  import type { Play } from "#lib/services/atproto/plays.js";
+  import { usePoller } from "#lib/utils/polling.svelte.js";
 
   interface Props {
     plays: Play[];

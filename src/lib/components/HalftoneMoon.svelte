@@ -3,7 +3,7 @@
    * The big moon: the lit part is a halftone dot screen (as a riso print
    * would render a tint), the dark part a faint solid. Uses currentColor.
    */
-  import { getMoonPhaseGeometry } from "$lib/utils/moonPhase";
+  import { getMoonPhaseGeometry } from "#lib/utils/moonPhase.js";
 
   interface Props {
     phase: number;

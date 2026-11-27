@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getPlaceholderAvatar } from "$lib/utils/avatar";
+  import { getPlaceholderAvatar } from "#lib/utils/avatar.js";
 
   interface Props {
     did: string;

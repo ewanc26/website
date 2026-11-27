@@ -1,4 +1,4 @@
-import type { SerialisedBlock } from "$lib/providers/serialise";
+import type { SerialisedBlock } from "#lib/providers/serialise.js";
 
 export interface Metrics {
   minX: number;

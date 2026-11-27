@@ -12,7 +12,7 @@ import {
   extractCidFromImageObject,
 } from "@ewanc26/atproto";
 import { resolveDid } from "./did";
-import { getCache, setCache } from "$lib/utils/cache";
+import { getCache, setCache } from "#lib/utils/cache.js";
 import { com } from "@bsky/sdk/lexicons";
 
 export interface ShippedApp {

@@ -6,9 +6,9 @@
    * the footer.
    */
   import { page } from "$app/state";
-  import PixelMoon from "$lib/components/PixelMoon.svelte";
-  import { NAV_LINKS } from "$lib/config";
-  import type { Almanac } from "$lib/utils/almanac";
+  import PixelMoon from "#lib/components/PixelMoon.svelte";
+  import { NAV_LINKS } from "#lib/config.js";
+  import type { Almanac } from "#lib/utils/almanac.js";
 
   interface Props {
     almanac: Almanac;

@@ -1,4 +1,4 @@
-import { getIndexedPosts } from "$lib/server/blogIndex";
+import { getIndexedPosts } from "#lib/server/blogIndex.js";
 import type { RequestHandler } from "./$types";
 
 const STATIC = ["/", "/about", "/about/name", "/blog", "/support", "/subscriptions", "/site"];

@@ -1,6 +1,6 @@
-import { fetchBlogPosts } from "$lib/services/atproto/fetch";
+import { fetchBlogPosts } from "#lib/services/atproto/fetch.js";
 import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$app/env/public";
-import { normalizeTag } from "$lib/utils/tags";
+import { normalizeTag } from "#lib/utils/tags.js";
 import type { RequestHandler } from "./$types";
 
 const json = (data: unknown, headers: Record<string, string> = {}) =>

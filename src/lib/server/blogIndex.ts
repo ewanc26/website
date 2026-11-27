@@ -1,7 +1,7 @@
-import { fetchBlogPosts } from "$lib/services/atproto/fetch";
+import { fetchBlogPosts } from "#lib/services/atproto/fetch.js";
 import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$app/env/public";
-import { blogDateParts } from "$lib/utils/date";
-import { normalizeSlug } from "$lib/utils/slugify";
+import { blogDateParts } from "#lib/utils/date.js";
+import { normalizeSlug } from "#lib/utils/slugify.js";
 
 export interface IndexedPost {
   title: string;

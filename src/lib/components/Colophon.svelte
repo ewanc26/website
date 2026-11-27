@@ -3,15 +3,15 @@
    * The press: a print shop's back page. What it was printed in, the
    * calibration colour bar, tonight's moon among its eight phases.
    */
-  import PixelMoon from "$lib/components/PixelMoon.svelte";
-  import WolfToggle from "$lib/components/layout/WolfToggle.svelte";
-  import AmbianceToggle from "$lib/components/layout/AmbianceToggle.svelte";
-  import TriskeleEgg from "$lib/components/ostara-eggs/TriskeleEgg.svelte";
-  import SigilRule from "$lib/components/SigilRule.svelte";
-  import Pentacle from "$lib/components/icons/Pentacle.svelte";
-  import type { Almanac } from "$lib/utils/almanac";
-  import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
-  import { ATPROTO_DID } from "$lib/config/atproto";
+  import PixelMoon from "#lib/components/PixelMoon.svelte";
+  import WolfToggle from "#lib/components/layout/WolfToggle.svelte";
+  import AmbianceToggle from "#lib/components/layout/AmbianceToggle.svelte";
+  import TriskeleEgg from "#lib/components/ostara-eggs/TriskeleEgg.svelte";
+  import SigilRule from "#lib/components/SigilRule.svelte";
+  import Pentacle from "#lib/components/icons/Pentacle.svelte";
+  import type { Almanac } from "#lib/utils/almanac.js";
+  import type { NormalizedSiteInfo } from "#lib/services/atproto/siteInfo.js";
+  import { ATPROTO_DID } from "#lib/config/atproto.js";
 
   interface Props {
     almanac: Almanac;
