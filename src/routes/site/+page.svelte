@@ -89,7 +89,7 @@
         like a game's HUD.
       </li>
       <li><strong>Nothing floats.</strong> No cards with shadows. Panels sit flat and are told apart by ink, rules and slight rotation.</li>
-      <li><strong>Stepped motion.</strong> Things arrive in steps, like a print run advancing, not eased like an app.</li>
+      <li><strong>Brief motion.</strong> Things settle into place once and then hold still. All of it stops if you ask for less motion.</li>
     </ol>
   </div>
 

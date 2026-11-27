@@ -10,7 +10,11 @@ Not a documentation site, not a portfolio template. This is a two-ink risograph 
 - **Cut, not rounded.** Every corner is square (`--radius-*: 0`). Circles exist only for the moon, the deliberately punched "cartridge" corner-notch on project tiles, and the icon and count punches on list rows. Text chips (tags, skills, pronouns) are cut square.
 - **Colossal or pixel.** Section headings (`.slab`, `.word`) print at poster scale, cropped by the sheet, doubled in the second ink a hair out of register. Everything small — labels, metadata, buttons, nav — is Pixelify Sans, styled like a game's HUD.
 - **Nothing floats.** No cards with shadows. Panels (`.cart`, `.idcard`, `.nametag`) sit flat on the page and are told apart by ink, rule weight and a few degrees of rotation, not elevation.
-- **Stepped motion.** Entrances use `steps()` easing (`.thunk`, `--ease-step`), like a print run advancing a frame at a time, not the eased motion of an app. Everything stops under `prefers-reduced-motion`.
+- **Brief motion.** Things settle once, smoothly, using opacity and small movements, then hold still: no loops for show, no full-screen sweeps or flashes. Everything stops under `prefers-reduced-motion`.
+  - Page turns fade the old page out (120ms) after the next has loaded, and `.thunk` brings sections in. Back, forward and in-page links are instant. No view transitions: snapshotting the page stuttered in Safari.
+  - A rule along the top edge shows a load that takes longer than a moment.
+  - `reveal` (`src/lib/actions/reveal.ts`) settles home headings and cartridges in the first time they are scrolled to.
+  - Controls press in, cartridges straighten under the pointer, list titles nudge, dialogs leave as they arrived.
 
 ## Type
 
@@ -43,4 +47,4 @@ SvelteKit server-renders every page; Svelte components (comments, table of conte
 ## Anti-references
 
 - **AI slop**: no generic "boost productivity" copy, no purple gradients, no glassmorphism, no centred hero with a subtitle and two buttons.
-- **Visual noise for its own sake**: no drop shadows, no soft blur, no motion without a reason tied to the print-shop conceit.
+- **Visual noise for its own sake**: no drop shadows, no soft blur, no motion that does not answer something the reader did.

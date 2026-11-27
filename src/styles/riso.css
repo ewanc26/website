@@ -7,7 +7,7 @@
  * where they cross they make a third colour. Headlines are colossal and
  * cropped by the edge of the sheet; small labels are pixel type; the
  * navigation is a spine down the left edge (a bar at the bottom on
- * phones). Motion is stepped, like a print run, not eased.
+ * phones). Motion is brief and settles smoothly; nothing loops for show.
  *
  * Rules of the house: no gradients except halftone dots, no soft
  * shadows, no rounded corners (circles only where a moon is meant), no
@@ -202,6 +202,11 @@
     position: relative;
     z-index: 1;
     padding-block: var(--space-lg) var(--space-2xl);
+    transition: opacity 160ms ease-out;
+  }
+  .shell-main.leaving {
+    opacity: 0;
+    transition: opacity 120ms ease-in;
   }
 
   /* ── The spine (nav) ─────────────────────────────────────────── */
@@ -1671,6 +1676,57 @@
     animation: thunk 380ms var(--ease-out-expo) both;
   }
 
+  /* Below the fold: settles in the first time it is reached (see reveal.ts). */
+  .reveal-pending {
+    opacity: 0;
+  }
+  .reveal-in {
+    animation: thunk 380ms var(--ease-out-expo) backwards;
+  }
+  .carts > .reveal-in:nth-child(2n) {
+    animation-delay: 60ms;
+  }
+
+  /* ── Touch: things answer the hand ───────────────────────────── */
+
+  .btn,
+  .chip,
+  .share-link,
+  .share-btn,
+  .spine-nav a,
+  .turn a {
+    transition:
+      background-color 140ms ease-out,
+      color 140ms ease-out,
+      translate 100ms ease-out;
+  }
+  :is(.btn, button.chip, .share-link, .share-btn, .turn a):active {
+    translate: 2px 2px;
+  }
+  .spine-nav a:active {
+    translate: 0 1px;
+  }
+  /* A cartridge picked up sits straight. */
+  .cart {
+    transition: rotate 160ms var(--ease-out-expo);
+  }
+  .cart:is(:hover, :focus-visible) {
+    rotate: 0deg;
+  }
+  .track-title,
+  .shelf-name {
+    transition: translate 160ms var(--ease-out-expo);
+  }
+  @media (hover: hover) {
+    .track:hover .track-title,
+    .shelf a:hover .shelf-name {
+      translate: 4px 0;
+    }
+  }
+  .outline-link {
+    transition: border-left-color 160ms ease-out;
+  }
+
   /* The overprint plate slides into (mis)register once on load. */
   .slab::after,
   .poster-name::after {
@@ -1683,15 +1739,6 @@
   }
 }
 
-/* Page turns swap instantly: the root cross-fade snapshots the whole page
-   (blend-mode layers included), which stutters in Safari. Sections animate
-   in on arrival instead. */
-::view-transition-group(root),
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1699,12 +1746,10 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    /* Without this, staggered entrances stay invisible for their delay. */
+    animation-delay: 0s !important;
+    transition-delay: 0s !important;
     scroll-behavior: auto !important;
-  }
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
   }
 }
 
@@ -1720,6 +1765,9 @@
   [data-modal-open],
   dialog {
     display: none !important;
+  }
+  .reveal-pending {
+    opacity: 1;
   }
   * {
     animation: none !important;

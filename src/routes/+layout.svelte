@@ -1,10 +1,12 @@
 <script lang="ts">
   import "../styles/riso.css";
+  import { onNavigate } from "$app/navigation";
   import { page } from "$app/state";
   import { ME_LINKS } from "#lib/config.js";
   import { pulseAmbiance } from "#lib/stores/ambiance.js";
   import { extraBacklinkTargets } from "#lib/stores/backlinkTargets.js";
   import Header from "#lib/components/Header.svelte";
+  import NavProgress from "#lib/components/NavProgress.svelte";
   import Colophon from "#lib/components/Colophon.svelte";
   import BacklinkAvatars from "#lib/components/BacklinkAvatars.svelte";
   import SeasonalThemeUpdater from "#lib/components/SeasonalThemeUpdater.svelte";
@@ -19,6 +21,29 @@
   let { data, children } = $props();
 
   const backlinks = $derived([`https://ewancroft.uk${page.url.pathname}`, ...$extraBacklinkTargets]);
+
+  // Page turns: once the next page has loaded, the old one fades out and the
+  // new one arrives. Opacity only, with no snapshot of the page, which is what
+  // stuttered in Safari when this was a view transition.
+  const FADE_MS = 120;
+  let leaving = $state(false);
+  let turn = 0;
+
+  onNavigate((navigation) => {
+    const mine = ++turn;
+    leaving = false;
+    const samePage = navigation.from?.url.pathname === navigation.to?.url.pathname;
+    // Back and forward should feel immediate.
+    if (samePage || navigation.willUnload || navigation.type === "popstate") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    leaving = true;
+    const done = () => {
+      if (mine === turn) leaving = false;
+    };
+    navigation.complete.then(done, done);
+    return new Promise<void>((resolve) => setTimeout(resolve, FADE_MS));
+  });
 
   function handleClick(event: MouseEvent) {
     const el = (event.target as HTMLElement).closest<HTMLElement>("[data-copy]");
@@ -72,8 +97,9 @@
 </svg>
 
 <a class="skip-to-content" href="#main-content">Skip to content</a>
+<NavProgress />
 <Header almanac={data.almanac} />
-<div class="shell-main" id="main-content" tabindex="-1">
+<div class="shell-main" class:leaving id="main-content" tabindex="-1">
   {@render children?.()}
 </div>
 {#if page.status !== 404}
