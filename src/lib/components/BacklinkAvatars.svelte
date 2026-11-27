@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Link2, ExternalLink } from "@lucide/svelte";
-  import BaseModal from "$lib/components/BaseModal.svelte";
-  import { getPlaceholderAvatar } from "$lib/utils/avatar";
+  import BaseModal from "#lib/components/BaseModal.svelte";
+  import { getPlaceholderAvatar } from "#lib/utils/avatar.js";
 
   interface Person {
     did: string;

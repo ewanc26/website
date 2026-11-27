@@ -1,8 +1,8 @@
 import { fetchDocuments, fetchPublications } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID, PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$app/env/public";
-import { blogDateParts } from "$lib/utils/date";
-import { normalizeSlug } from "$lib/utils/slugify";
-import { normalizeTag } from "$lib/utils/tags";
+import { blogDateParts } from "#lib/utils/date.js";
+import { normalizeSlug } from "#lib/utils/slugify.js";
+import { normalizeTag } from "#lib/utils/tags.js";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, setHeaders }) => {

@@ -3,7 +3,7 @@
    * The page word: colossal, cropped by the sheet, printed twice — once in
    * each ink, the second plate a hair out of register.
    */
-  import SigilBand from "$lib/components/SigilBand.svelte";
+  import SigilBand from "#lib/components/SigilBand.svelte";
 
   interface Props {
     word: string;

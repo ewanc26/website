@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Link2, Check, Mail } from "@lucide/svelte";
-  import Bluesky from "$lib/components/icons/Bluesky.svelte";
-  import { pulseAmbiance } from "$lib/stores/ambiance";
+  import Bluesky from "#lib/components/icons/Bluesky.svelte";
+  import { pulseAmbiance } from "#lib/stores/ambiance.js";
 
   interface Props {
     url: string;

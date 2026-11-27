@@ -17,6 +17,9 @@
     "test:profile-links": "node --experimental-strip-types --test src/lib/utils/profileLinkLabels.test.ts",
     "audit:site": "node scripts/audit-site.mjs"
   },
+  "imports": {
+    "#lib/*": "./src/lib/*"
+  },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@sveltejs/adapter-vercel": "^7.0.5",

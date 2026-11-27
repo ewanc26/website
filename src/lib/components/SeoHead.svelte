@@ -7,10 +7,10 @@
    * global <head> bits live in the root layout, not here.
    */
   import { page } from "$app/state";
-  import { SITE, ME_LINKS } from "$lib/config";
-  import { ATPROTO_DID } from "$lib/config/atproto";
+  import { SITE, ME_LINKS } from "#lib/config.js";
+  import { ATPROTO_DID } from "#lib/config/atproto.js";
   import { PUBLIC_LEAFLET_BLOG_PUBLICATION } from "$app/env/public";
-  import type { NormalizedSiteInfo } from "$lib/services/atproto/siteInfo";
+  import type { NormalizedSiteInfo } from "#lib/services/atproto/siteInfo.js";
 
   interface Props {
     title?: string;

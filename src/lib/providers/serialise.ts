@@ -1,5 +1,5 @@
 import { buildPdsBlobUrl, resolveIdentity } from "@ewanc26/atproto";
-import { blobRefCid } from "$lib/utils/blobRef";
+import { blobRefCid } from "#lib/utils/blobRef.js";
 
 /**
  * Serialise Leaflet content for server→client transfer (moved to Astro from SvelteKit).

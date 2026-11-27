@@ -8,8 +8,8 @@
  */
 
 import chroma from "chroma-js";
-import { getCurrentSabbat } from "$lib/utils/sabbats";
-import { getMoonPhase } from "$lib/utils/moonPhase";
+import { getCurrentSabbat } from "#lib/utils/sabbats.js";
+import { getMoonPhase } from "#lib/utils/moonPhase.js";
 import {
   AA,
   AA_LARGE,
@@ -25,7 +25,7 @@ import {
   darkFillLightness,
   darkTextLightness,
   lightTextLightness,
-} from "$lib/utils/contrast";
+} from "#lib/utils/contrast.js";
 import {
   baseline,
   getSabbatContext,
@@ -33,15 +33,15 @@ import {
   getThemeShade,
   type Baseline,
   type Scale,
-} from "$lib/utils/theme";
+} from "#lib/utils/theme.js";
 
 export {
   baseline,
   getCurrentPrimaryShade,
   getHueRotation,
   getTargetHues,
-} from "$lib/utils/theme";
-export type { Baseline, ModeColors, Scale } from "$lib/utils/theme";
+} from "#lib/utils/theme.js";
+export type { Baseline, ModeColors, Scale } from "#lib/utils/theme.js";
 
 export function getDynamicThemeCSS(now: Date = new Date()): string {
   const { prev, next, progress } = getSabbatContext(now);

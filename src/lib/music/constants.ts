@@ -5,7 +5,7 @@
  * table the notes, chord-voice, and chime layers all read from.
  */
 
-import type { Sabbat } from "$lib/utils/sabbats";
+import type { Sabbat } from "#lib/utils/sabbats.js";
 
 // Root frequency for the drone (roughly A1) — deep enough to sit
 // underneath the page without competing with anything else.

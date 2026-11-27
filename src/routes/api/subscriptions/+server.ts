@@ -1,4 +1,4 @@
-import { fetchSubscriptions } from "$lib/services/atproto/fetch";
+import { fetchSubscriptions } from "#lib/services/atproto/fetch.js";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 

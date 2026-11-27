@@ -1,7 +1,7 @@
 <script lang="ts">
-  import ArrowUpRight from "$lib/components/icons/ArrowUpRight.svelte";
-  import Slab from "$lib/components/Slab.svelte";
-  import SeoHead from "$lib/components/SeoHead.svelte";
+  import ArrowUpRight from "#lib/components/icons/ArrowUpRight.svelte";
+  import Slab from "#lib/components/Slab.svelte";
+  import SeoHead from "#lib/components/SeoHead.svelte";
 
   let { data } = $props();
 </script>

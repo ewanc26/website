@@ -5,8 +5,8 @@
    * homepage render with no live update; this polls /api/kibun so it can
    * change while the tab stays open, using the same pattern as NowPlaying.
    */
-  import type { KibunStatusData } from "$lib/services/atproto/types";
-  import { usePoller } from "$lib/utils/polling.svelte";
+  import type { KibunStatusData } from "#lib/services/atproto/types.js";
+  import { usePoller } from "#lib/utils/polling.svelte.js";
 
   interface Props {
     status: KibunStatusData | null;

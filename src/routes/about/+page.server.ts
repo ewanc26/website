@@ -1,9 +1,9 @@
 import { fetchSifaProfile, fetchSifaSkills, fetchSifaEducation, fetchSifaLanguages, fetchSifaExternalAccounts } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID } from "$app/env/public";
 import { GITHUB_TOKEN, GITHUB_USERNAME } from "$app/env/private";
-import { fetchPinnedGitHubProjects } from "$lib/services/github";
-import { resolveDid } from "$lib/services/atproto/did";
-import { fetchProfile, fetchProfileLinks } from "$lib/services/atproto/fetch";
+import { fetchPinnedGitHubProjects } from "#lib/services/github.js";
+import { resolveDid } from "#lib/services/atproto/did.js";
+import { fetchProfile, fetchProfileLinks } from "#lib/services/atproto/fetch.js";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, setHeaders }) => {

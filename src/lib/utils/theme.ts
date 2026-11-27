@@ -6,7 +6,7 @@
  */
 
 import chroma from "chroma-js";
-import { type Sabbat, sabbats } from "$lib/utils/sabbats";
+import { type Sabbat, sabbats } from "#lib/utils/sabbats.js";
 
 export interface ModeColors {
   light: [number, number, number];

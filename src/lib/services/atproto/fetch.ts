@@ -10,9 +10,9 @@
  * server-side request context is respected.
  */
 
-import { blobRefCid } from "$lib/utils/blobRef";
-import { mapWithConcurrency } from "$lib/utils/promise";
-import { profileLinkLabels } from "$lib/utils/profileLinkLabels";
+import { blobRefCid } from "#lib/utils/blobRef.js";
+import { mapWithConcurrency } from "#lib/utils/promise.js";
+import { profileLinkLabels } from "#lib/utils/profileLinkLabels.js";
 import {
   fetchKibunStatus as _fetchKibunStatus,
   fetchBlogPosts as _fetchBlogPosts,
@@ -24,8 +24,8 @@ import {
 import { resolveDid } from "./did";
 import { getPDSAgent } from "./agents";
 import { fetchAtRecords, type AtRecord } from "./records";
-import { getCache, setCache } from "$lib/utils/cache";
-import { ATPROTO_DID } from "$lib/config/atproto";
+import { getCache, setCache } from "#lib/utils/cache.js";
+import { ATPROTO_DID } from "#lib/config/atproto.js";
 import { com, app } from "@bsky/sdk/lexicons";
 
 //  Simple wrappers (delegate to @ewanc26/atproto) 

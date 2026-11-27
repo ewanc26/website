@@ -1,6 +1,6 @@
 <script lang="ts">
-  import LoadingSkeleton from "$lib/components/LoadingSkeleton.svelte";
-  import { safeResourceUrl } from "$lib/utils/url";
+  import LoadingSkeleton from "#lib/components/LoadingSkeleton.svelte";
+  import { safeResourceUrl } from "#lib/utils/url.js";
 
   interface Props {
     url: string;

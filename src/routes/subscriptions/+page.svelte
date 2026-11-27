@@ -1,7 +1,7 @@
 <script lang="ts">
-  import SeoHead from "$lib/components/SeoHead.svelte";
-  import Slab from "$lib/components/Slab.svelte";
-  import SubscriptionsList from "$lib/components/SubscriptionsList.svelte";
+  import SeoHead from "#lib/components/SeoHead.svelte";
+  import Slab from "#lib/components/Slab.svelte";
+  import SubscriptionsList from "#lib/components/SubscriptionsList.svelte";
 
   let { data } = $props();
 </script>

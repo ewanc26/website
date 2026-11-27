@@ -13,7 +13,7 @@
  */
 
 import { getPDSAgent } from "@ewanc26/atproto";
-import { getCache, setCache } from "$lib/utils/cache";
+import { getCache, setCache } from "#lib/utils/cache.js";
 import { com } from "@bsky/sdk/lexicons";
 
 export type FeedPostKind =

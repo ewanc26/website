@@ -11,17 +11,17 @@
    */
   import { onMount } from "svelte";
   import { LogOut, LogIn, Send, Reply, MessageCircle } from "@lucide/svelte";
-  import EmptyState from "$lib/components/EmptyState.svelte";
-  import type { LeafletComment } from "$lib/services/atproto/fetch";
-  import { buildThread } from "$lib/utils/commentThread";
+  import EmptyState from "#lib/components/EmptyState.svelte";
+  import type { LeafletComment } from "#lib/services/atproto/fetch.js";
+  import { buildThread } from "#lib/utils/commentThread.js";
   import {
     initReaderSession,
     publishLeafletComment,
     signInReader,
     signOutReader,
     type ReaderSession,
-  } from "$lib/services/atproto/commentClient";
-  import { pulseAmbiance } from "$lib/stores/ambiance";
+  } from "#lib/services/atproto/commentClient.js";
+  import { pulseAmbiance } from "#lib/stores/ambiance.js";
 
   interface Props {
     comments: LeafletComment[];

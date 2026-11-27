@@ -5,8 +5,8 @@
    * /api/subscriptions and /api/recommendations so new subscriptions show
    * up without a full page reload, using the same pattern as NowPlaying.
    */
-  import type { SubscriptionPublication } from "$lib/services/atproto/fetch";
-  import { usePoller } from "$lib/utils/polling.svelte";
+  import type { SubscriptionPublication } from "#lib/services/atproto/fetch.js";
+  import { usePoller } from "#lib/utils/polling.svelte.js";
 
   interface Props {
     subscriptions: SubscriptionPublication[];

@@ -1,8 +1,8 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import SeoHead from "$lib/components/SeoHead.svelte";
-  import Slab from "$lib/components/Slab.svelte";
-  import NotFoundEgg from "$lib/components/ostara-eggs/NotFoundEgg.svelte";
+  import SeoHead from "#lib/components/SeoHead.svelte";
+  import Slab from "#lib/components/Slab.svelte";
+  import NotFoundEgg from "#lib/components/ostara-eggs/NotFoundEgg.svelte";
 
   const missing = $derived(page.status === 404);
 </script>

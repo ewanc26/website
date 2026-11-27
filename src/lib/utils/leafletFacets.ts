@@ -1,6 +1,6 @@
 /** Render Leaflet plaintext + UTF-8 byte-indexed facets as safe inline HTML. */
-import type { FacetSchema } from "$lib/providers/facets";
-import { safeLinkUrl } from "$lib/utils/url";
+import type { FacetSchema } from "#lib/providers/facets.js";
+import { safeLinkUrl } from "#lib/utils/url.js";
 
 export interface SerialisedFacet {
   $type?: string;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import SeoHead from "$lib/components/SeoHead.svelte";
-  import { consumeReaderReturnTo, initReaderSession } from "$lib/services/atproto/commentClient";
+  import SeoHead from "#lib/components/SeoHead.svelte";
+  import { consumeReaderReturnTo, initReaderSession } from "#lib/services/atproto/commentClient.js";
 
   let { data } = $props();
 

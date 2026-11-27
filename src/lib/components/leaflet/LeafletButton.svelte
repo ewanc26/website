@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { safeLinkUrl } from "$lib/utils/url";
+  import { safeLinkUrl } from "#lib/utils/url.js";
 
   interface Props {
     text: string;

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { GitHubProfileSummary, GitHubMetric } from "$lib/services/github";
-  import ArrowUpRight from "$lib/components/icons/ArrowUpRight.svelte";
+  import type { GitHubProfileSummary, GitHubMetric } from "#lib/services/github.js";
+  import ArrowUpRight from "#lib/components/icons/ArrowUpRight.svelte";
 
   interface Props {
     summary: GitHubProfileSummary | null;

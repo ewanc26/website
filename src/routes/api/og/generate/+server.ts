@@ -3,11 +3,11 @@ import wasmDataUri from "@resvg/resvg-wasm/index_bg.wasm?inline";
 import archivoUri from "../../../../../node_modules/@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff?inline";
 import monoUri from "../../../../lib/fonts/JetBrainsMono-Regular.ttf?inline";
 import satori from "satori";
-import { cleanOgText, getDefaultOgTitle, getOgTemplate } from "$lib/og";
-import { getOgThemeColors } from "$lib/server/theme";
-import { getMoonIllumination } from "$lib/utils/moonPhase";
-import { getAlmanac } from "$lib/utils/almanac";
-import { SITE } from "$lib/config";
+import { cleanOgText, getDefaultOgTitle, getOgTemplate } from "#lib/og.js";
+import { getOgThemeColors } from "#lib/server/theme.js";
+import { getMoonIllumination } from "#lib/utils/moonPhase.js";
+import { getAlmanac } from "#lib/utils/almanac.js";
+import { SITE } from "#lib/config.js";
 import type { RequestHandler } from "./$types";
 
 const decode = (uri: string): ArrayBuffer => {

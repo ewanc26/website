@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { inkColor, inkFillPath, inkStrokePath, parseFills, parseStrokes, parseViewBox } from "$lib/utils/leafletInk";
+  import { inkColor, inkFillPath, inkStrokePath, parseFills, parseStrokes, parseViewBox } from "#lib/utils/leafletInk.js";
 
   type Obj = Record<string, unknown>;
   interface Props {

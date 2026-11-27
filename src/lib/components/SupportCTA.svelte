@@ -4,7 +4,7 @@
    * Designed to fit the risograph zine aesthetic with two-ink styling.
    */
   import { Heart } from "@lucide/svelte";
-  import ArrowUpRight from "$lib/components/icons/ArrowUpRight.svelte";
+  import ArrowUpRight from "#lib/components/icons/ArrowUpRight.svelte";
 
   interface Props {
     compact?: boolean;

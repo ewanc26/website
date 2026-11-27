@@ -25,8 +25,8 @@
  * browser's autoplay policy is always satisfied.
  */
 
-import { getSabbatContext, getTargetHues } from "$lib/utils/theme";
-import { getMoonIllumination } from "$lib/utils/moonPhase";
+import { getSabbatContext, getTargetHues } from "#lib/utils/theme.js";
+import { getMoonIllumination } from "#lib/utils/moonPhase.js";
 import { ROOT_HZ } from "./constants";
 import { createBreathLayer, type BreathLayer } from "./breath";
 import { createChimeLayer, type ChimeLayer } from "./chime";

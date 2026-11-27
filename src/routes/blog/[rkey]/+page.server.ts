@@ -1,7 +1,7 @@
 import { fetchBlogPosts } from "@ewanc26/atproto";
 import { PUBLIC_ATPROTO_DID } from "$app/env/public";
-import { normalizeSlug } from "$lib/utils/slugify";
-import { blogDateParts } from "$lib/utils/date";
+import { normalizeSlug } from "#lib/utils/slugify.js";
+import { blogDateParts } from "#lib/utils/date.js";
 import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 

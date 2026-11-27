@@ -1,4 +1,4 @@
-import { getDynamicThemeCSS } from "$lib/server/theme";
+import { getDynamicThemeCSS } from "#lib/server/theme.js";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = () =>

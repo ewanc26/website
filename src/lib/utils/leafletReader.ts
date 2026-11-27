@@ -1,5 +1,5 @@
-import type { FacetSchema } from "$lib/providers/facets";
-import type { SerialisedFacet } from "$lib/utils/leafletFacets";
+import type { FacetSchema } from "#lib/providers/facets.js";
+import type { SerialisedFacet } from "#lib/utils/leafletFacets.js";
 
 export const NS = "pub.leaflet.richtext.facet";
 export const CANVAS = "pub.leaflet.pages.canvas";

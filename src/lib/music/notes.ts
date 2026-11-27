@@ -5,7 +5,7 @@
  * reasoned about (and tested) independently of any AudioContext.
  */
 
-import type { Sabbat } from "$lib/utils/sabbats";
+import type { Sabbat } from "#lib/utils/sabbats.js";
 import { ROOT_HZ, SABBAT_SEMITONES } from "./constants";
 
 export function semitoneOf(sabbat: Sabbat): number {

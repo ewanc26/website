@@ -4,9 +4,9 @@
  * Computed per request in Europe/London so it matches the blog's dates.
  */
 
-import { getMoonPhase } from "$lib/utils/moonPhase";
-import { getCurrentSabbat } from "$lib/utils/sabbats";
-import { getSabbatContext } from "$lib/utils/theme";
+import { getMoonPhase } from "#lib/utils/moonPhase.js";
+import { getCurrentSabbat } from "#lib/utils/sabbats.js";
+import { getSabbatContext } from "#lib/utils/theme.js";
 
 const DAY_MS = 86_400_000;
 

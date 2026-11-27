@@ -1,8 +1,8 @@
 import { fetchDocuments } from "@ewanc26/atproto";
-import { fetchBlob } from "$lib/services/atproto";
+import { fetchBlob } from "#lib/services/atproto/index.js";
 import { PUBLIC_ATPROTO_DID } from "$app/env/public";
-import { renderMarkdown } from "$lib/utils/markdown";
-import { leafletProvider, serialiseBlocks, type SerialisedBlock } from "$lib/providers";
+import { renderMarkdown } from "#lib/utils/markdown.js";
+import { leafletProvider, serialiseBlocks, type SerialisedBlock } from "#lib/providers/index.js";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 

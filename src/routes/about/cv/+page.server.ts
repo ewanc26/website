@@ -1,5 +1,5 @@
 import { PUBLIC_ATPROTO_DID } from "$app/env/public";
-import { gatherCvData } from "$lib/server/cv/data";
+import { gatherCvData } from "#lib/server/cv/data.js";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ fetch, setHeaders }) => {

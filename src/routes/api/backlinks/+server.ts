@@ -1,5 +1,5 @@
 import { PUBLIC_ATPROTO_DID } from "$app/env/public";
-import { fetchBacklinks } from "$lib/services/atproto";
+import { fetchBacklinks } from "#lib/services/atproto/index.js";
 import type { RequestHandler } from "./$types";
 
 const json = (data: unknown, headers: Record<string, string> = {}) =>

@@ -7,8 +7,8 @@
  * `... | bash -s -- skills` prints a single section.
  */
 import { PUBLIC_ATPROTO_DID } from "$app/env/public";
-import { gatherCvData } from "$lib/server/cv/data";
-import { generateCvScript } from "$lib/server/cv/script";
+import { gatherCvData } from "#lib/server/cv/data.js";
+import { generateCvScript } from "#lib/server/cv/script.js";
 import { redirect } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 

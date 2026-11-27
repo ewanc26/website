@@ -1,6 +1,6 @@
 <script lang="ts">
   import { afterNavigate } from "$app/navigation";
-  import { wolfMode } from "$lib/stores/wolfMode";
+  import { wolfMode } from "#lib/stores/wolfMode.js";
   import FooterToggleButton from "./FooterToggleButton.svelte";
 
   afterNavigate(() => {

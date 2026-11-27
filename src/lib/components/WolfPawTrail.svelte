@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { wolfMode } from "$lib/stores/wolfMode";
+  import { wolfMode } from "#lib/stores/wolfMode.js";
 
   let trailEl: HTMLDivElement | undefined = $state();
 

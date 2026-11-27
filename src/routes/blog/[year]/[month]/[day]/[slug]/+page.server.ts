@@ -1,4 +1,4 @@
-import { loadPost } from "$lib/server/post";
+import { loadPost } from "#lib/server/post.js";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 

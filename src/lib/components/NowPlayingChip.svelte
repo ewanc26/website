@@ -3,8 +3,8 @@
    * Compact "currently/last playing" chip from fm.teal.feed.play, styled
    * to sit pinned on the homepage's halftone moon alongside KibunStatus.
    */
-  import type { Play } from "$lib/services/atproto/plays";
-  import { usePoller } from "$lib/utils/polling.svelte";
+  import type { Play } from "#lib/services/atproto/plays.js";
+  import { usePoller } from "#lib/utils/polling.svelte.js";
 
   interface Props {
     play: Play | null;
