@@ -67,25 +67,36 @@
     text-align: start;
   }
 
-  .base-modal[open] {
-    animation: modal-in 260ms var(--ease-out-expo) both;
+  /* Arrives and leaves the same way. Where discrete transitions are not
+     supported it simply appears and disappears. */
+  .base-modal,
+  .base-modal::backdrop {
+    opacity: 0;
+    transition:
+      opacity 160ms ease-in,
+      translate 160ms ease-in,
+      overlay 160ms allow-discrete,
+      display 160ms allow-discrete;
   }
-
+  .base-modal {
+    translate: 0 14px;
+  }
+  .base-modal[open],
   .base-modal[open]::backdrop {
-    animation: modal-fade 260ms var(--ease-out-expo) both;
+    opacity: 1;
+    transition-duration: 220ms;
+    transition-timing-function: var(--ease-out-expo);
   }
-
-  @keyframes modal-in {
-    from {
+  .base-modal[open] {
+    translate: 0 0;
+  }
+  @starting-style {
+    .base-modal[open],
+    .base-modal[open]::backdrop {
       opacity: 0;
-      translate: 0 14px;
-      scale: 1.02;
     }
-  }
-
-  @keyframes modal-fade {
-    from {
-      opacity: 0;
+    .base-modal[open] {
+      translate: 0 14px;
     }
   }
 

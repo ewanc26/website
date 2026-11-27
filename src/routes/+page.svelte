@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { reveal } from "#lib/actions/reveal.js";
   import Link from "#lib/components/icons/Link.svelte";
   import FeedTypeIcon from "#lib/components/icons/FeedTypeIcon.svelte";
   import ArrowUpRight from "#lib/components/icons/ArrowUpRight.svelte";
@@ -117,7 +118,7 @@
     </div>
   </section>
 
-  <h2 class="word"><span class="word-text" style="--n:5">Words</span><small>the newest six</small></h2>
+  <h2 class="word" {@attach reveal}><span class="word-text" style="--n:5">Words</span><small>the newest six</small></h2>
   {#if writing.length > 0}
     <div>
       <ol class="tracks">
@@ -141,7 +142,7 @@
   <SupportCTA />
 
   {#if feed.length > 0}
-    <SigilRule /><h2 class="word"><span class="word-text" style="--n:4">Feed</span><small>lately, on Bluesky</small></h2>
+    <SigilRule /><h2 class="word" {@attach reveal}><span class="word-text" style="--n:4">Feed</span><small>lately, on Bluesky</small></h2>
     <div>
       <ol class="tracks">
         {#each feed as post (post.rkey)}
@@ -175,11 +176,11 @@
   {/if}
 
   {#if apps.length > 0}
-    <SigilRule /><h2 class="word"><span class="word-text" style="--n:4">Apps</span><small>things I've shipped</small></h2>
+    <SigilRule /><h2 class="word" {@attach reveal}><span class="word-text" style="--n:4">Apps</span><small>things I've shipped</small></h2>
     <div>
       <ul class="carts">
         {#each apps.slice(0, 6) as app, i (app.externalUrl)}
-          <li>
+          <li {@attach reveal}>
             <a class="cart" href={app.externalUrl} rel="noopener" style={`--tilt:${tilts[i % tilts.length]}deg`}>
               <span class="cart-band" style="background:var(--riso-a)"></span>
               <span class="cart-body">
@@ -200,12 +201,12 @@
     </div>
   {/if}
 
-  <SigilRule /><h2 class="word"><span class="word-text" style="--n:5">Works</span><small>open source, live from GitHub</small></h2>
+  <SigilRule /><h2 class="word" {@attach reveal}><span class="word-text" style="--n:5">Works</span><small>open source, live from GitHub</small></h2>
   {#if githubProjects.length > 0}
     <div>
       <ul class="carts">
         {#each githubProjects.slice(0, 6) as project, i (project.url)}
-          <li>
+          <li {@attach reveal}>
             <a class="cart" href={project.url} rel="noopener" style={`--tilt:${tilts[i % tilts.length]}deg;--lang:${project.languageColor ?? "var(--riso-a)"}`}>
               <span class="cart-band"></span>
               <span class="cart-body">
@@ -227,20 +228,20 @@
     <p class="empty">Project data is unavailable right now.</p>
   {/if}
 
-  <SigilRule /><h2 class="word"><span class="word-text" style="--n:7">Commits</span><small>a year of GitHub</small></h2>
+  <SigilRule /><h2 class="word" {@attach reveal}><span class="word-text" style="--n:7">Commits</span><small>a year of GitHub</small></h2>
   <GithubActivity username={githubUsername} contributions={githubContributions} languages={githubLanguages} commits={githubCommits} />
   {#if githubProfileSummary}
     <GithubProfileSummary summary={githubProfileSummary} />
   {/if}
 
   {#snippet popfeedShelf(shelf: PopfeedShelf)}
-    <SigilRule /><h2 class="word"><span class="word-text" style={`--n:${shelf.n}`}>{shelf.word}</span><small>logged on Popfeed</small></h2>
+    <SigilRule /><h2 class="word" {@attach reveal}><span class="word-text" style={`--n:${shelf.n}`}>{shelf.word}</span><small>logged on Popfeed</small></h2>
     <ul class="carts">
       {#each shelf.items.slice(0, 6) as w, i (w.uri)}
         {@const href = w.imdbId ? `https://www.imdb.com/title/${w.imdbId}/` : undefined}
         {@const kind = kindLabel[w.creativeWorkType ?? ""] ?? w.creativeWorkType}
         {@const year = w.releaseDate ? new Date(w.releaseDate).getFullYear() : null}
-        <li>
+        <li {@attach reveal}>
           {#if href}
             <a class="cart" {href} target="_blank" rel="noopener" style={`--tilt:${tilts[i % tilts.length]}deg`}>
               <span class="photo photo--poster">
@@ -276,7 +277,7 @@
   {/each}
 
   {#if otherPublications.length > 0}
-    <SigilRule /><h2 class="word"><span class="word-text" style="--n:5">Shelf</span><small>other things I publish</small></h2>
+    <SigilRule /><h2 class="word" {@attach reveal}><span class="word-text" style="--n:5">Shelf</span><small>other things I publish</small></h2>
     <ul class="shelf">
       {#each otherPublications as pub (pub.rkey ?? pub.url)}
         <li>
@@ -290,7 +291,7 @@
   {/if}
 
   {#if links.cards?.length > 0}
-    <SigilRule /><h2 class="word"><span class="word-text" style="--n:9">Elsewhere</span></h2>
+    <SigilRule /><h2 class="word" {@attach reveal}><span class="word-text" style="--n:9">Elsewhere</span></h2>
     <ul class="shelf">
       {#each links.cards.slice(0, 8) as link (link.url)}
         <li>
